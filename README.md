@@ -72,6 +72,12 @@ from 3.7% to 0.65%, while retaining the internal tongue seal. Actual lip shaping
 vocal-fold coupling and radiation losses are still required; a domain cap is
 not the complete anatomical opening.
 
+The [general-graph acoustic reference](reports/MOVING_GRAPH.md) now retains
+branch momentum through cycles, allowing multiple mouth regions to share one
+outlet volume. Independent discrete and continuous controls check this
+coupling. Actual lip integration still needs explicit geometric replacement
+seams and closed-lip state transport; no new speech has been rendered with it.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

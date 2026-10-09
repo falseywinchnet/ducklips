@@ -130,6 +130,14 @@ pressure effect from internal tongue motion. These caps still omit the
 separately controlled lip constriction and actual fold aperture; their ideal
 pressure conditions are not a radiation or laryngeal source model.
 
+The [general-graph canonical reference](reports/MOVING_GRAPH.md) now supports
+the cycles introduced when multiple mouth regions connect to a shared lip
+volume, preserving each branch's momentum. Independent full-state and
+continuous controls pass. The planar core must replace, rather than overlap,
+the existing lip and epilarynx segments. Final lip section geometry, complete
+closure transport, dynamic fold coupling and radiation remain integration
+gates; the new dense reference has not rendered speech.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

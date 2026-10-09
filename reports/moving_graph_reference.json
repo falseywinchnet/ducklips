@@ -1,0 +1,657 @@
+{
+  "use": "general-graph canonical reference including a common outlet; not a complete articulated lip or speech render",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/moving_graph_reference.py"
+  ],
+  "discrete": [
+    {
+      "name": "graph-00",
+      "nodes": 3,
+      "branches": 2,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-00.txt",
+      "output": "out/moving-graph/graph-00.jsonl",
+      "log": "out/moving-graph/graph-00.log",
+      "input_sha256": "f8d2841350e9291c8caa9f42e9ac9d74c0bf47e4fc7db6e4cc8a2f9826d004c7",
+      "output_sha256": "78225e7779b34e22bca3662cef5436fdaaeea9287d1e531da2440a4afc4abcff",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 9.654686195316063e-14,
+        "momentum_Pa_s": 4.163336342344337e-17,
+        "average_pressure_Pa": 8.526512829121202e-14,
+        "average_flow_m3_s": 3.3881317890172014e-20,
+        "local_mass_m3": 3.980806697911446e-24,
+        "global_mass_m3": 4.549493369041652e-24
+      }
+    },
+    {
+      "name": "graph-01",
+      "nodes": 4,
+      "branches": 6,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-01.txt",
+      "output": "out/moving-graph/graph-01.jsonl",
+      "log": "out/moving-graph/graph-01.log",
+      "input_sha256": "0179634a1029512e13dbfbc56fd4b08324d479a64d6a517d56fa6cb232e9374e",
+      "output_sha256": "141440b62645b5f2bf3bc6534512ecc27e48ef2c0bdff12295bded25d68de54a",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 9.706247236927376e-14,
+        "momentum_Pa_s": 2.0816681711721685e-17,
+        "average_pressure_Pa": 1.1368683772161603e-13,
+        "average_flow_m3_s": 6.098637220230962e-20,
+        "local_mass_m3": 1.27179019180028e-23,
+        "global_mass_m3": 1.2485257370722261e-23
+      }
+    },
+    {
+      "name": "graph-02",
+      "nodes": 5,
+      "branches": 7,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-02.txt",
+      "output": "out/moving-graph/graph-02.jsonl",
+      "log": "out/moving-graph/graph-02.log",
+      "input_sha256": "6bc8adc6288429201e7f31824a7a5f0df89dfeffae186d804e58d818be3a14d3",
+      "output_sha256": "f3156668a5f8cbfd8d2bc69fadffe53e3340801d58dc8185b8156133d6171678",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.7232837643982085e-13,
+        "momentum_Pa_s": 8.326672684688674e-17,
+        "average_pressure_Pa": 2.2737367544323206e-13,
+        "average_flow_m3_s": 1.3552527156068805e-19,
+        "local_mass_m3": 5.2732764050255514e-24,
+        "global_mass_m3": 4.652890945610781e-24
+      }
+    },
+    {
+      "name": "graph-03",
+      "nodes": 6,
+      "branches": 9,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-03.txt",
+      "output": "out/moving-graph/graph-03.jsonl",
+      "log": "out/moving-graph/graph-03.log",
+      "input_sha256": "614854ea3e2015b154807aee6e0bcf7151d40313d477becb3077ef39fe72d337",
+      "output_sha256": "0d084a537f7b70929670543316ebd9bf4668ac3b2c5edc0d8348e6cd49ca9cca",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.0714807061035074e-13,
+        "momentum_Pa_s": 2.0816681711721685e-17,
+        "average_pressure_Pa": 1.4210854715202004e-13,
+        "average_flow_m3_s": 1.0842021724855044e-19,
+        "local_mass_m3": 5.236925694512967e-24,
+        "global_mass_m3": 6.824240053562478e-24
+      }
+    },
+    {
+      "name": "graph-04",
+      "nodes": 7,
+      "branches": 5,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-04.txt",
+      "output": "out/moving-graph/graph-04.jsonl",
+      "log": "out/moving-graph/graph-04.log",
+      "input_sha256": "955fefbb14483ba8ab39b41182925e7211d3d50619464409bfadce3445b189de",
+      "output_sha256": "ca809d47a9694dab25e448b1cb905ca159bf973cbc7455b346c581e24490fffa",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.6853561961250656e-13,
+        "momentum_Pa_s": 2.7755575615628914e-17,
+        "average_pressure_Pa": 1.7053025658242404e-13,
+        "average_flow_m3_s": 5.421010862427522e-20,
+        "local_mass_m3": 3.825710333057753e-24,
+        "global_mass_m3": 4.691665036824204e-24
+      }
+    },
+    {
+      "name": "graph-05",
+      "nodes": 8,
+      "branches": 10,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-05.txt",
+      "output": "out/moving-graph/graph-05.jsonl",
+      "log": "out/moving-graph/graph-05.log",
+      "input_sha256": "1a08b95dcb978b69b7fa5772b0d36956eea6993a0f79630cdccef0f8de8ace67",
+      "output_sha256": "101938768e484c3c8272556a9f6e7436c2e34a8fea66f9d063dbc255462eb0fd",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.224425555419371e-13,
+        "momentum_Pa_s": 1.3877787807814457e-17,
+        "average_pressure_Pa": 1.2789769243681803e-13,
+        "average_flow_m3_s": 6.776263578034403e-20,
+        "local_mass_m3": 2.5849394142282115e-24,
+        "global_mass_m3": 3.9291079096268815e-24
+      }
+    },
+    {
+      "name": "graph-06",
+      "nodes": 9,
+      "branches": 12,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-06.txt",
+      "output": "out/moving-graph/graph-06.jsonl",
+      "log": "out/moving-graph/graph-06.log",
+      "input_sha256": "30c415b73d466bb8ece0014f609117b6c8b0201ed04150cb10dd2b3030c4a696",
+      "output_sha256": "3ba60ae19d7574405a9f3503fd6ba92bfcfd6110591ec640e0abd510b2f1f940",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 6.164221655892583e-13,
+        "momentum_Pa_s": 2.8189256484623115e-17,
+        "average_pressure_Pa": 5.684341886080801e-13,
+        "average_flow_m3_s": 2.439454888092385e-19,
+        "local_mass_m3": 2.68833699079734e-24,
+        "global_mass_m3": 3.308722450212111e-24
+      }
+    },
+    {
+      "name": "graph-07",
+      "nodes": 10,
+      "branches": 12,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-07.txt",
+      "output": "out/moving-graph/graph-07.jsonl",
+      "log": "out/moving-graph/graph-07.log",
+      "input_sha256": "7d8923e8a99e1a4a52520b1bb3c9a354986eb7627e4b4b2f499bb28039e9f414",
+      "output_sha256": "5c54ca5764b64b5ddcbf8e0e014f68decf24dd6ad58217c102863b69c100d41b",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.9591906992413588e-13,
+        "momentum_Pa_s": 2.7755575615628914e-17,
+        "average_pressure_Pa": 2.1316282072803006e-13,
+        "average_flow_m3_s": 8.131516293641283e-20,
+        "local_mass_m3": 3.799860938915471e-24,
+        "global_mass_m3": 6.100457017578579e-24
+      }
+    },
+    {
+      "name": "graph-08",
+      "nodes": 3,
+      "branches": 1,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-08.txt",
+      "output": "out/moving-graph/graph-08.jsonl",
+      "log": "out/moving-graph/graph-08.log",
+      "input_sha256": "9175c3bab0b1aac912466a827e42972cdfbb6cacb361e8ba045a5e3d91802188",
+      "output_sha256": "ed98d8411e9c506a678b0163d2cb6b2a245018f8a371cff59727f65a40636eb0",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 5.6130356058937775e-14,
+        "momentum_Pa_s": 8.239936510889834e-18,
+        "average_pressure_Pa": 8.526512829121202e-14,
+        "average_flow_m3_s": 8.470329472543003e-20,
+        "local_mass_m3": 1.2407709188295415e-24,
+        "global_mass_m3": 1.5186519058590742e-24
+      }
+    },
+    {
+      "name": "graph-09",
+      "nodes": 4,
+      "branches": 7,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-09.txt",
+      "output": "out/moving-graph/graph-09.jsonl",
+      "log": "out/moving-graph/graph-09.log",
+      "input_sha256": "4affbd4ae8a40cf97acbf05ed3f4ce8186175a8b0eea59413f258e7b9212eb3b",
+      "output_sha256": "0dcde00419df7873c6009cfacaec5be10d64af6cfa3ef80c484c2f1383b05605",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 4.07376496235962e-13,
+        "momentum_Pa_s": 2.0816681711721685e-17,
+        "average_pressure_Pa": 2.8421709430404007e-13,
+        "average_flow_m3_s": 9.486769009248164e-20,
+        "local_mass_m3": 5.790264287871194e-24,
+        "global_mass_m3": 6.4106497472859645e-24
+      }
+    },
+    {
+      "name": "graph-10",
+      "nodes": 5,
+      "branches": 7,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-10.txt",
+      "output": "out/moving-graph/graph-10.jsonl",
+      "log": "out/moving-graph/graph-10.log",
+      "input_sha256": "51da479d55fa3541f1063047e6b9ddf94ef6962466cabe8e0229c7be15a81a51",
+      "output_sha256": "7263b8dfc24d19b4dd93e90346d3b51cec4b3e8507cc74dd2d2c7007957dc937",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 9.3128302971833e-14,
+        "momentum_Pa_s": 1.3877787807814457e-17,
+        "average_pressure_Pa": 8.526512829121202e-14,
+        "average_flow_m3_s": 5.421010862427522e-20,
+        "local_mass_m3": 4.549493369041652e-24,
+        "global_mass_m3": 5.428372769879244e-24
+      }
+    },
+    {
+      "name": "graph-11",
+      "nodes": 6,
+      "branches": 8,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-11.txt",
+      "output": "out/moving-graph/graph-11.jsonl",
+      "log": "out/moving-graph/graph-11.log",
+      "input_sha256": "3fc76f1b38d1fe9e75afe342a73a9736d309c336258af0127df203a64a1c7225",
+      "output_sha256": "38a937645708e6cfcac757389350a58eb818332dfc0d4a8a799862f60234b042",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.701062314800195e-13,
+        "momentum_Pa_s": 1.734723475976807e-17,
+        "average_pressure_Pa": 2.8421709430404007e-13,
+        "average_flow_m3_s": 1.0842021724855044e-19,
+        "local_mass_m3": 1.3183191012563879e-24,
+        "global_mass_m3": 1.783608195817466e-24
+      }
+    },
+    {
+      "name": "graph-12",
+      "nodes": 7,
+      "branches": 6,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-12.txt",
+      "output": "out/moving-graph/graph-12.jsonl",
+      "log": "out/moving-graph/graph-12.log",
+      "input_sha256": "bb42d31d6d55b82f817db09d05fe6328fac18e0a9fc5438434ee1b9c91401ec5",
+      "output_sha256": "30bf3298b66c51fe9c5cae2ce7489cbd3aae2bcc5ff85049050b71b67d08b3dd",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 6.643245744910402e-14,
+        "momentum_Pa_s": 1.3877787807814457e-17,
+        "average_pressure_Pa": 8.526512829121202e-14,
+        "average_flow_m3_s": 8.131516293641283e-20,
+        "local_mass_m3": 4.549493369041652e-24,
+        "global_mass_m3": 7.34122793640812e-24
+      }
+    },
+    {
+      "name": "graph-13",
+      "nodes": 8,
+      "branches": 10,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-13.txt",
+      "output": "out/moving-graph/graph-13.jsonl",
+      "log": "out/moving-graph/graph-13.log",
+      "input_sha256": "2c940e63204f9e091ac73a0faca1b75338283afa9dbda1e2fb0b05ac38f2b76d",
+      "output_sha256": "ddbcfecc669d7524a035a9e5dfbab5ed33993f10bd42c477beff0a7677446ba2",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 2.025493421859318e-13,
+        "momentum_Pa_s": 5.551115123125783e-17,
+        "average_pressure_Pa": 2.2737367544323206e-13,
+        "average_flow_m3_s": 2.168404344971009e-19,
+        "local_mass_m3": 6.2038545941477076e-24,
+        "global_mass_m3": 8.995589161514176e-24
+      }
+    },
+    {
+      "name": "graph-14",
+      "nodes": 9,
+      "branches": 11,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-14.txt",
+      "output": "out/moving-graph/graph-14.jsonl",
+      "log": "out/moving-graph/graph-14.log",
+      "input_sha256": "d3f8d0d523c8d05f27df5b4d234d4c256c80dc2bf8690b2c3bc511e60bde0aaa",
+      "output_sha256": "cba75d346a1472b3836b436a13ee3859febe97116b509301ae101ebf43c5c439",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.9732221963180092e-13,
+        "momentum_Pa_s": 2.7755575615628914e-17,
+        "average_pressure_Pa": 2.2737367544323206e-13,
+        "average_flow_m3_s": 8.131516293641283e-20,
+        "local_mass_m3": 8.892191584945048e-24,
+        "global_mass_m3": 9.926167350636332e-24
+      }
+    },
+    {
+      "name": "graph-15",
+      "nodes": 10,
+      "branches": 13,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-15.txt",
+      "output": "out/moving-graph/graph-15.jsonl",
+      "log": "out/moving-graph/graph-15.log",
+      "input_sha256": "5e0d29fe36047b49ee3b08ad1d3fe83d34a4ce73cf861bafa27353149798780e",
+      "output_sha256": "917cc845974a00df9810345eeffa75476ef659f64f809977d45c23db3cfc75b6",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 3.241516981493358e-13,
+        "momentum_Pa_s": 3.122502256758253e-17,
+        "average_pressure_Pa": 4.547473508864641e-13,
+        "average_flow_m3_s": 1.8973538018496328e-19,
+        "local_mass_m3": 1.0339757656912846e-23,
+        "global_mass_m3": 1.41654679899706e-23
+      }
+    },
+    {
+      "name": "graph-16",
+      "nodes": 3,
+      "branches": 1,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-16.txt",
+      "output": "out/moving-graph/graph-16.jsonl",
+      "log": "out/moving-graph/graph-16.log",
+      "input_sha256": "8b6ba8c9b4d071a352e170cedac6b4835bd544c4a81528d1ebcfef47205a3236",
+      "output_sha256": "6f9fd741cad7475d7b392512eeb1579f695796e23e404863d1c78acff0621ed8",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.1627289914765028e-13,
+        "momentum_Pa_s": 3.469446951953614e-18,
+        "average_pressure_Pa": 9.947598300641403e-14,
+        "average_flow_m3_s": 5.929230630780102e-21,
+        "local_mass_m3": 1.6543612251060553e-24,
+        "global_mass_m3": 2.68833699079734e-24
+      }
+    },
+    {
+      "name": "graph-17",
+      "nodes": 4,
+      "branches": 6,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-17.txt",
+      "output": "out/moving-graph/graph-17.jsonl",
+      "log": "out/moving-graph/graph-17.log",
+      "input_sha256": "6099a8e6b630ac8d4bdf2a6087e17e9e7b25a35d3fc509c8c69d7e394e0d6164",
+      "output_sha256": "52c7ee3026f53bde55a60c8f71b2c8dbff5dff5107232aba7b9a05933c5f413c",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 2.600833712181812e-13,
+        "momentum_Pa_s": 8.326672684688674e-17,
+        "average_pressure_Pa": 3.410605131648481e-13,
+        "average_flow_m3_s": 1.3552527156068805e-19,
+        "local_mass_m3": 4.1359030627651384e-24,
+        "global_mass_m3": 5.5317703464483726e-24
+      }
+    },
+    {
+      "name": "graph-18",
+      "nodes": 5,
+      "branches": 8,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-18.txt",
+      "output": "out/moving-graph/graph-18.jsonl",
+      "log": "out/moving-graph/graph-18.log",
+      "input_sha256": "6d374b4e885609c7eaa9745d890856ceb5b738adbe8627c39629342b96d3a68f",
+      "output_sha256": "4f132cc23e67024a0d3125132683361d4aac6ce2e06c459da708e2b763a9d123",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 2.1030376367479506e-13,
+        "momentum_Pa_s": 2.7755575615628914e-17,
+        "average_pressure_Pa": 2.8421709430404007e-13,
+        "average_flow_m3_s": 5.421010862427522e-20,
+        "local_mass_m3": 1.075334796318936e-23,
+        "global_mass_m3": 1.0546552810051103e-23
+      }
+    },
+    {
+      "name": "graph-19",
+      "nodes": 6,
+      "branches": 8,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-19.txt",
+      "output": "out/moving-graph/graph-19.jsonl",
+      "log": "out/moving-graph/graph-19.log",
+      "input_sha256": "455aa0cb537d66dc3780ccea387f97db77502cb136e71334432552146a07d305",
+      "output_sha256": "865d6db5fa72030313834386302a3355e46b1fdf844fecc45d1a63deddb25464",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.5470511197810975e-13,
+        "momentum_Pa_s": 3.469446951953614e-17,
+        "average_pressure_Pa": 1.7053025658242404e-13,
+        "average_flow_m3_s": 3.2526065174565133e-19,
+        "local_mass_m3": 1.0546552810051103e-23,
+        "global_mass_m3": 1.4992648602523627e-23
+      }
+    },
+    {
+      "name": "graph-20",
+      "nodes": 7,
+      "branches": 5,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-20.txt",
+      "output": "out/moving-graph/graph-20.jsonl",
+      "log": "out/moving-graph/graph-20.log",
+      "input_sha256": "1dfadf9ba79951db1cb523acf1f762c605aa99203edeab1dbccf813df41394d8",
+      "output_sha256": "83f3fdeebbab09b1eb726206cb451099a41e10cacfb0fda20b7123ce3a5c235c",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.2855616365017444e-13,
+        "momentum_Pa_s": 2.7755575615628914e-17,
+        "average_pressure_Pa": 1.2789769243681803e-13,
+        "average_flow_m3_s": 4.0657581468206416e-20,
+        "local_mass_m3": 3.528442300421509e-24,
+        "global_mass_m3": 4.239300639334267e-24
+      }
+    },
+    {
+      "name": "graph-21",
+      "nodes": 8,
+      "branches": 11,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-21.txt",
+      "output": "out/moving-graph/graph-21.jsonl",
+      "log": "out/moving-graph/graph-21.log",
+      "input_sha256": "2b684716ca806cc762d8870e4a81bb50dbcf1ddedf7bcbf787ab798accdafacb",
+      "output_sha256": "36d5ef4741a32d0eed774297245a30d0105b66ad379f6dac93eb863bad67e805",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 4.0957413160746814e-13,
+        "momentum_Pa_s": 2.3852447794681098e-17,
+        "average_pressure_Pa": 4.689582056016661e-13,
+        "average_flow_m3_s": 3.1170812458958252e-19,
+        "local_mass_m3": 1.5302841332231012e-23,
+        "global_mass_m3": 1.34416849539867e-23
+      }
+    },
+    {
+      "name": "graph-22",
+      "nodes": 9,
+      "branches": 11,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-22.txt",
+      "output": "out/moving-graph/graph-22.jsonl",
+      "log": "out/moving-graph/graph-22.log",
+      "input_sha256": "815c876f43de393053eb6b690a12dbb0fabff66da59dfdfd1da20fb678a8d058",
+      "output_sha256": "ebcbc2e7ec02e2f847f1de632db11e60da1cc53de29d07f1da578b0856424f1c",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 2.370744458063673e-13,
+        "momentum_Pa_s": 3.469446951953614e-17,
+        "average_pressure_Pa": 2.8421709430404007e-13,
+        "average_flow_m3_s": 6.776263578034403e-20,
+        "local_mass_m3": 4.446095792472524e-24,
+        "global_mass_m3": 4.807987310464473e-24
+      }
+    },
+    {
+      "name": "graph-23",
+      "nodes": 10,
+      "branches": 12,
+      "steps": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/graph-23.txt",
+      "output": "out/moving-graph/graph-23.jsonl",
+      "log": "out/moving-graph/graph-23.log",
+      "input_sha256": "3fbe60f7f4aa1479646077fece45e30f3d3ee5179beb4c401a5c5d91a826da37",
+      "output_sha256": "448ac1ccee1fce97480f70ac399cff4df663f0cdd16c364eb8f50ea1639fa258",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maxima": {
+        "pressure_Pa": 1.943231010429424e-13,
+        "momentum_Pa_s": 5.551115123125783e-17,
+        "average_pressure_Pa": 1.9184653865522705e-13,
+        "average_flow_m3_s": 1.6263032587282567e-19,
+        "local_mass_m3": 7.031035206700735e-24,
+        "global_mass_m3": 8.68539643180679e-24
+      }
+    }
+  ],
+  "continuous": [
+    {
+      "name": "shared-outlet-32",
+      "nodes": 4,
+      "branches": 5,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/shared-outlet-32.txt",
+      "output": "out/moving-graph/shared-outlet-32.jsonl",
+      "log": "out/moving-graph/shared-outlet-32.log",
+      "input_sha256": "0d8b64ce31b40c23d171cd6a983a9f8b66060ff569cdac63924ecbfb5ef253ef",
+      "output_sha256": "d2a10dc2e8cae80cd771db0a269abe270632b760c623e08d8130c3fbc6925fce",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maximum_relative_state_error": 0.00011821934752031479,
+      "refinement_ratio": null,
+      "continuous_oracle_endpoint_sensitivity": 1.6603469609825633e-15
+    },
+    {
+      "name": "shared-outlet-64",
+      "nodes": 4,
+      "branches": 5,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/shared-outlet-64.txt",
+      "output": "out/moving-graph/shared-outlet-64.jsonl",
+      "log": "out/moving-graph/shared-outlet-64.log",
+      "input_sha256": "e3e7c72a9e2097eabcde83a0d3e53714dc2cff9254f1ce077578531174904893",
+      "output_sha256": "6d3478852428f3c4c42fa1508f17c8289eb55fffd44e11e9a61349d85dfe5650",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maximum_relative_state_error": 7.470994054575199e-06,
+      "refinement_ratio": 15.823777486199157,
+      "continuous_oracle_endpoint_sensitivity": 1.6603469609825633e-15
+    },
+    {
+      "name": "shared-outlet-128",
+      "nodes": 4,
+      "branches": 5,
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_moving_graph_probe",
+        "--fixture"
+      ],
+      "input": "out/moving-graph/shared-outlet-128.txt",
+      "output": "out/moving-graph/shared-outlet-128.jsonl",
+      "log": "out/moving-graph/shared-outlet-128.log",
+      "input_sha256": "d6d186a61aeca56660ebfbaa9a390864cc3e93a2dbb096a30adfc0db6ce3cfe7",
+      "output_sha256": "56bc0f06bcc9267a896eed609411a68719ae6f7db6ba8458a8d1e5be11ebbf41",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "maximum_relative_state_error": 4.682222066324604e-07,
+      "refinement_ratio": 15.956086551955647,
+      "continuous_oracle_endpoint_sensitivity": 1.6603469609825633e-15
+    }
+  ],
+  "hashes": {
+    "include/ducklips/moving_graph.hpp": "0a29b09b4183373950ffcae3d6d1b5eebcd11b61b5b369b3b2959dc393b1a82e",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "tools/moving_graph_probe.cpp": "ff9bb8548c3b0ce9a69f3253744e1f459a126a3b910cb897f5c6eafb047a3b62",
+    "tools/moving_graph_reference.py": "039c968845701c1c30eddf2ddd6496295be59a60110abf4faeb654c5da987a4f",
+    "include/ducklips/moving_tree.hpp": "0f09f08b2c42545fed2ba21af3c30ee392c34b1b096bc02e7677a0d66d470738",
+    "src/moving_tree.cpp": "c7573c7657b4a5855ae4c54803c35c740a99076fe793653aa3b2dc29acd35b7f",
+    "build/ducklips_moving_graph_probe": "ef5e8f98a835ae02a58a6f355dda02cbb6bab4d28a54f877974ee14e17005f7d"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  }
+}

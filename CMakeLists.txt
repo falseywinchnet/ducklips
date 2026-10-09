@@ -18,6 +18,7 @@ add_library(ducklips STATIC
     src/moving_mode.cpp
     src/canonical_speech.cpp
     src/moving_tree.cpp
+    src/moving_graph.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
     src/motion_segment.cpp
@@ -165,3 +166,7 @@ target_link_libraries(ducklips_planar_pressure_motion_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_inertive_motion_probe tools/planar_inertive_motion_probe.cpp)
 target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)
+
+add_executable(ducklips_moving_graph_probe tools/moving_graph_probe.cpp)
+target_link_libraries(ducklips_moving_graph_probe PRIVATE ducklips)
+add_test(NAME ducklips_moving_graph_reference COMMAND ducklips_moving_graph_probe)
