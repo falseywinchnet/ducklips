@@ -40,7 +40,9 @@ them one pressure compartment. The API documents that restriction. The
 independent audit checks for split cells and compares graph connectivity
 with exact polygon connectivity before accepting its selected reference poses.
 General component reconstruction is still required before arbitrary moving
-anatomy can use one pressure unknown per geometrical cell.
+anatomy can use one pressure unknown per geometrical cell. The subsequent
+[66-pose transport audit](CAVITY_TRANSPORT.md) finds eight poses with split
+cells, including one that would falsely join the sealed /t/ chambers.
 
 ## Controlled physical checks
 

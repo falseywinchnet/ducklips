@@ -145,3 +145,6 @@ target_link_libraries(ducklips_airspace_geometry_probe PRIVATE ducklips)
 
 add_executable(ducklips_cavity_graph_probe tools/cavity_graph_probe.cpp)
 target_link_libraries(ducklips_cavity_graph_probe PRIVATE ducklips)
+
+add_executable(ducklips_cavity_transport_probe tools/cavity_transport_probe.cpp)
+target_link_libraries(ducklips_cavity_transport_probe PRIVATE ducklips)

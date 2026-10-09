@@ -102,7 +102,9 @@ correctness; performance optimization is parked. The
 above and below the tongue without the tested midpoint-volume jumps. Its
 geometry now has [fixed-pose graph pressure checks](reports/CAVITY_GRAPH.md),
 but still needs acoustic integration, physical flow/boundary laws and
-component-preserving moving-state transport. The latest listening follow-up
+component-preserving moving-state transport. [Zero-storage transport](reports/CAVITY_TRANSPORT.md)
+now passes conservation checks, but split-cell contacts and inconsistent temporal
+geometry remain explicit failed integration gates. The latest listening follow-up
 reports [November improved and Foxtrot's /tr/ still jammed](reports/LISTENING_SPATIAL_2026_10_09.md).
 The passive-representation speed gate, flexible-blade/tongue-root work,
 individual body matching and realistic speech remain unsatisfied requirements.

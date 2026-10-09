@@ -4,6 +4,7 @@
 #include <cmath>
 #include <stdexcept>
 #include <limits>
+#include <utility>
 
 namespace ducklips {
 void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> connections) {
@@ -45,6 +46,7 @@ void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> 
             if(selected_index[edge]!=cavity_reservoir){slots_[i]=matrix_.edge_slot(selected_index[edge]);}++edge;
         }
     }
+    component_.resize(nodes);open_degree_.resize(nodes);anchored_.resize(nodes);pinned_.resize(nodes);
     slope_.resize(connections.size());boundary_diagonal_.resize(nodes);
     cg_residual_.resize(nodes);cg_direction_.resize(nodes);cg_image_.resize(nodes);cg_preconditioned_.resize(nodes);
     pressure_.assign(nodes,0);volume_.resize(nodes);compliance_.resize(nodes);flow_.assign(connections.size(),0);
@@ -56,7 +58,8 @@ bool CavityNetwork::reset(std::span<const double> volumes,std::span<const double
     const std::size_t n=pressure_.size();
     if (volumes.size()!=n || compliances.size()!=n || pressures.size()!=n || !n) { return false; }
     for (std::size_t i=0;i<n;++i) {
-        if (!std::isfinite(volumes[i]) || volumes[i]<0 || !std::isfinite(compliances[i]) || compliances[i]<=0
+        if (!std::isfinite(volumes[i]) || volumes[i]<0 || !std::isfinite(compliances[i]) || compliances[i]<0
+            || (compliances[i]==0 && volumes[i]!=0)
             || !std::isfinite(pressures[i])) { return false; }
     }
     std::copy(volumes.begin(),volumes.end(),volume_.begin());
@@ -73,7 +76,7 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
         residual_[i]=storage_[i]*pressure[i]-rhs_[i];
         balance_residual_+=residual_[i];
         if (jacobian) {
-            matrix_.diagonal[i]=storage_[i];matrix_.parent_coupling[i]=0;boundary_diagonal_[i]=storage_[i];
+            matrix_.diagonal[i]=pinned_[i]?1:storage_[i];matrix_.parent_coupling[i]=0;boundary_diagonal_[i]=matrix_.diagonal[i];
             roundoff_[i]=6*eps*std::abs(storage_[i]*pressure[i])+4*eps*std::abs(rhs_[i]);
             balance_roundoff_+=roundoff_[i];
         }
@@ -103,6 +106,13 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
                 roundoff_[c.to]+=uncertainty;
                 if(slots_[e]!=cavity_reservoir){
                     matrix_.diagonal[c.from]+=slope;matrix_.diagonal[c.to]+=slope;matrix_.parent_coupling[slots_[e]]=-slope;
+                }else{
+                    // A zero-storage cell can lose its selected forest exits
+                    // while retaining a cycle edge. Ground only its
+                    // preconditioner with that omitted conductance; the actual
+                    // Jacobian still contains the full conservative edge.
+                    if(storage_[c.from]==0){matrix_.diagonal[c.from]+=slope;}
+                    if(storage_[c.to]==0){matrix_.diagonal[c.to]+=slope;}
                 }
             }
         }
@@ -114,6 +124,33 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
     }
     if(jacobian){std::copy(residual_.begin(),residual_.end(),gradient_.begin());}
     return norm;
+}
+std::size_t CavityNetwork::component_root(std::size_t node) noexcept {
+    while(component_[node]!=node){component_[node]=component_[component_[node]];node=component_[node];}
+    return node;
+}
+bool CavityNetwork::constrain_empty_cells(std::span<const CavityPassage> passages) noexcept {
+    std::fill(pinned_.begin(),pinned_.end(),false);
+    if(std::none_of(storage_.begin(),storage_.end(),[](double c){return c==0;})){return true;}
+    for(std::size_t i=0;i<storage_.size();++i){component_[i]=i;open_degree_[i]=0;anchored_[i]=false;}
+    for(std::size_t e=0;e<connections_.size();++e){
+        if(passages[e].area==0){continue;}const CavityConnection& c=connections_[e];++open_degree_[c.from];
+        if(c.to!=cavity_reservoir){++open_degree_[c.to];component_[component_root(c.from)]=component_root(c.to);}
+    }
+    for(std::size_t i=0;i<storage_.size();++i){if(storage_[i]>0){anchored_[component_root(i)]=true;}}
+    for(std::size_t e=0;e<connections_.size();++e){
+        if(passages[e].area>0 && connections_[e].to==cavity_reservoir){anchored_[component_root(connections_[e].from)]=true;}
+    }
+    for(std::size_t i=0;i<storage_.size();++i){
+        if(storage_[i]==0 && open_degree_[i]==0){
+            // This gauge has neither air nor a passage. No epsilon storage:
+            // nonzero inherited mass or imposed inflow must cause failure.
+            if(rhs_[i]!=0){return false;}
+            pinned_[i]=true;candidate_[i]=0;anchored_[component_root(i)]=true;
+        }
+    }
+    for(std::size_t i=0;i<storage_.size();++i){if(!anchored_[component_root(i)]){return false;}}
+    return true;
 }
 void CavityNetwork::multiply_jacobian(std::span<const double> x,std::span<double> y) const noexcept {
     // Flux differences retain the small storage term without subtracting two
@@ -198,7 +235,8 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
         || !std::isfinite(dt) || dt<=0 || !std::isfinite(air.density) || air.density<=0) { return report; }
     double scale=0;
     for (std::size_t i=0;i<n;++i) {
-        if (!std::isfinite(volumes[i]) || volumes[i]<0 || !std::isfinite(compliances[i]) || compliances[i]<=0
+        if (!std::isfinite(volumes[i]) || volumes[i]<0 || !std::isfinite(compliances[i]) || compliances[i]<0
+            || (compliances[i]==0 && volumes[i]!=0)
             || !std::isfinite(inflow[i])) { return report; }
         storage_[i]=compliances[i]/dt;
         rhs_[i]=(compliance_[i]*pressure_[i]-(volumes[i]-volume_[i]))/dt+inflow[i];
@@ -210,6 +248,7 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
             || (p.area>0 && p.resistance==0) || !std::isfinite(p.reservoir_pressure)) { return report; }
         if(!std::isfinite(p.forward_loss) || p.forward_loss<0 || !std::isfinite(p.reverse_loss) || p.reverse_loss<0){return report;}
     }
+    if(!constrain_empty_cells(passages)){return report;}
     const double tolerance=1e-14+1e-11*scale;
     for (std::size_t iteration=0;iteration<64;++iteration) {
         const double norm=evaluate(candidate_,passages,air,true);

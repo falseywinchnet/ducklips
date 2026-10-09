@@ -162,5 +162,83 @@ int main() {
     const double parallel_expected=300+300/(1+4*.001/(1e6*1e-10));
     check(valid && report.converged && std::abs(parallel.pressures()[0]-parallel_expected)<1e-8,
         "parallel passages both participate in pressure equalization",parallel.pressures()[0]-parallel_expected);
+    // A vanished finite-volume cell has zero storage, not an epsilon cavity.
+    // Its old air must leave through an interval-open passage in this step.
+    ducklips::CavityNetwork transport{};transport.prepare(2,connection);
+    const double bulk=air.density*air.sound_speed*air.sound_speed;
+    const std::array<double,2> oldv{1e-6,2e-6},oldc{oldv[0]/bulk,oldv[1]/bulk},oldp{500,100};
+    std::array<double,2> newv{0,3e-6},newc{0,newv[1]/bulk};
+    std::array<ducklips::CavityPassage,1> exit_port{{{1e-5,1e6,0,0,0}}};
+    valid=transport.reset(oldv,oldc,oldp);const double oldmass=oldv[0]+oldv[1]+oldc[0]*oldp[0]+oldc[1]*oldp[1];
+    const std::size_t transport_allocations=allocations.load();
+    report=transport.advance(newv,newc,exit_port,pi,.001,air);
+    const double expected_outflow=(oldv[0]+oldc[0]*oldp[0])/.001;
+    check(valid && report.converged && std::abs(transport.flows()[0]-expected_outflow)<1e-12
+        && std::abs(newv[1]+newc[1]*transport.pressures()[1]-oldmass)<1e-16,
+        "disappearing cell expels all its air without artificial storage",transport.flows()[0]-expected_outflow);
+    check(allocations.load()==transport_allocations,"vanishing-cell step allocates no storage");
+    exit_port[0].area=0;const double retained=transport.pressures()[1];
+    report=transport.advance(newv,newc,exit_port,pi,.001,air);
+    check(report.converged && transport.pressures()[0]==0 && transport.pressures()[1]==retained && transport.flows()[0]==0,
+        "absent sealed cell has no residual pressure or stored air");
+    // Reopening a new cell fills it by flow, not by copying another pressure.
+    exit_port[0].area=1e-5;newv=oldv;newc=oldc;
+    const double charge=oldmass-newv[0]-newv[1],gdt=.001/exit_port[0].resistance;
+    const double born_pressure=(gdt*charge/newc[1]-newv[0])/(newc[0]+gdt*(1+newc[0]/newc[1]));
+    report=transport.advance(newv,newc,exit_port,pi,.001,air);
+    check(report.converged && std::abs(transport.pressures()[0]-born_pressure)<1e-7
+        && std::abs(newv[0]+newv[1]+newc[0]*transport.pressures()[0]+newc[1]*transport.pressures()[1]-oldmass)<1e-16,
+        "appearing cell fills conservatively with the independently solved pressure",transport.pressures()[0]-born_pressure);
+    ducklips::CavityNetwork impossible{};impossible.prepare(1,{});
+    std::array<double,1> iv{1e-6},ic{iv[0]/bulk},ip{500},iz{};
+    valid=impossible.reset(iv,ic,ip);report=impossible.advance(iz,iz,{},iz,.001,air);
+    check(valid && !report.converged && impossible.pressures()[0]==500,
+        "sealed disappearing air is rejected transactionally rather than deleted");
+    report=impossible.advance(iv,ic,{},iz,.001,air);
+    check(report.converged && impossible.pressures()[0]==500,"rejected disappearance leaves original stored mass intact");
+    const std::array<ducklips::CavityConnection,3> tri_links{{{0,1},{1,2},{2,0}}};
+    std::array<ducklips::CavityPassage,3> tri_ports{{{0,0,0,0,0},{1e-4,1e6,0,0,0},{0,0,0,0,0}}};
+    ducklips::CavityNetwork chord{};chord.prepare(3,tri_links);
+    std::array<double,3> cv{1e-5,1e-6,1e-5},ccap{1e-10,1e-11,1e-10},cp{};
+    valid=chord.reset(cv,ccap,cp);cv[1]=ccap[1]=0;report=chord.advance(cv,ccap,tri_ports,ti,.001,air);
+    check(valid && report.converged && std::abs(chord.flows()[1]-.001)<1e-12 && std::abs(chord.pressures()[2]-10000)<1e-6,
+        "zero-storage cell can drain through an edge outside the preconditioner tree",chord.pressures()[2]);
+    // A moving wedge has V=a*t^2 and interval conductance b*t. Its
+    // prescribed geometry and opening admit a finite constant pressure.
+    // This distinguishes consistent moving geometry from independently
+    // interpolating cell volume and aperture across a birth/death event.
+    double wedge_error=0,wedge_mass_error=0;valid=true;
+    for(std::size_t subdivisions:{1u,2u,4u,8u,16u}){
+        for(bool closing:{false,true}){
+            ducklips::CavityNetwork wedge{};
+            const std::array<ducklips::CavityConnection,1> vent{{{0,ducklips::cavity_reservoir}}};wedge.prepare(1,vent);
+            const double acoef=1e-4,bcoef=1e-6,duration=.01;
+            const double expected_pressure=closing?2*acoef/(bcoef-2*acoef/bulk):-2*acoef/(bcoef+2*acoef/bulk);
+            std::array<double,1> wv{closing?acoef*duration*duration:0},wc{wv[0]/bulk},wp{closing?expected_pressure:0},wi{};
+            const double initial_mass=wv[0]+wc[0]*wp[0];double integrated_outflow=0;
+            valid=wedge.reset(wv,wc,wp)&&valid;
+            for(std::size_t step=1;step<=subdivisions;++step){
+                const double t0=duration*double(step-1)/double(subdivisions),t1=duration*double(step)/double(subdivisions);
+                const double old_height=closing?duration-t0:t0,new_height=closing?duration-t1:t1;
+                const double average_height=.5*(old_height+new_height);wv[0]=acoef*new_height*new_height;wc[0]=wv[0]/bulk;
+                const std::array<ducklips::CavityPassage,1> opening{{{1e-5*average_height/duration,1/(bcoef*average_height),0,0,0}}};
+                report=wedge.advance(wv,wc,opening,wi,t1-t0,air);valid=valid&&report.converged;
+                wedge_error=std::max(wedge_error,std::abs(wedge.pressures()[0]-expected_pressure));
+                integrated_outflow+=(t1-t0)*wedge.flows()[0];
+                wedge_mass_error=std::max(wedge_mass_error,std::abs(wv[0]+wc[0]*wedge.pressures()[0]+integrated_outflow-initial_mass));
+            }
+        }
+    }
+    check(valid && wedge_error<1e-7,"coherent moving-wedge birth and disappearance retain finite exact pressure under timestep refinement",wedge_error);
+    check(wedge_mass_error<1e-18,"moving wedge exchanges exactly its stored air with the reservoir",wedge_mass_error);
+    // The same disappearing-cell conservation must hold through nonlinear
+    // passage loss, where the drained amount fixes Q independently of Newton.
+    valid=transport.reset(oldv,oldc,oldp);newv={0,3e-6};newc={0,newv[1]/bulk};exit_port[0]={1e-5,1e6,0,1,2};
+    report=transport.advance(newv,newc,exit_port,pi,.001,air);
+    const double receiving_pressure=(oldmass-newv[1])/newc[1];
+    const double transport_pressure=receiving_pressure+1e6*expected_outflow+air.density*expected_outflow*expected_outflow/(2e-10);
+    check(valid && report.converged && std::abs(transport.flows()[0]-expected_outflow)<1e-12
+        && std::abs(transport.pressures()[0]-transport_pressure)<1e-5,
+        "nonlinear disappearing-cell outflow matches independent mass and pressure-drop equations",transport.pressures()[0]-transport_pressure);
     return failures?1:0;
 }

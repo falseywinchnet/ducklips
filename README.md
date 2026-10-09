@@ -34,7 +34,9 @@ the tested finite sampling jumps. It is independently checked against Boolean
 geometry and is not yet a speech-rendering path. The native
 [mean-pressure solver now retains cyclic and disconnected air routes](reports/CAVITY_GRAPH.md);
 fixed Foxtrot snapshots preserve the sealed /t/ chambers. Moving-state and
-acoustic integration remain unfinished.
+acoustic integration remain unfinished. [Zero-storage transport checks](reports/CAVITY_TRANSPORT.md)
+now conserve cell contents through disappearance, while a full 66-pose audit
+exposes split cells and unresolved pressure refinement that block speech integration.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

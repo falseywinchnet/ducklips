@@ -32,9 +32,15 @@ public:
     // keeps the direct solve; other graphs use that elimination only as a
     // preconditioner, retaining every passage in the actual pressure equation.
     void prepare(std::size_t nodes,std::span<const CavityConnection> connections);
+    // Zero compliance is allowed only with zero volume (an absent grid cell).
     bool reset(std::span<const double> volumes,std::span<const double> compliances,
                std::span<const double> pressures) noexcept;
-    // Geometry and passages are the end-of-step values; inflow is m^3/s.
+    // Volume/compliance are end-of-step values; inflow is m^3/s. Passages
+    // define the step's flow law (normally end-of-step). A disappearing cell
+    // needs its interval-open exit, not an already-sealed endpoint passage.
+    // With V=C=0, pressure is an algebraic transport multiplier, not a stored
+    // physical endpoint pressure. Nonempty components need storage or an open
+    // reservoir; inconsistent disappearance fails without discarding air.
     // Failure leaves stored state and the last accepted port flows unchanged.
     [[nodiscard]] CavityStepReport advance(std::span<const double> volumes,std::span<const double> compliances,
         std::span<const CavityPassage> passages,std::span<const double> inflow,double dt,const AirProperties& air) noexcept;
@@ -46,6 +52,8 @@ private:
     double potential_change(std::span<const CavityPassage> passages,const AirProperties& air) const noexcept;
     bool balanced(double tolerance) const noexcept;
     bool solve_jacobian() noexcept;
+    bool constrain_empty_cells(std::span<const CavityPassage> passages) noexcept;
+    std::size_t component_root(std::size_t node) noexcept;
     void multiply_jacobian(std::span<const double> x,std::span<double> y) const noexcept;
     TreeOperator matrix_{};
     std::vector<CavityConnection> connections_{};
@@ -53,6 +61,8 @@ private:
     std::vector<double> pressure_{},volume_{},compliance_{},flow_{};
     std::vector<double> candidate_{},trial_{},residual_{},gradient_{},delta_{},storage_{},rhs_{},working_flow_{},linearization_flow_{},roundoff_{};
     std::vector<double> slope_{},boundary_diagonal_{},cg_residual_{},cg_direction_{},cg_image_{},cg_preconditioned_{};
+    std::vector<std::size_t> component_{},open_degree_{};
+    std::vector<bool> anchored_{},pinned_{};
     double balance_residual_{},balance_roundoff_{};
     bool ready_{false};
     bool direct_tree_{false};

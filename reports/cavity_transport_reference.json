@@ -1,0 +1,956 @@
+{
+  "use": "mean-pressure mass transport reference; no acoustic integration or new speech",
+  "whole_transition_valid": false,
+  "pressure_refinement_established": false,
+  "decision": "Do not promote this trajectory into speech: unresolved split cells, temporal geometry and large density changes",
+  "mobility_m2_per_Pa_s": 1e-07,
+  "boundaries": "sealed outer boundary",
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  },
+  "all_pose_cell_events": {
+    "born": 195,
+    "vanished": 176
+  },
+  "geometry_command": [
+    "./build/ducklips_airspace_geometry_probe",
+    "out/nato-airspace-geometry.csv",
+    "5.020",
+    "5.085",
+    "512",
+    "out/planar-airspace/motion.csv",
+    "--frames",
+    "out/planar-airspace/motion"
+  ],
+  "temporal_geometry": "linear interpolation of saved volumes and apertures; trapezoid interval aperture",
+  "audit_command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/cavity_transport_reference.py"
+  ],
+  "geometry_audit": [
+    {
+      "time": 5.02,
+      "sha256": "ec671120027e50f15c091c53df963a8c26e3c09a1297d86e9a4fd9397a214cc6",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.021,
+      "sha256": "ea5e036ccbfdc94be899826d41e7d0f14fbc0495a97abfed1184efb05d587125",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.022,
+      "sha256": "c375a43649e1e10ceebe847ff6402239769ec9457ca53ef053e6515500cfc6d7",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.023,
+      "sha256": "4748959407e1b932148f450ac9401f7f2b017007974fda9eb3db528ae47d62ab",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.024,
+      "sha256": "6289c4b23882c1a9d83c19d39885bf7654a4a3fdcf4b6c1820a076c90d73d102",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.024172319493869e-21
+    },
+    {
+      "time": 5.025,
+      "sha256": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.533715576826534e-21
+    },
+    {
+      "time": 5.026,
+      "sha256": "cf1b14cab04bd3e3a1efce7d0980dfbe1ec57b92f9f01ab974d4df70643b5b7e",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.017554874593445e-21
+    },
+    {
+      "time": 5.027,
+      "sha256": "ea9867746d450e2d41acb7d1f0e8bddc0662a9432c55fd20638463c93139a7a3",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.507245797224837e-21
+    },
+    {
+      "time": 5.028,
+      "sha256": "570f13fd770c50417261402de0a425d6a09eb2b4b8c045b4d8d05151469cbea1",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.0381730293306602e-21
+    },
+    {
+      "time": 5.029,
+      "sha256": "6a769e60e6e9e5bf7bd23f466d6d959aae6233332f38a5e249263961a34fc584",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.0572595439959903e-21
+    },
+    {
+      "time": 5.03,
+      "sha256": "3be34a24754f74aca5ca5759a1b7308fcec43d125e0cd63104b1e762ed7b2774",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.031,
+      "sha256": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.0307897643942934e-21
+    },
+    {
+      "time": 5.032,
+      "sha256": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+      "split_cells": [
+        {
+          "cell": 3760,
+          "volume_m3": [
+            4.693651561530388e-12,
+            3.5177967688535637e-10
+          ],
+          "fluid_regions": [
+            1,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5278639519620526e-21
+    },
+    {
+      "time": 5.033,
+      "sha256": "5ffa51ccb3fb01fbd7343af9be13dadaeb379086e46d826ffb159c3b4ea1579b",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.0307897643942934e-21
+    },
+    {
+      "time": 5.034,
+      "sha256": "6e66c83365f76dabfab3ccdd64c1a9960578cf1e73006c050df8d59eec2b76f2",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5278639519620526e-21
+    },
+    {
+      "time": 5.035,
+      "sha256": "9230c518c1cc79b0ffeac3dcd6ad52f9751be501c20ff643609d240f947e2349",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.036,
+      "sha256": "15a11478df8f41e56d780c6d83301b702b87503dcbcf49dd614ca3d9cfa86a48",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 1.998468359928115e-21
+    },
+    {
+      "time": 5.037,
+      "sha256": "4c21f67debd929addd9d95515a2064b69e42dedaf45296c54d26856a9c3728cc",
+      "split_cells": [
+        {
+          "cell": 3630,
+          "volume_m3": [
+            1.035261568371048e-09,
+            2.1149896888404167e-11
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.038,
+      "sha256": "9867499099c9d80a4085147194b486c604a8c1de842439770378e76ec8a27f71",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 1.5352472168984194e-21
+    },
+    {
+      "time": 5.039,
+      "sha256": "853a7ab27f0241f3311bc3bdb09209a0b383384c2a817fa15172a5d51a354048",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.0043199847925965e-21
+    },
+    {
+      "time": 5.04,
+      "sha256": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.041,
+      "sha256": "d718a92a0045b4b061e4c5f73700c3aaac602c65963168357026ee82889f9085",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.042,
+      "sha256": "505b8a33db6afafbda8a13934607ac15ad02e98b65b9933b281dd6d1b163e02b",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.043,
+      "sha256": "3302a3d0e4fbeaeff6e8f3d643220caa86fdeead0573a9d363ff0c0b3eb1b599",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.044,
+      "sha256": "61c4d4291acb611573c43e7f0429cbff59f6f40f41e2f8858c650fcf7ba5f3b5",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5278639519620526e-21
+    },
+    {
+      "time": 5.045,
+      "sha256": "f7f85b19adc339647eb4f46d2c1edd022d638500117733759007827282ce6f17",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.046,
+      "sha256": "5d9e84363c44c8f5caab7b75110cbf21d045031388b12cdc2219024525a59d8b",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.047,
+      "sha256": "d60a12fcc9f95ee54e53b55e04a991ace6c07db04ea26dc3c3b0edd761c6b8e4",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.048,
+      "sha256": "9a781207ff436c010f53cbec179770e2f7de59cefffb36b377084568f832ef3a",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5609511764641737e-21
+    },
+    {
+      "time": 5.049,
+      "sha256": "133a9b4958ab128b4b08d0a09b0e8285df0748327349178adb9640d88f0f46b8",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.05,
+      "sha256": "cc0772a00d82df43eec06be884fcadc8371ac425aa093ce27dc4f303aebcf978",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.051,
+      "sha256": "96651bda2250f3902064676308f5d78c6d14edac8c23e872ed524eb934da297c",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.017554874593445e-21
+    },
+    {
+      "time": 5.052,
+      "sha256": "554f211a5fe4bc15b1b9616811357605fb0002559d6d18a96ff4f236eb01955a",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.533715576826534e-21
+    },
+    {
+      "time": 5.053,
+      "sha256": "a8705dfbddb1c1ed97fa635c59b5324b711f47bba8339045385c61fd384b2e41",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.017554874593445e-21
+    },
+    {
+      "time": 5.054,
+      "sha256": "1e5f693c62fe8758acec4d4941dc879c015b4494287a3a87e86383d75c6f56e4",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.055,
+      "sha256": "fdf9df00944d7e193aa6d0f90b86d26454ee9c18442fd324e48fbec626845dc8",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 4.149137952565987e-21
+    },
+    {
+      "time": 5.056,
+      "sha256": "b700d015ed22f25426ad68d2478f41bdec6f223708806fb0289747594750db86",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5278639519620526e-21
+    },
+    {
+      "time": 5.057,
+      "sha256": "852f8043af17684704de2d87fb6d4ccce96cc9f42eb227b9fa34fdef92152718",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5278639519620526e-21
+    },
+    {
+      "time": 5.058,
+      "sha256": "a91bf6fff9fb4457f62a78aac037f649794afc53701eab875b153715deb1cc80",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21
+    },
+    {
+      "time": 5.059,
+      "sha256": "751cf622f0e44851913cb4debc5ced8377783af93d4b2e9a4a65ad12bc126400",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.06,
+      "sha256": "096add39dacff6f47684e6447f6e0a740cac838f43868493039a4cfde8dc81f6",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 4.486627642487622e-21
+    },
+    {
+      "time": 5.061,
+      "sha256": "db1393f67315d9930ba21d44e57fc6d4fd02fefbd43b35a768c1bf72667fac54",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 3.0043199847925965e-21
+    },
+    {
+      "time": 5.062,
+      "sha256": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+      "split_cells": [],
+      "exact_fluid_components": 2,
+      "merged_cell_graph_components": 2,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.063,
+      "sha256": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5212465070616284e-21
+    },
+    {
+      "time": 5.064,
+      "sha256": "06d5d6c505856107a8c1c007b3603be0bf07483ac0c2b6391377c5bf5fa412e9",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.065,
+      "sha256": "af9823b5baf4184a17044ae301441c0e55a25795336c54255dbc191d6f002522",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.5013941723603557e-21
+    },
+    {
+      "time": 5.066,
+      "sha256": "62c0445db98e963a4ec4a63310dd56879cfe2a1798c316043bca8ea1a00bd606",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 4.036641389258775e-21
+    },
+    {
+      "time": 5.067,
+      "sha256": "279728e1aaf39c06528d26a5e486db239c1479c056a9a40e238b64f10e06f90b",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.0307897643942934e-21
+    },
+    {
+      "time": 5.068,
+      "sha256": "700d3639276b82d4a2f21195436889e00615d861afbc56ed7adde3608428e78e",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 3.2094607767057474e-21
+    },
+    {
+      "time": 5.069,
+      "sha256": "113a00ec46d586a3ff717cdba66c02deb3b9b474307e695d8512ebb15bdaf6b9",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 2.514629062161204e-21
+    },
+    {
+      "time": 5.07,
+      "sha256": "3fc32b6d14fe1f69a1f078972f759d95c61ecdccc3e27c188fd4aaf399896271",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.5087774372967225e-21
+    },
+    {
+      "time": 5.071,
+      "sha256": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.760240343512843e-21
+    },
+    {
+      "time": 5.072,
+      "sha256": "a1321bdc700944eb1df115d2b99884b753c8f51fd1efe629046bc162c5735e51",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.5352472168984194e-21
+    },
+    {
+      "time": 5.073,
+      "sha256": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.733770563911146e-21
+    },
+    {
+      "time": 5.074,
+      "sha256": "5cff2d3e9b0002c3ab518fe21843e4e831c659084ad864c49c42f27be552568e",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 8.07328277851755e-22
+    },
+    {
+      "time": 5.075,
+      "sha256": "ca22f3fc0643530d31630405bac36d2940cdb6b29e3d0d7d1dde21c326ffa3db",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.3499587596865412e-21
+    },
+    {
+      "time": 5.076,
+      "sha256": "91860970188d5f6ddb0c0e6729b2b27aaafec1eb4a4cc8a51ddedac71deb524e",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.0058516248644817e-21
+    },
+    {
+      "time": 5.077,
+      "sha256": "560201a8b9d30dfa00d8597a1974c8081cd4639c1e8ba66a7438a7239d95e607",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.1249656330721176e-21
+    },
+    {
+      "time": 5.078,
+      "sha256": "7cf024f8b181f895b1c7b68a18b4ce9f492abb0febb0b73410000908c0c31492",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.4293680984916318e-21
+    },
+    {
+      "time": 5.079,
+      "sha256": "9ccfece3daf503b744c4b7d366b14a8e11580e2ef196ef4ce93166fdf6499775",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            1.5052001916046573e-09,
+            3.828857929636318e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2917,
+          "volume_m3": [
+            1.6975236949301253e-09,
+            1.2790896630151678e-08
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2981,
+          "volume_m3": [
+            1.8898471982555637e-09,
+            6.250718709003902e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 3045,
+          "volume_m3": [
+            2.082170701581035e-09,
+            6.756427499434398e-10
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.0190865146653301e-21
+    },
+    {
+      "time": 5.08,
+      "sha256": "fb6bd8d441644220bce89ae15b5a517d61a4544a371131f03167d1cccf7ccecc",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            7.96093760180391e-09,
+            3.0747058949800675e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2917,
+          "volume_m3": [
+            8.821612657322536e-09,
+            7.768545682165925e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2981,
+          "volume_m3": [
+            9.682287712841014e-09,
+            1.1280773850283658e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.522012327097571e-21
+    },
+    {
+      "time": 5.081,
+      "sha256": "d23bba40ba44a6a3d0528732f4cac0376f19f2439f2581ffa2f4348a122ed552",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            1.3586134374020027e-08,
+            2.3168016869395314e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2917,
+          "volume_m3": [
+            1.5029990579342646e-08,
+            3.404669009605157e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.8131799027162367e-21
+    },
+    {
+      "time": 5.082,
+      "sha256": "775c92a32078645f7a68ba00391c95140a35820249f26d3b63ac7516436b56f8",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            1.8475924748645486e-08,
+            1.5403503753667866e-09
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2917,
+          "volume_m3": [
+            2.0427345907320986e-08,
+            8.792830699389727e-10
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.522012327097571e-21
+    },
+    {
+      "time": 5.083,
+      "sha256": "68f90aa1bfdfb6f2a6771586408f1120256d00daf3ac9c50af21f17291e15e21",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            2.2717395928050727e-08,
+            7.543643249099985e-10
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        },
+        {
+          "cell": 2917,
+          "volume_m3": [
+            2.5109561076853526e-08,
+            4.084915500041658e-11
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.1448179677733903e-21
+    },
+    {
+      "time": 5.084,
+      "sha256": "b99903e27e1284b8ca8e9c0cbe5069e270cc8a600e373f821abca6dbe9ebe117",
+      "split_cells": [
+        {
+          "cell": 2853,
+          "volume_m3": [
+            2.638947708224598e-08,
+            1.2994073706868972e-10
+          ],
+          "fluid_regions": [
+            0,
+            0
+          ]
+        }
+      ],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.6080391108030858e-21
+    },
+    {
+      "time": 5.085,
+      "sha256": "9e81a538a042e14f274f0996f5673db285bd7241efb93e01276c7e9603ddff1f",
+      "split_cells": [],
+      "exact_fluid_components": 1,
+      "merged_cell_graph_components": 1,
+      "maximum_cell_volume_error_m3": 1.4889251025954498e-21
+    }
+  ],
+  "rejected_times": [
+    5.032,
+    5.037,
+    5.079,
+    5.08,
+    5.081,
+    5.082,
+    5.083,
+    5.084
+  ],
+  "runs": [
+    {
+      "name": "preclosure",
+      "start": 5.02,
+      "end": 5.031,
+      "subdivisions": 1,
+      "steps": 11,
+      "born": 17,
+      "vanished": 15,
+      "maximum_pressure_error_Pa": 2.2562016965821385e-07,
+      "maximum_total_mass_error_m3": 5.421010862427522e-19,
+      "maximum_local_mass_error_m3": 6.458729620390609e-20,
+      "minimum_relative_density": 0.8376180525464082,
+      "maximum_relative_density": 1.2269384375534786,
+      "native_report": "nodes=4096 edges=8064 states=12 max_residual=6.4579485964562366e-17 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/preclosure-1.txt",
+      "input_sha256": "8a05e6b1e707ceec54b510e74a277a2d86a91914c08173be68aa466df36fde42",
+      "output": "out/cavity-transport/preclosure-1.csv",
+      "output_sha256": "5dd366babf7570604c8160efc5807e78a8db666cb256fa8e4a77f38c04fecdd2"
+    },
+    {
+      "name": "preclosure",
+      "start": 5.02,
+      "end": 5.031,
+      "subdivisions": 2,
+      "steps": 22,
+      "born": 17,
+      "vanished": 15,
+      "maximum_pressure_error_Pa": 1.9235812942497432e-07,
+      "maximum_total_mass_error_m3": 3.1170812458958252e-19,
+      "maximum_local_mass_error_m3": 2.4883195488031894e-20,
+      "minimum_relative_density": 0.832281749919816,
+      "maximum_relative_density": 1.2393942340121968,
+      "native_report": "nodes=4096 edges=8064 states=23 max_residual=4.9765991447827925e-17 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/preclosure-2.txt",
+      "input_sha256": "2583254bc5a0cc6b64f1f0bf83e9529f3006bb2073adef375239435065de1d1e",
+      "output": "out/cavity-transport/preclosure-2.csv",
+      "output_sha256": "dd2c9c47fd3c13e70927c9bc662656e78d587337a3da93c24a649fdf1ab1b08e"
+    },
+    {
+      "name": "preclosure",
+      "start": 5.02,
+      "end": 5.031,
+      "subdivisions": 4,
+      "steps": 44,
+      "born": 17,
+      "vanished": 15,
+      "maximum_pressure_error_Pa": 1.5914702089503407e-07,
+      "maximum_total_mass_error_m3": 4.2012834183813297e-19,
+      "maximum_local_mass_error_m3": 1.1229261158742916e-20,
+      "minimum_relative_density": 0.8122436751895918,
+      "maximum_relative_density": 1.2504934346089536,
+      "native_report": "nodes=4096 edges=8064 states=45 max_residual=4.4915192577580157e-17 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/preclosure-4.txt",
+      "input_sha256": "af42265af3cc3f7f6aa40149f37dc3d4563d276571ebec8a9616e956456a6289",
+      "output": "out/cavity-transport/preclosure-4.csv",
+      "output_sha256": "aa4e1ef00c316d0885d61bbd0ba5a71e63b7e975e8812f53a1f3cae8a625354d"
+    },
+    {
+      "name": "release",
+      "start": 5.038,
+      "end": 5.078,
+      "subdivisions": 1,
+      "steps": 40,
+      "born": 147,
+      "vanished": 136,
+      "maximum_pressure_error_Pa": 5.386013071984053e-06,
+      "maximum_total_mass_error_m3": 3.108949729602184e-17,
+      "maximum_local_mass_error_m3": 4.728672166851637e-18,
+      "minimum_relative_density": 0.3717943284222659,
+      "maximum_relative_density": 2.4458493419389997,
+      "native_report": "nodes=4096 edges=8064 states=41 max_residual=4.7286626484843285e-15 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/release-1.txt",
+      "input_sha256": "1d7d8e80e935cf8f107140d4f4f0d4860d2dfa2df07f522d52be6a0c71744f34",
+      "output": "out/cavity-transport/release-1.csv",
+      "output_sha256": "9288a3f5b5f89a87d7623a02a61e63799a5f760797a2779c0f3d8f6f50d55ac3"
+    },
+    {
+      "name": "release",
+      "start": 5.038,
+      "end": 5.078,
+      "subdivisions": 2,
+      "steps": 80,
+      "born": 147,
+      "vanished": 136,
+      "maximum_pressure_error_Pa": 2.0153529476374388e-06,
+      "maximum_total_mass_error_m3": 3.617169497954764e-17,
+      "maximum_local_mass_error_m3": 1.2054343317479473e-18,
+      "minimum_relative_density": 0.3355605267441247,
+      "maximum_relative_density": 2.651741592393227,
+      "native_report": "nodes=4096 edges=8064 states=81 max_residual=2.4108831962320765e-15 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/release-2.txt",
+      "input_sha256": "b3a57691ccd4264c57d215bb099e56f0432063dbd6f546e0d34c61822de9abfc",
+      "output": "out/cavity-transport/release-2.csv",
+      "output_sha256": "2c779d419afd037137c52f455c56c888e58c1c7b024eddad47bd01456780a2f8"
+    },
+    {
+      "name": "release",
+      "start": 5.038,
+      "end": 5.078,
+      "subdivisions": 4,
+      "steps": 160,
+      "born": 147,
+      "vanished": 136,
+      "maximum_pressure_error_Pa": 1.5500481822527945e-06,
+      "maximum_total_mass_error_m3": 3.572446158339737e-17,
+      "maximum_local_mass_error_m3": 4.20068397093117e-19,
+      "minimum_relative_density": 0.2793732186852706,
+      "maximum_relative_density": 2.826990233142229,
+      "native_report": "nodes=4096 edges=8064 states=161 max_residual=1.680307008950757e-15 max_Newton=1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_transport_probe"
+      ],
+      "input": "out/cavity-transport/release-4.txt",
+      "input_sha256": "952afec86177607fb34f8ffcd82b7f91d1c051959a26a91ca9dac9f42b6efe4e",
+      "output": "out/cavity-transport/release-4.csv",
+      "output_sha256": "e64d5de87c8b3078b6d591de659ddc2fbcb69819fc063a058a51112db8ec6e1b"
+    }
+  ],
+  "refinement": [
+    {
+      "name": "preclosure",
+      "endpoint_pressure_differences_Pa": [
+        2515.129462515022,
+        3534.3988156356245
+      ],
+      "volume_weighted_RMS_differences_Pa": [
+        81.78119377598458,
+        42.23037571815655
+      ],
+      "worst_cells": [
+        {
+          "cell": 3310,
+          "volume_m3": 3.011586781099696e-12,
+          "previous_pressure_Pa": 28484.420973343113,
+          "pressure_Pa": 30999.550435858135
+        },
+        {
+          "cell": 3310,
+          "volume_m3": 3.011586781099696e-12,
+          "previous_pressure_Pa": 30999.550435858135,
+          "pressure_Pa": 34533.94925149376
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "endpoint_pressure_differences_Pa": [
+        6585.399793751814,
+        7561.273358462466
+      ],
+      "volume_weighted_RMS_differences_Pa": [
+        591.7844212218016,
+        265.9200344513058
+      ],
+      "worst_cells": [
+        {
+          "cell": 3619,
+          "volume_m3": 2.6952825415385308e-11,
+          "previous_pressure_Pa": 130191.76884827855,
+          "pressure_Pa": 136777.16864203036
+        },
+        {
+          "cell": 3619,
+          "volume_m3": 2.6952825415385308e-11,
+          "previous_pressure_Pa": 136777.16864203036,
+          "pressure_Pa": 144338.44200049283
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "include/ducklips/cavity_network.hpp": "354526fd5e20a9879d16a9fca390cad8ecb9f7100ad207961de36e9c997311a8",
+    "src/cavity_network.cpp": "2f5c04876e49ec8a9ed1b84ec800fcd646f4812afdfcb13647b1b2fb6086dad1",
+    "tests/cavity_network_tests.cpp": "6f791a4134f4724e05e48087eab8971a0286cf9250f5e32b29d2a957b17c092d",
+    "tools/airspace_geometry_probe.cpp": "c5dea176adc65b039d348c2c5d23126cea1539406df4507a56ecd85e52205f3f",
+    "tools/cavity_transport_probe.cpp": "4177a4383b0eeffde8e1a08c64d31956b910a6784a23d7fd282a5d034184f1eb",
+    "tools/cavity_transport_reference.py": "d959636b3b423c8aaad5d86c091df1fb338c49d787378ddce457b20565c1cab5",
+    "build/ducklips_cavity_transport_probe": "929cacce40f5d6126415b2177a23f190c72ba5660139d610a48c46ad96e30efe",
+    "build/ducklips_airspace_geometry_probe": "279c537930c7bdd0ded5fa47cf7540df65928771b853a7846f558b981f5a33fb",
+    "out/nato-airspace-geometry.csv": "f7c69147401ec4526c19135d7b45cceac020921f0939c98b10e90c13bcdf04d9",
+    "out/cavity-transport-native.log": "bd0701c1ae16399c521af8aa355662e0a66408ce903f9e26735e83ae78117424",
+    "out/cavity-transport-native-asan.log": "bd0701c1ae16399c521af8aa355662e0a66408ce903f9e26735e83ae78117424"
+  }
+}

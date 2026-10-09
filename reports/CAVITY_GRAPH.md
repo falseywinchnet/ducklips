@@ -127,12 +127,12 @@ grid faces are not tube walls; copying that resistance into the speech engine
 would introduce artificial wall friction. Physical mean-flow resistance,
 inertance and acoustic boundary terms must come from actual tissue geometry.
 
-`CavityNetwork` still requires positive compliance and persistent node
-identity. It does not transport stored air when a cut cell disappears,
-splits, or merges. Passing zero volume with an arbitrary positive compliance
-would merely hide that missing moving-contact treatment. The planar geometry
-also still needs general resolution of cells containing disconnected air
-pieces. The four audited snapshots do not contain such cells.
+The subsequent [zero-storage transport work](CAVITY_TRANSPORT.md) now allows
+zero compliance at zero volume, draining a disappearing cell through an
+interval-open passage without artificial storage. Persistent node identity
+is still required. Split/merge geometry and consistent interval openings
+remain unresolved: the full 66-pose audit finds split cells outside the four
+snapshots checked here, including a false connection across the /t/ seal.
 
 The production spatial-pressure speech route still uses section geometry,
 and the acoustic representation remains a tree. Nasal flow, side cavities,

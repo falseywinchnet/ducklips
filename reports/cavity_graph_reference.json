@@ -440,11 +440,11 @@
     }
   ],
   "hashes": {
-    "include/ducklips/cavity_network.hpp": "12b134d8183601b5b48fdb093aaa7fde9daba994a781452cdb6bb671cb25995c",
-    "src/cavity_network.cpp": "427a6a571eec6f7bc033883a0c9d68bacdbf624bec5a8d528bb964ece5c25f26",
+    "include/ducklips/cavity_network.hpp": "354526fd5e20a9879d16a9fca390cad8ecb9f7100ad207961de36e9c997311a8",
+    "src/cavity_network.cpp": "2f5c04876e49ec8a9ed1b84ec800fcd646f4812afdfcb13647b1b2fb6086dad1",
     "tools/cavity_graph_probe.cpp": "33bb631d6ca000224108ded70c25a280d0964b8ff998857301c91a6471fa1418",
-    "tests/cavity_network_tests.cpp": "b0eb800de0863e73167049078828bcc0702c598f615f7c023bf7473773ecbd7a",
+    "tests/cavity_network_tests.cpp": "6f791a4134f4724e05e48087eab8971a0286cf9250f5e32b29d2a957b17c092d",
     "tools/cavity_graph_reference.py": "c95f865606e3371a8895d9d3eddf6cfce9d49dc834cb01f31fd71f17fe1e616e",
-    "build/ducklips_cavity_graph_probe": "d0127cc8cf759dd2092c919580853756787861d81947fc457228f24512881840"
+    "build/ducklips_cavity_graph_probe": "7ebe5753afe4cbdfe96d2f3ed2ff5d9c5da18e53d8614e920836364f387194b5"
   }
 }

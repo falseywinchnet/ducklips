@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cstdio>
 #include <fstream>
+#include <filesystem>
 #include <iomanip>
 #include <numeric>
 #include <sstream>
@@ -18,7 +19,10 @@ void numbers(std::ostream& out,std::span<const double> p){out<<'[';for(std::size
 }
 
 int main(int argc,char** argv){
-    if(argc!=6 && argc!=7){std::fprintf(stderr,"usage: ducklips_airspace_geometry_probe GEOMETRY.csv START END CONTOUR_VERTICES OUTPUT.csv [LAST_POSE.json]\n");return 2;}
+    if(argc!=6 && argc!=7 && argc!=8){std::fprintf(stderr,"usage: ducklips_airspace_geometry_probe GEOMETRY.csv START END CONTOUR_VERTICES OUTPUT.csv [LAST_POSE.json | --frames DIRECTORY]\n");return 2;}
+    const bool frames=argc==8;
+    if(frames && std::string(argv[6])!="--frames"){return 2;}
+    if(frames){std::filesystem::create_directories(argv[7]);}
     double start=0,end=0;std::size_t vertices=0;
     try{start=std::stod(argv[2]);end=std::stod(argv[3]);vertices=std::stoul(argv[4]);}catch(...){return 2;}
     if(!std::isfinite(start) || !std::isfinite(end) || start<0 || end<start || vertices<32 || vertices>1024){return 2;}
@@ -85,8 +89,10 @@ int main(int argc,char** argv){
         double area=0;for(std::size_t i=0;i<vertices;++i){const auto a=body[i],b=body[(i+1)%vertices];area+=a.x*b.y-a.y*b.x;}
         std::size_t vertical=0,horizontal=0;for(double v:cells.vertical_face){vertical+=v>0;}for(double v:cells.horizontal_face){horizontal+=v>0;}
         output<<time<<','<<std::accumulate(cells.volume.begin(),cells.volume.end(),0.)<<','<<std::abs(area)/2<<','<<error<<','<<*std::max_element(cells.volume.begin(),cells.volume.end())<<','<<vertical<<','<<horizontal<<'\n';++rows;
-        if(argc==7){
-            std::ofstream snapshot(argv[6]);if(!snapshot){return 2;}snapshot<<std::setprecision(17)<<"{\"time\":"<<time<<",\"depth\":0.022,\"domain\":";points(snapshot,domain);
+        if(argc>=7){
+            std::ostringstream name;
+            if(frames){name<<argv[7]<<"/pose-"<<std::fixed<<std::setprecision(3)<<time<<".json";}else{name<<argv[6];}
+            std::ofstream snapshot(name.str());if(!snapshot){return 2;}snapshot<<std::setprecision(17)<<"{\"time\":"<<time<<",\"depth\":0.022,\"domain\":";points(snapshot,domain);
             snapshot<<",\"solids\":[";for(std::size_t i=0;i<solids.size();++i){if(i){snapshot<<',';}points(snapshot,solids[i]);}
             snapshot<<"],\"x_edges\":";numbers(snapshot,xs);snapshot<<",\"y_edges\":";numbers(snapshot,ys);
             snapshot<<",\"volume\":";numbers(snapshot,cells.volume);snapshot<<",\"vertical_face\":";numbers(snapshot,cells.vertical_face);
