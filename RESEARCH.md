@@ -244,6 +244,14 @@ analytically integrated compressible viscous law changes the residual-air
 escape, motivating consistent passage density and disappearing-cell transport.
 The alternative is a diagnostic, not a replacement production source.
 
+[Continuous pressure storage](reports/CONTOUR_PRESSURE_STORAGE.md) now supplies
+a native gas representation without the fixed chamber seam. Its two overlapping
+mass moments, energy, shape forces and inverse moment solve pass independent
+80-digit checks. A conservative prescribed-area sweep crosses the old seam
+with finite density and converging force work. The internal transfer now means
+an integrated flux; the old passage momenta cannot be reused unchanged.
+Compatible flow/inertia/loss coupling remains necessary before speech.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

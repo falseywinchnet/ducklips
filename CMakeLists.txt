@@ -25,6 +25,7 @@ add_library(ducklips STATIC
     src/glottal_storage.cpp
     src/glottal_kinetics.cpp
     src/glottal_contour.cpp
+    src/contour_pressure_storage.cpp
     src/contour_kinetics.cpp
     src/fold_contact.cpp
     src/contour_glottal_storage.cpp
@@ -249,3 +250,7 @@ add_test(NAME ducklips_contour_relaxation_upper_cycle COMMAND ducklips_contour_c
 
 add_executable(ducklips_contour_pocket_probe tools/contour_pocket_probe.cpp)
 target_link_libraries(ducklips_contour_pocket_probe PRIVATE ducklips)
+
+add_executable(ducklips_contour_pressure_probe tools/contour_pressure_probe.cpp)
+target_link_libraries(ducklips_contour_pressure_probe PRIVATE ducklips)
+add_test(NAME ducklips_contour_pressure_storage COMMAND ducklips_contour_pressure_probe)

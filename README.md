@@ -163,6 +163,12 @@ A pressure-integrated viscous law changes residual-air escape, identifying
 the density representation and disappearing-cell transport as the next work.
 This is a model diagnosis, with no new speech result.
 
+[Continuous contour pressure storage](reports/CONTOUR_PRESSURE_STORAGE.md)
+now replaces the fixed chamber split in a new native storage component.
+Overlapping mass moments preserve total air and give pressure/shape forces
+from the same energy. A mass-preserving control crosses the old boundary
+without a singularity. Compatible momentum and speech integration are next.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,
