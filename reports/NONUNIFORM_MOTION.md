@@ -162,3 +162,7 @@ samples and renders 1.31 seconds in 0.079 seconds in this single-run check.
 This is a PCM regression check, not a replacement for the previous multi-case
 performance receipt. The physical reference prototype does not change the
 speech default.
+
+The subsequent native exact-phase/continuous-coupling implementation, physical
+rate projection, and coefficient-sampling limits are documented in
+[CONTINUOUS_MODES.md](CONTINUOUS_MODES.md).

@@ -1,0 +1,40 @@
+{
+  "schema": 1,
+  "scope": "Interaction-coordinate RK4: exact diagonal acoustic phase, moving coupling.\n\nA numerical experiment for the existing nonuniform canonical-network fixture.\nNo speech, damping model, eigenvalue crossing, or complete engine speed claim.\n",
+  "comparisons": [
+    {
+      "initial_mode": 0,
+      "cases": [
+        {
+          "substeps": 1,
+          "max_relative_state_error": 1.3372349501326011e-08
+        },
+        {
+          "substeps": 2,
+          "max_relative_state_error": 1.678213474491974e-09
+        },
+        {
+          "substeps": 4,
+          "max_relative_state_error": 1.1505122571836402e-09
+        }
+      ]
+    },
+    {
+      "initial_mode": 4,
+      "cases": [
+        {
+          "substeps": 1,
+          "max_relative_state_error": 4.4205235473658793e-07
+        },
+        {
+          "substeps": 2,
+          "max_relative_state_error": 2.6357663372542377e-08
+        },
+        {
+          "substeps": 4,
+          "max_relative_state_error": 7.941208587522581e-10
+        }
+      ]
+    }
+  ]
+}

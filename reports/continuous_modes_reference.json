@@ -1,0 +1,226 @@
+{
+  "schema": 1,
+  "scope": "Unforced continuous modal transport kernel; includes three coefficient fills and phase evaluation per sample; excludes eigenbasis/physical transport construction, losses, source and microphone",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "binary_sha256": "269a51146389fad7f302d365ab0d75416b45b954be7c73bcfe9f75bd8aa80990",
+  "source_sha256": {
+    "include/ducklips/modal_transport.hpp": "0987e584b86f9f1adb17bb8ae28f144194f629bcd5f1bf3dbdc1944f7b8d840c",
+    "src/modal_transport.cpp": "45b36517b8a538256daf4cedfcdc18128a65cd2048af285d2f1eafafcfb5afa8",
+    "src/real_dot.hpp": "46e53921940cbf37b3f48889ed9065c8f4948ca9812dc0be16dc437ec072b470",
+    "tools/modal_transport_probe.cpp": "9958944ca0741d43e70bfe4eb5378ad06ee95ea152e94d240560e19175734dbc",
+    "include/ducklips/continuous_modes.hpp": "9364629ce3d1f56e282aad43f81dbe3efee6035a7052d945865a30a159ddc188",
+    "src/continuous_modes.cpp": "d7169cf01bc81b5aaf390c2bdb352c456b3481ed54793d9406e6fa083e8a0eef",
+    "tools/continuous_modes_probe.cpp": "02a021ef30b399970f584f007fd4c5b644f500f4213471cfbafa5e9ac7c692b2",
+    "tools/interaction_modal_reference.py": "e003b4f1f3b0480c197f69b3d53b71343bc5f9503d679db0abdcf43bff506923",
+    "tools/verify_continuous_modes.py": "6273519a3586ebb851ff17cd6a3730cc7b072ea508d00d657b8dd691e10d9717",
+    "tools/moving_modal_reference.py": "c72a90fd783b2aa7d67e8f134e603ef8500d9b6450ad841bb5aab0b54cd0d30c"
+  },
+  "native_transport_max_component_relative_error_with_unit_floor": 7.460698725481052e-14,
+  "transport_binary_sha256": "2a8a78ef4dc380701b70c7db6c196ba2de1accdceaf23d189cb16d04e2d113aa",
+  "comparisons": [
+    {
+      "initial_condition": "low",
+      "max_relative_state_error": 1.3372350445852957e-08,
+      "max_absolute_native_vs_python_error": 3.3630153170357743e-15,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 13508,
+        "max_work_balance_residual": 2.6721067703182582e-11,
+        "final_wall_work": -2.9681900824652714e-06,
+        "initial_energy": 0.2899999999999997,
+        "final_energy": 0.28999703180706055
+      }
+    },
+    {
+      "initial_condition": "high",
+      "max_relative_state_error": 4.420523543458608e-07,
+      "max_absolute_native_vs_python_error": 2.0896199963262186e-15,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45881,
+        "max_work_balance_residual": 1.2445487782702935e-10,
+        "final_wall_work": 8.903888891970462e-07,
+        "initial_energy": 0.2900000000000002,
+        "final_energy": 0.2900008902874659
+      }
+    },
+    {
+      "initial_condition": "mixed",
+      "max_relative_state_error": 2.7460415840866204e-07,
+      "max_absolute_native_vs_python_error": 1.1473015709113979e-15,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45245,
+        "max_work_balance_residual": 7.1592541668759856e-12,
+        "final_wall_work": -9.818724529509634e-07,
+        "initial_energy": 0.03931300045905082,
+        "final_energy": 0.03931201858095103
+      }
+    }
+  ],
+  "timings": [
+    {
+      "modes": 20,
+      "states": 40,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.18094125,
+      "realtime_multiple": 27.633278757607787,
+      "checksum": 1.0013883042635487
+    },
+    {
+      "modes": 20,
+      "states": 40,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.178562875,
+      "realtime_multiple": 28.001341264246555,
+      "checksum": 1.0013883042635487
+    },
+    {
+      "modes": 20,
+      "states": 40,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.180525792,
+      "realtime_multiple": 27.69687336422266,
+      "checksum": 1.0013883042635487
+    },
+    {
+      "modes": 24,
+      "states": 48,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.217720541,
+      "realtime_multiple": 22.96521943696622,
+      "checksum": 1.0019875236001938
+    },
+    {
+      "modes": 24,
+      "states": 48,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.21624975,
+      "realtime_multiple": 23.12141401319539,
+      "checksum": 1.0019875236001938
+    },
+    {
+      "modes": 24,
+      "states": 48,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.21953725,
+      "realtime_multiple": 22.775178244238734,
+      "checksum": 1.0019875236001938
+    },
+    {
+      "modes": 32,
+      "states": 64,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.343677666,
+      "realtime_multiple": 14.548515934113682,
+      "checksum": 1.0024380486528912
+    },
+    {
+      "modes": 32,
+      "states": 64,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.344959542,
+      "realtime_multiple": 14.49445338143451,
+      "checksum": 1.0024380486528912
+    },
+    {
+      "modes": 32,
+      "states": 64,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.3471915,
+      "realtime_multiple": 14.401274224743405,
+      "checksum": 1.0024380486528912
+    }
+  ],
+  "transport_construction_timings": [
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.045429959,
+      "equivalent_realtime_multiple": 110.0595314206645
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.044663167,
+      "equivalent_realtime_multiple": 111.94906980062565
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.045284875,
+      "equivalent_realtime_multiple": 110.41214091901546
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.063329125,
+      "equivalent_realtime_multiple": 78.95261461452372
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.064485541,
+      "equivalent_realtime_multiple": 77.53676130281671
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.063966583,
+      "equivalent_realtime_multiple": 78.16581354673893
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.104023417,
+      "equivalent_realtime_multiple": 48.066100347386204
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.106901083,
+      "equivalent_realtime_multiple": 46.772210904542476
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.106036417,
+      "equivalent_realtime_multiple": 47.15361138617123
+    }
+  ],
+  "summed_cost_not_complete_speech_benchmark": [
+    {
+      "modes": 20,
+      "sum_of_separate_worst_wall_seconds": 0.226371209,
+      "equivalent_realtime_multiple": 22.087614507549855
+    },
+    {
+      "modes": 24,
+      "sum_of_separate_worst_wall_seconds": 0.284022791,
+      "equivalent_realtime_multiple": 17.60422106407651
+    },
+    {
+      "modes": 32,
+      "sum_of_separate_worst_wall_seconds": 0.454092583,
+      "equivalent_realtime_multiple": 11.010970421421748
+    }
+  ]
+}

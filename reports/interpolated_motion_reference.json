@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "scope": "Measure motion-coefficient sampling error separately from acoustic stepping.\n\nLocal polynomial interpolation of continuous, isolated-mode coefficients.\nRequires future control knots (bounded lookahead), not an online predictor.\n",
+  "initial_condition": "highest nominal mode",
+  "cases": [
+    {
+      "polynomial_degree": 3,
+      "control_rate_hz": 500,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.004,
+      "max_relative_state_error": 0.003881204282388893
+    },
+    {
+      "polynomial_degree": 3,
+      "control_rate_hz": 1000,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.002,
+      "max_relative_state_error": 0.00025087470823241537
+    },
+    {
+      "polynomial_degree": 3,
+      "control_rate_hz": 2000,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.001,
+      "max_relative_state_error": 1.6032663912626283e-05
+    },
+    {
+      "polynomial_degree": 5,
+      "control_rate_hz": 500,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.006,
+      "max_relative_state_error": 0.00026157059800567534
+    },
+    {
+      "polynomial_degree": 5,
+      "control_rate_hz": 1000,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.003,
+      "max_relative_state_error": 4.572881554742279e-06
+    },
+    {
+      "polynomial_degree": 5,
+      "control_rate_hz": 2000,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.0015,
+      "max_relative_state_error": 4.303225840553267e-07
+    }
+  ],
+  "native_interpolator": "Not implemented or timed; does not establish complete speech throughput"
+}
