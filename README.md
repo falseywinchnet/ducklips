@@ -47,9 +47,14 @@ air behind a moving seal through graph reindexing and audits correspondence
 across all 520 saved subintervals. [Partitions through the Foxtrot contact
 points](reports/CONTACT_PRESSURE_PARTITION.md) now retain finite neck coupling
 without an instantaneous pressure merge, and the native solver now checks
-small-region conservation against each region's own scale. Full contact-event
-evolution, physical interval flow and acoustic integration remain required
-for speech.
+small-region conservation against each region's own scale. A native
+[moving-pressure replay](reports/PLANAR_PRESSURE_MOTION.md) now combines actual
+contour motion, opening histories and conserved storage through two separately
+initialized closure/release intervals. It preserves the sealed chambers, but
+the coarse release control reaches a 12% density reduction; its prescribed
+mobility and pressure magnitudes are not physically validated. Complete
+contact-event evolution, physical interval flow and acoustic integration
+remain required for speech.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

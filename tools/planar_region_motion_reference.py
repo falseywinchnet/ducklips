@@ -87,7 +87,16 @@ def correspondence(first,last,old_geometry,old_cells,new_geometry,new_cells):
             links.append([i,j,float(raw),float(clear),point.x,point.y])
             old_targets.setdefault(i,[]).append(j);new_sources.setdefault(j,[]).append(i)
         elif raw>0:removed.append([i,j,float(raw)])
-    assert max_subset_error<1e-20
+    # A thin fragment's area can be ill-conditioned relative to the absolute
+    # coordinates used by Boolean intersections. Check an explicit coordinate
+    # roundoff allowance (boundary length times positional roundoff), rather
+    # than an absolute m^3 floor or a relative tolerance on the tiny area.
+    # This is a consistency allowance, not a certified GEOS error bound, and
+    # it changes no geometry, witness volume, or correspondence classification.
+    subset_allowance=np.asarray([64*np.finfo(float).eps*first['depth']*
+        max(abs(x) for x in (*a.bounds,*b.bounds))*(a.length+b.length) for a,b in zip(old,new)])
+    assert np.all((overlap_volume>0)|(witness_volume==0))
+    assert np.all(witness_volume-overlap_volume<=subset_allowance)
     # Independent point-in-fluid checks along the motion guard the constructive
     # sweep argument against implementation/rounding mistakes. They supplement
     # the hull enclosure; finite samples alone do not certify a clear path.

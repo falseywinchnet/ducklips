@@ -1,0 +1,771 @@
+{
+  "use": "two separately initialized full-mouth moving pressure intervals on a coarse five-region graph; no speech or calibrated mobility",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_pressure_motion_reference.py"
+  ],
+  "runs": [
+    {
+      "name": "closure",
+      "subdivisions": 1,
+      "steps": 2,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 1.0164395367051604e-19,
+        "port_geometry_error_m2": 2.6020852139652106e-18,
+        "interval_area_error_m2": 5.5699802409270305e-15,
+        "native_oracle_pressure_error_Pa": 9.32686816668138e-10,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 5.911239452457074e-21,
+        "sealed_group_mass_error_m3": 0.0,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9759578575228138,
+        1.006663831209707
+      ],
+      "final_pressure_Pa": [
+        799.1359308133123,
+        930.6040284355589,
+        -3357.4851969390556,
+        -515.3509488536436,
+        -1369.966839869335
+      ],
+      "independent_quadrature_evaluations": 1512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-1.txt",
+      "input_sha256": "ffd0090de1a114669ae72e70507e4b87896040b3abd043ac60349e33616d71d6",
+      "output": "out/planar-pressure-motion/closure-1.json",
+      "output_sha256": "45d0e0113b33c1c7583ee8881c13a1e48aef1660a4ef6d9e69d28fd2aac26cc5",
+      "audit": "out/planar-pressure-motion/closure-1-audit.json",
+      "audit_sha256": "97d55e20691de3d44e7c20972ddb90f4d42af32501a9ae46dc21b18638e880c9",
+      "log": "out/planar-pressure-motion/closure-1.log",
+      "log_sha256": "d7df390004572bc2531f6e943a5b054318c17cb8bb1e68c688004abd063977e7"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 2,
+      "steps": 3,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 1.7618285302889447e-19,
+        "port_geometry_error_m2": 3.2526065174565133e-18,
+        "interval_area_error_m2": 2.6152040602522852e-15,
+        "native_oracle_pressure_error_Pa": 9.426912583876401e-10,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 4.8334618883916924e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.975893724592981,
+        1.0066661480567618
+      ],
+      "final_pressure_Pa": [
+        799.035825448504,
+        930.9275761267786,
+        -3366.441360590215,
+        -510.99998348425686,
+        -1373.3563661402181
+      ],
+      "independent_quadrature_evaluations": 1890,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-2.txt",
+      "input_sha256": "f6fe0de719965a09b7b40303718ac775374215b36fb3a9826aa24765fa714407",
+      "output": "out/planar-pressure-motion/closure-2.json",
+      "output_sha256": "dd2e4a8f5dc625d8a5d8ac23f484876896a2ee11c227bfcc9389288c586d78aa",
+      "audit": "out/planar-pressure-motion/closure-2-audit.json",
+      "audit_sha256": "fbeda2b3ddff4d4159a3d9841edef9b81cb809d07d89a0ec8b98a0a0917cceca",
+      "log": "out/planar-pressure-motion/closure-2.log",
+      "log_sha256": "7be0d4c8cbfad1b6a6a1ad3f3f0bb2d1aabef168486bd70683d22824ba89350c"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 4,
+      "steps": 5,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.5914196963582334e-19,
+        "port_geometry_error_m2": 3.2526065174565133e-18,
+        "interval_area_error_m2": 5.087727114605478e-15,
+        "native_oracle_pressure_error_Pa": 1.0354597179684788e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 2.662242027410706e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9758294046117726,
+        1.006668481304081
+      ],
+      "final_pressure_Pa": [
+        798.9350975867213,
+        931.2534141148909,
+        -3375.423645965956,
+        -506.63877710220356,
+        -1376.7488089013689
+      ],
+      "independent_quadrature_evaluations": 2730,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-4.txt",
+      "input_sha256": "c521699c3bbff8a00f5590707b293b3709da76c070a49d6a3e0399547d5996e3",
+      "output": "out/planar-pressure-motion/closure-4.json",
+      "output_sha256": "1ff58047e0a792c81c42dff3cd40967eb6644bfeabce723ee3450404347f7d55",
+      "audit": "out/planar-pressure-motion/closure-4-audit.json",
+      "audit_sha256": "9b93c517ae4431bb5a3714aa9c131f2642ae56c7fbddefbf4ff61e66aba40378",
+      "log": "out/planar-pressure-motion/closure-4.log",
+      "log_sha256": "3f0c194bbfacb26a7ccec643c1a3f28476ae7d9a6ee5389f03ec57e0dac031d7"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 8,
+      "steps": 9,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.5914196963582334e-19,
+        "port_geometry_error_m2": 3.2526065174565133e-18,
+        "interval_area_error_m2": 1.017588791007995e-14,
+        "native_oracle_pressure_error_Pa": 1.1842757885460742e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 4.708602852335934e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9757883620002503,
+        1.0066699783190638
+      ],
+      "final_pressure_Pa": [
+        798.8705007468244,
+        931.462472257246,
+        -3381.155246665047,
+        -503.86317031921243,
+        -1378.887974790626
+      ],
+      "independent_quadrature_evaluations": 3906,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-8.txt",
+      "input_sha256": "23d5370c2d5285cf9e77eb5e6f142bf4fb56f7befd1c7c373f19168a81ba10f8",
+      "output": "out/planar-pressure-motion/closure-8.json",
+      "output_sha256": "d0ad705adeeac67718205dc55c3c08bf22a624e75d5c54815e800a98a515ac08",
+      "audit": "out/planar-pressure-motion/closure-8-audit.json",
+      "audit_sha256": "487a7032a952530b607417d550ae559fb8cc87f75c9c4c6905d1f146d0217d42",
+      "log": "out/planar-pressure-motion/closure-8.log",
+      "log_sha256": "758010238cf9ed08c22314684d7e40f1cf44d9febaa7d625e69f65de7677a36f"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 16,
+      "steps": 17,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.5914196963582334e-19,
+        "port_geometry_error_m2": 3.2526065174565133e-18,
+        "interval_area_error_m2": 3.5697627579628355e-14,
+        "native_oracle_pressure_error_Pa": 1.3370708984439261e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 5.485493468585152e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9757657352423278,
+        1.0066708035709095
+      ],
+      "final_pressure_Pa": [
+        798.8348827083751,
+        931.5777186775119,
+        -3384.3150734089204,
+        -502.3330684631333,
+        -1380.0668058321658
+      ],
+      "independent_quadrature_evaluations": 6594,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-16.txt",
+      "input_sha256": "f3b15b66777ced988c60e153e1f89cf8d7f1bdf4a05eddb4acabd3c703cd547f",
+      "output": "out/planar-pressure-motion/closure-16.json",
+      "output_sha256": "e2762601ed2aa6beed980c87740f61723c458be0b5af7f002eb087bb4a698cfa",
+      "audit": "out/planar-pressure-motion/closure-16-audit.json",
+      "audit_sha256": "3f33f1799466c952481390ffee9798c20a7f6bc06ce8453c0a502ab0d2f57a7a",
+      "log": "out/planar-pressure-motion/closure-16.log",
+      "log_sha256": "f66479cd3d88b3b139e11b39a5d1d595e95b00b79595a5b3ac4342055b9e1d60"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 32,
+      "steps": 33,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 4.1335207826009857e-19,
+        "port_geometry_error_m2": 3.686287386450715e-18,
+        "interval_area_error_m2": 1.6777811778778684e-14,
+        "native_oracle_pressure_error_Pa": 1.512376002210658e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 6.085166293149852e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9757537982389799,
+        1.006671239418832
+      ],
+      "final_pressure_Pa": [
+        798.8160697723433,
+        931.6385848398794,
+        -3385.9820759264594,
+        -501.5261350325525,
+        -1380.6876356267771
+      ],
+      "independent_quadrature_evaluations": 11844,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-32.txt",
+      "input_sha256": "c433fadf9c8ca25c219ab68619ed9f04ccaecf73c8f866506e29ac7925353010",
+      "output": "out/planar-pressure-motion/closure-32.json",
+      "output_sha256": "f183de20e3604447c19928be9a9d65cb00950db1172388b3eeb3af09f5e730a2",
+      "audit": "out/planar-pressure-motion/closure-32-audit.json",
+      "audit_sha256": "3e153a37b9d4aa9d5d249223ad1488d37dfe5332153431e4b5516ab02ef7307b",
+      "log": "out/planar-pressure-motion/closure-32.log",
+      "log_sha256": "cadc744106a80eda47acf4dea8cce7a44878e0d4aa33d250acfef684a7645bf9"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 64,
+      "steps": 65,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 4.1335207826009857e-19,
+        "port_geometry_error_m2": 4.9873299934333204e-18,
+        "interval_area_error_m2": 2.082969213779151e-15,
+        "native_oracle_pressure_error_Pa": 1.5122623153729364e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 6.416114470766356e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9757477176656207,
+        1.006671461450106
+      ],
+      "final_pressure_Pa": [
+        798.8064854662446,
+        931.6695915073003,
+        -3386.8312279960624,
+        -501.1151091159428,
+        -1381.0038070985622
+      ],
+      "independent_quadrature_evaluations": 22512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-64.txt",
+      "input_sha256": "cb29b673853a4eed4e767497c24b52637e7ea319ee9b3f59982b602950cd7962",
+      "output": "out/planar-pressure-motion/closure-64.json",
+      "output_sha256": "160752a61b121ebe864332e79a274dada8a7ac12781ba4512124004ce9fcdc5f",
+      "audit": "out/planar-pressure-motion/closure-64-audit.json",
+      "audit_sha256": "c66ddb6269fe3915be7d54064eea9ad0d7dd14e8b851f0e7a3e27989d71e26bc",
+      "log": "out/planar-pressure-motion/closure-64.log",
+      "log_sha256": "b8cdbe48f0b5339909d228895b9a7ccd187b5a611ef7dfa29d9545b15af5be8c"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "contact_cuts": [
+        0.33213081472719347
+      ],
+      "maxima": {
+        "region_volume_error_m3": 4.1335207826009857e-19,
+        "port_geometry_error_m2": 4.9873299934333204e-18,
+        "interval_area_error_m2": 4.165504746689308e-15,
+        "native_oracle_pressure_error_Pa": 1.5139676179387607e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 6.271686433602932e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.9757446267744435,
+        1.0066715743654313
+      ],
+      "final_pressure_Pa": [
+        798.8016111476735,
+        931.6853601324842,
+        -3387.262870948961,
+        -500.9062010221468,
+        -1381.164428683039
+      ],
+      "independent_quadrature_evaluations": 43764,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/closure-128.txt",
+      "input_sha256": "4388ae69f6b20063ae61f11f93f80a3c55b088f22d7a89d56a3dc2b8557c0f4f",
+      "output": "out/planar-pressure-motion/closure-128.json",
+      "output_sha256": "ba4cca04a376651e6a73775ce9bec57dde91fc68287e172da611d82065a1ea78",
+      "audit": "out/planar-pressure-motion/closure-128-audit.json",
+      "audit_sha256": "0483b246430c2479102e2e569db69e8c61643bb99ceaa5f9caf131a02daec9e7",
+      "log": "out/planar-pressure-motion/closure-128.log",
+      "log_sha256": "5cd88ab0037a08beb8a79b6639ab57f7ab58e4fb32cec1298c45d4fb2b307ef2"
+    },
+    {
+      "name": "release",
+      "subdivisions": 1,
+      "steps": 2,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 2.236166980751353e-19,
+        "port_geometry_error_m2": 1.951563910473908e-18,
+        "interval_area_error_m2": 1.792780333909061e-13,
+        "native_oracle_pressure_error_Pa": 3.4924596548080444e-09,
+        "total_mass_error_m3": 0.0,
+        "local_mass_error_m3": 1.5788809942105916e-21,
+        "sealed_group_mass_error_m3": 0.0,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8820931654908997,
+        1.016711808259681
+      ],
+      "final_pressure_Pa": [
+        1599.733104277981,
+        2333.804023464477,
+        -16465.689439195863,
+        -1297.3974988403422,
+        -7551.447271659075
+      ],
+      "independent_quadrature_evaluations": 10164,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-1.txt",
+      "input_sha256": "931987fb519567b0397b873c3d4c59d40c4133fce76ab5700433a9c42bd7c5ba",
+      "output": "out/planar-pressure-motion/release-1.json",
+      "output_sha256": "12761fee4f35a8cdb21d40e335862a3295878f1027a2ef7e01250db06bb10883",
+      "audit": "out/planar-pressure-motion/release-1-audit.json",
+      "audit_sha256": "42d5c8d53357b752539ba6b4db34d42f566544477de38754970833bcc211d2d6",
+      "log": "out/planar-pressure-motion/release-1.log",
+      "log_sha256": "67df122f64b7b1498a2d1fb65124b6cb611850a39899c1993d2b78da53ba5d4c"
+    },
+    {
+      "name": "release",
+      "subdivisions": 2,
+      "steps": 3,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 1.951563910473908e-18,
+        "interval_area_error_m2": 2.2377043879022668e-14,
+        "native_oracle_pressure_error_Pa": 1.0993062460329384e-08,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 4.334633204931003e-21,
+        "sealed_group_mass_error_m3": 0.0,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8818704596967868,
+        1.0167193788979418
+      ],
+      "final_pressure_Pa": [
+        1599.4139659137952,
+        2334.861263097586,
+        -16496.790303343732,
+        -1284.9766303054182,
+        -7565.215783162446
+      ],
+      "independent_quadrature_evaluations": 7224,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-2.txt",
+      "input_sha256": "76a5a905fee36cbf97724c8687a15af51e5cea3ee152cb87f5c2c4af7d093a5d",
+      "output": "out/planar-pressure-motion/release-2.json",
+      "output_sha256": "9f3d0c3853910328ce1314fa6f63526aedaebeaa83cf4c70edd353d4a78e93bf",
+      "audit": "out/planar-pressure-motion/release-2-audit.json",
+      "audit_sha256": "23365df8570c4827a47bd9c8163221ebe69aa7d3bc234b04c0c33753707593a5",
+      "log": "out/planar-pressure-motion/release-2.log",
+      "log_sha256": "163d5ed28a2847d034a97c03d417c17edb27c57d4cf6022ea01f4cdd198685e9"
+    },
+    {
+      "name": "release",
+      "subdivisions": 4,
+      "steps": 5,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 2.168404344971009e-18,
+        "interval_area_error_m2": 3.7938808995427453e-14,
+        "native_oracle_pressure_error_Pa": 1.1370502761565149e-08,
+        "total_mass_error_m3": 0.0,
+        "local_mass_error_m3": 3.872135844937292e-21,
+        "sealed_group_mass_error_m3": 1.6940658945086007e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8813985139599056,
+        1.0167354698120843
+      ],
+      "final_pressure_Pa": [
+        1598.7388326524083,
+        2337.1083592575774,
+        -16562.69752549918,
+        -1258.6997892701343,
+        -7594.2853581153895
+      ],
+      "independent_quadrature_evaluations": 4914,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-4.txt",
+      "input_sha256": "dfc1cd25ff6d342a9069f875e6e87e3e171ddcce1d3f63d286796026a79e110b",
+      "output": "out/planar-pressure-motion/release-4.json",
+      "output_sha256": "6f7d1912e600f06085bf601c165d29bcb061725130930394891d453c3bd989b6",
+      "audit": "out/planar-pressure-motion/release-4-audit.json",
+      "audit_sha256": "63b7fe5e4f575cf72301e3df8594583d9313562c701e34d707e91a34bca75e3d",
+      "log": "out/planar-pressure-motion/release-4.log",
+      "log_sha256": "c37247a45fab089b1f70ef3d2de8d44afe4758b2f0dd123a9b602de2e3b6430c"
+    },
+    {
+      "name": "release",
+      "subdivisions": 8,
+      "steps": 9,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 4.336808689942018e-18,
+        "interval_area_error_m2": 5.505847268380613e-14,
+        "native_oracle_pressure_error_Pa": 9.820723789744079e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 4.948530466416061e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8811571614485938,
+        1.0167436168764177
+      ],
+      "final_pressure_Pa": [
+        1598.3978732441321,
+        2338.2460967917295,
+        -16596.40240370388,
+        -1245.2720355706545,
+        -7609.128946597331
+      ],
+      "independent_quadrature_evaluations": 5922,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-8.txt",
+      "input_sha256": "a5a05299fadb0b2cb7c06f1e4f883a3454d8c025d23ddb60e09ec38b8f28fde7",
+      "output": "out/planar-pressure-motion/release-8.json",
+      "output_sha256": "0fc0b2b933424feccb0ee73921d056caabf96f6d3cc801c6a9812da6d842d09a",
+      "audit": "out/planar-pressure-motion/release-8-audit.json",
+      "audit_sha256": "f9101bde639ca2e3a60cd1517f7303b4682a2a59d931badfd3c8a10fc5de0861",
+      "log": "out/planar-pressure-motion/release-8.log",
+      "log_sha256": "9ab29e3a4c94c3586308957956159cb046ffb4ae0b1c180188c7f5c7754d8563"
+    },
+    {
+      "name": "release",
+      "subdivisions": 16,
+      "steps": 17,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 4.336808689942018e-18,
+        "interval_area_error_m2": 1.0044942376258477e-13,
+        "native_oracle_pressure_error_Pa": 8.509232429787517e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 5.951792305104913e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8810145127295019,
+        1.0167484125976372
+      ],
+      "final_pressure_Pa": [
+        1598.1971304242095,
+        2338.915819260022,
+        -16616.32329732505,
+        -1237.3306843695914,
+        -7617.919193656518
+      ],
+      "independent_quadrature_evaluations": 8316,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-16.txt",
+      "input_sha256": "330579bb6109f3f11badfd3a5e871505c7192385c27e4a760bf2905ca0421648",
+      "output": "out/planar-pressure-motion/release-16.json",
+      "output_sha256": "ab876b2add7b631cadd4873a258863f888dd76d449055928830a4d4ba00820cc",
+      "audit": "out/planar-pressure-motion/release-16-audit.json",
+      "audit_sha256": "c8efae57c21f13ad39408bb07e0cdf161cd7bf6a61847753cf86373f4bd78e11",
+      "log": "out/planar-pressure-motion/release-16.log",
+      "log_sha256": "3c8f862ea7e7b60a586cf36f15a49e985660d6ee993c6719f6a403eb5408cecb"
+    },
+    {
+      "name": "release",
+      "subdivisions": 32,
+      "steps": 33,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 4.553649124439119e-18,
+        "interval_area_error_m2": 2.8570678808903516e-14,
+        "native_oracle_pressure_error_Pa": 1.127773430198431e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 5.243892106234312e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8809427238614324,
+        1.0167508181101081
+      ],
+      "final_pressure_Pa": [
+        1598.0965053118944,
+        2339.251749076602,
+        -16626.34861275098,
+        -1233.3343478569518,
+        -7622.3432598004065
+      ],
+      "independent_quadrature_evaluations": 13356,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-32.txt",
+      "input_sha256": "c09050c72165087afb60353c996b5261739c6a36b482ee719edcf254960f1b68",
+      "output": "out/planar-pressure-motion/release-32.json",
+      "output_sha256": "9b34a1b24012a405a368f6b5db3b09dd3613411bb416734d67eefe9e494d15a0",
+      "audit": "out/planar-pressure-motion/release-32-audit.json",
+      "audit_sha256": "ea7c649fa616c8ba9e328a9f1e9f2c53a74d108c4d9b3d423b85870fe6d56e8b",
+      "log": "out/planar-pressure-motion/release-32.log",
+      "log_sha256": "1e8bab31bd55d94b8d55bc549e2f56820f42fb6b0bcac257d3783659652df09e"
+    },
+    {
+      "name": "release",
+      "subdivisions": 64,
+      "steps": 65,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 4.553649124439119e-18,
+        "interval_area_error_m2": 1.4890335228126984e-14,
+        "native_oracle_pressure_error_Pa": 1.2114469427615404e-09,
+        "total_mass_error_m3": 1.3552527156068805e-20,
+        "local_mass_error_m3": 5.958729636257848e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.880904735127712,
+        1.0167520892019977
+      ],
+      "final_pressure_Pa": [
+        1598.0433230797885,
+        2339.4292570589623,
+        -16631.65373941502,
+        -1231.2188926901242,
+        -7624.686657988621
+      ],
+      "independent_quadrature_evaluations": 23814,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-64.txt",
+      "input_sha256": "8be95d26ef02495557fc54f52b82c6cc868bf2e201ac621fbc8503ed9f8c055e",
+      "output": "out/planar-pressure-motion/release-64.json",
+      "output_sha256": "0985667dab89193e221520a393145bbd0919ee153529b7d0540c3cacb5441db1",
+      "audit": "out/planar-pressure-motion/release-64-audit.json",
+      "audit_sha256": "329396e5b4afee579a326100d8ae8c2b2c27c1bb8a3a303e6596c931f778e243",
+      "log": "out/planar-pressure-motion/release-64.log",
+      "log_sha256": "3f7ecfcb2a0640d0570d92c32cf09f1af6a3f6dc15344a0bc07e0c9fc059f195"
+    },
+    {
+      "name": "release",
+      "subdivisions": 128,
+      "steps": 129,
+      "contact_cuts": [
+        0.4035948961583442
+      ],
+      "maxima": {
+        "region_volume_error_m3": 3.8624702394796095e-19,
+        "port_geometry_error_m2": 5.204170427930421e-18,
+        "interval_area_error_m2": 2.499602612973618e-14,
+        "native_oracle_pressure_error_Pa": 1.2009877536911517e-09,
+        "total_mass_error_m3": 2.710505431213761e-20,
+        "local_mass_error_m3": 6.312415587196757e-21,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "sealed_throat_flow_m3_per_s": 0.0
+      },
+      "relative_density_range": [
+        0.8808857090802287,
+        1.01675272529021
+      ],
+      "final_pressure_Pa": [
+        1598.0167133335972,
+        2339.5180867778126,
+        -16634.310726946063,
+        -1230.159418492456,
+        -7625.860311025339
+      ],
+      "independent_quadrature_evaluations": 44856,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_pressure_motion_probe"
+      ],
+      "input": "out/planar-pressure-motion/release-128.txt",
+      "input_sha256": "3eb9f103c8f15746f9150e7a3d94aad315ad8401db90b2de214b3a7418ed3897",
+      "output": "out/planar-pressure-motion/release-128.json",
+      "output_sha256": "cc31b02e77b089ca90182af72d1b305898970b42f1451550f062f914e9c5513f",
+      "audit": "out/planar-pressure-motion/release-128-audit.json",
+      "audit_sha256": "28cc9edd8b218a779c90e354d0f3575577c4c19fca4c25f9f6880cf9bc0e7940",
+      "log": "out/planar-pressure-motion/release-128.log",
+      "log_sha256": "9f2ef9fd84a3f7eb5a214be21fd1f70760dbe0da0df2c57f214253f2c01ecbae"
+    }
+  ],
+  "refinement": [
+    {
+      "name": "closure",
+      "comparisons": [
+        {
+          "subdivisions": 2,
+          "maximum_endpoint_difference_Pa": 8.956163651159386
+        },
+        {
+          "subdivisions": 4,
+          "maximum_endpoint_difference_Pa": 8.982285375740958
+        },
+        {
+          "subdivisions": 8,
+          "maximum_endpoint_difference_Pa": 5.7316006990909045
+        },
+        {
+          "subdivisions": 16,
+          "maximum_endpoint_difference_Pa": 3.1598267438735093
+        },
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 1.6670025175390037
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 0.8491520696029511
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.43164295289852816
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "comparisons": [
+        {
+          "subdivisions": 2,
+          "maximum_endpoint_difference_Pa": 31.100864147869288
+        },
+        {
+          "subdivisions": 4,
+          "maximum_endpoint_difference_Pa": 65.90722215544884
+        },
+        {
+          "subdivisions": 8,
+          "maximum_endpoint_difference_Pa": 33.704878204698616
+        },
+        {
+          "subdivisions": 16,
+          "maximum_endpoint_difference_Pa": 19.920893621168943
+        },
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 10.025315425929875
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 5.3051266640395625
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 2.6569875310451607
+        }
+      ]
+    }
+  ],
+  "input_poses": {
+    "out/planar-airspace/motion/pose-5.031.json": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+    "out/planar-airspace/motion/pose-5.032.json": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+    "out/planar-airspace/motion/pose-5.062.json": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+    "out/planar-airspace/motion/pose-5.063.json": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132"
+  },
+  "source_contacts": "reports/contact_partition_reference.json",
+  "source_contacts_sha256": "6e56044140f100a4b6b3b1e1ca2075142195fdf8f6390773cece271e953f1275",
+  "bulk_modulus_Pa": 139650.0,
+  "mobility_m2_per_Pa_s": 1e-07,
+  "initial_pressure_Pa": [
+    600.0,
+    600.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "boundaries": "sealed exterior; no glottal or lip port",
+  "hashes": {
+    "tools/planar_pressure_motion_probe.cpp": "8d103c84faae3f5e3eaf01487e5f8d218b85d33f88ad2913f2f2ea110e1481ac",
+    "tools/planar_pressure_motion_reference.py": "3e0ef308b005136eb3b50d4680e7b1da7533102a9c4bd56deed2e0e0d130fa2c",
+    "include/ducklips/planar_airspace.hpp": "8707baa999676c4f50b293aac68383761d5fe9dc2055d393e5e85884d76957b4",
+    "src/planar_airspace.cpp": "0be379880ff602aedd79a91f6d7b47463136f33d4dc1a8fbb3bca74315a6e15f",
+    "include/ducklips/planar_face_motion.hpp": "0212b82dc5baf6ec7ff9248434fdb825d214c9651c441c900aadffa8b86fad36",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "include/ducklips/cavity_network.hpp": "aa563ba020df6a2e36daa721c319f1fc58fc4361116e0de067ee4e5673ecb66c",
+    "src/cavity_network.cpp": "3b266c392ed71580e6604f6b3f5ad149717364d52f1a0ed8fe3be37118b23584",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "build/ducklips_planar_pressure_motion_probe": "e06542bd9012079aec49fed72d866c5f8be521f21bbb2e4292a4e82cc258b7b6"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}
