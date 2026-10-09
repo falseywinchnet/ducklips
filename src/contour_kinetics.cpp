@@ -114,25 +114,29 @@ bool ContourKinetics::evaluate(const std::array<double,2>& mass,const std::array
     if(!std::isfinite(candidate.quadratic_loss[2])){return false;}result=candidate;return true;
 }
 bool ContourKinetics::transfer(const std::array<double,2>& mass0,const std::array<double,2>& area0,const std::array<double,3>& p0,
-    const std::array<double,2>& mass1,const std::array<double,2>& area1,const std::array<double,3>& p1,ContourKineticTransfer& result) const noexcept {
+    const std::array<double,2>& mass1,const std::array<double,2>& area1,const std::array<double,3>& p1,ContourKineticTransfer& result,ContourUpdate update) const noexcept {
     const std::array<double,4> a={mass0[0],mass0[1],area0[0],area0[1]},b={mass1[0],mass1[1],area1[0],area1[1]};
     std::array<double,3> g0,g1,unused;if(!metric(a,a,4,g0,unused) || !metric(b,b,4,g1,unused)){return false;}
     ContourKineticTransfer candidate;double work=0;
     for(std::size_t j=0;j<3;++j){if(!std::isfinite(p0[j]) || !std::isfinite(p1[j]) || (g0[j]==0 && p0[j]!=0) || (g1[j]==0 && p1[j]!=0)){return false;}
-        candidate.flow[j]=.25*(g0[j]+g1[j])*(p0[j]+p1[j]);work+=candidate.flow[j]*(p1[j]-p0[j]);
+        candidate.flow[j]=update==ContourUpdate::dissipative?g1[j]*p1[j]:.25*(g0[j]+g1[j])*(p0[j]+p1[j]);
+        if(update==ContourUpdate::dissipative){const double dp=p1[j]-p0[j];candidate.numerical_loss+=.5*g1[j]*dp*dp;}
+        work+=candidate.flow[j]*(p1[j]-p0[j]);
         candidate.energy_change+=.5*(p1[j]*p1[j]*g1[j]-p0[j]*p0[j]*g0[j]);}
     // Average the forward and reverse coordinate paths. This gives a
-    // time-symmetric discrete gradient and its correct coincident limit.
+    // symmetric coordinate gradient. The dissipative update holds old
+    // momentum in the geometry effort and uses final momentum/metric in flow.
+    // Its nonnegative momentum discretization loss is explicit in the ledger.
     for(int direction:{1,-1}){auto current=a;
         for(std::size_t step=0;step<4;++step){const std::size_t k=direction==1?step:3-step;auto next=current;next[k]=b[k];std::array<double,3> gradient;
             std::array<double,2> volume_slope;if(!metric(current,next,k,unused,gradient,&volume_slope)){return false;}
             if(k>=2){for(std::size_t i=0;i<2;++i){candidate.volume_gradient[i][k-2]+=.5*volume_slope[i];}}
-            for(std::size_t j=0;j<3;++j){candidate.effort[k]+=.125*(p0[j]*p0[j]+p1[j]*p1[j])*gradient[j];}current=next;
+            for(std::size_t j=0;j<3;++j){const double weight=update==ContourUpdate::dissipative?.25*p0[j]*p0[j]:.125*(p0[j]*p0[j]+p1[j]*p1[j]);candidate.effort[k]+=weight*gradient[j];}current=next;
         }
     }
     for(std::size_t k=0;k<4;++k){work+=candidate.effort[k]*(b[k]-a[k]);}
     for(const auto& row:candidate.volume_gradient){for(double v:row){if(!std::isfinite(v)){return false;}}}
-    candidate.chain_residual=candidate.energy_change-work;
+    candidate.chain_residual=candidate.energy_change-work+candidate.numerical_loss;
     for(double v:candidate.effort){if(!std::isfinite(v)){return false;}}if(!std::isfinite(candidate.chain_residual)){return false;}result=candidate;return true;
 }
 }

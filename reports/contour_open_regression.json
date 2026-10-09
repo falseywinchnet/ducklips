@@ -19,7 +19,7 @@
         "forward"
       ],
       "output": "out/contour-sealed/open-forward-960.json",
-      "output_sha256": "1efd8772e5a35caf258d4205071c60d50629db55c3f73e3732decfbae7c3b5d2"
+      "output_sha256": "6ff67d81152c553ba33c11712d5291171867a2486d6ea3ed81215f7b0f033a44"
     },
     {
       "mode": "forward",
@@ -36,7 +36,7 @@
         "forward"
       ],
       "output": "out/contour-sealed/open-forward-1920.json",
-      "output_sha256": "6cedc127b392882e730030150dc6562e3eaae0b5caac40643b20590d85ffe68f"
+      "output_sha256": "e120a403ff2b93929bbc36a3f57eced928a2b361c0608f86d4be6a43a515c366"
     },
     {
       "mode": "forward",
@@ -53,7 +53,7 @@
         "forward"
       ],
       "output": "out/contour-sealed/open-forward-3840.json",
-      "output_sha256": "d8594913d796e9f378a821c657c277281f9d581fe3f9d8cfe0c76b06f8b836df"
+      "output_sha256": "0c43f482ae203e783e90d3f5dc9e056906144a306beec9bc8002bbb260f4c6d7"
     },
     {
       "mode": "reverse",
@@ -70,7 +70,7 @@
         "reverse"
       ],
       "output": "out/contour-sealed/open-reverse-960.json",
-      "output_sha256": "c7a43fa6c3c604f5faa17432d5b0b8b79c10a529160b505895b6ed1b640bd4c7"
+      "output_sha256": "9d06f5af6b96cd841d1edd445ce0e524818a472e279925ca85fa44d37bfe7e7b"
     },
     {
       "mode": "reverse",
@@ -87,7 +87,7 @@
         "reverse"
       ],
       "output": "out/contour-sealed/open-reverse-1920.json",
-      "output_sha256": "54c6b1e89503aab2d5fa73c22bd90b28ba7fd845ab945b1899d2413e5d86e014"
+      "output_sha256": "7245119e800f99d0c790b16a7bd557fbf3509a13859c0a0ff3cbf30393869cce"
     },
     {
       "mode": "reverse",
@@ -104,7 +104,7 @@
         "reverse"
       ],
       "output": "out/contour-sealed/open-reverse-3840.json",
-      "output_sha256": "f15dc3a0a1c39a6a5c754875ca9cfcd3af3ec83c694c894812a6523b38afa7b2"
+      "output_sha256": "591ab19d4d3319c1c06d6b3585e0d35072b1e5635a12de81bc7de0c7a9083a72"
     },
     {
       "mode": "relaxation",
@@ -121,7 +121,7 @@
         "relaxation"
       ],
       "output": "out/contour-sealed/open-relaxation-3840.json",
-      "output_sha256": "280c4bf5920081718249d0385702a2d33cca1812505d5ae8eddf6ebe948afb3a"
+      "output_sha256": "e426df43502f96d39b1a4799af8986570609345dd2d848da7777c7f9229c6518"
     },
     {
       "mode": "relaxation",
@@ -138,7 +138,7 @@
         "relaxation"
       ],
       "output": "out/contour-sealed/open-relaxation-7680.json",
-      "output_sha256": "9588142b4e12ef562746ee718525265667373f1596ea490cd51c3a1e9505d29f"
+      "output_sha256": "c20c5927838a93cf80b65072e87afd717c79f4b044c60dcce27d8bd22aa19141"
     },
     {
       "mode": "relaxation",
@@ -155,7 +155,7 @@
         "relaxation"
       ],
       "output": "out/contour-sealed/open-relaxation-15360.json",
-      "output_sha256": "3e14afc3236290d2a7bbbefbffb236ed48fd91626e5bf42f83ac9d405810eadc"
+      "output_sha256": "5f58d6229e7b972279635b93bfd3ec6deb2e701b013b827e1db69acbb2422e77"
     },
     {
       "mode": "rest_motion",
@@ -172,7 +172,7 @@
         "rest_motion"
       ],
       "output": "out/contour-sealed/open-rest_motion-960.json",
-      "output_sha256": "203462d573ac27116b5f0bbeceb9bfc9014d8e46ec5a4f06efb45a72d5324349"
+      "output_sha256": "f6b007e7a1950bdd22f38f7291983d3b1caaf26e56079621e4803324c4791085"
     },
     {
       "mode": "rest_motion",
@@ -189,7 +189,7 @@
         "rest_motion"
       ],
       "output": "out/contour-sealed/open-rest_motion-1920.json",
-      "output_sha256": "f19b03a5acc7e89382f0e5545d69a7bc2da94af945a639ca8ad50a1a2ffdae7d"
+      "output_sha256": "a1622e4eabbf9940069e4bba061b0fe877d4cef3517c0440390e844a2dd9a8f9"
     },
     {
       "mode": "rest_motion",
@@ -206,7 +206,7 @@
         "rest_motion"
       ],
       "output": "out/contour-sealed/open-rest_motion-3840.json",
-      "output_sha256": "49ade4257c4932ec24255326cbf546db1794f9879d457f61290e325b5da9efe0"
+      "output_sha256": "73e9e465616b3d98494831f2a245c826f7a333cc265e2894af208173170f7df1"
     }
   ],
   "acceptance": [
@@ -232,17 +232,17 @@
     }
   ],
   "hashes": {
-    "src/contour_kinetics.cpp": "1dcab037f708ccb3f5765f57194ecc471eb232e188bc95a54a5dc1cd43720996",
-    "src/contour_glottal_storage.cpp": "bdb8cdf471abfa344f093a0df53977df775b941e9dbfbe5685e00e99158bf8f8",
+    "src/contour_kinetics.cpp": "f91909c7c90850ae94d0ceafac0f92f9cb19e61ced968f8325b30c30c2cc2fef",
+    "src/contour_glottal_storage.cpp": "d14e32f2a9b7ebaab3a44cc6cebe1a30d610ca805751272887ebf3243e0bb1e8",
     "src/fold_contact.cpp": "95d47f609fcdc534bb8042005ff0cfb69f2a7c8c00efa339ceecf3f8d142710b",
     "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
     "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
     "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
-    "include/ducklips/contour_kinetics.hpp": "c714bd85d403f41a06958f161f843012364b0c44b8e53dfe94b2accde42172a5",
-    "include/ducklips/contour_glottal_storage.hpp": "305a8fe982e3bf3621135cd526d8a34b51e68e02df61bd76a05d06a716cb1098",
+    "include/ducklips/contour_kinetics.hpp": "f11e3065ef7b6decd9bb45dc2ac8df1d2e3b82edece2775adcb192e7f11ab70b",
+    "include/ducklips/contour_glottal_storage.hpp": "db8235074bb2624116230662f8918a134659c54faa227100f1ca484e56c25132",
     "include/ducklips/fold_contact.hpp": "88f9b233eb79a46964fa03e7bae6b6ed8e6d9ab4e115f2bab767d3bc16864038",
     "tools/contour_open_regression.py": "ef1dab8d5165cbe50a7e129664cc5de27f5999d6e63c39d18665bc94674ef1dc",
-    "tools/contour_glottal_probe.cpp": "3140b6d10c1671d753a8d712d968e2f9e5e2db68984f9bb4ce63856714d1f54c",
-    "build/ducklips_contour_glottal_probe": "df33e3e0aefc96ddeea1cb1535a5635823e07f4f3315addcbdec3635c8d60226"
+    "tools/contour_glottal_probe.cpp": "e25be8ecd0819835a69f2d6482f886ee8fec438840c26325b0e7e6a31bbd2c43",
+    "build/ducklips_contour_glottal_probe": "913f39318644c6db97d71946f43dc66c88865154a5c9786b841bda7f75cc2ff3"
   }
 }

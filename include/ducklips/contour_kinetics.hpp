@@ -2,6 +2,7 @@
 #include "ducklips/glottal_contour.hpp"
 #include "ducklips/sources.hpp"
 namespace ducklips {
+enum class ContourUpdate { symmetric, dissipative };
 struct ContourKineticState final {
     std::array<double,3> inverse_inertance{},resistance{},quadratic_loss{};
     // Coordinates: lower mass, upper mass, lower area, upper area.
@@ -13,7 +14,7 @@ struct ContourKineticTransfer final {
     std::array<double,3> flow{};
     std::array<double,4> effort{};
     std::array<std::array<double,2>,2> volume_gradient{}; // chamber, control area
-    double energy_change{},chain_residual{};
+    double energy_change{},numerical_loss{},chain_residual{};
 };
 // Positive-storage contour reference. Density is uniform within each chamber; the three
 // dual paths join the moving volume centroids. Mass and shape derivatives
@@ -27,7 +28,8 @@ public:
         const std::array<double,3>& momentum,ContourKineticState&) const noexcept;
     [[nodiscard]] bool transfer(const std::array<double,2>& mass0,const std::array<double,2>& area0,
         const std::array<double,3>& momentum0,const std::array<double,2>& mass1,const std::array<double,2>& area1,
-        const std::array<double,3>& momentum1,ContourKineticTransfer&) const noexcept;
+        const std::array<double,3>& momentum1,ContourKineticTransfer&,
+        ContourUpdate update=ContourUpdate::symmetric) const noexcept;
 private:
     [[nodiscard]] bool metric(const std::array<double,4>& first,const std::array<double,4>& last,
         std::size_t coordinate,std::array<double,3>& value,std::array<double,3>& slope,
