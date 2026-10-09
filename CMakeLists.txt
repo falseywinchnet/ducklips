@@ -18,11 +18,13 @@ add_library(ducklips STATIC
     src/sources.cpp
     src/air_path.cpp
     src/voice.cpp
+    src/body_config.cpp
     src/articulation.cpp
     src/tongue.cpp
     src/phonetics.cpp
     src/vowel_library.cpp
     src/cues.cpp
+    src/nudges.cpp
     src/synthesizer.cpp
     src/planner.cpp
     src/connected_speech.cpp
@@ -56,3 +58,12 @@ if(DUCKLIPS_WITH_GUI_FORMS_AUDIO)
     target_link_libraries(ducklips_gui_forms PRIVATE ducklips_gui_forms_audio)
     add_test(NAME ducklips_gui_forms_offline COMMAND ducklips_gui_forms --out ${CMAKE_CURRENT_BINARY_DIR}/gui_forms_offline.wav)
 endif()
+
+add_executable(ducklips_stream tools/ducklips_stream.cpp)
+target_link_libraries(ducklips_stream PRIVATE ducklips)
+
+add_executable(ducklips_stream_tests tests/stream_tests.cpp)
+target_link_libraries(ducklips_stream_tests PRIVATE ducklips)
+add_test(NAME ducklips_stream_tests COMMAND ducklips_stream_tests)
+
+target_compile_definitions(ducklips_stream_tests PRIVATE DUCKLIPS_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")

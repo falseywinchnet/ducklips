@@ -1,0 +1,5 @@
+# Experimental control: the legacy piecewise-linear aperture law.
+preset=baritone
+name=sharp-contact-control
+folds.contact_softness=0
+folds.medial_roundness=0

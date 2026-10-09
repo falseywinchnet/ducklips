@@ -1,0 +1,16 @@
+# Targets for one continuously running human body; this is a protocol demo,
+# not a phrase recording or a substitute for the general engine.
+0 vowel AA 75
+0 pitch 112 90
+0 glottis 0.000003 170
+0 lungs 600 40
+0.20 diphthong AY 0.75 75
+0.30 pitch 128 60
+render 0.60
+# Host can send new commands while sound is already being rendered.
+0.75 pitch 108 60
+1.10 diphthong AW 0.75 75
+1.95 diphthong OY 0.75 75
+2.80 lungs 0 40
+2.90 glottis 0.000025 170
+render 3.30

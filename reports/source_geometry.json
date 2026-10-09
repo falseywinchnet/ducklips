@@ -1,0 +1,35 @@
+{
+  "method": "Welch spectrum, 8192-sample segments, 0.9-1.7 s excerpt, channel 0, relative to 100-1000 Hz power",
+  "measure": "glottal flow derivative, before tract radiation; same body, cues and seed except aperture geometry",
+  "not_a": "human realism, intelligibility, or calibrated sound-level score",
+  "cases": [
+    {
+      "name": "sharp",
+      "body": "sharp-contact-control",
+      "bands_db": {
+        "1000-4000": -18.327004364584102,
+        "4000-8000": -27.19240323781488,
+        "8000-16000": -30.06404883185896,
+        "16000-22000": -34.92918610671881
+      },
+      "wav_sha256": "b806d5302b006b849ecefe48e2b2838905da169e02d060a695a6ddb28695ef74"
+    },
+    {
+      "name": "rounded",
+      "body": "reference",
+      "bands_db": {
+        "1000-4000": -18.72427430469176,
+        "4000-8000": -28.147572718868755,
+        "8000-16000": -33.641104539833364,
+        "16000-22000": -41.759155251807556
+      },
+      "wav_sha256": "3fada6966cd76b6c9583d71e74577759d264eae2c59d1347cd3fce9c8beeb5aa"
+    }
+  ],
+  "change_db": {
+    "1000-4000": -0.3972699401076589,
+    "4000-8000": -0.9551694810538756,
+    "8000-16000": -3.577055707974406,
+    "16000-22000": -6.8299691450887465
+  }
+}

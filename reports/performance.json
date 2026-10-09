@@ -1,0 +1,386 @@
+{
+  "utc": "2026-10-09T05:35:33.430251+00:00",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "machine": "arm64",
+  "cpu": "Apple M4",
+  "binary_sha256": "54771cfb066d7db620aab1b271de21429f84ec6141a2a9eebbd57f645dde3dea",
+  "git_head": "5709d495f9c8596e49017be0ae4be3886db18887",
+  "working_tree_changes": [
+    " M .gitignore",
+    " M CMakeLists.txt",
+    " M include/ducklips/phonetics.hpp",
+    " M include/ducklips/planner.hpp",
+    " M include/ducklips/sources.hpp",
+    " M include/ducklips/synthesizer.hpp",
+    " M src/phonetics.cpp",
+    " M src/synthesizer.cpp",
+    " M surface/surface_say.cpp",
+    " M tools/ducklips_say.cpp",
+    "?? bodies/",
+    "?? examples/",
+    "?? include/ducklips/body_config.hpp",
+    "?? include/ducklips/nudges.hpp",
+    "?? reports/",
+    "?? samples/",
+    "?? src/body_config.cpp",
+    "?? src/nudges.cpp",
+    "?? tests/stream_tests.cpp",
+    "?? tools/benchmark.py",
+    "?? tools/ducklips_stream.cpp",
+    "?? tools/fetch_samples.py",
+    "?? tools/source_comparison.py"
+  ],
+  "criterion": "Every timed render >= minimum_speed and no nonfinite or clipped samples before output limiting",
+  "minimum_speed": 10.0,
+  "includes_silent_intervals": true,
+  "includes_prepare_in_render_time": false,
+  "excludes": "Disk I/O and offline enhanced-field visualization",
+  "cases": [
+    {
+      "case": "baritone",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "baritone",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/baritone.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.822,
+          "wall_seconds": 2.1657521659508348,
+          "prepare_seconds": 0.331,
+          "speed": 12.755214050493962,
+          "end_to_end_speed": 10.73068302337211,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.848,
+          "wall_seconds": 2.204956625122577,
+          "prepare_seconds": 0.344,
+          "speed": 12.575757575757574,
+          "end_to_end_speed": 10.53988987139738,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.848,
+          "wall_seconds": 2.211350125260651,
+          "prepare_seconds": 0.35,
+          "speed": 12.575757575757574,
+          "end_to_end_speed": 10.50941672895906,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 12.575757575757574,
+      "median_speed": 12.575757575757574,
+      "passed": true
+    },
+    {
+      "case": "alto",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "alto",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/alto.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.642,
+          "wall_seconds": 1.9770019580610096,
+          "prepare_seconds": 0.322,
+          "speed": 14.15347137637028,
+          "end_to_end_speed": 11.755172980604009,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.653,
+          "wall_seconds": 1.9939243327826262,
+          "prepare_seconds": 0.327,
+          "speed": 14.059286146400483,
+          "end_to_end_speed": 11.655407187677657,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.673,
+          "wall_seconds": 2.014883999712765,
+          "prepare_seconds": 0.328,
+          "speed": 13.891213389121338,
+          "end_to_end_speed": 11.534162762378882,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 13.891213389121338,
+      "median_speed": 14.059286146400483,
+      "passed": true
+    },
+    {
+      "case": "child",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "child",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/child.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 24.36,
+          "render_seconds": 1.314,
+          "wall_seconds": 1.5598476249724627,
+          "prepare_seconds": 0.232,
+          "speed": 18.538812785388128,
+          "end_to_end_speed": 15.616910017367912,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 24.36,
+          "render_seconds": 1.301,
+          "wall_seconds": 1.5435851248912513,
+          "prepare_seconds": 0.229,
+          "speed": 18.724058416602613,
+          "end_to_end_speed": 15.7814425697554,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 24.36,
+          "render_seconds": 1.248,
+          "wall_seconds": 1.4814531248994172,
+          "prepare_seconds": 0.22,
+          "speed": 19.51923076923077,
+          "end_to_end_speed": 16.443314736437518,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 18.538812785388128,
+      "median_speed": 18.724058416602613,
+      "passed": true
+    },
+    {
+      "case": "gravel",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "gravel",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/gravel.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 24.91,
+          "render_seconds": 1.909,
+          "wall_seconds": 2.2977950838394463,
+          "prepare_seconds": 0.375,
+          "speed": 13.048716605552645,
+          "end_to_end_speed": 10.840827441573783,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 24.91,
+          "render_seconds": 1.912,
+          "wall_seconds": 2.3052542498335242,
+          "prepare_seconds": 0.381,
+          "speed": 13.028242677824268,
+          "end_to_end_speed": 10.805749518431165,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 24.91,
+          "render_seconds": 1.921,
+          "wall_seconds": 2.309449499938637,
+          "prepare_seconds": 0.376,
+          "speed": 12.967204580947422,
+          "end_to_end_speed": 10.786120242361596,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 12.967204580947422,
+      "median_speed": 13.028242677824268,
+      "passed": true
+    },
+    {
+      "case": "whisper",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "whisper",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/whisper.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 23.29,
+          "render_seconds": 1.514,
+          "wall_seconds": 1.8910963339731097,
+          "prepare_seconds": 0.365,
+          "speed": 15.383091149273447,
+          "end_to_end_speed": 12.315607397465966,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.29,
+          "render_seconds": 1.517,
+          "wall_seconds": 1.891431957948953,
+          "prepare_seconds": 0.363,
+          "speed": 15.352669742913646,
+          "end_to_end_speed": 12.313422062116054,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.29,
+          "render_seconds": 1.525,
+          "wall_seconds": 1.9042936246842146,
+          "prepare_seconds": 0.368,
+          "speed": 15.272131147540984,
+          "end_to_end_speed": 12.230256772435572,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 15.272131147540984,
+      "median_speed": 15.352669742913646,
+      "passed": true
+    },
+    {
+      "case": "body",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--body",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/body.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.79,
+          "wall_seconds": 2.135433708317578,
+          "prepare_seconds": 0.333,
+          "speed": 12.983240223463685,
+          "end_to_end_speed": 10.883035099370918,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.787,
+          "wall_seconds": 2.132374540902674,
+          "prepare_seconds": 0.334,
+          "speed": 13.005036373810857,
+          "end_to_end_speed": 10.898648222540713,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 23.24,
+          "render_seconds": 1.792,
+          "wall_seconds": 2.1362026249989867,
+          "prepare_seconds": 0.333,
+          "speed": 12.968749999999998,
+          "end_to_end_speed": 10.879117799048217,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 12.968749999999998,
+      "median_speed": 12.983240223463685,
+      "passed": true
+    },
+    {
+      "case": "fast",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_say",
+        "--voice",
+        "baritone",
+        "--rate",
+        "2",
+        "--dictionary",
+        "/Users/joshuahkuttenkuler/ducklips/samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. Xray. Yankee. Zulu.",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/benchmark/fast.wav"
+      ],
+      "runs": [
+        {
+          "audio_seconds": 17.1,
+          "render_seconds": 1.375,
+          "wall_seconds": 1.7185787921771407,
+          "prepare_seconds": 0.334,
+          "speed": 12.436363636363637,
+          "end_to_end_speed": 9.95008205491543,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 17.1,
+          "render_seconds": 1.373,
+          "wall_seconds": 1.719495417084545,
+          "prepare_seconds": 0.337,
+          "speed": 12.454479242534596,
+          "end_to_end_speed": 9.944777886639299,
+          "nonfinite": 0,
+          "clipped": 0
+        },
+        {
+          "audio_seconds": 17.1,
+          "render_seconds": 1.371,
+          "wall_seconds": 1.7205567075870931,
+          "prepare_seconds": 0.339,
+          "speed": 12.472647702407004,
+          "end_to_end_speed": 9.938643652135722,
+          "nonfinite": 0,
+          "clipped": 0
+        }
+      ],
+      "minimum_speed": 12.436363636363637,
+      "median_speed": 12.454479242534596,
+      "passed": true
+    }
+  ],
+  "passed": true
+}

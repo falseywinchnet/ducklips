@@ -26,10 +26,12 @@ double turbulence_pressure(double jet_velocity, double hydraulic_diameter, const
     return pressure;
 }
 
-float finite_sample(double value) noexcept {
+float finite_sample(double value, SynthesisStatistics& statistics) noexcept {
     if (!std::isfinite(value)) {
+        ++statistics.nonfinite_samples;
         return 0.0f;
     }
+    if (std::fabs(value) > 1.0) { ++statistics.clipped_samples; }
     double clamped = std::clamp(value, -1.0, 1.0);
     float sample = static_cast<float>(clamped);
     return sample;
@@ -594,8 +596,8 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
             right = direct;
         }
         tap_previous_flow_ = flow;
-        stereo[2 * frame] = finite_sample(gain * left);
-        stereo[2 * frame + 1] = finite_sample(gain * right);
+        stereo[2 * frame] = finite_sample(gain * left, statistics_);
+        stereo[2 * frame + 1] = finite_sample(gain * right, statistics_);
 
         flow_sum_ += flow;
         area_sum_ += area;

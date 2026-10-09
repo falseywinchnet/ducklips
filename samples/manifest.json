@@ -1,0 +1,19 @@
+{
+  "scope": "Human spoken speech only; no singing, animal calls, instruments, or synthetic reference voices.",
+  "recordings": [
+    {
+      "id": "nato_valeatory",
+      "path": "samples/raw/nato_valeatory.ogg",
+      "url": "https://upload.wikimedia.org/wikipedia/commons/a/a5/NATO_Phonetic_Alphabet_reading.ogg",
+      "source_page": "https://commons.wikimedia.org/wiki/File:NATO_Phonetic_Alphabet_reading.ogg",
+      "author": "valeatory",
+      "recorded": "2014-02-28",
+      "license": "CC-BY-SA-3.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/3.0/",
+      "sha256": "15197e85e0ccde8317c94abf681c38bf7b4cf39107ebe5bc9b303983b44c6f88",
+      "max_bytes": 2000000,
+      "description": "Human reading of the NATO alphabet and digits; contributor recording, not an official NATO voice standard.",
+      "use": "Pronunciation and acoustic reference, never waveform playback inside the engine."
+    }
+  ]
+}

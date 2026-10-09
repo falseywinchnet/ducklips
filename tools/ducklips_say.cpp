@@ -2,6 +2,7 @@
 // Cues are streamed into the engine a short way ahead of the render position,
 // the way an interactive host would feed it.
 #include "ducklips/planner.hpp"
+#include "ducklips/body_config.hpp"
 #include "ducklips/synthesizer.hpp"
 #include "ducklips/voice.hpp"
 #include "ducklips/wav.hpp"
@@ -11,6 +12,7 @@
 #include <cstdio>
 #include <cstring>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -18,6 +20,7 @@ namespace {
 
 struct Arguments final {
     std::string voice{"baritone"};
+    std::string body_path{};
     std::string text{};
     std::string phonemes{};
     std::string output{"ducklips.wav"};
@@ -25,6 +28,7 @@ struct Arguments final {
     std::string probe_path{};
     bool room{false};
     bool report{false};
+    double rate{0.0};
     bool normalize{false};
     std::string invariant{"passive"};
     std::size_t control_block{48};
@@ -40,7 +44,7 @@ struct Arguments final {
 };
 
 void print_usage() {
-    std::printf("usage: ducklips_say [--voice NAME] (--text TEXT | --phonemes ARPABET) [--out FILE.wav]\n"
+    std::printf("usage: ducklips_say [--voice NAME] [--body FILE] [--rate FACTOR] (--text TEXT | --phonemes ARPABET) [--out FILE.wav]\n"
                 "                    [--room] [--normalize] [--report] [--dictionary cmudict.txt]\n"
                 "                    [--probe FILE.csv] [--chunk FRAMES] [--control-block SAMPLES] [--diagnostics]\n"
                 "                    [--no-pop] [--frication-gain G] [--aspiration-gain G] [--lung-pressure PA]\n"
@@ -53,7 +57,14 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
     for (int index = 1; index < count; ++index) {
         std::string flag = values[index];
         bool has_value = index + 1 < count;
-        if (flag == "--voice" && has_value) {
+        if (flag == "--rate" && has_value) {
+            std::istringstream parsed(values[++index]);
+            std::string extra{};
+            if (!(parsed >> arguments.rate) || (parsed >> extra) || !std::isfinite(arguments.rate)
+                || arguments.rate < 0.25 || arguments.rate > 4.0) { return false; }
+        } else if (flag == "--body" && has_value) {
+            arguments.body_path = values[++index];
+        } else if (flag == "--voice" && has_value) {
             arguments.voice = values[++index];
         } else if (flag == "--text" && has_value) {
             arguments.text = values[++index];
@@ -97,7 +108,8 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
         }
     }
     bool has_input = !arguments.text.empty() || !arguments.phonemes.empty();
-    return has_input && arguments.control_block >= 8;
+    return has_input && arguments.control_block >= 8 && arguments.control_block <= 480
+        && arguments.chunk_frames > 0 && arguments.chunk_frames <= 48000;
 }
 
 }
@@ -113,6 +125,13 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "unknown voice %s\n", arguments.voice.c_str());
         return 2;
     }
+    if (!arguments.body_path.empty()) {
+        std::string error{};
+        if (!ducklips::load_body_config(arguments.body_path, voice, error)) {
+            std::fprintf(stderr, "%s\n", error.c_str());
+            return 2;
+        }
+    }
     if (arguments.frication_gain >= 0.0) {
         voice.frication_gain = arguments.frication_gain;
     }
@@ -122,6 +141,7 @@ int main(int argc, char** argv) {
     if (arguments.aspiration_gain >= 0.0) {
         voice.aspiration_gain = arguments.aspiration_gain;
     }
+    if (arguments.rate > 0.0) { voice.speaking_rate = arguments.rate; }
     ducklips::SynthesisOptions options{};
     options.radiate_mean_flow = !arguments.no_pop;
     if (arguments.tap == "lips") {
@@ -165,7 +185,7 @@ int main(int argc, char** argv) {
     planner.prepare(voice, synthesizer.vowels(), options.rate);
     if (!arguments.dictionary.empty()) {
         std::size_t added = planner.load_dictionary(arguments.dictionary);
-        std::printf("dictionary: %zu entries added from %s\n", added, arguments.dictionary.c_str());
+        std::printf("dictionary: %zu definitions installed from %s\n", added, arguments.dictionary.c_str());
     }
     ducklips::UtterancePlan plan{};
     if (!arguments.text.empty()) {
@@ -251,6 +271,7 @@ int main(int argc, char** argv) {
         }
     }
     const ducklips::SynthesisStatistics& statistics = synthesizer.statistics();
+    std::printf("output audit: nonfinite %zu, clipped %zu\n", synthesizer.statistics().nonfinite_samples, synthesizer.statistics().clipped_samples);
     std::printf("rendered %.2f s in %.3f s: real-time factor %.3f (lower is faster)\n", audio_seconds, render_seconds,
                 render_seconds / audio_seconds);
     std::printf("geometry steps %zu (at most %zu per block), modes %zu..%zu, warm-started %zu, bisected %zu, "

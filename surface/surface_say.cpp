@@ -2,6 +2,7 @@
 // body, with the surface network as the acoustics.
 #include "surface_synthesizer.hpp"
 #include "ducklips/planner.hpp"
+#include "ducklips/body_config.hpp"
 #include "ducklips/voice.hpp"
 #include "ducklips/wav.hpp"
 #include <algorithm>
@@ -9,6 +10,7 @@
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -16,6 +18,7 @@ namespace {
 
 struct Arguments final {
     std::string voice{"baritone"};
+    std::string body_path{};
     std::string text{};
     std::string phonemes{};
     std::string output{"surface_say.wav"};
@@ -39,8 +42,8 @@ struct Arguments final {
     bool floor{true};
     double floor_opening{1.0};
     double floor_minimum{0.0};
-    double roundness{0.25e-6};
-    double softness{0.03e-6};
+    double roundness{-1.0};
+    double softness{-1.0};
     double share{0.6};
     double timing{0.86};
     double tension{0.0};
@@ -52,7 +55,7 @@ struct Arguments final {
 };
 
 void print_usage() {
-    std::printf("usage: surface_say [--voice NAME] (--text TEXT | --phonemes ARPABET) [--out FILE.wav]\n"
+    std::printf("usage: surface_say [--voice NAME] [--body FILE] [--rate FACTOR] (--text TEXT | --phonemes ARPABET) [--out FILE.wav]\n"
                 "                   [--normalize] [--dictionary cmudict.txt] [--ring PIECES] [--solid | --tube] [--no-floor] [--share A] [--timing T]\n"
                 "                   [--tension N_PER_M] [--probe FILE.csv]\n"
                 "                   [--frication-scale S] [--aspiration-scale S]\n"
@@ -63,7 +66,9 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
     for (int index = 1; index < count; ++index) {
         std::string flag = values[index];
         bool has_value = index + 1 < count;
-        if (flag == "--voice" && has_value) {
+        if (flag == "--body" && has_value) {
+            arguments.body_path = values[++index];
+        } else if (flag == "--voice" && has_value) {
             arguments.voice = values[++index];
         } else if (flag == "--text" && has_value) {
             arguments.text = values[++index];
@@ -154,6 +159,13 @@ int main(int argc, char** argv) {
         std::fprintf(stderr, "unknown voice %s\n", arguments.voice.c_str());
         return 2;
     }
+    if (!arguments.body_path.empty()) {
+        std::string error{};
+        if (!ducklips::load_body_config(arguments.body_path, voice, error)) {
+            std::fprintf(stderr, "%s\n", error.c_str());
+            return 2;
+        }
+    }
     if (arguments.rate > 0.0) {
         voice.speaking_rate = arguments.rate;
     }
@@ -184,8 +196,12 @@ int main(int argc, char** argv) {
     options.floor = arguments.floor;
     options.floor_opening_scale = arguments.floor_opening;
     options.floor_minimum_area = arguments.floor_minimum;
-    options.medial_roundness = arguments.roundness;
-    options.contact_softness = arguments.softness;
+    if (!arguments.body_path.empty()) {
+        options.medial_roundness = voice.folds.medial_roundness;
+        options.contact_softness = voice.folds.contact_softness;
+    }
+    if (arguments.roundness >= 0.0) { options.medial_roundness = arguments.roundness; }
+    if (arguments.softness >= 0.0) { options.contact_softness = arguments.softness; }
     options.axial_share = arguments.share;
     options.cross_timing = arguments.timing;
     options.edge_tension = arguments.tension;
@@ -213,7 +229,7 @@ int main(int argc, char** argv) {
     planner.prepare(voice, synthesizer.vowels(), options.rate);
     if (!arguments.dictionary.empty()) {
         std::size_t added = planner.load_dictionary(arguments.dictionary);
-        std::printf("dictionary: %zu entries added from %s\n", added, arguments.dictionary.c_str());
+        std::printf("dictionary: %zu definitions installed from %s\n", added, arguments.dictionary.c_str());
     }
     ducklips::UtterancePlan plan{};
     if (!arguments.text.empty()) {

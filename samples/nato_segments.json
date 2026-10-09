@@ -1,0 +1,190 @@
+{
+  "source": "https://commons.wikimedia.org/wiki/File:NATO_Phonetic_Alphabet_reading.ogg",
+  "sourceSHA256": "15197e85e0ccde8317c94abf681c38bf7b4cf39107ebe5bc9b303983b44c6f88",
+  "creator": "valeatory",
+  "license": "CC BY-SA 3.0",
+  "clips": [
+    {
+      "letter": "A",
+      "word": "Alfa",
+      "start": 0.557,
+      "end": 1.331,
+      "file": "nato-a.m4a"
+    },
+    {
+      "letter": "B",
+      "word": "Bravo",
+      "start": 1.719,
+      "end": 2.502,
+      "file": "nato-b.m4a"
+    },
+    {
+      "letter": "C",
+      "word": "Charlie",
+      "start": 2.883,
+      "end": 3.665,
+      "file": "nato-c.m4a"
+    },
+    {
+      "letter": "D",
+      "word": "Delta",
+      "start": 4.06,
+      "end": 4.858,
+      "file": "nato-d.m4a"
+    },
+    {
+      "letter": "E",
+      "word": "Echo",
+      "start": 5.304,
+      "end": 6.063,
+      "file": "nato-e.m4a"
+    },
+    {
+      "letter": "F",
+      "word": "Foxtrot",
+      "start": 6.428,
+      "end": 7.533,
+      "file": "nato-f.m4a"
+    },
+    {
+      "letter": "G",
+      "word": "Golf",
+      "start": 7.75,
+      "end": 8.529,
+      "file": "nato-g.m4a"
+    },
+    {
+      "letter": "H",
+      "word": "Hotel",
+      "start": 8.817,
+      "end": 9.683,
+      "file": "nato-h.m4a"
+    },
+    {
+      "letter": "I",
+      "word": "India",
+      "start": 10.106,
+      "end": 10.895,
+      "file": "nato-i.m4a"
+    },
+    {
+      "letter": "J",
+      "word": "Juliett",
+      "start": 11.215,
+      "end": 12.171,
+      "file": "nato-j.m4a"
+    },
+    {
+      "letter": "K",
+      "word": "Kilo",
+      "start": 12.517,
+      "end": 13.263,
+      "file": "nato-k.m4a"
+    },
+    {
+      "letter": "L",
+      "word": "Lima",
+      "start": 13.727,
+      "end": 14.494,
+      "file": "nato-l.m4a"
+    },
+    {
+      "letter": "M",
+      "word": "Mike",
+      "start": 14.917,
+      "end": 15.682,
+      "file": "nato-m.m4a"
+    },
+    {
+      "letter": "N",
+      "word": "November",
+      "start": 16.079,
+      "end": 17.03,
+      "file": "nato-n.m4a"
+    },
+    {
+      "letter": "O",
+      "word": "Oscar",
+      "start": 17.427,
+      "end": 18.28,
+      "file": "nato-o.m4a"
+    },
+    {
+      "letter": "P",
+      "word": "Papa",
+      "start": 18.57,
+      "end": 19.381,
+      "file": "nato-p.m4a"
+    },
+    {
+      "letter": "Q",
+      "word": "Quebec",
+      "start": 19.819,
+      "end": 20.642,
+      "file": "nato-q.m4a"
+    },
+    {
+      "letter": "R",
+      "word": "Romeo",
+      "start": 21.093,
+      "end": 21.927,
+      "file": "nato-r.m4a"
+    },
+    {
+      "letter": "S",
+      "word": "Sierra",
+      "start": 22.25,
+      "end": 23.138,
+      "file": "nato-s.m4a"
+    },
+    {
+      "letter": "T",
+      "word": "Tango",
+      "start": 23.52,
+      "end": 24.375,
+      "file": "nato-t.m4a"
+    },
+    {
+      "letter": "U",
+      "word": "Uniform",
+      "start": 24.818,
+      "end": 25.734,
+      "file": "nato-u.m4a"
+    },
+    {
+      "letter": "V",
+      "word": "Victor",
+      "start": 26.143,
+      "end": 26.955,
+      "file": "nato-v.m4a"
+    },
+    {
+      "letter": "W",
+      "word": "Whiskey",
+      "start": 27.339,
+      "end": 28.196,
+      "file": "nato-w.m4a"
+    },
+    {
+      "letter": "X",
+      "word": "X-ray",
+      "start": 28.752,
+      "end": 29.588,
+      "file": "nato-x.m4a"
+    },
+    {
+      "letter": "Y",
+      "word": "Yankee",
+      "start": 30.105,
+      "end": 30.968,
+      "file": "nato-y.m4a"
+    },
+    {
+      "letter": "Z",
+      "word": "Zulu",
+      "start": 31.427,
+      "end": 32.222,
+      "file": "nato-z.m4a"
+    }
+  ]
+}

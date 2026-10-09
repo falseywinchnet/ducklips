@@ -636,16 +636,16 @@ Lexicon::Lexicon() {
     }
 }
 
-void Lexicon::add_line(const std::string& line) {
+bool Lexicon::add_line(const std::string& line, bool replace) {
     if (line.empty() || line[0] == ';') {
-        return;
+        return false;
     }
     std::istringstream fields(line);
     std::string word{};
     fields >> word;
     // CMU alternates are written WORD(2); keep the first pronunciation only.
     if (word.empty() || word.find('(') != std::string::npos) {
-        return;
+        return false;
     }
     std::vector<PhoneToken> phones{};
     std::string symbol{};
@@ -653,7 +653,7 @@ void Lexicon::add_line(const std::string& line) {
         Phone phone = Phone::AX;
         int stress = -1;
         if (!parse_phone(symbol, phone, stress)) {
-            return;
+            return false;
         }
         if (phone == Phone::AH && stress == 0) {
             phone = Phone::AX;
@@ -661,9 +661,11 @@ void Lexicon::add_line(const std::string& line) {
         append(phones, phone, stress);
     }
     std::string key = uppercase(word);
-    if (!phones.empty() && entries_.find(key) == entries_.end()) {
-        entries_.emplace(key, phones);
+    if (!phones.empty() && (replace || entries_.find(key) == entries_.end())) {
+        entries_.insert_or_assign(key, phones);
+        return true;
     }
+    return false;
 }
 
 std::size_t Lexicon::load_cmu_file(const std::string& path) {
@@ -671,13 +673,12 @@ std::size_t Lexicon::load_cmu_file(const std::string& path) {
     if (!file) {
         return 0;
     }
-    std::size_t before = entries_.size();
+    std::size_t installed = 0;
     std::string line{};
     while (std::getline(file, line)) {
-        add_line(line);
+        if (add_line(line, true)) { ++installed; }
     }
-    std::size_t added = entries_.size() - before;
-    return added;
+    return installed;
 }
 
 WordPronunciation Lexicon::pronounce(const std::string& word) const {

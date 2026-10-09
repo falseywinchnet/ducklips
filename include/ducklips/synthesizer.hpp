@@ -41,6 +41,8 @@ struct SynthesisOptions final {
 };
 
 struct SynthesisStatistics final {
+    std::size_t nonfinite_samples{};
+    std::size_t clipped_samples{};
     std::size_t blocks{};
     std::size_t warm_modes{};
     std::size_t bisected_modes{};

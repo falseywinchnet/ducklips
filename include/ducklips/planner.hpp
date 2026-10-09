@@ -37,7 +37,7 @@ struct UtterancePlan final {
 class UtterancePlanner final {
 public:
     void prepare(const VoiceProfile& voice, const VowelLibrary& vowels, SynthesisRate rate);
-    // Adds a CMU-format dictionary file; returns entries added.
+    // Loads explicit CMU-format overrides; returns definitions installed.
     std::size_t load_dictionary(const std::string& path);
     [[nodiscard]] UtterancePlan plan_text(const std::string& text) const;
     // Space-separated ARPAbet; "|" separates phrases; "AA1:0.8" forces a duration.

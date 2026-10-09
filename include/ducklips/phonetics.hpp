@@ -82,13 +82,15 @@ class Lexicon final {
 public:
     Lexicon();
     // Reads "WORD  PH0 PH1 ..." lines (CMU dictionary format). Returns the
-    // number of entries added; 0 when the file cannot be read.
+    // number of definitions installed (including overrides); 0 if unreadable.
+    // Explicit files override built-ins. Numbered CMU alternates are skipped;
+    // the last valid unnumbered definition in the file wins.
     std::size_t load_cmu_file(const std::string& path);
     [[nodiscard]] WordPronunciation pronounce(const std::string& word) const;
     [[nodiscard]] std::size_t entry_count() const noexcept;
 
 private:
-    void add_line(const std::string& line);
+    bool add_line(const std::string& line, bool replace = false);
     std::map<std::string, std::vector<PhoneToken>> entries_{};
 };
 

@@ -34,11 +34,14 @@ struct FoldParameters final {
     // a corner (m^2; 0: hard corner). HYPOTHESIS: the curved, mucus-covered
     // medial surface seals over a fraction of a millisecond, which is what
     // ends a real voice's harmonics above about 4 kHz.
-    double contact_softness{0.0};
+    double contact_softness{0.03e-6};
+    // Shared by both engines: the modal path formerly left these at zero,
+    // reintroducing the hard-minimum corner already diagnosed in the surface
+    // experiments. These are explicit model parameters, not measured anatomy.
     // Area scale over which the narrowest point moves between the lower and
     // upper mass (m^2; used with contact_softness > 0). Real medial surfaces
     // are rounded, so the flow area has no corner at the exchange.
-    double medial_roundness{0.0};
+    double medial_roundness{0.25e-6};
     // Tension of the right fold relative to the left (1: symmetric). An
     // asymmetric larynx vibrates with subharmonics and irregular cycles
     // (Steinecke and Herzel 1995): the physical origin of a rough, gravelly
