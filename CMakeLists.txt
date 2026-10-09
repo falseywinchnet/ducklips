@@ -125,3 +125,7 @@ add_test(NAME ducklips_cavity_network_tests COMMAND ducklips_cavity_network_test
 
 add_executable(ducklips_cavity_network_probe tools/cavity_network_probe.cpp)
 target_link_libraries(ducklips_cavity_network_probe PRIVATE ducklips)
+
+add_executable(ducklips_canonical_closure_tests tests/canonical_closure_tests.cpp)
+target_link_libraries(ducklips_canonical_closure_tests PRIVATE ducklips)
+add_test(NAME ducklips_canonical_closure_tests COMMAND ducklips_canonical_closure_tests)

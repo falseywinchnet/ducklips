@@ -11,7 +11,9 @@ fixes physical and pronunciation-planning failures. Local material transport
 now resolves the tested Foxtrot attachment miss while retaining the dorsal
 contact and lower anchor. Human listening of that alphabet found 14 words
 legible but mechanical, six distorted, two with clicks and four unintelligible;
-see the [listening record](reports/LISTENING_2026_10_09.md). A separate
+see the [listening record](reports/LISTENING_2026_10_09.md). The canonical
+renderer now removes [unphysical history in fully closed passages](reports/CLOSED_PASSAGE_HISTORY.md).
+The preceding listening result does not score that new rendering. A separate
 [pressure-topology correction](reports/CAVITY_TOPOLOGY.md) is tested but not
 yet connected to rendering. Performance optimization
 is parked by user instruction. Numerical stability and a plausible enhanced

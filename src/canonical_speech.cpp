@@ -72,9 +72,24 @@ void CanonicalSpeech::free_step(const AcousticNetwork& start,const AcousticNetwo
         load_pressure_+=physical_.average_pressure[0]/double(substeps);
         load_impedance_+=response_.average_pressure[0]/double(substeps);
         losses(physical_,physical_memory_,h/2);losses(response_,response_memory_,h/2);
+        close_passages(physical_,physical_memory_);close_passages(response_,response_memory_);
     }
     for (std::size_t n=0;n<cend_.size();++n) { cend_[n]=start.nodes[n].compliance+(fraction+increment)*(end.nodes[n].compliance-start.nodes[n].compliance); }
     for (std::size_t b=0;b<gend_.size();++b) { gend_[b]=inertive_conductance(start,b)+(fraction+increment)*(inertive_conductance(end,b)-inertive_conductance(start,b)); }
+    close_passages(physical_,physical_memory_);close_passages(response_,response_memory_);
+}
+void CanonicalSpeech::close_passages(MovingTreeReference& state,std::vector<double>& memory) noexcept {
+    // At zero area the air path no longer exists. Its inverse inertance is
+    // zero, so a pressure difference must not integrate an unobservable
+    // momentum and release it as flow on reopening. The branch's relaxation
+    // states likewise belong to the absent air path, not to the surrounding
+    // cavities. Keep all nodal pressure and all open-path history intact.
+    for(std::size_t branch=0;branch<gend_.size();++branch){
+        if(gend_[branch]!=0){continue;}
+        state.momentum[branch]=0;
+        const std::size_t offset=(cend_.size()+branch)*(loss_terms+1);
+        std::fill_n(memory.begin()+static_cast<std::ptrdiff_t>(offset),loss_terms+1,0.);
+    }
 }
 double CanonicalSpeech::inertive_conductance(const AcousticNetwork& network,std::size_t index) const noexcept {
     const AcousticBranch& branch=network.branches[index];

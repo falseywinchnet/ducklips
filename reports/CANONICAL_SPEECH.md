@@ -80,6 +80,10 @@ a complete anatomical closure law, smooth source motion and a moving-wall
 work audit including the loss memory remain unfinished. A vanishing loss
 weight is not yet a verified physical closure limit.
 
+The subsequent [closed-passage correction](CLOSED_PASSAGE_HISTORY.md) removes
+unobservable momentum and relaxation state at complete contact. The
+near-contact loss-memory limit remains unvalidated.
+
 Radiation uses the change in branch volume flow over the audio sample, so it
 includes changing geometry and pressure-source contributions. The original
 body geometry is retained; this integration does not add the detailed surface

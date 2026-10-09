@@ -25,6 +25,7 @@ public:
 private:
     static constexpr std::size_t loss_terms=24;
     void losses(MovingTreeReference& state,std::vector<double>& memory,double h) noexcept;
+    void close_passages(MovingTreeReference& state,std::vector<double>& memory) noexcept;
     double inertive_conductance(const AcousticNetwork& network,std::size_t branch) const noexcept;
     std::array<double,loss_terms> loss_poles_{},loss_weights_{};
     std::vector<double> physical_memory_{},response_memory_{},loss_scale_{},static_resistance_{},rad_pole_{},rad_weight_{};

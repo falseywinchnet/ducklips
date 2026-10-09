@@ -1,0 +1,292 @@
+{
+  "scope": "waveform measurements; not a listening judgment",
+  "word_windows_seconds": {
+    "Foxtrot": [
+      4.55,
+      5.65
+    ],
+    "November": [
+      11.7,
+      12.65
+    ]
+  },
+  "renders": {
+    "before": {
+      "path": "out/nato-click-audit.wav",
+      "sha256": "9836e9a7b5b135b2dd030a68d24f483c0aa9d9d4078694bdeb6b18da7aa389b8",
+      "frames": 1115472,
+      "sample_rate": 48000,
+      "peak": 0.5299552083015442,
+      "rms": 0.012112399796342238,
+      "words": {
+        "Foxtrot": {
+          "first_frame": 218400,
+          "last_frame_exclusive": 271200,
+          "peak": 0.5299552083015442,
+          "rms": 0.015873679827795202,
+          "largest_left_sample_jump": 0.7673272639513016,
+          "jump_time_seconds": 5.0660625
+        },
+        "November": {
+          "first_frame": 561600,
+          "last_frame_exclusive": 607200,
+          "peak": 0.14142873883247375,
+          "rms": 0.011767650785024985,
+          "largest_left_sample_jump": 0.029985599219799042,
+          "jump_time_seconds": 11.847
+        }
+      },
+      "candidate_events": {
+        "Foxtrot_T_release": {
+          "microphone_peak": 0.5299552083015442,
+          "largest_left_sample_jump": 0.7673272639513016,
+          "lip_acceleration_peak": 6.15325,
+          "stored_energy_peak": 0.4186047
+        },
+        "November_N_release": {
+          "microphone_peak": 0.14142873883247375,
+          "largest_left_sample_jump": 0.029985599219799042,
+          "lip_acceleration_peak": 0.9479232,
+          "stored_energy_peak": 0.02361107
+        }
+      }
+    },
+    "after": {
+      "path": "out/nato-closed-contact.wav",
+      "sha256": "d1042e9a5f81fa1d9f22fa4906ecb7e192befca8015c3d881951e9a277254b9f",
+      "frames": 1115472,
+      "sample_rate": 48000,
+      "peak": 0.14013558626174927,
+      "rms": 0.011961178817420863,
+      "words": {
+        "Foxtrot": {
+          "first_frame": 218400,
+          "last_frame_exclusive": 271200,
+          "peak": 0.14013558626174927,
+          "rms": 0.013426996463122585,
+          "largest_left_sample_jump": 0.2379268929362297,
+          "jump_time_seconds": 4.962041666666667,
+          "excerpt_path": "out/foxtrot-closed-contact-context.wav",
+          "excerpt_sha256": "d21f116ce99ad0cbca827292e9edc80871fbf04d75305965c56a39b0d49a2855"
+        },
+        "November": {
+          "first_frame": 561600,
+          "last_frame_exclusive": 607200,
+          "peak": 0.051292676478624344,
+          "rms": 0.01145921546266018,
+          "largest_left_sample_jump": 0.021027139388024807,
+          "jump_time_seconds": 12.139875,
+          "excerpt_path": "out/november-closed-contact-context.wav",
+          "excerpt_sha256": "ad2f95d14be5d06c93696d269d252216d05af46192bcce9ebb47b698123714b5"
+        }
+      },
+      "candidate_events": {
+        "Foxtrot_T_release": {
+          "microphone_peak": 0.10717036575078964,
+          "largest_left_sample_jump": 0.1314920336008072,
+          "lip_acceleration_peak": 0.9793503,
+          "stored_energy_peak": 0.007621794
+        },
+        "November_N_release": {
+          "microphone_peak": 0.04608248174190521,
+          "largest_left_sample_jump": 0.007162522757425904,
+          "lip_acceleration_peak": 0.2559145,
+          "stored_energy_peak": 4.064701e-05
+        }
+      }
+    }
+  },
+  "source_sha256": {
+    "include/ducklips/acoustic_network.hpp": "9eed5e78beb792700e7b15121225dcb1114599fca7257f7fd89906a53a9fce2f",
+    "include/ducklips/air_path.hpp": "54c02a1dad42ea477ed6a7c8eb0549b8996fe8dd20c5f65ca041a213049fe3ee",
+    "include/ducklips/articulation.hpp": "82a1671eaed62a46d93ff34b91b5ea7ffb2f1876e1fb29364ea7608ac4bd49a5",
+    "include/ducklips/articulation_speeds.hpp": "b193955fd0ebaceade7dbaf973fb231a1bfb8297af8412964ba38a0eb6130781",
+    "include/ducklips/body_config.hpp": "e6026167c9e45be5527cdc27f80d23adc0bf3aa8782e1149b78659972f3c6c1b",
+    "include/ducklips/canonical_speech.hpp": "e4b99a983f8990a9b44e63e3cb313c2f835b87debd95b72d5310a364e965e8ec",
+    "include/ducklips/cavity_network.hpp": "ab53d5939ef5a2667068869afd623511fb454d7770c0468bc3e0aa846f5b49af",
+    "include/ducklips/connected_speech.hpp": "a659a80e6ba9c6fadab99f2eaac4740556d118b68ccfb5c7d5d6370e147c8e5c",
+    "include/ducklips/continuous_modes.hpp": "81880825cc159963706de4146ab7bbe16603379a2c1e0058732bb6a7bdde72b7",
+    "include/ducklips/cues.hpp": "4c9e0a80cc730dc28da64fcfdfc1407c5b36557fd27976104ce8c7318a7419c9",
+    "include/ducklips/gui_forms_voice.hpp": "997ba825a4d6fe8d3546686d7631f47b2fb1dc31664d78be43c2f07d521406fc",
+    "include/ducklips/modal.hpp": "cea58d51b9bb921979ad7427180d8c2aae11c8247efa426613b6575db7480f4d",
+    "include/ducklips/modal_transport.hpp": "5d5526c9f64aab6cfbbc573c1e2c287fdced5c1fcedccf982bcb0be636808807",
+    "include/ducklips/motion_segment.hpp": "6aef5724fac1544773b6f864247eaae91d65d26773f483d473463dddefcb96e4",
+    "include/ducklips/moving_mode.hpp": "722bd74f0142eb0c337661177e36ba10b20e670a862c321a7ce5b08c10a964ee",
+    "include/ducklips/moving_tree.hpp": "84bb7058c8691b408106650b6f319c27fc29e45aaab2cf617656ae3fbfd66a8e",
+    "include/ducklips/nudges.hpp": "50a69c9906f36c5770fd687466947d07b5e7cdf3a4516ed38b75b2b0103c2f69",
+    "include/ducklips/phonetics.hpp": "5fc468bdad3ed0f8840e8da898f07943a628b29a59817016a3ae51fed32f4c2b",
+    "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+    "include/ducklips/planner.hpp": "708b4575d6e1db244f75af41fe2065f0d5d1b34e7b668b6fc54d472c863579b8",
+    "include/ducklips/sources.hpp": "49e1e7c5d96be992639b13ab5fabc9ff3d37dfd33bcdf39395b7790b5bdbbfb3",
+    "include/ducklips/synthesizer.hpp": "9fa4e1820722b7a548724371fdcc5a276e813e26873e3ec8476ed6e5e7d504bf",
+    "include/ducklips/tongue.hpp": "5309d172d53dd93d3d1d2c33bbd3ba7960127f453a215bd455f335486278f235",
+    "include/ducklips/tongue_flow.hpp": "836bf3882c39d0592e348bb7faf04de4d45612bcccc0927523e36cbbde37faa9",
+    "include/ducklips/tongue_surface.hpp": "67dbde17023e7658e9a59d65e9f131658ad2206f291d1225b54c5594a7c4dc48",
+    "include/ducklips/tree_operator.hpp": "d06d519a97aba819a6810b41b428579794b79202134bbfee987573fac6155a6b",
+    "include/ducklips/voice.hpp": "4be60640f1b304320ed5a1390370be8e9147b8fbe8ed7a049e7c112db18bf599",
+    "include/ducklips/vowel_library.hpp": "1636d297e82c797df002ee56e17fe0cfcd5021717ae1500b9d5afda9b1216e5b",
+    "include/ducklips/wav.hpp": "c173a71e234e5570595deb6c91cc59f4977000c0da4c0a95aeb7a68118aae650",
+    "src/acoustic_network.cpp": "16c2eacb4a8880e315954075736d40500c9c831fcec920fd8f14bbec53526e81",
+    "src/air_path.cpp": "b1f3cc8308ade5f5ba10f03ed40481757252e9bc12c5850eb624c2e862ff29cf",
+    "src/articulation.cpp": "3f2673cf924dd57738c361ef4dce9d16e0a10760d385963b7e7097821838bd38",
+    "src/body_config.cpp": "d236591366f2707b5e221c160c5f55b2b9c6a132d0891e59c9e9ac14549476dc",
+    "src/canonical_speech.cpp": "7501214919b19db95af9c8296ecc49a707634834770904d7f59106285e6155d0",
+    "src/cavity_network.cpp": "a7c7d827a0e47c08808659d932707d97db47208083fdf7bc760ab86306ac7118",
+    "src/connected_speech.cpp": "69225ff4ba76951f37fe7d2d5f36cbf3f30b63b4766edd02ca8abe0496ef848e",
+    "src/continuous_modes.cpp": "1313d7e9ce96e13c7cbee6ab51f81d4f3e52f1ef58f4796f2191606499dc8e9c",
+    "src/cues.cpp": "ab593f27d6c3c958f7256f23cea0bae6ebf4b38bd644535388116d98929efd5b",
+    "src/gui_forms_voice.cpp": "82301e8667d7ed4bd3106a764fe8210db51e2271ecb0423644ece6cf06a89204",
+    "src/modal.cpp": "c6c187f0988011ef158faf1285c0bdf180c127033058bd1d89abd8bebbab3e03",
+    "src/modal_transport.cpp": "ab92fb76594ff58b635041181b7877cc6e3e96ebb111121457b3aa8b0ace259b",
+    "src/motion_segment.cpp": "fd7fda3eb378898a036676c2694ad1801f01745e1654729ac0da3ac36c1de8c4",
+    "src/moving_mode.cpp": "13bfb6f9093bae55339aebf23a77911318e2b7e5254aaad9dcab9d31336f5874",
+    "src/moving_tree.cpp": "62d9ff74cd554cb3b06547fc699ffb8a91bffbcf09c1ee28879095c8b8860102",
+    "src/nudges.cpp": "72a492573310c616959fff50f2cc1ce03823597ec80126aa9a618fdb839ecf11",
+    "src/phonetics.cpp": "eb2975fe1510d639b952b8dc9621a5b9b2056ce5b7aa10f14203d2e33520a1f0",
+    "src/physics.cpp": "fe62f185c76f14cde53fdc23fc3a5021a1bf12dec9a3bba7c42eb97b21e976ab",
+    "src/planner.cpp": "4aedb22028237ef16bc262452b1b11d0f00d621ae17e363d93d72f24f1f47ac2",
+    "src/real_dot.hpp": "3fda54b8fb003c89a01d4780130fb2469967a59887283938a7c67d549b44d5df",
+    "src/sources.cpp": "66167fbd6dcbd63fe5aacca8f90748046ef26ccdf8ebde8a0c78f256e0b5b4b5",
+    "src/synthesizer.cpp": "d531143131d79c2dd71456bf9f843d2c1fec6b9c2d4d7287053700435e8683ff",
+    "src/tongue.cpp": "a4cf577fc89074d90eff012f185b6cb36f8834bf419fc6fc59a464e292e99c14",
+    "src/tongue_flow.cpp": "f83873621e4270266e572b8bee2b42f127c47edb32e36921740c17b91e119590",
+    "src/tongue_surface.cpp": "8f33d2d322ea103f0e6d2779cf6e044b59c0ef8ce3b212e544d8bc2228c49a06",
+    "src/tree_operator.cpp": "cf78a2d778f7201c6c1f799e80342c97b5722066d8ee431fd5294b920a43ee86",
+    "src/voice.cpp": "df08c24c1e11a853cfd4d12ad544271d93c253e8894f9de243378a74c2e303d3",
+    "src/vowel_library.cpp": "72b9fa7b3a27e51eb189c3e5ecec1c5a1d716d3d0e75748ccd71d98d9412e560",
+    "src/wav.cpp": "ec7d81058fae761156c4a59df17254864025e06ce4417a22fefa77765c2e7e7c"
+  },
+  "binary_sha256": "6e8613b6bf546399cb818492bd9f4694fb1210ffc05936e0cff0381ba86337e0",
+  "candidate_windows_seconds": {
+    "Foxtrot_T_release": [
+      5.06,
+      5.075
+    ],
+    "November_N_release": [
+      11.84,
+      11.86
+    ]
+  },
+  "geometry_probe_maximum_difference": {
+    "narrowest_cm2": 0.0,
+    "blade_root_x_cm": 0.0,
+    "blade_root_y_cm": 0.0,
+    "attachment_motion_cm": 0.0,
+    "tip_target_error_cm": 0.0,
+    "body_wall_penetration_cm": 0.0
+  },
+  "source_baseline_commit": "ca2764d",
+  "validation": {
+    "release": "12/12 passed",
+    "asan_ubsan": "canonical closure and affected streaming tests 2/2 passed",
+    "human_assessment": "pending for this corrected audio; prior 14 legible mechanical words refer to prior audio",
+    "nonfinite_samples": 0,
+    "clipped_samples": 0,
+    "geometry_failures": 0,
+    "maximum_cavity_mass_residual_m3_s": 5.503099542e-16
+  },
+  "regression": {
+    "before": {
+      "closed_energy": 0,
+      "reopened_energy": 0.116659618035,
+      "peak_lip_acceleration": 149.955961931
+    },
+    "after": {
+      "closed_energy": 0,
+      "reopened_energy": 0,
+      "peak_lip_acceleration": 0
+    },
+    "open_passage_energy_before_and_after": 1.65649768234e-05
+  },
+  "enhanced_fields": {
+    "foxtrot-before-contact-enhanced": {
+      "shape": [
+        684,
+        104
+      ],
+      "png_pixels": [
+        416,
+        684
+      ],
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/foxtrot-before-contact-context.wav",
+      "source_sha256": "4524757181a5224622d84242d0750e5b07ef224f427f32295d9f93dd1648a1ff",
+      "full_saved_field_exact_pixel_match": true,
+      "display_reference": 0.015974152821882408,
+      "db_range": 70.0,
+      "colormap": "magma",
+      "png_sha256": "a80ec8e438f10d9da8f2828f1d1bdc640ae9e6a97eb83b7330b7da257a3450b7"
+    },
+    "foxtrot-closed-contact-enhanced": {
+      "shape": [
+        684,
+        104
+      ],
+      "png_pixels": [
+        416,
+        684
+      ],
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/foxtrot-closed-contact-context.wav",
+      "source_sha256": "d21f116ce99ad0cbca827292e9edc80871fbf04d75305965c56a39b0d49a2855",
+      "full_saved_field_exact_pixel_match": true,
+      "display_reference": 0.015974152821882408,
+      "db_range": 70.0,
+      "colormap": "magma",
+      "png_sha256": "436ee61ac478504f4e2bd963c25cadc8d3fbe219d26da888fdad5c2109250437"
+    },
+    "november-before-contact-enhanced": {
+      "shape": [
+        684,
+        90
+      ],
+      "png_pixels": [
+        360,
+        684
+      ],
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/november-before-contact-context.wav",
+      "source_sha256": "fb5e1b7e4d30968a86d55682210ac72e35c86fb5dad0927dc48337b21320daad",
+      "full_saved_field_exact_pixel_match": true,
+      "display_reference": 0.015974152821882408,
+      "db_range": 70.0,
+      "colormap": "magma",
+      "png_sha256": "cfa25877317ae72428c0276bb22b912f3d2b987876171bda609352ea5c0430d5"
+    },
+    "november-closed-contact-enhanced": {
+      "shape": [
+        684,
+        90
+      ],
+      "png_pixels": [
+        360,
+        684
+      ],
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/november-closed-contact-context.wav",
+      "source_sha256": "ad2f95d14be5d06c93696d269d252216d05af46192bcce9ebb47b698123714b5",
+      "full_saved_field_exact_pixel_match": true,
+      "display_reference": 0.015974152821882408,
+      "db_range": 70.0,
+      "colormap": "magma",
+      "png_sha256": "7a71425c4b1dee53c213614ebc2264dd86679ca680386843d0e81905a4c4c46e"
+    }
+  },
+  "render_command": [
+    "./build/ducklips_say",
+    "--canonical-motion",
+    "--conservative-tongue",
+    "--body",
+    "bodies/reference.body",
+    "--dictionary",
+    "samples/nato.dict",
+    "--text",
+    "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. X-ray. Yankee. Zulu.",
+    "--chunk",
+    "48",
+    "--out",
+    "out/nato-closed-contact.wav",
+    "--probe",
+    "out/nato-closed-contact.csv",
+    "--trace",
+    "4.5",
+    "out/nato-closed-contact-trace.csv",
+    "--report"
+  ]
+}
