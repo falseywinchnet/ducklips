@@ -1,0 +1,113 @@
+{
+  "digits": 80,
+  "cases": [
+    {
+      "input": [
+        3e-06,
+        3e-06,
+        0,
+        0
+      ],
+      "maximum_scaled_error": 2.2871402012249244e-16
+    },
+    {
+      "input": [
+        1e-06,
+        4e-06,
+        700,
+        -200
+      ],
+      "maximum_scaled_error": 9.989121649691721e-17
+    },
+    {
+      "input": [
+        5e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "maximum_scaled_error": 1.6044346921929896e-16
+    },
+    {
+      "input": [
+        0,
+        3e-06,
+        700,
+        -100
+      ],
+      "maximum_scaled_error": 7.793879549388528e-17
+    },
+    {
+      "input": [
+        3e-06,
+        0,
+        -100,
+        700
+      ],
+      "maximum_scaled_error": 1.0925292762100227e-16
+    },
+    {
+      "input": [
+        -1e-06,
+        3e-06,
+        700,
+        -200
+      ],
+      "maximum_scaled_error": 2.4149048184087986e-16
+    },
+    {
+      "input": [
+        3e-06,
+        -1e-06,
+        -200,
+        700
+      ],
+      "maximum_scaled_error": 2.4149048184087986e-16
+    },
+    {
+      "input": [
+        -5e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "maximum_scaled_error": 3.7377521686894136e-16
+    },
+    {
+      "input": [
+        1e-06,
+        -3e-06,
+        900,
+        -100
+      ],
+      "maximum_scaled_error": 3.541606197432718e-16
+    },
+    {
+      "input": [
+        2e-06,
+        4e-06,
+        -20000,
+        10000
+      ],
+      "maximum_scaled_error": 1.6048177239475407e-16
+    },
+    {
+      "input": [
+        3e-06,
+        3e-06,
+        1e-09,
+        -1e-09
+      ],
+      "maximum_scaled_error": 1.001817182852727e-16
+    }
+  ],
+  "maximum_scaled_error": 3.7377521686894136e-16,
+  "hashes": {
+    "tools/linear_contour_storage_reference.py": "b9bf486937787760aec573b346dffec381dcae75818c8f140c83eb0e1d299970",
+    "build/ducklips_contour_profile_limit_probe": "5d3bfa2fadf17b878f5decceb90af6e18f04d25a64c35013625633f521c5d9cb",
+    "src/contour_pressure_storage.cpp": "15bfb9a429476166366f3233d2af6d42d0cbc4b984880983f8140e5a8f39233e",
+    "include/ducklips/contour_pressure_storage.hpp": "244f34238a6ab67335d61267cad98aac8f4b3aee037dc9be24308dc6e1eed941",
+    "out/continuous-contact/linear-storage-input.txt": "874d4378d2c548d3ca155218c882de7fd7d864f8e7b9bde2dad06226cc65790c",
+    "out/continuous-contact/linear-storage-output.jsonl": "492b091f9c04354bcab5bf06a592cd2045552eb92321725840423e5c25e91fc8"
+  }
+}

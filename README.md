@@ -28,9 +28,11 @@ measurements remain research references; they are not acoustically equivalent.
 
 The developing continuous gas source now has [coupled gas/tissue motion](reports/CONTINUOUS_GLOTTAL_DYNAMICS.md)
 using shared inertia and [finite narrow-gap loss](reports/CONTOUR_PRESSURE_LOSS.md).
-Open and already sealed phases advance with a complete work ledger. Carrying
-motion through sealing/reopening and connecting this source to the speech tract
-remain unfinished; these results have not produced a new speech recording.
+Open and already sealed phases advance with a complete work ledger. An explicit
+[full-span tip-contact profile](reports/CONTINUOUS_CONTACT_MOTION.md) now carries
+two free controls through sealing and reopening, with numerical damping reported
+separately from physical loss. Sustained phonation and connection to the speech
+tract remain unfinished; these results have not produced a new speech recording.
 
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).

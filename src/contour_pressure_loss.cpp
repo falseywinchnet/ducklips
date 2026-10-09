@@ -1,4 +1,5 @@
 #include "ducklips/contour_pressure_loss.hpp"
+#include "contour_pressure_intervals.hpp"
 #include <algorithm>
 #include <cmath>
 namespace ducklips {
@@ -17,9 +18,9 @@ bool slit_bgk_conductance(double delta,double& result) noexcept {
     else {const double coordinate=(std::log(delta)-bgk_log_min)/bgk_log_step;const int index=std::clamp(static_cast<int>(coordinate),0,199);const double t=coordinate-index;const double* c=bgk_coefficients[index];value=std::exp(((c[0]*t+c[1])*t+c[2])*t+c[3]);}
     if(!std::isfinite(value) || value<=0){return false;}result=value;return true;
 }
-bool ContourPressureDissipation::configure(const FoldParameters& f,const AirProperties& air) noexcept {
-    ContourPressureKinetics kinetics;if(!kinetics.configure(f,air)){return false;}
-    kinetics_=kinetics;thickness_={f.lower_thickness,f.upper_thickness};density_=air.density;gamma_=air.heat_capacity_ratio;thermal_speed_=air.sound_speed*std::sqrt(2/gamma_);viscosity_=air.viscosity;width_=f.length;return true;
+bool ContourPressureDissipation::configure(const FoldParameters& f,const AirProperties& air,ContourPressureProfile profile) noexcept {
+    ContourPressureKinetics kinetics;if(!kinetics.configure(f,air,profile)){return false;}
+    kinetics_=kinetics;thickness_={f.lower_thickness,f.upper_thickness};basis_=profile==ContourPressureProfile::linear_span?std::array<double,2>{0.,thickness_[0]+thickness_[1]}:std::array<double,2>{.5*thickness_[0],thickness_[0]+.5*thickness_[1]};density_=air.density;gamma_=air.heat_capacity_ratio;thermal_speed_=air.sound_speed*std::sqrt(2/gamma_);viscosity_=air.viscosity;width_=f.length;return true;
 }
 bool ContourPressureDissipation::integrate(const ContourPressureFlow& state,double start,double end,int mapping,double lo,double hi,std::array<double,25>& result,const std::array<double,25>* budget,int depth) const noexcept {
     const double middle=.5*(lo+hi),radius=.5*(hi-lo),span=end-start;std::array<double,25> low{},high{},absolute{};
@@ -48,14 +49,15 @@ bool ContourPressureDissipation::integrate(const ContourPressureFlow& state,doub
     for(std::size_t j=0;j<25;++j){result[j]=a[j]+b[j];}return true;
 }
 bool ContourPressureDissipation::prepare(const ContourPressureFlow& state,ContourPressureLoss& result) const noexcept {
+    if(basis_[0]==0 && state.area[1]<state.area[0]){ContourPressureLoss reflected;if(!prepare(pressure_reflect_flow(state,basis_[1]),reflected)){return false;}result.resistance=pressure_reflect_matrix(reflected.resistance);return true;}
     if(density_<=0 || state.support[1]<=state.support[0]){return false;}ContourPressureLoss candidate;
     if(viscosity_==0){result=candidate;return true;}
-    const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1];
+    const double c0=basis_[0],c1=basis_[1];
     const double nodes[]={state.support[0],std::clamp(c0,state.support[0],state.support[1]),std::clamp(c1,state.support[0],state.support[1]),state.support[1]};
     for(std::size_t n=0;n<3;++n){if(nodes[n+1]<=nodes[n]){continue;}
         const int mapping=nodes[n]==state.support[0] && state.area[0]<=0?1:nodes[n+1]==state.support[1] && state.area[1]<=0?2:0;
-        std::array<double,25> part;if(!integrate(state,nodes[n],nodes[n+1],mapping,0.,1.,part)){return false;}
-        for(std::size_t j=0;j<25;++j){candidate.resistance[j]+=part[j];}}
+        std::array<double,514> knots;const std::size_t count=n==1?pressure_interval_knots(nodes[n],nodes[n+1],state.area[0],state.area[1],knots):pressure_interval_knots(nodes[n],nodes[n+1],1.,1.,knots);if(count==0){return false;}
+        for(std::size_t k=0;k+1<count;++k){std::array<double,25> part;if(!integrate(state,knots[k],knots[k+1],mapping,0.,1.,part)){return false;}for(std::size_t j=0;j<25;++j){candidate.resistance[j]+=part[j];}}}
     result=candidate;return true;
 }
 bool ContourPressureDissipation::power(const ContourPressureFlow& state,const ContourPressureLoss& loss,const std::array<double,5>& rate,double& result) const noexcept {

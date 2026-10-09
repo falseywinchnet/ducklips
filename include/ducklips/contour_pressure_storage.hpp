@@ -3,6 +3,8 @@
 #include "ducklips/gas_storage.hpp"
 #include "ducklips/sources.hpp"
 namespace ducklips {
+// Alternative explicit axial shape assumptions; neither is measured anatomy.
+enum class ContourPressureProfile { flat_caps, linear_span };
 struct ContourPressureState final {
     // Coefficients of continuous specific-enthalpy effort, in Pa.
     std::array<double,2> effort{},mass{},area_effort{};
@@ -17,7 +19,7 @@ struct ContourPressureState final {
 // This storage component does not yet supply momentum or a speech source.
 class ContourPressureStorage final {
 public:
-    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&) noexcept;
+    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&,ContourPressureProfile=ContourPressureProfile::flat_caps) noexcept;
     [[nodiscard]] bool evaluate(const std::array<double,2>& area,
         const std::array<double,2>& effort,ContourPressureState&) const noexcept;
     // Restricted integrals for continuity reconstruction. Empty subintervals
@@ -29,7 +31,7 @@ public:
         ContourPressureState&) const noexcept;
 private:
     GasStorage gas_{};
-    std::array<double,2> thickness_{};
+    std::array<double,2> thickness_{},basis_{};
     double bulk_{},gamma_{};
 };
 }

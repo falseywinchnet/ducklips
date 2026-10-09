@@ -1,4 +1,5 @@
 #include "ducklips/contour_pressure_flow.hpp"
+#include "contour_pressure_intervals.hpp"
 #include <algorithm>
 #include <cmath>
 namespace ducklips {
@@ -8,19 +9,20 @@ constexpr double weights8[]={.36268378337836198297,.31370664587788728734,.222381
 constexpr double points16[]={.09501250983763744019,.28160355077925891323,.45801677765722738634,.61787624440264374845,.75540440835500303390,.86563120238783174388,.94457502307323257608,.98940093499164993260};
 constexpr double weights16[]={.18945061045506849629,.18260341504492358887,.16915651939500253819,.14959598881657673208,.12462897125553387205,.09515851168249278481,.06225352393864789286,.02715245941175409485};
 }
-bool ContourPressureKinetics::configure(const FoldParameters& f,const AirProperties& air) noexcept {
-    ContourPressureStorage storage;if(!storage.configure(f,air) || !std::isfinite(f.length) || f.length<=0 || !std::isfinite(air.viscosity) || air.viscosity<0){return false;}
-    storage_=storage;thickness_={f.lower_thickness,f.upper_thickness};density_=air.density;bulk_=air.density*air.sound_speed*air.sound_speed;gamma_=air.heat_capacity_ratio;viscosity_=air.viscosity;width_=f.length;return true;
+bool ContourPressureKinetics::configure(const FoldParameters& f,const AirProperties& air,ContourPressureProfile profile) noexcept {
+    ContourPressureStorage storage;if(!storage.configure(f,air,profile) || !std::isfinite(f.length) || f.length<=0 || !std::isfinite(air.viscosity) || air.viscosity<0){return false;}
+    storage_=storage;thickness_={f.lower_thickness,f.upper_thickness};basis_=profile==ContourPressureProfile::linear_span?std::array<double,2>{0.,thickness_[0]+thickness_[1]}:std::array<double,2>{.5*thickness_[0],thickness_[0]+.5*thickness_[1]};density_=air.density;bulk_=air.density*air.sound_speed*air.sound_speed;gamma_=air.heat_capacity_ratio;viscosity_=air.viscosity;width_=f.length;return true;
 }
 bool ContourPressureKinetics::sample(const ContourPressureFlow& state,double z,ContourFlowSample& result) const noexcept {
     if(density_<=0 || !std::isfinite(z) || z<state.support[0] || z>state.support[1]){return false;}
-    const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1],end=thickness_[0]+thickness_[1];
+    if(basis_[0]==0 && state.area[1]<state.area[0]){ContourFlowSample reflected;if(!sample(pressure_reflect_flow(state,basis_[1]),basis_[1]-z,reflected)){return false;}result=reflected;result.flow={reflected.flow[2],reflected.flow[1],reflected.flow[0],-reflected.flow[4],-reflected.flow[3]};return true;}
+    const double c0=basis_[0],c1=basis_[1],end=thickness_[0]+thickness_[1];
     const double t=std::clamp((z-c0)/(c1-c0),0.,1.),mu=(1-t)*state.effort[0]+t*state.effort[1];
     double a=(1-t)*state.area[0]+t*state.area[1];
     // Use the same contact origin as restricted storage integration, avoiding
     // cancellation between signed areas in a tiny interval at the tip.
     if(z>c0 && z<c1 && (state.area[0]<=0 || state.area[1]<=0)){
-        const double root=c0+(c1-c0)*(-state.area[0])/(state.area[1]-state.area[0]);a=(z-root)*(state.area[1]-state.area[0])/(c1-c0);
+        const double root=state.area[0]==0?c0:state.area[1]==0?c1:c0+(c1-c0)*(-state.area[0])/(state.area[1]-state.area[0]);a=(z-root)*(state.area[1]-state.area[0])/(c1-c0);
     }
     if(a<=0 || 1+(gamma_-1)*mu/bulk_<=0){return false;}
     ContourFlowSample candidate;candidate.area=a;candidate.relative_density=std::exp(std::log1p((gamma_-1)*mu/bulk_)/(gamma_-1));
@@ -50,22 +52,26 @@ bool ContourPressureKinetics::integrate(const ContourPressureFlow& state,double 
     for(std::size_t j=0;j<25;++j){result[j]=a[j]+b[j];}return true;
 }
 bool ContourPressureKinetics::prepare(const std::array<double,2>& area,const std::array<double,2>& effort,ContourPressureFlow& result) const noexcept {
+    // Integrate a full-span taper from its narrow end. Using the near-end
+    // coordinate retains thin intervals that H - epsilon would round away.
+    if(basis_[0]==0 && area[1]<area[0]){ContourPressureFlow reflected;if(!prepare({area[1],area[0]},{effort[1],effort[0]},reflected)){return false;}result=pressure_reflect_flow(reflected,basis_[1]);return true;}
     ContourPressureState gas;if(!storage_.evaluate(area,effort,gas)){return false;}
     const auto& c=gas.compliance;const double det=c[0]*c[3]-c[1]*c[2];if(det<=0 || !std::isfinite(det)){return false;}
     ContourPressureFlow candidate;candidate.area=area;candidate.effort=effort;
     for(std::size_t j=0;j<5;++j){double a=j==0?1.:j==1?-1.:0.,b=j==1?1.:j==2?-1.:0.;if(j>=3){a=-gas.mass_area[j-3];b=-gas.mass_area[2+j-3];}
         candidate.effort_rate[j]=(c[3]*a-c[1]*b)/det;candidate.effort_rate[5+j]=(-c[2]*a+c[0]*b)/det;}
-    const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1],end=thickness_[0]+thickness_[1];candidate.support={0.,end};
-    if(area[0]<=0){candidate.support[0]=c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}
-    if(area[1]<=0){candidate.support[1]=c0+(c1-c0)*area[0]/(area[0]-area[1]);}
+    const double c0=basis_[0],c1=basis_[1],end=thickness_[0]+thickness_[1];candidate.support={0.,end};
+    if(area[0]<=0){candidate.support[0]=area[0]==0?c0:c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}
+    if(area[1]<=0){candidate.support[1]=area[1]==0?c1:c0+(c1-c0)*area[0]/(area[0]-area[1]);}
     // Closed exterior flows are constrained to zero. Their formal basis
     // columns would carry finite flow into a zero-area endpoint and have
     // infinite energy; remove them from the admissible kinetic metric.
     for(std::size_t j:{0u,2u}){if(area[j==0?0:1]<=0){candidate.effort_rate[j]=candidate.effort_rate[5+j]=0.;}}
     if(area[0]<=0 || area[1]<=0){const double t=-area[0]/(area[1]-area[0]),slope=std::abs(area[1]-area[0])/(c1-c0),factor=12*viscosity_*width_*width_/(slope*slope*slope);candidate.contact_loss={factor*(1-t)*(1-t),factor*(1-t)*t,factor*(1-t)*t,factor*t*t};}
     const double nodes[]={candidate.support[0],std::clamp(c0,candidate.support[0],candidate.support[1]),std::clamp(c1,candidate.support[0],candidate.support[1]),candidate.support[1]};
-    for(std::size_t n=0;n<3;++n){if(nodes[n+1]<=nodes[n]){continue;}std::array<double,25> part;if(!integrate(candidate,nodes[n],nodes[n+1],part)){return false;}
-        for(std::size_t j=0;j<25;++j){candidate.inertia[j]+=part[j];}}
+    for(std::size_t n=0;n<3;++n){if(nodes[n+1]<=nodes[n]){continue;}
+        std::array<double,514> knots;const std::size_t count=n==1?pressure_interval_knots(nodes[n],nodes[n+1],area[0],area[1],knots):pressure_interval_knots(nodes[n],nodes[n+1],1.,1.,knots);if(count==0){return false;}
+        for(std::size_t k=0;k+1<count;++k){std::array<double,25> part;if(!integrate(candidate,knots[k],knots[k+1],part)){return false;}for(std::size_t j=0;j<25;++j){candidate.inertia[j]+=part[j];}}}
     for(std::size_t j:{0u,2u}){if(area[j==0?0:1]<=0){for(std::size_t k=0;k<5;++k){candidate.inertia[5*j+k]=candidate.inertia[5*k+j]=0.;}}}
     for(double v:candidate.contact_loss){if(!std::isfinite(v)){return false;}}
     for(double v:candidate.inertia){if(!std::isfinite(v)){return false;}}

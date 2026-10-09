@@ -20,14 +20,14 @@ struct ContourFlowSample final {
 // This component does not advance generalized momenta or regularize contact.
 class ContourPressureKinetics final {
 public:
-    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&) noexcept;
+    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&,ContourPressureProfile=ContourPressureProfile::flat_caps) noexcept;
     [[nodiscard]] bool prepare(const std::array<double,2>& area,const std::array<double,2>& effort,ContourPressureFlow&) const noexcept;
     [[nodiscard]] bool sample(const ContourPressureFlow&,double z,ContourFlowSample&) const noexcept;
     [[nodiscard]] bool energy(const ContourPressureFlow&,const std::array<double,5>& rate,double&) const noexcept;
 private:
     [[nodiscard]] bool integrate(const ContourPressureFlow&,double lo,double hi,std::array<double,25>&,int depth=0) const noexcept;
     ContourPressureStorage storage_{};
-    std::array<double,2> thickness_{};
+    std::array<double,2> thickness_{},basis_{};
     double density_{},bulk_{},gamma_{},viscosity_{},width_{};
 };
 }

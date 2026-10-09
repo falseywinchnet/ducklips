@@ -1,0 +1,379 @@
+{
+  "base_commit": "dbc880fb3334d61e896217507c7c1f56e883be6f",
+  "scope": "two free full-span tip-contact cycles and two exact-zero pressure-driven onset controls; not sustained phonation or speech",
+  "endpoint_scales": {
+    "area_m2": 1e-06,
+    "effort_Pa": 1000,
+    "flow_m3_s": 1e-05,
+    "area_rate_m2_s": 0.001
+  },
+  "cycles": [
+    {
+      "mode": "lower",
+      "runs": [
+        {
+          "steps": 2000,
+          "maximum_sampled_mass_residual_m3": 1.0384218614837571e-21,
+          "final": {
+            "step": 2000,
+            "time": 0.002,
+            "area": [
+              2.053493096563312e-06,
+              5.746464698995512e-07
+            ],
+            "effort": [
+              -5.82534585958995,
+              -15.15534494824828
+            ],
+            "flow": [
+              2.401802232499757e-06,
+              5.042233287351401e-07,
+              -7.894755153210047e-08
+            ],
+            "area_rate": [
+              0.002141258130397668,
+              -0.00048729755031829596
+            ],
+            "energy": 9.60571444779128e-07,
+            "loss": 4.783712012004231e-07,
+            "balance": 7.549181142403952e-20,
+            "mass_balance": 1.5302841332231012e-23
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 7.9e-05,
+          "first_reopened_s": 0.0008089999999999999,
+          "minimum_area": -1.9576998732194157e-07,
+          "physical_loss_J": 4.7585323281395614e-07,
+          "numerical_loss_J": 2.517968386466666e-09,
+          "maximum_balance_J": 9.397433503092437e-20
+        },
+        {
+          "steps": 4000,
+          "maximum_sampled_mass_residual_m3": 1.3429277244798404e-21,
+          "final": {
+            "step": 4000,
+            "time": 0.002,
+            "area": [
+              2.053328621719925e-06,
+              5.739342498291851e-07
+            ],
+            "effort": [
+              -5.831744151778518,
+              -15.168756244445706
+            ],
+            "flow": [
+              2.4025094982162825e-06,
+              5.045675247632045e-07,
+              -7.871049635720648e-08
+            ],
+            "area_rate": [
+              0.0021416706939207356,
+              -0.0004873963545576735
+            ],
+            "energy": 9.609755702373923e-07,
+            "loss": 4.779670757452285e-07,
+            "balance": 3.1452450913920307e-18,
+            "mass_balance": 4.756288522179909e-24
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 7.85e-05,
+          "first_reopened_s": 0.0008095,
+          "minimum_area": -1.960927128663454e-07,
+          "physical_loss_J": 4.76506617655725e-07,
+          "numerical_loss_J": 1.4604580895013568e-09,
+          "maximum_balance_J": 3.147680311115387e-18
+        },
+        {
+          "steps": 8000,
+          "maximum_sampled_mass_residual_m3": 1.5366947829703872e-21,
+          "final": {
+            "step": 8000,
+            "time": 0.002,
+            "area": [
+              2.0532390940076473e-06,
+              5.735510895551417e-07
+            ],
+            "effort": [
+              -5.8349692759356,
+              -15.176041192997603
+            ],
+            "flow": [
+              2.4028630122288077e-06,
+              5.047456803591717e-07,
+              -7.857962332075785e-08
+            ],
+            "area_rate": [
+              0.0021418729335710793,
+              -0.000487450009078506
+            ],
+            "energy": 9.61179655686101e-07,
+            "loss": 4.777629903494608e-07,
+            "balance": 5.608618072332509e-17,
+            "mass_balance": 2.1299900773240463e-23
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 7.85e-05,
+          "first_reopened_s": 0.0008095,
+          "minimum_area": -1.9625520439555677e-07,
+          "physical_loss_J": 4.769268132707447e-07,
+          "numerical_loss_J": 8.361770787153923e-10,
+          "maximum_balance_J": 6.148908625650505e-17
+        }
+      ],
+      "successive_scaled_endpoint_differences": [
+        0.0007122200703661985,
+        0.00038316027404328157
+      ],
+      "endpoint_refinement_ratio": 1.8588045750425226,
+      "first_closed_s_fine_grid_change": 0.0,
+      "first_reopened_s_fine_grid_change": 0.0
+    },
+    {
+      "mode": "upper",
+      "runs": [
+        {
+          "steps": 2000,
+          "maximum_sampled_mass_residual_m3": 7.904227740827025e-22,
+          "final": {
+            "step": 2000,
+            "time": 0.002,
+            "area": [
+              2.306156057057009e-06,
+              2.5644027601891503e-06
+            ],
+            "effort": [
+              -1.1252583537024958,
+              -1.7590464596251534
+            ],
+            "flow": [
+              5.677500766769118e-07,
+              2.1709996032629565e-08,
+              -1.4772605257169269e-06
+            ],
+            "area_rate": [
+              -0.00027127898432509107,
+              0.0016345460363955426
+            ],
+            "energy": 1.5038966303652113e-07,
+            "loss": 2.662060442124735e-07,
+            "balance": 4.502938320678188e-17,
+            "mass_balance": 2.895132143935597e-24
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 9.2e-05,
+          "first_reopened_s": 0.00043599999999999997,
+          "minimum_area": -5.7041801604423165e-08,
+          "physical_loss_J": 2.6480566644743e-07,
+          "numerical_loss_J": 1.4003777650429091e-09,
+          "maximum_balance_J": 4.502938320678188e-17
+        },
+        {
+          "steps": 4000,
+          "maximum_sampled_mass_residual_m3": 1.5442945048482181e-21,
+          "final": {
+            "step": 4000,
+            "time": 0.002,
+            "area": [
+              2.305986878198054e-06,
+              2.5640785840573966e-06
+            ],
+            "effort": [
+              -1.1258408647897047,
+              -1.7609282006615181
+            ],
+            "flow": [
+              5.677608741262865e-07,
+              2.173056839791797e-08,
+              -1.4775091701395996e-06
+            ],
+            "area_rate": [
+              -0.00027147149788844083,
+              0.0016349114605944707
+            ],
+            "energy": 1.504688190632558e-07,
+            "loss": 2.661268881952183e-07,
+            "balance": 5.450884655685997e-17,
+            "mass_balance": 8.271806125530277e-25
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 9.099999999999999e-05,
+          "first_reopened_s": 0.00043599999999999997,
+          "minimum_area": -5.732616484634903e-08,
+          "physical_loss_J": 2.6523701644214674e-07,
+          "numerical_loss_J": 8.898717530714033e-10,
+          "maximum_balance_J": 5.450884655685997e-17
+        },
+        {
+          "steps": 8000,
+          "maximum_sampled_mass_residual_m3": 1.4008303673585524e-21,
+          "final": {
+            "step": 8000,
+            "time": 0.002,
+            "area": [
+              2.3058976312836775e-06,
+              2.563899049779909e-06
+            ],
+            "effort": [
+              -1.126147787656072,
+              -1.761910521517648
+            ],
+            "flow": [
+              5.677685793512873e-07,
+              2.1743352898019673e-08,
+              -1.477636047845648e-06
+            ],
+            "area_rate": [
+              -0.0002715713797404327,
+              0.0016351010387419067
+            ],
+            "energy": 1.5051004579119348e-07,
+            "loss": 2.660856614650464e-07,
+            "balance": 5.227469127935835e-17,
+            "mass_balance": 1.0339757656912846e-23
+          },
+          "closures": 1,
+          "reopenings": 1,
+          "first_closed_s": 9.099999999999999e-05,
+          "first_reopened_s": 0.00043625,
+          "minimum_area": -5.747442166901385e-08,
+          "physical_loss_J": 2.655405643957748e-07,
+          "numerical_loss_J": 5.450970692723517e-10,
+          "maximum_balance_J": 5.227469127935835e-17
+        }
+      ],
+      "successive_scaled_endpoint_differences": [
+        0.0003654241989281548,
+        0.00018957814743592039
+      ],
+      "endpoint_refinement_ratio": 1.9275649850501488,
+      "first_closed_s_fine_grid_change": 0.0,
+      "first_reopened_s_fine_grid_change": 2.500000000000332e-07
+    }
+  ],
+  "release_ctests_passed": 7,
+  "address_undefined_sanitizer_ctests_passed": 7,
+  "default_regressions": {
+    "scope": "fresh native runs against historical default-profile fixtures, not fresh independent oracles",
+    "motion": [
+      {
+        "mode": "free",
+        "maximum_scaled_changes": {
+          "mass": 0.0,
+          "effort": 0.0,
+          "area": 0.0,
+          "flow": 0.0,
+          "position": 0.0,
+          "velocity": 0.0,
+          "momentum": 0.0
+        },
+        "reference_hash": "4ebecd6e39ac3dd3c28be257780a183e14a92bbc51f19721f2cc781fb02c5ead"
+      },
+      {
+        "mode": "driven",
+        "maximum_scaled_changes": {
+          "mass": 0.0,
+          "effort": 0.0,
+          "area": 0.0,
+          "flow": 0.0,
+          "position": 0.0,
+          "velocity": 0.0,
+          "momentum": 0.0
+        },
+        "reference_hash": "20c2dc0852b57035b225d5e91df0cce7f4d4f8d2d37725698ce4d81c5a0f8e58"
+      },
+      {
+        "mode": "lower",
+        "maximum_scaled_changes": {
+          "mass": 0.0,
+          "effort": 0.0,
+          "area": 0.0,
+          "flow": 0.0,
+          "position": 0.0,
+          "velocity": 0.0,
+          "momentum": 0.0
+        },
+        "reference_hash": "9755f0ba696e8532adc850c21aab94104e832413949f219304c18beb34a6afa3"
+      },
+      {
+        "mode": "upper",
+        "maximum_scaled_changes": {
+          "mass": 0.0,
+          "effort": 0.0,
+          "area": 0.0,
+          "flow": 0.0,
+          "position": 0.0,
+          "velocity": 0.0,
+          "momentum": 0.0
+        },
+        "reference_hash": "cb6b1f8a39d60f15aaf10049b13e954ad4a71f6466bdbec7299bac2ccfe16c2c"
+      }
+    ],
+    "constitutive_maximum_scaled_change": 1.5842225612773803e-16,
+    "constitutive_fixture_hashes": {
+      "out/slit-kinetic/loss-input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+      "out/slit-kinetic/loss-output.txt": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604"
+    }
+  },
+  "hashes": {
+    ".build/asan/ducklips_continuous_contact_controls": "3deee87ec072f2f24430be01c7f86545e727739f0c98c4d87402b4ebae81ee90",
+    ".build/asan/ducklips_continuous_glottis_probe": "431bc18cac40e5a716690416803c4073888a25a8378bdaf7f46aeb2ae817ee5c",
+    ".build/asan/ducklips_contour_pressure_flow_probe": "9a419fa0ff2b48b52e0f2eef11ad2ee5a6835961634c0bc078b2d940df1bd696",
+    ".build/asan/ducklips_contour_pressure_loss_probe": "43d93368bbdb08964ccc994058be4b47039a4dc8801aac25015f0153124e9b00",
+    ".build/asan/ducklips_contour_pressure_probe": "14e8d7d3ac95eb07c59d9a670eaf05af365626f9a9050b9408c4c5fb6e9528b5",
+    ".build/asan/ducklips_glottal_storage_probe": "817532ed58df0509d4af5b2c83fe86a3258a2928d843aaf732f545b303f49312",
+    "CMakeLists.txt": "df6331d68b9ae777c6e42c62a6daa929500e068a03c6e478d77a9fd73414aa22",
+    "build/ducklips_continuous_contact_controls": "5f08648f04909259adb9e8f0932142955b1396b4157ea27d79127ac6963d741c",
+    "build/ducklips_continuous_contact_probe": "2a2b77c9ffa3ca2cb2f483d336fbb0442102971a5424f0010d634491ffdb4927",
+    "build/ducklips_continuous_glottis_probe": "c4f707b04c4bef87803345aa9873cd058f6dc41f0b4ea328d10a5f043b59da52",
+    "build/ducklips_contour_pressure_flow_probe": "c7da320e2da5fe08d032fbd523a95abb8e48c5594cf79fdd5cec24d897095a84",
+    "build/ducklips_contour_pressure_loss_probe": "9fec6bbd63569abd5a7172aae9117fc81b442e391ad81cffccd478e23f0b2ac5",
+    "build/ducklips_contour_pressure_probe": "eabb3fd55f4c03d9654c5f4eec74da65c586f9f4939742f75b2bf19e53663811",
+    "build/ducklips_contour_profile_limit_probe": "5d3bfa2fadf17b878f5decceb90af6e18f04d25a64c35013625633f521c5d9cb",
+    "build/ducklips_glottal_storage_probe": "c391dd052a5c2f37270f2d3e09bc88b4d39b5fca1977052ffcfe2d53b73386ab",
+    "include/ducklips/continuous_glottis.hpp": "9c1bc5a2b421d9f2935bac11536a0420424cea109caae0bd984919e1613d893a",
+    "include/ducklips/contour_pressure_flow.hpp": "96f5679484188e42067c5decc2a8e5eaddd4537ee0e82a89499e304580f6234b",
+    "include/ducklips/contour_pressure_loss.hpp": "e275cb6c660cee1a1adfa224fbc9bc7592708d35c2cc7ba2090857242118b9f5",
+    "include/ducklips/contour_pressure_storage.hpp": "244f34238a6ab67335d61267cad98aac8f4b3aee037dc9be24308dc6e1eed941",
+    "out/continuous-contact/cycle-lower-2000.jsonl": "7b7cd4dc843a58b1cac1ff65cd28dbcc67bed7a59bd10f3c3535428fbc621213",
+    "out/continuous-contact/cycle-lower-2000.stderr": "81847bbeb313960d996db7cf19685b97345b675a629d721f5394aa8bb26d5037",
+    "out/continuous-contact/cycle-lower-4000.jsonl": "4a2333c58e6eda75bac02f3e1025c0403fdf4b9a75a3812f157617aa12464313",
+    "out/continuous-contact/cycle-lower-4000.stderr": "ad7b33a5a54cb0e03818c1b4615456273e8150684d1dd3863cd510c0a2e1e737",
+    "out/continuous-contact/cycle-lower-8000.jsonl": "093da3b9cfddc5eb3bbcb523c2acac5e326317fff5adfdf9b1bca1628d934dfc",
+    "out/continuous-contact/cycle-lower-8000.stderr": "3050ff00db83c2f0ff221854e5d0d4a6322a13225ae61e03a26c51df1bf81842",
+    "out/continuous-contact/cycle-upper-2000.jsonl": "a480034d204086789b9ce5ff986ca5f1cb03c3ab3e8db739ece4ea44da8535d3",
+    "out/continuous-contact/cycle-upper-2000.stderr": "954e0201b78c7ee5c79e1fdf17707a2f7ffc7a3d023f665750c0344956f95281",
+    "out/continuous-contact/cycle-upper-4000.jsonl": "34f74804ba72d232099b8b023c1d899d856c4a86f13c9a97857ccad3473d543d",
+    "out/continuous-contact/cycle-upper-4000.stderr": "2eabb5f41c29a94d1b2dcb9cd316b23cfe392c55248f91d7ccc382669787c721",
+    "out/continuous-contact/cycle-upper-8000.jsonl": "1120af22c80f512c168c72760a513662677508b173ebd701b5972a4e4ba64314",
+    "out/continuous-contact/cycle-upper-8000.stderr": "9548f2ae2abeae5211e9d60167f4c3d97c4af84dc0f13f49d80b2c408742a333",
+    "out/continuous-contact/experiment.json": "e7572c6f9b5d77f5fe6d5652c0587ef4c7402b7e450acf14d2c544033072f3ad",
+    "out/continuous-contact/final-asan-build.log": "589958eb41c2707677b3cd2feea4c1afb4043ca39f78e200dc01a3eca16bb9c7",
+    "out/continuous-contact/final-build.log": "8ef64ec927af74449b68b63375266b012d0ca8d0548213ecc0ed1925ff923494",
+    "out/continuous-contact/final-ctest.log": "a9c72ed50b3d96599dafccd64fb5fe35fd4c1dbedc460f03fb932e97df65a919",
+    "out/continuous-contact/final-profile-reference.log": "8a85765ddec843b5bea9f790bfed7f9af3ef2d47c4a1577404351a43338411f3",
+    "out/continuous-contact/final-regression.log": "a58f2884de9b7e1f1e891edaa840c375eb4194f00793b67e34426a13541b755b",
+    "out/continuous-contact/final-storage-reference.log": "91d3353928a9b5b0f05d6abe392cc42ee48cb2f85b391160def78b20b82ac958",
+    "out/continuous-contact/regression.json": "f22a752620ecfad03a85c453fe728ae636e1f12ab30e4fd2d5c40ef8d3d171a2",
+    "out/continuous-contact/verified-asan-ctest.log": "cf7a2e042a639ccef55344c8484f0c53425941064c911e37c8761c49a103c774",
+    "reports/contour_profile_limits.json": "06c2cf345d894dbaa3ff6824e537ce870457b147193ba1e6ff66f45e771a31bc",
+    "reports/linear_contour_storage_reference.json": "ded37f929e65bb9ab9522ab804b062dde2a02b9df38b48904df73cae89271452",
+    "src/continuous_glottis.cpp": "7cdba230bfe0959559a0f5fd7ee95aaca995568a51332ac10643cb7afb9428e4",
+    "src/contour_pressure_flow.cpp": "2d11d07258507954c4e9f167c2d7d37b7d7e9e71527631d3d2b2beb82303dc43",
+    "src/contour_pressure_intervals.hpp": "246fdbb4e7bbc4cc8883e110a5ca6af31d3af702089b805e9b33f7f8d11ed36d",
+    "src/contour_pressure_loss.cpp": "8ecacddd73e70a6877e148cd856db445684a9cb5593721f26eb2b1163c3b0f00",
+    "src/contour_pressure_storage.cpp": "15bfb9a429476166366f3233d2af6d42d0cbc4b984880983f8140e5a8f39233e",
+    "tools/continuous_contact_controls.cpp": "7c4ac36a30baf0a33fae54e7ee92cfe2622e29ad6ecd4644eea699426d6671c3",
+    "tools/continuous_contact_experiment.py": "85bdc42732650bd7618cedc372b2e0d38d2526e0a2b624442bfaf370d35e3a85",
+    "tools/continuous_contact_probe.cpp": "b51e7750f60ac16654bccca0aaeb99f779ddb10eb5e346a9882c660f46fd245c",
+    "tools/continuous_contact_reference.py": "aa758921aee2393ccdbbf4b4ad079aebf05c50363ee2b443ea8cc77dcb5575f5",
+    "tools/continuous_contact_regression.py": "970f646c0eed60b9d07c5ab3713175d2df6ddf93d14dd4e27c84f5cab199f230",
+    "tools/contour_profile_limit_probe.cpp": "f0e0e79b97336c45ad5dba25a422262ec48e19e8a7825bdb0f7b734fb84eae6b",
+    "tools/contour_profile_limit_reference.py": "8da9c089d9841c05c5342c10349723b667261b6020715cd3c61482caa4125c82",
+    "tools/linear_contour_storage_reference.py": "b9bf486937787760aec573b346dffec381dcae75818c8f140c83eb0e1d299970"
+  }
+}

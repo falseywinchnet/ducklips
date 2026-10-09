@@ -39,10 +39,11 @@ struct Integrand final {
     }
 };
 }
-bool ContourPressureStorage::configure(const FoldParameters& folds,const AirProperties& air) noexcept {
+bool ContourPressureStorage::configure(const FoldParameters& folds,const AirProperties& air,ContourPressureProfile profile) noexcept {
     if(!std::isfinite(folds.lower_thickness) || folds.lower_thickness<=0 || !std::isfinite(folds.upper_thickness) || folds.upper_thickness<=0){return false;}
+    if(profile!=ContourPressureProfile::flat_caps && profile!=ContourPressureProfile::linear_span){return false;}
     GasStorage gas;if(!gas.configure(air)){return false;}
-    gas_=gas;thickness_={folds.lower_thickness,folds.upper_thickness};bulk_=air.density*air.sound_speed*air.sound_speed;gamma_=air.heat_capacity_ratio;return true;
+    gas_=gas;thickness_={folds.lower_thickness,folds.upper_thickness};bulk_=air.density*air.sound_speed*air.sound_speed;gamma_=air.heat_capacity_ratio;basis_=profile==ContourPressureProfile::linear_span?std::array<double,2>{0.,thickness_[0]+thickness_[1]}:std::array<double,2>{.5*thickness_[0],thickness_[0]+.5*thickness_[1]};return true;
 }
 bool ContourPressureStorage::evaluate(const std::array<double,2>& area,const std::array<double,2>& effort,ContourPressureState& result) const noexcept {
     ContourPressureState candidate;if(!interval(area,effort,0.,thickness_[0]+thickness_[1],candidate) || candidate.volume<=0){return false;}result=candidate;return true;
@@ -50,14 +51,14 @@ bool ContourPressureStorage::evaluate(const std::array<double,2>& area,const std
 bool ContourPressureStorage::interval(const std::array<double,2>& area,const std::array<double,2>& effort,double first,double last,ContourPressureState& result) const noexcept {
     if(!std::isfinite(first) || !std::isfinite(last) || first<0 || last<first || last>thickness_[0]+thickness_[1]){return false;}
     if(bulk_<=0){return false;}for(double v:area){if(!std::isfinite(v)){return false;}}for(double v:effort){if(!std::isfinite(v)){return false;}}
-    const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1],end=thickness_[0]+thickness_[1];
+    const double c0=basis_[0],c1=basis_[1],end=thickness_[0]+thickness_[1];
     const double nodes[]={0.,c0,c1,end};const Integrand integrand{gas_,area,effort,c0,c1,bulk_,gamma_};Values sum{};
     const auto opening=[&](double z){
         if(z<=c0){return area[0];}if(z>=c1){return area[1];}
-        if((area[0]<=0 && area[1]>0) || (area[1]<=0 && area[0]>0)){const double root=c0+(c1-c0)*(-area[0])/(area[1]-area[0]);return (z-root)*(area[1]-area[0])/(c1-c0);}
+        if((area[0]<=0 && area[1]>0) || (area[1]<=0 && area[0]>0)){const double root=area[0]==0?c0:area[1]==0?c1:c0+(c1-c0)*(-area[0])/(area[1]-area[0]);return (z-root)*(area[1]-area[0])/(c1-c0);}
         const double t=(z-c0)/(c1-c0);return (1-t)*area[0]+t*area[1];};
     for(std::size_t j=0;j<3;++j){double lo=std::max(first,nodes[j]),hi=std::min(last,nodes[j+1]);if(hi<=lo){continue;}const double a=opening(lo),b=opening(hi);if(a<=0 && b<=0){continue;}
-        if(a<=0){lo=c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}else if(b<=0){hi=c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}
+        if(a<=0){lo=area[0]==0?c0:area[1]==0?c1:c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}else if(b<=0){hi=area[0]==0?c0:area[1]==0?c1:c0+(c1-c0)*(-area[0])/(area[1]-area[0]);}
         // Density must be positive on the entire occupied interval, including
         // its contact endpoint, rather than only at quadrature nodes.
         for(double z:{lo,hi}){const double t=std::clamp((z-c0)/(c1-c0),0.,1.);if(1+(gamma_-1)*((1-t)*effort[0]+t*effort[1])/bulk_<=0){return false;}}

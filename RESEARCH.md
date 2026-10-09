@@ -275,6 +275,15 @@ failures are preserved and require temporal refinement despite conservation.
 Near-ambient compression energy is evaluated directly from effort to avoid
 cancellation. Cap sealing/reopening and speech-tract coupling remain unfinished.
 
+[Continuous-source tip contact](reports/CONTINUOUS_CONTACT_MOTION.md) now has
+free closing/reopening controls at either end and exact-zero opening controls.
+The previous flat cap has a parallel-strip squeeze singularity; an explicit
+full-span affine profile instead has a finite point-contact kinetic/loss limit.
+The profile is an uncalibrated shape assumption and remains opt-in. A dissipative
+momentum update reports its added damping separately, with mass/work checks and
+temporal refinement. Pressure-driven sustained motion, whole-passage closure
+and speech integration still remain unfinished.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

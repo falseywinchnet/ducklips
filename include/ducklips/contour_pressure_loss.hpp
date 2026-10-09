@@ -12,13 +12,13 @@ struct ContourPressureLoss final {
 // Configure identically to the kinetics that prepared the supplied flow state.
 class ContourPressureDissipation final {
 public:
-    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&) noexcept;
+    [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&,ContourPressureProfile=ContourPressureProfile::flat_caps) noexcept;
     [[nodiscard]] bool prepare(const ContourPressureFlow&,ContourPressureLoss&) const noexcept;
     [[nodiscard]] bool power(const ContourPressureFlow&,const ContourPressureLoss&,const std::array<double,5>& rate,double&) const noexcept;
 private:
     [[nodiscard]] bool integrate(const ContourPressureFlow&,double start,double end,int mapping,double lo,double hi,std::array<double,25>&,const std::array<double,25>* budget=nullptr,int depth=0) const noexcept;
     ContourPressureKinetics kinetics_{};
-    std::array<double,2> thickness_{};
+    std::array<double,2> thickness_{},basis_{};
     double density_{},thermal_speed_{},gamma_{},viscosity_{},width_{};
 };
 }

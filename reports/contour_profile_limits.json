@@ -1,0 +1,207 @@
+{
+  "reversal_checks": [
+    {
+      "area": 1e-08,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": 1e-12,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": 1e-16,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": 1e-20,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": 0.0,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": -1e-12,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    },
+    {
+      "area": -1e-08,
+      "maximum_scaled_error": {
+        "inertia": 0.0,
+        "resistance": 0.0
+      }
+    }
+  ],
+  "scope": "prescribed constant-enthalpy squeeze, Qin=0; conditional constitutive limit, not proof of every unconstrained trajectory",
+  "profile_meaning": {
+    "flat": "area controls at tissue centres with constant cap strips",
+    "linear": "area controls at axial boundaries with an affine full span; different explicit shape assumption"
+  },
+  "area_rate_m2_s": -0.0003,
+  "effort_Pa": 700.0,
+  "records": {
+    "flat": [
+      {
+        "area": 1e-06,
+        "kinetic_energy_J": 1.7271751904405576e-10,
+        "loss_W": 5.8397516037501776e-06,
+        "exact_flat_cap_kinetic_J": 3.35661000438251e-11,
+        "exact_flat_cap_loss_W": 2.5464394315842277e-06
+      },
+      {
+        "area": 1e-07,
+        "kinetic_energy_J": 5.72096611827942e-10,
+        "loss_W": 0.002566719202246874,
+        "exact_flat_cap_kinetic_J": 3.3566100043825106e-10,
+        "exact_flat_cap_loss_W": 0.0024025310726828696
+      },
+      {
+        "area": 1e-08,
+        "kinetic_energy_J": 3.6885890446854966e-09,
+        "loss_W": 1.4998306706337174,
+        "exact_flat_cap_kinetic_J": 3.3566100043825096e-09,
+        "exact_flat_cap_loss_W": 1.4890907724108027
+      },
+      {
+        "area": 1e-09,
+        "kinetic_energy_J": 3.399145469599504e-08,
+        "loss_W": 255.68202582106017,
+        "exact_flat_cap_kinetic_J": 3.35661000438251e-08,
+        "exact_flat_cap_loss_W": 255.41263311971838
+      },
+      {
+        "area": 1e-10,
+        "kinetic_energy_J": 3.3617920280066785e-07,
+        "loss_W": 19084.558665898225,
+        "exact_flat_cap_kinetic_J": 3.3566100043825104e-07,
+        "exact_flat_cap_loss_W": 19081.960696287064
+      },
+      {
+        "area": 1e-11,
+        "kinetic_energy_J": 3.357220967306686e-06,
+        "loss_W": 1273265.8761632084,
+        "exact_flat_cap_kinetic_J": 3.3566100043825104e-06,
+        "exact_flat_cap_loss_W": 1273247.5714432357
+      },
+      {
+        "area": 1e-12,
+        "kinetic_energy_J": 3.356680375510059e-05,
+        "loss_W": 91127545.31853434,
+        "exact_flat_cap_kinetic_J": 3.35661000438251e-05,
+        "exact_flat_cap_loss_W": 91127417.66642308
+      },
+      {
+        "area": 0.0,
+        "kinetic_energy_J": 1.570893482051015e-11,
+        "loss_W": 2.537095238935751e-06
+      },
+      {
+        "area": -1e-12,
+        "kinetic_energy_J": 1.5708909444563348e-11,
+        "loss_W": 2.537091017268351e-06
+      },
+      {
+        "area": -1e-10,
+        "kinetic_energy_J": 1.570639747171695e-11,
+        "loss_W": 2.5366731139419273e-06
+      },
+      {
+        "area": -1e-08,
+        "kinetic_energy_J": 1.5457640099364656e-11,
+        "loss_W": 2.495296979468924e-06
+      }
+    ],
+    "linear": [
+      {
+        "area": 1e-06,
+        "kinetic_energy_J": 8.118832464156977e-11,
+        "loss_W": 1.363473840163386e-06
+      },
+      {
+        "area": 1e-07,
+        "kinetic_energy_J": 1.0185314818210287e-10,
+        "loss_W": 5.772479791608604e-06
+      },
+      {
+        "area": 1e-08,
+        "kinetic_energy_J": 1.0580998811962587e-10,
+        "loss_W": 1.2713189087980733e-05
+      },
+      {
+        "area": 1e-09,
+        "kinetic_energy_J": 1.062829448793385e-10,
+        "loss_W": 1.7999980643595876e-05
+      },
+      {
+        "area": 1e-10,
+        "kinetic_energy_J": 1.063319313325051e-10,
+        "loss_W": 1.976831868732873e-05
+      },
+      {
+        "area": 1e-11,
+        "kinetic_energy_J": 1.0633685719576321e-10,
+        "loss_W": 2.0085342629021212e-05
+      },
+      {
+        "area": 1e-12,
+        "kinetic_energy_J": 1.0633735015963821e-10,
+        "loss_W": 2.0127511978328228e-05
+      },
+      {
+        "area": 0.0,
+        "kinetic_energy_J": 1.0633740493883798e-10,
+        "loss_W": 2.0133071184289293e-05
+      },
+      {
+        "area": -1e-12,
+        "kinetic_energy_J": 1.0633722771000696e-10,
+        "loss_W": 2.0133037629204208e-05
+      },
+      {
+        "area": -1e-10,
+        "kinetic_energy_J": 1.0631968381016709e-10,
+        "loss_W": 2.012971600795034e-05
+      },
+      {
+        "area": -1e-08,
+        "kinetic_energy_J": 1.0458270082604481e-10,
+        "loss_W": 1.9800849584274246e-05
+      }
+    ]
+  },
+  "independent_zero_gap_linear_limit": {
+    "kinetic_energy_J": 1.0633740493883792e-10,
+    "loss_W": 2.0133071136427656e-05
+  },
+  "flat_cap_asymptote": "Kcap=rho0*r*V^2*c0^3/(6a); Pcap=rho0*r*vth*width*V^2*c0^3/(3 a^2 G(delta)); G grows logarithmically as a tends to zero",
+  "hashes": {
+    "tools/contour_profile_limit_reference.py": "8da9c089d9841c05c5342c10349723b667261b6020715cd3c61482caa4125c82",
+    "tools/contour_profile_limit_probe.cpp": "f0e0e79b97336c45ad5dba25a422262ec48e19e8a7825bdb0f7b734fb84eae6b",
+    "build/ducklips_contour_profile_limit_probe": "5d3bfa2fadf17b878f5decceb90af6e18f04d25a64c35013625633f521c5d9cb",
+    "src/contour_pressure_storage.cpp": "15bfb9a429476166366f3233d2af6d42d0cbc4b984880983f8140e5a8f39233e",
+    "src/contour_pressure_flow.cpp": "2d11d07258507954c4e9f167c2d7d37b7d7e9e71527631d3d2b2beb82303dc43",
+    "src/contour_pressure_loss.cpp": "8ecacddd73e70a6877e148cd856db445684a9cb5593721f26eb2b1163c3b0f00",
+    "src/contour_pressure_intervals.hpp": "246fdbb4e7bbc4cc8883e110a5ca6af31d3af702089b805e9b33f7f8d11ed36d",
+    "out/continuous-contact/profile-input.txt": "f053d659f36fa1201bf6a8002cc27ddd52e81c8d4ce8a5685c71bf540b2bf2ec",
+    "out/continuous-contact/flat-profile.jsonl": "795b4f453313813715f1d7e7be76d4d794f41c9484f0f4c00edee09759b133cd",
+    "out/continuous-contact/linear-profile.jsonl": "40861d95fdf15f8c79598cf5f12a3186b6a410ba86911a72c28fb9b7cfeb3702"
+  }
+}

@@ -2,6 +2,7 @@
 #include "ducklips/contour_pressure_loss.hpp"
 #include "ducklips/fold_contact.hpp"
 namespace ducklips {
+enum class ContinuousGlottalUpdate { symmetric, dissipative };
 struct ContinuousGlottalState final {
     FoldState folds{};
     std::array<double,2> mass{},effort{},area{};
@@ -15,26 +16,27 @@ struct ContinuousGlottalState final {
 struct ContinuousGlottalStep final {
     std::array<double,3> flow{};
     double reservoir_work{},load_work{},external_work{},fluid_loss{},tissue_loss{};
-    double energy_change{},energy_residual{},maximum_scaled_residual{};
+    double numerical_loss{},energy_change{},energy_residual{},maximum_scaled_residual{};
     std::size_t iterations{};
 };
-// Continuous-pressure, shared fluid/tissue Hamiltonian reference. The current
-// advance holds rest area and port topology fixed; a crossing is rejected
-// transactionally. No disappearing chamber, independent passage inertia,
+// Continuous-pressure, shared fluid/tissue Hamiltonian reference. Rest area
+// remains fixed. Symmetric steps preserve topology; dissipative steps may
+// cross cap contact with the explicit linear-span profile and a loss ledger. No disappearing chamber, independent passage inertia,
 // source waveform, or prescribed tissue oscillation is used.
 class ContinuousGlottis final {
 public:
     [[nodiscard]] bool prepare(const FoldParameters&,const AirProperties&,double tension,
         const FoldState&,const std::array<double,2>& effort,
-        const std::array<double,3>& flow={},double outlet_loss=1.) noexcept;
+        const std::array<double,3>& flow={},double outlet_loss=1.,ContourPressureProfile profile=ContourPressureProfile::flat_caps) noexcept;
     [[nodiscard]] bool advance(double dt,double reservoir_pressure,double free_load,double load_slope,
-        const std::array<double,4>& external_force={}) noexcept;
+        const std::array<double,4>& external_force={},ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric) noexcept;
     [[nodiscard]] bool state(ContinuousGlottalState&) const noexcept;
     ContinuousGlottalStep last{};
 private:
     struct Configuration final {
         std::array<double,4> z{},potential_gradient{};
         std::array<double,49> metric{},inverse{};
+        std::array<bool,7> active{};
         ContourPressureState gas{};
         ContourPressureFlow flow{};
         double potential{};
@@ -53,6 +55,7 @@ private:
     std::array<double,4> mass_{},stiffness_{},damping_{};
     std::array<double,2> coupling_{};
     std::array<bool,7> active_{};
+    ContourPressureProfile profile_{ContourPressureProfile::flat_caps};
     double rest_area_{},width_{},density_{},bulk_{},gamma_{},outlet_loss_{};
 };
 }
