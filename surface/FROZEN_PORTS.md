@@ -140,10 +140,10 @@ zero-mean-flow linearization. It does not cover source nonlinearities, turbulent
 series-pressure drives, articulator work, or time-varying state transfer.
 No source or acoustic rendering algorithm was replaced by this change.
 
-The next step is to construct a small passive dynamic representation of these
-port responses, verify its poles/residues, pressure-flow phase and retained
-cavity behavior against this operator, and then carry acoustic state through
-moving postures. The current compact tree modes are still missing floor and
+The subsequent [passive dynamic reduction](PASSIVE_REDUCTION.md) provides a
+501-state frozen representation with all-port verification and a native modal
+probe. Its coupled-fold case clears 10×, but the general multiport case still
+fails. Carrying acoustic state through moving postures remains open. The current compact tree modes are still missing floor and
 transverse physics; this reference prevents accepting them merely for being
 fast. The full detailed-physics 10× gate and human-realism requirements remain
 open.

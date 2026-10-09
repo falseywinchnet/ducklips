@@ -50,7 +50,7 @@ class FrozenPorts:
         powers = np.array([1, q, q*q])
         return (b @ powers) / (a @ powers)
 
-    def response(self, frequency, damping=0.0):
+    def response(self, frequency, damping=0.0, source_piece=None):
         q = np.exp(-(damping + 2j*np.pi*frequency) / self.fs)
         h = q**self.delay * self.transfer(self.b, self.a, q)
         forward, backward = h[::2][self.pair_mask], h[1::2][self.pair_mask]
@@ -70,7 +70,7 @@ class FrozenPorts:
         matrix = coo_matrix((values, (self.remap[rows], self.remap[cols])),
                             shape=(len(self.active), len(self.active))).tocsc()
         rhs = np.zeros(len(self.active), dtype=complex)
-        source = self.remap[self.snapshot['source_piece']]
+        source = self.remap[self.snapshot['source_piece'] if source_piece is None else source_piece]
         if source < 0:
             raise ValueError('Source is on an unconnected piece')
         rhs[source] = 1

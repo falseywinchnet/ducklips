@@ -154,6 +154,7 @@ struct SurfaceLinearSnapshot final {
     std::size_t pieces{};
     std::size_t glottis{};
     std::size_t allocated_delay_samples{};
+    std::vector<std::size_t> piece_tubes{}; // anatomical partition, including terminal pieces
     std::vector<SurfaceLinearPath> paths{}; // reciprocal paths remain adjacent
     std::vector<SurfaceLinearPort> ports{};
 };

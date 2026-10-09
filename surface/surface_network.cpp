@@ -1489,6 +1489,10 @@ SurfaceLinearSnapshot SurfaceNetwork::linear_snapshot() const {
     snapshot.pieces = pieces_.size();
     snapshot.glottis = glottis_;
     snapshot.allocated_delay_samples = history_.size();
+    snapshot.piece_tubes.reserve(pieces_.size());
+    for (const SurfacePiece& piece : pieces_) {
+        snapshot.piece_tubes.push_back(stations_[piece.station].tube);
+    }
     snapshot.paths.reserve(links_.size());
     for (std::size_t index = 0; index < links_.size(); ++index) {
         const AirLink& link = links_[index];

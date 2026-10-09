@@ -143,6 +143,8 @@ int main(int argc, char** argv) {
             << ",\"impulse_m3_per_s\":" << impulse << ",\"samples\":" << samples << ",\"channels\":" << channels
             << ",\"pressure_pieces\":[";
         for (std::size_t i = 0; i < observations.size(); ++i) { if (i) { out << ','; } out << observations[i]; }
+        out << "],\"piece_tubes\":[";
+        for (std::size_t i = 0; i < snapshot.piece_tubes.size(); ++i) { if (i) { out << ','; } out << snapshot.piece_tubes[i]; }
         out << "],\"last_channel\":\"sum radiation flow derivative\",\"paths\":[\n";
         for (std::size_t i = 0; i < snapshot.paths.size(); ++i) {
             const ducklips::SurfaceLinearPath& path = snapshot.paths[i];

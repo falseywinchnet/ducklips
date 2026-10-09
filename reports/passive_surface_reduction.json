@@ -1,0 +1,740 @@
+{
+  "schema": 1,
+  "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+  "git_head_at_measurement": "e82b981ed58ea816517c94942a6a6be0a0ece9c1",
+  "working_tree_modified": true,
+  "energy_realization": {
+    "fixture": "body",
+    "input_ports_tested": 5,
+    "states": 20220,
+    "matrix_nonzeros": 142847,
+    "prepare_seconds": 0.8893184578046203,
+    "maximum_component_step_gain": 1.0000000000000018,
+    "maximum_component_transfer_error": 1.2397099932844932e-13,
+    "maximum_random_energy_ratio": 0.8633089266234943,
+    "max_relative_complex_error": 7.680541641419017e-11
+  },
+  "reduction": {
+    "fixture": "body",
+    "snapshot_sha256": "4e1d643c53bdda1cbd52a15efb9bfcd30891567f3f3d998b9189414a9aeb62df",
+    "full_states": 20220,
+    "reduced_states": 501,
+    "anchor_frequencies_hz": [
+      100.0,
+      225.26315789473682,
+      350.52631578947364,
+      475.7894736842105,
+      601.0526315789473,
+      726.3157894736842,
+      851.578947368421,
+      976.8421052631578,
+      1102.1052631578946,
+      1227.3684210526314,
+      1352.6315789473683,
+      1477.8947368421052,
+      1603.157894736842,
+      1728.421052631579,
+      1853.6842105263156,
+      1978.9473684210525,
+      2104.210526315789,
+      2229.4736842105262,
+      2354.736842105263,
+      2480.0,
+      2605.2631578947367,
+      2730.5263157894738,
+      2855.7894736842104,
+      2981.052631578947,
+      3106.315789473684,
+      3231.578947368421,
+      3356.842105263158,
+      3482.1052631578946,
+      3607.368421052631,
+      3732.6315789473683,
+      3857.894736842105,
+      3983.157894736842,
+      4108.421052631578,
+      4233.684210526316,
+      4358.9473684210525,
+      4484.210526315789,
+      4609.473684210526,
+      4734.736842105263,
+      4860.0,
+      4985.263157894737,
+      5110.526315789473,
+      5235.78947368421,
+      5361.0526315789475,
+      5486.315789473684,
+      5611.578947368421,
+      5736.8421052631575,
+      5862.105263157894,
+      5987.368421052632,
+      6112.631578947368,
+      6237.894736842105,
+      6363.157894736842,
+      6488.421052631578,
+      6613.684210526316,
+      6738.9473684210525,
+      6864.210526315789,
+      6989.473684210526,
+      7114.736842105262,
+      7240.0,
+      7365.263157894737,
+      7490.526315789473,
+      7615.78947368421,
+      7741.052631578947,
+      7866.315789473684,
+      7991.578947368421,
+      8116.8421052631575,
+      8242.105263157893,
+      8367.368421052632,
+      8492.631578947368,
+      8617.894736842105,
+      8743.157894736842,
+      8868.421052631578,
+      8993.684210526315,
+      9118.947368421052,
+      9244.210526315788,
+      9369.473684210527,
+      9494.736842105263,
+      9620.0,
+      9745.263157894737,
+      9870.526315789473,
+      9995.78947368421,
+      10121.052631578947,
+      10246.315789473683,
+      10371.57894736842,
+      10496.842105263157,
+      10622.105263157895,
+      10747.368421052632,
+      10872.631578947368,
+      10997.894736842105,
+      11123.157894736842,
+      11248.421052631578,
+      11373.684210526315,
+      11498.947368421052,
+      11624.210526315788,
+      11749.473684210525,
+      11874.736842105263,
+      12000.0
+    ],
+    "rank_tolerance": 1e-10,
+    "anatomical_blocks": true,
+    "validation_frequency_count": 2401,
+    "validation_frequency_range_hz": [
+      50.0,
+      12000.0
+    ],
+    "preparation_seconds": 3.83055333327502,
+    "scattering_step_largest_singular_value": 1.0000000000000033,
+    "flow_step_spectral_radius": 1.000000000000003,
+    "channels": [
+      {
+        "input": 0,
+        "channel": 0,
+        "normalized_rms_error": 4.5865558431944637e-08,
+        "max_relative_complex_error_with_1pct_floor": 4.85500194654955e-07,
+        "max_magnitude_error_db_above_1pct_peak": 3.91612697038517e-06,
+        "max_phase_error_rad_above_1pct_peak": 3.5860218090178094e-07
+      },
+      {
+        "input": 0,
+        "channel": 1,
+        "normalized_rms_error": 1.9637955439092435e-07,
+        "max_relative_complex_error_with_1pct_floor": 3.1884162433178487e-06,
+        "max_magnitude_error_db_above_1pct_peak": 2.5157974626774153e-05,
+        "max_phase_error_rad_above_1pct_peak": 2.8311702105768695e-06
+      },
+      {
+        "input": 0,
+        "channel": 2,
+        "normalized_rms_error": 1.4684250331885842e-07,
+        "max_relative_complex_error_with_1pct_floor": 1.6299988859175225e-06,
+        "max_magnitude_error_db_above_1pct_peak": 1.3030633227517104e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.1510993954894594e-06
+      },
+      {
+        "input": 0,
+        "channel": 3,
+        "normalized_rms_error": 9.290716350432583e-08,
+        "max_relative_complex_error_with_1pct_floor": 4.2125993451904644e-06,
+        "max_magnitude_error_db_above_1pct_peak": 3.599538078827846e-05,
+        "max_phase_error_rad_above_1pct_peak": 3.26445990413798e-06
+      },
+      {
+        "input": 0,
+        "channel": 4,
+        "normalized_rms_error": 9.655288377832376e-06,
+        "max_relative_complex_error_with_1pct_floor": 1.8962855892058963e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00014652672664311733,
+        "max_phase_error_rad_above_1pct_peak": 1.3956539402904531e-05
+      },
+      {
+        "input": 0,
+        "channel": 5,
+        "normalized_rms_error": 1.2759839070319544e-07,
+        "max_relative_complex_error_with_1pct_floor": 4.21261306975435e-06,
+        "max_magnitude_error_db_above_1pct_peak": 3.5995520561179534e-05,
+        "max_phase_error_rad_above_1pct_peak": 3.264460166487805e-06
+      },
+      {
+        "input": 1,
+        "channel": 0,
+        "normalized_rms_error": 4.79487594822798e-07,
+        "max_relative_complex_error_with_1pct_floor": 6.971646347045691e-06,
+        "max_magnitude_error_db_above_1pct_peak": 5.5168726499661256e-05,
+        "max_phase_error_rad_above_1pct_peak": 6.59937760985813e-06
+      },
+      {
+        "input": 1,
+        "channel": 1,
+        "normalized_rms_error": 2.373356358856435e-07,
+        "max_relative_complex_error_with_1pct_floor": 1.3951254135129708e-05,
+        "max_magnitude_error_db_above_1pct_peak": 8.539989547793071e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.3950688801922858e-05
+      },
+      {
+        "input": 1,
+        "channel": 2,
+        "normalized_rms_error": 1.0078873807604218e-06,
+        "max_relative_complex_error_with_1pct_floor": 1.6126864929360902e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00013835721916765633,
+        "max_phase_error_rad_above_1pct_peak": 1.1586164757002665e-05
+      },
+      {
+        "input": 1,
+        "channel": 3,
+        "normalized_rms_error": 3.9908068501480433e-07,
+        "max_relative_complex_error_with_1pct_floor": 1.398948866978779e-05,
+        "max_magnitude_error_db_above_1pct_peak": 9.137957286987943e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.3793551762120692e-05
+      },
+      {
+        "input": 1,
+        "channel": 4,
+        "normalized_rms_error": 6.7273720798020345e-06,
+        "max_relative_complex_error_with_1pct_floor": 2.085940860576521e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00014652669359810114,
+        "max_phase_error_rad_above_1pct_peak": 1.3659280399606524e-05
+      },
+      {
+        "input": 1,
+        "channel": 5,
+        "normalized_rms_error": 5.252985110564446e-07,
+        "max_relative_complex_error_with_1pct_floor": 1.3989494664283846e-05,
+        "max_magnitude_error_db_above_1pct_peak": 9.137978264802613e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.3793551340282785e-05
+      },
+      {
+        "input": 2,
+        "channel": 0,
+        "normalized_rms_error": 3.837742388345396e-07,
+        "max_relative_complex_error_with_1pct_floor": 3.6114655560951947e-06,
+        "max_magnitude_error_db_above_1pct_peak": 2.356419223757822e-05,
+        "max_phase_error_rad_above_1pct_peak": 3.36291135046106e-06
+      },
+      {
+        "input": 2,
+        "channel": 1,
+        "normalized_rms_error": 7.645129510428751e-07,
+        "max_relative_complex_error_with_1pct_floor": 1.1329898419385234e-05,
+        "max_magnitude_error_db_above_1pct_peak": 7.227864145745969e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.0972067604813638e-05
+      },
+      {
+        "input": 2,
+        "channel": 2,
+        "normalized_rms_error": 7.710210823995523e-08,
+        "max_relative_complex_error_with_1pct_floor": 3.94831462403787e-06,
+        "max_magnitude_error_db_above_1pct_peak": 3.4019751780766566e-05,
+        "max_phase_error_rad_above_1pct_peak": 3.3183997838386545e-06
+      },
+      {
+        "input": 2,
+        "channel": 3,
+        "normalized_rms_error": 2.9281610392606953e-07,
+        "max_relative_complex_error_with_1pct_floor": 8.285210976658308e-06,
+        "max_magnitude_error_db_above_1pct_peak": 6.911077521227456e-05,
+        "max_phase_error_rad_above_1pct_peak": 4.862106785772992e-06
+      },
+      {
+        "input": 2,
+        "channel": 4,
+        "normalized_rms_error": 7.733108497988031e-06,
+        "max_relative_complex_error_with_1pct_floor": 1.6388189799521795e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00013872148369877742,
+        "max_phase_error_rad_above_1pct_peak": 1.2261989133195067e-05
+      },
+      {
+        "input": 2,
+        "channel": 5,
+        "normalized_rms_error": 3.845420110997758e-07,
+        "max_relative_complex_error_with_1pct_floor": 8.285254566315696e-06,
+        "max_magnitude_error_db_above_1pct_peak": 6.911122953466713e-05,
+        "max_phase_error_rad_above_1pct_peak": 4.862094844467993e-06
+      },
+      {
+        "input": 3,
+        "channel": 0,
+        "normalized_rms_error": 4.75678694425229e-08,
+        "max_relative_complex_error_with_1pct_floor": 1.4400919329978986e-06,
+        "max_magnitude_error_db_above_1pct_peak": 8.76538177685005e-06,
+        "max_phase_error_rad_above_1pct_peak": 1.429989389160659e-06
+      },
+      {
+        "input": 3,
+        "channel": 1,
+        "normalized_rms_error": 9.358749192371639e-08,
+        "max_relative_complex_error_with_1pct_floor": 2.2889196953326152e-06,
+        "max_magnitude_error_db_above_1pct_peak": 1.9479266142831858e-05,
+        "max_phase_error_rad_above_1pct_peak": 1.4025327888916407e-06
+      },
+      {
+        "input": 3,
+        "channel": 2,
+        "normalized_rms_error": 4.73255279308262e-08,
+        "max_relative_complex_error_with_1pct_floor": 7.956537417164157e-07,
+        "max_magnitude_error_db_above_1pct_peak": 6.054256899260255e-06,
+        "max_phase_error_rad_above_1pct_peak": 7.927272904841372e-07
+      },
+      {
+        "input": 3,
+        "channel": 3,
+        "normalized_rms_error": 1.5403423689644523e-08,
+        "max_relative_complex_error_with_1pct_floor": 3.271600930225398e-07,
+        "max_magnitude_error_db_above_1pct_peak": 2.154855378143223e-06,
+        "max_phase_error_rad_above_1pct_peak": 3.174621564536483e-07
+      },
+      {
+        "input": 3,
+        "channel": 4,
+        "normalized_rms_error": 1.032238460750833e-05,
+        "max_relative_complex_error_with_1pct_floor": 1.8962853240482868e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00014652669309665934,
+        "max_phase_error_rad_above_1pct_peak": 1.39565365130348e-05
+      },
+      {
+        "input": 3,
+        "channel": 5,
+        "normalized_rms_error": 1.9735131836578238e-08,
+        "max_relative_complex_error_with_1pct_floor": 3.2715984794388926e-07,
+        "max_magnitude_error_db_above_1pct_peak": 2.1548480357557143e-06,
+        "max_phase_error_rad_above_1pct_peak": 3.174616750075731e-07
+      },
+      {
+        "input": 4,
+        "channel": 0,
+        "normalized_rms_error": 2.2025108860066644e-06,
+        "max_relative_complex_error_with_1pct_floor": 2.3468849829456152e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00012230583633278912,
+        "max_phase_error_rad_above_1pct_peak": 1.8775120913010997e-05
+      },
+      {
+        "input": 4,
+        "channel": 1,
+        "normalized_rms_error": 1.476587329251781e-06,
+        "max_relative_complex_error_with_1pct_floor": 3.487571334004187e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.0001098427981069256,
+        "max_phase_error_rad_above_1pct_peak": 1.284487822979939e-05
+      },
+      {
+        "input": 4,
+        "channel": 2,
+        "normalized_rms_error": 1.279040431973643e-06,
+        "max_relative_complex_error_with_1pct_floor": 9.095654965943984e-06,
+        "max_magnitude_error_db_above_1pct_peak": 6.424417289396473e-05,
+        "max_phase_error_rad_above_1pct_peak": 8.71249466482119e-06
+      },
+      {
+        "input": 4,
+        "channel": 3,
+        "normalized_rms_error": 1.7286564067805192e-06,
+        "max_relative_complex_error_with_1pct_floor": 1.6659633150061613e-05,
+        "max_magnitude_error_db_above_1pct_peak": 0.00011840602579916079,
+        "max_phase_error_rad_above_1pct_peak": 1.627064006131712e-05
+      },
+      {
+        "input": 4,
+        "channel": 4,
+        "normalized_rms_error": 2.1587766463505994e-12,
+        "max_relative_complex_error_with_1pct_floor": 1.170266832477153e-10,
+        "max_magnitude_error_db_above_1pct_peak": 9.966806529989668e-10,
+        "max_phase_error_rad_above_1pct_peak": 7.115669322014387e-11
+      },
+      {
+        "input": 4,
+        "channel": 5,
+        "normalized_rms_error": 2.1608492544400862e-12,
+        "max_relative_complex_error_with_1pct_floor": 1.169882458149613e-10,
+        "max_magnitude_error_db_above_1pct_peak": 9.964376424774233e-10,
+        "max_phase_error_rad_above_1pct_peak": 7.106556802029032e-11
+      }
+    ],
+    "accepted_as_speech_renderer": false
+  },
+  "modal_export": {
+    "model_sha256": "6487bdf95bf01e03c75653c21d46e8cfa1fa379bb549ef76d53b5237334f6d41",
+    "real_state_order": 501,
+    "stored_modal_states": 301,
+    "sample_rate": 192000.0,
+    "eigenvector_condition_number": 29.53227267171152,
+    "real_coordinate_condition_number": 29.480987217534672,
+    "max_modal_coordinate_relative_transfer_error_unfloored": 8.288843413917539e-06,
+    "worst_unfloored_location": {
+      "frequency_hz": 11153.541666666666,
+      "output": 4,
+      "input": 3,
+      "absolute_error": 3.954517976707746e-08
+    },
+    "max_modal_error_with_1pct_per_transfer_floor": 4.115461768453443e-06,
+    "per_transfer_modal_error_with_1pct_floor": [
+      [
+        6.62923269192617e-11,
+        6.405975395536002e-11,
+        6.406376340814599e-11,
+        6.39968332594142e-11,
+        1.0640283943116397e-06
+      ],
+      [
+        6.405303523699967e-11,
+        6.461786604246137e-11,
+        6.424099691389493e-11,
+        6.420320102246231e-11,
+        2.7334790004150515e-06
+      ],
+      [
+        6.404533015793065e-11,
+        6.42293749833231e-11,
+        6.449468769304584e-11,
+        6.420175166732341e-11,
+        2.416825492206667e-06
+      ],
+      [
+        6.390850492868084e-11,
+        6.411429232159714e-11,
+        6.412536978504302e-11,
+        7.163826846454448e-11,
+        2.1381719770018305e-06
+      ],
+      [
+        4.115461768453443e-06,
+        3.691918410415195e-06,
+        1.961134681330799e-06,
+        1.7380848777343304e-06,
+        7.593346282294057e-11
+      ],
+      [
+        6.454886613858672e-11,
+        6.47723022847039e-11,
+        6.477902787707277e-11,
+        7.241789479181146e-11,
+        7.810229813018965e-11
+      ]
+    ],
+    "maximum_pole_radius": 1.000000000000008
+  },
+  "native_verification": {
+    "schema": 1,
+    "platform": "macOS-26.5-arm64-arm-64bit",
+    "binary_sha256": "51412a30c5531112278d4dd5e72d6170ff9c4c08a7d0e5b3605b5588ae7aebfc",
+    "model_sha256": "6487bdf95bf01e03c75653c21d46e8cfa1fa379bb549ef76d53b5237334f6d41",
+    "modes_sha256": "697d353419ed0c8df6ec859f00efa7802a11b9376e09f26cb9a168ac70cf926c",
+    "git_head_at_measurement": "e82b981ed58ea816517c94942a6a6be0a0ece9c1",
+    "working_tree_modified": true,
+    "impulse_duration_seconds": 0.0625,
+    "laplace_damping_per_second": 400.0,
+    "frequency_count": 241,
+    "frequency_range_hz": [
+      48.0,
+      12000.0
+    ],
+    "max_native_error_with_1pct_per_transfer_floor": 2.4872666804656646e-06,
+    "per_transfer_native_error_with_1pct_floor": [
+      [
+        7.290590029894641e-12,
+        1.1175494689634958e-11,
+        1.1764092148621819e-11,
+        8.489650905631449e-12,
+        8.482632595023116e-07
+      ],
+      [
+        1.1001132903023562e-11,
+        8.301635805282463e-12,
+        9.502035508360647e-12,
+        2.4321970247395707e-11,
+        1.6270187371083803e-06
+      ],
+      [
+        1.126684260249109e-11,
+        9.829283485408506e-12,
+        8.344557153361506e-12,
+        2.0431746165094785e-11,
+        2.4546982533693304e-06
+      ],
+      [
+        8.400661867051368e-12,
+        3.5349447477380475e-11,
+        1.30526252175696e-11,
+        4.080042791930184e-12,
+        1.6559322707468532e-06
+      ],
+      [
+        1.7509767620759137e-06,
+        2.4872666804656646e-06,
+        2.1477499184441085e-06,
+        2.4834201545178487e-06,
+        7.66455617151729e-12
+      ],
+      [
+        8.756372273737966e-12,
+        1.3046379226403943e-11,
+        8.734408652995302e-12,
+        4.238035648934962e-12,
+        7.829199480224936e-12
+      ]
+    ],
+    "impulse_runs": [
+      {
+        "mode": "impulse",
+        "sample_rate": 192000,
+        "samples": 12000,
+        "stored_modes": 301,
+        "render_seconds": 0.009644666,
+        "realtime_multiple": 6.4802658796064065,
+        "microphone_rms": 2.3140487570091555e-08,
+        "microphone_peak": 3.9233629644597115e-07,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "impulse",
+        "sample_rate": 192000,
+        "samples": 12000,
+        "stored_modes": 301,
+        "render_seconds": 0.0063895,
+        "realtime_multiple": 9.78167305735973,
+        "microphone_rms": 1.0040685307022146e-08,
+        "microphone_peak": 1.7879217323085618e-07,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "impulse",
+        "sample_rate": 192000,
+        "samples": 12000,
+        "stored_modes": 301,
+        "render_seconds": 0.005483959,
+        "realtime_multiple": 11.396875870151472,
+        "microphone_rms": 6.498386796732403e-09,
+        "microphone_peak": 1.2588406628877864e-07,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "impulse",
+        "sample_rate": 192000,
+        "samples": 12000,
+        "stored_modes": 301,
+        "render_seconds": 0.004947666,
+        "realtime_multiple": 12.632218908875418,
+        "microphone_rms": 1.0478405099453646e-07,
+        "microphone_peak": 8.556040477328853e-06,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "impulse",
+        "sample_rate": 192000,
+        "samples": 12000,
+        "stored_modes": 301,
+        "render_seconds": 0.004639458,
+        "realtime_multiple": 13.471401185224654,
+        "microphone_rms": 1.057176425011907e-07,
+        "microphone_peak": 8.848532379190414e-06,
+        "accepted_as_speech_renderer": false
+      }
+    ],
+    "coupled_voice_runs": [
+      {
+        "mode": "coupled_frozen_voice",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 0.500858583,
+        "realtime_multiple": 19.965715552088284,
+        "microphone_rms": 0.25758847968583815,
+        "microphone_peak": 1.4931967288921624,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "coupled_frozen_voice",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 0.506487333,
+        "realtime_multiple": 19.7438303950634,
+        "microphone_rms": 0.25758847968583815,
+        "microphone_peak": 1.4931967288921624,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "coupled_frozen_voice",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 0.508250166,
+        "realtime_multiple": 19.67535018965444,
+        "microphone_rms": 0.25758847968583815,
+        "microphone_peak": 1.4931967288921624,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "coupled_frozen_voice",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 0.50495025,
+        "realtime_multiple": 19.803931179358756,
+        "microphone_rms": 0.25758847968583815,
+        "microphone_peak": 1.4931967288921624,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "coupled_frozen_voice",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 0.507093041,
+        "realtime_multiple": 19.720246959571273,
+        "microphone_rms": 0.25758847968583815,
+        "microphone_peak": 1.4931967288921624,
+        "accepted_as_speech_renderer": false
+      }
+    ],
+    "all_port_runs": [
+      {
+        "mode": "all_ports_diagnostic",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 1.135720417,
+        "realtime_multiple": 8.804983911810753,
+        "microphone_rms": 0.165498931894862,
+        "microphone_peak": 1.0212204900277735,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "all_ports_diagnostic",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 1.138679458,
+        "realtime_multiple": 8.78210275046518,
+        "microphone_rms": 0.165498931894862,
+        "microphone_peak": 1.0212204900277735,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "all_ports_diagnostic",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 1.140403833,
+        "realtime_multiple": 8.768823561118284,
+        "microphone_rms": 0.165498931894862,
+        "microphone_peak": 1.0212204900277735,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "all_ports_diagnostic",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 1.140904417,
+        "realtime_multiple": 8.764976146113035,
+        "microphone_rms": 0.165498931894862,
+        "microphone_peak": 1.0212204900277735,
+        "accepted_as_speech_renderer": false
+      },
+      {
+        "mode": "all_ports_diagnostic",
+        "sample_rate": 192000,
+        "samples": 1920000,
+        "stored_modes": 301,
+        "render_seconds": 1.145466334,
+        "realtime_multiple": 8.730068883892663,
+        "microphone_rms": 0.165498931894862,
+        "microphone_peak": 1.0212204900277735,
+        "accepted_as_speech_renderer": false
+      }
+    ],
+    "minimum_all_ports_realtime_multiple": 8.730068883892663,
+    "minimum_coupled_voice_realtime_multiple": 19.67535018965444,
+    "accepted_as_speech_renderer": false
+  },
+  "earlier_trials": [
+    {
+      "candidate": "body-reduced-12",
+      "states": 120,
+      "anatomical_blocks": false,
+      "tested_inputs": 1,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 23.513812159062887,
+      "max_relative_complex_error_with_1pct_floor": 14.382847569911437
+    },
+    {
+      "candidate": "body-reduced-24",
+      "states": 230,
+      "anatomical_blocks": false,
+      "tested_inputs": 1,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 64.60581936119767,
+      "max_relative_complex_error_with_1pct_floor": 1698.6328962411708
+    },
+    {
+      "candidate": "body-reduced-48",
+      "states": 292,
+      "anatomical_blocks": false,
+      "tested_inputs": 1,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 51.01212411380715,
+      "max_relative_complex_error_with_1pct_floor": 354.7968878154163
+    },
+    {
+      "candidate": "body-reduced-tight",
+      "states": 349,
+      "anatomical_blocks": false,
+      "tested_inputs": 1,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 52.66506882905479,
+      "max_relative_complex_error_with_1pct_floor": 429.2714768414817
+    },
+    {
+      "candidate": "body-reduced-allports",
+      "states": 473,
+      "anatomical_blocks": true,
+      "tested_inputs": 5,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 1.9661528664057235,
+      "max_relative_complex_error_with_1pct_floor": 0.27531383189675274
+    },
+    {
+      "candidate": "body-reduced-96",
+      "states": 501,
+      "anatomical_blocks": true,
+      "tested_inputs": 5,
+      "frequency_count": 241,
+      "max_magnitude_error_db_above_1pct_peak": 0.00039251552925857855,
+      "max_relative_complex_error_with_1pct_floor": 9.904488546223605e-05
+    }
+  ],
+  "accepted_as_speech_renderer": false,
+  "source_sha256_at_receipt_assembly": {
+    "surface/frozen_modes.cpp": "5c7928fb8f89cbfff402ae859788ac99609f2dd33b9c4e8e228026defe57e518",
+    "surface/frozen_modes.hpp": "69f06a8c4afd0e8db083a2b40f06134783482265eb52f9612da3a1f9289f4272",
+    "surface/surface_modal_probe.cpp": "ceb0e57d8a9cf351fc64d3e372870645d87b741ce8dd0e353bde807631890c20",
+    "tools/passive_surface.py": "41f150b903c80c4eeec9b171051d4c3c9df1f7c8c351f6a465636b5e797ddab8",
+    "tools/reduce_surface.py": "48dfa5b918fc0c7f033e400b843edeb29a0a3d7f16e88f14dcdbb9861e72e174",
+    "tools/export_surface_modes.py": "9d990ca0538a4c8df54c8fbd9c23c4cff2dbf6d6b7d2d34b338451af5037e021",
+    "tools/verify_surface_modes.py": "796617d129bc32bed91c130880554993590c6b5d25d6033d776f8fab32b07e5d"
+  },
+  "receipt_notes": [
+    "Source hashes are captured at receipt assembly; reduce_surface.py subsequently gained a missing-anatomy metadata guard. The measured snapshot contains that metadata and its reduction calculation is unchanged.",
+    "The combined native verification intentionally exits nonzero: accuracy passes, but all-port speed remains below 10x."
+  ]
+}

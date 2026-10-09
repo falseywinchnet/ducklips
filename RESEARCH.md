@@ -44,6 +44,15 @@ tested 48 Hz–12 kHz points. The full body has 563 pressure unknowns versus
 319,232 allocated delay samples, but the operator is frequency-dependent:
 this is a verified reduction reference, not yet a small dynamic renderer.
 
+The [passive dynamic reduction](surface/PASSIVE_REDUCTION.md) now expresses the
+same frozen network in 20,220 energy states, then projects anatomical blocks
+to 501 states. All 30 port transfers have been checked at 2,401 frequencies.
+A native coupled-fold probe reaches 19.68–19.97×, while the simultaneous
+five-source/six-output path still fails the speed gate at 8.73–8.80×. Its offline
+preparation and frozen-state limitation prevent using it as the moving engine.
+Further reduction must preserve the weak cavity couplings and the energy
+metric; blind modal pruning is not an acceptable shortcut.
+
 A reduction must preserve the port responses at glottis, lips, nose, constriction
 jets, and moving sublingual openings. Frozen-shape frequency response, phase,
 loss and resonant residues should agree before moving-body speech is compared.
@@ -80,7 +89,8 @@ Useful primary references:
 - [Toda and Honda, 2002](https://www.isca-archive.org/icslp_2002/toda02_icslp.html): sibilant differences include constriction length/width, sublingual cavity and lips.
 - [1-D/3-D glottal flow comparison, 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC9629867/): comparison of 1-D and 3-D glottal flow under asymmetric fold conditions. Agreement in selected outputs does not establish equivalence for every geometry.
 
-The next substantive milestone is a tested compact representation of the
-additional cavity physics, followed by the flexible-blade and tongue-root
-experiments on matched speech. Realism and the full detailed-physics speed gate
-remain unsatisfied.
+The next substantive milestone is a smaller passive port representation that
+passes the simultaneous-source speed gate, followed by energy-consistent state
+transport through moving anatomy and the flexible-blade/tongue-root experiments
+on matched speech. Realism and the full detailed-physics speed gate remain
+unsatisfied.

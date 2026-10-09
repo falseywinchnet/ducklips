@@ -9,6 +9,10 @@ configuration, not a speaker embedding or a bank of recorded sounds.
 passes the local 10× realtime benchmark; the detailed surface engine does not.
 The engines are not acoustically equivalent. The surface model has a mouth
 floor and transverse propagation that the compact engine does not yet retain.
+A new [passive frozen surface reduction](surface/PASSIVE_REDUCTION.md) retains
+the tested detailed port responses in 501 real states. Coupled-fold probes reach
+19.68–19.97×, but the general all-port probe still fails at 8.73–8.80×; moving
+anatomy has not been transferred to this representation.
 Neither numerical stability nor a plausible spectrogram proves intelligibility
 or human realism. See [current findings](reports/2026-10-09.md) and the explicit
 [research gates](RESEARCH.md).
