@@ -26,6 +26,13 @@ spectrogram do not establish intelligibility or human realism. See the
 explicit [research gates](RESEARCH.md). Earlier engines and their performance
 measurements remain research references; they are not acoustically equivalent.
 
+Listening follow-up on the spatial-pressure recording: the user reports
+[November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
+A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures
+air above and below the tongue, retaining the /t/ closure while eliminating
+the tested finite sampling jumps. It is independently checked against Boolean
+geometry and is not yet a speech-rendering path.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

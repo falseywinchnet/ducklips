@@ -1,0 +1,215 @@
+{
+  "use": "extruded planar geometry reference, not newly rendered speech or validated anatomy",
+  "assumptions": {
+    "depth_m": 0.022,
+    "blade": "finite lower body-material attachment; tapered to pad",
+    "grid": [
+      64,
+      64
+    ],
+    "body": "native conservative material map",
+    "tongue_mass": "combined blade/body union volume is not constrained"
+  },
+  "geometry_replay_rows": 23239,
+  "existing_columns_identical": true,
+  "shapely_version": "2.1.2",
+  "geos_version": "3.13.1",
+  "contour_refinement": {
+    "128": {
+      "rows": 66,
+      "maximum_reconstructed_pose_error_cm": 9.793055255613581e-12,
+      "largest_step_mL": 0.08359204234892174,
+      "event_changes_mL": {
+        "5.025": 0.021911813292708464,
+        "5.071": 0.06940845674436821,
+        "5.073": 0.05626794521874782
+      },
+      "difference_from_1024_mL": 0.007879554143820806
+    },
+    "256": {
+      "rows": 66,
+      "maximum_reconstructed_pose_error_cm": 9.793055255613581e-12,
+      "largest_step_mL": 0.08348599273655204,
+      "event_changes_mL": {
+        "5.025": 0.021863478784451218,
+        "5.071": 0.06939743268742962,
+        "5.073": 0.05626730393032029
+      },
+      "difference_from_1024_mL": 0.001886360961070267
+    },
+    "512": {
+      "rows": 66,
+      "maximum_reconstructed_pose_error_cm": 9.793055255613581e-12,
+      "largest_step_mL": 0.08345868432253127,
+      "event_changes_mL": {
+        "5.025": 0.021852665584397975,
+        "5.071": 0.06939464979011752,
+        "5.073": 0.0562677139397897
+      },
+      "difference_from_1024_mL": 0.0003782849908833116
+    },
+    "1024": {
+      "rows": 66,
+      "maximum_reconstructed_pose_error_cm": 9.793055255613581e-12,
+      "largest_step_mL": 0.08345190184106734,
+      "event_changes_mL": {
+        "5.025": 0.021849901783369118,
+        "5.071": 0.06939406186233976,
+        "5.073": 0.056267926274971146
+      },
+      "difference_from_1024_mL": 0.0
+    }
+  },
+  "independent_snapshots": [
+    {
+      "time": 5.025,
+      "maximum_cell_volume_error_m3": 3.533715576826534e-21,
+      "total_volume_error_m3": 2.439454888092385e-19,
+      "maximum_vertical_face_error_m2": 6.132518538121134e-19,
+      "maximum_horizontal_face_error_m2": 2.1446874224478885e-18,
+      "split_pressure_cells": [],
+      "connected_air_volumes_mL": [
+        68.58320316074615
+      ],
+      "native_component_volumes_mL": [
+        68.58320316074587
+      ],
+      "snapshot": "out/planar-airspace/pose-5.025.json",
+      "sha256": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab"
+    },
+    {
+      "time": 5.04,
+      "maximum_cell_volume_error_m3": 2.0117032497289633e-21,
+      "total_volume_error_m3": 2.0328790734103208e-19,
+      "maximum_vertical_face_error_m2": 6.098637220230962e-19,
+      "maximum_horizontal_face_error_m2": 1.2197274440461925e-18,
+      "split_pressure_cells": [],
+      "connected_air_volumes_mL": [
+        56.19576061861672,
+        12.670919754251459
+      ],
+      "native_component_volumes_mL": [
+        12.670919754251367,
+        56.19576061861714
+      ],
+      "snapshot": "out/planar-airspace/pose-5.040.json",
+      "sha256": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239"
+    },
+    {
+      "time": 5.071,
+      "maximum_cell_volume_error_m3": 1.7734752333136913e-21,
+      "total_volume_error_m3": 2.439454888092385e-19,
+      "maximum_vertical_face_error_m2": 1.5263533709522492e-18,
+      "maximum_horizontal_face_error_m2": 1.2265037076242269e-18,
+      "split_pressure_cells": [],
+      "connected_air_volumes_mL": [
+        69.80382078372418
+      ],
+      "native_component_volumes_mL": [
+        69.80382078372376
+      ],
+      "snapshot": "out/planar-airspace/pose-5.071.json",
+      "sha256": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2"
+    },
+    {
+      "time": 5.073,
+      "maximum_cell_volume_error_m3": 1.733770563911146e-21,
+      "total_volume_error_m3": 1.0842021724855044e-19,
+      "maximum_vertical_face_error_m2": 6.410345344820545e-18,
+      "maximum_horizontal_face_error_m2": 1.0638733817514012e-18,
+      "split_pressure_cells": [],
+      "connected_air_volumes_mL": [
+        69.92286598954311
+      ],
+      "native_component_volumes_mL": [
+        69.92286598954286
+      ],
+      "snapshot": "out/planar-airspace/pose-5.073.json",
+      "sha256": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0"
+    }
+  ],
+  "commands": [
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.020",
+      "5.085",
+      "128",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/foxtrot-128.csv"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.020",
+      "5.085",
+      "256",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/foxtrot-256.csv"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.020",
+      "5.085",
+      "512",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/foxtrot-512.csv"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.020",
+      "5.085",
+      "1024",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/foxtrot-1024.csv"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.025",
+      "5.025",
+      "512",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.025.csv",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.025.json"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.04",
+      "5.04",
+      "512",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.040.csv",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.040.json"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.071",
+      "5.071",
+      "512",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.071.csv",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.071.json"
+    ],
+    [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+      "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+      "5.073",
+      "5.073",
+      "512",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.073.csv",
+      "/Users/joshuahkuttenkuler/ducklips/out/planar-airspace/pose-5.073.json"
+    ]
+  ],
+  "hashes": {
+    "include/ducklips/planar_airspace.hpp": "d20eca76240141f9439be7f06876f161632bdf275303d3704df92e9c744b5722",
+    "src/planar_airspace.cpp": "e7320cf75642aff3c279ef835d1975012ff71469e4e1c816d1acde9f57574636",
+    "tools/airspace_geometry_probe.cpp": "3de3e835ee7731e8b516c6c046c2bb27933f441c937585995a5afd96bf9c94f5",
+    "tools/tongue_reach_audit.cpp": "6be64f856de9adbc7f11635dac024a18211f9690e73274a0f1d66b1358797f03",
+    "tests/planar_airspace_tests.cpp": "2188a9febc696681c638283f5a805151d9b8191ad34f7e6d512839ee7d5c4b5c",
+    "tools/planar_airspace_reference.py": "1535405a68787aff92d552c4bc434d3576416fe164a3e3054e27c999f2afda2c",
+    "build/ducklips_airspace_geometry_probe": "d58f8182950db08b6ad7926d3b5f212cb86ec2c160f04fa190c727a50186ba82",
+    "out/nato-airspace-geometry.csv": "f7c69147401ec4526c19135d7b45cceac020921f0939c98b10e90c13bcdf04d9"
+  },
+  "figure": {
+    "path": "out/planar-airspace/foxtrot-closure.png",
+    "sha256": "35b7afe30b23c8d11d5247ef1e5a568328046336031c52b8f2f4cd640476088d"
+  }
+}

@@ -1,5 +1,10 @@
 # Spatial airflow exposes a geometric sampling discontinuity
 
+Subsequent [human listening feedback](LISTENING_SPATIAL_2026_10_09.md) confirms
+November improved in this recording and localizes Foxtrot's remaining damage
+to /tr/. The later [solid-airspace reference](PLANAR_AIRSPACE.md) addresses the
+geometry defect described here; it is not yet connected to speech rendering.
+
 The canonical moving-network engine now has an opt-in `--spatial-pressure`
 path, including the conservative material tongue. It connects the separately
 tested pressure network to actual streamed speech. This is a physical

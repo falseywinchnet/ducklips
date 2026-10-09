@@ -96,11 +96,15 @@ Useful primary references:
 - [Toda and Honda, 2002](https://www.isca-archive.org/icslp_2002/toda02_icslp.html): sibilant differences include constriction length/width, sublingual cavity and lips.
 - [1-D/3-D glottal flow comparison, 2022](https://pmc.ncbi.nlm.nih.gov/articles/PMC9629867/): comparison of 1-D and 3-D glottal flow under asymmetric fold conditions. Agreement in selected outputs does not establish equivalence for every geometry.
 
-The next substantive milestone is a smaller passive port representation that
-passes the simultaneous-source speed gate, followed by energy-consistent state
-transport through moving anatomy and the flexible-blade/tongue-root experiments
-on matched speech. Realism and the full detailed-physics speed gate remain
-unsatisfied.
+The current priority, following the user's 9 October instruction, is speech
+correctness; performance optimization is parked. The
+[solid-airspace reference](reports/PLANAR_AIRSPACE.md) now measures free air
+above and below the tongue without the tested midpoint-volume jumps. Its
+geometry still needs integration with pressure/acoustic state, physical
+boundaries and component-preserving transport. The latest listening follow-up
+reports [November improved and Foxtrot's /tr/ still jammed](reports/LISTENING_SPATIAL_2026_10_09.md).
+The passive-representation speed gate, flexible-blade/tongue-root work,
+individual body matching and realistic speech remain unsatisfied requirements.
 
 ## Moving-energy reference
 

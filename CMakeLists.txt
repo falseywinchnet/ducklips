@@ -24,6 +24,7 @@ add_library(ducklips STATIC
     src/sources.cpp
     src/cavity_network.cpp
     src/mean_airway.cpp
+    src/planar_airspace.cpp
     src/air_path.cpp
     src/voice.cpp
     src/body_config.cpp
@@ -134,3 +135,10 @@ add_test(NAME ducklips_canonical_closure_tests COMMAND ducklips_canonical_closur
 add_executable(ducklips_mean_airway_tests tests/mean_airway_tests.cpp)
 target_link_libraries(ducklips_mean_airway_tests PRIVATE ducklips)
 add_test(NAME ducklips_mean_airway_tests COMMAND ducklips_mean_airway_tests)
+
+add_executable(ducklips_planar_airspace_tests tests/planar_airspace_tests.cpp)
+target_link_libraries(ducklips_planar_airspace_tests PRIVATE ducklips)
+add_test(NAME ducklips_planar_airspace_tests COMMAND ducklips_planar_airspace_tests)
+
+add_executable(ducklips_airspace_geometry_probe tools/airspace_geometry_probe.cpp)
+target_link_libraries(ducklips_airspace_geometry_probe PRIVATE ducklips)

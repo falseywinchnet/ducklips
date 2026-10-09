@@ -40,7 +40,7 @@ int main(int argc,char** argv) {
   for(std::size_t i=0;i<airway.oral_area.size();++i){airway_file<<",area_"<<i<<",length_"<<i;}
   airway_file<<'\n';
  }
- std::printf("time,phone,body_activation,body_place,body_gap,body_width,tip_activation,tip_place,tip_gap,tip_down,posture_x,posture_y,jaw,blade,offset_x,offset_y,root_x,root_y,tip_x,tip_y,miss,overlap,drag_x,drag_y,attachment_motion");
+ std::printf("time,phone,body_activation,body_place,body_gap,body_width,tip_activation,tip_place,tip_gap,tip_down,posture_x,posture_y,jaw,blade,offset_x,offset_y,root_x,root_y,tip_x,tip_y,miss,overlap,drag_x,drag_y,attachment_motion,posture_root");
  if(partition){std::printf(",partition_section,upstream_volume,downstream_volume,neck_area,front_area,neck_length");}
  std::puts("");
  for(ducklips::SampleCount sample=0;sample<ducklips::samples_from_seconds(options.rate,plan.duration);sample+=block){
@@ -64,6 +64,7 @@ int main(int argc,char** argv) {
   const double bg=ducklips::MidsagittalTongue::gap_from_area(b.target_area.value*1e4,17.5-b.place.value*100);
   const double tg=ducklips::MidsagittalTongue::gap_from_area(t.target_area.value*1e4,17.5-t.place.value*100);
   printf("%.6f,%s,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g,%.12g",time,ducklips::phone_spec(plan.phones[phone].phone).name,b.activation.value,b.place.value*100,bg,b.width.value*100,t.activation.value,t.place.value*100,tg,t.tip_down.value,state.shape[0].value,state.shape[1].value,state.shape[2].value,state.shape[3].value,state.body_offset_x.value,state.body_offset_y.value,s.blade_root.x,s.blade_root.y,s.tip.x,s.tip.y,s.tip_target_error,s.body_wall_penetration,pull.x,pull.y,s.attachment_motion);
+  printf(",%.12g",state.shape[ducklips::root_parameter].value);
   if(partition){
    // Fixed spatial cut at the centre of the requested section. This is a
    // diagnostic partition, not a production rule for finding air chambers.
