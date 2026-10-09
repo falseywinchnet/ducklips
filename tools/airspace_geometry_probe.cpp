@@ -93,6 +93,11 @@ int main(int argc,char** argv){
             std::ostringstream name;
             if(frames){name<<argv[7]<<"/pose-"<<std::fixed<<std::setprecision(3)<<time<<".json";}else{name<<argv[6];}
             std::ofstream snapshot(name.str());if(!snapshot){return 2;}snapshot<<std::setprecision(17)<<"{\"time\":"<<time<<",\"depth\":0.022,\"domain\":";points(snapshot,domain);
+            // These are the end caps of the reconstructed tongue/floor domain.
+            // Lip shaping and the time-varying fold aperture are separate body
+            // controls, so neither cap is itself a complete anatomical port.
+            snapshot<<",\"boundary_edges\":{\"supraglottal_entry\":"<<domain.size()-1
+                    <<",\"mouth_end\":"<<arcs.size()-1<<'}';
             snapshot<<",\"solids\":[";for(std::size_t i=0;i<solids.size();++i){if(i){snapshot<<',';}points(snapshot,solids[i]);}
             snapshot<<"],\"x_edges\":";numbers(snapshot,xs);snapshot<<",\"y_edges\":";numbers(snapshot,ys);
             snapshot<<",\"volume\":";numbers(snapshot,cells.volume);snapshot<<",\"vertical_face\":";numbers(snapshot,cells.vertical_face);

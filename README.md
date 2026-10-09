@@ -64,6 +64,14 @@ resistance. In the reopening fixture, the worst density reduction falls from
 its sealed lips and expanding volume. This is a coarse inviscid diagnostic,
 not a new speech recording or a validated flow law for the human mouth.
 
+[Explicit domain-cap attachments](reports/PLANAR_BOUNDARY_PORTS.md) now retain
+each opening's owning region, area, centroid and outward normal, including
+contact with exterior tissue. Connecting the mouth-end cap to an ideal ambient
+pressure boundary reduces the reopening control's worst density reduction
+from 3.7% to 0.65%, while retaining the internal tongue seal. Actual lip shaping,
+vocal-fold coupling and radiation losses are still required; a domain cap is
+not the complete anatomical opening.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

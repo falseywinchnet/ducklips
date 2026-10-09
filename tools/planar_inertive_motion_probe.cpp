@@ -12,10 +12,12 @@
 #include <cmath>
 #include <cstdio>
 #include <exception>
+#include <string>
 #include <vector>
 namespace {
 using ducklips::Point2;using ducklips::PlanarContour;
 using Polygons=std::vector<std::vector<Point2>>;
+struct BoundaryLoad {std::size_t edge{},region{};double distance{},pressure{};};
 struct Port {ducklips::CavityConnection connection{};ducklips::PlanarFace face{};std::size_t index{};double distance{};};
 void sample(const Polygons& first,const Polygons& last,double t,Polygons& result){
     for(std::size_t c=0;c<first.size();++c){for(std::size_t v=0;v<first[c].size();++v){
@@ -26,7 +28,7 @@ std::vector<PlanarContour> views(const Polygons& p){std::vector<PlanarContour> r
 void values(const char* name,std::span<const double> a){
     std::printf(",\"%s\":[",name);for(std::size_t i=0;i<a.size();++i){std::printf("%s%.17g",i?",":"",a[i]);}std::putchar(']');
 }
-bool compatible(const ducklips::PlanarAirspace& geometry,std::span<const std::size_t> cells,std::span<const Port> ports){
+bool compatible(const ducklips::PlanarAirspace& geometry,std::span<const std::size_t> cells,std::span<const Port> ports,std::span<const BoundaryLoad> loads){
     if(geometry.regions.size()!=cells.size()){return false;}
     for(std::size_t i=0;i<cells.size();++i){if(geometry.regions[i].cell!=cells[i]){return false;}}
     for(const auto& link:geometry.region_links){
@@ -40,6 +42,10 @@ bool compatible(const ducklips::PlanarAirspace& geometry,std::span<const std::si
     for(std::size_t i=0;i<ports.size();++i){for(std::size_t j=0;j<i;++j){
         if(ports[i].index==ports[j].index && ports[i].face.vertical==ports[j].face.vertical){return false;}
     }}
+    for(const auto& port:geometry.boundary_ports){
+        std::size_t count=0;for(const auto& load:loads){count+=load.edge==port.edge && load.region==port.region;}
+        if(count!=1){return false;}
+    }
     return true;
 }
 void contour(PlanarContour points){
@@ -56,19 +62,26 @@ void geometry_json(double fraction,const ducklips::PlanarAirspace& geometry,
         std::printf("%s[%zu,%zu,%zu,%d,%.17g]",i?",":"",r.first,r.second,r.face,int(r.vertical),r.area);
     }
     std::putchar(']');
+    std::printf(",\"boundary_ports\":[");
+    for(std::size_t i=0;i<geometry.boundary_ports.size();++i){const auto& p=geometry.boundary_ports[i];
+        std::printf("%s[%zu,%zu,%.17g,%.17g,%.17g,%.17g,%.17g]",i?",":"",p.edge,p.region,p.area,p.centre.x,p.centre.y,p.outward_normal.x,p.outward_normal.y);}
+    std::putchar(']');
     if(!contours.empty()){
         std::printf(",\"domain\":");contour(contours[0]);std::printf(",\"solids\":[");
         for(std::size_t i=1;i<contours.size();++i){if(i>1){std::putchar(',');}contour(contours[i]);}std::putchar(']');
     }
     std::putchar('}');
 }
-void metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> ports,
+void metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> ports,std::span<const BoundaryLoad> loads,
              std::span<double> v,std::span<double> c,std::span<double> g){
     const ducklips::AirProperties air{};const double bulk=air.density*air.sound_speed*air.sound_speed;
     for(std::size_t i=0;i<v.size();++i){v[i]=geometry.regions[i].volume;c[i]=v[i]/bulk;}
     std::fill(g.begin(),g.end(),0.);
     for(const auto& link:geometry.region_links){for(std::size_t i=0;i<ports.size();++i){
         if(link.face==ports[i].index && link.vertical==ports[i].face.vertical){g[i]+=link.area/(air.density*ports[i].distance);}
+    }}
+    for(const auto& port:geometry.boundary_ports){for(std::size_t i=0;i<loads.size();++i){
+        if(port.edge==loads[i].edge && port.region==loads[i].region){g[ports.size()+i]+=port.area/(air.density*loads[i].distance);}
     }}
 }
 void state(const ducklips::MovingTreeReference& acoustic,std::span<const double> v,
@@ -83,7 +96,13 @@ void state(const ducklips::MovingTreeReference& acoustic,std::span<const double>
 }
 
 }
-int main(){
+int main(int argc,char** argv){
+    const bool boundary_mode=argc==2 && std::string(argv[1])=="--boundary-loads";
+    if(argc!=1 && !boundary_mode){return 2;}
+    // Boundary loads append: count, then domain_edge region distance pressure.
+    // These controls require independently established continuously open caps;
+    // only the internal face-motion events are scheduled by this tool.
+
     std::size_t nx=0,ny=0,solid_count=0,subdivisions=0;double depth=0,duration=0;
     if(std::scanf("%zu %zu %zu %lf %lf %zu",&nx,&ny,&solid_count,&depth,&duration,&subdivisions)!=6
         || !nx || !ny || nx>256 || ny>256 || solid_count>32 || !subdivisions || subdivisions>2048
@@ -111,16 +130,28 @@ int main(){
         else{const std::size_t column=p.index%nx,row=p.index/nx;if(!row || row>=ny){return 2;}
             p.face.coordinate=y[row];p.face.low=x[column];p.face.high=x[column+1];p.distance=.5*(y[row+1]-y[row-1]);}
     }
+    std::vector<BoundaryLoad> loads;std::vector<std::size_t> selected;
+    if(boundary_mode){
+        std::size_t count=0;if(std::scanf("%zu",&count)!=1 || count>262144){return 2;}loads.resize(count);
+        for(std::size_t i=0;i<count;++i){auto& b=loads[i];
+            if(std::scanf("%zu %zu %lf %lf",&b.edge,&b.region,&b.distance,&b.pressure)!=4 || b.edge>=first[0].size()
+                || b.region>=nodes || !std::isfinite(b.distance) || b.distance<=0 || !std::isfinite(b.pressure)){return 2;}
+            for(std::size_t j=0;j<i;++j){if(loads[j].edge==b.edge && loads[j].region==b.region){return 2;}}
+            if(std::find(selected.begin(),selected.end(),b.edge)==selected.end()){selected.push_back(b.edge);}
+        }
+    }
+    const std::size_t channels=ports.size()+loads.size();std::vector<double> series(channels,0.);
+    for(std::size_t i=0;i<loads.size();++i){series[ports.size()+i]=-loads[i].pressure;}
     ducklips::PlanarAirspace geometry;ducklips::PlanarFaceMotion face_motion;ducklips::MovingTreeReference acoustic;
-    try{geometry.prepare(x,y,edges);geometry.prepare_regions(262144,524288);face_motion.prepare(edges,262144);std::vector<ducklips::TreeEdge> branches;for(const auto& p:ports){branches.push_back({p.connection.from,p.connection.to});}acoustic.prepare(nodes,branches);}
+    try{geometry.prepare(x,y,edges);geometry.prepare_regions(262144,524288);face_motion.prepare(edges,262144);std::vector<ducklips::TreeEdge> branches;for(const auto& p:ports){branches.push_back({p.connection.from,p.connection.to});}for(const auto& b:loads){branches.push_back({b.region,ducklips::ground_node});}acoustic.prepare(nodes,branches);}
     catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
     const auto original_first=views(first),original_last=views(last);
-    if(!geometry.build_regions(first[0],std::span<const PlanarContour>(original_first).subspan(1),depth) || geometry.regions.size()!=nodes){return 1;}
+    if(!geometry.build_regions(first[0],std::span<const PlanarContour>(original_first).subspan(1),depth,selected) || geometry.regions.size()!=nodes){return 1;}
     std::vector<std::size_t> cells(nodes);
-    std::vector<double> gend(port_count),old_volume(nodes),c1(nodes),c2(nodes),g1(port_count),g2(port_count),scratch(nodes);
+    std::vector<double> gend(channels),old_volume(nodes),c1(nodes),c2(nodes),g1(channels),g2(channels),scratch(nodes);
     for(std::size_t i=0;i<nodes;++i){cells[i]=geometry.regions[i].cell;}
-    if(!compatible(geometry,cells,ports)){return 1;}
-    metrics(geometry,ports,volume,compliance,gend);
+    if(!compatible(geometry,cells,ports,loads)){return 1;}
+    metrics(geometry,ports,loads,volume,compliance,gend);
     for(std::size_t i=0;i<nodes;++i){acoustic.charge[i]=compliance[i]*initial[i];}
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
@@ -147,20 +178,20 @@ int main(){
         old_volume=volume;
         std::printf("%s{\"dt\":%.17g,\"stage1\":",step>1?",":"",dt);
         sample(first,last,first_stage,a);
-        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth) || !compatible(geometry,cells,ports)){return 1;}
-        metrics(geometry,ports,scratch,c1,g1);geometry_json(first_stage,geometry,{});
+        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads)){return 1;}
+        metrics(geometry,ports,loads,scratch,c1,g1);geometry_json(first_stage,geometry,{});
         std::printf(",\"stage2\":");sample(first,last,second_stage,a);
-        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth) || !compatible(geometry,cells,ports)){return 1;}
-        metrics(geometry,ports,scratch,c2,g2);geometry_json(second_stage,geometry,{});
+        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads)){return 1;}
+        metrics(geometry,ports,loads,scratch,c2,g2);geometry_json(second_stage,geometry,{});
         std::printf(",\"geometry\":");sample(first,last,t1,a);
-        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth) || !compatible(geometry,cells,ports)){return 1;}
-        metrics(geometry,ports,volume,compliance,gend);geometry_json(t1,geometry,va);
+        if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads)){return 1;}
+        metrics(geometry,ports,loads,volume,compliance,gend);geometry_json(t1,geometry,va);
         for(std::size_t i=0;i<nodes;++i){inflow[i]=-(volume[i]-old_volume[i])/dt;}
         // A closed passage has no kinetic state to accumulate pressure history.
         // The zero-metric momentum is discarded, as in CanonicalSpeech.
-        for(std::size_t i=0;i<ports.size();++i){if(g1[i]==0 && g2[i]==0){acoustic.momentum[i]=0;}}
-        acoustic.advance(c1,c2,g1,g2,dt,inflow);
-        for(std::size_t i=0;i<ports.size();++i){if(gend[i]==0){acoustic.momentum[i]=0;}}
+        for(std::size_t i=0;i<channels;++i){if(g1[i]==0 && g2[i]==0){acoustic.momentum[i]=0;}}
+        acoustic.advance(c1,c2,g1,g2,dt,inflow,series);
+        for(std::size_t i=0;i<channels;++i){if(gend[i]==0){acoustic.momentum[i]=0;}}
         values("wall_flow",inflow);state(acoustic,volume,compliance,gend);std::putchar('}');
     }
     std::puts("]}");std::fprintf(stderr,"steps=%zu; inviscid canonical moving-volume reference; no speech\n",cuts.size()-1);

@@ -123,6 +123,13 @@ boundaries, neck losses, spatially resolved inertance and nonlinear mean-flow
 coupling remain integration gates; the five-region inviscid control does not
 validate the production speech path.
 
+[Boundary attachments and ideal open-cap controls](reports/PLANAR_BOUNDARY_PORTS.md)
+now identify the mouth-end and supraglottal caps without changing the saved
+tongue/floor geometry. The pressure-release control separates the sealed-mouth
+pressure effect from internal tongue motion. These caps still omit the
+separately controlled lip constriction and actual fold aperture; their ideal
+pressure conditions are not a radiation or laryngeal source model.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

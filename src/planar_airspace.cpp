@@ -16,13 +16,14 @@ bool increasing(std::span<const double> values) {
 }
 void PlanarAirspace::prepare(std::span<const double> x,std::span<const double> y,std::size_t maximum_edges){
     if(!increasing(x) || !increasing(y) || maximum_edges<3 || maximum_edges>4096){throw std::invalid_argument("invalid planar grid or edge capacity");}
-    piece_capacity_=link_capacity_=0;regions.clear();region_links.clear();
+    piece_capacity_=link_capacity_=0;regions.clear();region_links.clear();boundary_ports.clear();
     x_.assign(x.begin(),x.end());y_.assign(y.begin(),y.end());maximum_edges_=maximum_edges;
     volume.resize(columns()*rows());vertical_face.resize(x_.size()*rows());horizontal_face.resize(columns()*y_.size());
     edges_.reserve(maximum_edges);hits_.reserve(maximum_edges);
     motion_points_.resize(maximum_edges);motion_contours_.clear();motion_contours_.reserve(maximum_edges/3);
     cuts_.reserve(x.size()+maximum_edges*(y.size()+1)+maximum_edges*(maximum_edges-1)/2);
     domain_.reserve(maximum_edges);solid_.reserve(maximum_edges);free_.reserve(2*maximum_edges);left_.reserve(2*maximum_edges);
+    boundary_blocked_.reserve(2*maximum_edges);
 }
 void PlanarAirspace::polygon_intervals(PlanarContour polygon,std::size_t first_edge,double x,std::vector<Interval>& out) noexcept {
     hits_.clear();
@@ -58,7 +59,7 @@ bool PlanarAirspace::build(PlanarContour domain,std::span<const PlanarContour> s
     std::size_t count=domain.size();
     for(PlanarContour p:solids){if(p.size()<3 || p.size()>maximum_edges_-std::min(count,maximum_edges_)){return false;}count+=p.size();}
     if(count>maximum_edges_){return false;}
-    regions.clear();region_links.clear();
+    regions.clear();region_links.clear();boundary_ports.clear();
     edges_.clear();cuts_.clear();
     for(double value:x_){cuts_.push_back(value);}
     for(std::size_t contour=0;contour<=solids.size();++contour){
@@ -117,7 +118,7 @@ bool PlanarAirspace::build(PlanarContour domain,std::span<const PlanarContour> s
 void PlanarAirspace::prepare_regions(std::size_t piece_capacity,std::size_t link_capacity){
     if(x_.empty() || piece_capacity==0 || link_capacity==0){throw std::invalid_argument("prepare the grid and positive region capacities first");}
     piece_capacity_=piece_capacity;link_capacity_=link_capacity;
-    pieces_.reserve(piece_capacity);regions.reserve(piece_capacity);region_links.reserve(link_capacity);
+    pieces_.reserve(piece_capacity);regions.reserve(piece_capacity);region_links.reserve(link_capacity);boundary_ports.reserve(link_capacity);
     previous_rows_.resize(rows());current_rows_.resize(rows());
 }
 std::size_t PlanarAirspace::piece_root(std::size_t piece) noexcept {
@@ -129,7 +130,8 @@ double PlanarAirspace::boundary_y(std::size_t edge,double x) const noexcept {
     if(x==s.a.x){return s.a.y;}if(x==s.b.x){return s.b.y;}
     return s.a.y+(x-s.a.x)*(s.b.y-s.a.y)/(s.b.x-s.a.x);
 }
-bool PlanarAirspace::build_regions(PlanarContour domain,std::span<const PlanarContour> solids,double depth) noexcept {
+bool PlanarAirspace::build_regions(PlanarContour domain,std::span<const PlanarContour> solids,double depth,
+                                  std::span<const std::size_t> boundary_edges) noexcept {
     if(!piece_capacity_ || !build(domain,solids,depth)){return false;}
     pieces_.clear();regions.clear();region_links.clear();
     std::fill(previous_rows_.begin(),previous_rows_.end(),Range{});
@@ -146,7 +148,9 @@ bool PlanarAirspace::build_regions(PlanarContour domain,std::span<const PlanarCo
                 const double ll=std::max(boundary_y(air.low_edge,lo),y_[row]),hl=std::min(boundary_y(air.high_edge,lo),y_[row+1]);
                 const double lr=std::max(boundary_y(air.low_edge,hi),y_[row]),hr=std::min(boundary_y(air.high_edge,hi),y_[row+1]);
                 const std::size_t slice=static_cast<std::size_t>(&air-free_.data());
-                const std::size_t id=pieces_.size();pieces_.push_back({row*columns()+column,id,0,slice,ll,hl,lr,hr,depth*(hi-lo)*(high-low),{x,.5*(low+high)}});
+                constexpr std::size_t absent=static_cast<std::size_t>(-1);
+                const std::size_t id=pieces_.size();pieces_.push_back({row*columns()+column,id,0,slice,ll,hl,lr,hr,depth*(hi-lo)*(high-low),{x,.5*(low+high)},
+                    lo,hi,air.low>=y_[row]?air.low_edge:absent,air.high<=y_[row+1]?air.high_edge:absent});
                 // Adjacent strips in one cell form a region only through an
                 // opening of positive length. Across a grid face, retain a port.
                 if(have_previous){for(std::size_t other=previous_rows_[row].begin;other<previous_rows_[row].end;++other){
@@ -195,11 +199,93 @@ bool PlanarAirspace::build_regions(PlanarContour domain,std::span<const PlanarCo
             && region_links[count-1].vertical==link.vertical && region_links[count-1].face==link.face){region_links[count-1].area+=link.area;}
         else{region_links[count++]=link;}
     }
-    region_links.resize(count);return true;
+    region_links.resize(count);return attach_boundaries(domain,solids,depth,boundary_edges);
+}
+
+bool PlanarAirspace::attach_boundaries(PlanarContour domain,std::span<const PlanarContour> solids,double depth,
+                                      std::span<const std::size_t> selected) noexcept {
+    if(selected.empty()){return true;}
+    // Signed area relative to the first vertex avoids cancellation from a
+    // translated coordinate origin. Winding changes no physical normal.
+    double signed_area=0;
+    for(std::size_t i=1;i+1<domain.size();++i){signed_area+=cross(minus(domain[i],domain[0]),minus(domain[i+1],domain[0]));}
+    if(signed_area==0 || !std::isfinite(signed_area)){return false;}
+    for(std::size_t index=0;index<selected.size();++index){
+        const std::size_t edge=selected[index];if(edge>=domain.size()){return false;}
+        for(std::size_t other=0;other<index;++other){if(selected[other]==edge){return false;}}
+        const Point2 a=domain[edge],b=domain[(edge+1)%domain.size()],u=minus(b,a);
+        const double length=std::hypot(u.x,u.y),norm=u.x*u.x+u.y*u.y;
+        if(length==0 || !std::isfinite(norm) || norm==0){return false;}
+        const double sign=signed_area>0?1.:-1.;const Point2 normal{sign*u.y/length,-sign*u.x/length};
+        boundary_blocked_.clear();
+        // Intersect each solid with the supporting line in edge coordinates.
+        // Include collinear solid edges explicitly: exterior tissue touching
+        // an otherwise free interior cap must still close that aperture.
+        for(PlanarContour solid:solids){
+            hits_.clear();
+            for(std::size_t k=0;k<solid.size();++k){
+                const Point2 c=minus(solid[k],a),d=minus(solid[(k+1)%solid.size()],a);
+                const double sc=cross(u,c),sd=cross(u,d);
+                const double tc=(c.x*u.x+c.y*u.y)/norm,td=(d.x*u.x+d.y*u.y)/norm;
+                if(sc==0 && sd==0){
+                    const double lo=std::max(0.,std::min(tc,td)),hi=std::min(1.,std::max(tc,td));
+                    if(hi>lo){boundary_blocked_.push_back({lo,hi,0,0});}
+                }else if((sc<=0 && sd>0)||(sd<=0 && sc>0)){
+                    hits_.push_back({std::lerp(tc,td,sc/(sc-sd)),0});
+                }
+            }
+            std::sort(hits_.begin(),hits_.end(),[](Hit first,Hit second){return first.y<second.y;});
+            for(std::size_t k=0;k+1<hits_.size();k+=2){
+                const double lo=std::max(0.,hits_[k].y),hi=std::min(1.,hits_[k+1].y);
+                if(hi>lo){boundary_blocked_.push_back({lo,hi,0,0});}
+            }
+        }
+        std::sort(boundary_blocked_.begin(),boundary_blocked_.end(),[](Interval first,Interval second){return first.low<second.low;});
+        for(std::size_t piece_index=0;piece_index<pieces_.size();++piece_index){
+            const Piece& piece=pieces_[piece_index];double t0=0,t1=0;
+            if(u.x!=0){
+                if(piece.low_edge!=edge && piece.high_edge!=edge){continue;}
+                t0=(piece.x_left-a.x)/u.x;t1=(piece.x_right-a.x)/u.x;
+            }else{
+                double low=0,high=0;
+                if(normal.x>0 && piece.x_right==a.x){low=piece.low_right;high=piece.high_right;}
+                else if(normal.x<0 && piece.x_left==a.x){low=piece.low_left;high=piece.high_left;}
+                else{continue;}
+                t0=(low-a.y)/u.y;t1=(high-a.y)/u.y;
+            }
+            double start=std::max(0.,std::min(t0,t1));const double end=std::min(1.,std::max(t0,t1));
+            if(end<=start){continue;}
+            // Emit portions before successive covered intervals and the tail.
+            // Only positive-length pieces contribute; no aperture floor.
+            for(std::size_t k=0;k<=boundary_blocked_.size() && start<end;++k){
+                const double stop=k<boundary_blocked_.size()?std::min(end,boundary_blocked_[k].low):end;
+                if(stop>start){
+                    if(boundary_ports.size()==link_capacity_){return false;}
+                    const double area=depth*length*(stop-start),middle=.5*(start+stop);
+                    boundary_ports.push_back({edge,pieces_[piece_root(piece_index)].region,area,
+                        {area*std::lerp(a.x,b.x,middle),area*std::lerp(a.y,b.y,middle)},normal});
+                }
+                if(k<boundary_blocked_.size()){start=std::max(start,boundary_blocked_[k].high);}
+            }
+        }
+    }
+    std::sort(boundary_ports.begin(),boundary_ports.end(),[](const PlanarBoundaryPort& a,const PlanarBoundaryPort& b){
+        return a.edge!=b.edge?a.edge<b.edge:a.region<b.region;
+    });
+    std::size_t count=0;
+    for(const PlanarBoundaryPort& port:boundary_ports){
+        if(count && boundary_ports[count-1].edge==port.edge && boundary_ports[count-1].region==port.region){
+            PlanarBoundaryPort& total=boundary_ports[count-1];total.area+=port.area;total.centre.x+=port.centre.x;total.centre.y+=port.centre.y;
+        }else{boundary_ports[count++]=port;}
+    }
+    boundary_ports.resize(count);
+    for(PlanarBoundaryPort& port:boundary_ports){port.centre.x/=port.area;port.centre.y/=port.area;}
+    return true;
 }
 
 bool PlanarAirspace::build_between(PlanarContour first_domain,std::span<const PlanarContour> first_solids,
-    PlanarContour last_domain,std::span<const PlanarContour> last_solids,double fraction,double depth) noexcept {
+    PlanarContour last_domain,std::span<const PlanarContour> last_solids,double fraction,double depth,
+    std::span<const std::size_t> boundary_edges) noexcept {
     motion_contours_.clear();
     if(!std::isfinite(fraction) || fraction<0 || fraction>1 || first_solids.size()!=last_solids.size()
         || first_domain.size()!=last_domain.size() || first_domain.size()<3){return false;}
@@ -218,7 +304,7 @@ bool PlanarAirspace::build_between(PlanarContour first_domain,std::span<const Pl
         }
         motion_contours_.push_back({motion_points_.data()+offset,first.size()});offset+=first.size();
     }
-    return build_regions(motion_contours_[0],std::span<const PlanarContour>(motion_contours_).subspan(1),depth);
+    return build_regions(motion_contours_[0],std::span<const PlanarContour>(motion_contours_).subspan(1),depth,boundary_edges);
 }
 
 }

@@ -15,6 +15,7 @@ import shapely
 from planar_pressure_motion_reference import sampled,port_lines,PORTS,BULK,INITIAL
 from planar_regions_reference import check_geometry
 from planar_region_motion_reference import exact_regions,correspondence
+from planar_boundary_reference import check_boundaries
 
 ROOT=Path(__file__).resolve().parents[1]
 RHO=1.14
@@ -36,26 +37,32 @@ def write_input(p,q,subdivisions,initial,ports,path):
     path.write_text('\n'.join(lines)+'\n')
 
 
-def run(name,p,q,subdivisions,initial,ports,binary,out):
+def run(name,p,q,subdivisions,initial,ports,binary,out,boundary_loads=()):
     source=out/f'{name}-{subdivisions}.txt';destination=source.with_suffix('.json');log=source.with_suffix('.log')
     write_input(p,q,subdivisions,initial,ports,source)
+    command=[str(binary)]
+    if boundary_loads:
+        command.append('--boundary-loads')
+        with source.open('a') as f:
+            f.write(str(len(boundary_loads))+'\n')
+            f.writelines(' '.join(map(str,row))+'\n' for row in boundary_loads)
     with source.open() as f,destination.open('w') as g:
-        result=subprocess.run([str(binary)],stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
+        result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
     log.write_text(result.stderr);assert result.returncode==0,(name,result.stderr)
     native=json.loads(destination.read_text())
-    receipt=dict(name=name,subdivisions=subdivisions,steps=len(native['steps']),command=[str(binary)],
+    receipt=dict(name=name,subdivisions=subdivisions,steps=len(native['steps']),command=command,
                  **{k:str(v.relative_to(ROOT)) for k,v in [('input',source),('output',destination),('log',log)]},
                  **{k+'_sha256':sha(v) for k,v in [('input',source),('output',destination),('log',log)]})
     return native,receipt
 
 
-def dense_step(z,c1,c2,g1,g2,drive,dt,incidence):
+def dense_step(z,c1,c2,g1,g2,drive,dt,incidence,series=None):
     n,m=incidence.shape;size=n+m
     def operator(c,g):
         return np.block([[np.zeros((n,n)),-incidence*g],[incidence.T/c,np.zeros((m,m))]])
     f1,f2=operator(c1,g1),operator(c2,g2);identity=np.eye(size)
     matrix=np.block([[identity-dt*A[0,0]*f1,-dt*A[0,1]*f2],[-dt*A[1,0]*f1,identity-dt*A[1,1]*f2]])
-    source=np.r_[drive,np.zeros(m)]
+    source=np.r_[drive,np.zeros(m) if series is None else series]
     right=np.concatenate([z+dt*sum(row)*source for row in A])
     stage=np.linalg.solve(matrix,right).reshape(2,size)
     result=z+dt*(.5*(f1@stage[0]+f2@stage[1])+source)
@@ -64,9 +71,13 @@ def dense_step(z,c1,c2,g1,g2,drive,dt,incidence):
     return result,flow,pressure
 
 
-def audit_motion(name,p,q,event,subdivisions,binary,out):
-    native,receipt=run(name,p,q,subdivisions,INITIAL,PORTS,binary,out)
-    lines,distance=port_lines(p);incidence=np.zeros((5,4))
+def audit_motion(name,p,q,event,subdivisions,binary,out,boundary_loads=(),case=None):
+    native,receipt=run(name if case is None else case+"-"+name,p,q,subdivisions,INITIAL,PORTS,binary,out,boundary_loads)
+    lines,distance=port_lines(p);incidence=np.zeros((5,4+len(boundary_loads)))
+    distance=np.r_[distance,[row[2] for row in boundary_loads]]
+    series=np.r_[np.zeros(4),[-row[3] for row in boundary_loads]]
+    for k,(_,region,_,_) in enumerate(boundary_loads):incidence[region,4+k]=1
+    selected=sorted({row[0] for row in boundary_loads})
     for edge,(i,j,_,_) in enumerate(PORTS):incidence[i,edge]=1;incidence[j,edge]=-1
     maxima=dict(volume_error_m3=0.,port_area_error_m2=0.,oracle_pressure_error_Pa=0.,oracle_momentum_error_Pa_s=0.,
                 oracle_average_flow_error_m3_s=0.,oracle_average_pressure_error_Pa=0.,
@@ -82,11 +93,14 @@ def audit_motion(name,p,q,event,subdivisions,binary,out):
         v=np.array([r.area*p['depth'] for r in regions])
         area=np.array([regions[i].intersection(regions[j]).intersection(line).length*p['depth']
                        for (i,j,_,_),line in zip(PORTS,lines)])
+        if boundary_loads:
+            boundary,_=check_boundaries(pose,record,selected,regions)
+            area=np.r_[area,[boundary.get((edge,region),(0.,None,None))[0] for edge,region,_,_ in boundary_loads]]
         snapshots+=1
         return pose,regions,cells,v,v/BULK,area/(RHO*distance)
     first=native['initial'];old_pose,old_regions,old_cells,old_v,c,g=geometry(first['geometry'])
-    z=np.r_[c*INITIAL,np.zeros(4)];old_native=first;mass0=sum(np.array(first['volume'])+first['charge'])
-    density=[1+x/BULK for x in INITIAL];matches=0;sealed_mass=None;records=[];maximum_speed=0.
+    z=np.r_[c*INITIAL,np.zeros(incidence.shape[1])];old_native=first;mass0=sum(np.array(first['volume'])+first['charge'])
+    density=[1+x/BULK for x in INITIAL];matches=0;sealed_mass=None;records=[];maximum_speed=0.;discharged=np.zeros(5)
     for state in native['steps']:
         _,_,_,_,c1,g1=geometry(state['stage1']);_,_,_,_,c2,g2=geometry(state['stage2'])
         pose,regions,cells,v,c,g=geometry(state['geometry']);dt=state['dt']
@@ -95,7 +109,7 @@ def audit_motion(name,p,q,event,subdivisions,binary,out):
         assert not any(match[k] for k in ['split_candidates','merge_candidates','old_without_witness','new_without_witness'])
         matches+=match['intermediate_witness_checks']
         z[5:][(g1==0)&(g2==0)]=0
-        z,average_flow,average_pressure=dense_step(z,c1,c2,g1,g2,-(v-old_v)/dt,dt,incidence)
+        z,average_flow,average_pressure=dense_step(z,c1,c2,g1,g2,-(v-old_v)/dt,dt,incidence,series)
         z[5:][g==0]=0
         pressure=np.array(state['pressure']);momentum=np.array(state['momentum'])
         maxima['oracle_pressure_error_Pa']=max(maxima['oracle_pressure_error_Pa'],float(max(abs(pressure-z[:5]/c))))
@@ -107,15 +121,17 @@ def audit_motion(name,p,q,event,subdivisions,binary,out):
         opened=np.array(state['conductance'])>0
         maximum_speed=max(maximum_speed,float(max(abs(momentum[opened]/(RHO*distance[opened])),default=0.)))
         charge=np.array(state['volume'])+state['charge'];old_charge=np.array(old_native['volume'])+old_native['charge']
+        old_discharged=discharged.copy()
+        discharged+=dt*incidence[:,4:]@np.array(state['average_flow'][4:])
         balance=charge-old_charge+dt*incidence@np.array(state['average_flow'])
         maxima['local_mass_error_m3']=max(maxima['local_mass_error_m3'],float(max(abs(balance))))
-        maxima['global_mass_error_m3']=max(maxima['global_mass_error_m3'],abs(sum(charge)-mass0))
+        maxima['global_mass_error_m3']=max(maxima['global_mass_error_m3'],abs(sum(charge)+sum(discharged)-mass0))
         t=state['geometry']['fraction'];old_t=old_native['geometry']['fraction']
         closed=(old_t>event['fraction']+1e-10) if name=='closure' else (t<event['fraction']-1e-10)
         if closed:
             maxima['closed_flow_m3_s']=max(maxima['closed_flow_m3_s'],abs(state['average_flow'][1]))
-            groups=np.array([sum(charge[:2]),sum(charge[2:])])
-            if sealed_mass is None:sealed_mass=np.array([sum(old_charge[:2]),sum(old_charge[2:])])
+            groups=np.array([sum((charge+discharged)[:2]),sum((charge+discharged)[2:])])
+            if sealed_mass is None:sealed_mass=np.array([sum((old_charge+old_discharged)[:2]),sum((old_charge+old_discharged)[2:])])
             maxima['sealed_group_mass_error_m3']=max(maxima['sealed_group_mass_error_m3'],float(max(abs(groups-sealed_mass))))
         density.extend((1+pressure/BULK).tolist())
         records.append(dict(fraction=t,oracle_pressure_Pa=(z[:5]/c).tolist(),oracle_momentum_Pa_s=z[5:].tolist(),
@@ -129,8 +145,9 @@ def audit_motion(name,p,q,event,subdivisions,binary,out):
     assert maxima['closed_flow_m3_s']==0,maxima
     final=native['steps'][-1];v0=np.array(first['volume']);vend=np.array(final['volume'])
     mass=np.array(final['volume'])+final['charge']
-    audit_path=out/f'{name}-{subdivisions}-audit.json';audit_path.write_text(json.dumps(records,indent=2)+'\n')
-    receipt.update(maxima=maxima,geometry_snapshots=snapshots,intermediate_witness_checks=matches,
+    audit_path=out/f'{receipt["name"]}-{subdivisions}-audit.json';audit_path.write_text(json.dumps(records,indent=2)+'\n')
+    receipt.update(maxima=maxima,geometry_snapshots=snapshots,boundary_loads=boundary_loads,discharged_reference_volume_by_region_m3=discharged.tolist(),intermediate_witness_checks=matches,
+                   group_balance_includes_external_ports=bool(boundary_loads),
                    relative_density_range=[min(density),max(density)],final_pressure_Pa=final['pressure'],final_flow_m3_s=final['flow'],
                    maximum_sampled_normal_speed_m_s=maximum_speed,maximum_sampled_normal_mach=maximum_speed/350,
                    volume_change_m3=(vend-v0).tolist(),transferred_mass_m3=(mass-v0*(1+INITIAL/BULK)).tolist(),
@@ -193,7 +210,7 @@ def main():
             previous=np.array(result['final_pressure_Pa'])
         refinement.append(dict(name=name,comparisons=differences));inputs.update({str(path.relative_to(ROOT)):sha(path) for path in paths})
     sources=['tools/planar_inertive_motion_probe.cpp','tools/planar_inertive_motion_reference.py','include/ducklips/moving_tree.hpp','src/moving_tree.cpp',
-             'tools/planar_pressure_motion_reference.py','tools/planar_contact_partition_reference.py','tools/planar_region_motion_reference.py','tools/planar_regions_reference.py',
+             'tools/planar_boundary_reference.py','tools/planar_pressure_motion_reference.py','tools/planar_contact_partition_reference.py','tools/planar_region_motion_reference.py','tools/planar_regions_reference.py',
              'include/ducklips/planar_airspace.hpp','src/planar_airspace.cpp','include/ducklips/planar_face_motion.hpp','src/planar_face_motion.cpp']
     report=dict(use='inviscid canonical pressure/momentum control on five moving regions; two separately initialized intervals; no speech',
                 command=[sys.executable,str(Path(__file__).resolve()),*sys.argv[1:]],runs=runs,controls=control_receipts,refinement=refinement,input_poses=inputs,

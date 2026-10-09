@@ -1,0 +1,1859 @@
+{
+  "use": "ideal pressure boundaries at tongue/floor domain caps; no anatomical lip/glottal constriction or radiation losses",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_open_boundary_reference.py"
+  ],
+  "runs": [
+    {
+      "name": "mouth_open-closure",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-closure-16.txt",
+      "output": "out/planar-open-boundary/mouth_open-closure-16.json",
+      "log": "out/planar-open-boundary/mouth_open-closure-16.log",
+      "input_sha256": "ccd21fccc869ba3c116ff98444443dfc6eece5132edb7c748cae7dc0f57e2723",
+      "output_sha256": "2116341efe08d4660517174910831e65d5f0d7d043f1b7da801630f93f9e4823",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 3.9302328752599536e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.660840436874423e-09,
+        "oracle_momentum_error_Pa_s": 1.6750007414065293e-13,
+        "oracle_average_flow_error_m3_s": 3.93531168481169e-15,
+        "oracle_average_pressure_error_Pa": 2.1914274839218706e-09,
+        "local_mass_error_m3": 5.881357552828596e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -9.282451365257592e-08,
+        -2.566077253057065e-08
+      ],
+      "intermediate_witness_checks": 255,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9987016435778161,
+        1.0059471996667166
+      ],
+      "final_pressure_Pa": [
+        829.6917436265411,
+        830.5264334569806,
+        179.1931244706889,
+        40.4944232374558,
+        -12.86553991611658
+      ],
+      "final_flow_m3_s": [
+        5.237131104009301e-07,
+        0,
+        -9.956383923578323e-05,
+        -7.237447680225256e-06,
+        -0.0001262463480381318,
+        -3.6384090588759587e-05
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.176731233340874,
+      "maximum_sampled_normal_mach": 0.009076374952402497,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.780922469870704e-09,
+        -9.907668155455929e-09,
+        7.181947400431777e-08,
+        2.6693618274790648e-08,
+        2.009893958962312e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 63.3919716345972,
+      "audit": "out/planar-open-boundary/mouth_open-closure-16-audit.json",
+      "audit_sha256": "998d87f84d5f7a2481344fc7a6eef92aea708c4328ff6d51fc425d0a278ee37a"
+    },
+    {
+      "name": "mouth_open-closure",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-closure-32.txt",
+      "output": "out/planar-open-boundary/mouth_open-closure-32.json",
+      "log": "out/planar-open-boundary/mouth_open-closure-32.log",
+      "input_sha256": "ac3d14baaf8545f9b9b7c356c890be5800c16f2907ef1fa2c9e6ab8703cb6ee9",
+      "output_sha256": "37bec95f508a56d3360878cc95b7f1ddd932ecd28a26a5303a72b70559f9d61a",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.675621868843738e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.012143340834882e-09,
+        "oracle_momentum_error_Pa_s": 1.3242185126216555e-13,
+        "oracle_average_flow_error_m3_s": 3.077526501324944e-15,
+        "oracle_average_pressure_error_Pa": 1.7150796338682994e-09,
+        "local_mass_error_m3": 5.971727034750014e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -9.273734895977041e-08,
+        -2.598758170738289e-08
+      ],
+      "intermediate_witness_checks": 495,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.998543789520504,
+        1.005948875664462
+      ],
+      "final_pressure_Pa": [
+        829.6193339678548,
+        830.7604865421146,
+        182.92061995357966,
+        34.77266843800351,
+        19.19900451289712
+      ],
+      "final_flow_m3_s": [
+        4.6919345976576965e-07,
+        0,
+        -9.871332430557475e-05,
+        -4.321561997139077e-06,
+        -0.00012176534492305966,
+        -4.21967722182468e-05
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.1769189765975714,
+      "maximum_sampled_normal_mach": 0.009076911361707346,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.758476528687506e-09,
+        -9.885220306171774e-09,
+        7.189331869207273e-08,
+        2.639584738247195e-08,
+        2.0562508370093906e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.16850311313507,
+      "audit": "out/planar-open-boundary/mouth_open-closure-32-audit.json",
+      "audit_sha256": "09aecc00c26c90667c1eb49293e3243c9e4d64f05ca7ea6a45da6aed8af16100"
+    },
+    {
+      "name": "mouth_open-closure",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-closure-64.txt",
+      "output": "out/planar-open-boundary/mouth_open-closure-64.json",
+      "log": "out/planar-open-boundary/mouth_open-closure-64.log",
+      "input_sha256": "354fda624bc25755ac698ff62bcecd8241d3b725a25555c3d74a0efdd9d1ef71",
+      "output_sha256": "a0cc934dde396bcf7677b9cc63732d2d462218542a419a49e7552e5ef20f2390",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 4.607859233063394e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.4989609553595074e-09,
+        "oracle_momentum_error_Pa_s": 1.573463581650003e-13,
+        "oracle_average_flow_error_m3_s": 2.4364682499203663e-15,
+        "oracle_average_pressure_error_Pa": 1.4304077922133729e-09,
+        "local_mass_error_m3": 6.487538770162183e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -9.272657438822619e-08,
+        -2.602055989446761e-08
+      ],
+      "intermediate_witness_checks": 975,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.998543826931307,
+        1.0059489986506964
+      ],
+      "final_pressure_Pa": [
+        829.6140190813021,
+        830.7776615697654,
+        183.21997401830814,
+        34.18030589448661,
+        22.456937801228356
+      ],
+      "final_flow_m3_s": [
+        4.636276068337287e-07,
+        0,
+        -9.856857053258446e-05,
+        -4.525231356168726e-06,
+        -0.00012184403219576225,
+        -4.168735421405884e-05
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.3462961389082015,
+      "maximum_sampled_normal_mach": 0.00956084611116629,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.75682899114627e-09,
+        -9.883573062633981e-09,
+        7.189924913720391e-08,
+        2.636501972044443e-08,
+        2.060960949653186e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.4257606290836,
+      "audit": "out/planar-open-boundary/mouth_open-closure-64-audit.json",
+      "audit_sha256": "f6af614227d12d2f1027e7f65b7d98c25e41f0d209ae96ebd58a8f66fc285556"
+    },
+    {
+      "name": "mouth_open-closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-closure-128.txt",
+      "output": "out/planar-open-boundary/mouth_open-closure-128.json",
+      "log": "out/planar-open-boundary/mouth_open-closure-128.log",
+      "input_sha256": "17d091578cdc8d6d682d731e1a28c241aea8ed80fcdac98b293ed85526ac2689",
+      "output_sha256": "a99a55f3d521da23b749ceb9c95c4565b44dcee0970dfe10ac10f0047539fcbe",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.54009659728305e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.507032720837742e-09,
+        "oracle_momentum_error_Pa_s": 7.013833958069426e-14,
+        "oracle_average_flow_error_m3_s": 1.0438863688115151e-15,
+        "oracle_average_pressure_error_Pa": 1.1590373105718754e-09,
+        "local_mass_error_m3": 6.51718802524338e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -9.27258200701968e-08,
+        -2.602269669970699e-08
+      ],
+      "intermediate_witness_checks": 1935,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.998543821592989,
+        1.0059490085664404
+      ],
+      "final_pressure_Pa": [
+        829.6135919711351,
+        830.7790463034055,
+        183.23903390285034,
+        34.14079297847697,
+        22.668650764033114
+      ],
+      "final_flow_m3_s": [
+        4.6276038729794174e-07,
+        0,
+        -9.855867955227823e-05,
+        -4.542226414621902e-06,
+        -0.00012185276542124673,
+        -4.164580268725638e-05
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.346320939393019,
+      "maximum_sampled_normal_mach": 0.00956091696969434,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.756696593208442e-09,
+        -9.883440253907196e-09,
+        7.189962672886785e-08,
+        2.636296339390323e-08,
+        2.0612670307833658e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.44177355452565,
+      "audit": "out/planar-open-boundary/mouth_open-closure-128-audit.json",
+      "audit_sha256": "1cad53da827da1f6c73442d499d54ad9d613334944e3dcfd6b5bd7f8fca0bcca"
+    },
+    {
+      "name": "both_open-closure",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-closure-16.txt",
+      "output": "out/planar-open-boundary/both_open-closure-16.json",
+      "log": "out/planar-open-boundary/both_open-closure-16.log",
+      "input_sha256": "19723ce78223451a4255d5442a35dbd30e19d0f78bd4c3091698c1cf129545ea",
+      "output_sha256": "149fc73aabe4bde3d81620402a2ce5fa2661670156b9e0af00664c28fda129e5",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 3.9302328752599536e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.9543798518716358e-09,
+        "oracle_momentum_error_Pa_s": 1.7709163128987182e-13,
+        "oracle_average_flow_error_m3_s": 4.279224002055881e-15,
+        "oracle_average_pressure_error_Pa": 2.988599590025842e-09,
+        "local_mass_error_m3": 5.533838297979755e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        1.0392928506163367e-07,
+        0.0,
+        0.0,
+        -9.282453220440387e-08,
+        -2.566084029432343e-08
+      ],
+      "intermediate_witness_checks": 255,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.998701644696967,
+        1.0048122583958081
+      ],
+      "final_pressure_Pa": [
+        573.7811792317075,
+        574.0270444050916,
+        179.19287667645222,
+        40.49444982760481,
+        -12.864500841287297
+      ],
+      "final_flow_m3_s": [
+        -4.371131966287343e-05,
+        0,
+        -9.956388419911083e-05,
+        -7.237544574967105e-06,
+        -0.00012624618790380162,
+        -3.6383761035597084e-05,
+        0.0001800537917028785
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.165696985686899,
+      "maximum_sampled_normal_mach": 0.009044848530533996,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        -6.95476309449001e-08,
+        -3.4508324983820686e-08,
+        7.18194690953146e-08,
+        2.6693619658591762e-08,
+        2.0098954611905752e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 63.392104841315486,
+      "audit": "out/planar-open-boundary/both_open-closure-16-audit.json",
+      "audit_sha256": "16dbea8d1292a56914edc9b136af01f08992cca01977bfd87d2983f83e94d5fd"
+    },
+    {
+      "name": "both_open-closure",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-closure-32.txt",
+      "output": "out/planar-open-boundary/both_open-closure-32.json",
+      "log": "out/planar-open-boundary/both_open-closure-32.log",
+      "input_sha256": "092b43d469270f20b72cbc01a133a37b907ad4fef93cafe39bcef1b1f118a498",
+      "output_sha256": "eb9d1fecbef897981724d212f7ffd39c421665c4a42303433abd0957ad19890c",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.675621868843738e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.16255102714058e-09,
+        "oracle_momentum_error_Pa_s": 1.580124919797754e-13,
+        "oracle_average_flow_error_m3_s": 3.2524642159213746e-15,
+        "oracle_average_pressure_error_Pa": 2.0799006961169653e-09,
+        "local_mass_error_m3": 4.422417747438193e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        1.0393141181032631e-07,
+        0.0,
+        0.0,
+        -9.273736839215622e-08,
+        -2.5987639726541685e-08
+      ],
+      "intermediate_witness_checks": 495,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9985437895204996,
+        1.0048131038630128
+      ],
+      "final_pressure_Pa": [
+        573.7091317222195,
+        574.237754174977,
+        182.9203699419424,
+        34.77278570022323,
+        19.19909532853406
+      ],
+      "final_flow_m3_s": [
+        -4.3805994511377816e-05,
+        0,
+        -9.87133725719598e-05,
+        -4.321743195254691e-06,
+        -0.00012176519436793777,
+        -4.219622165790676e-05,
+        0.00018004992942486077
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.1658893900407787,
+      "maximum_sampled_normal_mach": 0.009045398257259368,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        -6.956996462510019e-08,
+        -3.448811597373852e-08,
+        7.189331373914074e-08,
+        2.639585348501823e-08,
+        2.056250968304876e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.16853164479588,
+      "audit": "out/planar-open-boundary/both_open-closure-32-audit.json",
+      "audit_sha256": "9e5ed23ca084c131f353ac26d565b4975cdfb0946020c5b36dbaa7697c8393fd"
+    },
+    {
+      "name": "both_open-closure",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-closure-64.txt",
+      "output": "out/planar-open-boundary/both_open-closure-64.json",
+      "log": "out/planar-open-boundary/both_open-closure-64.log",
+      "input_sha256": "c7a837f46ccdd015407ec26fbe2dc90f8c6449e9ed0b32f97392cfaf1d832e78",
+      "output_sha256": "98060f4da0ad48be05800020c3cea4061d7c737f097ce707bfd934c356245467",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 4.607859233063394e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.8441141946823336e-09,
+        "oracle_momentum_error_Pa_s": 1.4669342129902674e-13,
+        "oracle_average_flow_error_m3_s": 2.6243587923462097e-15,
+        "oracle_average_pressure_error_Pa": 1.6707417671568692e-09,
+        "local_mass_error_m3": 6.6377108254317706e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        1.0393173100794498e-07,
+        0.0,
+        0.0,
+        -9.272659396797156e-08,
+        -2.6020616879979305e-08
+      ],
+      "intermediate_witness_checks": 975,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9985438269312898,
+        1.0048147527443616
+      ],
+      "final_pressure_Pa": [
+        573.7034451774049,
+        574.2528024190501,
+        183.21972300076652,
+        34.1804342737321,
+        22.45692792665426
+      ],
+      "final_flow_m3_s": [
+        -4.381447548559201e-05,
+        0,
+        -9.856862033127446e-05,
+        -4.525411610041366e-06,
+        -0.00012184387645455676,
+        -4.168680388752452e-05,
+        0.00018004973978872092
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.3322359720439505,
+      "maximum_sampled_normal_mach": 0.009520674205839859,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        -6.957172737129242e-08,
+        -3.4486672708358603e-08,
+        7.18992441643442e-08,
+        2.6365026401542162e-08,
+        2.0609609353771657e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.42577876693352,
+      "audit": "out/planar-open-boundary/both_open-closure-64-audit.json",
+      "audit_sha256": "f4d0ca7a135cdd6947ec81c3a11a68933e2593c00881985df92057fcef22a1f8"
+    },
+    {
+      "name": "both_open-closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-closure-128.txt",
+      "output": "out/planar-open-boundary/both_open-closure-128.json",
+      "log": "out/planar-open-boundary/both_open-closure-128.log",
+      "input_sha256": "f3e3b7e051026143e7cb10283c7cda8ebc61de4cd7cf54542a3cedb4b96ead4b",
+      "output_sha256": "cfc20bb3d2529fcc5d6c5033ce455a08b866fd726b63a7829a3cf06991298ab0",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.54009659728305e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.563307705509942e-09,
+        "oracle_momentum_error_Pa_s": 1.0044395870600908e-13,
+        "oracle_average_flow_error_m3_s": 1.1279158488274044e-15,
+        "oracle_average_pressure_error_Pa": 1.4194938557920977e-09,
+        "local_mass_error_m3": 6.282514300522672e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.006756807046916155,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        1.0393179930255406e-07,
+        0.0,
+        0.0,
+        -9.272583966048129e-08,
+        -2.6022753615376214e-08
+      ],
+      "intermediate_witness_checks": 1935,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9985438215929711,
+        1.0048147477072549
+      ],
+      "final_pressure_Pa": [
+        573.7028848218207,
+        574.2539057429138,
+        183.2387828076048,
+        34.140922125609514,
+        22.668634083197436
+      ],
+      "final_flow_m3_s": [
+        -4.381557160196181e-05,
+        0,
+        -9.855872946199546e-05,
+        -4.542406557256511e-06,
+        -0.00012185260929266969,
+        -4.164525248694735e-05,
+        0.00018004973610516364
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.3322607964971915,
+      "maximum_sampled_normal_mach": 0.00952074513284912,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        -6.957190107337568e-08,
+        -3.4486566889425276e-08,
+        7.189962175446908e-08,
+        2.636297011496313e-08,
+        2.061267006667279e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 66.44179099744343,
+      "audit": "out/planar-open-boundary/both_open-closure-128-audit.json",
+      "audit_sha256": "8309781e704ded8f04842d9a4ac6576f71f1aee551563316cf550d2a38991e53"
+    },
+    {
+      "name": "mouth_open-release",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-release-16.txt",
+      "output": "out/planar-open-boundary/mouth_open-release-16.json",
+      "log": "out/planar-open-boundary/mouth_open-release-16.log",
+      "input_sha256": "acd8dcab7614d37bf8af69fa65f1c2971785a4d6ea95107f6cb2aa9b3c0a301f",
+      "output_sha256": "6fb0be7153cd091a89e4b563aa53463207b79acd557404a7d8f46ac088206474",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 4.1335207826009857e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 3.0032651920919307e-09,
+        "oracle_momentum_error_Pa_s": 1.2526649639452159e-13,
+        "oracle_average_flow_error_m3_s": 3.2339040299811384e-15,
+        "oracle_average_pressure_error_Pa": 1.8277148683409905e-09,
+        "local_mass_error_m3": 4.631384249684402e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -4.0092043027739873e-07,
+        -1.5401535426118248e-07
+      ],
+      "intermediate_witness_checks": 255,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9938626293421006,
+        1.0124931975855274
+      ],
+      "final_pressure_Pa": [
+        1744.6750428188816,
+        1732.8648898937233,
+        697.8508923211671,
+        298.689758856547,
+        291.2234048322915
+      ],
+      "final_flow_m3_s": [
+        5.096031630079504e-05,
+        6.509753296204e-05,
+        -0.0004165209796787321,
+        4.694664768315581e-06,
+        -0.0004334116818655633,
+        -0.0001988635284357655
+      ],
+      "maximum_sampled_normal_speed_m_s": 13.56662306190045,
+      "maximum_sampled_normal_mach": 0.03876178017685843,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        4.52144702973672e-08,
+        -5.630784651263924e-08,
+        3.23209095239769e-07,
+        9.171763451506689e-08,
+        1.5110243099901718e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 367.8296273785143,
+      "audit": "out/planar-open-boundary/mouth_open-release-16-audit.json",
+      "audit_sha256": "59e585151bdd91a5e8031cffc7367c14aa2c65aef5aa587ebda952f1b2a2fd9f"
+    },
+    {
+      "name": "mouth_open-release",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-release-32.txt",
+      "output": "out/planar-open-boundary/mouth_open-release-32.json",
+      "log": "out/planar-open-boundary/mouth_open-release-32.log",
+      "input_sha256": "960ee40e7995c1292d122db33af9cd142073a3d5c0d8c562e8bc2472e43fbd06",
+      "output_sha256": "1282535ed9f5f6e2d479425ecff7b3cbe362b6627a3ad8b4286746f9fbc5aace",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.2690460541616737e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 2.46433273787261e-09,
+        "oracle_momentum_error_Pa_s": 1.1164983867995026e-13,
+        "oracle_average_flow_error_m3_s": 2.9199360214882814e-15,
+        "oracle_average_pressure_error_Pa": 2.158685674658045e-09,
+        "local_mass_error_m3": 5.684798759770683e-21,
+        "global_mass_error_m3": 2.710505431213761e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -4.00433719612554e-07,
+        -1.5505622616451128e-07
+      ],
+      "intermediate_witness_checks": 495,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9935824814846864,
+        1.0124912201746128
+      ],
+      "final_pressure_Pa": [
+        1744.398897384674,
+        1734.1548181016444,
+        717.2028120398181,
+        274.3392905048056,
+        386.6386947061721
+      ],
+      "final_flow_m3_s": [
+        5.103974661212852e-05,
+        6.465688036629217e-05,
+        -0.000410645356765515,
+        -2.6062928569947214e-05,
+        -0.0004304700445470422,
+        -0.00014796018317074614
+      ],
+      "maximum_sampled_normal_speed_m_s": 13.474789049216055,
+      "maximum_sampled_normal_mach": 0.03849939728347444,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        4.513135520786964e-08,
+        -5.619044042580477e-08,
+        3.235623922270198e-07,
+        9.01001466423378e-08,
+        1.528864921256357e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 372.85837746244835,
+      "audit": "out/planar-open-boundary/mouth_open-release-32-audit.json",
+      "audit_sha256": "e23b45a06494dd621797c471d2794cb04ca5123a0284690cd44b14031a667ba1"
+    },
+    {
+      "name": "mouth_open-release",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-release-64.txt",
+      "output": "out/planar-open-boundary/mouth_open-release-64.json",
+      "log": "out/planar-open-boundary/mouth_open-release-64.log",
+      "input_sha256": "5ab248410bd20ea92470c9caf35acbf61487b3ebd5799224503dd45f422bbdcf",
+      "output_sha256": "6ed036de60c0716335cab7bd0ca114c39bf3af425ff6309f91de3df0194c317c",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 3.8624702394796095e-19,
+        "port_area_error_m2": 5.421010862427522e-18,
+        "oracle_pressure_error_Pa": 1.2680771988016204e-09,
+        "oracle_momentum_error_Pa_s": 7.549516567451064e-14,
+        "oracle_average_flow_error_m3_s": 1.2342794700800214e-15,
+        "oracle_average_pressure_error_Pa": 1.156763573817443e-09,
+        "local_mass_error_m3": 6.4467484262056615e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -4.004130631769015e-07,
+        -1.5509519441109425e-07
+      ],
+      "intermediate_witness_checks": 975,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9934504545937511,
+        1.0124910932076787
+      ],
+      "final_pressure_Pa": [
+        1744.3811664523296,
+        1734.2452442622366,
+        718.1920328732662,
+        273.3095055149521,
+        390.1557999564606
+      ],
+      "final_flow_m3_s": [
+        5.103735734164355e-05,
+        6.461505863533257e-05,
+        -0.0004099243666503158,
+        -2.9523512063651035e-05,
+        -0.00043118261388530924,
+        -0.00014269354989588132
+      ],
+      "maximum_sampled_normal_speed_m_s": 13.4660732095535,
+      "maximum_sampled_normal_mach": 0.03847449488443857,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        4.5126018498130695e-08,
+        -5.618221005949733e-08,
+        3.235804518689191e-07,
+        9.003174283553885e-08,
+        1.5295225444489884e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 373.007518611375,
+      "audit": "out/planar-open-boundary/mouth_open-release-64-audit.json",
+      "audit_sha256": "847efcff3866193a1725a851c020b6e74fd6cf998f3a6dff1e7e59d21e87bffb"
+    },
+    {
+      "name": "mouth_open-release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/mouth_open-release-128.txt",
+      "output": "out/planar-open-boundary/mouth_open-release-128.json",
+      "log": "out/planar-open-boundary/mouth_open-release-128.log",
+      "input_sha256": "7c2432f927344839fa58764716337cff5e4b782dd32c1a6d2119a70efe8c2efe",
+      "output_sha256": "55c76145a1ec33fb83de450dd92445bcfd0b445c8e04c65c6bcdcac44b4e62a9",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.404571325722362e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 1.192006493511144e-09,
+        "oracle_momentum_error_Pa_s": 9.903189379656396e-14,
+        "oracle_average_flow_error_m3_s": 1.3126672871507233e-15,
+        "oracle_average_pressure_error_Pa": 9.306404535891488e-10,
+        "local_mass_error_m3": 6.387902280440756e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        0.0,
+        0.0,
+        0.0,
+        -4.004120495472061e-07,
+        -1.5509776893494735e-07
+      ],
+      "intermediate_witness_checks": 1935,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9934501960144719,
+        1.0124910855806815
+      ],
+      "final_pressure_Pa": [
+        1744.3801013421796,
+        1734.2509564037082,
+        718.2123233003449,
+        273.2605738059966,
+        390.382641141632
+      ],
+      "final_flow_m3_s": [
+        5.103554605778457e-05,
+        6.461245539945165e-05,
+        -0.00040987413295873415,
+        -2.9748710613807768e-05,
+        -0.0004312483290429552,
+        -0.0001423593600430073
+      ],
+      "maximum_sampled_normal_speed_m_s": 13.465530683311249,
+      "maximum_sampled_normal_mach": 0.03847294480946071,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        4.512569791805427e-08,
+        -5.618169015445546e-08,
+        3.235808222997013e-07,
+        9.00284925306708e-08,
+        1.5295649588818255e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 373.02068918871356,
+      "audit": "out/planar-open-boundary/mouth_open-release-128-audit.json",
+      "audit_sha256": "fa1c4ac2866130a1be1c82346fd195a0e7c33661bbe26a2920b3bbb0674607fa"
+    },
+    {
+      "name": "both_open-release",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-release-16.txt",
+      "output": "out/planar-open-boundary/both_open-release-16.json",
+      "log": "out/planar-open-boundary/both_open-release-16.log",
+      "input_sha256": "955da3769b33cd74f93f06509da37dcadc0f037b9b5fc3bd73908999b74f6524",
+      "output_sha256": "05cf06e8b172a3cfb52dc93930062ef1b8f01a921a834b3d007185efbe3ed0bc",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 4.1335207826009857e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 3.0023556973901577e-09,
+        "oracle_momentum_error_Pa_s": 1.2807810367831962e-13,
+        "oracle_average_flow_error_m3_s": 3.3685077296952137e-15,
+        "oracle_average_pressure_error_Pa": 1.834223439800553e-09,
+        "local_mass_error_m3": 5.646541656440105e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        5.152197648322047e-07,
+        0.0,
+        0.0,
+        -4.021080943570848e-07,
+        -1.5670702862982463e-07
+      ],
+      "intermediate_witness_checks": 255,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9938626293421006,
+        1.0069072469422888
+      ],
+      "final_pressure_Pa": [
+        440.66549480793384,
+        430.3515874570134,
+        696.1362039518203,
+        296.9252688698426,
+        282.9005508267703
+      ],
+      "final_flow_m3_s": [
+        -0.0001787115305799415,
+        3.5205528398965776e-05,
+        -0.0004163789291003416,
+        1.4361756597793958e-05,
+        -0.0004424065686409821,
+        -0.00021842436721988338,
+        0.0008650564294230749
+      ],
+      "maximum_sampled_normal_speed_m_s": 7.336992843681382,
+      "maximum_sampled_normal_mach": 0.02096283669623252,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        -3.472702745371887e-07,
+        -1.7485939763787743e-07,
+        3.2317779114985044e-07,
+        9.16004276870988e-08,
+        1.5094681149282048e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 364.8877473195856,
+      "audit": "out/planar-open-boundary/both_open-release-16-audit.json",
+      "audit_sha256": "40c035aba570525b31ac77b9eae63a876fb1f4ddcdf13993e9e8d785f31f083e"
+    },
+    {
+      "name": "both_open-release",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-release-32.txt",
+      "output": "out/planar-open-boundary/both_open-release-32.json",
+      "log": "out/planar-open-boundary/both_open-release-32.log",
+      "input_sha256": "f8a4fbcbdb614fdf6097f93763e07ef90c5c54ea873fe8b6f1af34b2d7ad42d4",
+      "output_sha256": "2a5fdfb7ed8c6004c6220264d4ac6083a89f57937e9f39a51c95928471099fe6",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.2690460541616737e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 2.4644464247103315e-09,
+        "oracle_momentum_error_Pa_s": 1.1686658585308152e-13,
+        "oracle_average_flow_error_m3_s": 3.031158223726349e-15,
+        "oracle_average_pressure_error_Pa": 2.15902673517121e-09,
+        "local_mass_error_m3": 5.082197683525802e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        5.152396521287994e-07,
+        0.0,
+        0.0,
+        -4.016214964395747e-07,
+        -1.577478848062996e-07
+      ],
+      "intermediate_witness_checks": 495,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9935824814846864,
+        1.006907895976452
+      ],
+      "final_pressure_Pa": [
+        440.36019541462235,
+        431.51975263255645,
+        715.4897630659226,
+        272.5766649424172,
+        378.31120741383336
+      ],
+      "final_flow_m3_s": [
+        -0.0001788740799170931,
+        3.476514022709684e-05,
+        -0.00041050432999380644,
+        -1.6402124407233257e-05,
+        -0.0004394659620334084,
+        -0.00016751133629431823,
+        0.0008651297967579417
+      ],
+      "maximum_sampled_normal_speed_m_s": 7.245213938140534,
+      "maximum_sampled_normal_mach": 0.020700611251830096,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        -3.47362164473631e-07,
+        -1.747530741222017e-07,
+        3.235311180666115e-07,
+        8.998306365936862e-08,
+        1.5273078598692045e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 369.9171468738433,
+      "audit": "out/planar-open-boundary/both_open-release-32-audit.json",
+      "audit_sha256": "de5bc8f0907af4e80187df07ecbde45131d92699fecb0f3a17ac2aa991ef64c9"
+    },
+    {
+      "name": "both_open-release",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-release-64.txt",
+      "output": "out/planar-open-boundary/both_open-release-64.json",
+      "log": "out/planar-open-boundary/both_open-release-64.log",
+      "input_sha256": "31c7912ea6e4e1d51db1386c5a50675ad76994f046f47fe293f31b799e8e7319",
+      "output_sha256": "729bd5207df471cd8984fda403d2067584bdeff614313eb00cba8a7f9cbf2a6b",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 3.8624702394796095e-19,
+        "port_area_error_m2": 5.421010862427522e-18,
+        "oracle_pressure_error_Pa": 1.2740883903461508e-09,
+        "oracle_momentum_error_Pa_s": 5.2817125673065846e-14,
+        "oracle_average_flow_error_m3_s": 1.2764312176671844e-15,
+        "oracle_average_pressure_error_Pa": 1.1575878033909248e-09,
+        "local_mass_error_m3": 6.036512078819109e-21,
+        "global_mass_error_m3": 2.710505431213761e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        5.152416879713315e-07,
+        0.0,
+        0.0,
+        -4.0160078321054765e-07,
+        -1.577868504608012e-07
+      ],
+      "intermediate_witness_checks": 975,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9934504545937511,
+        1.0069192499260142
+      ],
+      "final_pressure_Pa": [
+        440.3385070176994,
+        431.6013209805184,
+        716.4792730483553,
+        271.54573384010325,
+        381.82686704570625
+      ],
+      "final_flow_m3_s": [
+        -0.0001788941901736013,
+        3.472332956664413e-05,
+        -0.0004097829610947474,
+        -1.9861289013344403e-05,
+        -0.0004401786859946739,
+        -0.00016224705960790137,
+        0.0008651363719501424
+      ],
+      "maximum_sampled_normal_speed_m_s": 7.236500405622154,
+      "maximum_sampled_normal_mach": 0.020675715444634726,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        -3.4736869231305045e-07,
+        -1.747456499721703e-07,
+        3.2354918298733914e-07,
+        8.99145837216719e-08,
+        1.527965212762217e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 370.0653412013662,
+      "audit": "out/planar-open-boundary/both_open-release-64-audit.json",
+      "audit_sha256": "abcdbf6bb94869805bc9ffc1ee956252e7d0d98c95773855ffe06a3f6339f571"
+    },
+    {
+      "name": "both_open-release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/both_open-release-128.txt",
+      "output": "out/planar-open-boundary/both_open-release-128.json",
+      "log": "out/planar-open-boundary/both_open-release-128.log",
+      "input_sha256": "6ccbeea002aefaa1aa0fd7d87e9c9bfe8a68a8ff5c678bea6d74e0d134b87699",
+      "output_sha256": "6c8592763d02bf9ce193cc17793b0aa565802a635983a69fbe8412d3f3510702",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.404571325722362e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 1.4275656212703325e-09,
+        "oracle_momentum_error_Pa_s": 8.709699628184353e-14,
+        "oracle_average_flow_error_m3_s": 1.2816353880951148e-15,
+        "oracle_average_pressure_error_Pa": 1.1466454452602193e-09,
+        "local_mass_error_m3": 6.14781310764724e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 1.3552527156068805e-20,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "boundary_loads": [
+        [
+          266,
+          3,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          266,
+          4,
+          0.008565858581929889,
+          0.0
+        ],
+        [
+          535,
+          0,
+          0.045,
+          600.0
+        ]
+      ],
+      "discharged_reference_volume_by_region_m3": [
+        5.152419498225017e-07,
+        0.0,
+        0.0,
+        -4.0159977272504974e-07,
+        -1.5778941337264616e-07
+      ],
+      "intermediate_witness_checks": 1935,
+      "group_balance_includes_external_ports": true,
+      "relative_density_range": [
+        0.9934501960144719,
+        1.0069192376926341
+      ],
+      "final_pressure_Pa": [
+        440.33688124910236,
+        431.6059097906307,
+        716.4994960736814,
+        271.49698940924884,
+        382.0531446931941
+      ],
+      "final_flow_m3_s": [
+        -0.00017889706086348812,
+        3.472071784792267e-05,
+        -0.00040973272933042716,
+        -2.008680141696336e-05,
+        -0.0004402444102061546,
+        -0.00016191236757669193,
+        0.000865137014014912
+      ],
+      "maximum_sampled_normal_speed_m_s": 7.2359561115172095,
+      "maximum_sampled_normal_mach": 0.0206741603186206,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        -3.473691816418089e-07,
+        -1.7474523230998183e-07,
+        3.2354955218760607e-07,
+        8.991134585681422e-08,
+        1.528007521825604e-07
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": 370.07851828435616,
+      "audit": "out/planar-open-boundary/both_open-release-128-audit.json",
+      "audit_sha256": "b10bb46a08d4412b060b4a8a4b974ccf3d21f3d909063b47e03a661a0848a427"
+    }
+  ],
+  "controls": [
+    {
+      "name": "open-tube-8",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-8-16.txt",
+      "output": "out/planar-open-boundary/open-tube-8-16.json",
+      "log": "out/planar-open-boundary/open-tube-8-16.log",
+      "input_sha256": "2d0c56930c53b1e7d084159a2463173528cd545247250762aacdcf53f63925de",
+      "output_sha256": "7ef7d6c507e1c757c7d8ada6174ac97e15ea7f46797c59933de9acaa87f1542a",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 2.9049192033170357e-05,
+      "maximum_relative_energy_error": 2.220446049250313e-16,
+      "discrete_frequency_Hz": 727.9959115884719,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-8",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-8-32.txt",
+      "output": "out/planar-open-boundary/open-tube-8-32.json",
+      "log": "out/planar-open-boundary/open-tube-8-32.log",
+      "input_sha256": "9e5c1ad54eed59f872021360c7426341682b613f3da85bd4277f78253eb28468",
+      "output_sha256": "8353bd2c120c8b418c189255d87dace3da1e6017c922fc88aacf50270e891268",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.81648194264028e-06,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 727.9959115884719,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-8",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-8-64.txt",
+      "output": "out/planar-open-boundary/open-tube-8-64.json",
+      "log": "out/planar-open-boundary/open-tube-8-64.log",
+      "input_sha256": "516c0f28bf5cfe1d4b8da374ce228af8de73c5f397e164dca860d6cfa5240761",
+      "output_sha256": "6fa6c93df0cd19eae575bcc8f286921e81c8e13042c0a8d210fb321ae0a49df5",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "exact_discrete_pressure_error_Pa": 1.135443277178183e-07,
+      "maximum_relative_energy_error": 3.3306690738754696e-16,
+      "discrete_frequency_Hz": 727.9959115884719,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-16",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-16-16.txt",
+      "output": "out/planar-open-boundary/open-tube-16-16.json",
+      "log": "out/planar-open-boundary/open-tube-16-16.log",
+      "input_sha256": "b1ba3e08eda178f29398a8288400db339a00501fb76562af2f3deecaedec1796",
+      "output_sha256": "4b02fd8da4ca15ad6aecaf12013a1d60a97cfe9cde8bfae5882420c36c70501e",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 2.9323388520907656e-05,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 728.8738720883078,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-16",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-16-32.txt",
+      "output": "out/planar-open-boundary/open-tube-16-32.json",
+      "log": "out/planar-open-boundary/open-tube-16-32.log",
+      "input_sha256": "5b61060380d1de8e6e95c7be4f84acd4a7bc4d061500162f308adffabe0a38b9",
+      "output_sha256": "4cf0d7c56383ea38a4ce9472ba56bf27d02e7bf63df96067c0429f3ac9b178c7",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.8336300371402103e-06,
+      "maximum_relative_energy_error": 6.661338147750939e-16,
+      "discrete_frequency_Hz": 728.8738720883078,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-16",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-16-64.txt",
+      "output": "out/planar-open-boundary/open-tube-16-64.json",
+      "log": "out/planar-open-boundary/open-tube-16-64.log",
+      "input_sha256": "20073e7f55aa94b1320523e435d3326d10959034a0759c17f275392b47e4808d",
+      "output_sha256": "b9bc21df1faa41b3145a2e418447ece6ead71435499680abdb656f06c0f387f2",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "exact_discrete_pressure_error_Pa": 1.146161849874261e-07,
+      "maximum_relative_energy_error": 6.661338147750939e-16,
+      "discrete_frequency_Hz": 728.8738720883078,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-32",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-32-16.txt",
+      "output": "out/planar-open-boundary/open-tube-32-16.json",
+      "log": "out/planar-open-boundary/open-tube-32-16.log",
+      "input_sha256": "52a0c70d1db500fb400d6e185fd201f6cdb0111ad13a5dae265da3e90d5eff4c",
+      "output_sha256": "585290f3d207165119cea459e914c34375703a1984e21357369581c09c2ef91b",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 2.9392267304473307e-05,
+      "maximum_relative_energy_error": 9.992007221626409e-16,
+      "discrete_frequency_Hz": 729.0934614076035,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-32",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-32-32.txt",
+      "output": "out/planar-open-boundary/open-tube-32-32.json",
+      "log": "out/planar-open-boundary/open-tube-32-32.log",
+      "input_sha256": "eabc9d17c9f2cf89251dd0e63f733a938f0fb4d3674d8a6b82cf5fe51cda06c1",
+      "output_sha256": "a3194d7a3fc919b90a7ccf3879572744e7f9b12546886f7eabd78c1129cf893e",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.8379376847121875e-06,
+      "maximum_relative_energy_error": 6.661338147750939e-16,
+      "discrete_frequency_Hz": 729.0934614076035,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "open-tube-32",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/open-tube-32-64.txt",
+      "output": "out/planar-open-boundary/open-tube-32-64.json",
+      "log": "out/planar-open-boundary/open-tube-32-64.log",
+      "input_sha256": "008ddd3b43eb1737ea6a407a33fb30662b72d34081596ac05206188ba0871d50",
+      "output_sha256": "1637d61da9bc716128846e31aaa65b94528650488d6a6353d5e52cc774e418c5",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "exact_discrete_pressure_error_Pa": 1.1488551621141596e-07,
+      "maximum_relative_energy_error": 9.992007221626409e-16,
+      "discrete_frequency_Hz": 729.0934614076035,
+      "continuum_frequency_Hz": 729.1666666666667
+    },
+    {
+      "name": "driven-cap",
+      "subdivisions": 8,
+      "steps": 8,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/driven-cap-8.txt",
+      "output": "out/planar-open-boundary/driven-cap-8.json",
+      "log": "out/planar-open-boundary/driven-cap-8.log",
+      "input_sha256": "90d0e9e30cbbed4993478bde71d9cad25a25ab318af7945c638196b383897adc",
+      "output_sha256": "b6c84297e8e22fdc17befcede58a4fa383ff9ee4145b9f2395738698116e173a",
+      "log_sha256": "cd1a42eb9f463573f85f647db37bcbf748ecaacc7988e081fac7367b26e3bbd8",
+      "exact_pressure_error_Pa": 1.0695255269865811e-05,
+      "source_work_J": 8.410685379231475e-06,
+      "source_energy_error_J": 0.0
+    },
+    {
+      "name": "driven-cap",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/driven-cap-16.txt",
+      "output": "out/planar-open-boundary/driven-cap-16.json",
+      "log": "out/planar-open-boundary/driven-cap-16.log",
+      "input_sha256": "7bf05fccf4e4840093f00d2e87710c4305f3d4b333f5f38675a051997ccebaf9",
+      "output_sha256": "38bf854b149569a8be31664c46c2fdc0cb912d8e88169e631c8e8eda81e1907b",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_pressure_error_Pa": 6.686319977688981e-07,
+      "source_work_J": 8.410686137420818e-06,
+      "source_energy_error_J": 0.0
+    },
+    {
+      "name": "driven-cap",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--boundary-loads"
+      ],
+      "input": "out/planar-open-boundary/driven-cap-32.txt",
+      "output": "out/planar-open-boundary/driven-cap-32.json",
+      "log": "out/planar-open-boundary/driven-cap-32.log",
+      "input_sha256": "a6bab451504896dbde05a4ebebf9674f822d4419929faf1eadef298a00a97d74",
+      "output_sha256": "eab097a121b9cb63677f472c4c0bd36b3f028bb4db3d045e77feff15c23b12cc",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_pressure_error_Pa": 4.1792276306296117e-08,
+      "source_work_J": 8.410686184820947e-06,
+      "source_energy_error_J": 1.6940658945086007e-21
+    },
+    {
+      "name": "sealed-regression-closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-open-boundary/sealed-regression-closure-128.txt",
+      "output": "out/planar-open-boundary/sealed-regression-closure-128.json",
+      "log": "out/planar-open-boundary/sealed-regression-closure-128.log",
+      "input_sha256": "4388ae69f6b20063ae61f11f93f80a3c55b088f22d7a89d56a3dc2b8557c0f4f",
+      "output_sha256": "3784ebed5f1c6b481130e1cffd8b8bde1ea172e698ad524ec3fc492e5e3cbccc",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "previous_output": "out/planar-inertive-motion/closure-128.json",
+      "previous_output_sha256": "07ebc358264223234a3709b249dd17193d4ec758fbc3e2d955bf685610904426",
+      "maximum_state_difference": 0.0
+    },
+    {
+      "name": "sealed-regression-release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-open-boundary/sealed-regression-release-128.txt",
+      "output": "out/planar-open-boundary/sealed-regression-release-128.json",
+      "log": "out/planar-open-boundary/sealed-regression-release-128.log",
+      "input_sha256": "3eb9f103c8f15746f9150e7a3d94aad315ad8401db90b2de214b3a7418ed3897",
+      "output_sha256": "c90a6877e74c2d9ae0250919ef657059c16759283e4c532133c8c23b4a593157",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "previous_output": "out/planar-inertive-motion/release-128.json",
+      "previous_output_sha256": "6d93f6a3b77c01b10bafc86649494511afca6aa072dce34164c0de18e9bdccc5",
+      "maximum_state_difference": 0.0
+    }
+  ],
+  "refinement": [
+    {
+      "name": "closure",
+      "case": "mouth_open",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 32.0645444290137
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 3.2579332883312375
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.21171296280475715
+        }
+      ]
+    },
+    {
+      "name": "closure",
+      "case": "both_open",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 32.06359616982136
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 3.257832598120199
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.21170615654317615
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "case": "mouth_open",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 95.41528987388057
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 3.517105250288523
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.22684118517139495
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "case": "both_open",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 95.41065658706304
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 3.515659631872893
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.22627764748784784
+        }
+      ]
+    }
+  ],
+  "conservative_cap_to_solid_sweep_clearance_m": {
+    "closure": {
+      "supraglottal_entry": 0.03293686209830074,
+      "mouth_end": 0.016486591021999994
+    },
+    "release": {
+      "supraglottal_entry": 0.03293686221793877,
+      "mouth_end": 0.020562170912600004
+    }
+  },
+  "input_poses": {
+    "out/planar-boundary/poses/pose-5.031.json": "fb5f64dd9e1dff7872b289b82104cf33c55d3dbb3653c7b34d5bde247c1a33b0",
+    "out/planar-boundary/poses/pose-5.032.json": "b83ca9a82a6605c98b320a66528d71fbed9c53bd3e03d11fbad1c34c93ae493c",
+    "out/planar-boundary/poses/pose-5.062.json": "84bff3cd353072dca169eb9a7eba6d7d530875ff23ec0e56bc4db37e7ef715b5",
+    "out/planar-boundary/poses/pose-5.063.json": "dffafa1cf007c019dc61ea95ee368f4f1cb0c849a737423f4d206b0c28a13cce"
+  },
+  "contact_receipt": "reports/contact_partition_reference.json",
+  "contact_sha256": "6e56044140f100a4b6b3b1e1ca2075142195fdf8f6390773cece271e953f1275",
+  "hashes": {
+    "tools/planar_open_boundary_reference.py": "3a14e27ff92c3e3d9f5510ade68557e36865607d8b47e8cb408849e4e21cf5d5",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "tools/planar_boundary_reference.py": "73accfa3f3dc2c666048212636b0b24c1dac387cf01ec3820eac18acff72dcaa",
+    "tools/planar_inertive_motion_probe.cpp": "2ec96478b3a8ff0e5e1274a5c95b44fd6859ff2f346d51a9c4eecf33fabf5bb0",
+    "tools/planar_pressure_motion_reference.py": "3e0ef308b005136eb3b50d4680e7b1da7533102a9c4bd56deed2e0e0d130fa2c",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "src/planar_airspace.cpp": "f19a73ddd492d7b8d15c9ce35e649c87bec85be84fce400b506446aa9634a337",
+    "include/ducklips/planar_airspace.hpp": "a6fbcec06637360e559bd949ae152e2fcb036470ecaa4bbf0269a7887cdff7cd",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "include/ducklips/planar_face_motion.hpp": "0212b82dc5baf6ec7ff9248434fdb825d214c9651c441c900aadffa8b86fad36",
+    "src/moving_tree.cpp": "c7573c7657b4a5855ae4c54803c35c740a99076fe793653aa3b2dc29acd35b7f",
+    "include/ducklips/moving_tree.hpp": "0f09f08b2c42545fed2ba21af3c30ee392c34b1b096bc02e7677a0d66d470738",
+    "build/ducklips_planar_inertive_motion_probe": "a94998dbd3fbbabafa1ad70ec1310d5f7c4f42df96d48aef1ce28bb9c6d3dc3c"
+  }
+}

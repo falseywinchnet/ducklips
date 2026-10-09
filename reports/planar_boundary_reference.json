@@ -1,0 +1,2587 @@
+{
+  "use": "end-cap attachments of the tongue/floor domain; not complete lip or glottal anatomy",
+  "runs": [
+    {
+      "time": 5.02,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000224154317,
+        "mouth_end": 0.0004280849587601446
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.02,
+        "regions": 1270,
+        "links": 2377,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.848979353782387e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.020.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.020.json",
+      "input": "out/planar-boundary/pose-5.020.txt",
+      "output": "out/planar-boundary/pose-5.020.ports.json",
+      "pose_sha256": "2b0807df641defc9c4ed178d17003fcde03ff7e7eac1ef3a38599cb624db3421",
+      "previous_pose_sha256": "ec671120027e50f15c091c53df963a8c26e3c09a1297d86e9a4fd9397a214cc6",
+      "input_sha256": "825baab68a14c1d1dce99c24e3ed6861789e0ae050d70c63493a1139713f1f1e",
+      "output_sha256": "75a2f5e373cce3c64c18c40bcee0e80bcb44d0cadfed69142f68a1ef1a8bf75e"
+    },
+    {
+      "time": 5.021,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000213819707,
+        "mouth_end": 0.0004280849588919246
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.021,
+        "regions": 1270,
+        "links": 2377,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.85055217577682e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.021.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.021.json",
+      "input": "out/planar-boundary/pose-5.021.txt",
+      "output": "out/planar-boundary/pose-5.021.ports.json",
+      "pose_sha256": "9c716ac62e2a5f814c77af3bb9fe5ad4a8a3ab541d263ca80fe18cb7c5b8d91f",
+      "previous_pose_sha256": "ea5e036ccbfdc94be899826d41e7d0f14fbc0495a97abfed1184efb05d587125",
+      "input_sha256": "1d98a89abc64ec881eaeafe0ee523cce44be099335a0385515dc03fde01d75cb",
+      "output_sha256": "f00c23c86dbfb9e69f850101084a3838046b3867ec3265810f7c517861ea4d4d"
+    },
+    {
+      "time": 5.022,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000203964255,
+        "mouth_end": 0.00042808495901776474
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.022,
+        "regions": 1270,
+        "links": 2377,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.852235617059923e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.022.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.022.json",
+      "input": "out/planar-boundary/pose-5.022.txt",
+      "output": "out/planar-boundary/pose-5.022.ports.json",
+      "pose_sha256": "e548b4ecead42144632f8dc4d0f0fdcbe4d26e58d70157fa87783b57336cc2ab",
+      "previous_pose_sha256": "c375a43649e1e10ceebe847ff6402239769ec9457ca53ef053e6515500cfc6d7",
+      "input_sha256": "a42ee5e7177236565471cc526a44d61721454c15e29420ab6e187090fbb0a772",
+      "output_sha256": "9c833ec6578bcdb27c0cbc09649617ca2f73c130fa6be7fbb1f351a6806e5878"
+    },
+    {
+      "time": 5.023,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500019456074,
+        "mouth_end": 0.0004280849591376645
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.023,
+        "regions": 1271,
+        "links": 2379,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.854095411865681e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.531435568635775e-18,
+        "maximum_component_volume_error_m3": 2.0328790734103208e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.023.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.023.json",
+      "input": "out/planar-boundary/pose-5.023.txt",
+      "output": "out/planar-boundary/pose-5.023.ports.json",
+      "pose_sha256": "57da6d72c3b6ca6bedcae413dc21c766e542091d005da858e63f9b23e4c4e65b",
+      "previous_pose_sha256": "4748959407e1b932148f450ac9401f7f2b017007974fda9eb3db528ae47d62ab",
+      "input_sha256": "e7e788b93148554c8876762ab04f5cded8247b877966f476bdb1ca722b010c75",
+      "output_sha256": "f389b6a9eb621a55ab03f8aad0624231d046850161e17c578d69b6dcd178fda1"
+    },
+    {
+      "time": 5.024,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000185592823,
+        "mouth_end": 0.00042808495925228477
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.024,
+        "regions": 1272,
+        "links": 2381,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.856135049516151e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.024.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.024.json",
+      "input": "out/planar-boundary/pose-5.024.txt",
+      "output": "out/planar-boundary/pose-5.024.ports.json",
+      "pose_sha256": "6fc89ed25754401d0673ed92a9af1a998221548968c3235e98e78c02ea9da6b4",
+      "previous_pose_sha256": "6289c4b23882c1a9d83c19d39885bf7654a4a3fdcf4b6c1820a076c90d73d102",
+      "input_sha256": "fc8acb7883e524d6990d72b79a00fe490dbb4a5b2d508ca8bd1e16687c97c58c",
+      "output_sha256": "3bed9a0c16f2207cac4494d4b93d4f48ac63bb98be3c751103ba099449a361cb"
+    },
+    {
+      "time": 5.025,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000177033286,
+        "mouth_end": 0.00042808495936140457
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.025,
+        "regions": 1270,
+        "links": 2377,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.858320316074591e-05
+        ],
+        "maximum_region_volume_error_m3": 3.520480687025686e-21,
+        "maximum_port_area_error_m2": 2.1480755542369057e-18,
+        "maximum_component_volume_error_m3": 2.439454888092385e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.025.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.025.json",
+      "input": "out/planar-boundary/pose-5.025.txt",
+      "output": "out/planar-boundary/pose-5.025.ports.json",
+      "pose_sha256": "20bda7c0e5f04d53ca459a6459828a004c053813c261b1eecc94595f682ed2e4",
+      "previous_pose_sha256": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab",
+      "input_sha256": "75d7bbe4c4f19f49486deae51b0d0a4c80f62f698b19ba37f91758c1bd0d2c5a",
+      "output_sha256": "d3cc138cca8f177df5d4ff722f5b43f99e67d88f6e1bffd535d3e89cc56543cf"
+    },
+    {
+      "time": 5.026,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000168871233,
+        "mouth_end": 0.00042808495946568454
+      },
+      "errors": {
+        "area_m2": 1.3552527156068805e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.026,
+        "regions": 1269,
+        "links": 2375,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.860598915017069e-05
+        ],
+        "maximum_region_volume_error_m3": 3.017554874593445e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 1.6263032587282567e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.026.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.026.json",
+      "input": "out/planar-boundary/pose-5.026.txt",
+      "output": "out/planar-boundary/pose-5.026.ports.json",
+      "pose_sha256": "27540f6f9377b241e8bf6e602f0cb894526d4248f0e687d15e2634c071bc78de",
+      "previous_pose_sha256": "cf1b14cab04bd3e3a1efce7d0980dfbe1ec57b92f9f01ab974d4df70643b5b7e",
+      "input_sha256": "7f3a39dbef4be56cec94d771436d884a3a59777330bccf2503275e8a3a1838a2",
+      "output_sha256": "9bf0b1c2569cb5cbe70da2dc55a425be7a0c7e1c43ae64d53db27717ed45142a"
+    },
+    {
+      "time": 5.027,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500016108488,
+        "mouth_end": 0.00042808495956490466
+      },
+      "errors": {
+        "area_m2": 6.776263578034403e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.027,
+        "regions": 1270,
+        "links": 2378,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.862914276022833e-05
+        ],
+        "maximum_region_volume_error_m3": 3.507245797224837e-21,
+        "maximum_port_area_error_m2": 2.15485181781494e-18,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.027.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.027.json",
+      "input": "out/planar-boundary/pose-5.027.txt",
+      "output": "out/planar-boundary/pose-5.027.ports.json",
+      "pose_sha256": "a8aa643d776d4132664ad621c80c9830923d45c6deb60a5333c159f47525d31c",
+      "previous_pose_sha256": "ea9867746d450e2d41acb7d1f0e8bddc0662a9432c55fd20638463c93139a7a3",
+      "input_sha256": "5368b8ac84faaf214a5d7590a0d3c338bdbe7e6d3f283c8be047e1c784100976",
+      "output_sha256": "8b0f2142fd36de7f03a12aa89b64ead19f85e49817c4adb3d8d3f98084ee2616"
+    },
+    {
+      "time": 5.028,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000153663346,
+        "mouth_end": 0.0004280849596597246
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.028,
+        "regions": 1272,
+        "links": 2382,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.865213963820605e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0381730293306602e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 3.9302328752599536e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.028.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.028.json",
+      "input": "out/planar-boundary/pose-5.028.txt",
+      "output": "out/planar-boundary/pose-5.028.ports.json",
+      "pose_sha256": "78c65a6fcbc84a956a422bc5d9d27c76ac0b7e0511e7da4a54ea687b31170dc7",
+      "previous_pose_sha256": "570f13fd770c50417261402de0a425d6a09eb2b4b8c045b4d8d05151469cbea1",
+      "input_sha256": "15da12b12ad409b7584ea42c6bd823723347751bae9b3fda4d7b08f6a04acc37",
+      "output_sha256": "16935918d143e21bbb7ee45201832bcb8b5607ab18d5dc3b87f822392025810e"
+    },
+    {
+      "time": 5.029,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000146573954,
+        "mouth_end": 0.00042808495975014466
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.029,
+        "regions": 1272,
+        "links": 2381,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.867453987601224e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0572595439959903e-21,
+        "maximum_port_area_error_m2": 1.849919956803392e-18,
+        "maximum_component_volume_error_m3": 5.421010862427522e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.029.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.029.json",
+      "input": "out/planar-boundary/pose-5.029.txt",
+      "output": "out/planar-boundary/pose-5.029.ports.json",
+      "pose_sha256": "7d2cc71ebd4a0d2f6a2a85223abb5a052360d477197a2709c50c75d5f49d7db8",
+      "previous_pose_sha256": "6a769e60e6e9e5bf7bd23f466d6d959aae6233332f38a5e249263961a34fc584",
+      "input_sha256": "599a74f31ca6f3a65c4a452c2950bac35dbfbf2e12ce3a472bc7cb654c0260c6",
+      "output_sha256": "7ede26f55bb98006c1292604c262599963d23f8603e08b57882c836584532a08"
+    },
+    {
+      "time": 5.03,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000139816707,
+        "mouth_end": 0.00042808495983638476
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.03,
+        "regions": 1272,
+        "links": 2381,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.86960032988207e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 2.303929616531697e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.030.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.030.json",
+      "input": "out/planar-boundary/pose-5.030.txt",
+      "output": "out/planar-boundary/pose-5.030.ports.json",
+      "pose_sha256": "b0867af3cc846209ef307d054bec2eacffcdcb6eb6b073087476f8d24166fabc",
+      "previous_pose_sha256": "3be34a24754f74aca5ca5759a1b7308fcec43d125e0cd63104b1e762ed7b2774",
+      "input_sha256": "d17dcbeca6ba0595c4a9486d0919dba687ba28077a9911804d25167206d35505",
+      "output_sha256": "639ec7980d57273389127b5df5de2861f6b31686f0219c961109bc027a7b8867"
+    },
+    {
+      "time": 5.031,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500013336983,
+        "mouth_end": 0.0004280849599186646
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.031,
+        "regions": 1272,
+        "links": 2380,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.871628779824739e-05
+        ],
+        "maximum_region_volume_error_m3": 3.017554874593445e-21,
+        "maximum_port_area_error_m2": 1.836367429647323e-18,
+        "maximum_component_volume_error_m3": 2.439454888092385e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.031.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.031.json",
+      "input": "out/planar-boundary/pose-5.031.txt",
+      "output": "out/planar-boundary/pose-5.031.ports.json",
+      "pose_sha256": "fb5f64dd9e1dff7872b289b82104cf33c55d3dbb3653c7b34d5bde247c1a33b0",
+      "previous_pose_sha256": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+      "input_sha256": "f62fd3f47d1ba44b5680de25a4ef282d5dedd766896cdb83dce25cbfda483576",
+      "output_sha256": "78302eb285abd23ad56e751fd957f8cb2a78664950187cced217fb78339fddab"
+    },
+    {
+      "time": 5.032,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000127222425,
+        "mouth_end": 0.00042808495999720474
+      },
+      "errors": {
+        "area_m2": 5.421010862427522e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.032,
+        "regions": 1272,
+        "links": 2378,
+        "split_cells": [
+          3760
+        ],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2053198742264036e-05,
+          5.6683191999116054e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 6.098637220230962e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.032.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.032.json",
+      "input": "out/planar-boundary/pose-5.032.txt",
+      "output": "out/planar-boundary/pose-5.032.ports.json",
+      "pose_sha256": "b83ca9a82a6605c98b320a66528d71fbed9c53bd3e03d11fbad1c34c93ae493c",
+      "previous_pose_sha256": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+      "input_sha256": "37d0ba25cfa4a195fa07435a417e67848edfa5c4e751820ef1f8c52e96b087ad",
+      "output_sha256": "f8e682c2e654aad77076b404cf66a973618c087c9490c8a42c56b160ff168821"
+    },
+    {
+      "time": 5.033,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500012135816,
+        "mouth_end": 0.0004280849600720045
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.033,
+        "regions": 1270,
+        "links": 2376,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2159027311605368e-05,
+          5.659802419734895e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 1.4907779871675686e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.033.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.033.json",
+      "input": "out/planar-boundary/pose-5.033.txt",
+      "output": "out/planar-boundary/pose-5.033.ports.json",
+      "pose_sha256": "f11c878e1dc737da52077af26693c236361b0a75efffc0059f0e133442643874",
+      "previous_pose_sha256": "5ffa51ccb3fb01fbd7343af9be13dadaeb379086e46d826ffb159c3b4ea1579b",
+      "input_sha256": "15fcfc2b6e23438da897a032caa70f8db82f672e34bc5649abde12fff4ec59cb",
+      "output_sha256": "75702ab79bc0f215004866687091594487ebe44544229747e7f4fed9930eb653"
+    },
+    {
+      "time": 5.034,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.000264550001157607,
+        "mouth_end": 0.00042808496014350443
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.034,
+        "regions": 1271,
+        "links": 2378,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2256509340272612e-05,
+          5.652051902133003e-05
+        ],
+        "maximum_region_volume_error_m3": 2.541098841762901e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 5.759824041329242e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.034.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.034.json",
+      "input": "out/planar-boundary/pose-5.034.txt",
+      "output": "out/planar-boundary/pose-5.034.ports.json",
+      "pose_sha256": "5742d677ed9e1cc89b15048c95d59808a32b98338971f4ae3db036cf7baf39d4",
+      "previous_pose_sha256": "6e66c83365f76dabfab3ccdd64c1a9960578cf1e73006c050df8d59eec2b76f2",
+      "input_sha256": "ef063fb89fbdc7295ac4c6de7a93feae2ba64cbbac235e2836382f5131ee1f74",
+      "output_sha256": "69c7d9128b11619bbe7df76f17eb630d2835bf0310c57c05a1884947d9a4cfa8"
+    },
+    {
+      "time": 5.035,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.000264550001104246,
+        "mouth_end": 0.00042808496021170487
+      },
+      "errors": {
+        "area_m2": 2.0328790734103208e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.035,
+        "regions": 1271,
+        "links": 2378,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.234541365556547e-05,
+          5.645022547730979e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 1.0164395367051604e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.035.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.035.json",
+      "input": "out/planar-boundary/pose-5.035.txt",
+      "output": "out/planar-boundary/pose-5.035.ports.json",
+      "pose_sha256": "453b9f0633a6baf0a11e3ab780ad9b6980179cef9110124c282ba46dbf78974e",
+      "previous_pose_sha256": "9230c518c1cc79b0ffeac3dcd6ad52f9751be501c20ff643609d240f947e2349",
+      "input_sha256": "c44dcf8b3920405429d538c5fffbeb53e2389241fce6c91adb8cbd6fb75e41c2",
+      "output_sha256": "db7083405f0caa211907aeb93f671a52be1b4b4a54f629b227a198187aee39a1"
+    },
+    {
+      "time": 5.036,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000105333527,
+        "mouth_end": 0.0004280849602766046
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.036,
+        "regions": 1271,
+        "links": 2378,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2425845020114634e-05,
+          5.638685907155848e-05
+        ],
+        "maximum_region_volume_error_m3": 1.998468359928115e-21,
+        "maximum_port_area_error_m2": 1.2332799712022613e-18,
+        "maximum_component_volume_error_m3": 7.453889935837843e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.036.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.036.json",
+      "input": "out/planar-boundary/pose-5.036.txt",
+      "output": "out/planar-boundary/pose-5.036.ports.json",
+      "pose_sha256": "59b7e3641dc45788bfa3475daad5b5327b058c505d453d584d99cb3f4bd1e3c3",
+      "previous_pose_sha256": "15a11478df8f41e56d780c6d83301b702b87503dcbcf49dd614ca3d9cfa86a48",
+      "input_sha256": "6f9789eda8cc076e8d0102f9f168684f79cb72059ec8d58053842358bd9123ec",
+      "output_sha256": "bb6ed32e82e76acc5f0c142b3de4366db173485902ab3ec9c69cf1812adf38bf"
+    },
+    {
+      "time": 5.037,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000100476583,
+        "mouth_end": 0.0004280849603386448
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.037,
+        "regions": 1272,
+        "links": 2380,
+        "split_cells": [
+          3630
+        ],
+        "components": 2,
+        "component_volumes_m3": [
+          1.249812127064519e-05,
+          5.633013981543771e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2332799712022613e-18,
+        "maximum_component_volume_error_m3": 1.2197274440461925e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.037.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.037.json",
+      "input": "out/planar-boundary/pose-5.037.txt",
+      "output": "out/planar-boundary/pose-5.037.ports.json",
+      "pose_sha256": "f76dfe274555b3f272326eb5e374d6d1e01516f71c77779beaf8744b1d1f3808",
+      "previous_pose_sha256": "4c21f67debd929addd9d95515a2064b69e42dedaf45296c54d26856a9c3728cc",
+      "input_sha256": "214dbe2811dcce20f2f0a347e07db2998390688e0d3a23542afba683f104678e",
+      "output_sha256": "68d777b19b574c72f4336343a802b3a9c0250d9f9432ce2067154730b5ec2c1e"
+    },
+    {
+      "time": 5.038,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000095842887,
+        "mouth_end": 0.0004280849603978248
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.038,
+        "regions": 1272,
+        "links": 2381,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2562696044347948e-05,
+          5.6279685337348e-05
+        ],
+        "maximum_region_volume_error_m3": 1.5352472168984194e-21,
+        "maximum_port_area_error_m2": 9.486769009248164e-19,
+        "maximum_component_volume_error_m3": 9.486769009248164e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.038.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.038.json",
+      "input": "out/planar-boundary/pose-5.038.txt",
+      "output": "out/planar-boundary/pose-5.038.ports.json",
+      "pose_sha256": "e952f113335898c314070f61690694ad2cf83c2469829bbf7f01f2ca1d40c5bc",
+      "previous_pose_sha256": "9867499099c9d80a4085147194b486c604a8c1de842439770378e76ec8a27f71",
+      "input_sha256": "3c0b50bac3cd2275a18184d03fd0fb88a4bfdee841a4ace1ae3290c2bce6eaf9",
+      "output_sha256": "04be2982cc50dc258db7d7c01fb5c41a6513835872bffa6c3fe3fe012a0dfee5"
+    },
+    {
+      "time": 5.039,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500009142155,
+        "mouth_end": 0.00042808496045414467
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.039,
+        "regions": 1270,
+        "links": 2378,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.262010382240884e-05,
+          5.623505101294379e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0043199847925965e-21,
+        "maximum_port_area_error_m2": 1.849919956803392e-18,
+        "maximum_component_volume_error_m3": 1.4907779871675686e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.039.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.039.json",
+      "input": "out/planar-boundary/pose-5.039.txt",
+      "output": "out/planar-boundary/pose-5.039.ports.json",
+      "pose_sha256": "165e2324753df17811d521e256bb21fae6e9d7f935c6d283693876a3fd855dca",
+      "previous_pose_sha256": "853a7ab27f0241f3311bc3bdb09209a0b383384c2a817fa15172a5d51a354048",
+      "input_sha256": "03fb7c38c8eb59c9e8eb769633ab3c3c003963f422f9ed9072e20d9117ba59f4",
+      "output_sha256": "86919c3569515b5352a684340c1f0957a9cbcb6e38cc69f425f0f87c3ab7f7c7"
+    },
+    {
+      "time": 5.04,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500008720712,
+        "mouth_end": 0.00042808496050804465
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.04,
+        "regions": 1270,
+        "links": 2378,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2670919754251379e-05,
+          5.61957606186166e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2332799712022613e-18,
+        "maximum_component_volume_error_m3": 1.1519648082658485e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.040.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.040.json",
+      "input": "out/planar-boundary/pose-5.040.txt",
+      "output": "out/planar-boundary/pose-5.040.ports.json",
+      "pose_sha256": "758410690cfd86884e12ce4f29e8047af0089b479b6c8e6938f05085b15ddcae",
+      "previous_pose_sha256": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239",
+      "input_sha256": "e7042eeb798dd346b0f9e5bc7f6f10ce00ea959c189e547c4f149df63d563dc8",
+      "output_sha256": "c21d8dd462edb8c07bc18c9c5a3b76b34aa56be776cdbcbcea134d6d50daea92"
+    },
+    {
+      "time": 5.041,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000083183266,
+        "mouth_end": 0.00042808496055930486
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.041,
+        "regions": 1271,
+        "links": 2380,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2715730656361273e-05,
+          5.6161329161917734e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.041.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.041.json",
+      "input": "out/planar-boundary/pose-5.041.txt",
+      "output": "out/planar-boundary/pose-5.041.ports.json",
+      "pose_sha256": "a216dcda3993c146357410c4449e179a2ef7f32c9f247a4fdec6b3addab9239d",
+      "previous_pose_sha256": "d718a92a0045b4b061e4c5f73700c3aaac602c65963168357026ee82889f9085",
+      "input_sha256": "6525efae226868623b80b8a31d06685a12b956ea724ee2029850e86eb5a08449",
+      "output_sha256": "bcb5fb6e242bbe1e0d8228097a66e660ce23030344f9073ab965228c066f1910"
+    },
+    {
+      "time": 5.042,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500007934999,
+        "mouth_end": 0.0004280849606081446
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.042,
+        "regions": 1269,
+        "links": 2377,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.275511452748785e-05,
+          5.613127931121805e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 1.8973538018496328e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.042.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.042.json",
+      "input": "out/planar-boundary/pose-5.042.txt",
+      "output": "out/planar-boundary/pose-5.042.ports.json",
+      "pose_sha256": "eecb0884c50cbbbd58833329fb8ca605bb15d3907d66e5e3c367d68fcac71cb3",
+      "previous_pose_sha256": "505b8a33db6afafbda8a13934607ac15ad02e98b65b9933b281dd6d1b163e02b",
+      "input_sha256": "a802e6b3709218132ad7c1ef8f5229b95bd36f1444d7e2e0b5b54b79b9f2210c",
+      "output_sha256": "b974a0e46b151d8abf66d77d8ec397c7f7ca50e8a6edf73cc7242752ea44a341"
+    },
+    {
+      "time": 5.043,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000075690946,
+        "mouth_end": 0.0004280849606550047
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.043,
+        "regions": 1269,
+        "links": 2376,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.278995881054295e-05,
+          5.61047916849416e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 8.809142651444724e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.043.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.043.json",
+      "input": "out/planar-boundary/pose-5.043.txt",
+      "output": "out/planar-boundary/pose-5.043.ports.json",
+      "pose_sha256": "d74157eb0503d4f65cd65b824bcc4b86355f8c9974a12a1c0b959f975d033165",
+      "previous_pose_sha256": "3302a3d0e4fbeaeff6e8f3d643220caa86fdeead0573a9d363ff0c0b3eb1b599",
+      "input_sha256": "56b09ffe967f704ed2f998c013959ac02962f59030da739546832bbf8724836c",
+      "output_sha256": "2758912e0abe9d9378447c271e259364a6829c5823bbb3f3231d88e6bd250354"
+    },
+    {
+      "time": 5.044,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.000264550000722007,
+        "mouth_end": 0.0004280849606994446
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.044,
+        "regions": 1271,
+        "links": 2380,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2822181930310393e-05,
+          5.607994854816066e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 8.978549240895584e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.044.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.044.json",
+      "input": "out/planar-boundary/pose-5.044.txt",
+      "output": "out/planar-boundary/pose-5.044.ports.json",
+      "pose_sha256": "c53bca35951d392da84581015b3ce2f0b09a81fdfdb19f1c53bcee0090e018a2",
+      "previous_pose_sha256": "61c4d4291acb611573c43e7f0429cbff59f6f40f41e2f8858c650fcf7ba5f3b5",
+      "input_sha256": "bf0de395b4e17d419061ca684d3bed3316dfa8137950244ec648001755d8aa04",
+      "output_sha256": "f08b270b2ce275cd81666d87aa72e231373b3a0feeb8f4ba45d0172ac05eaee1"
+    },
+    {
+      "time": 5.045,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500006886836,
+        "mouth_end": 0.00042808496074190456
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.045,
+        "regions": 1271,
+        "links": 2380,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2850282181362895e-05,
+          5.605851684727503e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.531435568635775e-18,
+        "maximum_component_volume_error_m3": 7.792703114739563e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.045.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.045.json",
+      "input": "out/planar-boundary/pose-5.045.txt",
+      "output": "out/planar-boundary/pose-5.045.ports.json",
+      "pose_sha256": "6273221adce6f8e7285330c6d19fddfcdc38b1094d65fb426b8ecc55f3982cb8",
+      "previous_pose_sha256": "f7f85b19adc339647eb4f46d2c1edd022d638500117733759007827282ce6f17",
+      "input_sha256": "6ce6b08d64e6a60960bf304cdef7266afb4c2b0c8d5e314e9539222827e29843",
+      "output_sha256": "3a494cff3e8a7b160b10749d7a14173beff900435783b2793443a958ee27d6cc"
+    },
+    {
+      "time": 5.046,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000065693924,
+        "mouth_end": 0.0004280849607826047
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.046,
+        "regions": 1271,
+        "links": 2380,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2874733964081726e-05,
+          5.6040083181194624e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.531435568635775e-18,
+        "maximum_component_volume_error_m3": 6.606856988583543e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.046.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.046.json",
+      "input": "out/planar-boundary/pose-5.046.txt",
+      "output": "out/planar-boundary/pose-5.046.ports.json",
+      "pose_sha256": "57ae6ddaf8b4b27877eb6854c61ee59c075ca9945169a473cd3d20884e25628a",
+      "previous_pose_sha256": "5d9e84363c44c8f5caab7b75110cbf21d045031388b12cdc2219024525a59d8b",
+      "input_sha256": "3a40d1c520d5c3a0fcba8147afe8e93e8bba2031c5d5b443f6a7d8ca1fec0926",
+      "output_sha256": "88c54b8f072adadc84413b1bff8ca2ad21c374344f9728e34db23ab432940260"
+    },
+    {
+      "time": 5.047,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000062666507,
+        "mouth_end": 0.00042808496082110444
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.047,
+        "regions": 1273,
+        "links": 2384,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.289596971923332e-05,
+          5.6024273924986356e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.531435568635775e-18,
+        "maximum_component_volume_error_m3": 8.300922883092143e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.047.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.047.json",
+      "input": "out/planar-boundary/pose-5.047.txt",
+      "output": "out/planar-boundary/pose-5.047.ports.json",
+      "pose_sha256": "08924328d34966e1c5e1bf5ac9b58e8f395cf8e1f1e5aeb2180107e7f807bad9",
+      "previous_pose_sha256": "d60a12fcc9f95ee54e53b55e04a991ace6c07db04ea26dc3c3b0edd761c6b8e4",
+      "input_sha256": "52c08d1fce68759463deb3dfd37e47d263a9a972ea175e31ee4f30a4a68a1761",
+      "output_sha256": "b2afafbcda08ebfccc7ee7172813c74b80c27f4c86376f3524fd2ea1b9901014"
+    },
+    {
+      "time": 5.048,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500005977521,
+        "mouth_end": 0.00042808496085806484
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.048,
+        "regions": 1273,
+        "links": 2384,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2914380299850929e-05,
+          5.6010753883099374e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5609511764641737e-21,
+        "maximum_port_area_error_m2": 1.5246593050577406e-18,
+        "maximum_component_volume_error_m3": 2.507217523872729e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.048.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.048.json",
+      "input": "out/planar-boundary/pose-5.048.txt",
+      "output": "out/planar-boundary/pose-5.048.ports.json",
+      "pose_sha256": "7366362f33e8195c715122b2eff7c8ee7675f8b48f7cc585bed228c4aa679723",
+      "previous_pose_sha256": "9a781207ff436c010f53cbec179770e2f7de59cefffb36b377084568f832ef3a",
+      "input_sha256": "db90746b454952d2bb7a5fbefbf522d7c3b6d2214e1d2dd6997011728d4d2424",
+      "output_sha256": "a3b18bd710d34794207c2246fb5070c053d890e2a826e240111e79ac4d8bf2e1"
+    },
+    {
+      "time": 5.049,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500005702004,
+        "mouth_end": 0.00042808496089326477
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.049,
+        "regions": 1272,
+        "links": 2382,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2930316467429861e-05,
+          5.599922423432035e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 2.303929616531697e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.049.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.049.json",
+      "input": "out/planar-boundary/pose-5.049.txt",
+      "output": "out/planar-boundary/pose-5.049.ports.json",
+      "pose_sha256": "fe248e1fa454a64249dfb1e248f7da83cf888bc2d679883492b624dfaf817f00",
+      "previous_pose_sha256": "133a9b4958ab128b4b08d0a09b0e8285df0748327349178adb9640d88f0f46b8",
+      "input_sha256": "a27a63661d0fbe3c54bfaf1d709b3487b9850c236055e8de712e8b71cf90e490",
+      "output_sha256": "a84437dae70cf96bf2907372d95ad60464a720acc2fa18e0d8d189958ce22192"
+    },
+    {
+      "time": 5.05,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000054390103,
+        "mouth_end": 0.00042808496092692474
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.05,
+        "regions": 1273,
+        "links": 2385,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2944091141679554e-05,
+          5.598941997586384e-05
+        ],
+        "maximum_region_volume_error_m3": 2.541098841762901e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 6.776263578034403e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.050.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.050.json",
+      "input": "out/planar-boundary/pose-5.050.txt",
+      "output": "out/planar-boundary/pose-5.050.ports.json",
+      "pose_sha256": "fca7eb0c374d3c82c6cc9349e8935d1f02be1c80f5bd7f554f7f01ec49f774ab",
+      "previous_pose_sha256": "cc0772a00d82df43eec06be884fcadc8371ac425aa093ce27dc4f303aebcf978",
+      "input_sha256": "c1cd8ed7e5d79618a233e853134eb923920cf6f079e372cb3885b8b564f00d75",
+      "output_sha256": "55985e725b55569bc3cb1163773974a6de87bbd4f973dd1de682781a35150a63"
+    },
+    {
+      "time": 5.051,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500005187996,
+        "mouth_end": 0.0004280849609588246
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.051,
+        "regions": 1273,
+        "links": 2385,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2955982068301901e-05,
+          5.598110728884959e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 2.168404344971009e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.051.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.051.json",
+      "input": "out/planar-boundary/pose-5.051.txt",
+      "output": "out/planar-boundary/pose-5.051.ports.json",
+      "pose_sha256": "fa8c85192888c2e5df7ecf628895a1c7a3d7d5c4f9bb3797658eff2ff44f9a52",
+      "previous_pose_sha256": "96651bda2250f3902064676308f5d78c6d14edac8c23e872ed524eb934da297c",
+      "input_sha256": "901595fb5e115c1ac1918f49de45cad68dbc8323e9c8f7574fd80915e3a00e21",
+      "output_sha256": "602299a64cc8b725bcccbd66139924e2b5fffdf6654ed959db9d361fb0420c21"
+    },
+    {
+      "time": 5.052,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500004948416,
+        "mouth_end": 0.0004280849609894046
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.052,
+        "regions": 1273,
+        "links": 2385,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2966234740015053e-05,
+          5.5974080632805706e-05
+        ],
+        "maximum_region_volume_error_m3": 3.533715576826534e-21,
+        "maximum_port_area_error_m2": 2.1480755542369057e-18,
+        "maximum_component_volume_error_m3": 9.825582188149884e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.052.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.052.json",
+      "input": "out/planar-boundary/pose-5.052.txt",
+      "output": "out/planar-boundary/pose-5.052.ports.json",
+      "pose_sha256": "3699c67a4a9c7fd1293aa63b1bdf6ace5adc0badef0a3f9a71e3702851ecad70",
+      "previous_pose_sha256": "554f211a5fe4bc15b1b9616811357605fb0002559d6d18a96ff4f236eb01955a",
+      "input_sha256": "9fdf1dba2a188069f33b5075f07916e7cc40545523afaf2b77940ba5ff9ae3f4",
+      "output_sha256": "b3596610bbc517fb6b61c9c22c9826e42ed700fbc1ab5d22e888df501c65d117"
+    },
+    {
+      "time": 5.053,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000047202705,
+        "mouth_end": 0.0004280849610184446
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.053,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.297506527139514e-05,
+          5.596816008858867e-05
+        ],
+        "maximum_region_volume_error_m3": 3.024172319493869e-21,
+        "maximum_port_area_error_m2": 1.849919956803392e-18,
+        "maximum_component_volume_error_m3": 2.371692252312041e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.053.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.053.json",
+      "input": "out/planar-boundary/pose-5.053.txt",
+      "output": "out/planar-boundary/pose-5.053.ports.json",
+      "pose_sha256": "9d99cb31fe2a02405db7d0aaca6e29c6951626e0f6688e2e4f8cc5f6b0a50a12",
+      "previous_pose_sha256": "a8705dfbddb1c1ed97fa635c59b5324b711f47bba8339045385c61fd384b2e41",
+      "input_sha256": "d0178c7c25ece3d4a7acb03301756c0e0b13c52c34455077dc960c7e3cd20369",
+      "output_sha256": "f74a21b7d5c78684f90af511421e6b34f6d60d054fb4ad29a3d594ebcb7864ac"
+    },
+    {
+      "time": 5.054,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000045024705,
+        "mouth_end": 0.00042808496104638485
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.054,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.298196047849522e-05,
+          5.596389094571065e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.531435568635775e-18,
+        "maximum_component_volume_error_m3": 7.962109704190423e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.054.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.054.json",
+      "input": "out/planar-boundary/pose-5.054.txt",
+      "output": "out/planar-boundary/pose-5.054.ports.json",
+      "pose_sha256": "80436c18deb6ad2d0953c65d5c59a564a422bd59c8461418c6a9371f1ca70489",
+      "previous_pose_sha256": "1e5f693c62fe8758acec4d4941dc879c015b4494287a3a87e86383d75c6f56e4",
+      "input_sha256": "d248f065cb0174d9bb459480a867f4e1c02c73158e0a1b16ad1750f138fa993d",
+      "output_sha256": "445e65b41fe57259ede073457eec28bb39d863d792480b98b6210439430be163"
+    },
+    {
+      "time": 5.055,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500004295016,
+        "mouth_end": 0.0004280849610727848
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.055,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.298606298831463e-05,
+          5.59621556462224e-05
+        ],
+        "maximum_region_volume_error_m3": 4.1425205076655626e-21,
+        "maximum_port_area_error_m2": 2.4530074152484538e-18,
+        "maximum_component_volume_error_m3": 2.846030702774449e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.055.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.055.json",
+      "input": "out/planar-boundary/pose-5.055.txt",
+      "output": "out/planar-boundary/pose-5.055.ports.json",
+      "pose_sha256": "fa7dec851f50312f3b6589174fcb624d32012e4be2de77103791cc2d62b82fb1",
+      "previous_pose_sha256": "fdf9df00944d7e193aa6d0f90b86d26454ee9c18442fd324e48fbec626845dc8",
+      "input_sha256": "312c465422384b06d1aba4799e15a4193d6216f12e87fd46d8c5db0763b75828",
+      "output_sha256": "050920656b40d878e66a65b68204b908dffc313df4dd4b2d307d883481df9078"
+    },
+    {
+      "time": 5.056,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500004096818,
+        "mouth_end": 0.0004280849610980847
+      },
+      "errors": {
+        "area_m2": 5.421010862427522e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.056,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2987283225437004e-05,
+          5.5963079184851885e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 2.710505431213761e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.056.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.056.json",
+      "input": "out/planar-boundary/pose-5.056.txt",
+      "output": "out/planar-boundary/pose-5.056.ports.json",
+      "pose_sha256": "6d98bb97f69c18df0f304414a28c0f1b052e7acf86bcae9c6eb7558734d9af47",
+      "previous_pose_sha256": "b700d015ed22f25426ad68d2478f41bdec6f223708806fb0289747594750db86",
+      "input_sha256": "9340b46b451ec77616ec5f6bcd5cfb1ee61cde984aed94ce8d83cd7c86dada6e",
+      "output_sha256": "93f7740a00b3babbdc530e6a348a94fdb240537b0a1fceb926bfeb653df13f72"
+    },
+    {
+      "time": 5.057,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000039078767,
+        "mouth_end": 0.00042808496112228464
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.057,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.298593791797203e-05,
+          5.5966398862943995e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5517643593698782e-18,
+        "maximum_component_volume_error_m3": 1.4230153513872246e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.057.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.057.json",
+      "input": "out/planar-boundary/pose-5.057.txt",
+      "output": "out/planar-boundary/pose-5.057.ports.json",
+      "pose_sha256": "6e517fb84aa62ea3a98c1f42c45bd5a000b40c8bf71cf3e88317682f560d887d",
+      "previous_pose_sha256": "852f8043af17684704de2d87fb6d4ccce96cc9f42eb227b9fa34fdef92152718",
+      "input_sha256": "fade5ae0e3e7ec90e1c37063180b5557118e81afd121f38930f7e6166a7ec118",
+      "output_sha256": "669eb330386cd622159cfe305c255c6b89152c6b5aad2356eab10caf8521dc21"
+    },
+    {
+      "time": 5.058,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500003727647,
+        "mouth_end": 0.00042808496114516467
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.058,
+        "regions": 1272,
+        "links": 2383,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.2982519678767017e-05,
+          5.597168517994606e-05
+        ],
+        "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+        "maximum_port_area_error_m2": 1.2332799712022613e-18,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.058.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.058.json",
+      "input": "out/planar-boundary/pose-5.058.txt",
+      "output": "out/planar-boundary/pose-5.058.ports.json",
+      "pose_sha256": "d3974dba5e3c4de9b7986785b428efa2fbf7b05cc4b586d60dd3c67f7716cf09",
+      "previous_pose_sha256": "a91bf6fff9fb4457f62a78aac037f649794afc53701eab875b153715deb1cc80",
+      "input_sha256": "ef5bda20616dad8fbd240faa0a55c91b23291f1e3e61195d35884290543450f3",
+      "output_sha256": "1aa267986227bfa1aea37c86157c54bba3e1d5c0e4235352210bee4be25d4987"
+    },
+    {
+      "time": 5.059,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000035555847,
+        "mouth_end": 0.00042808496116716476
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.059,
+        "regions": 1276,
+        "links": 2389,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.3022437061245898e-05,
+          5.594333058874996e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 2.236166980751353e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.059.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.059.json",
+      "input": "out/planar-boundary/pose-5.059.txt",
+      "output": "out/planar-boundary/pose-5.059.ports.json",
+      "pose_sha256": "331ca1e79269dcfc7ffa4b50a49c856c351b6b6ec50c82abb82a66aff89e53de",
+      "previous_pose_sha256": "751cf622f0e44851913cb4debc5ced8377783af93d4b2e9a4a65ad12bc126400",
+      "input_sha256": "17e764a65eea0f684eb7692c7fb3dd19625f9543ff99734d4a441b9b17e29259",
+      "output_sha256": "0bec7bf3201eee31a3f96071d9791c637ff1e70449ea55348a80cdac2f35416b"
+    },
+    {
+      "time": 5.06,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.000264550000339169,
+        "mouth_end": 0.00042808496118806487
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.06,
+        "regions": 1276,
+        "links": 2389,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.318265764141787e-05,
+          5.581447058003649e-05
+        ],
+        "maximum_region_volume_error_m3": 4.486627642487622e-21,
+        "maximum_port_area_error_m2": 2.757939276260002e-18,
+        "maximum_component_volume_error_m3": 1.4907779871675686e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.060.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.060.json",
+      "input": "out/planar-boundary/pose-5.060.txt",
+      "output": "out/planar-boundary/pose-5.060.ports.json",
+      "pose_sha256": "d50186c19996b09e46bac73f5a30f2c6bc0d66cb614e7bcaabb46bf515669d95",
+      "previous_pose_sha256": "096add39dacff6f47684e6447f6e0a740cac838f43868493039a4cfde8dc81f6",
+      "input_sha256": "946e38ef2b8db49dffdb6b19562f05cd5faf929c6f089256f98dca4b1c9eb9c3",
+      "output_sha256": "f902b516c421fec826f01ecbe712b0b13856a14f6c10a612a5e82c75bd76f017"
+    },
+    {
+      "time": 5.061,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500003235419,
+        "mouth_end": 0.0004280849612080847
+      },
+      "errors": {
+        "area_m2": 6.776263578034403e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.061,
+        "regions": 1274,
+        "links": 2386,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.348210752486356e-05,
+          5.556454862782741e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0043199847925965e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 1.6263032587282567e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.061.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.061.json",
+      "input": "out/planar-boundary/pose-5.061.txt",
+      "output": "out/planar-boundary/pose-5.061.ports.json",
+      "pose_sha256": "7409e161a1f0b0e3e0dadabc5bcca8ab78b13435c19f9ada71a321810f18de90",
+      "previous_pose_sha256": "db1393f67315d9930ba21d44e57fc6d4fd02fefbd43b35a768c1bf72667fac54",
+      "input_sha256": "14f260b1024f9a28305678199320cbb989e7de81f794bf0122b280474c058aa7",
+      "output_sha256": "a8538c0680d6997492fd38105b0edd8392127b4fb336858d24df271d9f9dfb29"
+    },
+    {
+      "time": 5.062,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500003086226,
+        "mouth_end": 0.0004280849612272247
+      },
+      "errors": {
+        "area_m2": 5.421010862427522e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.062,
+        "regions": 1280,
+        "links": 2397,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.3908959979133205e-05,
+          5.519964822594504e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.062.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.062.json",
+      "input": "out/planar-boundary/pose-5.062.txt",
+      "output": "out/planar-boundary/pose-5.062.ports.json",
+      "pose_sha256": "84bff3cd353072dca169eb9a7eba6d7d530875ff23ec0e56bc4db37e7ef715b5",
+      "previous_pose_sha256": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+      "input_sha256": "0ac8bd17182d1b414990f0a726bbf9cfdf5b5cedc50691859acb80adfa3d9129",
+      "output_sha256": "7f8231f1236f64a2f44b2ec3dc53a8133b3ff2eacc1ccd524d107035b11a541b"
+    },
+    {
+      "time": 5.063,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000029435667,
+        "mouth_end": 0.0004280849612452646
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.063,
+        "regions": 1276,
+        "links": 2392,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.917984206007134e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 2.710505431213761e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.063.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.063.json",
+      "input": "out/planar-boundary/pose-5.063.txt",
+      "output": "out/planar-boundary/pose-5.063.ports.json",
+      "pose_sha256": "dffafa1cf007c019dc61ea95ee368f4f1cb0c849a737423f4d206b0c28a13cce",
+      "previous_pose_sha256": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132",
+      "input_sha256": "974480fe59d6078e2cad5dd8780ed60b1ee919d59a6bc143baa8934babedb290",
+      "output_sha256": "0129d986a680f53b4ba54ee58dc78c0d011fb144509fe2c43c0d5347b4dcc16b"
+    },
+    {
+      "time": 5.064,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000028079867,
+        "mouth_end": 0.0004280849612626448
+      },
+      "errors": {
+        "area_m2": 5.421010862427522e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.064,
+        "regions": 1277,
+        "links": 2394,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.925956788898063e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 1.4907779871675686e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.064.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.064.json",
+      "input": "out/planar-boundary/pose-5.064.txt",
+      "output": "out/planar-boundary/pose-5.064.ports.json",
+      "pose_sha256": "32bb871b1f3363dfcc07571897a663eb221d7643cf8ec4c099168f4df7e986d3",
+      "previous_pose_sha256": "06d5d6c505856107a8c1c007b3603be0bf07483ac0c2b6391377c5bf5fa412e9",
+      "input_sha256": "8c2ae12289e9c19f45301b657f8b468f46ae87267e481866d6d86dc6e3ef8b8d",
+      "output_sha256": "9d0eac610d48b58b5ae482414755a3479c34531f0f632f006f38d2c351e7e929"
+    },
+    {
+      "time": 5.065,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500002678396,
+        "mouth_end": 0.00042808496127914473
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.065,
+        "regions": 1279,
+        "links": 2399,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.93425012314213e-05
+        ],
+        "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+        "maximum_port_area_error_m2": 1.5382118322138094e-18,
+        "maximum_component_volume_error_m3": 1.6263032587282567e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.065.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.065.json",
+      "input": "out/planar-boundary/pose-5.065.txt",
+      "output": "out/planar-boundary/pose-5.065.ports.json",
+      "pose_sha256": "c4a646798c308cdf8e7c22dd1788bbe5cdf015312ccf4de6fcbc6bab145ef36d",
+      "previous_pose_sha256": "af9823b5baf4184a17044ae301441c0e55a25795336c54255dbc191d6f002522",
+      "input_sha256": "e9f22aade9cfb139871d334ebb5b6e7c4d40025cf97a0d970bc2bb0d0f6cf644",
+      "output_sha256": "3ab999400b7d4ff6b8c7760feed6cb6a21b529d9b3c5e77bb37edac8c1d118ed"
+    },
+    {
+      "time": 5.066,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500002554794,
+        "mouth_end": 0.0004280849612949846
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.066,
+        "regions": 1279,
+        "links": 2398,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.942595991574385e-05
+        ],
+        "maximum_region_volume_error_m3": 4.036641389258775e-21,
+        "maximum_port_area_error_m2": 2.4530074152484538e-18,
+        "maximum_component_volume_error_m3": 2.710505431213761e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.066.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.066.json",
+      "input": "out/planar-boundary/pose-5.066.txt",
+      "output": "out/planar-boundary/pose-5.066.ports.json",
+      "pose_sha256": "9f106e292a25329adcf5c3fa21250fa8dd378d09750112409c2aedd82073f22f",
+      "previous_pose_sha256": "62c0445db98e963a4ec4a63310dd56879cfe2a1798c316043bca8ea1a00bd606",
+      "input_sha256": "157bc7e6e2d858dd7f5474f4ddac0c58e5b9ce59be2a68d0d3cc1a0c62bc834c",
+      "output_sha256": "f81e8e66294be6cd167364bfb895f3392b2428b175098d39c220e89eda9ccc1e"
+    },
+    {
+      "time": 5.067,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500002437182,
+        "mouth_end": 0.00042808496130994453
+      },
+      "errors": {
+        "area_m2": 2.0328790734103208e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.067,
+        "regions": 1280,
+        "links": 2401,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.95077319005033e-05
+        ],
+        "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+        "maximum_port_area_error_m2": 1.8431436932253575e-18,
+        "maximum_component_volume_error_m3": 3.3881317890172014e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.067.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.067.json",
+      "input": "out/planar-boundary/pose-5.067.txt",
+      "output": "out/planar-boundary/pose-5.067.ports.json",
+      "pose_sha256": "c236048cb3d34b61d13d31710aaa9b15808e09b10c55aac8ca6d04baa1847491",
+      "previous_pose_sha256": "279728e1aaf39c06528d26a5e486db239c1479c056a9a40e238b64f10e06f90b",
+      "input_sha256": "dbf75542babfe4f3e0aa2ba6de98d53271ec864a51784ef8883c19416bbae896",
+      "output_sha256": "c9b65b0bb99d5caef3d1cbbcd55d947d484a733630cca352df234df1fee9a14f"
+    },
+    {
+      "time": 5.068,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000023244704,
+        "mouth_end": 0.0004280849613242447
+      },
+      "errors": {
+        "area_m2": 5.421010862427522e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.068,
+        "regions": 1281,
+        "links": 2403,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.95860539127953e-05
+        ],
+        "maximum_region_volume_error_m3": 3.2160782216061716e-21,
+        "maximum_port_area_error_m2": 2.134523027080837e-18,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.068.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.068.json",
+      "input": "out/planar-boundary/pose-5.068.txt",
+      "output": "out/planar-boundary/pose-5.068.ports.json",
+      "pose_sha256": "70a3e2997ce4063ccc5f189e1de2ef7dfb121439f11fee3b0ff79cbd1d289668",
+      "previous_pose_sha256": "700d3639276b82d4a2f21195436889e00615d861afbc56ed7adde3608428e78e",
+      "input_sha256": "4814732cdfcb7e45465ebad022770a052dd7000703aa6810bcd22c247576fed7",
+      "output_sha256": "f02020b44f6b3ac6c30c230f03e438daaffca76d5615f21b08a0a4828f952a37"
+    },
+    {
+      "time": 5.069,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500002217204,
+        "mouth_end": 0.0004280849613381046
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.069,
+        "regions": 1280,
+        "links": 2402,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.965961658475407e-05
+        ],
+        "maximum_region_volume_error_m3": 2.514629062161204e-21,
+        "maximum_port_area_error_m2": 1.5449880957918438e-18,
+        "maximum_component_volume_error_m3": 9.486769009248164e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.069.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.069.json",
+      "input": "out/planar-boundary/pose-5.069.txt",
+      "output": "out/planar-boundary/pose-5.069.ports.json",
+      "pose_sha256": "e92fe97a16b73894ca78d58bc1dcc169f697df838548aea853f247ca93c6c0bf",
+      "previous_pose_sha256": "113a00ec46d586a3ff717cdba66c02deb3b9b474307e695d8512ebb15bdaf6b9",
+      "input_sha256": "a631362fb4c60181585e187523055068a21d6796e5e56a3c5f6808858a77a48a",
+      "output_sha256": "4770cb81756a638e3378497687eb5fdeb185233f51a1204c614c250c624a002c"
+    },
+    {
+      "time": 5.07,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500002114838,
+        "mouth_end": 0.00042808496135108464
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.07,
+        "regions": 1280,
+        "links": 2404,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.973442613393385e-05
+        ],
+        "maximum_region_volume_error_m3": 1.5087774372967225e-21,
+        "maximum_port_area_error_m2": 9.283481101907132e-19,
+        "maximum_component_volume_error_m3": 1.3552527156068805e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.070.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.070.json",
+      "input": "out/planar-boundary/pose-5.070.txt",
+      "output": "out/planar-boundary/pose-5.070.ports.json",
+      "pose_sha256": "5c88f331a34ab593e29d4da07cfda616a0331d2a6b5499b871a4e3cc5639e082",
+      "previous_pose_sha256": "3fc32b6d14fe1f69a1f078972f759d95c61ecdccc3e27c188fd4aaf399896271",
+      "input_sha256": "7082f0ee1eb585cd7765c3572bb0d36b272c38bfc08dc3e0c45223444a333088",
+      "output_sha256": "3734f8eba7ade1f60ce04f77f5462cd38ba88fa4951cafc71e0daf8000817625"
+    },
+    {
+      "time": 5.071,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000020173723,
+        "mouth_end": 0.0004280849613636247
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.071,
+        "regions": 1282,
+        "links": 2407,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.980382078372393e-05
+        ],
+        "maximum_region_volume_error_m3": 1.7734752333136913e-21,
+        "maximum_port_area_error_m2": 1.2197274440461925e-18,
+        "maximum_component_volume_error_m3": 2.439454888092385e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.071.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.071.json",
+      "input": "out/planar-boundary/pose-5.071.txt",
+      "output": "out/planar-boundary/pose-5.071.ports.json",
+      "pose_sha256": "b3fd0e0e3fbab6881a3e8e5ad8fb695fa46dce354d3ab20d48d452701f11977f",
+      "previous_pose_sha256": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2",
+      "input_sha256": "9ab1e3764e8ee18634303292555d31d7c6e5ec5118533a5bec04f489835dd689",
+      "output_sha256": "1a1023def2c51dd93b291e0d8ec6fe55acc893d74af3760e76bbccb52f71c929"
+    },
+    {
+      "time": 5.072,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000019242627,
+        "mouth_end": 0.00042808496137550467
+      },
+      "errors": {
+        "area_m2": 6.098637220230962e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.072,
+        "regions": 1283,
+        "links": 2410,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.986659827560316e-05
+        ],
+        "maximum_region_volume_error_m3": 1.522012327097571e-21,
+        "maximum_port_area_error_m2": 9.283481101907132e-19,
+        "maximum_component_volume_error_m3": 3.1170812458958252e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.072.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.072.json",
+      "input": "out/planar-boundary/pose-5.072.txt",
+      "output": "out/planar-boundary/pose-5.072.ports.json",
+      "pose_sha256": "39411f4c4b2fbf6c033685a9b0245c787e6363a7dcdda0ad60b2e3e029648223",
+      "previous_pose_sha256": "a1321bdc700944eb1df115d2b99884b753c8f51fd1efe629046bc162c5735e51",
+      "input_sha256": "78a56f86b542ddb63d67d65637247da3331cbb47c1df5d89f61ab2b79788724c",
+      "output_sha256": "d791a9f53dcb46a0750b340a790d41aa92f05bef3e1a78197d5a74a8784dc112"
+    },
+    {
+      "time": 5.073,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000018355093,
+        "mouth_end": 0.00042808496138672453
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.073,
+        "regions": 1286,
+        "links": 2416,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.9922865989543e-05
+        ],
+        "maximum_region_volume_error_m3": 1.733770563911146e-21,
+        "maximum_port_area_error_m2": 1.07742590890747e-18,
+        "maximum_component_volume_error_m3": 1.0842021724855044e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.073.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.073.json",
+      "input": "out/planar-boundary/pose-5.073.txt",
+      "output": "out/planar-boundary/pose-5.073.ports.json",
+      "pose_sha256": "79fc704ea34d230be856936e5392457dfecb740c0bfa9b9a15e8af3c647adf64",
+      "previous_pose_sha256": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0",
+      "input_sha256": "570b0cb0c5caf570e96095713a74f5aedb4f91fb2ab10377c19a2ce360d33ea9",
+      "output_sha256": "dc1544ffc9796a3dcbd96ed41df19ee58a716d0015f7e26bae9ce58923e80ca8"
+    },
+    {
+      "time": 5.074,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001751112,
+        "mouth_end": 0.00042808496139750475
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.074,
+        "regions": 1281,
+        "links": 2407,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          6.997288236948161e-05
+        ],
+        "maximum_region_volume_error_m3": 8.07328277851755e-22,
+        "maximum_port_area_error_m2": 4.811147140404426e-19,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.074.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.074.json",
+      "input": "out/planar-boundary/pose-5.074.txt",
+      "output": "out/planar-boundary/pose-5.074.ports.json",
+      "pose_sha256": "ff1c9ad8704d635643ce3d744a43a6477026b8577fa9fc21a06bca74923e40e6",
+      "previous_pose_sha256": "5cff2d3e9b0002c3ab518fe21843e4e831c659084ad864c49c42f27be552568e",
+      "input_sha256": "51c3d94180093dd7cd123c88dfc85034402d484f2806c9425528a66f27e2c278",
+      "output_sha256": "20c53e950edc23b196651f10821894df25664337dea16572da8e5b5d9557eee4"
+    },
+    {
+      "time": 5.075,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000016699815,
+        "mouth_end": 0.00042808496140784474
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.075,
+        "regions": 1285,
+        "links": 2415,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          7.001642645577197e-05
+        ],
+        "maximum_region_volume_error_m3": 1.3499587596865412e-21,
+        "maximum_port_area_error_m2": 9.181837148236616e-19,
+        "maximum_component_volume_error_m3": 2.846030702774449e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.075.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.075.json",
+      "input": "out/planar-boundary/pose-5.075.txt",
+      "output": "out/planar-boundary/pose-5.075.ports.json",
+      "pose_sha256": "1947a938a9a0d42e20c168b6d53217cf1d1bf70c70cb996f957642d870c117cf",
+      "previous_pose_sha256": "ca22f3fc0643530d31630405bac36d2940cdb6b29e3d0d7d1dde21c326ffa3db",
+      "input_sha256": "fa2224972a6461c5a8b0999a2d6bd2577fb750e8d4ffc6b458f169d51ef09dfd",
+      "output_sha256": "ca6e586c19d232cbc4e206baa4edc0a432cb0373ffd722335244139285b5b223"
+    },
+    {
+      "time": 5.076,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001593207,
+        "mouth_end": 0.0004280849614177448
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.076,
+        "regions": 1289,
+        "links": 2423,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          7.005397311459981e-05
+        ],
+        "maximum_region_volume_error_m3": 9.992341799640574e-22,
+        "maximum_port_area_error_m2": 7.724940478959219e-19,
+        "maximum_component_volume_error_m3": 2.439454888092385e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.076.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.076.json",
+      "input": "out/planar-boundary/pose-5.076.txt",
+      "output": "out/planar-boundary/pose-5.076.ports.json",
+      "pose_sha256": "28e71636a5ce3b96c7279f58e1f16cbdbcffc2bd1894b6c0936c80596dff554c",
+      "previous_pose_sha256": "91860970188d5f6ddb0c0e6729b2b27aaafec1eb4a4cc8a51ddedac71deb524e",
+      "input_sha256": "5e8bc8f305c32f3633eb2ea8a393e1ac8afa812cc6994347d514b61a0db7c43b",
+      "output_sha256": "b7e096a657d64c5ae77d7e11646f73660901630bd49fe69d4a90617579f23363"
+    },
+    {
+      "time": 5.077,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001519699,
+        "mouth_end": 0.00042808496142698443
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.077,
+        "regions": 1285,
+        "links": 2415,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          7.008628436331471e-05
+        ],
+        "maximum_region_volume_error_m3": 1.1249656330721176e-21,
+        "maximum_port_area_error_m2": 9.0801931945661e-19,
+        "maximum_component_volume_error_m3": 1.2197274440461925e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.077.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.077.json",
+      "input": "out/planar-boundary/pose-5.077.txt",
+      "output": "out/planar-boundary/pose-5.077.ports.json",
+      "pose_sha256": "4ea189aefa8056f7e87dfa8106e3b54d6ba1a8854f44e0a52e0a11cfaf005da6",
+      "previous_pose_sha256": "560201a8b9d30dfa00d8597a1974c8081cd4639c1e8ba66a7438a7239d95e607",
+      "input_sha256": "e50879de36b9a0b8bae9ba96a7dfb05bfbc95fe1ba7896951ba0445b6aea6f58",
+      "output_sha256": "a892541c53fded75bda780d346200c10e06d660744bcf2cd1b15bebe0d51b17d"
+    },
+    {
+      "time": 5.078,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001449459,
+        "mouth_end": 0.00042808496143600456
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.078,
+        "regions": 1283,
+        "links": 2411,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          7.011405418879332e-05
+        ],
+        "maximum_region_volume_error_m3": 1.4293680984916318e-21,
+        "maximum_port_area_error_m2": 1.0503208545953324e-18,
+        "maximum_component_volume_error_m3": 2.168404344971009e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.078.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.078.json",
+      "input": "out/planar-boundary/pose-5.078.txt",
+      "output": "out/planar-boundary/pose-5.078.ports.json",
+      "pose_sha256": "3bbd262d810c4490734ffcda657c60f9e8d86ca6145eb3df9a80c0f87ce0125b",
+      "previous_pose_sha256": "7cf024f8b181f895b1c7b68a18b4ce9f492abb0febb0b73410000908c0c31492",
+      "input_sha256": "f568acea9fadf07304af364c9a46e56da75f240ef823af4cc6697a1258ef0b6c",
+      "output_sha256": "df344eaee87fcbf696c6261a0e7a4ee7917056897a67455f178fb81f072fbcd9"
+    },
+    {
+      "time": 5.079,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001382486,
+        "mouth_end": 0.0004280849614445844
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.079,
+        "regions": 1298,
+        "links": 2439,
+        "split_cells": [
+          2853,
+          2917,
+          2981,
+          3045
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.013790396836113e-05
+        ],
+        "maximum_region_volume_error_m3": 1.0190865146653301e-21,
+        "maximum_port_area_error_m2": 7.521652571618187e-19,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.079.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.079.json",
+      "input": "out/planar-boundary/pose-5.079.txt",
+      "output": "out/planar-boundary/pose-5.079.ports.json",
+      "pose_sha256": "79418da9bf9f0c68cb4a65edb7980e25c549b680f20e567080d793710da3ce0f",
+      "previous_pose_sha256": "9ccfece3daf503b744c4b7d366b14a8e11580e2ef196ef4ce93166fdf6499775",
+      "input_sha256": "aef8ebba21d8a874570b8afe08153897be75bcc90a70dcf75055db5e763bad0b",
+      "output_sha256": "4f970c61d01aff3c420f7bbf33568ebda7f5381ead29e744041efec767db6630"
+    },
+    {
+      "time": 5.08,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001318779,
+        "mouth_end": 0.0004280849614527246
+      },
+      "errors": {
+        "area_m2": 4.743384504624082e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.08,
+        "regions": 1294,
+        "links": 2431,
+        "split_cells": [
+          2853,
+          2917,
+          2981
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.01583805663248e-05
+        ],
+        "maximum_region_volume_error_m3": 1.5352472168984194e-21,
+        "maximum_port_area_error_m2": 9.351243737687476e-19,
+        "maximum_component_volume_error_m3": 2.574980159653073e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.080.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.080.json",
+      "input": "out/planar-boundary/pose-5.080.txt",
+      "output": "out/planar-boundary/pose-5.080.ports.json",
+      "pose_sha256": "e78b1ea3dab005f6f6fade8d95cecf2b5374468312d773e39a4bc0b4ba84a85a",
+      "previous_pose_sha256": "fb6bd8d441644220bce89ae15b5a517d61a4544a371131f03167d1cccf7ccecc",
+      "input_sha256": "6ed6ad3e9fc67dcf66d4ce9dd6652d865d7f22f9150623cb8281247a2b91ca46",
+      "output_sha256": "55a9fd0026a16a9ad348937daa20b4c10f55b74c3e3e2272f03a3c27091dbbc5"
+    },
+    {
+      "time": 5.081,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001257795,
+        "mouth_end": 0.00042808496146042486
+      },
+      "errors": {
+        "area_m2": 2.710505431213761e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.081,
+        "regions": 1293,
+        "links": 2429,
+        "split_cells": [
+          2853,
+          2917
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.017595932204563e-05
+        ],
+        "maximum_region_volume_error_m3": 1.8131799027162367e-21,
+        "maximum_port_area_error_m2": 1.2400562347802957e-18,
+        "maximum_component_volume_error_m3": 1.7618285302889447e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.081.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.081.json",
+      "input": "out/planar-boundary/pose-5.081.txt",
+      "output": "out/planar-boundary/pose-5.081.ports.json",
+      "pose_sha256": "b0954f3b4c50afe82de6a5102ab605a8d3e82293b568ba25e97a50cef321e0be",
+      "previous_pose_sha256": "d23bba40ba44a6a3d0528732f4cac0376f19f2439f2581ffa2f4348a122ed552",
+      "input_sha256": "688488a15e0a5aa0d0ed4fa865dd67a7b96183388377290a7da4f3b05d0717c3",
+      "output_sha256": "ba844883e191033bab8e3c12a152fc4504e38c6f8b3b9b84878fb478f75cb41f"
+    },
+    {
+      "time": 5.082,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001200078,
+        "mouth_end": 0.00042808496146790466
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.082,
+        "regions": 1292,
+        "links": 2427,
+        "split_cells": [
+          2853,
+          2917
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.019105031807338e-05
+        ],
+        "maximum_region_volume_error_m3": 1.522012327097571e-21,
+        "maximum_port_area_error_m2": 9.351243737687476e-19,
+        "maximum_component_volume_error_m3": 8.131516293641283e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.082.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.082.json",
+      "input": "out/planar-boundary/pose-5.082.txt",
+      "output": "out/planar-boundary/pose-5.082.ports.json",
+      "pose_sha256": "b9e5ed77c2522a6f644d368f87ec8454248dca6cf1dd720749ef78fab770121a",
+      "previous_pose_sha256": "775c92a32078645f7a68ba00391c95140a35820249f26d3b63ac7516436b56f8",
+      "input_sha256": "b7e0c2012fdedca51a207de33e391c04f916dd8f84d9bf467c92ad5104418436",
+      "output_sha256": "73a5ed81341ec67e812ef0203d25bdf905d1ca52ee4a1679122d0e03bbcfa9a4"
+    },
+    {
+      "time": 5.083,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001144539,
+        "mouth_end": 0.00042808496147494455
+      },
+      "errors": {
+        "area_m2": 4.0657581468206416e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.083,
+        "regions": 1291,
+        "links": 2425,
+        "split_cells": [
+          2853,
+          2917
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.020400986920037e-05
+        ],
+        "maximum_region_volume_error_m3": 1.1315830779725419e-21,
+        "maximum_port_area_error_m2": 7.521652571618187e-19,
+        "maximum_component_volume_error_m3": 5.421010862427522e-20
+      },
+      "pose": "out/planar-boundary/poses/pose-5.083.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.083.json",
+      "input": "out/planar-boundary/pose-5.083.txt",
+      "output": "out/planar-boundary/pose-5.083.ports.json",
+      "pose_sha256": "4e3c7d36e938899c6269ca4899018d61e90a3f94ec2b9e334cf38cc540962f13",
+      "previous_pose_sha256": "68f90aa1bfdfb6f2a6771586408f1120256d00daf3ac9c50af21f17291e15e21",
+      "input_sha256": "00af9ff7bb215a2ab785d9edf8270a5c4b331a029a976266fde09bdfe1650d03",
+      "output_sha256": "b61423c2ac2cc8abec84fd345868e65a40f8ca17d417bab33fb6a66e93400260"
+    },
+    {
+      "time": 5.084,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.0002645500001091722,
+        "mouth_end": 0.0004280849614817646
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.084,
+        "regions": 1289,
+        "links": 2420,
+        "split_cells": [
+          2853
+        ],
+        "components": 1,
+        "component_volumes_m3": [
+          7.021514101951852e-05
+        ],
+        "maximum_region_volume_error_m3": 1.6080391108030858e-21,
+        "maximum_port_area_error_m2": 1.07742590890747e-18,
+        "maximum_component_volume_error_m3": 2.168404344971009e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.084.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.084.json",
+      "input": "out/planar-boundary/pose-5.084.txt",
+      "output": "out/planar-boundary/pose-5.084.ports.json",
+      "pose_sha256": "a9573ac84d54f451dfe2599a2db0b0b7bd797afcd3f9ab5162e58ca5a9b5a9e5",
+      "previous_pose_sha256": "b99903e27e1284b8ca8e9c0cbe5069e270cc8a600e373f821abca6dbe9ebe117",
+      "input_sha256": "b4658cd17b561e53584fd2e664c5a2e13ec8049af53d6a4d36fb88bbb676aeba",
+      "output_sha256": "d9aeca6434b074ed8fae8614d507771bf555ded0f63f2d1ad021f1b5ad0db7f1"
+    },
+    {
+      "time": 5.085,
+      "ports": 21,
+      "boundary_edges": {
+        "supraglottal_entry": 535,
+        "mouth_end": 266
+      },
+      "areas_m2": {
+        "supraglottal_entry": 0.00026455000010416283,
+        "mouth_end": 0.0004280849614881447
+      },
+      "errors": {
+        "area_m2": 3.3881317890172014e-20,
+        "centre_m": 1.3877787807814457e-17,
+        "normal": 0.0
+      },
+      "interior": {
+        "time": 5.085,
+        "regions": 1289,
+        "links": 2421,
+        "split_cells": [],
+        "components": 1,
+        "component_volumes_m3": [
+          7.022470397161009e-05
+        ],
+        "maximum_region_volume_error_m3": 1.495542547495874e-21,
+        "maximum_port_area_error_m2": 9.181837148236616e-19,
+        "maximum_component_volume_error_m3": 1.7618285302889447e-19
+      },
+      "pose": "out/planar-boundary/poses/pose-5.085.json",
+      "previous_pose": "out/planar-airspace/motion/pose-5.085.json",
+      "input": "out/planar-boundary/pose-5.085.txt",
+      "output": "out/planar-boundary/pose-5.085.ports.json",
+      "pose_sha256": "7aa762ac5d91d8c3a47d0d0dfd2151cc99cf32c12520478367bd73f0f8bd954f",
+      "previous_pose_sha256": "9e81a538a042e14f274f0996f5673db285bd7241efb93e01276c7e9603ddff1f",
+      "input_sha256": "c52a831c372127faa06534ddbe029518cce6952cbec55237a4443ff1619be58b",
+      "output_sha256": "7f2900ce4329d97ab6914efafe26eb4728c3ea0eab155d19e4bce7ef458b29cf"
+    }
+  ],
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_boundary_reference.py"
+  ],
+  "hashes": {
+    "tools/planar_boundary_reference.py": "73accfa3f3dc2c666048212636b0b24c1dac387cf01ec3820eac18acff72dcaa",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "tools/planar_regions_probe.cpp": "1720bf6b5ab6a86db169f0ce5513682ddabc90889e3fb6e0381352f77a6ae6b3",
+    "tools/airspace_geometry_probe.cpp": "ca9a3f9b816893f2c1bd48237af55ae77fd88198a394793d94ddd221dc676475",
+    "include/ducklips/planar_airspace.hpp": "a6fbcec06637360e559bd949ae152e2fcb036470ecaa4bbf0269a7887cdff7cd",
+    "src/planar_airspace.cpp": "f19a73ddd492d7b8d15c9ce35e649c87bec85be84fce400b506446aa9634a337",
+    "build/ducklips_planar_regions_probe": "7f6d3517cfa70dbb819ca5feb17fcee89a6709e32c7f2e67fa0ca519d5c27e80"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

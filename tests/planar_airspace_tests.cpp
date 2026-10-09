@@ -129,6 +129,57 @@ int main(){
     check(split.build_regions(unit,{},1) && split.regions.size()==6,"component preparation can be repeated for a changed grid");
     split.build(unit,{},1);
     check(split.regions.empty() && split.region_links.empty(),"ordinary geometry build does not expose stale component outputs");
+    // Domain ports retain the one-sided owning region, including a boundary
+    // lying inside a grid cell. An internal grid face cannot represent this.
+    ducklips::PlanarAirspace boundary;boundary.prepare(grid(1,-.1,1.1),grid(1,-.1,1.1),32);boundary.prepare_regions(2048,4096);
+    const std::array<std::size_t,4> all_edges{0,1,2,3};
+    const std::size_t port_before=allocations.load();
+    const bool port_valid=boundary.build_regions(unit,{},.02,all_edges);
+    const std::size_t port_after=allocations.load();
+    bool square_ports=port_valid && boundary.boundary_ports.size()==4;
+    const std::array<ducklips::Point2,4> normals{{{0,-1},{1,0},{0,1},{-1,0}}};
+    for(const auto& port:boundary.boundary_ports){square_ports=square_ports && port.region==0 && std::abs(port.area-.02)<1e-16
+        && port.outward_normal.x==normals[port.edge].x && port.outward_normal.y==normals[port.edge].y;}
+    check(square_ports,"domain caps expose exact area and outward direction inside a grid cell");
+    check(port_before==port_after,"boundary extraction allocates nothing after preparation");
+    const auto horizontal_barrier=box(-.1,1.1,.45,.55);const std::array<ducklips::PlanarContour,1> cut_mouth{{horizontal_barrier}};
+    const std::array<std::size_t,1> right_cap{1};
+    bool split_ports=boundary.build_regions(unit,cut_mouth,1,right_cap) && boundary.boundary_ports.size()==2;
+    for(const auto& port:boundary.boundary_ports){split_ports=split_ports && std::abs(port.area-.45)<1e-14
+        && ((port.centre.y<.5)==(boundary.regions[port.region].interior.y<.5));}
+    check(split_ports,"two disconnected chambers on one cap retain separate source attachments");
+    const auto exterior_contact=box(1,1.2,.2,.8);const std::array<ducklips::PlanarContour,1> exterior{{exterior_contact}};
+    check(boundary.build_regions(unit,exterior,1,right_cap) && boundary.regions.size()==1 && boundary.boundary_ports.size()==1
+        && std::abs(boundary.boundary_ports[0].area-.4)<1e-14 && std::abs(boundary.boundary_ports[0].centre.y-.5)<1e-14,
+        "coincident exterior tissue closes its part of a boundary aperture");
+    auto reversed_unit=unit;std::reverse(reversed_unit.begin(),reversed_unit.end());
+    check(boundary.build_regions(reversed_unit,exterior,1,right_cap) && boundary.boundary_ports.size()==1
+        && std::abs(boundary.boundary_ports[0].area-.4)<1e-14 && boundary.boundary_ports[0].outward_normal.x==1,
+        "boundary winding does not reverse physical flow direction");
+    const std::array<ducklips::Point2,3> triangular_mouth{{{0,0},{1,0},{0,1}}};
+    check(boundary.build_regions(triangular_mouth,{},1,right_cap) && boundary.boundary_ports.size()==1
+        && std::abs(boundary.boundary_ports[0].area-std::sqrt(2.))<1e-14
+        && std::abs(boundary.boundary_ports[0].outward_normal.x-1/std::sqrt(2.))<1e-14
+        && std::abs(boundary.boundary_ports[0].centre.x-.5)<1e-14,
+        "sloping cap has geometric length normal and area centroid");
+    const auto seal_cap=box(1,1.1,0,1);const std::array<ducklips::PlanarContour,1> exterior_seal{{seal_cap}};
+    check(boundary.build_regions(unit,exterior_seal,1,right_cap) && boundary.boundary_ports.empty(),"complete external contact seals a boundary exactly");
+    const auto nearly_sealed=box(1,1.1,0,1-1e-12);const std::array<ducklips::PlanarContour,1> narrow_cap{{nearly_sealed}};
+    check(boundary.build_regions(unit,narrow_cap,1,right_cap) && boundary.boundary_ports.size()==1 && boundary.boundary_ports[0].area>0
+        && boundary.boundary_ports[0].area<1.01e-12,"small positive boundary opening survives without an aperture threshold");
+    const auto moved_cap=box(0,1.05,0,1);const std::size_t moving_port_before=allocations.load();
+    bool moving_port_valid=true;
+    for(double fraction:{0.,.25,.5,.75,1.}){
+        moving_port_valid=boundary.build_between(unit,{},moved_cap,{},fraction,1,right_cap) && moving_port_valid;
+        moving_port_valid=moving_port_valid && boundary.boundary_ports.size()==1 && std::abs(boundary.boundary_ports[0].area-1)<1e-14
+            && std::abs(boundary.boundary_ports[0].centre.x-(1+.05*fraction))<1e-14;
+    }
+    check(moving_port_valid && allocations.load()==moving_port_before,"moving cap identity and area persist without new allocations");
+    const std::array<std::size_t,2> duplicate_cap{1,1};
+    const std::array<std::size_t,1> invalid_cap{4};
+    check(!boundary.build_regions(unit,{},1,duplicate_cap) && !boundary.build_regions(unit,{},1,invalid_cap),"duplicate and invalid boundary identities are rejected");
+    boundary.build_regions(unit,{},1,right_cap);boundary.build(unit,{},1);
+    check(boundary.boundary_ports.empty(),"ordinary geometry clears prior boundary attachments");
     // A sloping tissue boundary sweeps a triangular air wedge into the right
     // cell. Its volume is h^2/2 and its shared aperture is h, not two linear
     // interpolants. All contour vertices have fixed correspondence.
