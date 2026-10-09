@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""Align waveform/STFT/enhanced views of two separately rendered analysis fields."""
+"""Coarse timing overview only. Use native_fields.py to inspect field detail.
+
+Nearest interpolation does not prevent row loss when the axes or the displayed
+figure are smaller than the input raster. This overview is deliberately not an
+ordinary-versus-enhanced resolution comparison.
+"""
 import argparse
 from pathlib import Path
 import numpy as np
@@ -31,6 +36,6 @@ for column, (path, label) in enumerate([(a.human,'Human: valeatory — Alfa'), (
         for ax in axes[:,column]:
             ax.set_xlim(0,1.5)
             ax.set_xlabel('Seconds from recording start (no time warping)')
-fig.suptitle('Same word, different bodies and timing\nDisplay normalized per recording; not a loudness comparison or a realism score',fontsize=15)
+fig.suptitle('Timing overview only — spatial detail reduced\nUse native_fields.py for ordinary/enhanced detail; independent display peaks',fontsize=15)
 a.out.parent.mkdir(parents=True,exist_ok=True)
 fig.savefig(a.out,dpi=150)

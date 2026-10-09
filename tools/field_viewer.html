@@ -1,0 +1,120 @@
+<div id="ducklips-native-fields">
+  <h3>Alfa · native field cells</h3>
+  <div class="viz-controls">
+    <label class="form-label">Recording<select class="form-select" data-control="recording"><option value="0">Human · valeatory</option><option value="1">DuckLips · reference body</option></select></label>
+    <label class="form-label">Enhanced row height<select class="form-select" data-control="zoom"><option value="1">1 CSS pixel</option><option value="2" selected>2 CSS pixels</option><option value="4">4 CSS pixels</option><option value="8">8 CSS pixels</option></select></label>
+    <label class="form-label">Time column width<select class="form-select" data-control="timezoom"><option value="4">4 CSS pixels</option><option value="8" selected>8 CSS pixels</option><option value="16">16 CSS pixels</option><option value="32">32 CSS pixels</option></select></label>
+    <label class="form-label" for="ducklips-time-center">Time center · <output data-value="time"></output><input id="ducklips-time-center" class="form-range" data-control="time" type="range" min="0" max="1.5" step="0.0106666667" value="0.88"></label>
+    <label class="form-label" for="ducklips-frequency-center">Frequency center · <output data-value="frequency"></output><input id="ducklips-frequency-center" class="form-range" data-control="frequency" type="range" min="0" max="8000" step="11.72447484" value="1800"></label>
+  </div>
+  <div class="text-small" data-status aria-live="polite"></div>
+  <section data-panel="ordinary"><div class="viz-row"><span>Ordinary STFT</span><span class="text-small" data-metrics></span></div><div class="field-plot"><canvas role="img" aria-label="Ordinary STFT, discrete native cells"></canvas><svg role="img" aria-label="Time in seconds and frequency in hertz"></svg></div></section>
+  <section data-panel="enhanced"><div class="viz-row"><span>Full enhanced field</span><span class="text-small" data-metrics></span></div><div class="field-plot"><canvas role="img" aria-label="Enhanced spectrogram, discrete native cells"></canvas><svg role="img" aria-label="Time in seconds and frequency in hertz"></svg></div></section>
+  <div class="text-small">Shared time/frequency window · independent field peaks · −60 to 0 dB</div>
+  <div class="viz-row text-small"><span>−60 dB</span><canvas data-legend width="160" height="12" aria-label="Intensity legend"></canvas><span>0 dB</span><span data-cell></span></div>
+  <div class="text-small">Human: <a href="https://commons.wikimedia.org/wiki/File:NATO_Phonetic_Alphabet_reading.ogg">valeatory · NATO alphabet recording</a> · <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> · transformed analysis</div>
+</div>
+<style>
+#ducklips-native-fields .field-plot { position:relative; height:316px; }
+#ducklips-native-fields .field-plot canvas { position:absolute; left:64px; top:12px; image-rendering:pixelated; }
+#ducklips-native-fields .field-plot svg { position:absolute; inset:0; overflow:visible; pointer-events:none; }
+#ducklips-native-fields svg text { fill:var(--foreground); font-size:12px; }
+#ducklips-native-fields svg .domain, #ducklips-native-fields svg .tick line { stroke:var(--border); }
+#ducklips-native-fields [data-metrics] { color:var(--muted-foreground); }
+#ducklips-native-fields section { margin-top:12px; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script type="application/json" id="ducklips-fields-data">__FIELD_DATA__</script>
+<script>
+(() => {
+  const root = document.getElementById('ducklips-native-fields');
+  const records = JSON.parse(document.getElementById('ducklips-fields-data').textContent);
+  for (const rec of records) for (const key of ['ordinary','enhanced']) {
+    const field=rec[key], raw=atob(field.data), bytes=Uint8Array.from(raw,c=>c.charCodeAt(0));
+    const view=new DataView(bytes.buffer);
+    field.values=Array.from({length:bytes.length/2},(_,i)=>view.getUint16(i*2,true));
+    delete field.data;
+  }
+  const controls=Object.fromEntries([...root.querySelectorAll('[data-control]')].map(e=>[e.dataset.control,e]));
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  let palette=[];
+  function restore(saved) {
+    const values=saved?.privateContent;
+    if (!values) return;
+    for(const [key,input] of Object.entries(controls)) if(values[key]!==undefined) {
+      const old=input.value; input.value=String(values[key]); if(input.value==='') input.value=old;
+    }
+  }
+  restore(window.openai?.widgetState);
+  function colors() {
+    const probe=document.createElement('span'); root.append(probe);
+    const resolve=name=>{ probe.style.color=`var(${name})`; return d3.rgb(getComputedStyle(probe).color); };
+    const background=resolve('--background'), foreground=resolve('--foreground'); probe.remove();
+    const interpolate=d3.interpolateRgb(background,foreground);
+    palette=Array.from({length:256},(_,i)=>interpolate(i/255));
+    const legend=root.querySelector('[data-legend]'), ctx=legend.getContext('2d');
+    for(let x=0;x<160;x++){ctx.fillStyle=palette[Math.round(x/159*255)];ctx.fillRect(x,0,1,12);}
+  }
+  function draw() {
+    colors();
+    const rec=records[+controls.recording.value], zoom=+controls.zoom.value;
+    const cellWidth=+controls.timezoom.value;
+    const width=Math.floor(root.getBoundingClientRect().width), plotWidth=Math.max(cellWidth,Math.floor((width-80)/cellWidth)*cellWidth);
+    const columns=Math.min(rec.cols,plotWidth/cellWidth);
+    const firstCol=clamp(Math.round((+controls.time.value-rec.t0)/rec.dt-columns/2),0,rec.cols-columns);
+    const rowCount=256/zoom, firstRow=clamp(Math.round(+controls.frequency.value/rec.enhanced.df-rowCount/2),0,rec.enhanced.rows-rowCount);
+    const low=(firstRow-.5)*rec.enhanced.df, high=(firstRow+rowCount-.5)*rec.enhanced.df;
+    const start=rec.t0+(firstCol-.5)*rec.dt, end=start+columns*rec.dt;
+    const actualWidth=columns*cellWidth, dpr=window.devicePixelRatio||1;
+    controls.time.max=rec.t0+(rec.cols-1)*rec.dt;
+    root.querySelector('[data-value="time"]').textContent=((start+end)/2).toFixed(3)+' s';
+    root.querySelector('[data-value="frequency"]').textContent=((low+high)/2).toFixed(0)+' Hz';
+    root.querySelector('[data-status]').textContent=`${start.toFixed(3)}–${end.toFixed(3)} s · ${Math.max(0,low).toFixed(0)}–${high.toFixed(0)} Hz · ${columns} columns × ${cellWidth} CSS px · no spatial reduction`;
+    for(const key of ['ordinary','enhanced']) {
+      const field=rec[key], panel=root.querySelector(`[data-panel="${key}"]`), canvas=panel.querySelector('canvas');
+      canvas.style.width=actualWidth+'px'; canvas.style.height='256px';
+      canvas.width=Math.ceil(actualWidth*dpr); canvas.height=Math.ceil(256*dpr);
+      const ctx=canvas.getContext('2d'); ctx.imageSmoothingEnabled=false;
+      const first=Math.max(0,Math.floor(low/field.df+.5)), last=Math.min(field.rows,Math.ceil(high/field.df+.5));
+      for(let row=first;row<last;row++) {
+        const top=Math.round(clamp((high-(row+.5)*field.df)/(high-low)*256,0,256)*dpr);
+        const bottom=Math.round(clamp((high-(row-.5)*field.df)/(high-low)*256,0,256)*dpr);
+        for(let col=0;col<columns;col++) {
+          ctx.fillStyle=palette[Math.round(field.values[row*rec.cols+firstCol+col]/65535*255)];
+          const x0=Math.round(col*cellWidth*dpr), x1=Math.round((col+1)*cellWidth*dpr);
+          ctx.fillRect(x0,top,x1-x0,bottom-top);
+        }
+      }
+      const rowHeight=field.df/(high-low)*256;
+      canvas.dataset.rowHeight=rowHeight; canvas.dataset.columnWidth=cellWidth;
+      panel.querySelector('[data-metrics]').textContent=`${field.df.toFixed(3)} Hz/row · ${rowHeight.toFixed(3)} CSS px/row`;
+      const svg=d3.select(panel.querySelector('svg')).attr('width',width).attr('height',316).attr('viewBox',`0 0 ${width} 316`);
+      svg.selectAll('*').remove();
+      const x=d3.scaleLinear().domain([start,end]).range([64,64+actualWidth]);
+      const y=d3.scaleLinear().domain([low,high]).range([268,12]);
+      svg.append('g').attr('transform','translate(0,268)').call(d3.axisBottom(x).ticks(width<400?3:5).tickFormat(d3.format('.2f')));
+      svg.append('g').attr('transform','translate(64,0)').call(d3.axisLeft(y).ticks(4).tickFormat(d3.format('.0f')));
+      svg.append('text').attr('class','axis-title').attr('data-axis','x').attr('x',64+actualWidth/2).attr('y',309).attr('text-anchor','middle').text('Time (s)');
+      svg.append('text').attr('class','axis-title').attr('data-axis','y').attr('transform','translate(14,140) rotate(-90)').attr('text-anchor','middle').text('Frequency (Hz)');
+      svg.append('rect').attr('data-chart-frame','').attr('x',64).attr('y',12).attr('width',actualWidth).attr('height',256).attr('fill','none').attr('stroke','var(--border)');
+      canvas.onpointermove=event=>{
+        const bounds=canvas.getBoundingClientRect();
+        const col=clamp(Math.floor((event.clientX-bounds.left)/cellWidth)+firstCol,0,rec.cols-1);
+        const hz=high-(event.clientY-bounds.top)/256*(high-low), row=clamp(Math.round(hz/field.df),0,field.rows-1);
+        const db=-60+field.values[row*rec.cols+col]*60/65535;
+        root.querySelector('[data-cell]').textContent=`${key}: ${(rec.t0+col*rec.dt).toFixed(3)} s · ${(row*field.df).toFixed(1)} Hz · ${db.toFixed(2)} dB`;
+      };
+    }
+  }
+  for(const input of Object.values(controls)) input.addEventListener('input',()=>{
+    draw();
+    const values=Object.fromEntries(Object.entries(controls).map(([k,v])=>[k,v.value]));
+    window.openai?.setWidgetState?.({modelContent:{recording:records[+values.recording].label,center_seconds:+values.time,center_hz:+values.frequency,enhanced_row_css_pixels:+values.zoom,time_column_css_pixels:+values.timezoom},privateContent:values}).catch(()=>{});
+  });
+  window.addEventListener('openai:set_globals',event=>{restore(event.detail?.globals?.widgetState);draw();});
+  new ResizeObserver(draw).observe(root);
+  new MutationObserver(draw).observe(document.documentElement,{attributes:true,attributeFilter:['class','style','data-theme','data-color-mode']});
+  matchMedia('(prefers-color-scheme: dark)').addEventListener('change',draw);
+  draw();
+})();
+</script>

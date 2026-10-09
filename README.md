@@ -135,6 +135,32 @@ and timing. Keep its ordinary STFT beside the enhanced field: registration and
 reassignment improve inspection but do not make an invertible spectrum, a
 calibrated energy measure, or a realism score.
 
+Inspect fine structure with the native-cell viewer, not the overview PNGs:
+
+```sh
+python tools/native_fields.py \
+  out/enhanced_specgram/nato_human.npz \
+  out/enhanced_specgram/nato_generated.npz \
+  --out out/enhanced_specgram/native-fields.html \
+  --crop-prefix out/enhanced_specgram/human-native
+```
+
+This emits an inline visualization fragment plus optional 384×256 native PNG
+crops and an axis receipt. The viewer preserves every supplied spatial cell in
+the selected 0–8 kHz band. It shows a cropped time/frequency window at a minimum
+of one CSS pixel per enhanced row; resizing changes the crop, not the cell
+scale. Frequency and time zoom enlarge cells, and controls pan the window.
+Both methods use the same physical axes; ordinary rows occupy approximately
+twice the height of enhanced rows. The fields use independent display peaks.
+Intensity is packed at 16-bit precision across −60 to 0 dB, then mapped to an
+8-bit grayscale display; original full-precision linear NPZ fields are retained.
+Small negative values at floating-point roundoff are floored for display.
+
+`tools/compare_fields.py` is only a coarse timing overview. Setting
+`interpolation='nearest'` does **not** preserve details when a dense field is
+drawn in a smaller panel or the resulting PNG is reduced again for display.
+Never use that overview to judge the enhanced field's additional fine detail.
+
 ## Detailed surface experiment
 
 ```sh
