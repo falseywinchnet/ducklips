@@ -171,7 +171,11 @@ void Synthesizer::reset() noexcept {
     measured_pitch_ = 0.0;
     tremor_phase_ = 0.0;
     output_gain_ = 1.0;
-    previous_output_gain_ = 1.0;
+    lung_pressure_ = 0.0;
+    shimmer_multiplier_ = 1.0;
+    pitch_multiplier_ = 1.0;
+    pitch_correction_ = 1.0;
+    tap_previous_flow_ = 0.0;
     flow_sum_ = 0.0;
     area_sum_ = 0.0;
     probe_samples_ = 0;
@@ -244,7 +248,9 @@ void Synthesizer::begin_block() noexcept {
         queue_.pop();
     }
     const double block_seconds = static_cast<double>(options_.control_block) * sample_period_;
-    articulators_.advance(block_seconds);
+    // Geometry solves remain at control rate; physiological forces follow
+    // their continuous trajectories in render_samples, not a block hold.
+    articulators_.advance_geometry(block_seconds);
     model_.build(articulators_, shape_);
     // The tongue body follows the blade's pull with its own inertia.
     Point2 pull = model_.required_drag();
@@ -331,12 +337,12 @@ void Synthesizer::begin_block() noexcept {
     // Larynx: breathing pressure with shimmer; tension from intended pitch,
     // the pitch controller's correction, jitter and tremor.
     double shimmer = shimmer_noise_.next();
+    shimmer_multiplier_ = 1.0 + voice_.shimmer * shimmer;
     double effort = std::clamp(articulators_.effort.value, 0.3, 2.0);
-    lung_pressure_ = articulators_.lung_pressure.value * effort * (1.0 + voice_.shimmer * shimmer);
+    lung_pressure_ = articulators_.lung_pressure.value * effort * shimmer_multiplier_;
     // Effort above 1 presses the folds together; below 1 lets them part.
     double adduction = std::clamp(1.0 - 1.5 * (effort - 1.0), 0.4, 1.6);
     rest_area_ = std::max(articulators_.glottal_rest_area.value * adduction, -2.0e-6);
-    previous_output_gain_ = output_gain_;
     output_gain_ = std::max(articulators_.loudness.value, 0.0);
     tremor_phase_ += 2.0 * pi * voice_.tremor_rate * block_seconds;
     if (tremor_phase_ > 2.0 * pi) {
@@ -345,7 +351,8 @@ void Synthesizer::begin_block() noexcept {
     double wander = voice_.jitter * jitter_noise_.next() + voice_.tremor_depth * std::sin(tremor_phase_);
     double intended = std::max(articulators_.pitch.value, 30.0);
     double feedforward = intended / unit_pitch_;
-    tension_ = std::clamp(feedforward * std::exp(pitch_integral_) * (1.0 + wander), 0.3, 6.0);
+    pitch_multiplier_ = 1.0 + wander;
+    tension_ = std::clamp(feedforward * pitch_correction_ * pitch_multiplier_, 0.3, 6.0);
 
     // Probe of the block that just finished.
     if (probe_samples_ > 0) {
@@ -452,6 +459,7 @@ void Synthesizer::track_pitch(double glottal_area) noexcept {
                     double intended = std::max(articulators_.pitch.value, 30.0);
                     double error = std::log(intended / measured_pitch_);
                     pitch_integral_ = std::clamp(pitch_integral_ + 0.25 * error, -1.2, 1.2);
+                    pitch_correction_ = std::exp(pitch_integral_);
                     statistics_.pitch_cycles += 1;
                 }
             }
@@ -477,6 +485,14 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
     std::array<double, radiator_count> radiated{};
     std::array<double, microphone_count> microphone{};
     for (std::size_t frame = 0; frame < frames; ++frame) {
+        articulators_.advance_physiology(period);
+        const double effort = std::clamp(articulators_.effort.value, 0.3, 2.0);
+        lung_pressure_ = articulators_.lung_pressure.value * effort * shimmer_multiplier_;
+        const double adduction = std::clamp(1.0 - 1.5 * (effort - 1.0), 0.4, 1.6);
+        rest_area_ = std::max(articulators_.glottal_rest_area.value * adduction, -2.0e-6);
+        tension_ = std::clamp(std::max(articulators_.pitch.value, 30.0)/unit_pitch_
+                             * pitch_correction_ * pitch_multiplier_, 0.3, 6.0);
+        output_gain_ = std::max(articulators_.loudness.value, 0.0);
         // Turbulence of the glottal jet of the previous sample. The same
         // fluctuating pressure acts on the fold surface and, downstream, as
         // the aspiration source in the tract.
@@ -581,7 +597,7 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
                                          .modes = modes, .glottal_area = area, .glottal_flow = flow,
                                          .tension = tension_});
         }
-        double gain = previous_output_gain_ + ramp * (output_gain_ - previous_output_gain_);
+        double gain = output_gain_;
         double left = microphone[0];
         double right = microphone[1];
         if (options_.tap == OutputTap::lips) {

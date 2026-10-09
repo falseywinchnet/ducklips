@@ -98,6 +98,8 @@ struct ArticulatorState final {
     CriticallyDampedTracker loudness{};           // output gain
 
     void advance(double step) noexcept;
+    void advance_geometry(double step) noexcept;
+    void advance_physiology(double step) noexcept;
     void apply_speeds(const ArticulatorSpeeds& speeds) noexcept;
     void place_vowel(const VowelShape& vowel) noexcept;
     void target_vowel(const VowelShape& vowel, double angular_rate) noexcept;

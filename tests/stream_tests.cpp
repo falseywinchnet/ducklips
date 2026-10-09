@@ -1,5 +1,6 @@
 #include "ducklips/body_config.hpp"
 #include "ducklips/nudges.hpp"
+#include "ducklips/planner.hpp"
 #include <algorithm>
 #include <atomic>
 #include <cmath>
@@ -93,6 +94,33 @@ int main() {
     std::vector<float> half_second(24000 * 2);
     bounded.render(half_second);
     check(bounded.pending() == 0, "speed-scaled diphthong targets are delivered");
+    // Regression for the audible control-clock comb observed in Alfa's inhale.
+    // This measures the rendered signal, independently of the control code.
+    ducklips::Synthesizer speech{};
+    ducklips::SynthesisOptions speech_options{};
+    speech.prepare(ducklips::baritone_voice(), speech_options);
+    ducklips::UtterancePlanner planner{};
+    planner.prepare(ducklips::baritone_voice(), speech.vowels(), speech_options.rate);
+    const ducklips::UtterancePlan plan = planner.plan_phonemes("AE1 L F AX0");
+    for (const ducklips::Cue& cue : plan.cues) { check(speech.enqueue(cue), "clock-regression cue accepted"); }
+    std::vector<float> spoken(62880*2);
+    speech.render(spoken);
+    double largest_clock_line=0.0;
+    for (double frequency : {1000.0, 2000.0}) {
+        double real=0.0,imaginary=0.0,weight_sum=0.0;
+        for (std::size_t sample=0;sample<5760;++sample) {
+            const double window=0.5-0.5*std::cos(2*ducklips::pi*static_cast<double>(sample)/5759.0);
+            const double phase=2*ducklips::pi*frequency*static_cast<double>(sample)/48000.0;
+            const double value=spoken[2*(7680+sample)]*window;
+            real+=value*std::cos(phase);imaginary+=value*std::sin(phase);weight_sum+=window;
+        }
+        largest_clock_line=std::max(largest_clock_line,2*std::hypot(real,imaginary)/weight_sum);
+    }
+    std::printf("Quiet Alfa control-clock amplitude %.9g (limit 1e-5 full scale)\n",largest_clock_line);
+    check(largest_clock_line<1e-5, "physiological trajectory does not impose the old 1/2 kHz clock comb");
+    double voiced_energy=0.0;
+    for (std::size_t frame=28800;frame<48000;++frame) { voiced_energy+=spoken[2*frame]*spoken[2*frame]; }
+    check(voiced_energy/19200>1e-6, "clock-line regression retains audible speech rather than muting output");
     std::printf("%zu failures\n", failures);
     return failures ? 1 : 0;
 }

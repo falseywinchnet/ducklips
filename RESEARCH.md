@@ -83,6 +83,13 @@ be labelled a successful reduction without these checks.
    The enhanced field helps locate transitions; ordinary spectral analysis and
    known simulated states must check features before changing anatomy.
 
+6. The enhanced-field horizontal comb follows the control clock. Advancing
+   physiological forces at audio rate removes most quiet-section components,
+   but moving-geometry updates still introduce strong transition-region lines.
+   [The controlled investigation](reports/CONTROL_CLOCK.md) makes continuous
+   state transport a measured audio-quality requirement, not just an energy
+   accounting concern.
+
 Useful primary references:
 
 - [Owens, Wright and Ramsey, 1989](https://www.isca-archive.org/eurospeech_1989/owens89b_eurospeech.html): articulators, lossy tube and two-mass folds in one model.

@@ -130,7 +130,7 @@ void ConstrictionSlotState::advance(double step) noexcept {
     tip_down.advance(step);
 }
 
-void ArticulatorState::advance(double step) noexcept {
+void ArticulatorState::advance_geometry(double step) noexcept {
     for (std::size_t parameter = 0; parameter < shape_parameter_count; ++parameter) {
         shape[parameter].advance(step);
     }
@@ -140,13 +140,21 @@ void ArticulatorState::advance(double step) noexcept {
         slot[index].advance(step);
     }
     port_area.advance(step);
+    body_offset_x.advance(step);
+    body_offset_y.advance(step);
+}
+
+void ArticulatorState::advance_physiology(double step) noexcept {
     glottal_rest_area.advance(step);
     lung_pressure.advance(step);
     pitch.advance(step);
-    body_offset_x.advance(step);
-    body_offset_y.advance(step);
     effort.advance(step);
     loudness.advance(step);
+}
+
+void ArticulatorState::advance(double step) noexcept {
+    advance_geometry(step);
+    advance_physiology(step);
 }
 
 void ArticulatorState::apply_speeds(const ArticulatorSpeeds& speeds) noexcept {

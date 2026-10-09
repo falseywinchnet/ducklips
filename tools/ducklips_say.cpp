@@ -48,7 +48,7 @@ void print_usage() {
                 "                    [--room] [--normalize] [--report] [--dictionary cmudict.txt]\n"
                 "                    [--probe FILE.csv] [--chunk FRAMES] [--control-block SAMPLES] [--diagnostics]\n"
                 "                    [--no-pop] [--frication-gain G] [--aspiration-gain G] [--lung-pressure PA]\n"
-                "                    [--trace START_S FILE.csv]\n"
+                "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
                 "                    [--invariant passive|charge|pressure]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
@@ -108,7 +108,8 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
         }
     }
     bool has_input = !arguments.text.empty() || !arguments.phonemes.empty();
-    return has_input && arguments.control_block >= 8 && arguments.control_block <= 480
+    return has_input && (arguments.tap == "microphones" || arguments.tap == "lips" || arguments.tap == "source")
+        && arguments.control_block >= 8 && arguments.control_block <= 480
         && arguments.chunk_frames > 0 && arguments.chunk_frames <= 48000;
 }
 

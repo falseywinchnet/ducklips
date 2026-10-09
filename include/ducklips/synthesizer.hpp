@@ -163,6 +163,9 @@ private:
 
     // Block constants.
     double lung_pressure_{};
+    double shimmer_multiplier_{1.0};
+    double pitch_multiplier_{1.0};
+    double pitch_correction_{1.0};
     double rest_area_{};
     double tension_{1.0};
     double oral_outlet_{};
@@ -174,7 +177,6 @@ private:
     double frication_scale_{};
     double tremor_phase_{};
     double output_gain_{1.0};
-    double previous_output_gain_{1.0};
 
     // Sample state.
     double transglottal_{};
