@@ -259,6 +259,13 @@ continuity pass. Moving contact exposes a logarithmic divergence in the
 inherited no-slip slit loss. That boundary-law limit and generalized momentum
 advancement remain outstanding; no cutoff has been inserted to hide it.
 
+[The narrow-gap loss component](reports/CONTOUR_PRESSURE_LOSS.md) now uses a
+checked diffuse-wall BGK conductance and integrates finite moving-contact
+loss over the full contour. Independent quadrature, kinetic benchmarks,
+continuum limits and fresh storage/flow regressions pass. This local,
+quasisteady constitutive approximation still needs compatible momentum and
+tissue advancement; it is not a new speech or physiological-validity result.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

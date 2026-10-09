@@ -15,7 +15,13 @@ bool ContourPressureKinetics::configure(const FoldParameters& f,const AirPropert
 bool ContourPressureKinetics::sample(const ContourPressureFlow& state,double z,ContourFlowSample& result) const noexcept {
     if(density_<=0 || !std::isfinite(z) || z<state.support[0] || z>state.support[1]){return false;}
     const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1],end=thickness_[0]+thickness_[1];
-    const double t=std::clamp((z-c0)/(c1-c0),0.,1.),a=(1-t)*state.area[0]+t*state.area[1],mu=(1-t)*state.effort[0]+t*state.effort[1];
+    const double t=std::clamp((z-c0)/(c1-c0),0.,1.),mu=(1-t)*state.effort[0]+t*state.effort[1];
+    double a=(1-t)*state.area[0]+t*state.area[1];
+    // Use the same contact origin as restricted storage integration, avoiding
+    // cancellation between signed areas in a tiny interval at the tip.
+    if(z>c0 && z<c1 && (state.area[0]<=0 || state.area[1]<=0)){
+        const double root=c0+(c1-c0)*(-state.area[0])/(state.area[1]-state.area[0]);a=(z-root)*(state.area[1]-state.area[0])/(c1-c0);
+    }
     if(a<=0 || 1+(gamma_-1)*mu/bulk_<=0){return false;}
     ContourFlowSample candidate;candidate.area=a;candidate.relative_density=std::exp(std::log1p((gamma_-1)*mu/bulk_)/(gamma_-1));
     const bool right=z>.5*(state.support[0]+state.support[1]);ContourPressureState partial;

@@ -1,0 +1,469 @@
+{
+  "scope": "instantaneous constitutive component, no momentum integration or new speech",
+  "base_commit": "50d1a2c3a69aa4f0afcd53739bae5542598a6b14",
+  "ctest_command": [
+    "ctest",
+    "--test-dir",
+    "build",
+    "-R",
+    "^ducklips_contour_pressure_(storage|flow|loss)$",
+    "--output-on-failure"
+  ],
+  "focused_ctests_passed": 3,
+  "sanitizer_command": [
+    "ctest",
+    "--test-dir",
+    ".build/asan",
+    "-R",
+    "^ducklips_contour_pressure_(storage|flow|loss)$",
+    "--output-on-failure"
+  ],
+  "sanitizer_ctests_passed": 3,
+  "sanitizers": "address,undefined",
+  "sanitizer_batch_and_conductance_byte_identical": true,
+  "flow_regression": [
+    {
+      "input": [
+        3e-06,
+        3e-06,
+        700,
+        700
+      ],
+      "matrix_scaled_error": 1.002259243633167e-16,
+      "field_scaled_error": 4.440892098500626e-16
+    },
+    {
+      "input": [
+        1e-06,
+        4e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.3338828640699246e-16,
+      "field_scaled_error": 4.440892098500626e-16
+    },
+    {
+      "input": [
+        5e-06,
+        1e-06,
+        1500,
+        -500
+      ],
+      "matrix_scaled_error": 6.144065928347077e-16,
+      "field_scaled_error": 6.661338147750939e-16
+    },
+    {
+      "input": [
+        -4.8e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.2181044311179285e-15,
+      "field_scaled_error": 3.907985046680551e-14
+    },
+    {
+      "input": [
+        -5e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 2.0071192855104584e-15,
+      "field_scaled_error": 1.7763568394002505e-14
+    },
+    {
+      "input": [
+        -5.2e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.4560709915580354e-15,
+      "field_scaled_error": 1.509903313490213e-14
+    },
+    {
+      "input": [
+        3e-06,
+        -5e-07,
+        700,
+        -100
+      ],
+      "matrix_scaled_error": 2.5281091755289425e-16,
+      "field_scaled_error": 4.440892098500626e-16
+    },
+    {
+      "input": [
+        3e-06,
+        -2e-06,
+        900,
+        -500
+      ],
+      "matrix_scaled_error": 1.1369163922339137e-15,
+      "field_scaled_error": 2.220446049250313e-15
+    },
+    {
+      "input": [
+        0,
+        3e-06,
+        700,
+        200
+      ],
+      "matrix_scaled_error": 1.9991513531133847e-16,
+      "field_scaled_error": 4.440892098500626e-16
+    },
+    {
+      "input": [
+        3e-06,
+        0,
+        900,
+        -100
+      ],
+      "matrix_scaled_error": 8.022377943729739e-16,
+      "field_scaled_error": 8.881784197001252e-16
+    },
+    {
+      "input": [
+        2e-06,
+        5e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 8.623786451469036e-16,
+      "field_scaled_error": 1.1102230246251565e-15
+    },
+    {
+      "input": [
+        -1e-06,
+        3e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 3.91461213809728e-16,
+      "field_scaled_error": 2.6645352591003757e-15
+    }
+  ],
+  "inverse_maximum_effort_error_Pa": 4.085067075720872e-07,
+  "prescribed_geometry_sweeps": [
+    {
+      "steps": 100,
+      "maximum_mass_error_m3": 1.173562494059608e-23,
+      "maximum_relative_density": 1.3130261710628388,
+      "work_J": 1.1988129378625793e-07,
+      "work_residual_J": 1.5893329644100765e-13,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883411e-10,
+        "coenergy": 2.6618336541634014e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070162,
+          -0.3412821205494769
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.205482442154427e-07,
+        "coenergy": 1.4791804403880907e-06,
+        "mass": [
+          7.468936321996139e-12,
+          3.7374557355263515e-10
+        ],
+        "effort": [
+          253168.94421804196,
+          -779.0701992809251
+        ],
+        "area_effort": [
+          -0.5758269140011204,
+          -4.47348039319392
+        ],
+        "compliance": [
+          4.146937204815004e-18,
+          4.643276770516866e-17,
+          4.643276770516866e-17,
+          2.6020047359187224e-15
+        ],
+        "mass_area": [
+          2.5791901795271555e-06,
+          2.0880725255537348e-05,
+          2.0880725255537348e-05,
+          0.00048232534488142954
+        ]
+      }
+    },
+    {
+      "steps": 200,
+      "maximum_mass_error_m3": 9.305781891221561e-25,
+      "maximum_relative_density": 1.3130261710624413,
+      "work_J": 1.1988141298593388e-07,
+      "work_residual_J": 3.973332939759039e-14,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883411e-10,
+        "coenergy": 2.6618336541634014e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070162,
+          -0.3412821205494769
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421515162e-07,
+        "coenergy": 1.4791804403862984e-06,
+        "mass": [
+          7.468936321994953e-12,
+          3.737455735526243e-10
+        ],
+        "effort": [
+          253168.9442177436,
+          -779.0701992797583
+        ],
+        "area_effort": [
+          -0.5758269140003751,
+          -4.473480393188252
+        ],
+        "compliance": [
+          4.146937204814536e-18,
+          4.643276770516438e-17,
+          4.643276770516438e-17,
+          2.6020047359186838e-15
+        ],
+        "mass_area": [
+          2.579190179526554e-06,
+          2.0880725255533045e-05,
+          2.0880725255533045e-05,
+          0.00048232534488139615
+        ]
+      }
+    },
+    {
+      "steps": 400,
+      "maximum_mass_error_m3": 2.5849394142282115e-25,
+      "maximum_relative_density": 1.3130261710624171,
+      "work_J": 1.1988144278591166e-07,
+      "work_residual_J": 9.933333725826136e-15,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883411e-10,
+        "coenergy": 2.6618336541634014e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070162,
+          -0.3412821205494769
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421513373e-07,
+        "coenergy": 1.4791804403861767e-06,
+        "mass": [
+          7.46893632199488e-12,
+          3.7374557355262357e-10
+        ],
+        "effort": [
+          253168.94421772548,
+          -779.0701992797161
+        ],
+        "area_effort": [
+          -0.5758269140003295,
+          -4.473480393187893
+        ],
+        "compliance": [
+          4.1469372048145086e-18,
+          4.643276770516411e-17,
+          4.643276770516411e-17,
+          2.6020047359186806e-15
+        ],
+        "mass_area": [
+          2.579190179526517e-06,
+          2.0880725255532784e-05,
+          2.0880725255532784e-05,
+          0.00048232534488139403
+        ]
+      }
+    },
+    {
+      "steps": 800,
+      "maximum_mass_error_m3": 2.5849394142282115e-25,
+      "maximum_relative_density": 1.3130261710624165,
+      "work_J": 1.198814502359098e-07,
+      "work_residual_J": 2.4833347946501836e-15,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883411e-10,
+        "coenergy": 2.6618336541634014e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070162,
+          -0.3412821205494769
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421513294e-07,
+        "coenergy": 1.4791804403861432e-06,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262326e-10
+        ],
+        "effort": [
+          253168.94421772586,
+          -779.0701992798149
+        ],
+        "area_effort": [
+          -0.5758269140003281,
+          -4.473480393187853
+        ],
+        "compliance": [
+          4.1469372048145086e-18,
+          4.6432767705164095e-17,
+          4.6432767705164095e-17,
+          2.6020047359186794e-15
+        ],
+        "mass_area": [
+          2.579190179526516e-06,
+          2.0880725255532777e-05,
+          2.0880725255532777e-05,
+          0.00048232534488139376
+        ]
+      }
+    }
+  ],
+  "work_refinement_ratios": [
+    3.9999994677175503,
+    3.999999445733496,
+    3.9999978042531317
+  ],
+  "hashes": {
+    ".build/asan/ducklips_contour_pressure_flow_probe": "8134c88a35b922709f1f8e8fc93e960cf2ef4274a9d05e1f0edb8862fdca4164",
+    ".build/asan/ducklips_contour_pressure_loss_probe": "eefe9cf141ae0a6b53e562f28024fa3b26a2c58075b90c6b8a23ca346f789768",
+    ".build/asan/ducklips_contour_pressure_probe": "be75f2757b858a1d8d3f80f00a28b2904596c27a1bd1863ec3a717f37b4d0653",
+    "CMakeLists.txt": "d9f5506f84bf3b25a7c5e2d8e9cadb7d92680741ef3ab51f92f6522704db012a",
+    "build/ducklips_contour_pressure_flow_probe": "c71af07319e64dbb9147ac27731ee041ea117694cea88079d916ca63fb836519",
+    "build/ducklips_contour_pressure_loss_probe": "003da7dbccba46423a9857036f17fcce51545970161b2be2593d2b527598669b",
+    "build/ducklips_contour_pressure_probe": "dfa47ef53bfa62e5a0bffefb0c85ea8e5c269a4de53f363afe28f3190ca3946b",
+    "include/ducklips/contour_pressure_flow.hpp": "a02f7170ed36e00cbd1984f75ac62836aa7f7c01a1d1f6549ed18d3e904146ce",
+    "include/ducklips/contour_pressure_loss.hpp": "b60054a6cc945f11dc8ef7fcf6e573197e9dcd779c7ce2921299b0c484b4479d",
+    "include/ducklips/contour_pressure_storage.hpp": "77f2aac24e97da22eefb9859316d7b48e09492251c5dc6d2fbf7fa16f317bdce",
+    "out/slit-kinetic/asan-ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/asan-ctest.stdout": "577d42f61b9af2eafbf71cface84256531c3d021e75766f98279101e971d5651",
+    "out/slit-kinetic/conductance-asan.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/conductance-asan.stdout": "557de3587fbbe7602ceda4908d975ff51e35f583f934c1f2f5129a40198bf309",
+    "out/slit-kinetic/conductance-input.txt": "bf2c62777cc45ac01d0e670e6e1820c13e13f080baec100ea2223b83445156f7",
+    "out/slit-kinetic/conductance-output.txt": "557de3587fbbe7602ceda4908d975ff51e35f583f934c1f2f5129a40198bf309",
+    "out/slit-kinetic/conductance-release.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/conductance-release.stdout": "557de3587fbbe7602ceda4908d975ff51e35f583f934c1f2f5129a40198bf309",
+    "out/slit-kinetic/contact-input.txt": "29f2e4ce40917f56a3d2fd801ff3446b23de89dee58a8b5cef2a5afad9f2df76",
+    "out/slit-kinetic/contact-output.txt": "3039a6bd79043b4985a2e440039a1710f1bb7a68b885712a0e9dd6d12868802a",
+    "out/slit-kinetic/ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/ctest.stdout": "e6851e42d69ed595e12712ba6d378485553e520a28b165016848cb9cfa907a79",
+    "out/slit-kinetic/flow-regression.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/flow-regression.stdout": "0a90ab8dfba9f05b81313fd4ef6ac914f3035c7776e5eeaf29e6dc4928866c3c",
+    "out/slit-kinetic/inverse-regression.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/inverse-regression.stdout": "2a8f9a90ee4a6361b1b1f07958cb8c93e7057c50ff2dd14d9ce77bd352a88120",
+    "out/slit-kinetic/loss-asan.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/loss-asan.stdout": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604",
+    "out/slit-kinetic/loss-input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+    "out/slit-kinetic/loss-output.txt": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604",
+    "out/slit-kinetic/loss-release.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/loss-release.stdout": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604",
+    "out/slit-kinetic/storage-input.txt": "2cc03738f0f284f2487103b87b61b3ece22f29bc9b2825cda61e99970882e143",
+    "out/slit-kinetic/storage-output.txt": "f90423fd469385d54ec25c9a275063554ef7906ff0fa1698d9555ffb163ed02d",
+    "out/slit-kinetic/sweep-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/sweep-100.stdout": "2d2252b64598856cb87eed33b66c362a7531da2f12ac8013142b0efc58cde211",
+    "out/slit-kinetic/sweep-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/sweep-200.stdout": "e4bae64e65e89c80456e5e9861a0674e59ed6b3c0884ab4d574c0c4d0bc752e8",
+    "out/slit-kinetic/sweep-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/sweep-400.stdout": "49e65e45c04153977cf8ecf82f47e1ed60a887d157479b57f618bc85ac83aeb5",
+    "out/slit-kinetic/sweep-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/slit-kinetic/sweep-800.stdout": "fad759881b2a247df06bbc006eea1f834c0ed63c9013a2db6f7e3fe237f76641",
+    "reports/contour_pressure_loss_reference.json": "3acb4a9119106d80ce0498e222c064c3c9d439689432cdf7454a48ac548dc17f",
+    "reports/slit_kinetic_initial_grid_failure.json": "e74a2c340269975c3b2ffe9e9b9b6ecf31dddcff96d3eea9f54d8f835bdc921f",
+    "reports/slit_kinetic_reference.json": "861f064ec1f9cd63388f2be22f8448f35dd194090883f370a83f52624946a3a0",
+    "src/contour_pressure_flow.cpp": "5c579bddaa94e3f52be1de73a222252ce84bcdd9ad9159e189180b6a1bb3ef6c",
+    "src/contour_pressure_loss.cpp": "54ee43813bbc935f244ffc49d89a9f14926f76bdce51c1f96bbe12d6d5382454",
+    "src/contour_pressure_storage.cpp": "7a2353d3acfeaf0c22278e0ca580fe898fb71a0ba389c42e0eaf033f247b46ec",
+    "src/slit_bgk_table.inc": "b5ea0340378012c2f82841c80f175176c302452bd869a9eaaf14a9183040807d",
+    "tools/contour_pressure_loss_probe.cpp": "9db0ab19e0840ec774edd07fe646631601a35ff0c1d7a7601681f42e9292a300",
+    "tools/contour_pressure_loss_reference.py": "a448047654093e29639533ed7e4c5f16b6c14ed91d51417afd0a90c798de9c30",
+    "tools/contour_pressure_loss_validation.py": "701307434f65b2b20549a5b3f8e1a5bcf364937d6e76fc3973fdeeb1c4b814af",
+    "tools/slit_kinetic_reference.py": "e378900d836a09f62eb678f9eb8a4460bef93974df187084e276594b7e32debe"
+  }
+}

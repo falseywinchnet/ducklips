@@ -1,0 +1,196 @@
+{
+  "scope": "native local BGK slit loss; independent spatial quadrature and fresh storage regression, no coupled time integration or new speech",
+  "cases": [
+    {
+      "input": [
+        3e-06,
+        3e-06,
+        700,
+        700
+      ],
+      "matrix_scaled_error": 2.9064073372826313e-16,
+      "reference_refinement": 0.0,
+      "minimum_scaled_eigenvalue": 1.2627229061214413e-33
+    },
+    {
+      "input": [
+        1e-06,
+        4e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.3331640616724284e-16,
+      "reference_refinement": 0.0,
+      "minimum_scaled_eigenvalue": 1.3421215984416532e-19
+    },
+    {
+      "input": [
+        5e-06,
+        1e-06,
+        1500,
+        -500
+      ],
+      "matrix_scaled_error": 9.50533536766429e-16,
+      "reference_refinement": 4.752667683832145e-16,
+      "minimum_scaled_eigenvalue": 2.262395432059776e-19
+    },
+    {
+      "input": [
+        -4.8e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.115643261559472e-10,
+      "reference_refinement": 4.326177464555243e-12,
+      "minimum_scaled_eigenvalue": -3.851755212153682e-21
+    },
+    {
+      "input": [
+        -5e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.0992174544463165e-10,
+      "reference_refinement": 8.619704460643175e-12,
+      "minimum_scaled_eigenvalue": 0.0
+    },
+    {
+      "input": [
+        -5.2e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.0835327111057381e-10,
+      "reference_refinement": 7.633872375248345e-12,
+      "minimum_scaled_eigenvalue": -2.211767378613277e-22
+    },
+    {
+      "input": [
+        3e-06,
+        -5e-07,
+        700,
+        -100
+      ],
+      "matrix_scaled_error": 6.68392107177099e-11,
+      "reference_refinement": 7.876744803684417e-12,
+      "minimum_scaled_eigenvalue": -1.0376459057119865e-17
+    },
+    {
+      "input": [
+        3e-06,
+        -2e-06,
+        900,
+        -500
+      ],
+      "matrix_scaled_error": 1.555330399006919e-11,
+      "reference_refinement": 4.185360087476896e-12,
+      "minimum_scaled_eigenvalue": -1.291341466916257e-18
+    },
+    {
+      "input": [
+        0,
+        3e-06,
+        700,
+        200
+      ],
+      "matrix_scaled_error": 3.595524738028942e-10,
+      "reference_refinement": 8.151859603763558e-12,
+      "minimum_scaled_eigenvalue": 0.0
+    },
+    {
+      "input": [
+        3e-06,
+        0,
+        900,
+        -100
+      ],
+      "matrix_scaled_error": 1.2122334121531504e-10,
+      "reference_refinement": 1.3027958309288464e-11,
+      "minimum_scaled_eigenvalue": -5.3055132119091225e-18
+    },
+    {
+      "input": [
+        2e-06,
+        5e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 9.451565847892347e-16,
+      "reference_refinement": 0.0,
+      "minimum_scaled_eigenvalue": 8.123664358614854e-20
+    },
+    {
+      "input": [
+        -1e-06,
+        3e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 1.2282087343842826e-11,
+      "reference_refinement": 6.1894054609912555e-12,
+      "minimum_scaled_eigenvalue": 0.0
+    }
+  ],
+  "native_conductance_max_relative_kinetic_error": 1.7036500867817495e-06,
+  "native_conductance_max_relative_port_error": 9.303668946358812e-14,
+  "contact": {
+    "input": [
+      -1e-06,
+      3e-06,
+      700.0,
+      700.0
+    ],
+    "rate": [
+      0.0,
+      1.2719785279765304e-07,
+      4.1457077948864696e-07,
+      -0.0003,
+      -0.0003
+    ],
+    "cutoffs_m": [
+      1e-05,
+      1e-06,
+      1e-07,
+      1e-08,
+      1e-09,
+      0.0
+    ],
+    "truncated_loss_W": [
+      9.913019934818898e-07,
+      1.2451326477811974e-06,
+      1.2935125301485273e-06,
+      1.2973887461406622e-06,
+      1.2976479707285818e-06,
+      1.2976678597900027e-06
+    ],
+    "native_full_loss_W": 1.2976678623264772e-06
+  },
+  "storage": {
+    "cases": 72,
+    "maximum_scaled_error": 1.428434745576066e-15,
+    "precision_digits": 80
+  },
+  "hashes": {
+    "build/ducklips_contour_pressure_loss_probe": "003da7dbccba46423a9857036f17fcce51545970161b2be2593d2b527598669b",
+    "build/ducklips_contour_pressure_probe": "dfa47ef53bfa62e5a0bffefb0c85ea8e5c269a4de53f363afe28f3190ca3946b",
+    "tools/contour_pressure_loss_reference.py": "a448047654093e29639533ed7e4c5f16b6c14ed91d51417afd0a90c798de9c30",
+    "tools/slit_kinetic_reference.py": "e378900d836a09f62eb678f9eb8a4460bef93974df187084e276594b7e32debe",
+    "tools/contour_pressure_flow_reference.py": "9a05d071811c68cec751c7f232eaa50c138c0258db085e94ddd23ec5a6da0c5b",
+    "tools/contour_pressure_reference.py": "72e18c4ba1fb9faa48f8fbbab335d048ee0d23bd91daa7ff52888bb96775d944",
+    "src/slit_bgk_table.inc": "b5ea0340378012c2f82841c80f175176c302452bd869a9eaaf14a9183040807d",
+    "src/contour_pressure_loss.cpp": "54ee43813bbc935f244ffc49d89a9f14926f76bdce51c1f96bbe12d6d5382454",
+    "src/contour_pressure_flow.cpp": "5c579bddaa94e3f52be1de73a222252ce84bcdd9ad9159e189180b6a1bb3ef6c",
+    "src/contour_pressure_storage.cpp": "7a2353d3acfeaf0c22278e0ca580fe898fb71a0ba389c42e0eaf033f247b46ec",
+    "out/slit-kinetic/conductance-input.txt": "bf2c62777cc45ac01d0e670e6e1820c13e13f080baec100ea2223b83445156f7",
+    "out/slit-kinetic/contact-input.txt": "29f2e4ce40917f56a3d2fd801ff3446b23de89dee58a8b5cef2a5afad9f2df76",
+    "out/slit-kinetic/loss-input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+    "out/slit-kinetic/storage-input.txt": "2cc03738f0f284f2487103b87b61b3ece22f29bc9b2825cda61e99970882e143",
+    "out/slit-kinetic/conductance-output.txt": "557de3587fbbe7602ceda4908d975ff51e35f583f934c1f2f5129a40198bf309",
+    "out/slit-kinetic/contact-output.txt": "3039a6bd79043b4985a2e440039a1710f1bb7a68b885712a0e9dd6d12868802a",
+    "out/slit-kinetic/loss-output.txt": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604",
+    "out/slit-kinetic/storage-output.txt": "f90423fd469385d54ec25c9a275063554ef7906ff0fa1698d9555ffb163ed02d"
+  }
+}

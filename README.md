@@ -26,6 +26,11 @@ spectrogram do not establish intelligibility or human realism. See the
 explicit [research gates](RESEARCH.md). Earlier engines and their performance
 measurements remain research references; they are not acoustically equivalent.
 
+The developing continuous gas source now has [finite narrow-gap loss](reports/CONTOUR_PRESSURE_LOSS.md)
+from a checked kinetic conductance reference, alongside its continuous storage
+and airflow/inertia components. Coupled momentum and tissue advancement remain
+unfinished; these component results have not produced a new speech recording.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

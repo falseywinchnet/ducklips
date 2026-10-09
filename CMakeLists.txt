@@ -25,6 +25,7 @@ add_library(ducklips STATIC
     src/glottal_storage.cpp
     src/glottal_kinetics.cpp
     src/glottal_contour.cpp
+    src/contour_pressure_loss.cpp
     src/contour_pressure_flow.cpp
     src/contour_pressure_storage.cpp
     src/contour_kinetics.cpp
@@ -259,3 +260,7 @@ add_test(NAME ducklips_contour_pressure_storage COMMAND ducklips_contour_pressur
 add_executable(ducklips_contour_pressure_flow_probe tools/contour_pressure_flow_probe.cpp)
 target_link_libraries(ducklips_contour_pressure_flow_probe PRIVATE ducklips)
 add_test(NAME ducklips_contour_pressure_flow COMMAND ducklips_contour_pressure_flow_probe)
+
+add_executable(ducklips_contour_pressure_loss_probe tools/contour_pressure_loss_probe.cpp)
+target_link_libraries(ducklips_contour_pressure_loss_probe PRIVATE ducklips)
+add_test(NAME ducklips_contour_pressure_loss COMMAND ducklips_contour_pressure_loss_probe)

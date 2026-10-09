@@ -1,0 +1,740 @@
+{
+  "scope": "linearized isothermal BGK gas, stationary diffuse parallel walls, small longitudinal pressure gradient; not a validated human-air surface model",
+  "published_source": "https://srd.nist.gov/jpcrdreprint/1.556019.pdf",
+  "published_location": "Table 1, column f, page 679",
+  "benchmarks": [
+    {
+      "delta": 0.1,
+      "published": 2.0327,
+      "runs": [
+        {
+          "delta": 0.1,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 2.0327141095805157,
+          "minimum_velocity": 1.7164630298710972,
+          "symmetry_error": 3.0863109053152056e-15,
+          "linear_residual": 2.977460332839696e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.1,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 2.0327142412245784,
+          "minimum_velocity": 1.7124115403377957,
+          "symmetry_error": 4.320824939144684e-15,
+          "linear_residual": 4.466180611807323e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.1,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 2.032714274276481,
+          "minimum_velocity": 1.7101624020829111,
+          "symmetry_error": 6.995617149368951e-15,
+          "linear_residual": 5.7067831788460245e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.1,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 2.032714282558553,
+          "minimum_velocity": 1.708926125563197,
+          "symmetry_error": 9.053150252462665e-15,
+          "linear_residual": 9.42859699090499e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 7.026397674358975e-06
+    },
+    {
+      "delta": 0.5,
+      "published": 1.6018,
+      "runs": [
+        {
+          "delta": 0.5,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 1.601872735715592,
+          "minimum_velocity": 1.1889475906532605,
+          "symmetry_error": 2.639270800257602e-15,
+          "linear_residual": 3.679063501859936e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.5,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 1.6018738574385272,
+          "minimum_velocity": 1.1836204172878977,
+          "symmetry_error": 3.3933326028341743e-15,
+          "linear_residual": 4.943726344962266e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.5,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 1.6018741391853897,
+          "minimum_velocity": 1.1806560184311647,
+          "symmetry_error": 6.409620895010644e-15,
+          "linear_residual": 7.932950116054905e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 0.5,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 1.6018742098003127,
+          "minimum_velocity": 1.1790229762415692,
+          "symmetry_error": 7.415049496092109e-15,
+          "linear_residual": 1.0232353975932524e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 4.632900506473803e-05
+    },
+    {
+      "delta": 1.0,
+      "published": 1.5386,
+      "runs": [
+        {
+          "delta": 1.0,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 1.5386739157944855,
+          "minimum_velocity": 1.0296608635074327,
+          "symmetry_error": 2.419415850511044e-15,
+          "linear_residual": 4.354271200845903e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 1.0,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 1.5386773145801538,
+          "minimum_velocity": 1.0230917838383025,
+          "symmetry_error": 2.928745052986223e-15,
+          "linear_residual": 6.3639139087053655e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 1.0,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 1.5386781686084872,
+          "minimum_velocity": 1.0194288614560216,
+          "symmetry_error": 5.602806329542504e-15,
+          "linear_residual": 1.0215748140929799e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 1.0,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 1.5386783827010238,
+          "minimum_velocity": 1.0174070883217103,
+          "symmetry_error": 6.6214953466848295e-15,
+          "linear_residual": 1.2727814740547446e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 5.094417069018142e-05
+    },
+    {
+      "delta": 2.0,
+      "published": 1.5948,
+      "runs": [
+        {
+          "delta": 2.0,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 1.5948407620552276,
+          "minimum_velocity": 0.9134479524855996,
+          "symmetry_error": 1.5398868086638651e-15,
+          "linear_residual": 6.281598959270178e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 2.0,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 1.5948528457368032,
+          "minimum_velocity": 0.904726836580232,
+          "symmetry_error": 2.4874730463382446e-15,
+          "linear_residual": 7.48443559758382e-15,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 2.0,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 1.5948558840709643,
+          "minimum_velocity": 0.8998503366392704,
+          "symmetry_error": 3.4350692287795e-15,
+          "linear_residual": 1.3498703951089833e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 2.0,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 1.5948566459981974,
+          "minimum_velocity": 0.8971512672984878,
+          "symmetry_error": 6.277879380470153e-15,
+          "linear_residual": 1.8844721739931937e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 3.5519186228683e-05
+    },
+    {
+      "delta": 5.0,
+      "published": 1.9907,
+      "runs": [
+        {
+          "delta": 5.0,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 1.9906518221379441,
+          "minimum_velocity": 0.8244415708881061,
+          "symmetry_error": 1.2474175379647759e-15,
+          "linear_residual": 1.6823614517052516e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 5.0,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 1.9907382970838055,
+          "minimum_velocity": 0.8100945634816251,
+          "symmetry_error": 2.138312464705284e-15,
+          "linear_residual": 1.9411830274742654e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 5.0,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 1.9907600758001347,
+          "minimum_velocity": 0.8020339883133536,
+          "symmetry_error": 3.7419951284314855e-15,
+          "linear_residual": 3.1921663037873005e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 5.0,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 1.9907655417418253,
+          "minimum_velocity": 0.797550171977408,
+          "symmetry_error": 4.989309568516422e-15,
+          "linear_residual": 4.4719081810154955e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 3.2923967360876105e-05
+    },
+    {
+      "delta": 10.0,
+      "published": 2.7686,
+      "runs": [
+        {
+          "delta": 10.0,
+          "cells": 256,
+          "velocity_order": 16,
+          "conductance": 2.76800512541375,
+          "minimum_velocity": 0.802159113498605,
+          "symmetry_error": 1.5794391882349042e-15,
+          "linear_residual": 3.903500768677524e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 10.0,
+          "cells": 512,
+          "velocity_order": 16,
+          "conductance": 2.768483621880365,
+          "minimum_velocity": 0.7794271547198325,
+          "symmetry_error": 2.0650265189911465e-15,
+          "linear_residual": 4.865432392556778e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 10.0,
+          "cells": 1024,
+          "velocity_order": 16,
+          "conductance": 2.768604430422653,
+          "minimum_velocity": 0.7666020153222048,
+          "symmetry_error": 2.6722588494347736e-15,
+          "linear_residual": 6.845063033270558e-14,
+          "gaussian_weight_sum": 0.49999999999999994
+        },
+        {
+          "delta": 10.0,
+          "cells": 2048,
+          "velocity_order": 16,
+          "conductance": 2.7686347870368886,
+          "minimum_velocity": 0.7594341944387716,
+          "symmetry_error": 3.52248054790413e-15,
+          "linear_residual": 1.274213322195103e-13,
+          "gaussian_weight_sum": 0.49999999999999994
+        }
+      ],
+      "relative_error": 1.256484753597853e-05
+    }
+  ],
+  "table": [
+    {
+      "delta": 1e-08,
+      "conductance": 10.750553133644956,
+      "spatial_relative_change": 2.1094237467877974e-15,
+      "previous_spatial_relative_change": 6.661338147750939e-16,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 1.4677992676220705e-08,
+      "conductance": 10.534037854173928,
+      "spatial_relative_change": 3.3306690738754696e-16,
+      "previous_spatial_relative_change": 5.551115123125783e-16,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 2.1544346900318822e-08,
+      "conductance": 10.317522767102268,
+      "spatial_relative_change": 6.661338147750939e-16,
+      "previous_spatial_relative_change": 4.440892098500626e-16,
+      "velocity_relative_change": 5.551115123125783e-16
+    },
+    {
+      "delta": 3.162277660168379e-08,
+      "conductance": 10.101007949526672,
+      "spatial_relative_change": 6.661338147750939e-16,
+      "previous_spatial_relative_change": 4.440892098500626e-16,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 4.641588833612782e-08,
+      "conductance": 9.884493509009566,
+      "spatial_relative_change": 0.0,
+      "previous_spatial_relative_change": 1.7763568394002505e-15,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 6.812920690579608e-08,
+      "conductance": 9.667979595419116,
+      "spatial_relative_change": 4.440892098500626e-16,
+      "previous_spatial_relative_change": 2.6645352591003757e-15,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 1e-07,
+      "conductance": 9.451466417276563,
+      "spatial_relative_change": 5.551115123125783e-16,
+      "previous_spatial_relative_change": 3.1086244689504383e-15,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 1.4677992676220674e-07,
+      "conductance": 9.234954264281653,
+      "spatial_relative_change": 8.881784197001252e-16,
+      "previous_spatial_relative_change": 5.773159728050814e-15,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 2.1544346900318822e-07,
+      "conductance": 9.018443538285565,
+      "spatial_relative_change": 2.6645352591003757e-15,
+      "previous_spatial_relative_change": 7.549516567451064e-15,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 3.162277660168379e-07,
+      "conductance": 8.80193479578372,
+      "spatial_relative_change": 3.1086244689504383e-15,
+      "previous_spatial_relative_change": 1.2878587085651816e-14,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 4.6415888336127725e-07,
+      "conductance": 8.585428806071269,
+      "spatial_relative_change": 6.217248937900877e-15,
+      "previous_spatial_relative_change": 2.220446049250313e-15,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 6.812920690579608e-07,
+      "conductance": 8.368926630627055,
+      "spatial_relative_change": 1.3322676295501878e-14,
+      "previous_spatial_relative_change": 5.773159728050814e-15,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 1e-06,
+      "conductance": 8.152429731170404,
+      "spatial_relative_change": 2.1760371282653068e-14,
+      "previous_spatial_relative_change": 4.618527782440651e-14,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 1.4677992676220675e-06,
+      "conductance": 7.935940116299298,
+      "spatial_relative_change": 1.6986412276764895e-14,
+      "previous_spatial_relative_change": 4.107825191113079e-14,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 2.1544346900318822e-06,
+      "conductance": 7.719460539828805,
+      "spatial_relative_change": 5.728750807065808e-14,
+      "previous_spatial_relative_change": 6.417089082333405e-14,
+      "velocity_relative_change": 1.1102230246251565e-16
+    },
+    {
+      "delta": 3.162277660168379e-06,
+      "conductance": 7.5029947680875,
+      "spatial_relative_change": 1.354472090042691e-14,
+      "previous_spatial_relative_change": 1.028066520802895e-13,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 4.641588833612773e-06,
+      "conductance": 7.286547938746704,
+      "spatial_relative_change": 3.1308289294429414e-14,
+      "previous_spatial_relative_change": 1.5787371410169726e-13,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 6.8129206905796085e-06,
+      "conductance": 7.070127040426224,
+      "spatial_relative_change": 5.773159728050814e-14,
+      "previous_spatial_relative_change": 2.398081733190338e-13,
+      "velocity_relative_change": 6.661338147750939e-16
+    },
+    {
+      "delta": 1e-05,
+      "conductance": 6.853741550710472,
+      "spatial_relative_change": 8.859579736508749e-14,
+      "previous_spatial_relative_change": 3.6282088444750116e-13,
+      "velocity_relative_change": 1.1102230246251565e-16
+    },
+    {
+      "delta": 1.4677992676220675e-05,
+      "conductance": 6.6374042804301014,
+      "spatial_relative_change": 1.3722356584366935e-13,
+      "previous_spatial_relative_change": 5.497824417943775e-13,
+      "velocity_relative_change": 1.1102230246251565e-16
+    },
+    {
+      "delta": 2.1544346900318823e-05,
+      "conductance": 6.421132484389624,
+      "spatial_relative_change": 2.113864638886298e-13,
+      "previous_spatial_relative_change": 8.333334022836425e-13,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 3.1622776601683795e-05,
+      "conductance": 6.2049493131337226,
+      "spatial_relative_change": 3.168576512280197e-13,
+      "previous_spatial_relative_change": 1.2658762926776035e-12,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 4.641588833612772e-05,
+      "conductance": 5.98888569664444,
+      "spatial_relative_change": 4.831690603168681e-13,
+      "previous_spatial_relative_change": 1.927791259959122e-12,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 6.812920690579608e-05,
+      "conductance": 5.772982768420129,
+      "spatial_relative_change": 7.358558207215538e-13,
+      "previous_spatial_relative_change": 2.9340974094793637e-12,
+      "velocity_relative_change": 6.661338147750939e-16
+    },
+    {
+      "delta": 0.0001,
+      "conductance": 5.557294955956143,
+      "spatial_relative_change": 1.120659121056633e-12,
+      "previous_spatial_relative_change": 4.476197190683706e-12,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 0.00014677992676220676,
+      "conductance": 5.341893879082346,
+      "spatial_relative_change": 1.7132961716015416e-12,
+      "previous_spatial_relative_change": 6.836309296431864e-12,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.00021544346900318823,
+      "conductance": 5.1268732075816565,
+      "spatial_relative_change": 2.6201263381153694e-12,
+      "previous_spatial_relative_change": 1.0462741784067475e-11,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.00031622776601683794,
+      "conductance": 4.912354629191055,
+      "spatial_relative_change": 4.020117572167692e-12,
+      "previous_spatial_relative_change": 1.6039836125969487e-11,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.00046415888336127724,
+      "conductance": 4.698495061987918,
+      "spatial_relative_change": 6.1741722845454206e-12,
+      "previous_spatial_relative_change": 2.464228820997505e-11,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.0006812920690579609,
+      "conductance": 4.485495203244444,
+      "spatial_relative_change": 9.50572953684059e-12,
+      "previous_spatial_relative_change": 3.7947645026292776e-11,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.001,
+      "conductance": 4.273609431142214,
+      "spatial_relative_change": 1.467803656396427e-11,
+      "previous_spatial_relative_change": 5.858491469723504e-11,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.0014677992676220676,
+      "conductance": 4.063156957984305,
+      "spatial_relative_change": 2.272693144789173e-11,
+      "previous_spatial_relative_change": 9.071077222699842e-11,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.002154434690031882,
+      "conductance": 3.854533968946548,
+      "spatial_relative_change": 3.5308866941363704e-11,
+      "previous_spatial_relative_change": 1.4091483535594307e-10,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.0031622776601683794,
+      "conductance": 3.648226272211396,
+      "spatial_relative_change": 5.505684796958121e-11,
+      "previous_spatial_relative_change": 2.197302340078977e-10,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.004641588833612773,
+      "conductance": 3.4448217519227304,
+      "spatial_relative_change": 8.622058622620443e-11,
+      "previous_spatial_relative_change": 3.441129603487525e-10,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.006812920690579608,
+      "conductance": 3.2450216934875695,
+      "spatial_relative_change": 1.3570078394309348e-10,
+      "previous_spatial_relative_change": 5.415934367647424e-10,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 0.01,
+      "conductance": 3.049649907851192,
+      "spatial_relative_change": 2.1481882939156094e-10,
+      "previous_spatial_relative_change": 8.573426413249763e-10,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 0.014677992676220676,
+      "conductance": 2.859658614912168,
+      "spatial_relative_change": 3.423523686763019e-10,
+      "previous_spatial_relative_change": 1.3663317144363418e-09,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 0.021544346900318822,
+      "conductance": 2.6761303808405152,
+      "spatial_relative_change": 5.4989346409684e-10,
+      "previous_spatial_relative_change": 2.1946269246342354e-09,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.03162277660168379,
+      "conductance": 2.5002761785777903,
+      "spatial_relative_change": 8.913627613793551e-10,
+      "previous_spatial_relative_change": 3.5573950452061354e-09,
+      "velocity_relative_change": 3.3306690738754696e-16
+    },
+    {
+      "delta": 0.046415888336127725,
+      "conductance": 2.333430987656477,
+      "spatial_relative_change": 1.460304321909689e-09,
+      "previous_spatial_relative_change": 5.827961890858546e-09,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.06812920690579609,
+      "conductance": 2.1770503750092045,
+      "spatial_relative_change": 2.4220188077350713e-09,
+      "previous_spatial_relative_change": 9.665945599479642e-09,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.1,
+      "conductance": 2.032714282558553,
+      "spatial_relative_change": 4.074390602681888e-09,
+      "previous_spatial_relative_change": 1.6259984692013063e-08,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 0.14677992676220675,
+      "conductance": 1.9021478887080807,
+      "spatial_relative_change": 6.9657246637433445e-09,
+      "previous_spatial_relative_change": 2.7797821600117345e-08,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.21544346900318823,
+      "conductance": 1.7872741439129722,
+      "spatial_relative_change": 1.2128128501487367e-08,
+      "previous_spatial_relative_change": 4.8397219565288196e-08,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.31622776601683794,
+      "conductance": 1.690318979630621,
+      "spatial_relative_change": 2.1550322859553717e-08,
+      "previous_spatial_relative_change": 8.599163869860149e-08,
+      "velocity_relative_change": 0.0
+    },
+    {
+      "delta": 0.46415888336127725,
+      "conductance": 1.6139994466513792,
+      "spatial_relative_change": 3.91571346458619e-08,
+      "previous_spatial_relative_change": 1.5623594240565808e-07,
+      "velocity_relative_change": 2.220446049250313e-16
+    },
+    {
+      "delta": 0.6812920690579608,
+      "conductance": 1.5618392462673838,
+      "spatial_relative_change": 7.288234926683401e-08,
+      "previous_spatial_relative_change": 2.907699798715413e-07,
+      "velocity_relative_change": 4.440892098500626e-16
+    },
+    {
+      "delta": 1.0,
+      "conductance": 1.5386783827010238,
+      "spatial_relative_change": 1.391405564099557e-07,
+      "previous_spatial_relative_change": 5.550405697274385e-07,
+      "velocity_relative_change": 5.551115123125783e-16
+    },
+    {
+      "delta": 1.4677992676220675,
+      "conductance": 1.5514776157194272,
+      "spatial_relative_change": 2.7262792690052606e-07,
+      "previous_spatial_relative_change": 1.0873467981564744e-06,
+      "velocity_relative_change": 5.551115123125783e-16
+    },
+    {
+      "delta": 2.154434690031878,
+      "conductance": 1.6105662352883563,
+      "spatial_relative_change": 5.480371580990351e-07,
+      "previous_spatial_relative_change": 2.1853064311461168e-06,
+      "velocity_relative_change": 5.551115123125783e-16
+    },
+    {
+      "delta": 3.1622776601683795,
+      "conductance": 1.7315399891174112,
+      "spatial_relative_change": 1.1283946166340542e-06,
+      "previous_spatial_relative_change": 4.498194829727353e-06,
+      "velocity_relative_change": 1.3322676295501878e-15
+    },
+    {
+      "delta": 4.641588833612772,
+      "conductance": 1.9380716850327726,
+      "spatial_relative_change": 2.3724394950797034e-06,
+      "previous_spatial_relative_change": 9.453785681623472e-06,
+      "velocity_relative_change": 1.3322676295501878e-15
+    },
+    {
+      "delta": 6.8129206905795945,
+      "conductance": 2.265937985566302,
+      "spatial_relative_change": 5.071308566861887e-06,
+      "previous_spatial_relative_change": 2.0197754990070038e-05,
+      "velocity_relative_change": 2.886579864025407e-15
+    },
+    {
+      "delta": 10.0,
+      "conductance": 2.7686347870368886,
+      "spatial_relative_change": 1.0964590644313432e-05,
+      "previous_spatial_relative_change": 4.3637080361813574e-05,
+      "velocity_relative_change": 3.3306690738754696e-15
+    },
+    {
+      "delta": 14.677992676220676,
+      "conductance": 3.5252209900907068,
+      "spatial_relative_change": 2.3854140119405898e-05,
+      "previous_spatial_relative_change": 9.483428132939231e-05,
+      "velocity_relative_change": 1.199040866595169e-14
+    },
+    {
+      "delta": 21.54434690031878,
+      "conductance": 4.6516837376901154,
+      "spatial_relative_change": 5.19923594908267e-05,
+      "previous_spatial_relative_change": 0.0002063771640652412,
+      "velocity_relative_change": 4.218847493575595e-15
+    },
+    {
+      "delta": 31.622776601683793,
+      "conductance": 6.317966491750888,
+      "spatial_relative_change": 0.00011318628005230202,
+      "previous_spatial_relative_change": 0.0004482343093237251,
+      "velocity_relative_change": 3.68594044175552e-14
+    },
+    {
+      "delta": 46.41588833612773,
+      "conductance": 8.77340851936816,
+      "spatial_relative_change": 0.000245670569583023,
+      "previous_spatial_relative_change": 0.0009695127681801363,
+      "velocity_relative_change": 1.0402789740737717e-13
+    },
+    {
+      "delta": 68.12920690579594,
+      "conductance": 12.38401927111484,
+      "spatial_relative_change": 0.0005311372798340042,
+      "previous_spatial_relative_change": 0.00208517768011407,
+      "velocity_relative_change": 1.8474111129762605e-13
+    },
+    {
+      "delta": 100.0,
+      "conductance": 17.68645584627994,
+      "spatial_relative_change": 0.0011430634055245026,
+      "previous_spatial_relative_change": 0.004452502258335711,
+      "velocity_relative_change": 4.04121180963557e-13
+    }
+  ],
+  "free_molecular": [
+    {
+      "delta": 0.0001,
+      "actual": 5.557294955949915,
+      "leading": 5.554173875722908
+    },
+    {
+      "delta": 1e-06,
+      "actual": 8.152429731170582,
+      "leading": 8.152362925122073
+    },
+    {
+      "delta": 1e-08,
+      "actual": 10.75055313364498,
+      "leading": 10.75055197452124
+    }
+  ],
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  },
+  "script_sha256": "0a5983b40c2e1237bccc6352eadc6520dda8b4882826ef54203fe2576c83efbb"
+}
