@@ -21,8 +21,9 @@ double energy(const ducklips::GraphContourGlottal& p,std::span<const double> c,s
 }
 }
 int main(int argc,char** argv){try{
+    const bool fitted=argc>1 && std::string(argv[argc-1])=="--relaxation";if(fitted){--argc;}
     const bool dissipative=argc>1 && std::string(argv[argc-1])=="--dissipative";if(dissipative){--argc;}
-    const auto update=dissipative?ducklips::ContourUpdate::dissipative:ducklips::ContourUpdate::symmetric;
+    const auto update=fitted?ducklips::ContourUpdate::relaxation:dissipative?ducklips::ContourUpdate::dissipative:ducklips::ContourUpdate::symmetric;
     const bool trajectory=argc==5 && std::string(argv[1])=="--trajectory";
     int steps=960;double duration=.005;std::string selected;
     if(trajectory){steps=std::stoi(argv[2]);duration=std::stod(argv[3]);selected=argv[4];require(steps>0 && steps<=3000000 && std::isfinite(duration) && duration>0,"invalid trajectory");}

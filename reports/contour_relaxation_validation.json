@@ -1,0 +1,222 @@
+{
+  "scope": "weighted relaxation update; controlled free contact cycles pass, sustained pressure-driven run incomplete; no new speech",
+  "comparison_commit": "6b3a16d1b247e73dd99769c2da493a9f5961a2d4",
+  "reference_exit_code": 0,
+  "symmetric_open_regression_exit_code": 0,
+  "focused_ctests_passed": 20,
+  "ctest_regex": "ducklips_(glottal_contour|glottal_kinetics|graph_glottal|glottal_storage|graph_phonation|graph_orifice|moving_graph|lip_profile|contour_)",
+  "sanitizers": "address,undefined; -fno-omit-frame-pointer",
+  "sanitizer_exit_code": 0,
+  "sanitizer_commands": [
+    [
+      ".build/asan/ducklips_contour_dissipation_probe"
+    ],
+    [
+      ".build/asan/ducklips_contour_glottal_probe",
+      "--relaxation"
+    ],
+    [
+      ".build/asan/ducklips_contour_cycle_probe",
+      "2000",
+      "lower",
+      "--relaxation"
+    ],
+    [
+      ".build/asan/ducklips_contour_cycle_probe",
+      "2000",
+      "upper",
+      "--relaxation"
+    ]
+  ],
+  "sanitizer_fixture_batches_byte_identical": true,
+  "pressure_drive": [
+    {
+      "command": [
+        "build/ducklips_contour_contact_probe",
+        "76800",
+        "--relaxation"
+      ],
+      "diagnostic_exit_code": 0,
+      "output": {
+        "status": "solver_stopped",
+        "planned_steps": 76800,
+        "accepted_steps": 8376,
+        "time_s": 0.010906250000000001,
+        "dt_s": 1.3020833333333335e-06,
+        "minimum_area_m2": -1.8178278209974792e-06,
+        "maximum_relative_density": 1.9344732540195304,
+        "maximum_step_work_residual_J": 2.4372181917160416e-18,
+        "numerical_loss_J": 6.192502624986067e-10,
+        "closures": [
+          1,
+          0
+        ],
+        "reopenings": [
+          0,
+          0
+        ],
+        "cells": [
+          {
+            "area_m2": -1.8178278209974792e-06,
+            "area_rate_m2_s": -0.005082156031841746,
+            "volume_m3": 4.183468901182552e-15,
+            "mass_volume_m3": 8.09280869836012e-15,
+            "relative_density": 1.9344732540195304,
+            "pressure_Pa": 151496.90798229026
+          },
+          {
+            "area_m2": 3.677554536667923e-07,
+            "area_rate_m2_s": -0.007097826838670511,
+            "volume_m3": 1.3834474194455723e-10,
+            "mass_volume_m3": 1.387786055021405e-10,
+            "relative_density": 1.0031361044264129,
+            "pressure_Pa": 438.2315068361046
+          }
+        ],
+        "momentum_Pa_s": [
+          0,
+          0.00015753802713784512,
+          0.002119422569447847
+        ],
+        "average_flow_m3_s": [
+          0,
+          3.979309201426562e-08,
+          3.5353746956915984e-06
+        ]
+      }
+    },
+    {
+      "command": [
+        "build/ducklips_contour_contact_probe",
+        "307200",
+        "--relaxation"
+      ],
+      "diagnostic_exit_code": 0,
+      "output": {
+        "status": "solver_stopped",
+        "planned_steps": 307200,
+        "accepted_steps": 33505,
+        "time_s": 0.010906575520833335,
+        "dt_s": 3.255208333333334e-07,
+        "minimum_area_m2": -1.8192711846889744e-06,
+        "maximum_relative_density": 2.5913797938131107,
+        "maximum_step_work_residual_J": 2.1411761441451774e-19,
+        "numerical_loss_J": 4.3281976063016766e-11,
+        "closures": [
+          1,
+          0
+        ],
+        "reopenings": [
+          0,
+          0
+        ],
+        "cells": [
+          {
+            "area_m2": -1.8192711846889744e-06,
+            "area_rate_m2_s": -0.00507913106017797,
+            "volume_m3": 8.043979910126712e-16,
+            "mass_volume_m3": 2.0845007000940962e-15,
+            "relative_density": 2.5913797938131107,
+            "pressure_Pa": 278567.47257621353
+          },
+          {
+            "area_m2": 3.6569123242151865e-07,
+            "area_rate_m2_s": -0.007101567322819864,
+            "volume_m3": 1.3732556585429078e-10,
+            "mass_volume_m3": 1.377608739965121e-10,
+            "relative_density": 1.003169898769492,
+            "pressure_Pa": 442.95683331149354
+          }
+        ],
+        "momentum_Pa_s": [
+          0,
+          6.708971090749916e-05,
+          0.002121203948768879
+        ],
+        "average_flow_m3_s": [
+          0,
+          1.4710876586121577e-08,
+          3.510620243304425e-06
+        ]
+      }
+    }
+  ],
+  "hashes": {
+    ".build/asan/ducklips_contour_cycle_probe": "93c39fe6a3c2caf93de6d21a1d789b2ef4db8396499b877f1a617feca3c873ad",
+    ".build/asan/ducklips_contour_dissipation_probe": "1f6ad4b35511a718ed0f44b4b22981a178d2e10d346d87d48e2fd8de7df1456f",
+    ".build/asan/ducklips_contour_glottal_probe": "f69af4756ea73752aafa541896f10f499f3fc5160ad07e61f2dd0af4b63f5dda",
+    ".build/asan/ducklips_contour_kinetics_probe": "68cb3c4624259c83d869223592077fabed2815826a639b7a631b176f3a0aefcd",
+    ".build/asan/ducklips_contour_sealed_probe": "d82a863902551d44c6ce82655d150c73316fb29af1f1f6360482a42d69199483",
+    "CMakeLists.txt": "fb143f9a6a3fc16cca28bf16ae3bef0a003fe2e2b12f36e7eff49b3cb151d61e",
+    "build/ducklips_contour_contact_probe": "356f2c4dc297d73bd0e7b0868c736646a4a710aa7c7a1b07162b1e83122dc6db",
+    "build/ducklips_contour_cycle_probe": "cf8c4dd6ba903de1efa660c0b563c4f19d1e16b02dc5c645678cda5bbcb1f2ef",
+    "build/ducklips_contour_dissipation_probe": "a5f6194f6eb032162cafcc15b33d346305e0a1ef0e2046900709ba00b958df84",
+    "build/ducklips_contour_glottal_probe": "cf14e2a85640e0d1138bf6b606e596f66a476b9dd21592eb675db3161a4a4fce",
+    "include/ducklips/contour_glottal_storage.hpp": "36eb4a6289f2e7008374d1d792a15b44d24457bdbcff879b6595d4005e9584bb",
+    "include/ducklips/contour_kinetics.hpp": "928fc6fa11c00951766f2231eaa445a99a9701f2f96c0020e9e94c536f75169a",
+    "include/ducklips/fold_contact.hpp": "88f9b233eb79a46964fa03e7bae6b6ed8e6d9ab4e115f2bab767d3bc16864038",
+    "out/contour-relaxation/asan-build.log": "f1d44179d45ba6c7946d4bf56f481b44474a1affaf42aea07eba7c99e00c1d0e",
+    "out/contour-relaxation/asan-dissipation-input.txt.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/contour-relaxation/asan-dissipation-output.jsonl": "7d105f2c5ea51656ce7779c9e5080ee60b72022a2d8c8427c00634c2e362a136",
+    "out/contour-relaxation/asan-kernel.log": "a66758d9b842441244a412152db7e4ebc8e695b922431353429ddd653e248aa9",
+    "out/contour-relaxation/asan-lower.log": "babd61a7b6e6cad9c48e0d2de2f59cf3d1d1354f220b347790cf4716683bc08d",
+    "out/contour-relaxation/asan-open.log": "99428aae1e989edd23dbe96636550656a71166a5ff04c8ca6370aae9c9d937cd",
+    "out/contour-relaxation/asan-upper.log": "8e2d0d25ef756ea478ebbde27ca450940defb1462d8d9d2eee5d7fb52a6fe65a",
+    "out/contour-relaxation/asan-weights-input.txt.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/contour-relaxation/asan-weights-output.txt": "9f655a9f14273dbc41471418afebbd06a46acc896695681f1cc50acdff4f63d7",
+    "out/contour-relaxation/build.log": "41c4f52208cf74c8b093a7cda15f3a2e0feb085c443b9a291335cd37934dbfa5",
+    "out/contour-relaxation/ctest.log": "0909add7ebeed23e6b56871dd5c949c9cbd94ca632dfe339194371d4a9c5af55",
+    "out/contour-relaxation/cycle-lower-1000.json": "bfdb60e288f89a4dfa8100c87ab581af6a5c1c7b3dc973e1ad78c4afe746bc58",
+    "out/contour-relaxation/cycle-lower-16000.json": "b63f05b9f2f95a6316d01f0f9bac606784bfd8426352fbcf84575387d6a63e33",
+    "out/contour-relaxation/cycle-lower-2000.json": "babd61a7b6e6cad9c48e0d2de2f59cf3d1d1354f220b347790cf4716683bc08d",
+    "out/contour-relaxation/cycle-lower-4000.json": "685fe7436cc528f1e39c42a07f79a0911777b9f4467aa03e7c52b60f8138a0e1",
+    "out/contour-relaxation/cycle-lower-500.json": "8b187d3161ffde37d4651a94609c8917505d2ad416cf0b2e1a387b9447190273",
+    "out/contour-relaxation/cycle-lower-8000.json": "4c79e1aab158727aaca6378563e34902d75203a8fa319829e32136a6b844a3f7",
+    "out/contour-relaxation/cycle-upper-1000.json": "ac903b07e1cdab2b6933e8b79a72d6ac4e30f180a327e565fe67605f6632cbdc",
+    "out/contour-relaxation/cycle-upper-16000.json": "d83064a8b095400d254b281e514afadf269cc6c75db219cdd4e607f90d0f7588",
+    "out/contour-relaxation/cycle-upper-2000.json": "8e2d0d25ef756ea478ebbde27ca450940defb1462d8d9d2eee5d7fb52a6fe65a",
+    "out/contour-relaxation/cycle-upper-4000.json": "bab4c61e2658617cb4124e1af07d99cfd456b979e71116243ede79ccfd7cee91",
+    "out/contour-relaxation/cycle-upper-500.json": "f7d07fcde8e48fec3bf6b5abdfc7930d700afea40ffcc47285fe91ddc6fca98a",
+    "out/contour-relaxation/cycle-upper-8000.json": "a00fe6c497c1c886de3f3f5fc7c04be6292c6472d8f5ef48ef66d9a8edd19ce6",
+    "out/contour-relaxation/dissipation-input.txt": "608457d7c1d4109c265ef2ba8d2d4aec47b6c1729f7fb5a317c0d5eb443611dd",
+    "out/contour-relaxation/dissipation-output.jsonl": "7d105f2c5ea51656ce7779c9e5080ee60b72022a2d8c8427c00634c2e362a136",
+    "out/contour-relaxation/open-forward-15360.json": "5c75056ab4544111e7c21095020a544ad0f4d4dc1713e07b6b1f17578630d564",
+    "out/contour-relaxation/open-forward-1920.json": "c65e7759f81b7a85a0ae28025fc100976b63065b5aeadc0cd2bf6d02c50b2e65",
+    "out/contour-relaxation/open-forward-3840.json": "e857f1d4adcca0b6c2b1fc794bccf26e96ba8764d93d1a75d8cbfabe42caa00f",
+    "out/contour-relaxation/open-forward-7680.json": "22119066e186dba9d1d017dfb3a01ed776483e74979e731f358b7ee21bf62699",
+    "out/contour-relaxation/open-relaxation-15360.json": "d4fd456cc46692b82a490d893905a7dbf31e382478b70d1821dbc0e5a794a9c9",
+    "out/contour-relaxation/open-relaxation-1920.json": "414fcad8b1dfe77b9f67aaf9036208dbdee15a559110c9484a3704f15fdb2d5c",
+    "out/contour-relaxation/open-relaxation-3840.json": "703096d46cb324889add6bd33f09047b4280851bc535242aa7341377d61956c8",
+    "out/contour-relaxation/open-relaxation-7680.json": "f63e7c76d5ea49a0614d639d9659c25120f3623ba260a293bc645d127978e6f3",
+    "out/contour-relaxation/open-rest_motion-15360.json": "d7056dc74a4a9105cd438aad127bdb7ebdd53d85054dd157b1b597d72de513a5",
+    "out/contour-relaxation/open-rest_motion-1920.json": "2ed99b183369ae703c80dda7500b86db99bf6edf3f1b5a3d1ce0616525b5a76a",
+    "out/contour-relaxation/open-rest_motion-3840.json": "d0ba37dfaf8e50f203f577beb5425f6a104ef2ae270804c0d80183da03485e70",
+    "out/contour-relaxation/open-rest_motion-7680.json": "757cab9e1080b5b803ae9bea59869bceb38ce6ba34765b6a6e12a476e4091140",
+    "out/contour-relaxation/open-reverse-15360.json": "bae4ab7f1d28885fb7e96f0f7fb6653ccc4ab503611df7b6c5dbbd4f5c79fad4",
+    "out/contour-relaxation/open-reverse-1920.json": "f6009a8fc52e9d0ccd5996a94cbbb0043dfa5ec922f265fdd27109eea5e4f1ce",
+    "out/contour-relaxation/open-reverse-3840.json": "d68cc5898ae247f6cdc21eef63f6dde5b76d404bff938aed7fa5646dab3889a4",
+    "out/contour-relaxation/open-reverse-7680.json": "ee5aa1812dbb027ab0a2ee86063afbe7f97f76ea1542ece4e39f7b8fb94ea8df",
+    "out/contour-relaxation/pressure-drive-307200.json": "502d4e0164d19cbeb6bbc8b18891e95beb3b5c9a1a6825b40b4bc1bb75aebba8",
+    "out/contour-relaxation/pressure-drive-76800.json": "ac306d10de452d4ba6e5cc89eda65a926ae969c305236289e2f897aebf742fda",
+    "out/contour-relaxation/reference.log": "ea565578626cd3ece95ef17af588fe7ee183772abb955725aee40991deb4d920",
+    "out/contour-relaxation/symmetric-regression.log": "bd122890454353c7f17b1a17f946eddf39a84ca142eb4df4e22f9fd98f2147b7",
+    "out/contour-relaxation/weights-input.txt": "5765ac71c4c2fee06fef2a48da0ed68c27831dbb51169ddd846dacec8e0dcbb3",
+    "out/contour-relaxation/weights-output.txt": "9f655a9f14273dbc41471418afebbd06a46acc896695681f1cc50acdff4f63d7",
+    "reports/CONTOUR_CONTACT_TRANSITIONS.md": "8889f8bff6c29bac755d8c5a785d067ee2b88a0ee605bd22bd06225141439295",
+    "reports/contour_open_regression.json": "1b016c67bfe859e540901a384a820f10e384397544fecae21cae9b6ff25519ab",
+    "reports/contour_relaxation_reference.json": "2c58f70c28c12047eedb71eebde0c557e791cec204426ebb49f13557b6d33083",
+    "src/contour_glottal_storage.cpp": "ad42d008cbaef7a8eeb15e5a860bf6a0c54f631ec4500bc78d8e272981d175b5",
+    "src/contour_kinetics.cpp": "bdfca24b382553b3e31a725af1945961383a7766b3d37c3dd32d8a769cafecbc",
+    "src/fold_contact.cpp": "95d47f609fcdc534bb8042005ff0cfb69f2a7c8c00efa339ceecf3f8d142710b",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "tools/contour_contact_probe.cpp": "250891fee2d9fdc125bfbe02849b494b6c23d4a01caf9aa843660d9129b32a5e",
+    "tools/contour_cycle_probe.cpp": "09b3f84bb88d484c8f0c3a23f2546b2cc0ce4875a9e76864ebfd211ce06891b0",
+    "tools/contour_dissipation_probe.cpp": "f63ac43e88e4e0cc9884c8d187b8176e2ab7d45e1fc10efff130ab906f1e7c65",
+    "tools/contour_glottal_probe.cpp": "fb6c66be3cf4ba98f03825da52d4fc235a5e569b648854598fbd6e57e5ae3465",
+    "tools/contour_open_regression.py": "ef1dab8d5165cbe50a7e129664cc5de27f5999d6e63c39d18665bc94674ef1dc",
+    "tools/contour_relaxation_reference.py": "2393a1ce9e5d0501a60388d8ca255d05360bc683f9ddee06b09deb66edeb6439",
+    "tools/contour_sealed_reference.py": "0eb916e8278cf13fc6cea66742cf04e10898fad63682a43f04d1239316de9a2d"
+  }
+}

@@ -5,8 +5,9 @@
 #include <stdexcept>
 #include <string>
 int main(int argc,char** argv){try{
+    const bool fitted=argc>1 && std::string(argv[argc-1])=="--relaxation";if(fitted){--argc;}
     const bool dissipative=argc>2 && std::string(argv[argc-1])=="--dissipative";if(dissipative){--argc;}
-    const auto update=dissipative?ducklips::ContourUpdate::dissipative:ducklips::ContourUpdate::symmetric;
+    const auto update=fitted?ducklips::ContourUpdate::relaxation:dissipative?ducklips::ContourUpdate::dissipative:ducklips::ContourUpdate::symmetric;
     if(argc!=2){throw std::invalid_argument("usage: contour_contact_probe STEPS_OVER_100_MS");}const int steps=std::stoi(argv[1]);if(steps<1000 || steps>1000000){throw std::invalid_argument("step range");}
     const ducklips::TreeEdge edges[]={{0,1},{1,2},{0,2},{0,ducklips::ground_node}};const double c[]={2e-10,3e-10,1e-10},g[]={.002,.003,.004,.002};
     const ducklips::FoldParameters f;const ducklips::AirProperties air;ducklips::FoldState initial;initial.rest_area=3e-6;

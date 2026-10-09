@@ -228,9 +228,13 @@ clipped-volume work and active passage momentum are solved together. Four
 independent closed-phase controls pass after the required temporal refinement;
 all four open controls still converge. The closing-cap limit has flow, momentum
 and energy scaling as area cubed, squared and to the fifth power, respectively,
-under bounded effort and positive viscosity/density/storage. Automatic event
-transport must still join the open and closed phases without hidden momentum
-or loss of chamber air.
+under bounded effort and positive viscosity/density/storage. The subsequent
+[contact-transition controls](reports/CONTOUR_CONTACT_TRANSITIONS.md) join these
+phases using a viscous-relaxation-derived time update and complete two free
+sealing/reopening motions. Open-motion accuracy and work accounting pass.
+Sustained pressure-driven motion still stops near a vanishing lower chamber;
+its air and energy cannot be removed without explicit transport. These
+controls are not new speech or evidence of improved pronunciation.
 
 ## Moving-energy reference
 

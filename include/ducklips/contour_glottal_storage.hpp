@@ -16,8 +16,8 @@ struct ContourGlottalStep final {
 // positive chamber storage. Elastic contact may close either cap.
 // Ports carry ambient-reference mass volume. Outlet effort is free_load +
 // load_slope * average_outflow, allowing exact elimination of a linear tract.
-// Symmetric steps preserve topology. The optional first-order dissipative
-// kinetic update can cross cap contact while accounting for numerical loss.
+// Symmetric steps preserve topology. Dissipative and exponentially fitted
+// relaxation updates cross cap contact with explicit numerical-loss ledgers.
 // Both modes require positive chamber storage and zero closed-cap momentum.
 class ContourGlottalStorage final {
 public:

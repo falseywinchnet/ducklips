@@ -59,12 +59,12 @@ bool ContourGlottalStorage::advance(double dt,double reservoir_pressure,double f
     double e0=0,reservoir_mass=0;GasEnergy reservoir;ContourKineticState k0;std::array<double,2> a0;
     if(!energy(e0) || !configuration(a0,k0) || !gas_.mass_at_pressure(1.,reservoir_pressure,reservoir_mass)
         || !gas_.evaluate(reservoir_mass,1.,reservoir)){return false;}
-    const bool dissipative=update==ContourUpdate::dissipative;
+    const bool dissipative=update!=ContourUpdate::symmetric,fitted=update==ContourUpdate::relaxation;
     const auto x0=positions(state.folds),v0=velocities(state.folds);
     std::array<double,7> y{},residual{},tolerance{};
     for(std::size_t i=0;i<4;++i){y[3+i]=dissipative?dt*v0[i]:-.5*(rest_area-state.folds.rest_area)/width_;}
     std::array<double,2> m1{},a1{},area_effort{};std::array<double,3> p1{},flow{};std::array<GasTransfer,2> gas;
-    FoldContactTransfer contact;std::array<bool,3> active{};std::array<double,3> ports{};
+    FoldContactTransfer contact;std::array<bool,3> active{};std::array<double,3> ports{},weight{};
     ContourKineticState k1,mid;ContourKineticTransfer kinetic;double norm=0;bool converged=false;
     const auto evaluate=[&](const std::array<double,7>& trial){
         if(!finite(trial)){return false;}
@@ -76,12 +76,16 @@ bool ContourGlottalStorage::advance(double dt,double reservoir_pressure,double f
         if(!kinetics_.evaluate(m1,a1,{},k1)){return false;}
         for(std::size_t j=0;j<3;++j){
             if(!dissipative && k0.geometry.passage[j].open!=k1.geometry.passage[j].open){return false;}
-            p1[j]=active[j]?(dissipative?flow[j]/k1.inverse_inertance[j]:4*flow[j]/(k0.inverse_inertance[j]+k1.inverse_inertance[j])-momentum[j]):0.;
+            weight[j]=dissipative?(fitted && active[j]?contour_relaxation_weight(dt*k1.resistance[j]*k1.inverse_inertance[j]):1.):0.;
+            const double symmetric=(1-weight[j])*.25*(k0.inverse_inertance[j]+k1.inverse_inertance[j]);
+            p1[j]=active[j]?(flow[j]-symmetric*momentum[j])/(symmetric+weight[j]*k1.inverse_inertance[j]):0.;
         }
-        if(!kinetics_.transfer(state.mass,a0,momentum,m1,a1,p1,kinetic,update)){return false;}
+        if(!kinetics_.transfer_weighted(state.mass,a0,momentum,m1,a1,p1,weight,kinetic)){return false;}
         std::array<double,2> mm,am;for(std::size_t i=0;i<2;++i){mm[i]=.5*(state.mass[i]+m1[i]);am[i]=.5*(a0[i]+a1[i]);
             if(!gas_.transfer(state.mass[i],k0.geometry.chamber[i].volume,m1[i],k1.geometry.chamber[i].volume,gas[i])){return false;}}
-        if(dissipative){mid=k1;}else if(!kinetics_.evaluate(mm,am,{},mid)){return false;}
+        if(dissipative && !fitted){mid=k1;}else if(!kinetics_.evaluate(mm,am,{},mid)){return false;}
+        if(fitted){for(std::size_t j=0;j<3;++j){mid.resistance[j]=(1-weight[j])*mid.resistance[j]+weight[j]*k1.resistance[j];
+            mid.quadratic_loss[j]=(1-weight[j])*mid.quadratic_loss[j]+weight[j]*k1.quadratic_loss[j];}}
         if(!contact_.transfer(a0,a1,contact)){return false;}
         for(std::size_t k=0;k<2;++k){area_effort[k]=kinetic.effort[k+2]+contact.area_effort[k];
             // Contact clips the volume nonlinearly. Use the finite volume

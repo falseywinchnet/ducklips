@@ -2,7 +2,9 @@
 #include "ducklips/glottal_contour.hpp"
 #include "ducklips/sources.hpp"
 namespace ducklips {
-enum class ContourUpdate { symmetric, dissipative };
+enum class ContourUpdate { symmetric, dissipative, relaxation };
+// beta=coth(x/2)-2/x; fixed-metric linear viscous decay is exponential.
+[[nodiscard]] double contour_relaxation_weight(double rate_step) noexcept;
 struct ContourKineticState final {
     std::array<double,3> inverse_inertance{},resistance{},quadratic_loss{};
     // Coordinates: lower mass, upper mass, lower area, upper area.
@@ -29,7 +31,12 @@ public:
     [[nodiscard]] bool transfer(const std::array<double,2>& mass0,const std::array<double,2>& area0,
         const std::array<double,3>& momentum0,const std::array<double,2>& mass1,const std::array<double,2>& area1,
         const std::array<double,3>& momentum1,ContourKineticTransfer&,
-        ContourUpdate update=ContourUpdate::symmetric) const noexcept;
+        ContourUpdate update=ContourUpdate::symmetric) const noexcept; // symmetric or dissipative; relaxation uses explicit weights
+    // Per-passage convex blend of the symmetric and backward kinetic rules.
+    // Each weight lies in [0,1]; the associated numerical loss is nonnegative.
+    [[nodiscard]] bool transfer_weighted(const std::array<double,2>& mass0,const std::array<double,2>& area0,
+        const std::array<double,3>& momentum0,const std::array<double,2>& mass1,const std::array<double,2>& area1,
+        const std::array<double,3>& momentum1,const std::array<double,3>& weight,ContourKineticTransfer&) const noexcept;
 private:
     [[nodiscard]] bool metric(const std::array<double,4>& first,const std::array<double,4>& last,
         std::size_t coordinate,std::array<double,3>& value,std::array<double,3>& slope,

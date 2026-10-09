@@ -148,8 +148,14 @@ new speech recording or performance claim.
 [Sealed-cap dynamics](reports/SEALED_GLOTTAL_DYNAMICS.md) now retains the
 chamber air during elastic tissue contact, with exact zero flow and no hidden
 momentum on the sealed passage. Four independent closed-phase motion controls
-converge; the open controls still pass. Joining these phases through automatic
-sealing/reopening and transporting disappearing chamber state remain required.
+converge; the open controls still pass.
+
+[Contact transitions with viscous relaxation](reports/CONTOUR_CONTACT_TRANSITIONS.md)
+now join the phases in two free-motion sealing/reopening controls while retaining
+both air chambers. The time update reproduces fixed-passage exponential decay
+and passes open-motion accuracy checks. Sustained pressure-driven motion still
+stops near a vanishing lower chamber; a complete voiced cycle and speech
+integration remain unfinished.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

@@ -1,6 +1,7 @@
 #include "ducklips/contour_kinetics.hpp"
 #include <algorithm>
 #include <cmath>
+#include <limits>
 namespace ducklips {
 namespace {
 // A scalar at two coordinate endpoints and its divided difference. Unlike
@@ -38,6 +39,12 @@ Pair positive_part(Pair x){
     return {a,b,x.a==x.b?(x.a>0?x.d:0.):x.d*(b-a)/(x.b-x.a)};
 }
 bool valid_coordinates(const std::array<double,4>& x){for(double v:x){if(!std::isfinite(v)){return false;}}return x[0]>0 && x[1]>0;}
+}
+double contour_relaxation_weight(double x) noexcept {
+    if(std::isnan(x) || x<0){return std::numeric_limits<double>::quiet_NaN();}
+    if(x<.1){const double y=x*x;return x*(1./6+y*(-1./360+y*(1./15120+y*(-1./604800+y/23950080))));}
+    if(x>50){return 1-2/x;}
+    return 1+2/std::expm1(x)-2/x;
 }
 bool ContourKinetics::configure(const FoldParameters& f,const AirProperties& air,double loss) noexcept {
     for(double v:{f.lower_thickness,f.upper_thickness,f.length,air.density}){if(!std::isfinite(v) || v<=0){return false;}}
@@ -115,12 +122,18 @@ bool ContourKinetics::evaluate(const std::array<double,2>& mass,const std::array
 }
 bool ContourKinetics::transfer(const std::array<double,2>& mass0,const std::array<double,2>& area0,const std::array<double,3>& p0,
     const std::array<double,2>& mass1,const std::array<double,2>& area1,const std::array<double,3>& p1,ContourKineticTransfer& result,ContourUpdate update) const noexcept {
+    if(update==ContourUpdate::relaxation){return false;}const double w=update==ContourUpdate::dissipative?1.:0.;
+    return transfer_weighted(mass0,area0,p0,mass1,area1,p1,{w,w,w},result);
+}
+bool ContourKinetics::transfer_weighted(const std::array<double,2>& mass0,const std::array<double,2>& area0,const std::array<double,3>& p0,
+    const std::array<double,2>& mass1,const std::array<double,2>& area1,const std::array<double,3>& p1,const std::array<double,3>& weight,ContourKineticTransfer& result) const noexcept {
+    for(double w:weight){if(!std::isfinite(w) || w<0 || w>1){return false;}}
     const std::array<double,4> a={mass0[0],mass0[1],area0[0],area0[1]},b={mass1[0],mass1[1],area1[0],area1[1]};
     std::array<double,3> g0,g1,unused;if(!metric(a,a,4,g0,unused) || !metric(b,b,4,g1,unused)){return false;}
     ContourKineticTransfer candidate;double work=0;
     for(std::size_t j=0;j<3;++j){if(!std::isfinite(p0[j]) || !std::isfinite(p1[j]) || (g0[j]==0 && p0[j]!=0) || (g1[j]==0 && p1[j]!=0)){return false;}
-        candidate.flow[j]=update==ContourUpdate::dissipative?g1[j]*p1[j]:.25*(g0[j]+g1[j])*(p0[j]+p1[j]);
-        if(update==ContourUpdate::dissipative){const double dp=p1[j]-p0[j];candidate.numerical_loss+=.5*g1[j]*dp*dp;}
+        candidate.flow[j]=(1-weight[j])*.25*(g0[j]+g1[j])*(p0[j]+p1[j])+weight[j]*g1[j]*p1[j];
+        const double dp=p1[j]-p0[j];candidate.numerical_loss+=.5*weight[j]*g1[j]*dp*dp;
         work+=candidate.flow[j]*(p1[j]-p0[j]);
         candidate.energy_change+=.5*(p1[j]*p1[j]*g1[j]-p0[j]*p0[j]*g0[j]);}
     // Average the forward and reverse coordinate paths. This gives a
@@ -131,7 +144,7 @@ bool ContourKinetics::transfer(const std::array<double,2>& mass0,const std::arra
         for(std::size_t step=0;step<4;++step){const std::size_t k=direction==1?step:3-step;auto next=current;next[k]=b[k];std::array<double,3> gradient;
             std::array<double,2> volume_slope;if(!metric(current,next,k,unused,gradient,&volume_slope)){return false;}
             if(k>=2){for(std::size_t i=0;i<2;++i){candidate.volume_gradient[i][k-2]+=.5*volume_slope[i];}}
-            for(std::size_t j=0;j<3;++j){const double weight=update==ContourUpdate::dissipative?.25*p0[j]*p0[j]:.125*(p0[j]*p0[j]+p1[j]*p1[j]);candidate.effort[k]+=weight*gradient[j];}current=next;
+            for(std::size_t j=0;j<3;++j){const double factor=(1-weight[j])*.125*(p0[j]*p0[j]+p1[j]*p1[j])+weight[j]*.25*p0[j]*p0[j];candidate.effort[k]+=factor*gradient[j];}current=next;
         }
     }
     for(std::size_t k=0;k<4;++k){work+=candidate.effort[k]*(b[k]-a[k]);}

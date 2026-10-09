@@ -1,5 +1,10 @@
 # Retained glottal air during elastic contact
 
+Historical phase-equation report at commit `c7e3f0e`. The later
+[contact-transition report](CONTOUR_CONTACT_TRANSITIONS.md) adds automatic cap
+sealing/reopening controls and identifies the remaining pressure-driven failure.
+The fixed-topology limitations below describe this earlier validation.
+
 `ContourGlottalStorage` can now evolve either sealed-cap phase with two
 positive-volume chambers. It retains their air masses, the active passage
 momenta and the tissue state. A sealed passage has exactly zero flow and
