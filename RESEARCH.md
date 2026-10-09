@@ -205,6 +205,14 @@ strong compression in very narrow openings and greater temporal-resolution
 requirements; complete contact/escape and validity of the loss model remain
 physical gates before a speech claim.
 
+[The contact-geometry reference](reports/GLOTTAL_CONTACT_GEOMETRY.md) now
+separates a sealed opening from retained air volume. The existing rectangular
+model still produces strong compression during rapid contraction under time
+refinement. Integrating a signed medial contour retains wedge storage and
+provides volume gradients and open-path metrics without area floors. Those
+shape-dependent gas and kinetic forces, plus contact-state transport, must
+be coupled before claiming a replacement dynamic source.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

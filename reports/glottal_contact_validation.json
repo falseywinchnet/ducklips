@@ -1,0 +1,66 @@
+{
+  "scope": "rectangular-source compression diagnostics and separate contour geometry; no dynamic contour coupling",
+  "commands": [
+    [
+      "build/ducklips_glottal_geometry_motion_probe",
+      "307200",
+      "out/glottal-contact/motion-307200.csv"
+    ],
+    [
+      "build/ducklips_glottal_geometry_motion_probe",
+      "1000000",
+      "out/glottal-contact/motion-1000000.csv"
+    ]
+  ],
+  "native_exit_codes": [
+    0,
+    0
+  ],
+  "ctest_exit_code": 0,
+  "sanitizer_exit_code": 0,
+  "sanitizer_batch_identical": true,
+  "peaks": [
+    {
+      "cell": 0,
+      "density_ratio": 1.7441538393167617,
+      "pressure_Pa": 117585.96868367273,
+      "volume_contraction_time_s": 4.0847747087742056e-05,
+      "local_gas_viscous_relaxation_s": 2.0963052695543244e-05,
+      "rectangular_volume_m3": 2.588023090214306e-10,
+      "contour_volume_m3": 5.296096079284966e-09
+    },
+    {
+      "cell": 1,
+      "density_ratio": 2.2531027667898544,
+      "pressure_Pa": 211282.85881170438,
+      "volume_contraction_time_s": 1.830969493503331e-05,
+      "local_gas_viscous_relaxation_s": 1.2656280353417744e-05,
+      "rectangular_volume_m3": 1.1165266103981892e-11,
+      "contour_volume_m3": 1.7344833327166495e-11
+    }
+  ],
+  "hashes": {
+    "out/glottal-contact/motion-307200.json": "21562872f9a35c9ee9f45fd8822792ef94501c7bd2cb8b30b45b5c1059505309",
+    "out/glottal-contact/motion-307200.csv": "e3b4a444223bcf3f940261b35850d1566a742dbad70af575b619fb3a893038fe",
+    "out/glottal-contact/motion-1000000.json": "7925885382d44d01f6810c2be849085cabfc0662e032417ba3aebcaab3a6dd49",
+    "out/glottal-contact/motion-1000000.csv": "d7db804f935c1ae130fd0b0febe55e380c7d1674c07a9165ec5d106146eb82b6",
+    "out/glottal-contact/peak-contours-input.txt": "43b8d55fa42f7bd19657bf3bffe071d0b802c9af3a381e38085b29103ac8df16",
+    "out/glottal-contact/peak-contours-output.jsonl": "bad13036b544979210e2c8ecb9d2db2513b8d7686e299c2a69dd1922cb68542d",
+    "out/glottal-contact/contour-asan.log": "c3a2ba2be332d246a4ccff27fbaa6dfa9e88b7e83efcf09ae440d60dfcf29a63",
+    "out/glottal-contact/contour-asan-output.jsonl": "5472f1b1da94b90f0f06ff5a37711c4251c9780ab17db3a096ac76a74d3a85ec",
+    "out/glottal-contact/ctest.log": "1102048fa0306597034178b4fbaebbfbd527435c04149e4b58a886915381d12a",
+    "reports/glottal_contour_reference.json": "2a7394653127b8eb3d90cb30c1dd3a055039f91cf0f562aae70ae7ceb295473d",
+    "tools/glottal_geometry_motion_probe.cpp": "e12a2f7dab690365e07fd1c1f44376e244bb4a7376c84eacf64a5009db7841da",
+    "build/ducklips_glottal_geometry_motion_probe": "640d19cc559f6291e3aede48ae2549e6de21afc793fc40ba4bc01a226c041d05",
+    ".build/asan/ducklips_glottal_contour_probe": "b995f3b718d550a7a21e9adcaf11d10ce2d7a53464cb79b55adad536aba3fe4e",
+    "include/ducklips/graph_glottal_storage.hpp": "0824f93972f0db68846f9e57c66741880da8848ca072a58b0fcafd2bb3d61ce8",
+    "src/graph_glottal_storage.cpp": "d8783bb7a0bd6f2825dbc2787357f132db8faf7ba3f07226b405220867a8e88c",
+    "include/ducklips/glottal_storage.hpp": "b28e25d89b6810eee77b0bf8c08d8f4ced13463b209fc9b900864ec82351d72f",
+    "src/glottal_storage.cpp": "047673700a53093ae7f77ba56c99866842e5fba88b8359e3388aa229e1652558",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "src/glottal_kinetics.cpp": "d5dfeea4bc1b9bf8dfede0fe8e84556d3e69af6c68276d377e7a9b2d1a8b4d74",
+    "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+    "include/ducklips/sources.hpp": "fe89057806121ba08016cf51c660788bcb3cf8c12fbc6f7d1b24936a25dcb4d9",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296"
+  }
+}

@@ -24,6 +24,7 @@ add_library(ducklips STATIC
     src/gas_storage.cpp
     src/glottal_storage.cpp
     src/glottal_kinetics.cpp
+    src/glottal_contour.cpp
     src/graph_glottal_storage.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
@@ -173,6 +174,10 @@ target_link_libraries(ducklips_planar_pressure_motion_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_inertive_motion_probe tools/planar_inertive_motion_probe.cpp)
 target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)
+
+add_executable(ducklips_glottal_contour_probe tools/glottal_contour_probe.cpp)
+target_link_libraries(ducklips_glottal_contour_probe PRIVATE ducklips)
+add_test(NAME ducklips_glottal_contour_reference COMMAND ducklips_glottal_contour_probe)
 
 add_executable(ducklips_glottal_geometry_motion_probe tools/glottal_geometry_motion_probe.cpp)
 target_link_libraries(ducklips_glottal_geometry_motion_probe PRIVATE ducklips)

@@ -1,0 +1,33 @@
+{
+  "scope": "piecewise-affine signed medial profile; numerical quadrature of storage, gradients and passage integrals; geometry only",
+  "valid_cases": 1131,
+  "invalid_cases": 2,
+  "motion_poses": 1001,
+  "maxima": {
+    "volume_scaled": 3.3306690738754696e-16,
+    "centroid_scaled": 4.440892098500626e-16,
+    "gradient_scaled": 1.2533377113932431e-16,
+    "inverse_area_relative": 4.701231682981278e-10,
+    "inverse_cube_relative": 5.537300314190684e-10,
+    "aperture_scaled": 3.3306690738754696e-16
+  },
+  "input": "out/glottal-contact/contour-input.txt",
+  "input_sha256": "959457b674bde471b00b35d42bca9c24415d057c63afc112b2506aac280d02b6",
+  "output": "out/glottal-contact/contour-output.jsonl",
+  "output_sha256": "5472f1b1da94b90f0f06ff5a37711c4251c9780ab17db3a096ac76a74d3a85ec",
+  "motion_input": "out/glottal-contact/motion-1000000.csv",
+  "motion_input_sha256": "d7db804f935c1ae130fd0b0febe55e380c7d1674c07a9165ec5d106146eb82b6",
+  "native_checks": "out/glottal-contact/contour-native.log",
+  "native_checks_sha256": "c3a2ba2be332d246a4ccff27fbaa6dfa9e88b7e83efcf09ae440d60dfcf29a63",
+  "hashes": {
+    "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
+    "include/ducklips/glottal_contour.hpp": "0650c7f74bb9e6d6f481465dd5311643cdefcdf8e6b37989ca1b5acce8e5889f",
+    "tools/glottal_contour_probe.cpp": "2c9c71aa65945837a1682a8038cb85b35579fda9d13fc8ecdcac2a1a45f3f4aa",
+    "tools/glottal_contour_reference.py": "7e6ee5cd33bbbbd11fd77e0dc9a40a4cbe99b47cc003a336986e212e8431eec3",
+    "build/ducklips_glottal_contour_probe": "1ae994926519da4c8d2cfb59c3c912edc33e979b13cb93aae5c005dcf656bd86"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  }
+}

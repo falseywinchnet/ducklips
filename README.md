@@ -132,6 +132,12 @@ work balance. Constant reservoir pressure produces repeated fold motion in
 a control; narrow-volume compression, contact and the loss model remain
 physical questions, and long-run temporal accuracy needs finer stepping.
 
+[Near-contact diagnosis and contour geometry](reports/GLOTTAL_CONTACT_GEOMETRY.md)
+now show that strong compression persists under refinement while air escapes
+from both ends. The new geometry keeps wedge-shaped storage behind an exact
+seal and derives force areas and passage integrals from the same surface.
+It is independently checked but not yet coupled into the source dynamics.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,
