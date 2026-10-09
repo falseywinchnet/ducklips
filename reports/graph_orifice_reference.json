@@ -1,0 +1,176 @@
+{
+  "use": "continuous nonlinear source/inlet ODE and reservoir energy balance; no speech",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "tools/graph_orifice_reference.py"
+  ],
+  "runs": [
+    {
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "32"
+      ],
+      "maximum_pressure_error_Pa": 2.101676856168524,
+      "maximum_flow_error_m3_s": 6.634942028323672e-06,
+      "normalized_maximum_error": 0.06634942028323672,
+      "refinement_ratio": null,
+      "output": "out/graph-orifice/trajectory-32.json",
+      "output_sha256": "9f00474af07d7112bb64455692aef850a32ef57a91437bcd13a525dc20f147e2"
+    },
+    {
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "64"
+      ],
+      "maximum_pressure_error_Pa": 0.1954374575871043,
+      "maximum_flow_error_m3_s": 4.074818709844899e-07,
+      "normalized_maximum_error": 0.004074818709844898,
+      "refinement_ratio": 16.282790722182142,
+      "output": "out/graph-orifice/trajectory-64.json",
+      "output_sha256": "987eca7927d6c1b57bf4896c0875aa942b2cdbd9993ea1daa0c490dcec1baf67"
+    },
+    {
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "128"
+      ],
+      "maximum_pressure_error_Pa": 0.042564619175891494,
+      "maximum_flow_error_m3_s": 9.658766230734123e-08,
+      "normalized_maximum_error": 0.0009658766230734123,
+      "refinement_ratio": 4.218777649757021,
+      "output": "out/graph-orifice/trajectory-128.json",
+      "output_sha256": "8aead7b5e814a8366e1f5e1f221b6c3f6c6e66e082c41fe19c70ad15875ae449"
+    },
+    {
+      "steps": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "256"
+      ],
+      "maximum_pressure_error_Pa": 0.03462638279199837,
+      "maximum_flow_error_m3_s": 3.0685021400257965e-08,
+      "normalized_maximum_error": 0.0003068502140025796,
+      "refinement_ratio": 3.1477137019865085,
+      "output": "out/graph-orifice/trajectory-256.json",
+      "output_sha256": "e3b5ee826e3ffbf17a811a3a5ea316a66957d74cbc699295f9103687e7284544"
+    },
+    {
+      "steps": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "512"
+      ],
+      "maximum_pressure_error_Pa": 0.028751467727374802,
+      "maximum_flow_error_m3_s": 1.286989154732099e-08,
+      "normalized_maximum_error": 0.0001286989154732099,
+      "refinement_ratio": 2.3842486385711146,
+      "output": "out/graph-orifice/trajectory-512.json",
+      "output_sha256": "86ab3697d5018880ff380f4d92dbeb60957d544265dc115b86a731ebd3519e59"
+    },
+    {
+      "steps": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "1024"
+      ],
+      "maximum_pressure_error_Pa": 0.013476487376010482,
+      "maximum_flow_error_m3_s": 4.775280689102435e-09,
+      "normalized_maximum_error": 4.7752806891024346e-05,
+      "refinement_ratio": 2.6951068188915244,
+      "output": "out/graph-orifice/trajectory-1024.json",
+      "output_sha256": "4d6f80043e9230c8af4669d21b132887c6c4ce8a75ac343598643b4631303f70"
+    },
+    {
+      "steps": 2048,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "2048"
+      ],
+      "maximum_pressure_error_Pa": 0.0041610296566432226,
+      "maximum_flow_error_m3_s": 1.385547124521342e-09,
+      "normalized_maximum_error": 1.385547124521342e-05,
+      "refinement_ratio": 3.4464946046148572,
+      "output": "out/graph-orifice/trajectory-2048.json",
+      "output_sha256": "c8641d193686b4f6471d96d134277d3ad13ceed0defd19a0b32408db980202fb"
+    },
+    {
+      "steps": 4096,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "4096"
+      ],
+      "maximum_pressure_error_Pa": 0.0010963670275714321,
+      "maximum_flow_error_m3_s": 3.5991652128090814e-10,
+      "normalized_maximum_error": 3.5991652128090814e-06,
+      "refinement_ratio": 3.849634686372033,
+      "output": "out/graph-orifice/trajectory-4096.json",
+      "output_sha256": "e0a089703020d129a0573032225139921125071e5c9c9c91fda5d796841d8be5"
+    },
+    {
+      "steps": 8192,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "8192"
+      ],
+      "maximum_pressure_error_Pa": 0.00027761139381254907,
+      "maximum_flow_error_m3_s": 9.08272894591946e-11,
+      "normalized_maximum_error": 9.08272894591946e-07,
+      "refinement_ratio": 3.9626473874088863,
+      "output": "out/graph-orifice/trajectory-8192.json",
+      "output_sha256": "60b4cdf012be947e25976768043eee8d3dd258bb8b77634e5b7e13173230fcc9"
+    },
+    {
+      "steps": 16384,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_orifice_probe",
+        "--trajectory",
+        "16384"
+      ],
+      "maximum_pressure_error_Pa": 6.962250540709647e-05,
+      "maximum_flow_error_m3_s": 2.2759747255085463e-11,
+      "normalized_maximum_error": 2.2759747255085463e-07,
+      "refinement_ratio": 3.99069851001531,
+      "output": "out/graph-orifice/trajectory-16384.json",
+      "output_sha256": "92ea8215485c1d07553b6f2174763f84ce8cc3cba2f84f4536258c34f268eb8c"
+    }
+  ],
+  "oracle_final_state": [
+    530.1181034361098,
+    524.4419641109571,
+    517.4189831352481,
+    1.5998461891151884e-05,
+    -2.8198820935178052e-05,
+    -5.601504131267065e-06,
+    5.3798883848762986e-05
+  ],
+  "oracle_pressure_refinement_Pa": 1.2505552149377763e-12,
+  "oracle_flow_refinement_m3_s": 1.2502206301473473e-18,
+  "native_checks": "out/graph-orifice/native-checks.log",
+  "native_checks_sha256": "6c9a4d4508ade299196725ff7a8eb8544c69d9c38f7392ca847d3069230546af",
+  "hashes": {
+    "include/ducklips/graph_orifice.hpp": "87aebe95fb91fb63cb5813b39fe39f61298fdca85d40ed513e79fde324d67dbc",
+    "src/graph_orifice.cpp": "c41b2e62f1ff58a541d46dcddb0a9fc5b381b57ca455cd9adf56f66c71c48b56",
+    "include/ducklips/moving_graph.hpp": "0a29b09b4183373950ffcae3d6d1b5eebcd11b61b5b369b3b2959dc393b1a82e",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "src/sources.cpp": "66167fbd6dcbd63fe5aacca8f90748046ef26ccdf8ebde8a0c78f256e0b5b4b5",
+    "tools/graph_orifice_probe.cpp": "e0153b2309660faf631d10de7663b77682a31dc108242ef57525325f889f770a",
+    "tools/graph_orifice_reference.py": "b6d072419183d04d5956715b022333b6fbe8c711f36a3e668653fa23b5e94177",
+    "build/ducklips_graph_orifice_probe": "e6479c71e1294a88500ad297605e4bdb2cab2ebe087d3060fcc1cb4c5cad40ea"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  }
+}

@@ -159,8 +159,17 @@ The [planar profile adapter](reports/PLANAR_LIP_PROFILE.md) now consumes those
 distinct lip metrics and continues canonical state across successive native
 Bravo intervals on a certified fixed graph. Complete terminal closure retains
 positive lip storage and zero exterior flow. The inlet remains sealed in
-these controls; laryngeal/source coupling, losses, radiation and full-utterance
-topology transport remain required before this becomes a speech path.
+these initial controls; dynamic vocal-fold coupling, losses, radiation and
+full-utterance topology transport remain required for a speech path.
+
+The subsequent [throat/source integration](reports/PLANAR_SOURCE.md) connects
+the body epilarynx and a held glottal aperture to the same total-flow graph.
+Source feedback uses work-conjugate average pressure and retains the
+inlet half-section momentum. Static source controls conserve reservoir work
+including orifice dissipation and converge to an independent continuous ODE.
+The moving Bravo controls conserve stored air but their undamped endpoint
+pressures are not yet temporally converged. Dynamic folds, losses/radiation
+and full-utterance state transport remain open.
 
 ## Moving-energy reference
 

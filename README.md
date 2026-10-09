@@ -94,9 +94,16 @@ contact.
 The [coupled profile adapter](reports/PLANAR_LIP_PROFILE.md) now uses those
 separate measurements in the native planar reference. Moving Bravo closure and reopening
 controls carry mouth and lip state through successive intervals, retain the
-air behind the seal, and conserve stored air including exterior flow. This
-remains an inviscid control with a sealed inlet, pending source, loss and
-full-utterance integration; no new listening result is attributed to it.
+air behind the seal, and conserve stored air including exterior flow. Those
+initial controls use a sealed inlet; no new listening result is attributed
+to them.
+
+The [throat and source connection](reports/PLANAR_SOURCE.md) now adds the
+existing epilarynx sections and an implicit held-aperture glottal inlet to
+that same stored-air network. It includes source-path inertia and pressure
+feedback, with independent mass, energy and continuous-equation checks.
+Dynamic folds and tract losses remain unfinished, and the moving inviscid
+controls still need temporal convergence; this is not yet a speech path.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
