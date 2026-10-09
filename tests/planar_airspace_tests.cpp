@@ -1,5 +1,7 @@
 #include "ducklips/planar_airspace.hpp"
 #include "ducklips/physics.hpp"
+#include "ducklips/cavity_network.hpp"
+#include <limits>
 #include <algorithm>
 #include <array>
 #include <atomic>
@@ -127,5 +129,54 @@ int main(){
     check(split.build_regions(unit,{},1) && split.regions.size()==6,"component preparation can be repeated for a changed grid");
     split.build(unit,{},1);
     check(split.regions.empty() && split.region_links.empty(),"ordinary geometry build does not expose stale component outputs");
+    // A sloping tissue boundary sweeps a triangular air wedge into the right
+    // cell. Its volume is h^2/2 and its shared aperture is h, not two linear
+    // interpolants. All contour vertices have fixed correspondence.
+    ducklips::PlanarAirspace motion;const std::array<double,3> mx{-1,0,1};const std::array<double,2> my{0,1};
+    motion.prepare(mx,my,32);motion.prepare_regions(2048,4096);
+    const auto mouth=box(-1,1,0,1);
+    const std::array<ducklips::Point2,5> first{{{-2,2},{2,-2},{3,-2},{3,3},{-2,3}}};
+    const std::array<ducklips::Point2,5> last{{{-2,2.4},{2.4,-2},{3,-2},{3,3},{-2,3}}};
+    const std::array<ducklips::PlanarContour,1> from{{first}},to{{last}};
+    const std::size_t motion_before=allocations.load();bool motion_valid=true;double volume_error=0,aperture_error=0;
+    for(double fraction:{0.,.125,.25,.5,.75,1.}){
+        motion_valid=motion.build_between(mouth,from,mouth,to,fraction,1)&&motion_valid;
+        const double height=.4*fraction;
+        volume_error=std::max(volume_error,std::abs(motion.volume[1]-.5*height*height));
+        aperture_error=std::max(aperture_error,std::abs(motion.vertical_face[1]-height));
+    }
+    const std::size_t motion_after=allocations.load();
+    check(motion_valid && volume_error<1e-14 && aperture_error<1e-14,"moving contours preserve quadratic wedge volume and linear aperture",volume_error);
+    check(motion_before==motion_after,"sampling moving contour geometry allocates nothing after preparation");
+    motion.build_between(mouth,from,mouth,to,.5,1);
+    check(std::abs(motion.volume[1]-.02)<1e-14 && std::abs(motion.volume[1]-.04)>.019,
+        "midpoint geometry does not substitute interpolated endpoint volumes",motion.volume[1]);
+    check(!motion.build_between(mouth,from,mouth,to,std::numeric_limits<double>::quiet_NaN(),1)
+        && !motion.build_between(mouth,from,mouth,to,1.01,1),"invalid motion fractions fail explicitly");
+    const std::array<ducklips::PlanarContour,1> wrong{{mouth}};
+    check(!motion.build_between(mouth,from,mouth,wrong,.5,1),"motion rejects mismatched vertex correspondence");
+    // Couple the freshly measured wedge to the actual native pressure solver.
+    // Midpoint aperture is the exact interval average for this linear motion.
+    const ducklips::AirProperties air{};const double bulk=air.density*air.sound_speed*air.sound_speed;
+    bool coupled_valid=true;double pressure_error=0,mass_error=0;
+    for(std::size_t steps:{1u,2u,4u,8u}){for(bool closing:{false,true}){
+        ducklips::CavityNetwork pressure;const std::array<ducklips::CavityConnection,1> reservoir{{{0,ducklips::cavity_reservoir}}};pressure.prepare(1,reservoir);
+        const double expected_pressure=closing?.16/(.04-.16/bulk):-.16/(.04+.16/bulk);
+        std::array<double,1> v{closing?.08:0},c{v[0]/bulk},p{closing?expected_pressure:0},in{};
+        coupled_valid=pressure.reset(v,c,p)&&coupled_valid;const double initial=v[0]+c[0]*p[0];double discharged=0;
+        for(std::size_t step=1;step<=steps;++step){
+            const double t0=double(step-1)/double(steps),t1=double(step)/double(steps),middle=.5*(t0+t1);
+            coupled_valid=motion.build_between(mouth,from,mouth,to,closing?1-middle:middle,1)&&coupled_valid;
+            const double conductance=.1*motion.vertical_face[1];
+            const std::array<ducklips::CavityPassage,1> opening{{{motion.vertical_face[1],1/conductance,0,0,0}}};
+            coupled_valid=motion.build_between(mouth,from,mouth,to,closing?1-t1:t1,1)&&coupled_valid;
+            v[0]=motion.volume[1];c[0]=v[0]/bulk;
+            const auto result=pressure.advance(v,c,opening,in,t1-t0,air);coupled_valid=result.converged&&coupled_valid;
+            pressure_error=std::max(pressure_error,std::abs(pressure.pressures()[0]-expected_pressure));
+            discharged+=(t1-t0)*pressure.flows()[0];mass_error=std::max(mass_error,std::abs(v[0]+c[0]*pressure.pressures()[0]+discharged-initial));
+        }
+    }}
+    check(coupled_valid && pressure_error<1e-10,"native moving contour measurements give exact finite wedge pressure under refinement",pressure_error);
+    check(mass_error<1e-14,"native moving wedge exchanges its stored air conservatively",mass_error);
     return failures?1:0;
 }

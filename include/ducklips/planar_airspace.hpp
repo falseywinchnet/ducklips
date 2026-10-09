@@ -36,6 +36,15 @@ public:
     // Region indices describe this pose only, not moving-state identities.
     void prepare_regions(std::size_t piece_capacity,std::size_t link_capacity);
     bool build_regions(PlanarContour domain,std::span<const PlanarContour> solids,double depth) noexcept;
+    // Linear motion of corresponding contour vertices, followed by fresh
+    // region/volume/aperture extraction. This does NOT blend those outputs.
+    // The caller supplies matching vertex identities and simple intermediate
+    // polygons. It does not establish a muscle law or moving-state identity.
+    bool build_between(PlanarContour first_domain,std::span<const PlanarContour> first_solids,
+        PlanarContour last_domain,std::span<const PlanarContour> last_solids,double fraction,double depth) noexcept;
+    // Actual sampled contours for diagnostics: domain first, then solids.
+    // Valid after successful build_between, until next preparation/motion call.
+    [[nodiscard]] std::span<const PlanarContour> interpolated_contours() const noexcept {return motion_contours_;}
     std::vector<PlanarRegion> regions{};
     std::vector<PlanarRegionLink> region_links{};
     // Row-major cell volumes and free portions of internal grid faces.
@@ -57,6 +66,8 @@ private:
     std::vector<Hit> hits_{};
     std::vector<Segment> edges_{};
     std::vector<Interval> domain_{},solid_{},free_{},left_{};
+    std::vector<Point2> motion_points_{};
+    std::vector<PlanarContour> motion_contours_{};
     std::vector<Piece> pieces_{};
     std::vector<Range> previous_rows_{},current_rows_{};
     std::size_t piece_capacity_{},link_capacity_{};

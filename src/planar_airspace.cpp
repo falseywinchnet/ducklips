@@ -20,6 +20,7 @@ void PlanarAirspace::prepare(std::span<const double> x,std::span<const double> y
     x_.assign(x.begin(),x.end());y_.assign(y.begin(),y.end());maximum_edges_=maximum_edges;
     volume.resize(columns()*rows());vertical_face.resize(x_.size()*rows());horizontal_face.resize(columns()*y_.size());
     edges_.reserve(maximum_edges);hits_.reserve(maximum_edges);
+    motion_points_.resize(maximum_edges);motion_contours_.clear();motion_contours_.reserve(maximum_edges/3);
     cuts_.reserve(x.size()+maximum_edges*(y.size()+1)+maximum_edges*(maximum_edges-1)/2);
     domain_.reserve(maximum_edges);solid_.reserve(maximum_edges);free_.reserve(2*maximum_edges);left_.reserve(2*maximum_edges);
 }
@@ -195,6 +196,29 @@ bool PlanarAirspace::build_regions(PlanarContour domain,std::span<const PlanarCo
         else{region_links[count++]=link;}
     }
     region_links.resize(count);return true;
+}
+
+bool PlanarAirspace::build_between(PlanarContour first_domain,std::span<const PlanarContour> first_solids,
+    PlanarContour last_domain,std::span<const PlanarContour> last_solids,double fraction,double depth) noexcept {
+    motion_contours_.clear();
+    if(!std::isfinite(fraction) || fraction<0 || fraction>1 || first_solids.size()!=last_solids.size()
+        || first_domain.size()!=last_domain.size() || first_domain.size()<3){return false;}
+    std::size_t count=first_domain.size();
+    if(count>maximum_edges_){return false;}
+    for(std::size_t i=0;i<first_solids.size();++i){
+        if(first_solids[i].size()<3 || first_solids[i].size()!=last_solids[i].size() || first_solids[i].size()>maximum_edges_-count){return false;}
+        count+=first_solids[i].size();
+    }
+    std::size_t offset=0;
+    for(std::size_t contour=0;contour<=first_solids.size();++contour){
+        const PlanarContour first=contour?first_solids[contour-1]:first_domain,last=contour?last_solids[contour-1]:last_domain;
+        for(std::size_t i=0;i<first.size();++i){
+            if(!std::isfinite(first[i].x) || !std::isfinite(first[i].y) || !std::isfinite(last[i].x) || !std::isfinite(last[i].y)){return false;}
+            motion_points_[offset+i]={std::lerp(first[i].x,last[i].x,fraction),std::lerp(first[i].y,last[i].y,fraction)};
+        }
+        motion_contours_.push_back({motion_points_.data()+offset,first.size()});offset+=first.size();
+    }
+    return build_regions(motion_contours_[0],std::span<const PlanarContour>(motion_contours_).subspan(1),depth);
 }
 
 }

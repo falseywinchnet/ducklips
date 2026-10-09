@@ -56,7 +56,17 @@ def audit(path):
     with source.open() as input_file, destination.open('w') as output_file:
         subprocess.run([str(BINARY)], stdin=input_file, stdout=output_file, check=True)
     native = json.loads(destination.read_text())
-    polygons = [Polygon(points) for points in polygons]
+    result = check_geometry(p,native)
+    result.update(geometry=str(path.relative_to(ROOT)), geometry_sha256=sha(path),
+                  command=[str(BINARY)], input=str(source.relative_to(ROOT)), input_sha256=sha(source),
+                  output=str(destination.relative_to(ROOT)), output_sha256=sha(destination))
+    print(json.dumps({k:result[k] for k in ['time','regions','links','split_cells','components']}), flush=True)
+    return result
+
+
+def check_geometry(p,native):
+    nx, ny = len(p['x_edges']) - 1, len(p['y_edges']) - 1
+    polygons = [Polygon(points) for points in [p['domain'], *p['solids']]]
     assert all(g.is_valid for g in polygons)
     fluid = polygons[0].difference(unary_union(polygons[1:]))
     exact_components = [g for g in shapely.get_parts(fluid) if g.area > 0]
@@ -124,14 +134,9 @@ def audit(path):
         mapped.extend(owners)
     assert len(set(mapped)) == len(exact_components)
     assert volume_error < 1e-18 and area_error < 1e-15 and component_error < 1e-16
-    result = dict(time=p['time'], regions=len(native['regions']), links=len(native['links']), split_cells=split,
-                  components=len(grouped), component_volumes_m3=volumes, maximum_region_volume_error_m3=volume_error,
-                  maximum_port_area_error_m2=area_error, maximum_component_volume_error_m3=component_error,
-                  geometry=str(path.relative_to(ROOT)), geometry_sha256=sha(path),
-                  command=[str(BINARY)], input=str(source.relative_to(ROOT)), input_sha256=sha(source),
-                  output=str(destination.relative_to(ROOT)), output_sha256=sha(destination))
-    print(json.dumps({k:result[k] for k in ['time','regions','links','split_cells','components']}), flush=True)
-    return result
+    return dict(time=p['time'], regions=len(native['regions']), links=len(native['links']), split_cells=split,
+                components=len(grouped), component_volumes_m3=volumes, maximum_region_volume_error_m3=volume_error,
+                maximum_port_area_error_m2=area_error, maximum_component_volume_error_m3=component_error)
 
 
 def pressure_control():

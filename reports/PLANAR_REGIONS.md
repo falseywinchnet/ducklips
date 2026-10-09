@@ -130,8 +130,11 @@ The native implementation adds no external C++ geometry dependency.
 
 ## Next integration requirement
 
-The previous [transport experiments](CAVITY_TRANSPORT.md) still have unresolved
-temporal refinement. A correct spatial decomposition does not establish how
+The subsequent [moving-contour audit](PLANAR_MOTION.md) checks 521 instants,
+including additional splits between these saved poses, and recomputes geometric
+metrics from the sampled boundaries. The previous
+[transport experiments](CAVITY_TRANSPORT.md) still have unresolved temporal
+pressure refinement. A correct spatial decomposition does not establish how
 old air content, pressure or momentum maps into regions that split, merge,
 appear and disappear. Assigning state by the new output index would again
 transfer air incorrectly. Volumes, openings and state correspondence must

@@ -104,8 +104,11 @@ geometry now has [fixed-pose graph pressure checks](reports/CAVITY_GRAPH.md),
 but still needs acoustic integration, physical flow/boundary laws and
 component-preserving moving-state transport. [Zero-storage transport](reports/CAVITY_TRANSPORT.md)
 now passes conservation checks. [Spatial region decomposition](reports/PLANAR_REGIONS.md)
-resolves split-cell contacts in all 66 assessed poses, but consistent temporal
-geometry and conservative state correspondence remain failed integration gates. The latest listening follow-up
+resolves split-cell contacts in all 66 assessed poses. [Moving-contour
+sampling](reports/PLANAR_MOTION.md) is now independently checked at 521 instants,
+including hidden intermediate splits and false openings from metric blending.
+Interval-integrated flow and conservative state correspondence remain failed
+integration gates. The latest listening follow-up
 reports [November improved and Foxtrot's /tr/ still jammed](reports/LISTENING_SPATIAL_2026_10_09.md).
 The passive-representation speed gate, flexible-blade/tongue-root work,
 individual body matching and realistic speech remain unsatisfied requirements.

@@ -15,8 +15,10 @@ still reports November improved and Foxtrot jammed around /tr/.
 
 A subsequent [native region decomposition](PLANAR_REGIONS.md) resolves every
 split-cell pose in this audit and preserves the /t/ seal in a fixed-pressure
-control. The temporal refinement failure below remains unresolved; the
-combined-cell experiments are retained as failure evidence.
+control. A later [521-instant moving-contour audit](PLANAR_MOTION.md) finds
+additional splits between these saved poses and false openings from the
+metric interpolation used here. The temporal pressure-refinement failure
+below remains unresolved; these experiments are retained as failure evidence.
 
 ## Zero storage without deleting air
 
