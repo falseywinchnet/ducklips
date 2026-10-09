@@ -1,0 +1,11 @@
+{
+  "scope": "six native glottal storage controls under ASan/UBSan; four focused CTests",
+  "sanitizer_exit_code": 0,
+  "ctest_exit_code": 0,
+  "hashes": {
+    "out/glottal-storage/asan-checks.log": "f638fafaa9e8dcdf48a4540089680e3c6012371dd50fa147c8e71a72a0118a0d",
+    "out/glottal-storage/ctest.log": "c46e4c32001c95c0dbbcd37709838f17d4f305407585e0337c6e6ed815c621c9",
+    ".build/asan/ducklips_glottal_storage_probe": "83ece7fa6a1fcd9c8c7104758411358379a2981f6db0b7b6a54a12409f10963c",
+    "reports/glottal_storage_reference.json": "98af8e7c5f77ad6d563b679a45127c4d2fe5898b60e55951731537a54233faeb"
+  }
+}

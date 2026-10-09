@@ -163,6 +163,11 @@ This gate takes precedence over treating the new source as ready for speech.
 Tract losses/radiation, full-utterance topology transport and anatomical
 calibration also remain unfinished. Performance optimization stays parked.
 
+Follow-up: [finite glottal storage](GLOTTAL_STORAGE.md) now independently
+checks mass storage and matching pressure-volume work on the tissue. It
+uses supplied flow ports and has not replaced this coupled source. The
+work gap measured here therefore remains an open full-system check.
+
 ## Reproduction
 
 ```sh

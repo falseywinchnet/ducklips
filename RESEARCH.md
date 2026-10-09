@@ -181,6 +181,14 @@ under refinement. The algebraic glottis has no internal volume/pressure state
 to account for that exchange. This is a physical work-accounting gate, not
 an invitation to tune damping or claim the coupled source ready for speech.
 
+The [finite glottal storage component](reports/GLOTTAL_STORAGE.md) now
+accounts for two chambers of air and their matching work on the four tissue
+masses. Mass-flow enthalpy and tissue pressure derive from one gas energy;
+independent continuous-motion and high-precision thermodynamic controls pass.
+Prescribed flow ports have not yet been connected to passage momentum, jet
+losses or the tract. This supplies the missing storage/force constitutive
+component, not a complete replacement for the audited source trajectory.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

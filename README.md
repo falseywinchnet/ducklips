@@ -113,6 +113,12 @@ closure. Internal glottal storage/displacement and matching pressure work
 need resolution before this source can be treated as physically complete.
 No new listening result is attributed to it.
 
+[Finite glottal storage](reports/GLOTTAL_STORAGE.md) now gives the moving
+folds two air chambers whose compression, mass transfer and tissue forces
+obey one work balance. Independent thermodynamic and continuous-motion
+checks pass. Its flows are still supplied inputs; connecting passage
+momentum, jet losses and the tract remains necessary before speech.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,
