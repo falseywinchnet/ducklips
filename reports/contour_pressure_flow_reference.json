@@ -1,0 +1,217 @@
+{
+  "scope": "strong local continuity and axial fluid inertia; contact loss divergence diagnosed, no momentum advance or speech",
+  "cases": [
+    {
+      "input": [
+        3e-06,
+        3e-06,
+        700,
+        700
+      ],
+      "matrix_scaled_error": 1.002259243633167e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 4.440892098500626e-16,
+      "weak_continuity_error": 3.3306690738754696e-16,
+      "minimum_scaled_eigenvalue": 2.269525086811424e-34
+    },
+    {
+      "input": [
+        1e-06,
+        4e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 2.6677657281398493e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 4.440892098500626e-16,
+      "weak_continuity_error": 2.220446049250313e-16,
+      "minimum_scaled_eigenvalue": -4.179255158704826e-20
+    },
+    {
+      "input": [
+        5e-06,
+        1e-06,
+        1500,
+        -500
+      ],
+      "matrix_scaled_error": 4.915252742677662e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 2.220446049250313e-16,
+      "weak_continuity_error": 2.168404344971009e-16,
+      "minimum_scaled_eigenvalue": -2.919475188711998e-19
+    },
+    {
+      "input": [
+        -4.8e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 2.706898735817619e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 5.5067062021407764e-14,
+      "weak_continuity_error": 2.2869889575866112e-17,
+      "minimum_scaled_eigenvalue": 0.0
+    },
+    {
+      "input": [
+        -5e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 1.4718874760410027e-15,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 2.2648549702353193e-14,
+      "weak_continuity_error": 2.220446049250313e-16,
+      "minimum_scaled_eigenvalue": -5.300905609422613e-23
+    },
+    {
+      "input": [
+        -5.2e-06,
+        1e-06,
+        -100,
+        900
+      ],
+      "matrix_scaled_error": 5.294803605665583e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 2.3092638912203256e-14,
+      "weak_continuity_error": 6.661338147750939e-16,
+      "minimum_scaled_eigenvalue": 0.0
+    },
+    {
+      "input": [
+        3e-06,
+        -5e-07,
+        700,
+        -100
+      ],
+      "matrix_scaled_error": 2.5281091755289425e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 4.440892098500626e-16,
+      "weak_continuity_error": 4.517509052022936e-17,
+      "minimum_scaled_eigenvalue": -8.517523240163678e-21
+    },
+    {
+      "input": [
+        3e-06,
+        -2e-06,
+        900,
+        -500
+      ],
+      "matrix_scaled_error": 4.263436470877176e-17,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 8.881784197001252e-16,
+      "weak_continuity_error": 2.220446049250313e-16,
+      "minimum_scaled_eigenvalue": -2.6656920873962574e-20
+    },
+    {
+      "input": [
+        0,
+        3e-06,
+        700,
+        200
+      ],
+      "matrix_scaled_error": 3.331918921855641e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 4.440892098500626e-16,
+      "weak_continuity_error": 6.661338147750939e-16,
+      "minimum_scaled_eigenvalue": 0.0
+    },
+    {
+      "input": [
+        3e-06,
+        0,
+        900,
+        -100
+      ],
+      "matrix_scaled_error": 6.685314953108117e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 7.771561172376096e-16,
+      "weak_continuity_error": 3.3306690738754696e-16,
+      "minimum_scaled_eigenvalue": -3.353808608043705e-35
+    },
+    {
+      "input": [
+        2e-06,
+        5e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 4.790992473038353e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 4.440892098500626e-16,
+      "weak_continuity_error": 2.168404344971009e-16,
+      "minimum_scaled_eigenvalue": -2.5704096656207638e-20
+    },
+    {
+      "input": [
+        -1e-06,
+        3e-06,
+        -20000,
+        10000
+      ],
+      "matrix_scaled_error": 3.91461213809728e-16,
+      "reference_refinement": 0.0,
+      "flow_scaled_error": 2.220446049250313e-15,
+      "weak_continuity_error": 4.440892098500626e-16,
+      "minimum_scaled_eigenvalue": 0.0
+    }
+  ],
+  "contact": {
+    "input": [
+      -1e-06,
+      3e-06,
+      700.0,
+      700.0
+    ],
+    "rate": [
+      0.0,
+      1.2719785279765304e-07,
+      4.1457077948864696e-07,
+      -0.0003,
+      -0.0003
+    ],
+    "tip_speed": 0.11249999999999998,
+    "near_tip_speed": [
+      0.11250000000000063,
+      0.11249999999999843,
+      0.11250000000004036,
+      0.11250000000024656,
+      0.11250000000433576
+    ],
+    "cutoffs_m": [
+      1e-05,
+      1e-06,
+      1e-07,
+      1e-08,
+      1e-09
+    ],
+    "truncated_loss_W": [
+      1.0377711824264835e-06,
+      1.5158530396725435e-06,
+      1.993934896918492e-06,
+      2.472016754164879e-06,
+      2.9500986114370526e-06
+    ],
+    "logarithmic_slopes": [
+      2.07628312500022e-07,
+      2.0762831249997362e-07,
+      2.07628312500164e-07,
+      2.0762831251136298e-07
+    ],
+    "expected_logarithmic_coefficient_W": 2.076283124999999e-07,
+    "native_logarithmic_coefficient_W": 2.0762831249999993e-07
+  },
+  "hashes": {
+    "out/contour-flow/input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+    "out/contour-flow/output.jsonl": "73f2e402570e884e907c82863890f39a8132c1cbebf88bdef4db4dc8a61996f8",
+    "build/ducklips_contour_pressure_flow_probe": "a9629cafd34fe59f23198d28fdb99ff736a5ef887027b30eb2807ed67b6f8b6b",
+    "include/ducklips/contour_pressure_flow.hpp": "a02f7170ed36e00cbd1984f75ac62836aa7f7c01a1d1f6549ed18d3e904146ce",
+    "src/contour_pressure_flow.cpp": "b3118727d7e96a2aa6c7955bbc34efa1470d0dc6ab3981d44fcf5abff8690497",
+    "include/ducklips/contour_pressure_storage.hpp": "77f2aac24e97da22eefb9859316d7b48e09492251c5dc6d2fbf7fa16f317bdce",
+    "src/contour_pressure_storage.cpp": "9cff50a0d047c7d812cf7d51f842901a83f7f0774074aa374b8eb7bda62a6fe6",
+    "tools/contour_pressure_flow_probe.cpp": "747c0506ea79f643411dea680f2739b6611e8e7b524777aed3f2b5a095b989f6",
+    "tools/contour_pressure_flow_reference.py": "9a05d071811c68cec751c7f232eaa50c138c0258db085e94ddd23ec5a6da0c5b"
+  }
+}

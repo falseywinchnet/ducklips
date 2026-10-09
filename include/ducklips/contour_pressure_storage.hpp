@@ -20,6 +20,10 @@ public:
     [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&) noexcept;
     [[nodiscard]] bool evaluate(const std::array<double,2>& area,
         const std::array<double,2>& effort,ContourPressureState&) const noexcept;
+    // Restricted integrals for continuity reconstruction. Empty subintervals
+    // return zero moments; full storage still requires positive air volume.
+    [[nodiscard]] bool interval(const std::array<double,2>& area,
+        const std::array<double,2>& effort,double first,double last,ContourPressureState&) const noexcept;
     [[nodiscard]] bool recover(const std::array<double,2>& area,
         const std::array<double,2>& mass,const std::array<double,2>& guess,
         ContourPressureState&) const noexcept;

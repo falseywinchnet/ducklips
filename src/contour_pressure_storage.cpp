@@ -44,18 +44,22 @@ bool ContourPressureStorage::configure(const FoldParameters& folds,const AirProp
     gas_=gas;thickness_={folds.lower_thickness,folds.upper_thickness};bulk_=air.density*air.sound_speed*air.sound_speed;gamma_=air.heat_capacity_ratio;return true;
 }
 bool ContourPressureStorage::evaluate(const std::array<double,2>& area,const std::array<double,2>& effort,ContourPressureState& result) const noexcept {
+    ContourPressureState candidate;if(!interval(area,effort,0.,thickness_[0]+thickness_[1],candidate) || candidate.volume<=0){return false;}result=candidate;return true;
+}
+bool ContourPressureStorage::interval(const std::array<double,2>& area,const std::array<double,2>& effort,double first,double last,ContourPressureState& result) const noexcept {
+    if(!std::isfinite(first) || !std::isfinite(last) || first<0 || last<first || last>thickness_[0]+thickness_[1]){return false;}
     if(bulk_<=0){return false;}for(double v:area){if(!std::isfinite(v)){return false;}}for(double v:effort){if(!std::isfinite(v)){return false;}}
     const double c0=.5*thickness_[0],c1=thickness_[0]+.5*thickness_[1],end=thickness_[0]+thickness_[1];
     const double nodes[]={0.,c0,c1,end};const Integrand integrand{gas_,area,effort,c0,c1,bulk_,gamma_};Values sum{};
     const auto opening=[&](double z){const double t=std::clamp((z-c0)/(c1-c0),0.,1.);return (1-t)*area[0]+t*area[1];};
-    for(std::size_t j=0;j<3;++j){double lo=nodes[j],hi=nodes[j+1];const double a=opening(lo),b=opening(hi);if(a<=0 && b<=0){continue;}
+    for(std::size_t j=0;j<3;++j){double lo=std::max(first,nodes[j]),hi=std::min(last,nodes[j+1]);if(hi<=lo){continue;}const double a=opening(lo),b=opening(hi);if(a<=0 && b<=0){continue;}
         if(a<=0){lo+=(hi-lo)*(-a)/(b-a);}else if(b<=0){hi=lo+(hi-lo)*a/(a-b);}
         // Density must be positive on the entire occupied interval, including
         // its contact endpoint, rather than only at quadrature nodes.
         for(double z:{lo,hi}){const double t=std::clamp((z-c0)/(c1-c0),0.,1.);if(1+(gamma_-1)*((1-t)*effort[0]+t*effort[1])/bulk_<=0){return false;}}
         Values part;if(!integrand.integrate(lo,hi,part)){return false;}for(std::size_t k=0;k<sum.size();++k){sum[k]+=part[k];}
     }
-    if(sum[0]<=0){return false;}ContourPressureState candidate;candidate.effort=effort;candidate.volume=sum[0];candidate.mass={sum[1],sum[2]};candidate.energy=sum[3];candidate.coenergy=sum[4];candidate.area_effort={sum[5],sum[6]};candidate.compliance={sum[7],sum[8],sum[8],sum[9]};candidate.mass_area={sum[10],sum[11],sum[11],sum[12]};
+    ContourPressureState candidate;candidate.effort=effort;candidate.volume=sum[0];candidate.mass={sum[1],sum[2]};candidate.energy=sum[3];candidate.coenergy=sum[4];candidate.area_effort={sum[5],sum[6]};candidate.compliance={sum[7],sum[8],sum[8],sum[9]};candidate.mass_area={sum[10],sum[11],sum[11],sum[12]};
     for(double v:sum){if(!std::isfinite(v)){return false;}}result=candidate;return true;
 }
 bool ContourPressureStorage::recover(const std::array<double,2>& area,const std::array<double,2>& mass,const std::array<double,2>& guess,ContourPressureState& result) const noexcept {

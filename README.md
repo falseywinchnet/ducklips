@@ -167,7 +167,13 @@ This is a model diagnosis, with no new speech result.
 now replaces the fixed chamber split in a new native storage component.
 Overlapping mass moments preserve total air and give pressure/shape forces
 from the same energy. A mass-preserving control crosses the old boundary
-without a singularity. Compatible momentum and speech integration are next.
+without a singularity.
+
+[Continuous-field airflow and inertia](reports/CONTOUR_PRESSURE_FLOW.md) now
+reconstructs local flux from that storage and includes moving-wall inertia.
+Independent field/energy checks pass. The old no-slip loss diverges at a
+moving contact tip; narrow-gap gas-wall treatment and coupled momentum
+integration remain required before a new speech source.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

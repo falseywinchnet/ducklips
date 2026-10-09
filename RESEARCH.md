@@ -252,6 +252,13 @@ with finite density and converging force work. The internal transfer now means
 an integrated flux; the old passage momenta cannot be reused unchanged.
 Compatible flow/inertia/loss coupling remains necessary before speech.
 
+[The continuous-field kinematics](reports/CONTOUR_PRESSURE_FLOW.md) now derives
+axial flux from local continuity and integrates a coupled flow/wall-motion
+inertia matrix. Independent quadrature, uniform-flow limits and moment
+continuity pass. Moving contact exposes a logarithmic divergence in the
+inherited no-slip slit loss. That boundary-law limit and generalized momentum
+advancement remain outstanding; no cutoff has been inserted to hide it.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

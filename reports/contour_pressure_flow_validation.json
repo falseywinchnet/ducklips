@@ -1,0 +1,61 @@
+{
+  "scope": "continuous-field strong continuity and instantaneous axial kinetic metric; no momentum integrator, finite contact-loss law or new speech",
+  "base_commit": "980c6790a18aafdc2ae26dce61e402b2370090e4",
+  "independent_reference_exit_code": 0,
+  "focused_ctests_passed": 2,
+  "ctest_command": [
+    "ctest",
+    "--test-dir",
+    "build",
+    "-R",
+    "^ducklips_contour_pressure_(storage|flow)$",
+    "--output-on-failure"
+  ],
+  "sanitizers": "address,undefined; -fno-omit-frame-pointer",
+  "sanitizer_exit_code": 0,
+  "sanitizer_flow_fixture_batch_byte_identical": true,
+  "storage_regression": {
+    "oracle_commit": "980c6790a18aafdc2ae26dce61e402b2370090e4",
+    "continuous_oracles_reused": true,
+    "native_full_storage_inverse_and_sweep_byte_identical": true
+  },
+  "versions": {
+    "python": "3.12.8 | packaged by conda-forge | (main, Dec  5 2024, 14:19:53) [Clang 18.1.8 ]",
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  },
+  "hashes": {
+    ".build/asan/ducklips_contour_pressure_flow_probe": "d8b772e37d623823400129eac9191081af4535d55e8c8db671f328ae6c725ab0",
+    ".build/asan/ducklips_contour_pressure_probe": "8ad37c4092213cdb1390c829a346e9428ac54d2fa53f9c0259cfbe9518d4a628",
+    "CMakeLists.txt": "9e15cc9c078afe4056a926c585d13f06f9035a53dc60bc98927e64bbf3f0c9d2",
+    "build/ducklips_contour_pressure_flow_probe": "a9629cafd34fe59f23198d28fdb99ff736a5ef887027b30eb2807ed67b6f8b6b",
+    "build/ducklips_contour_pressure_probe": "e203fe9d1bd42e13de943f2fff25c22d7c24d11902f5eb17603cd9ac53053031",
+    "include/ducklips/contour_pressure_flow.hpp": "a02f7170ed36e00cbd1984f75ac62836aa7f7c01a1d1f6549ed18d3e904146ce",
+    "include/ducklips/contour_pressure_storage.hpp": "77f2aac24e97da22eefb9859316d7b48e09492251c5dc6d2fbf7fa16f317bdce",
+    "include/ducklips/gas_storage.hpp": "78d45e0b0d4f16b5b864977735ad226939dbfcfe53fb075aafa9af76ed3d2d19",
+    "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+    "include/ducklips/sources.hpp": "fe89057806121ba08016cf51c660788bcb3cf8c12fbc6f7d1b24936a25dcb4d9",
+    "out/contour-flow/asan-batch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/contour-flow/asan-build.log": "f7f6a61a061f304427bfc9ca9378d5f063b8b66fc2e68def0bcb645e7e1afff6",
+    "out/contour-flow/asan-output.jsonl": "73f2e402570e884e907c82863890f39a8132c1cbebf88bdef4db4dc8a61996f8",
+    "out/contour-flow/asan-probe.log": "de9451618a5c3da7340f4c7e1e5b01c96430b71352824bab3beb2e944f4e04d1",
+    "out/contour-flow/asan-storage.log": "5313286f7b93ccd2c66b9f341764929153ccd06894511b6016444390822b89b6",
+    "out/contour-flow/ctest.log": "2a46353a76129f600845202117150ee5f060edf383a92d910aaee4dac2073bf7",
+    "out/contour-flow/input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+    "out/contour-flow/output.jsonl": "73f2e402570e884e907c82863890f39a8132c1cbebf88bdef4db4dc8a61996f8",
+    "out/contour-flow/reference.log": "5c52c0d2cd9bbfdadaec8771ac633e7a5e139395d7bfd0b83015e1677f9f4816",
+    "out/contour-flow/storage-regression-output.jsonl": "1a3c7a357cb6126af053bced90b85e659bf6662438bd639304f9473a89dca17c",
+    "out/contour-flow/storage-regression-recover-output.jsonl": "0fc2efddbeeeb8d1ec6152fd317a846935c986ae106fdd85291a0eba2e16ab00",
+    "out/contour-flow/storage-regression-sweep-800.json": "bed87bcb84c9089404caee65ebc7f6eea703f1dc11bb0e14ca4da1d40f64896b",
+    "out/contour-flow/storage-regression.log": "6a49f7bd09b0c8e0f535f992dc7678fdd353b868a650c26fab9620f64bb76fde",
+    "reports/CONTOUR_PRESSURE_FLOW.md": "50c15c6944fc8cb5056313db7a5ab8e9e81c86248705677a5eb8d8486fc14783",
+    "reports/contour_pressure_flow_reference.json": "5c30cbf7fa994bfc2974af7b2d345fbc278886c06906532b056e42974d2151b8",
+    "reports/contour_pressure_reference.json": "b31bca7fe8868820c6207344046a7c81417f264e08b2a2fc1d96abb24b1658df",
+    "src/contour_pressure_flow.cpp": "b3118727d7e96a2aa6c7955bbc34efa1470d0dc6ab3981d44fcf5abff8690497",
+    "src/contour_pressure_storage.cpp": "9cff50a0d047c7d812cf7d51f842901a83f7f0774074aa374b8eb7bda62a6fe6",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "tools/contour_pressure_flow_probe.cpp": "747c0506ea79f643411dea680f2739b6611e8e7b524777aed3f2b5a095b989f6",
+    "tools/contour_pressure_flow_reference.py": "9a05d071811c68cec751c7f232eaa50c138c0258db085e94ddd23ec5a6da0c5b",
+    "tools/contour_pressure_probe.cpp": "3a0c4b6bad1198c51f7fcc14183428be511918fd5e1415eb44b4de057bb97b2c"
+  }
+}
