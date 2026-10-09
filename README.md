@@ -136,7 +136,15 @@ physical questions, and long-run temporal accuracy needs finer stepping.
 now show that strong compression persists under refinement while air escapes
 from both ends. The new geometry keeps wedge-shaped storage behind an exact
 seal and derives force areas and passage integrals from the same surface.
-It is independently checked but not yet coupled into the source dynamics.
+It is independently checked; its open portion is now coupled below.
+
+[Coupled contour dynamics](reports/CONTOUR_GLOTTAL_DYNAMICS.md) derives gas
+and kinetic shape forces together and solves tissue, air storage, passage
+momentum and tract feedback jointly. Four short independent motion controls
+converge and balance work. A longer drive approaches a sealed lower opening
+with retained wedge volume; collision and sealing/reopening transport remain
+unimplemented. This is a source reference component, with no new speech
+recording or performance claim.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

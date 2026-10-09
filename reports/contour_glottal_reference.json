@@ -1,0 +1,624 @@
+{
+  "scope": "open contour coupled to gas/tissue/passage momentum and linear tract; no contact transport or speech claim",
+  "duration_s": 0.005,
+  "kernel": {
+    "instant_cases": 180,
+    "finite_transfer_cases": 60,
+    "digits": 80,
+    "maxima": {
+      "energy_scaled": 2.79505360754196e-15,
+      "metric_relative": 2.8070462474577254e-15,
+      "effort_scaled": 3.160264109696498e-15,
+      "transfer_scaled": 1.834016277845685e-14,
+      "flow_scaled": 2.3926900353793477e-15,
+      "resistance_relative": 1.0863816722076282e-14
+    }
+  },
+  "runs": [
+    {
+      "mode": "forward",
+      "steps": 120,
+      "normalized_error": 0.008956381396308293,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.32506829905733525,
+      "maximum_position_error_m": 4.3417251098134657e-07,
+      "maximum_work_balance_J": 1.6263032587282567e-19,
+      "maximum_mass_balance_m3": 2.117582368135751e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "120",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-120.json",
+      "output_sha256": "ed4d6996f3b856c59ace19a407a360be8e525050a7adcac4772f2acd4a0069e6"
+    },
+    {
+      "mode": "forward",
+      "steps": 240,
+      "normalized_error": 0.0033928456780250005,
+      "refinement_ratio": 2.6397844895562317,
+      "maximum_network_pressure_error_Pa": 0.10088991616910903,
+      "maximum_position_error_m": 1.7972417423701504e-07,
+      "maximum_work_balance_J": 1.4907779871675686e-17,
+      "maximum_mass_balance_m3": 3.1763735522036263e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "240",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-240.json",
+      "output_sha256": "5f864d606b0394ea4ef2dea52e9e341d484d270498c078afa880149a2cbe3314"
+    },
+    {
+      "mode": "forward",
+      "steps": 480,
+      "normalized_error": 0.0011627463124181015,
+      "refinement_ratio": 2.9179586654367284,
+      "maximum_network_pressure_error_Pa": 0.019115276804441805,
+      "maximum_position_error_m": 5.9595748126971574e-08,
+      "maximum_work_balance_J": 2.222614453595284e-18,
+      "maximum_mass_balance_m3": 3.1763735522036263e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "480",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-480.json",
+      "output_sha256": "76a4d93837cc734d9f23cb4c5547ca0c8a2440b7037011ff7e8bee57cb669667"
+    },
+    {
+      "mode": "forward",
+      "steps": 960,
+      "normalized_error": 0.0003275041294771217,
+      "refinement_ratio": 3.5503256532199754,
+      "maximum_network_pressure_error_Pa": 0.003790356461848887,
+      "maximum_position_error_m": 1.66840563295737e-08,
+      "maximum_work_balance_J": 1.2522535092207576e-17,
+      "maximum_mass_balance_m3": 8.470329472543003e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-960.json",
+      "output_sha256": "a4500c103867879c5a91cf45e32f04ec06293d00d6755dc2d09dd00992cdc0a9"
+    },
+    {
+      "mode": "forward",
+      "steps": 1920,
+      "normalized_error": 8.56430446928623e-05,
+      "refinement_ratio": 3.82405985975434,
+      "maximum_network_pressure_error_Pa": 0.000883416000277748,
+      "maximum_position_error_m": 4.360919303722846e-09,
+      "maximum_work_balance_J": 1.1953328951652686e-16,
+      "maximum_mass_balance_m3": 8.470329472543003e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-1920.json",
+      "output_sha256": "07a01b7ac8c67c5e6978cd88648eb00f35e700d731b160852cbb19845b6fe9eb"
+    },
+    {
+      "mode": "forward",
+      "steps": 3840,
+      "normalized_error": 2.1702085731381592e-05,
+      "refinement_ratio": 3.9463047816192605,
+      "maximum_network_pressure_error_Pa": 0.00021682703057024355,
+      "maximum_position_error_m": 1.1050068343524712e-09,
+      "maximum_work_balance_J": 1.9466850006977232e-16,
+      "maximum_mass_balance_m3": 2.329340604949326e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-glottal/forward-3840.json",
+      "output_sha256": "5bf4b4c46f7e57b428ccaa2c4d8416139ecade14ce74ca1eb28afdc7c25a5c28"
+    },
+    {
+      "mode": "reverse",
+      "steps": 120,
+      "normalized_error": 0.0006874512827795056,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.051520957975611736,
+      "maximum_position_error_m": 1.7082808426534994e-08,
+      "maximum_work_balance_J": 2.0718425889840186e-18,
+      "maximum_mass_balance_m3": 1.9852334701272664e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "120",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-120.json",
+      "output_sha256": "bc773523b6d823c68f8a7be6035c90b7d383b8428b14c719ef6760e4a4832b9b"
+    },
+    {
+      "mode": "reverse",
+      "steps": 240,
+      "normalized_error": 0.00015179181265384794,
+      "refinement_ratio": 4.528908844030981,
+      "maximum_network_pressure_error_Pa": 0.009596012105308915,
+      "maximum_position_error_m": 3.900255340970413e-09,
+      "maximum_work_balance_J": 1.9845981954168257e-18,
+      "maximum_mass_balance_m3": 5.293955920339377e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "240",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-240.json",
+      "output_sha256": "968eea2594fa48555e1190e414dd8328c52c87312712b6083838e269f440400c"
+    },
+    {
+      "mode": "reverse",
+      "steps": 480,
+      "normalized_error": 3.488603825810009e-05,
+      "refinement_ratio": 4.351076253796283,
+      "maximum_network_pressure_error_Pa": 0.003058686519548104,
+      "maximum_position_error_m": 8.186965688987847e-10,
+      "maximum_work_balance_J": 7.894347068410079e-19,
+      "maximum_mass_balance_m3": 3.3087224502121107e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "480",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-480.json",
+      "output_sha256": "7c7591f114cd948323c62ae24b243c03b3a6a4daa06eee0c8b1047fe845686e9"
+    },
+    {
+      "mode": "reverse",
+      "steps": 960,
+      "normalized_error": 8.072774899391968e-06,
+      "refinement_ratio": 4.3214432079268885,
+      "maximum_network_pressure_error_Pa": 0.0008454596390841118,
+      "maximum_position_error_m": 1.8722073610660198e-10,
+      "maximum_work_balance_J": 4.0826988057657276e-19,
+      "maximum_mass_balance_m3": 7.940933880509066e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-960.json",
+      "output_sha256": "9a0e0d95a244b0c56c512016604fc741ecdfda35bbbcbd0e5620c5fcfc40a334"
+    },
+    {
+      "mode": "reverse",
+      "steps": 1920,
+      "normalized_error": 1.9385195568043115e-06,
+      "refinement_ratio": 4.164402092852805,
+      "maximum_network_pressure_error_Pa": 0.00021744348603647268,
+      "maximum_position_error_m": 4.5670735707267936e-11,
+      "maximum_work_balance_J": 6.835555884342204e-19,
+      "maximum_mass_balance_m3": 1.1911400820763599e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-1920.json",
+      "output_sha256": "0307d14bb1a50eb80c0530b55e55c780f4d44b8768c6405e6dec7ca5e4cace92"
+    },
+    {
+      "mode": "reverse",
+      "steps": 3840,
+      "normalized_error": 4.786315485422676e-07,
+      "refinement_ratio": 4.050129087203541,
+      "maximum_network_pressure_error_Pa": 5.4768212255140725e-05,
+      "maximum_position_error_m": 1.13475480504081e-11,
+      "maximum_work_balance_J": 3.5321273900504324e-19,
+      "maximum_mass_balance_m3": 1.5881867761018131e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-glottal/reverse-3840.json",
+      "output_sha256": "4c08fa2540dd8413e4c9b44a3e76b4fbbdc6dd816195dd1af60b6014db22bae2"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 120,
+      "normalized_error": 0.008294151572670588,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 4.40071580165538,
+      "maximum_position_error_m": 8.053677776018398e-07,
+      "maximum_work_balance_J": 1.326665353637048e-18,
+      "maximum_mass_balance_m3": 4.714929491552258e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "120",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-120.json",
+      "output_sha256": "41642daf1473178ba4040947d81b84cd07ff90cb2ad82f5105bb69a6581f8697"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 240,
+      "normalized_error": 0.007271006521840286,
+      "refinement_ratio": 1.1407157382897442,
+      "maximum_network_pressure_error_Pa": 1.351631255801749,
+      "maximum_position_error_m": 3.1261493484457586e-07,
+      "maximum_work_balance_J": 4.836981645295682e-18,
+      "maximum_mass_balance_m3": 6.369290716658313e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "240",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-240.json",
+      "output_sha256": "f4d90a4dbab5731a22cc3240d99e43e85dd061c4d22c38d541e717d379c00e79"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 480,
+      "normalized_error": 0.0026623270307355416,
+      "refinement_ratio": 2.7310718923330275,
+      "maximum_network_pressure_error_Pa": 0.40248203517292325,
+      "maximum_position_error_m": 4.6190780138912016e-08,
+      "maximum_work_balance_J": 1.7321823771350442e-19,
+      "maximum_mass_balance_m3": 7.155112298583689e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "480",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-480.json",
+      "output_sha256": "f27677740a6e59542e14628e9691230b2fda3eab3fc4a781cd07e07bcdb45572"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 960,
+      "normalized_error": 0.0001413966098144824,
+      "refinement_ratio": 18.82878970173764,
+      "maximum_network_pressure_error_Pa": 0.09897762687013767,
+      "maximum_position_error_m": 5.282362654804693e-09,
+      "maximum_work_balance_J": 4.6798570335800094e-20,
+      "maximum_mass_balance_m3": 1.4144788474656773e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-960.json",
+      "output_sha256": "f38e698da8d4c7d0652937896cdbe7bc37e7d3e485bd10f263a09111f4ab4943"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 1920,
+      "normalized_error": 2.8772341067916533e-05,
+      "refinement_ratio": 4.914324124016136,
+      "maximum_network_pressure_error_Pa": 0.020140638747541573,
+      "maximum_position_error_m": 2.8155681740643556e-09,
+      "maximum_work_balance_J": 2.6723889485873176e-19,
+      "maximum_mass_balance_m3": 1.4227506535912076e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-1920.json",
+      "output_sha256": "d87ca394ab16a1211589afb9f642a21b0b4fec8bfe4d4042b62f65513ef919a9"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 3840,
+      "normalized_error": 8.403908361640701e-06,
+      "refinement_ratio": 3.4236857221393224,
+      "maximum_network_pressure_error_Pa": 0.004692622620169118,
+      "maximum_position_error_m": 8.403908361640701e-10,
+      "maximum_work_balance_J": 3.7354152973914645e-19,
+      "maximum_mass_balance_m3": 2.2788825875835912e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-3840.json",
+      "output_sha256": "30f4ee099e430ebde885fc33607f67668812bf5c8ff8f7b1ae74a962d080670e"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 120,
+      "normalized_error": 0.00868332772896606,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.3037872575221314,
+      "maximum_position_error_m": 3.9738889836792566e-07,
+      "maximum_work_balance_J": 4.06744559527025e-19,
+      "maximum_mass_balance_m3": 3.1763735522036263e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "120",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-120.json",
+      "output_sha256": "e71b681d0d92520397008ace842eb1f4065aebf7f1ac69dad7ef4818f0c1badf"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 240,
+      "normalized_error": 0.003293031221854363,
+      "refinement_ratio": 2.636879866591829,
+      "maximum_network_pressure_error_Pa": 0.08757671299500203,
+      "maximum_position_error_m": 1.6619848328484606e-07,
+      "maximum_work_balance_J": 6.60370046736604e-18,
+      "maximum_mass_balance_m3": 8.470329472543003e-22,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "240",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-240.json",
+      "output_sha256": "9e105c6a0db877895bf921cbfdf56f7b3c2c7e66362f4afeef0f5e3847a978bc"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 480,
+      "normalized_error": 0.0011143701808059743,
+      "refinement_ratio": 2.9550604265744624,
+      "maximum_network_pressure_error_Pa": 0.020486070162178294,
+      "maximum_position_error_m": 5.4573891671933156e-08,
+      "maximum_work_balance_J": 2.6761344224009577e-18,
+      "maximum_mass_balance_m3": 1.2705494208814505e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "480",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-480.json",
+      "output_sha256": "220ca00f8e066371c776358d1ca0920e921b25e3d0b9a41b56366faf303c9b59"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 960,
+      "normalized_error": 0.00031248446910803933,
+      "refinement_ratio": 3.5661618127353667,
+      "maximum_network_pressure_error_Pa": 0.0067980759860404305,
+      "maximum_position_error_m": 1.523023891966441e-08,
+      "maximum_work_balance_J": 9.148584487611984e-18,
+      "maximum_mass_balance_m3": 1.0587911840678754e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-960.json",
+      "output_sha256": "11543bca55f70197658ddbf1baa3a4a3f1e88a190b50ddba95a2d5fb0da38661"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 1920,
+      "normalized_error": 8.163151654503242e-05,
+      "refinement_ratio": 3.8279880410607805,
+      "maximum_network_pressure_error_Pa": 0.0018291698726784489,
+      "maximum_position_error_m": 3.978816069930729e-09,
+      "maximum_work_balance_J": 1.1002403773822951e-16,
+      "maximum_mass_balance_m3": 1.0587911840678754e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-1920.json",
+      "output_sha256": "dd9ce8909e8e8217092996c0383a715e1e1f28f223f603aa7515e3420f2d9d8e"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 3840,
+      "normalized_error": 2.0682188669137228e-05,
+      "refinement_ratio": 3.946947678068819,
+      "maximum_network_pressure_error_Pa": 0.0004664724356189254,
+      "maximum_position_error_m": 1.0081303954137468e-09,
+      "maximum_work_balance_J": 1.8271484686331951e-16,
+      "maximum_mass_balance_m3": 1.7999450129153882e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-glottal/rest_motion-3840.json",
+      "output_sha256": "c6399fc576f990c8cb919363f1e550f5628735a0ee5067dff6c7279126b4c1bf"
+    }
+  ],
+  "oracles": [
+    {
+      "mode": "forward",
+      "final_state": [
+        2.360702510968026e-09,
+        6.412683577565743e-10,
+        -7.686113712181857e-05,
+        -7.686113712181857e-05,
+        -6.06454341861723e-05,
+        -6.06454341861723e-05,
+        -0.021701960493650956,
+        -0.021701960493650956,
+        -0.055607544711444884,
+        -0.055607544711444884,
+        0.008011245969560613,
+        0.009771451887922205,
+        0.0015731384594851244,
+        -73.80605559275998,
+        -80.3110694231652,
+        -86.01490329506672,
+        1.6405653214196478e-05,
+        -2.034202514979715e-05,
+        5.688606228664202e-06,
+        -3.6293203492998175e-05
+      ],
+      "normalized_refinement_difference": 2.9632600626744443e-13
+    },
+    {
+      "mode": "reverse",
+      "final_state": [
+        1.6719986742747556e-09,
+        3.535507228010717e-11,
+        -7.727722766998631e-05,
+        -7.727722766998631e-05,
+        -0.00010580616868314933,
+        -0.00010580616868314933,
+        0.004212495560774385,
+        0.004212495560774385,
+        -0.0026065132547067127,
+        -0.0026065132547067127,
+        0.00023204252532967514,
+        -0.00017288397512233767,
+        1.0697221258482755e-06,
+        -12.903887820333548,
+        -27.25751336626985,
+        -28.58168534169388,
+        6.217194270891608e-06,
+        -1.0741751284060433e-08,
+        1.242006620673776e-05,
+        -2.5637045417687205e-05
+      ],
+      "normalized_refinement_difference": 4.171373594882377e-11
+    },
+    {
+      "mode": "relaxation",
+      "final_state": [
+        7.205580053570575e-09,
+        1.4785191138953436e-09,
+        -4.931175259835487e-06,
+        -4.931175259835487e-06,
+        -1.3514661164239406e-06,
+        -1.3514661164239406e-06,
+        0.0023424294483949245,
+        0.0023424294483949245,
+        -0.0037842595392874622,
+        -0.0037842595392874622,
+        0.0067307037390081145,
+        0.007810054497329321,
+        0.0012871745042023015,
+        -7.181442557291753,
+        -20.259622318351006,
+        -47.30893411334663,
+        -6.182728846390432e-05,
+        9.655479667294498e-05,
+        5.0851519694509914e-06,
+        -2.6269257926995096e-06
+      ],
+      "normalized_refinement_difference": 3.3938207164008454e-10
+    },
+    {
+      "mode": "rest_motion",
+      "final_state": [
+        1.7278564699287258e-09,
+        5.04858249339914e-10,
+        -6.783471698510631e-05,
+        -6.783471698510631e-05,
+        -5.2577536217827974e-05,
+        -5.2577536217827974e-05,
+        -0.012128390949736634,
+        -0.012128390949736634,
+        -0.04579894650225111,
+        -0.04579894650225111,
+        0.003694158451055046,
+        0.00592043648556659,
+        0.001015865276664601,
+        -67.6806516644197,
+        -74.37969544889906,
+        -79.13310590718065,
+        2.219466518006316e-05,
+        -2.39400424158395e-05,
+        1.246927380567371e-05,
+        -5.256812566649819e-05
+      ],
+      "normalized_refinement_difference": 1.7631837830045516e-13
+    }
+  ],
+  "acceptance": [
+    {
+      "mode": "forward",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "reverse",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "relaxation",
+      "second_order": false,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "rest_motion",
+      "second_order": true,
+      "endpoint_accuracy": true
+    }
+  ],
+  "hashes": {
+    "include/ducklips/contour_kinetics.hpp": "e9eb8f5c78d4c5ff2524a487257a35fd4bd63d9aebbe85d5c16f089d59f8776c",
+    "src/contour_kinetics.cpp": "ac0d8ccfb0da6dce6f5135beda729a55254e67f06068a7a5a225165d9cc1ff2a",
+    "include/ducklips/contour_glottal_storage.hpp": "2a116bbbeae1c85eed51fa46dd2922857d31f8d0040b2ea69edbf6aa52370e5f",
+    "src/contour_glottal_storage.cpp": "ade3861a523759d8ac00388dbc92284fb1ba529e17ba83a0faf794f63aa5ae6e",
+    "include/ducklips/glottal_contour.hpp": "0650c7f74bb9e6d6f481465dd5311643cdefcdf8e6b37989ca1b5acce8e5889f",
+    "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "src/glottal_storage.cpp": "047673700a53093ae7f77ba56c99866842e5fba88b8359e3388aa229e1652558",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "tools/contour_kinetics_probe.cpp": "8fec14da11c86dfe560ddc544107f800f771d368efa34cb8c9c806d90a4ad9c3",
+    "tools/contour_glottal_probe.cpp": "3140b6d10c1671d753a8d712d968e2f9e5e2db68984f9bb4ce63856714d1f54c",
+    "tools/contour_glottal_reference.py": "bb07f40e824ae9753e8e3d2dc7c27344d1ebb1642837b059d0a2da1f92f215de",
+    "build/ducklips_contour_glottal_probe": "6243fec28a6c9a35b64a7ab16975bccb616d96ad0caa8e564a16e26a7acb25d8",
+    "build/ducklips_contour_kinetics_probe": "f6346d9cf804b0a8675a8ad21d48b85c6bd3c2ac8507340731a23d22016fc960"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "mpmath": "1.3.0"
+  }
+}

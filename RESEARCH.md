@@ -213,6 +213,15 @@ provides volume gradients and open-path metrics without area floors. Those
 shape-dependent gas and kinetic forces, plus contact-state transport, must
 be coupled before claiming a replacement dynamic source.
 
+[The open-contour dynamic source](reports/CONTOUR_GLOTTAL_DYNAMICS.md) now
+couples both gas-volume and kinetic-shape forces with passage momentum and
+tract feedback. Independent energy derivatives and continuous open-motion
+controls pass, including two further refinements needed for pressure
+relaxation. Longer forward drive stops near a sealed inlet with positive
+wedge storage. This moves the remaining contact work to collision and
+sealing/reopening state transport; it does not establish speech or complete
+a glottal cycle.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

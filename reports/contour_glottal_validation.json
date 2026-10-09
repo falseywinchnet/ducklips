@@ -1,0 +1,154 @@
+{
+  "scope": "open contour dynamics; contact approaches stop before completion; no new speech or performance result",
+  "initial_reference_exit_code": 1,
+  "initial_reference_failure": "relaxation second-order criterion on 120 through 3840 steps",
+  "additional_endpoint_reference_exit_code": 0,
+  "focused_ctests_passed": 11,
+  "sanitizer_exit_code": 0,
+  "sanitizers": "address,undefined; -fno-omit-frame-pointer",
+  "sanitizer_fixture_batches_byte_identical": true,
+  "contacts": [
+    {
+      "status": "open_solver_stopped",
+      "planned_steps": 19200,
+      "accepted_steps": 2036,
+      "time_s": 0.010604166666666668,
+      "dt_s": 5.208333333333334e-06,
+      "minimum_area_m2": 1.5055463558907285e-08,
+      "maximum_relative_density": 1.0054836564583924,
+      "maximum_step_work_residual_J": 4.1689108779284544e-18,
+      "cells": [
+        {
+          "area_m2": 1.5055463558907285e-08,
+          "area_rate_m2_s": -0.0067919382086584655,
+          "volume_m3": 1.4131491679409087e-09,
+          "mass_volume_m3": 1.4105343399747582e-09,
+          "relative_density": 0.9981496447611681,
+          "pressure_Pa": -258.3064465485638
+        },
+        {
+          "area_m2": 2.656035640922696e-06,
+          "area_rate_m2_s": -0.007644657526302671,
+          "volume_m3": 1.2729974000996025e-09,
+          "mass_volume_m3": 1.2709395808737653e-09,
+          "relative_density": 0.9983834851307032,
+          "pressure_Pa": -225.67329343532816
+        }
+      ],
+      "momentum_Pa_s": [
+        -2.247382750561484e-06,
+        0.00693767345984189,
+        0.00221500256246838
+      ],
+      "average_flow_m3_s": [
+        5.908368213639499e-10,
+        1.7439350571975102e-05,
+        2.123311898096619e-05
+      ]
+    },
+    {
+      "status": "open_solver_stopped",
+      "planned_steps": 76800,
+      "accepted_steps": 8145,
+      "time_s": 0.010605468750000001,
+      "dt_s": 1.3020833333333335e-06,
+      "minimum_area_m2": 5.568442978566064e-09,
+      "maximum_relative_density": 1.0057041689080288,
+      "maximum_step_work_residual_J": 2.28182735056428e-18,
+      "cells": [
+        {
+          "area_m2": 5.568442978566064e-09,
+          "area_rate_m2_s": -0.006788655356468882,
+          "volume_m3": 1.3889375653425857e-09,
+          "mass_volume_m3": 1.38632223837702e-09,
+          "relative_density": 0.9981170305773099,
+          "pressure_Pa": -262.8576146797169
+        },
+        {
+          "area_m2": 2.6456000421392125e-06,
+          "area_rate_m2_s": -0.007646492547630254,
+          "volume_m3": 1.2677993627537597e-09,
+          "mass_volume_m3": 1.265755919565836e-09,
+          "relative_density": 0.9983881967068629,
+          "pressure_Pa": -225.01574685887059
+        }
+      ],
+      "momentum_Pa_s": [
+        2.7893263951742565e-07,
+        0.006792339142511669,
+        0.002223031536852353
+      ],
+      "average_flow_m3_s": [
+        1.6901500954400762e-11,
+        1.7423640365368685e-05,
+        2.1219118017487253e-05
+      ]
+    },
+    {
+      "status": "open_solver_stopped",
+      "planned_steps": 307200,
+      "accepted_steps": 32582,
+      "time_s": 0.010606119791666669,
+      "dt_s": 3.255208333333334e-07,
+      "minimum_area_m2": 1.1054517862723493e-09,
+      "maximum_relative_density": 1.0057249294335326,
+      "maximum_step_work_residual_J": 2.133199538100752e-19,
+      "cells": [
+        {
+          "area_m2": 1.1054517862723493e-09,
+          "area_rate_m2_s": -0.006786972424480245,
+          "volume_m3": 1.3774941864217666e-09,
+          "mass_volume_m3": 1.3748777292036525e-09,
+          "relative_density": 0.9981005675059067,
+          "pressure_Pa": -265.154942413641
+        },
+        {
+          "area_m2": 2.6405881211419566e-06,
+          "area_rate_m2_s": -0.007647284535047411,
+          "volume_m3": 1.265304838292735e-09,
+          "mass_volume_m3": 1.2632677573324638e-09,
+          "relative_density": 0.998390047284558,
+          "pressure_Pa": -224.7574802860066
+        }
+      ],
+      "momentum_Pa_s": [
+        -2.3846600508029338e-11,
+        0.006718024665041898,
+        0.002226851497508578
+      ],
+      "average_flow_m3_s": [
+        1.83726799032617e-13,
+        1.741828923834854e-05,
+        2.1214356788425407e-05
+      ]
+    }
+  ],
+  "hashes": {
+    "out/contour-glottal/asan-controls.log": "fb9dca7f8cabdab0f487be58023b131b570c7a0c848c3d3b014e650f8d9a6e72",
+    "out/contour-glottal/asan-coupled.log": "616598dc9a8d8273c8345f8c22c99219942137f83516020423754e77997471dd",
+    "out/contour-glottal/asan-kinetics.log": "d2f8a970d7c27831336fa90d7376a2c2aa3ba6b5d14b3da3181ee0ceb94d8a8b",
+    "out/contour-glottal/ctest.log": "a21be06f68613a0f0763627220cf7cee19f4b194c32756dbd15d7c00f33c1d60",
+    "out/contour-glottal/endpoint-checks.log": "cd50bcc24a19a760d4fff89f69d3a1150d278b8fda0788d2c4d45ad9957e3444",
+    "out/contour-glottal/initial-reference.log": "ec55d09b574ff7e20cbdf726d2c37148445fd795555bf27eee40cbfb9e39622f",
+    "out/contour-glottal/source-controls.log": "fb9dca7f8cabdab0f487be58023b131b570c7a0c848c3d3b014e650f8d9a6e72",
+    "out/contour-glottal/contact-19200.json": "650ff96528b544c65fe6d101e22675eab48ee6c4735c613dd233fabf47dff041",
+    "out/contour-glottal/contact-307200.json": "e8fd5230b7eae203f1b6cb4dc45d90695d41c39f2b461add788dfb6a624a43bc",
+    "out/contour-glottal/contact-76800.json": "78cdfb6609d93699ed981c9f68f3a0a905f15dfb8f440fa56b6d61aefb7e99a2",
+    "out/contour-glottal/kinetics-input.txt": "aad87395b757bdbaf3784b7d26a8706067e14ec0d78d153588804f5ebd421a1e",
+    "out/contour-glottal/kinetics-output.jsonl": "9e03ff8d02df0e31a50ad8383461d898f0e8140ec728512e08f4714db01fa41d",
+    "out/contour-glottal/transfers-input.txt": "9cca867f8e43c7e5391cfefbfacb94921b028c75c0cc71ab69f73dbbec8beb85",
+    "out/contour-glottal/transfers-output.jsonl": "207bd1cd807fc5716cd22e0f8ca01e32af8124a3e09c13b8b971a0c9611fc071",
+    "out/contour-glottal/asan-kinetics-output.jsonl": "9e03ff8d02df0e31a50ad8383461d898f0e8140ec728512e08f4714db01fa41d",
+    "out/contour-glottal/asan-transfers-output.jsonl": "207bd1cd807fc5716cd22e0f8ca01e32af8124a3e09c13b8b971a0c9611fc071",
+    "reports/contour_glottal_reference.json": "4be3be1bcdeaa3bce478ddebb846b53a71876024ef65b3b8e87175309368e3a7",
+    "reports/contour_glottal_endpoint_reference.json": "9555b08a062dc09b7eeb2c418d54a3c1d2d2871e646207f61e02d0b8890a79a2",
+    "tools/contour_contact_probe.cpp": "51899b7e887a338bf600a298d40dadcfdd97fbcdc0ad78d651d15ad383d17e02",
+    "tools/contour_source_controls.cpp": "5b4790b3a763ce492812e5638aa74368153984b83f5bf0966211a64fe74547bd",
+    "CMakeLists.txt": "2faf8ac35d901cf69c861b2bae03541e98304410b34436954e07b1bb5e9651d9",
+    "build/ducklips_contour_contact_probe": "5c4ebf1828382371c23e11b7117b4cd4abcf364cbd62577b9753a7c96de46ccc",
+    "build/ducklips_contour_source_controls": "251244562ce06a2b14838494b9d7c91f35682992443261706222a8bfda360ed8",
+    ".build/asan/ducklips_contour_kinetics_probe": "ff83b8c57b81dbeac718d0a782bc1792acec7d75eea21ed2580bf40d4a052a97",
+    ".build/asan/ducklips_contour_glottal_probe": "c2b1e88eb0d43b5d48648da24c3311efd5ba1d5e88f61a98e2db32969fc4efad",
+    ".build/asan/ducklips_contour_source_controls": "8d1e6f9fb191087b52614b847f2715572512a7ec3184ec3bfdbf9860083f99da"
+  }
+}

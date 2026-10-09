@@ -25,6 +25,8 @@ add_library(ducklips STATIC
     src/glottal_storage.cpp
     src/glottal_kinetics.cpp
     src/glottal_contour.cpp
+    src/contour_kinetics.cpp
+    src/contour_glottal_storage.cpp
     src/graph_glottal_storage.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
@@ -210,3 +212,18 @@ add_test(NAME ducklips_moving_graph_reference COMMAND ducklips_moving_graph_prob
 add_executable(ducklips_lip_profile_probe tools/lip_profile_probe.cpp)
 target_link_libraries(ducklips_lip_profile_probe PRIVATE ducklips)
 add_test(NAME ducklips_lip_profile_reference COMMAND ducklips_lip_profile_probe)
+
+add_executable(ducklips_contour_kinetics_probe tools/contour_kinetics_probe.cpp)
+target_link_libraries(ducklips_contour_kinetics_probe PRIVATE ducklips)
+add_test(NAME ducklips_contour_kinetics_reference COMMAND ducklips_contour_kinetics_probe)
+
+add_executable(ducklips_contour_glottal_probe tools/contour_glottal_probe.cpp)
+target_link_libraries(ducklips_contour_glottal_probe PRIVATE ducklips)
+add_test(NAME ducklips_contour_glottal_reference COMMAND ducklips_contour_glottal_probe)
+
+add_executable(ducklips_contour_source_controls tools/contour_source_controls.cpp)
+target_link_libraries(ducklips_contour_source_controls PRIVATE ducklips)
+add_test(NAME ducklips_contour_source_controls COMMAND ducklips_contour_source_controls)
+
+add_executable(ducklips_contour_contact_probe tools/contour_contact_probe.cpp)
+target_link_libraries(ducklips_contour_contact_probe PRIVATE ducklips)

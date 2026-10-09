@@ -1,0 +1,70 @@
+{
+  "scope": "two additional native refinements compared with reused independent continuous relaxation endpoint",
+  "reference": "reports/contour_glottal_reference.json",
+  "reference_sha256": "4be3be1bcdeaa3bce478ddebb846b53a71876024ef65b3b8e87175309368e3a7",
+  "oracle_refinement_difference": 3.3938207164008454e-10,
+  "runs": [
+    {
+      "steps": 7680,
+      "normalized_error": 2.1672800819009445e-06,
+      "refinement_ratio": 3.877629122245032,
+      "maximum_network_pressure_error_Pa": 0.001238513838366373,
+      "maximum_position_error_m": 2.1672800819009445e-10,
+      "maximum_mass_balance_m3": 2.0514079191315086e-22,
+      "maximum_work_balance_J": 6.551799847012013e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "7680",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-7680.json",
+      "output_sha256": "f333cc846b21f3e6b70f5f3bbb6fd9bab0025a5b6edbb1d171e0eb8e2f76e952"
+    },
+    {
+      "steps": 15360,
+      "normalized_error": 5.525626119670283e-07,
+      "refinement_ratio": 3.9222343947336546,
+      "maximum_network_pressure_error_Pa": 0.00031173404115492076,
+      "maximum_position_error_m": 5.525626119670283e-11,
+      "maximum_mass_balance_m3": 1.9356026333740848e-22,
+      "maximum_work_balance_J": 1.3556762320805077e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "15360",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-glottal/relaxation-15360.json",
+      "output_sha256": "807c00b74ed06d6831caedf4277afc8d620f59c75b7467205f6668d12843f81c"
+    }
+  ],
+  "combined_acceptance": [
+    {
+      "mode": "forward",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "reverse",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "rest_motion",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "relaxation",
+      "second_order": true,
+      "endpoint_accuracy": true
+    }
+  ],
+  "hashes": {
+    "build/ducklips_contour_glottal_probe": "6243fec28a6c9a35b64a7ab16975bccb616d96ad0caa8e564a16e26a7acb25d8",
+    "tools/contour_glottal_endpoint_reference.py": "f60f4f776177819b6f322fb8bcd466e68ff2f0542b683cd54acbe7e6269e3f3a"
+  }
+}

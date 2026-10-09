@@ -6,9 +6,11 @@ from air storage: an outlet can seal exactly while a wedge of air remains
 beside the sloping medial surface. It supplies integrated storage, pressure
 force areas and passage metrics from that one surface.
 
-The contour is not yet coupled into `GraphGlottalStorage`. The pressure and
-motion measurements below still come from the rectangular chamber engine.
-The new geometry has no audio or pronunciation result attached to it.
+The pressure and motion measurements below come from the rectangular
+chamber engine. The subsequent [open-contour dynamics](CONTOUR_GLOTTAL_DYNAMICS.md)
+couple the new geometry in `GraphContourGlottal`; contact transport remains
+unfinished. Neither reference has an audio or pronunciation result attached
+to it.
 
 ## What is causing the compression in the current equations?
 
