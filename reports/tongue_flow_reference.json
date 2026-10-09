@@ -1,0 +1,212 @@
+{
+  "baseline_commit": "aa7c1412ad078ef9857c55346a7553313419c617",
+  "source_hashes": {
+    "include/ducklips/tongue_flow.hpp": "2951035c74bbbcc86754cbda24839992a4ba6ea8bd7a39f5d2d1f97b04bfa23d",
+    "src/tongue_flow.cpp": "3894b0a25ad08c906b8d2d5c6a3274669848d259f5ad0ca6fc4b2760a47ee990",
+    "tools/tongue_flow_probe.cpp": "6c1200c578e4e152bcd47b36870d6fcc44a6f435a1a958b1c5985ccff27e3de4",
+    "tests/tongue_flow_tests.cpp": "10c2918e85ecc45858b0bb84aaa9a933bedf7f815d4d09c5eb33fd8e72c1c770",
+    "tools/tongue_flow_reference.py": "426e9e5b8b311f5aee8c5911a146ebe44d9f5b84bc7cbc860b2a577f41caab6f",
+    "tools/tongue_tissue_reference.py": "e3006456e10078e5999031161ba761c380e77b33a2c1ecb49dee760e42012b71"
+  },
+  "probe_sha256": "f4265e9af061422ec9bfc9c29c327df748bf72208bbaf011168b10c4dd34a9fe",
+  "fixture_sha256": "3ec2e9f0757cdbb109d5eee8b6401c6fdeffd304ad327c10ce3031d5970e0d47",
+  "profile_sha256": "a048036193656ffd687a6c1612afa948cb507b64896672431e5ba42ddd44e87c",
+  "fixture": {
+    "centre_cm": [
+      3.059093051,
+      5.322166367
+    ],
+    "radius_cm": 2.7,
+    "place_cm": 6,
+    "gap_cm": 0,
+    "wall_target_cm": [
+      3.35840734641,
+      10.0086725877
+    ]
+  },
+  "profile": {
+    "knots": 261,
+    "patch_width_cm": 0.9,
+    "shoulder_cm": 1.5,
+    "anchor_y_cm": 3.9721663670000003,
+    "free_y_cm": 7.916107015259751
+  },
+  "samples_per_command": 12417,
+  "records": [
+    {
+      "command": 0.0,
+      "local_volume_error": 0.0,
+      "maximum_principal_stretch": 1.0,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        1.9547143484733613,
+        2.1285655724530486
+      ],
+      "boundary_polygon_area_cm2": 22.90220819920611
+    },
+    {
+      "command": 0.1,
+      "local_volume_error": 1.9539925233402755e-14,
+      "maximum_principal_stretch": 1.1269399046657258,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        1.7592429136259842,
+        1.9157090152077263
+      ],
+      "boundary_polygon_area_cm2": 22.902208184317125
+    },
+    {
+      "command": 0.2,
+      "local_volume_error": 1.587618925213974e-14,
+      "maximum_principal_stretch": 1.274015797158975,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        1.5637714787787207,
+        1.7028524579624609
+      ],
+      "boundary_polygon_area_cm2": 22.90220813620551
+    },
+    {
+      "command": 0.30000000000000004,
+      "local_volume_error": 1.7763568394002505e-14,
+      "maximum_principal_stretch": 1.4522333193680008,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        1.3683000439313435,
+        1.4899959007171262
+      ],
+      "boundary_polygon_area_cm2": 22.902208054934757
+    },
+    {
+      "command": 0.4,
+      "local_volume_error": 2.1094237467877974e-14,
+      "maximum_principal_stretch": 1.647844472070308,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        1.1728286090839664,
+        1.2771393434717861
+      ],
+      "boundary_polygon_area_cm2": 22.902207945506955
+    },
+    {
+      "command": 0.5,
+      "local_volume_error": 1.84297022087776e-14,
+      "maximum_principal_stretch": 1.8576501848103506,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        0.9773571742367029,
+        1.0642827862265491
+      ],
+      "boundary_polygon_area_cm2": 22.90220781618086
+    },
+    {
+      "command": 0.6000000000000001,
+      "local_volume_error": 2.1538326677728037e-14,
+      "maximum_principal_stretch": 2.0792193199169735,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        0.7818857393893257,
+        0.8514262289812038
+      ],
+      "boundary_polygon_area_cm2": 22.902207677419817
+    },
+    {
+      "command": 0.7000000000000001,
+      "local_volume_error": 1.3988810110276972e-14,
+      "maximum_principal_stretch": 2.310309627327844,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        0.5864143045420622,
+        0.638569671735862
+      ],
+      "boundary_polygon_area_cm2": 22.902207540890686
+    },
+    {
+      "command": 0.8,
+      "local_volume_error": 9.103828801926284e-15,
+      "maximum_principal_stretch": 2.549223504648777,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        0.39094286969468506,
+        0.42571311449062677
+      ],
+      "boundary_polygon_area_cm2": 22.902207418257372
+    },
+    {
+      "command": 0.9,
+      "local_volume_error": 1.687538997430238e-14,
+      "maximum_principal_stretch": 2.794418143808853,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 0.0,
+      "patch_clearance_cm_range": [
+        0.1954714348473079,
+        0.2128565572452814
+      ],
+      "boundary_polygon_area_cm2": 22.90220732082095
+    },
+    {
+      "command": 1.0,
+      "local_volume_error": 2.353672812205332e-14,
+      "maximum_principal_stretch": 3.044794031221934,
+      "anchor_displacement_cm": 0.0,
+      "wall_penetration_cm": 3.019806626980426e-14,
+      "patch_clearance_cm_range": [
+        -1.9539925233402755e-14,
+        3.296563022558985e-11
+      ],
+      "boundary_polygon_area_cm2": 22.902207258897754
+    }
+  ],
+  "independent_checks": {
+    "inverse_recovery_max_cm": 2.5772483042890763e-14,
+    "gradient_max_absolute_error": 3.9967533838058955e-08,
+    "finite_difference_volume_max_error": 4.426583322114652e-09
+  },
+  "step_refinement": {
+    "16_to_32_max_cm": 0.000744588019131894,
+    "32_to_64_max_cm": 0.00018608910123596442,
+    "64_to_128_max_cm": 4.655200687937122e-05
+  },
+  "contour_refinement": [
+    {
+      "vertices": 512,
+      "rest_cm2": 22.90163561034196,
+      "closed_cm2": 22.90139884640998,
+      "relative_change": -1.0338297928069728e-05
+    },
+    {
+      "vertices": 2048,
+      "rest_cm2": 22.902174517270513,
+      "closed_cm2": 22.902159488668463,
+      "relative_change": -6.562085201888834e-07
+    },
+    {
+      "vertices": 8192,
+      "rest_cm2": 22.90220819920611,
+      "closed_cm2": 22.902207258897754,
+      "relative_change": -4.105754125571792e-08
+    }
+  ],
+  "body_only_airway_ml": {
+    "rest": 72.19563299302324,
+    "deformed": 63.36921451369456,
+    "rigid": 42.911364905188314
+  },
+  "scope": "Native kinematic material-map component; no calibrated elasticity, transverse anatomy, speech integration, pronunciation or performance claim",
+  "material_sha256": "2fee5f2db83c3ea3dcac62e574a4451aa9534f51cb5a7bd312feec1420a6c96c",
+  "validation": {
+    "release_suite": "8/8 passed in 28.52 seconds; final native flow regression also passed after CLI reader cleanup",
+    "asan_ubsan": "Final native flow regression passed; full speech sanitizer suite not repeated for this component-only change",
+    "probe_input": "513-knot capacity accepted; excess profile and partial point rows rejected",
+    "scope": "New native geometry component, not yet called by the speech renderer"
+  }
+}

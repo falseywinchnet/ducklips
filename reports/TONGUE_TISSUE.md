@@ -127,3 +127,8 @@ native fixture as well. Geometry figures and meshes remain regenerable under
 `out/`. Performance work is still parked. Next geometry work must resolve local
 conservation and contact through closure, then connect that tissue geometry to
 three-dimensional airway volume before producing speech-level claims.
+
+The [continuous native material-map follow-up](TONGUE_FLOW.md) now reaches
+this contact patch with local conservation and the same lower anchor. It
+establishes a conservative kinematic solution despite the triangle-solver
+failure; calibrated tissue mechanics and speech integration remain open.

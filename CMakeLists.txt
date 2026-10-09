@@ -27,6 +27,7 @@ add_library(ducklips STATIC
     src/body_config.cpp
     src/articulation.cpp
     src/tongue.cpp
+    src/tongue_flow.cpp
     src/phonetics.cpp
     src/vowel_library.cpp
     src/cues.cpp
@@ -96,3 +97,10 @@ add_test(NAME ducklips_motion_segment_reference COMMAND ducklips_motion_segment_
 
 add_executable(ducklips_tongue_geometry_probe tools/tongue_geometry_probe.cpp)
 target_link_libraries(ducklips_tongue_geometry_probe PRIVATE ducklips)
+
+add_executable(ducklips_tongue_flow_probe tools/tongue_flow_probe.cpp)
+target_link_libraries(ducklips_tongue_flow_probe PRIVATE ducklips)
+
+add_executable(ducklips_tongue_flow_tests tests/tongue_flow_tests.cpp)
+target_link_libraries(ducklips_tongue_flow_tests PRIVATE ducklips)
+add_test(NAME ducklips_tongue_flow_tests COMMAND ducklips_tongue_flow_tests)
