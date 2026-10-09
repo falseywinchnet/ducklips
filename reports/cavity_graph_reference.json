@@ -1,0 +1,450 @@
+{
+  "use": "fixed-geometry mean-pressure graph reference; not speech, moving-state transport, or calibrated planar viscosity",
+  "audit_command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/cavity_graph_reference.py"
+  ],
+  "scipy_version": "1.16.3",
+  "numpy_version": "2.3.5",
+  "nonlinear": [
+    {
+      "case": 0,
+      "pressure_error_Pa": 2.6465158953214996e-09,
+      "mass_error_m3": 1.0587911840678754e-20,
+      "oracle_residual_m3_per_s": 1.819654453158459e-14,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-00.txt",
+      "input_sha256": "e58b6eb6458a1d1b5a60f8164aba07fe918048aa0a3f5ef344562b1d4626e0a4",
+      "output": "out/cavity-graph/nonlinear-00.csv",
+      "output_sha256": "7347913a5c779605c71d30adca6b8d9188e139e45efdf10ffdc3f8ac5906f2a9",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=6.4184768611141862e-17 max_Newton=6"
+    },
+    {
+      "case": 1,
+      "pressure_error_Pa": 4.957314558851067e-10,
+      "mass_error_m3": 1.5881867761018131e-22,
+      "oracle_residual_m3_per_s": 2.203098814490545e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-01.txt",
+      "input_sha256": "adf7361b2155f52d80153513f01ddd69990664c4a505c4c5f6b275c9214bbff3",
+      "output": "out/cavity-graph/nonlinear-01.csv",
+      "output_sha256": "ad1eaa7f45e16804ad1e80b39807a3d71659e308dca4a5a9d7552b4359ea961a",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=3.4679290689121345e-15 max_Newton=6"
+    },
+    {
+      "case": 2,
+      "pressure_error_Pa": 3.029754225281067e-11,
+      "mass_error_m3": 2.329340604949326e-21,
+      "oracle_residual_m3_per_s": 2.4773680828114875e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-02.txt",
+      "input_sha256": "f8eb5a220a4944fec603105222b7451b682c1873b88d4c997a6502e6dac4e15f",
+      "output": "out/cavity-graph/nonlinear-02.csv",
+      "output_sha256": "76b899f5d2e2a58fe3a91ab3769c15e5a20570831516d2bc0efca5944186d04c",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=8.0642618776292918e-17 max_Newton=5"
+    },
+    {
+      "case": 3,
+      "pressure_error_Pa": 2.0037305148434825e-11,
+      "mass_error_m3": 3.1763735522036263e-22,
+      "oracle_residual_m3_per_s": 8.725116983077097e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-03.txt",
+      "input_sha256": "70ef77aafe14576aec87fef505c6537a573747afc9b3f211b361b70a809b81fe",
+      "output": "out/cavity-graph/nonlinear-03.csv",
+      "output_sha256": "832d9844b3a029682a66e8b7e27997c504174aca84439e6988101833e194f3aa",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=9.0056542952077212e-18 max_Newton=6"
+    },
+    {
+      "case": 4,
+      "pressure_error_Pa": 8.455458555545192e-13,
+      "mass_error_m3": 1.0587911840678754e-22,
+      "oracle_residual_m3_per_s": 7.432205892388133e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-04.txt",
+      "input_sha256": "a26c67fe65fbe91cc0c13e9d05603b2f474b961e03b28b00d16b9c550f560a2d",
+      "output": "out/cavity-graph/nonlinear-04.csv",
+      "output_sha256": "a6d642bc39ef06faf5a0c35f1ca8d3c09545f997641893dbcd003324be569229",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=5.0686451563697332e-18 max_Newton=6"
+    },
+    {
+      "case": 5,
+      "pressure_error_Pa": 4.618527782440651e-13,
+      "mass_error_m3": 1.3234889800848443e-22,
+      "oracle_residual_m3_per_s": 5.854691731421724e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-05.txt",
+      "input_sha256": "869386fc60a0fe73833e6ad148e125011eebab8cd2fb17b7f77e7280dfe3c7b4",
+      "output": "out/cavity-graph/nonlinear-05.csv",
+      "output_sha256": "84d095cb591eb3a1208ac27a8b6592076326c479f5a218b1b03c4796e43d9864",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=9.9746599868666408e-18 max_Newton=7"
+    },
+    {
+      "case": 6,
+      "pressure_error_Pa": 9.879386198008433e-11,
+      "mass_error_m3": 8.470329472543003e-22,
+      "oracle_residual_m3_per_s": 1.1206720230624856e-15,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-06.txt",
+      "input_sha256": "9e705dd728c349db14ae000d1df77a6f95e12e2192fc3df121e419488ea7ca26",
+      "output": "out/cavity-graph/nonlinear-06.csv",
+      "output_sha256": "fcd7d85269f205c7c5956aeae6d2444bb9a64db356a97bd1ea2e4b9a038ab2ff",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=7.8028675101066147e-18 max_Newton=6"
+    },
+    {
+      "case": 7,
+      "pressure_error_Pa": 1.2999521459278185e-09,
+      "mass_error_m3": 1.6543612251060553e-21,
+      "oracle_residual_m3_per_s": 2.1033183333039884e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-07.txt",
+      "input_sha256": "ee82253e4445ac91e5534bce10fcf26ac0a41f37f1318084ba8aa7d414339ca8",
+      "output": "out/cavity-graph/nonlinear-07.csv",
+      "output_sha256": "aa8e358c2de1b61c32141be9a7bf707289fde175ecc9d674bbce6873d8f29282",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=1.0181579971485499e-14 max_Newton=6"
+    },
+    {
+      "case": 8,
+      "pressure_error_Pa": 2.3921131742099533e-10,
+      "mass_error_m3": 2.117582368135751e-22,
+      "oracle_residual_m3_per_s": 2.1009127597337862e-15,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-08.txt",
+      "input_sha256": "c4bd8b748d6088529694df0f240fd3f09c0af6010c164008bc6d133c50694fc6",
+      "output": "out/cavity-graph/nonlinear-08.csv",
+      "output_sha256": "a90dcdf69cc901b93f8cf404f9898196f4b20d540f7dc8403b432d3e4a3fd6db",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=3.3068166260807885e-18 max_Newton=6"
+    },
+    {
+      "case": 9,
+      "pressure_error_Pa": 9.57811607804615e-11,
+      "mass_error_m3": 1.2705494208814505e-21,
+      "oracle_residual_m3_per_s": 5.275185670228222e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-09.txt",
+      "input_sha256": "78f353e16b1a1536013bfe32874842fd8ab66167aa043abcefc878a11e3624f8",
+      "output": "out/cavity-graph/nonlinear-09.csv",
+      "output_sha256": "f860659bbf52f1b6592001335862b77e5c204d804d4a9561d9c6492f3ed1da2b",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=5.6378512969246231e-18 max_Newton=5"
+    },
+    {
+      "case": 10,
+      "pressure_error_Pa": 1.5560885913146194e-11,
+      "mass_error_m3": 1.4823076576950256e-21,
+      "oracle_residual_m3_per_s": 8.918918121408881e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-10.txt",
+      "input_sha256": "95b33ed780ff90866b22f738b72f4813afe0d32c6c8dbcf162dbe29bf645dd27",
+      "output": "out/cavity-graph/nonlinear-10.csv",
+      "output_sha256": "62fa6fbceefdfd12767b14ebc4ea44c0cb96bef2d7ee8a1fdfc5b58b6ac4ca0c",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=7.8062556418956319e-18 max_Newton=7"
+    },
+    {
+      "case": 11,
+      "pressure_error_Pa": 2.1458390619955026e-12,
+      "mass_error_m3": 1.0587911840678754e-22,
+      "oracle_residual_m3_per_s": 3.0140820395097023e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-11.txt",
+      "input_sha256": "3e252ebf6193389189348933d9d3580c275b7affe796724ebe560fa8da974e34",
+      "output": "out/cavity-graph/nonlinear-11.csv",
+      "output_sha256": "482d9788e634f619a64fcb55bc0c90636bebf3271936446b026967f39e52872e",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=3.2526065174565133e-19 max_Newton=9"
+    },
+    {
+      "case": 12,
+      "pressure_error_Pa": 8.280665042548208e-11,
+      "mass_error_m3": 5.293955920339377e-22,
+      "oracle_residual_m3_per_s": 4.0679265511656126e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-12.txt",
+      "input_sha256": "ebfca9d6dbcbd8c1fde13c34ec573d5939864d4efeb6cf73be4f68b9d31b4363",
+      "output": "out/cavity-graph/nonlinear-12.csv",
+      "output_sha256": "05ad99ba09099bae01ed45f3e2fbb23116edb9183225e63f5cd6670ff193394f",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=1.0909784360635388e-18 max_Newton=5"
+    },
+    {
+      "case": 13,
+      "pressure_error_Pa": 5.6736837450444e-12,
+      "mass_error_m3": 4.235164736271502e-22,
+      "oracle_residual_m3_per_s": 1.962405932198763e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-13.txt",
+      "input_sha256": "644b3b3c85fe65431601a2c1496c3bfa6ccbf1b01dabe266cb5e96fe063f3ce8",
+      "output": "out/cavity-graph/nonlinear-13.csv",
+      "output_sha256": "c926ba14e9cb60900f1b3e4119f9d7393fb74fe3dcd4c965e5547e267922679c",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=4.1470733097570545e-18 max_Newton=6"
+    },
+    {
+      "case": 14,
+      "pressure_error_Pa": 1.3355361261346843e-09,
+      "mass_error_m3": 1.0024634930754645e-18,
+      "oracle_residual_m3_per_s": 4.5102810375396984e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-14.txt",
+      "input_sha256": "1b60e156784e946f79a078f814cacf307a6526938d8d84fdb09d8c2b926f7b54",
+      "output": "out/cavity-graph/nonlinear-14.csv",
+      "output_sha256": "41aadf5e179ed91cb295ee8d10015dbcecc02a4dfa87df0c45a345747dcbba3d",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=9.9503738582029655e-15 max_Newton=4"
+    },
+    {
+      "case": 15,
+      "pressure_error_Pa": 9.475797924096696e-11,
+      "mass_error_m3": 0.0,
+      "oracle_residual_m3_per_s": 8.673617379884035e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-15.txt",
+      "input_sha256": "8d96a4d7f7cad8ad012d06d7e3e243a6519f62f1f179733e08293fe79af988ab",
+      "output": "out/cavity-graph/nonlinear-15.csv",
+      "output_sha256": "2ad72f7f54cb93b0d1e92ea07c704d4b0e872a2c7a6dc39a635a14557763258a",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=2.6581384662827112e-15 max_Newton=14"
+    },
+    {
+      "case": 16,
+      "pressure_error_Pa": 2.6133619712709333e-09,
+      "mass_error_m3": 1.2705494208814505e-21,
+      "oracle_residual_m3_per_s": 4.8589435155520916e-15,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-16.txt",
+      "input_sha256": "1a0fabb10e13d137c7985270f5296ad6071ccf00bb197fa7e56a59e839c31b63",
+      "output": "out/cavity-graph/nonlinear-16.csv",
+      "output_sha256": "21b14dd443d9b3c9b4c1e6f9c0500cb165c11d705025f96f857fdc99aef58907",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=2.2388300523375204e-14 max_Newton=6"
+    },
+    {
+      "case": 17,
+      "pressure_error_Pa": 5.627782684314298e-10,
+      "mass_error_m3": 4.235164736271502e-22,
+      "oracle_residual_m3_per_s": 2.6020852139652106e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-17.txt",
+      "input_sha256": "e634d37a4242339452f48592f0ccef8ad2a04cd7390f392efe4548a57e77852b",
+      "output": "out/cavity-graph/nonlinear-17.csv",
+      "output_sha256": "88ca71e580c29a555076328865474a58cb22e7ce3e2adbac01452c502a54fec0",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=1.5667399018773343e-15 max_Newton=7"
+    },
+    {
+      "case": 18,
+      "pressure_error_Pa": 1.3694716471945867e-09,
+      "mass_error_m3": 2.541098841762901e-21,
+      "oracle_residual_m3_per_s": 1.3877787807814457e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-18.txt",
+      "input_sha256": "e09c23e41d7968e4142912f9f7c368e5552b3223cc48a13d0a4b6cabb1183fa6",
+      "output": "out/cavity-graph/nonlinear-18.csv",
+      "output_sha256": "c772eb810b3739824607a1b6dce43b28ac041d01dbb26a2157df0d3f9ec77d56",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=3.2725558374302466e-15 max_Newton=7"
+    },
+    {
+      "case": 19,
+      "pressure_error_Pa": 1.8673063095775433e-11,
+      "mass_error_m3": 2.117582368135751e-22,
+      "oracle_residual_m3_per_s": 8.063753657860939e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-19.txt",
+      "input_sha256": "d7265ac70e9d55fa38d8b4756a545bc5411acb2a90ab29de76f22b7c1d0bd896",
+      "output": "out/cavity-graph/nonlinear-19.csv",
+      "output_sha256": "7cdfa3d4dabf948f0af3cc650897da95a91dbf552a4f21dfec94bc92111ea48c",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=7.8062556418956319e-17 max_Newton=5"
+    },
+    {
+      "case": 20,
+      "pressure_error_Pa": 5.928768587182276e-11,
+      "mass_error_m3": 9.952637130238029e-21,
+      "oracle_residual_m3_per_s": 3.382710778154774e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-20.txt",
+      "input_sha256": "68bbf7a6bff357091d66644f28503084e473c22ad078e85a98c6d8c694d19a0b",
+      "output": "out/cavity-graph/nonlinear-20.csv",
+      "output_sha256": "9782cee439179911531fcdf50db3fe3b892c92c51108fbd0c8d962825f8aad73",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=4.3091615345436374e-16 max_Newton=7"
+    },
+    {
+      "case": 21,
+      "pressure_error_Pa": 1.6768808563938364e-12,
+      "mass_error_m3": 3.1763735522036263e-22,
+      "oracle_residual_m3_per_s": 1.179069862577986e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-21.txt",
+      "input_sha256": "f93c576c8db1881e5cac1ac2ffd83debbcda720ae85c86136c7e6d6789282fef",
+      "output": "out/cavity-graph/nonlinear-21.csv",
+      "output_sha256": "51b103d8200aafe2f2821ee2fa94859bad7ed794d4553afb89940fde73e49149",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=6.4035690812425106e-19 max_Newton=5"
+    },
+    {
+      "case": 22,
+      "pressure_error_Pa": 3.8482994568767026e-11,
+      "mass_error_m3": 2.117582368135751e-22,
+      "oracle_residual_m3_per_s": 2.5679667268498074e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-22.txt",
+      "input_sha256": "f1353bb123b724766094f9cc91a7b692d546f91c65ac70e4c7e53e251d10e92a",
+      "output": "out/cavity-graph/nonlinear-22.csv",
+      "output_sha256": "337a0a620e2196da99d78a66c9865e1b7f5bfe06c0c0a79053ed05301bf6f7a2",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=6.5268970783627367e-17 max_Newton=6"
+    },
+    {
+      "case": 23,
+      "pressure_error_Pa": 1.4586021279683337e-10,
+      "mass_error_m3": 4.235164736271502e-22,
+      "oracle_residual_m3_per_s": 9.64939933512099e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/nonlinear-23.txt",
+      "input_sha256": "fffc910b4c73dc4ba0661564a9667433d547c7aab49991003ae7417628912f0d",
+      "output": "out/cavity-graph/nonlinear-23.csv",
+      "output_sha256": "8f91c3754e481cbcdc8430fe93e68685b0f5cb3464a4e7bbae26ee0785960e76",
+      "native_report": "nodes=12 edges=22 steps=1 max_residual=3.6369426350754686e-15 max_Newton=8"
+    }
+  ],
+  "foxtrot": [
+    {
+      "time": 5.025,
+      "geometry": "out/planar-airspace/pose-5.025.json",
+      "geometry_sha256": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab",
+      "nodes": 1270,
+      "edges": 2377,
+      "components": 1,
+      "cycle_rank": 1108,
+      "pressure_error_Pa": 1.4957947769289603e-08,
+      "component_mass_error_m3": [
+        3.153626085358418e-24
+      ],
+      "energy_balance_error_J": 1.1230010791173042e-21,
+      "isolated_rear_pressure_error_Pa": null,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/foxtrot-5.025.txt",
+      "input_sha256": "54551e7e75ef67a5aaaec74ccb1c5bb50a166da265468634d0d15e31655402af",
+      "output": "out/cavity-graph/foxtrot-5.025.csv",
+      "output_sha256": "846ef688fc5525cbb6ada275333f84bb7ac3ea9c928244a54af3ae30247d8ca5",
+      "native_report": "nodes=1270 edges=2377 steps=1 max_residual=3.1782634944671874e-16 max_Newton=2"
+    },
+    {
+      "time": 5.04,
+      "geometry": "out/planar-airspace/pose-5.040.json",
+      "geometry_sha256": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239",
+      "nodes": 1270,
+      "edges": 2378,
+      "components": 2,
+      "cycle_rank": 1110,
+      "pressure_error_Pa": 3.147499683109345e-08,
+      "component_mass_error_m3": [
+        0.0,
+        4.8467614016778965e-26
+      ],
+      "energy_balance_error_J": 1.7270626461312238e-23,
+      "isolated_rear_pressure_error_Pa": 0.0,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/foxtrot-5.040.txt",
+      "input_sha256": "301cb6d7e95d062d0d4d24d904a06e8f1da6f2b2115e1512dfd69c6b65364576",
+      "output": "out/cavity-graph/foxtrot-5.040.csv",
+      "output_sha256": "e39a14557af41f100f8c84f57b1262d47e34f4ffffa400c76de1c7281a53c177",
+      "native_report": "nodes=1270 edges=2378 steps=1 max_residual=8.285146894449532e-17 max_Newton=2"
+    },
+    {
+      "time": 5.071,
+      "geometry": "out/planar-airspace/pose-5.071.json",
+      "geometry_sha256": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2",
+      "nodes": 1282,
+      "edges": 2407,
+      "components": 1,
+      "cycle_rank": 1126,
+      "pressure_error_Pa": 1.5458851976291044e-08,
+      "component_mass_error_m3": [
+        3.4638188150658034e-24
+      ],
+      "energy_balance_error_J": 4.787824783033493e-22,
+      "isolated_rear_pressure_error_Pa": null,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/foxtrot-5.071.txt",
+      "input_sha256": "1589b600246da30dd6e657ab66fe52851787715ca47af3e5e0c7a5e1aefd7b1c",
+      "output": "out/cavity-graph/foxtrot-5.071.csv",
+      "output_sha256": "28b64007ee63b77e169fe1fcd256a5484b9d4bcf60d9fee79ba5e928120a3cb7",
+      "native_report": "nodes=1282 edges=2407 steps=1 max_residual=3.1547286840277267e-16 max_Newton=2"
+    },
+    {
+      "time": 5.073,
+      "geometry": "out/planar-airspace/pose-5.073.json",
+      "geometry_sha256": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0",
+      "nodes": 1286,
+      "edges": 2416,
+      "components": 1,
+      "cycle_rank": 1131,
+      "pressure_error_Pa": 1.1917620668100426e-08,
+      "component_mass_error_m3": [
+        2.9985297205047253e-24
+      ],
+      "energy_balance_error_J": 1.008359016096283e-21,
+      "isolated_rear_pressure_error_Pa": null,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/cavity-graph/foxtrot-5.073.txt",
+      "input_sha256": "e6504d255f441555c1af40aa531a1675ea358ecbb3b71676aedf59ae9b362abd",
+      "output": "out/cavity-graph/foxtrot-5.073.csv",
+      "output_sha256": "6c521c8c0f1f4cdc2c336507f7e83839fcd22f7ac25f8ad49f6d566019cf1233",
+      "native_report": "nodes=1286 edges=2416 steps=1 max_residual=3.319755054350098e-16 max_Newton=2"
+    }
+  ],
+  "hashes": {
+    "include/ducklips/cavity_network.hpp": "12b134d8183601b5b48fdb093aaa7fde9daba994a781452cdb6bb671cb25995c",
+    "src/cavity_network.cpp": "427a6a571eec6f7bc033883a0c9d68bacdbf624bec5a8d528bb964ece5c25f26",
+    "tools/cavity_graph_probe.cpp": "33bb631d6ca000224108ded70c25a280d0964b8ff998857301c91a6471fa1418",
+    "tests/cavity_network_tests.cpp": "b0eb800de0863e73167049078828bcc0702c598f615f7c023bf7473773ecbd7a",
+    "tools/cavity_graph_reference.py": "c95f865606e3371a8895d9d3eddf6cfce9d49dc834cb01f31fd71f17fe1e616e",
+    "build/ducklips_cavity_graph_probe": "d0127cc8cf759dd2092c919580853756787861d81947fc457228f24512881840"
+  }
+}

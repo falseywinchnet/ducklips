@@ -135,8 +135,10 @@ reference. The native geometry component adds no external C++ dependency.
 
 ## Remaining engine work
 
-The current speech engine still uses the old section geometry. Its tree
-solvers cannot directly represent general passages that separate and rejoin.
+The current speech engine still uses the old section geometry. The
+[mean-pressure solver now supports cyclic and disconnected graphs](CAVITY_GRAPH.md),
+with fixed-pose pressure checks on these snapshots; the acoustic solver still
+requires a tree.
 The next integration must preserve actual fluid components, assign physical
 ports and wall boundaries, derive inertance/resistance from the same geometry,
 and transport stored mass/acoustic state conservatively as those components

@@ -116,5 +116,51 @@ int main() {
     check(valid,"reversing and reopening passive network converges");
     check(excess<1e-7,"reversing and reopening passive network obeys pressure bounds",excess);
     check(mass_error<1e-13,"reversing and reopening passive network conserves mass",mass_error);
+    // A four-cell ring has a genuine cycle: its antisymmetric mode has
+    // Laplacian eigenvalue 2/R. Deleting either route changes this solution.
+    ducklips::CavityNetwork ring{};
+    const std::array<ducklips::CavityConnection,4> ring_links{{{0,1},{1,2},{2,3},{3,0}}};
+    std::array<ducklips::CavityPassage,4> ring_ports{};
+    for(ducklips::CavityPassage& port:ring_ports){port={1e-4,1e6,0,0,0};}
+    const std::array<double,4> rv{1e-5,1e-5,1e-5,1e-5},rc{1e-10,1e-10,1e-10,1e-10},rp{723,123,-477,123},ri{};
+    ring.prepare(4,ring_links);valid=ring.reset(rv,rc,rp);
+    const std::size_t ring_allocations=allocations.load();
+    report=ring.advance(rv,rc,ring_ports,ri,.001,air);
+    const double amplitude=600/(1+.001*2/(1e6*1e-10));double ring_error=0;
+    const std::array<double,4> ring_expected{123+amplitude,123,123-amplitude,123};
+    for(std::size_t i=0;i<4;++i){ring_error=std::max(ring_error,std::abs(ring.pressures()[i]-ring_expected[i]));}
+    check(valid && report.converged && ring_error<1e-8,"cyclic pressure retains both paths and matches analytical mode",ring_error);
+    check(allocations.load()==ring_allocations,"cyclic pressure stepping performs no allocation");
+    // Close both links at node zero: compressing that chamber cannot affect
+    // the still-connected remaining three. No topology rebuilding is needed.
+    ring_ports[0].area=ring_ports[3].area=0;
+    const std::array<double,4> uniform{100,100,100,100};std::array<double,4> compressed=rv;
+    valid=ring.reset(rv,rc,uniform);compressed[0]-=1e-8;
+    report=ring.advance(compressed,rc,ring_ports,ri,.001,air);double other_error=0;
+    for(std::size_t i=1;i<4;++i){other_error=std::max(other_error,std::abs(ring.pressures()[i]-100));}
+    check(valid && report.converged && std::abs(ring.pressures()[0]-200)<1e-8 && other_error<1e-8
+        && ring.flows()[0]==0 && ring.flows()[3]==0,"closed cyclic contacts isolate compression exactly",other_error);
+    // Reopening dissipates energy without creating or destroying stored mass.
+    ring_ports[0].area=ring_ports[3].area=1e-4;valid=true;mass_error=0;previous_energy=INFINITY;
+    for(std::size_t step=0;step<40;++step){
+        report=ring.advance(compressed,rc,ring_ports,ri,.001,air);valid=valid&&report.converged;
+        double charge=0,energy=0;for(double value:ring.pressures()){charge+=1e-10*value;energy+=.5e-10*value*value;}
+        mass_error=std::max(mass_error,std::abs(charge-5e-8));valid=valid&&energy<=previous_energy+1e-16;previous_energy=energy;
+    }
+    check(valid && mass_error<1e-16,"reopened cycle dissipates energy and preserves isolated mass",mass_error);
+    ducklips::CavityNetwork disjoint{};disjoint.prepare(3,{});
+    std::array<double,3> disjoint_volume=tv;disjoint_volume[1]-=1e-8;
+    valid=disjoint.reset(tv,tc,tp);report=disjoint.advance(disjoint_volume,tc,{},ti,.001,air);
+    check(valid && report.converged && std::abs(disjoint.pressures()[0]-400)<1e-8 && std::abs(disjoint.pressures()[1]+100)<1e-8,
+        "disconnected graph keeps independent pressure states");
+    // Multiple physical passages between two cavities are parallel conductances.
+    ducklips::CavityNetwork parallel{};
+    const std::array<ducklips::CavityConnection,2> parallel_links{{{0,1},{0,1}}};
+    const std::array<ducklips::CavityPassage,2> parallel_ports{{{1e-4,1e6,0,0,0},{1e-4,1e6,0,0,0}}};
+    const std::array<double,2> pv{1e-5,1e-5},pc{1e-10,1e-10},ppar{600,0},pi{};
+    parallel.prepare(2,parallel_links);valid=parallel.reset(pv,pc,ppar);report=parallel.advance(pv,pc,parallel_ports,pi,.001,air);
+    const double parallel_expected=300+300/(1+4*.001/(1e6*1e-10));
+    check(valid && report.converged && std::abs(parallel.pressures()[0]-parallel_expected)<1e-8,
+        "parallel passages both participate in pressure equalization",parallel.pressures()[0]-parallel_expected);
     return failures?1:0;
 }

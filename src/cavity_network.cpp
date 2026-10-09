@@ -17,10 +17,36 @@ void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> 
         }
         if (c.to!=cavity_reservoir) { edges.push_back({c.from,c.to}); }
     }
-    matrix_.prepare(nodes,edges,0);std::size_t edge=0;
-    for (std::size_t i=0;i<connections_.size();++i) {
-        if (connections_[i].to!=cavity_reservoir) { slots_[i]=matrix_.edge_slot(edge++); }
+    // Select a breadth-first spanning forest. Zero-coupling links connect its
+    // roots only inside the preconditioner, never in the physical graph.
+    std::vector<std::vector<std::pair<std::size_t,std::size_t>>> neighbours(nodes);
+    for(std::size_t e=0;e<edges.size();++e){
+        neighbours[edges[e].first_node].push_back({edges[e].second_node,e});
+        neighbours[edges[e].second_node].push_back({edges[e].first_node,e});
     }
+    std::vector<bool> visited(nodes,false),selected(edges.size(),false);
+    std::vector<std::size_t> queue,roots;queue.reserve(nodes);
+    for(std::size_t root=0;root<nodes;++root){
+        if(visited[root]){continue;}roots.push_back(root);queue.clear();queue.push_back(root);visited[root]=true;
+        for(std::size_t q=0;q<queue.size();++q){
+            for(const std::pair<std::size_t,std::size_t>& link:neighbours[queue[q]]){
+                if(!visited[link.first]){visited[link.first]=true;selected[link.second]=true;queue.push_back(link.first);}
+            }
+        }
+    }
+    direct_tree_=roots.size()==1 && edges.size()+1==nodes;
+    std::vector<TreeEdge> forest;
+    std::vector<std::size_t> selected_index(edges.size(),cavity_reservoir);
+    for(std::size_t e=0;e<edges.size();++e){if(selected[e]){selected_index[e]=forest.size();forest.push_back(edges[e]);}}
+    for(std::size_t i=1;i<roots.size();++i){forest.push_back({0,roots[i]});}
+    matrix_.prepare(nodes,forest,0);std::size_t edge=0;
+    for(std::size_t i=0;i<connections_.size();++i){
+        if(connections_[i].to!=cavity_reservoir){
+            if(selected_index[edge]!=cavity_reservoir){slots_[i]=matrix_.edge_slot(selected_index[edge]);}++edge;
+        }
+    }
+    slope_.resize(connections.size());boundary_diagonal_.resize(nodes);
+    cg_residual_.resize(nodes);cg_direction_.resize(nodes);cg_image_.resize(nodes);cg_preconditioned_.resize(nodes);
     pressure_.assign(nodes,0);volume_.resize(nodes);compliance_.resize(nodes);flow_.assign(connections.size(),0);
     candidate_.resize(nodes);trial_.resize(nodes);residual_.resize(nodes);gradient_.resize(nodes);delta_.resize(nodes);
     storage_.resize(nodes);rhs_.resize(nodes);roundoff_.resize(nodes);working_flow_.resize(connections.size());linearization_flow_.resize(connections.size());ready_=false;
@@ -47,7 +73,7 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
         residual_[i]=storage_[i]*pressure[i]-rhs_[i];
         balance_residual_+=residual_[i];
         if (jacobian) {
-            matrix_.diagonal[i]=storage_[i];matrix_.parent_coupling[i]=0;
+            matrix_.diagonal[i]=storage_[i];matrix_.parent_coupling[i]=0;boundary_diagonal_[i]=storage_[i];
             roundoff_[i]=6*eps*std::abs(storage_[i]*pressure[i])+4*eps*std::abs(rhs_[i]);
             balance_roundoff_+=roundoff_[i];
         }
@@ -60,7 +86,7 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
         double flow=0;
         if(passage.area>0){flow=loss>0?orifice_flow(passage.area/std::sqrt(loss),drop,passage.resistance,air):drop/passage.resistance;}
         working_flow_[e]=flow;residual_[c.from]+=flow;
-        if(jacobian){linearization_flow_[e]=flow;}
+        if(jacobian){linearization_flow_[e]=flow;slope_[e]=0;}
         if (c.to!=cavity_reservoir) { residual_[c.to]-=flow; }
         else {balance_residual_+=flow;}
         if (jacobian && passage.area>0) {
@@ -71,10 +97,13 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
             const double uncertainty=2*eps*slope*(std::abs(pressure[c.from])+std::abs(downstream))+4*eps*std::abs(flow);
             roundoff_[c.from]+=uncertainty;
             if(c.to==cavity_reservoir){balance_roundoff_+=uncertainty;}
-            matrix_.diagonal[c.from]+=slope;
+            slope_[e]=slope;
+            if(c.to==cavity_reservoir){matrix_.diagonal[c.from]+=slope;boundary_diagonal_[c.from]+=slope;}
             if (c.to!=cavity_reservoir) {
                 roundoff_[c.to]+=uncertainty;
-                matrix_.diagonal[c.to]+=slope;matrix_.parent_coupling[slots_[e]]=-slope;
+                if(slots_[e]!=cavity_reservoir){
+                    matrix_.diagonal[c.from]+=slope;matrix_.diagonal[c.to]+=slope;matrix_.parent_coupling[slots_[e]]=-slope;
+                }
             }
         }
     }
@@ -85,6 +114,51 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
     }
     if(jacobian){std::copy(residual_.begin(),residual_.end(),gradient_.begin());}
     return norm;
+}
+void CavityNetwork::multiply_jacobian(std::span<const double> x,std::span<double> y) const noexcept {
+    // Flux differences retain the small storage term without subtracting two
+    // large diagonal/off-diagonal sums for nearly uniform pressure.
+    for(std::size_t i=0;i<x.size();++i){y[i]=boundary_diagonal_[i]*x[i];}
+    for(std::size_t e=0;e<connections_.size();++e){
+        const CavityConnection& c=connections_[e];if(c.to==cavity_reservoir){continue;}
+        const double flux=slope_[e]*(x[c.from]-x[c.to]);y[c.from]+=flux;y[c.to]-=flux;
+    }
+}
+bool CavityNetwork::solve_jacobian() noexcept {
+    if(matrix_.factor(0)!=0){return false;}
+    if(direct_tree_){
+        for(std::size_t i=0;i<delta_.size();++i){delta_[i]=-residual_[i];}
+        matrix_.solve(delta_);return true;
+    }
+    // Preconditioned conjugate gradients solve the complete SPD Jacobian.
+    // The forest is a preconditioner only; omitted cycle edges still contribute
+    // to every multiply and the independently recomputed final residual.
+    const std::size_t n=delta_.size();double scale=0;
+    std::fill(delta_.begin(),delta_.end(),0);
+    for(std::size_t i=0;i<n;++i){cg_residual_[i]=-residual_[i];scale=std::max(scale,std::abs(residual_[i]));}
+    const double tolerance=1e-17+1e-11*scale;
+    double previous=0;bool restart=true;
+    for(std::size_t iteration=0;iteration<4*n+64;++iteration){
+        std::copy(cg_residual_.begin(),cg_residual_.end(),cg_preconditioned_.begin());matrix_.solve(cg_preconditioned_);
+        long double product=0;for(std::size_t i=0;i<n;++i){product+=static_cast<long double>(cg_residual_[i])*cg_preconditioned_[i];}
+        const double current=static_cast<double>(product);
+        if(!std::isfinite(current) || current<=0){return false;}
+        const double beta=restart?0:current/previous;
+        for(std::size_t i=0;i<n;++i){cg_direction_[i]=restart?cg_preconditioned_[i]:cg_preconditioned_[i]+beta*cg_direction_[i];}
+        multiply_jacobian(cg_direction_,cg_image_);
+        product=0;for(std::size_t i=0;i<n;++i){product+=static_cast<long double>(cg_direction_[i])*cg_image_[i];}
+        const double denominator=static_cast<double>(product);if(!std::isfinite(denominator) || denominator<=0){return false;}
+        const double alpha=current/denominator;double error=0;
+        for(std::size_t i=0;i<n;++i){delta_[i]+=alpha*cg_direction_[i];cg_residual_[i]-=alpha*cg_image_[i];error=std::max(error,std::abs(cg_residual_[i]));}
+        restart=error<=tolerance || (iteration+1)%64==0;
+        if(restart){
+            multiply_jacobian(delta_,cg_image_);error=0;
+            for(std::size_t i=0;i<n;++i){cg_residual_[i]=-residual_[i]-cg_image_[i];error=std::max(error,std::abs(cg_residual_[i]));}
+            if(error<=tolerance){return true;}
+        }
+        previous=current;
+    }
+    return false;
 }
 bool CavityNetwork::balanced(double tolerance) const noexcept {
     for(std::size_t i=0;i<residual_.size();++i){
@@ -147,9 +221,7 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
             std::copy(working_flow_.begin(),working_flow_.end(),flow_.begin());
             report.converged=true;return report;
         }
-        if (!std::isfinite(norm) || matrix_.factor(0)!=0) { return report; }
-        for (std::size_t i=0;i<n;++i) { delta_[i]=-residual_[i]; }
-        matrix_.solve(delta_);
+        if (!std::isfinite(norm) || !solve_jacobian()) { return report; }
         double descent=0;for(std::size_t i=0;i<n;++i){descent+=residual_[i]*delta_[i];}
         bool accepted=false;double fraction=1;
         for (std::size_t search=0;search<24;++search) {

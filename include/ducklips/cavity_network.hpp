@@ -28,7 +28,9 @@ struct CavityStepReport final {
 // Backward Euler conserves C p + V per node. This is not an acoustic solver.
 class CavityNetwork final {
 public:
-    // Internal connections must form a tree, even when some ports are sealed.
+    // Internal connections may form cycles or disconnected components. A tree
+    // keeps the direct solve; other graphs use that elimination only as a
+    // preconditioner, retaining every passage in the actual pressure equation.
     void prepare(std::size_t nodes,std::span<const CavityConnection> connections);
     bool reset(std::span<const double> volumes,std::span<const double> compliances,
                std::span<const double> pressures) noexcept;
@@ -43,12 +45,16 @@ private:
                     const AirProperties& air,bool jacobian) noexcept;
     double potential_change(std::span<const CavityPassage> passages,const AirProperties& air) const noexcept;
     bool balanced(double tolerance) const noexcept;
+    bool solve_jacobian() noexcept;
+    void multiply_jacobian(std::span<const double> x,std::span<double> y) const noexcept;
     TreeOperator matrix_{};
     std::vector<CavityConnection> connections_{};
     std::vector<std::size_t> slots_{};
     std::vector<double> pressure_{},volume_{},compliance_{},flow_{};
     std::vector<double> candidate_{},trial_{},residual_{},gradient_{},delta_{},storage_{},rhs_{},working_flow_{},linearization_flow_{},roundoff_{};
+    std::vector<double> slope_{},boundary_diagonal_{},cg_residual_{},cg_direction_{},cg_image_{},cg_preconditioned_{};
     double balance_residual_{},balance_roundoff_{};
     bool ready_{false};
+    bool direct_tree_{false};
 };
 }

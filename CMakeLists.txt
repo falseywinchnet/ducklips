@@ -142,3 +142,6 @@ add_test(NAME ducklips_planar_airspace_tests COMMAND ducklips_planar_airspace_te
 
 add_executable(ducklips_airspace_geometry_probe tools/airspace_geometry_probe.cpp)
 target_link_libraries(ducklips_airspace_geometry_probe PRIVATE ducklips)
+
+add_executable(ducklips_cavity_graph_probe tools/cavity_graph_probe.cpp)
+target_link_libraries(ducklips_cavity_graph_probe PRIVATE ducklips)

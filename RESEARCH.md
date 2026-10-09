@@ -100,8 +100,9 @@ The current priority, following the user's 9 October instruction, is speech
 correctness; performance optimization is parked. The
 [solid-airspace reference](reports/PLANAR_AIRSPACE.md) now measures free air
 above and below the tongue without the tested midpoint-volume jumps. Its
-geometry still needs integration with pressure/acoustic state, physical
-boundaries and component-preserving transport. The latest listening follow-up
+geometry now has [fixed-pose graph pressure checks](reports/CAVITY_GRAPH.md),
+but still needs acoustic integration, physical flow/boundary laws and
+component-preserving moving-state transport. The latest listening follow-up
 reports [November improved and Foxtrot's /tr/ still jammed](reports/LISTENING_SPATIAL_2026_10_09.md).
 The passive-representation speed gate, flexible-blade/tongue-root work,
 individual body matching and realistic speech remain unsatisfied requirements.

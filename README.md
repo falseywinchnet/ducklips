@@ -31,7 +31,10 @@ Listening follow-up on the spatial-pressure recording: the user reports
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures
 air above and below the tongue, retaining the /t/ closure while eliminating
 the tested finite sampling jumps. It is independently checked against Boolean
-geometry and is not yet a speech-rendering path.
+geometry and is not yet a speech-rendering path. The native
+[mean-pressure solver now retains cyclic and disconnected air routes](reports/CAVITY_GRAPH.md);
+fixed Foxtrot snapshots preserve the sealed /t/ chambers. Moving-state and
+acoustic integration remain unfinished.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
