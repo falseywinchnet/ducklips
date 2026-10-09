@@ -31,6 +31,7 @@ add_library(ducklips STATIC
     src/voice.cpp
     src/body_config.cpp
     src/articulation.cpp
+    src/lip_profile.cpp
     src/tongue.cpp
     src/tongue_flow.cpp
     src/tongue_surface.cpp
@@ -170,3 +171,7 @@ target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)
 add_executable(ducklips_moving_graph_probe tools/moving_graph_probe.cpp)
 target_link_libraries(ducklips_moving_graph_probe PRIVATE ducklips)
 add_test(NAME ducklips_moving_graph_reference COMMAND ducklips_moving_graph_probe)
+
+add_executable(ducklips_lip_profile_probe tools/lip_profile_probe.cpp)
+target_link_libraries(ducklips_lip_profile_probe PRIVATE ducklips)
+add_test(NAME ducklips_lip_profile_reference COMMAND ducklips_lip_profile_probe)

@@ -84,6 +84,14 @@ lip tube; its narrowing changes storage and drives airflow. The tested open-lip
 intervals conserve stored air and retain the tongue seal. Closed-lip transport,
 laryngeal coupling and radiation are still required for this to render speech.
 
+The [lip contact investigation](reports/LIP_CONTACT_STORAGE.md) now separates
+actual air volume from the contact aperture. In all 562 NATO frames with a
+zero final-section midpoint area, the existing axial lip law still leaves
+air in that section's inner shoulder. Native integration retains that air
+while sealing the outlet, and coupled controls preserve its pressure through
+contact. This geometry still needs to replace the planar adapter's uniform
+section approximation before a new speech rendering can use it.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

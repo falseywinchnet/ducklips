@@ -4,6 +4,7 @@
 #include "ducklips/tongue.hpp"
 #include "ducklips/tongue_surface.hpp"
 #include "ducklips/voice.hpp"
+#include "ducklips/lip_profile.hpp"
 #include <array>
 #include <cstddef>
 #include <span>
@@ -126,6 +127,7 @@ public:
     [[nodiscard]] std::size_t port_section() const noexcept;
     [[nodiscard]] std::size_t epilarynx_sections() const noexcept;
     [[nodiscard]] std::size_t lip_sections() const noexcept;
+    [[nodiscard]] LipProfile lip_profile(const ArticulatorState& state) const noexcept;
     [[nodiscard]] double length_scale() const noexcept; // voice length / reference length
     [[nodiscard]] double area_scale() const noexcept;   // length_scale^2
     // d ln(area_i) / d(posture parameter) for every oral section at a vowel

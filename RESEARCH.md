@@ -147,6 +147,15 @@ when the linear solve is accurate. Temporal refinement, actual losses and
 closure-state transport are distinct requirements; successful small-step
 controls do not establish speech quality or efficient rendering.
 
+[Integrated lip contact geometry](reports/LIP_CONTACT_STORAGE.md) now shows
+that the default terminal section need not disappear at complete closure:
+its inner shoulder retains air even when the sampled midpoint is in contact.
+Independent integration and coupled closed-port controls preserve that volume
+without a compliance floor. The native geometry is available from the same
+articulator state, but the planar adapter and production speech network still
+need to consume its distinct storage and passage metrics. General empty-cell
+transport remains required for finer partitions and other contact geometries.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

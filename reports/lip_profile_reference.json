@@ -1,0 +1,1022 @@
+{
+  "use": "existing continuous axial lip law; volume and inertance reference, no new speech",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/lip_profile_reference.py"
+  ],
+  "geometry": {
+    "command": [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+      "--metrics"
+    ],
+    "input": "out/lip-profile/audit/nato-metrics.txt",
+    "output": "out/lip-profile/audit/nato-metrics.jsonl",
+    "log": "out/lip-profile/audit/nato-metrics.log",
+    "input_sha256": "d57880e6887ff9505c035324b908c1077d73ce33387a926be8e7457975646874",
+    "output_sha256": "7b93abf48cb4c3c2f9dad4472bd0a25df6d8170ce3cd9eca3a3c3cd34e38944e",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "poses": 23239,
+    "maximum_midpoint_area_difference_m2": 2.168404344971009e-19,
+    "closed_frames": 562,
+    "minimum_last_section_air_volume_at_closed_midpoint_m3": 8.199331447001495e-09,
+    "independent_maxima": {
+      "volume": 8.470329472543003e-22,
+      "centroid": 6.938893903907228e-18,
+      "conductance": 1.0547118733938987e-15
+    },
+    "partition_control": {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--metrics"
+      ],
+      "input": "out/lip-profile/audit/partition.txt",
+      "output": "out/lip-profile/audit/partition.jsonl",
+      "log": "out/lip-profile/audit/partition.log",
+      "input_sha256": "a62b93d2134b39f790950b09c7722275594240ea83580d0c8ee59c31ed4c7274",
+      "output_sha256": "63a6e59ee5c31de83f0a01dfa49c2804ec23c835cda420e23ba99e021dc0e756",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "partition_volume_range_m3": [
+      1.6384541521964005e-06,
+      1.6384541521964009e-06
+    ]
+  },
+  "trajectories": [
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-16.txt",
+      "output": "out/lip-profile/audit/closing-16.jsonl",
+      "log": "out/lip-profile/audit/closing-16.log",
+      "input_sha256": "f54416a154b1777a29be28bce3217822b0fbab2ef2e91bd48978868b604aa127",
+      "output_sha256": "34ed07bc57e9925195beb568e3e483e9de7f8de87316bfdbc74626f5cfae3ee8",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 99,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 7.569411764052347e-11,
+        "momentum_Pa_s": 3.814257124121895e-16,
+        "average_flow_m3_s": 1.5931525067550915e-17,
+        "local_mass_m3": 8.877974418166792e-23,
+        "global_mass_m3": 2.117582368135751e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 6.352747104407253e-22,
+        "centroid": 5.204170427930421e-18,
+        "conductance": 8.881784197001252e-16
+      },
+      "relative_density_range": [
+        0.9996702338953045,
+        1.000307259626091
+      ],
+      "final_pressure_Pa": [
+        0.39088905346473724,
+        1.2473879952563873,
+        5.907583963464542,
+        29.557590163676178
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-32.txt",
+      "output": "out/lip-profile/audit/closing-32.jsonl",
+      "log": "out/lip-profile/audit/closing-32.log",
+      "input_sha256": "cd8f6c940e39b0d6e2cb456d50d761ba6a8d6ed8e64598fe0b8f64c9cd401d44",
+      "output_sha256": "5c1f6497c3f3a98a46e487aeecb16a8f9135c8e873949c89378e5b88e00e7451",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 195,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 2.5854163254734885e-10,
+        "momentum_Pa_s": 2.7920848684297173e-15,
+        "average_flow_m3_s": 1.2541572157697117e-16,
+        "local_mass_m3": 1.029064380804251e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 7.411538288475128e-22,
+        "centroid": 6.938893903907228e-18,
+        "conductance": 1.0269562977782698e-15
+      },
+      "relative_density_range": [
+        0.9997005965078898,
+        1.0003227280777847
+      ],
+      "final_pressure_Pa": [
+        -0.26237297712656915,
+        3.9485686007253884,
+        6.812154605344976,
+        25.76581656423509
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-64.txt",
+      "output": "out/lip-profile/audit/closing-64.jsonl",
+      "log": "out/lip-profile/audit/closing-64.log",
+      "input_sha256": "e94064650926188a0c02af371560e1241c2e07c8717fb5a3afd0f7634ea118fe",
+      "output_sha256": "06c43119641f6cc7dea4df2966cac2bd700fe127fa73341a46defd229c53fc02",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 387,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 4.1114844862022437e-10,
+        "momentum_Pa_s": 2.200113870384421e-15,
+        "average_flow_m3_s": 1.593315560597438e-16,
+        "local_mass_m3": 1.0129085094653247e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 5.293955920339377e-22,
+        "centroid": 6.938893903907228e-18,
+        "conductance": 1.0824674490095276e-15
+      },
+      "relative_density_range": [
+        0.9996898723239268,
+        1.000317265878953
+      ],
+      "final_pressure_Pa": [
+        -2.657788670920423,
+        -2.306553763321163,
+        0.3146024660220173,
+        -9.5726186986588
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-128.txt",
+      "output": "out/lip-profile/audit/closing-128.jsonl",
+      "log": "out/lip-profile/audit/closing-128.log",
+      "input_sha256": "cb34bd7ccbd1b059f1e6c44342c69e3a6ed46fc5a083bc16510e0c53829026ad",
+      "output_sha256": "acf74eb6a1e1843d1ff5ad9b21b59880970e0d0e59924e91142bc675ca2f3344",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.020727951193365e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996898680473795,
+        1.0002959522528294
+      ],
+      "final_pressure_Pa": [
+        0.10976377664698421,
+        -4.101827552228069,
+        -6.421201311278296,
+        -9.804241947672745
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-256.txt",
+      "output": "out/lip-profile/audit/closing-256.jsonl",
+      "log": "out/lip-profile/audit/closing-256.log",
+      "input_sha256": "e2eae5f823a3f515b7445d53271223f33d6c4d92f3d8c14bb83f5af55450a701",
+      "output_sha256": "b90c217b9981159287028b07caf5a3ad1cafe71dae02754f444351edc98fe1b4",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.0285736462123311e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996805483959227,
+        1.0002915920410629
+      ],
+      "final_pressure_Pa": [
+        -2.9130633851790058,
+        -3.6989421323482263,
+        -5.884324690468069,
+        22.875087019798325
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-512.txt",
+      "output": "out/lip-profile/audit/closing-512.jsonl",
+      "log": "out/lip-profile/audit/closing-512.log",
+      "input_sha256": "98e962d6d234d4afaea334c17b53a3edfabe748c5dedfc2a585ed48f497a9600",
+      "output_sha256": "410ec2a3ad7a6c449ae60bf11e19d31ef76a9ffb0d1e506265d420a96a9271f3",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.04360062604145e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996866570415819,
+        1.000310121770234
+      ],
+      "final_pressure_Pa": [
+        -3.2640453491163064,
+        -3.871963965778061,
+        -3.227146233335602,
+        -28.362057789493917
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-1024.txt",
+      "output": "out/lip-profile/audit/closing-1024.jsonl",
+      "log": "out/lip-profile/audit/closing-1024.log",
+      "input_sha256": "725aa116d2d507b5caf925c9c297b73ea846512f8718d72e749ebd3ddcedcec2",
+      "output_sha256": "776908d6ff213cfb517152e22b5ddedd448c8824560db84fe78f9164b25d2c71",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.0432633722272499e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.999683684046757,
+        1.0003155248824385
+      ],
+      "final_pressure_Pa": [
+        -3.283412566929026,
+        -3.779902404763829,
+        -4.946668161982636,
+        11.399636154326611
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-2048.txt",
+      "output": "out/lip-profile/audit/closing-2048.jsonl",
+      "log": "out/lip-profile/audit/closing-2048.log",
+      "input_sha256": "a6947e682a480200f1a1f17eb8015e095ed5ea554c7dc743dabcb77664c19b97",
+      "output_sha256": "81ec97d2d0c603fb5d23609c73ace4c930e384d4ec8cc236bfebdccb9033423a",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.0524237512764211e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996788635200845,
+        1.0003174556405434
+      ],
+      "final_pressure_Pa": [
+        -3.2845464002673657,
+        -3.7742725435263282,
+        -5.052627283021508,
+        13.852784912874869
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-4096.txt",
+      "output": "out/lip-profile/audit/closing-4096.jsonl",
+      "log": "out/lip-profile/audit/closing-4096.log",
+      "input_sha256": "044056654f8b74afedb47bf8fc386a85f0f4ad77ef39591be70ac6dc71f76deb",
+      "output_sha256": "44964d92558c0fb645d663f2f5d0bb8c84263f68593cd19bc540d8495f6f60e7",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.0457705615106595e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996788689370832,
+        1.000317400038518
+      ],
+      "final_pressure_Pa": [
+        -3.2846105710730056,
+        -3.7739238043269276,
+        -5.059151190612012,
+        14.004170297811728
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/closing-8192.txt",
+      "output": "out/lip-profile/audit/closing-8192.jsonl",
+      "log": "out/lip-profile/audit/closing-8192.log",
+      "input_sha256": "c4ecd6c453a0cffed06ea5caac86cf2d4780c707acf45fbedcdf62736b7e3e48",
+      "output_sha256": "e51fc267fcf3677aaa545e006e7c235e90eaa04dbb40bd6b930007401d6ef872",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [
+        [
+          0,
+          0.4987278312279807
+        ]
+      ],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 1.0540496882653902e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        0.9996788694749347,
+        1.000317664533392
+      ],
+      "final_pressure_Pa": [
+        -3.2846130723087565,
+        -3.773901421851004,
+        -5.059556025195043,
+        14.013638727321954
+      ],
+      "minimum_endpoint_storage_m3": 9.081920170409972e-09
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-16.txt",
+      "output": "out/lip-profile/audit/opening-16.jsonl",
+      "log": "out/lip-profile/audit/opening-16.log",
+      "input_sha256": "c04a1b3ddd3d739ba766c272553c91702e0ebad4d2ec9ab7b5e54b06df388022",
+      "output_sha256": "77c18769d8fb58020d22c6d7775722904023e3d1a69106af8378ca96b304b80c",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 96,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 9.928271538228728e-10,
+        "momentum_Pa_s": 5.329070518200751e-15,
+        "average_flow_m3_s": 8.586881206085195e-17,
+        "local_mass_m3": 2.0514079191315086e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 8.470329472543003e-22,
+        "centroid": 5.204170427930421e-18,
+        "conductance": 1.6653345369377348e-15
+      },
+      "relative_density_range": [
+        1.0040962910520173,
+        1.00514647533391
+      ],
+      "final_pressure_Pa": [
+        695.3091341696598,
+        689.3497671537094,
+        674.0100209988516,
+        644.5349577420313
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-32.txt",
+      "output": "out/lip-profile/audit/opening-32.jsonl",
+      "log": "out/lip-profile/audit/opening-32.log",
+      "input_sha256": "1b5a9583061d010ab8fd01756a892560cfa2422b409671ca7da8588a965166bc",
+      "output_sha256": "dd7bb4bddc3a89d9e43eeaf22be22c261106439483ef9593a6632436ce8698b7",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 192,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 9.051632332557347e-09,
+        "momentum_Pa_s": 2.4646951146678475e-14,
+        "average_flow_m3_s": 3.618524750670371e-16,
+        "local_mass_m3": 1.8249672264451173e-22,
+        "global_mass_m3": 4.235164736271502e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 1.2705494208814505e-21,
+        "centroid": 5.204170427930421e-18,
+        "conductance": 1.6653345369377348e-15
+      },
+      "relative_density_range": [
+        1.00407680410212,
+        1.0051665513828796
+      ],
+      "final_pressure_Pa": [
+        694.8128670083166,
+        683.9430924284859,
+        670.7282907557358,
+        584.2684905886463
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-64.txt",
+      "output": "out/lip-profile/audit/opening-64.jsonl",
+      "log": "out/lip-profile/audit/opening-64.log",
+      "input_sha256": "c1cce323418c40222cf4c130379d5e2ff6d01c31a42abdc6cd20d91f09892938",
+      "output_sha256": "cbde866536a3d58790ed4dd337989ef92aa3aa44c05a883d45db4483899553be",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": true,
+      "independent_geometry_checks": 384,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 1.067837729351595e-08,
+        "momentum_Pa_s": 2.921968222935334e-14,
+        "average_flow_m3_s": 5.412337245047638e-16,
+        "local_mass_m3": 2.0974198407047708e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 1.0587911840678754e-21,
+        "centroid": 5.204170427930421e-18,
+        "conductance": 1.6653345369377348e-15
+      },
+      "relative_density_range": [
+        1.0041277095053063,
+        1.005125117743729
+      ],
+      "final_pressure_Pa": [
+        695.6947288922372,
+        686.7804883054092,
+        674.5290486395614,
+        593.469342499691
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-128.txt",
+      "output": "out/lip-profile/audit/opening-128.jsonl",
+      "log": "out/lip-profile/audit/opening-128.log",
+      "input_sha256": "30c6a532df1f833c8bf7cf974b8fc579c202a7c5e6bd1de491c3d5cfb591c789",
+      "output_sha256": "686b519f22d9948821bd66c77c1d4fadfad29d000f4190111d6931af2cf76701",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.0100488885038572e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0040297425812654,
+        1.0051605336033695
+      ],
+      "final_pressure_Pa": [
+        696.9458481774407,
+        690.4913034582329,
+        671.5929784074391,
+        629.8140463161641
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-256.txt",
+      "output": "out/lip-profile/audit/opening-256.jsonl",
+      "log": "out/lip-profile/audit/opening-256.log",
+      "input_sha256": "becf1908b1a056c50f2bd24d004598b3f7f576ef7bcd4aa9349996b54ab1cb8d",
+      "output_sha256": "1b250bbd1dbb8f30ae8ce4c7895cb799ec4d50d0f1a4d178b8904c37c82ac91c",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.049339967600126e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0040997356178254,
+        1.0051778033503276
+      ],
+      "final_pressure_Pa": [
+        698.6293655188778,
+        687.8735689951828,
+        676.8276936040879,
+        596.6313984228019
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-512.txt",
+      "output": "out/lip-profile/audit/opening-512.jsonl",
+      "log": "out/lip-profile/audit/opening-512.log",
+      "input_sha256": "a54bad82bec09d846bda226c6365418e003325ab947d74c202f1f6946dabf88c",
+      "output_sha256": "5584c1dce4b4dbf0bec05cdef4723592e9b974a9c0186c93c351455a57ac98b7",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.0745431268888511e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0041295353267126,
+        1.0051723032234985
+      ],
+      "final_pressure_Pa": [
+        698.7365366821424,
+        687.8422578656068,
+        674.9123724119953,
+        635.1772482639974
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-1024.txt",
+      "output": "out/lip-profile/audit/opening-1024.jsonl",
+      "log": "out/lip-profile/audit/opening-1024.log",
+      "input_sha256": "b252050eb6db8ec5497e3a7a54f6e7304ead97391f40b2faec238da5d490e004",
+      "output_sha256": "0842015fcf823191de7dd677bb0ae86d6078a07e97d0aa5f3f72cc2ece8ed134",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.100004780118999e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0041616809659675,
+        1.0051745967626662
+      ],
+      "final_pressure_Pa": [
+        698.7395115968746,
+        687.8060476667575,
+        675.173763983301,
+        631.2017850420283
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-2048.txt",
+      "output": "out/lip-profile/audit/opening-2048.jsonl",
+      "log": "out/lip-profile/audit/opening-2048.log",
+      "input_sha256": "e0e928d30e071288f6f1a28754ff89da124c243284429e24c23d90162f92aa06",
+      "output_sha256": "8cbd59f998257a7115fc374effe86e0097ab9343677c32e63a9e09213159bdf0",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.1108615256587575e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0041632619379752,
+        1.0051766468521477
+      ],
+      "final_pressure_Pa": [
+        698.7397476665554,
+        687.8031548061502,
+        675.1960870602658,
+        630.8545675832025
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-4096.txt",
+      "output": "out/lip-profile/audit/opening-4096.jsonl",
+      "log": "out/lip-profile/audit/opening-4096.log",
+      "input_sha256": "eb461c47cd3864947119099646e810bc87fa0c43d032661e46e2be5f37040158",
+      "output_sha256": "a2360685306bf4a2d792a1bb8314e3aed8f93819025eb5e74268799ad34e6a88",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.1126386715060394e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0041631687699786,
+        1.0051766455480236
+      ],
+      "final_pressure_Pa": [
+        698.7397625247287,
+        687.8029721125569,
+        675.1975001565349,
+        630.832572258361
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    },
+    {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+        "--sequence"
+      ],
+      "input": "out/lip-profile/audit/opening-8192.txt",
+      "output": "out/lip-profile/audit/opening-8192.jsonl",
+      "log": "out/lip-profile/audit/opening-8192.log",
+      "input_sha256": "451575632ed2ff4e1a3a00c5a3e97a7255e3171c1a6a9862ea86991072468ab4",
+      "output_sha256": "d354d448f2e17f864b1dd6bece03958bf29efde37e2fd06bd18570d96545c939",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "independent_audit": false,
+      "independent_geometry_checks": 0,
+      "contact_cuts": [],
+      "maxima": {
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 2.1268881500269724e-22,
+        "global_mass_m3": 8.470329472543003e-22,
+        "sealed_flow_m3_s": 0.0
+      },
+      "metric_errors": {
+        "volume": 0.0,
+        "centroid": 0.0,
+        "conductance": 0.0
+      },
+      "relative_density_range": [
+        1.0041631213385678,
+        1.0051768550471403
+      ],
+      "final_pressure_Pa": [
+        698.739763456793,
+        687.8029606661003,
+        675.1975887228454,
+        630.8311935175577
+      ],
+      "minimum_endpoint_storage_m3": 1.7486933146397576e-08
+    }
+  ],
+  "sealed_storage": {
+    "command": [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_lip_profile_probe",
+      "--sequence"
+    ],
+    "input": "out/lip-profile/audit/sealed-storage-64.txt",
+    "output": "out/lip-profile/audit/sealed-storage-64.jsonl",
+    "log": "out/lip-profile/audit/sealed-storage-64.log",
+    "input_sha256": "de2b8d00ccc825cb17f1831693555e1e49b45b0a4140d412fa7d14dde6ba2b37",
+    "output_sha256": "538c99b2e1b9e161a1dddb3d72e8060b84a98659e13d0031b1cf20bb3861ba6b",
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "independent_audit": true,
+    "independent_geometry_checks": 192,
+    "contact_cuts": [],
+    "maxima": {
+      "pressure_Pa": 1.020907802740112e-10,
+      "momentum_Pa_s": 2.9842794901924215e-16,
+      "average_flow_m3_s": 3.288971664020363e-17,
+      "local_mass_m3": 6.781882675212035e-23,
+      "global_mass_m3": 2.117582368135751e-22,
+      "sealed_flow_m3_s": 0.0
+    },
+    "metric_errors": {
+      "volume": 6.352747104407253e-22,
+      "centroid": 6.938893903907228e-18,
+      "conductance": 1.0269562977782698e-15
+    },
+    "relative_density_range": [
+      1.0050125313283207,
+      1.005012531328321
+    ],
+    "final_pressure_Pa": [
+      699.9999999999945,
+      700.0000000000002,
+      700.0000000000025,
+      699.9999999999761
+    ],
+    "minimum_endpoint_storage_m3": 9.081920170410045e-09
+  },
+  "refinement": [
+    {
+      "name": "closing",
+      "changes": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 3.791773599441086
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 35.338435262893896
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 6.735803777300314
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 32.67932896747107
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 51.237144809292246
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 39.76169394382053
+        },
+        {
+          "subdivisions": 2048,
+          "maximum_endpoint_difference_Pa": 2.4531487585482576
+        },
+        {
+          "subdivisions": 4096,
+          "maximum_endpoint_difference_Pa": 0.1513853849368587
+        },
+        {
+          "subdivisions": 8192,
+          "maximum_endpoint_difference_Pa": 0.009468429510226528
+        }
+      ]
+    },
+    {
+      "name": "opening",
+      "changes": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 60.266467153385065
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 9.200851911044765
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 36.34470381647304
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 33.18264789336217
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 38.54584984119549
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 3.9754632219691075
+        },
+        {
+          "subdivisions": 2048,
+          "maximum_endpoint_difference_Pa": 0.34721745882575306
+        },
+        {
+          "subdivisions": 4096,
+          "maximum_endpoint_difference_Pa": 0.021995324841554975
+        },
+        {
+          "subdivisions": 8192,
+          "maximum_endpoint_difference_Pa": 0.0013787408032612802
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "src/lip_profile.cpp": "a8c314104236be2fad3cac94fa5fbb73d75bd892a7122ff3d52dce4865b72fb9",
+    "include/ducklips/lip_profile.hpp": "7fde7207647179aea0f775152389333db60c4aa24c906be0fc0ce7b77fd1b4e6",
+    "src/articulation.cpp": "d5ee6e156c62f26adf8f841bc7113717d1feea73c71a511b06f3e32ca8b67fb0",
+    "include/ducklips/articulation.hpp": "96ef7312e442e92df5f384fee6b759f5b7649c540715463b283f3191ca99a753",
+    "tools/lip_profile_probe.cpp": "36fd68df6bbcd05750b5801ea55292befcda736407de09ab065a723c4041090e",
+    "tools/lip_profile_reference.py": "aea9a6d869018ed578f2a77eff63e249d707b78226672bd290d1b24cd88eb7fe",
+    "tools/tongue_reach_audit.cpp": "3d1283afc9394f29d3d2f757703f73ff3958caffdcc9a9f613299feebb712401",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "include/ducklips/moving_graph.hpp": "0a29b09b4183373950ffcae3d6d1b5eebcd11b61b5b369b3b2959dc393b1a82e",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "samples/nato.dict": "05db9444381785cf1f193f65fbf1a597c7b4ef5dffbe79749c516617b94a6de5",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "out/lip-profile/airway.csv": "85f3269d93397fe7c1b20089ffffb502038524f96bd2274411a01562a0402f7e",
+    "out/lip-profile/geometry.csv": "f7c69147401ec4526c19135d7b45cceac020921f0939c98b10e90c13bcdf04d9",
+    "build/ducklips_lip_profile_probe": "dc1030609df77523ed35645ed038a26644310729656e36222c5bb0e91575aef9",
+    "build/ducklips_tongue_reach_audit": "3dbeb6413c30cb85eeb0faa6f9eebeb2f9f947379135827a78b470f8f45c54dd"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  }
+}

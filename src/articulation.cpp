@@ -525,6 +525,15 @@ std::size_t TractModel::lip_sections() const noexcept {
     return lip_sections_;
 }
 
+LipProfile TractModel::lip_profile(const ArticulatorState& state) const noexcept {
+    const auto& slot=state.slot[static_cast<std::size_t>(ConstrictionSlot::lips)];
+    const ConstrictionGesture gesture=slot.current();
+    return {.length=double(lip_sections_)*section_length_+std::max(state.lip_protrusion.value,0.)*length_scale_,
+            .base_area=std::max(state.lip_area.value,0.)*area_scale_,.activation=slot.activation.value,
+            .place=gesture.place_from_lips*length_scale_,.core=constriction_core*length_scale_,
+            .width=gesture.width*length_scale_,.target_area=gesture.target_area*area_scale_};
+}
+
 double TractModel::length_scale() const noexcept {
     return length_scale_;
 }
