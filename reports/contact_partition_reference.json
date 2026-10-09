@@ -1,0 +1,1119 @@
+{
+  "use": "two located Foxtrot contacts, conservative pressure partition and frozen local-neck controls; no moving speech integration",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_contact_partition_reference.py"
+  ],
+  "bulk_modulus_Pa": 139650.0,
+  "mobility_m2_per_Pa_s": 1e-07,
+  "frozen_pressure_step_s": 0.0001,
+  "events": [
+    {
+      "event": {
+        "fraction": 0.3321308147271914,
+        "point_m": [
+          0.0736545328343718,
+          0.09543106113190118
+        ],
+        "vertex": [
+          3,
+          125
+        ],
+        "edge": [
+          0,
+          234
+        ],
+        "normalized_polynomial": [
+          0.3321308147271914,
+          -1.0,
+          -0.0
+        ],
+        "cell": 3760,
+        "time": 5.031332130814727,
+        "component_counts": [
+          1,
+          2
+        ],
+        "independent_bisection_fraction_bracket": [
+          0.3321308147271769,
+          0.332130814727177
+        ],
+        "root_difference_fraction": 1.4432899320127035e-14,
+        "candidate_count": 42
+      },
+      "samples": [
+        {
+          "offset_fraction": 0.001,
+          "time": 5.031331130814727,
+          "refined_geometry": {
+            "time": 5.031331130814727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8775364563187047e-09
+            ],
+            "maximum_region_volume_error_m3": 3.303552571383654e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 4.632211430296955e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-3-refined.txt",
+            "input_sha256": "903db1c71c9f63d6d28daabf747d2be8da8a95b06923074d171686ee82611dab",
+            "output": "out/contact-partition/closure-3-refined.json",
+            "output_sha256": "dfaa2494ee8821e837d9c4644f17de20dc2735063eac6c860faa8b9780ac0771"
+          },
+          "coarse_geometry": {
+            "time": 5.031331130814727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.877536456318707e-09
+            ],
+            "maximum_region_volume_error_m3": 4.7976475528075605e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 4.880365614062863e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-3-coarse.txt",
+            "input_sha256": "12d1ed7d9bcbbd1d3a7af594515fea6b1b2f276b3ea0386e48fc93d2533b52ed",
+            "output": "out/contact-partition/closure-3-coarse.json",
+            "output_sha256": "ad087b3d1715f9f831827072e3607d204852a54c8f29b2c55ceae415e25895f1"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 2.481541837659083e-24,
+            "energy_error_J": 3.308722450212111e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-3-partition.txt",
+            "input_sha256": "f963f3f868c7fc38a5c4b0a221820edf473f6bf5ecc563eb39ace7612116f549",
+            "output": "out/contact-partition/closure-3-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=8.2718061255302767e-25"
+          },
+          "pressure": {
+            "opening_m2": 2.047168672386634e-09,
+            "conductance_m3_per_Pa_s": 2.3821599096862774e-13,
+            "pressure_Pa": [
+              598.8519481642858,
+              11.19139085836814
+            ],
+            "flow_m3_per_s": 1.3999014201180523e-10,
+            "analytic_pressure_error_Pa": 0.0,
+            "mass_error_m3": 5.048709793414476e-28,
+            "local_mass_error_m3": 5.048709793414476e-28,
+            "instantaneously_merged_pressure_Pa": 544.1764819930759,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-3-pressure.txt",
+            "input_sha256": "3a841abe81b7a4fbe8b09a9aec034296a35a33825ece6738724845491ed1a758",
+            "output": "out/contact-partition/closure-3-pressure.csv",
+            "output_sha256": "4c890f82d70c4ece70b4e57da782e6d6c8d9d8648a923df2eb7f8fb7d1a6fa14",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=4.2134512451919847e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 0.0001,
+          "time": 5.031332030814727,
+          "refined_geometry": {
+            "time": 5.031332030814727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.873782779205212e-09
+            ],
+            "maximum_region_volume_error_m3": 2.895132143935597e-24,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 1.5302841332231012e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-4-refined.txt",
+            "input_sha256": "45bbe18ea12525d51d0c85f4431d950e35157498304b7a5b9df68044ba7fd5b4",
+            "output": "out/contact-partition/closure-4-refined.json",
+            "output_sha256": "380c7cba55d6091eb1a3c95bb76c0b2edb7a1f5c9f85f0806879f5cafe2f0f85"
+          },
+          "coarse_geometry": {
+            "time": 5.031332030814727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8737827792052148e-09
+            ],
+            "maximum_region_volume_error_m3": 1.2407709188295415e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 1.2407709188295415e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-4-coarse.txt",
+            "input_sha256": "7f48485ef1a686c7d6995d256809b31f79cccd69671c606486469f681cb2461f",
+            "output": "out/contact-partition/closure-4-coarse.json",
+            "output_sha256": "f78273d147eaac619b960c8faf9c0e33f9f884a0cc8b56a02d4cc1c5c28d7034"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 3.308722450212111e-24,
+            "energy_error_J": 4.1359030627651384e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-4-partition.txt",
+            "input_sha256": "31a9bc3eb58d332676f6c27847d6e8ae4330d25220956ad7915b2fd20a641e71",
+            "output": "out/contact-partition/closure-4-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=1.0132962503774589e-23"
+          },
+          "pressure": {
+            "opening_m2": 2.0471686659750963e-10,
+            "conductance_m3_per_Pa_s": 2.3821599022255788e-14,
+            "pressure_Pa": [
+              599.882829521702,
+              1.145658016056526
+            ],
+            "flow_m3_per_s": 1.4262876819327079e-11,
+            "analytic_pressure_error_Pa": 1.1368683772161603e-13,
+            "mass_error_m3": 1.5096825573667113e-27,
+            "local_mass_error_m3": 1.5096825573667113e-27,
+            "instantaneously_merged_pressure_Pa": 544.3295053183939,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-4-pressure.txt",
+            "input_sha256": "dc5be7d293b91d225c7e895a1f869bedd16038f7841aa03009099283911c91b3",
+            "output": "out/contact-partition/closure-4-pressure.csv",
+            "output_sha256": "a0292c0322836f3cb121edaf084495e23bb4744fe2f1565b1e0d3486fc1411e3",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=4.9646992624520587e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-05,
+          "time": 5.031332120814727,
+          "refined_geometry": {
+            "time": 5.031332120814727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8734074350830108e-09
+            ],
+            "maximum_region_volume_error_m3": 4.487454823100175e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 6.245213624775359e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-5-refined.txt",
+            "input_sha256": "6a28d720076f8b2910b47d338a293bfa92d9f58db39bc7f404125b2a514668ae",
+            "output": "out/contact-partition/closure-5-refined.json",
+            "output_sha256": "069c7d507ec931da32faa943187f85a45e074839b99dba2a819338b1b076e029"
+          },
+          "coarse_geometry": {
+            "time": 5.031332120814727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.873407435083018e-09
+            ],
+            "maximum_region_volume_error_m3": 5.624828165360588e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.542110104105285e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-5-coarse.txt",
+            "input_sha256": "0d8b6cc91dcd900a930fdd5a0e1241c365f68e3a829838fbfb91679e8a33a816",
+            "output": "out/contact-partition/closure-5-coarse.json",
+            "output_sha256": "01c548235042b255309ffb5827cf82407d993eaba4c4e3848507546a98255a7f"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 7.031035206700735e-24,
+            "energy_error_J": 8.68539643180679e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-5-partition.txt",
+            "input_sha256": "9f1c4f3bce0ab47cdb742b28736b776b6191c37c8c654baa5ca8eb666d7ac57a",
+            "output": "out/contact-partition/closure-5-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=8.2718061255302767e-25"
+          },
+          "pressure": {
+            "opening_m2": 2.0471686873468895e-11,
+            "conductance_m3_per_Pa_s": 2.3821599270945745e-15,
+            "pressure_Pa": [
+              599.9882586948538,
+              0.11483784810340267
+            ],
+            "flow_m3_per_s": 1.4289944244702678e-12,
+            "analytic_pressure_error_Pa": 1.3877787807814457e-17,
+            "mass_error_m3": 6.91781710072251e-28,
+            "local_mass_error_m3": 6.918063619755392e-28,
+            "instantaneously_merged_pressure_Pa": 544.3448395187879,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-5-pressure.txt",
+            "input_sha256": "70c31448480ba36a3d5c80f367d365d0b9db868cdf1eea05e778db4e22170d30",
+            "output": "out/contact-partition/closure-5-pressure.csv",
+            "output_sha256": "c18e4e252ee2d243043dec90e250a3e7a9bcf14f503e454bbd6bb80acdb8d243",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=6.0909654431669599e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-06,
+          "time": 5.031332129814727,
+          "refined_geometry": {
+            "time": 5.031332129814727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.873369900906817e-09
+            ],
+            "maximum_region_volume_error_m3": 2.2954261998346518e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 1.2407709188295415e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-6-refined.txt",
+            "input_sha256": "f309d9a8230d1558d7a5f615b536d987d1341df769fea8694a9af392b55b4b2a",
+            "output": "out/contact-partition/closure-6-refined.json",
+            "output_sha256": "d754141c704b5233d8b966aa2d61803e78f63ed7fe84032ea9d2b83315805e33"
+          },
+          "coarse_geometry": {
+            "time": 5.031332129814727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8733699009068167e-09
+            ],
+            "maximum_region_volume_error_m3": 8.271806125530277e-25,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 8.271806125530277e-25,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-6-coarse.txt",
+            "input_sha256": "0cfbcdf46a3c6c76a4de7da976e9d9c2060cd7630ffb35c5d907b504b76d2246",
+            "output": "out/contact-partition/closure-6-coarse.json",
+            "output_sha256": "114a94343bbcd5ab90e88d23cf3aeaf45cdcbf17d9edd9daef4f9f62fc1e9368"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 4.1359030627651384e-25,
+            "energy_error_J": 4.1359030627651384e-25,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-6-partition.txt",
+            "input_sha256": "c99bcfba4a34d6938c102ab9f5e4ee00ca49841059ee76d65be9004d0cabdcd6",
+            "output": "out/contact-partition/closure-6-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=2.8951321439355969e-24"
+          },
+          "pressure": {
+            "opening_m2": 2.0471683515044245e-12,
+            "conductance_m3_per_Pa_s": 2.38215953629607e-16,
+            "pressure_Pa": [
+              599.9988256264861,
+              0.011486510413757048
+            ],
+            "flow_m3_per_s": 1.4292655615322558e-13,
+            "analytic_pressure_error_Pa": 1.734723475976807e-18,
+            "mass_error_m3": 8.318784764588451e-29,
+            "local_mass_error_m3": 8.318784764588451e-29,
+            "instantaneously_merged_pressure_Pa": 544.3463732581886,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-6-pressure.txt",
+            "input_sha256": "0896a9ed41d856c3c9a675342a66b2e61587af1a066032caadfed7bdf561ffc3",
+            "output": "out/contact-partition/closure-6-pressure.csv",
+            "output_sha256": "96554b7facbb59aa77ce3295f13dc33ec508b344935d49aa6296ebfdb645f66d",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=2.0632309877257267e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-07,
+          "time": 5.031332130714727,
+          "refined_geometry": {
+            "time": 5.031332130714727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.873366147491382e-09
+            ],
+            "maximum_region_volume_error_m3": 1.5096046179092755e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 2.2333876538931747e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-7-refined.txt",
+            "input_sha256": "04b3a590ebaa5079509d9d795efbdfd12da06d1536f13200f73edb1f25f58016",
+            "output": "out/contact-partition/closure-7-refined.json",
+            "output_sha256": "fbc811d8747f77be5f0ea55eabd7cc3eb78f807319d1b397c4b1a73110a5f927"
+          },
+          "coarse_geometry": {
+            "time": 5.031332130714727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.873366147491382e-09
+            ],
+            "maximum_region_volume_error_m3": 2.274746684520826e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 2.2333876538931747e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-7-coarse.txt",
+            "input_sha256": "ce68365cdeeaa96a1ffcb672f2157374a0dbefe2a95eb5b352d50f66895a361b",
+            "output": "out/contact-partition/closure-7-coarse.json",
+            "output_sha256": "33bc80f1a1fb59b79b29e63ac7ce831841dcb516b2ce89cf90dbec1659a6e3d6"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 0.0,
+            "energy_error_J": 0.0,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-7-partition.txt",
+            "input_sha256": "94fe1d1ce53f2c6179e216d92da7bca2462c2d7d69a4404b5bed4096d6c16394",
+            "output": "out/contact-partition/closure-7-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=6.2038545941477076e-24"
+          },
+          "pressure": {
+            "opening_m2": 2.0471674355704293e-13,
+            "conductance_m3_per_Pa_s": 2.3821584704819662e-17,
+            "pressure_Pa": [
+              599.9998825602686,
+              0.0011486778093637824
+            ],
+            "flow_m3_per_s": 1.4292920661965554e-14,
+            "analytic_pressure_error_Pa": 0.0,
+            "mass_error_m3": 3.333320584617708e-28,
+            "local_mass_error_m3": 3.333320584617708e-28,
+            "instantaneously_merged_pressure_Pa": 544.3465266353345,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-7-pressure.txt",
+            "input_sha256": "e7c473ecd40abd49e1912a6783de9cf78e52af692203e30f9e4c69e0524bbe5c",
+            "output": "out/contact-partition/closure-7-pressure.csv",
+            "output_sha256": "adee4624d2660dab5aa14b005f425c336d893a3275765e83c530a622ad7f9218",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=2.8705323054671848e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-08,
+          "time": 5.031332130804727,
+          "refined_geometry": {
+            "time": 5.031332130804727,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8733657721498983e-09
+            ],
+            "maximum_region_volume_error_m3": 5.169878828456423e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 1.819797347616661e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-8-refined.txt",
+            "input_sha256": "500eb64a3a5bd029c837c0351bbaf9b9b223479ce85c973b20fd1e9bcdc59b45",
+            "output": "out/contact-partition/closure-8-refined.json",
+            "output_sha256": "59509de1df73cd8b3194c2c2891f2ee2d99b0c980ee84ca8d46d0b959d11612a"
+          },
+          "coarse_geometry": {
+            "time": 5.031332130804727,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.8733657721498814e-09
+            ],
+            "maximum_region_volume_error_m3": 3.556876633978019e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 3.5155176033503676e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/closure-8-coarse.txt",
+            "input_sha256": "9f55d00603b2c37078896be20738b82dcfda309e81533a7f7a1c68b884ac061c",
+            "output": "out/contact-partition/closure-8-coarse.json",
+            "output_sha256": "462acc59d45d7de04aab4b2b054e28d8e91ff51482aeed0860f12b528541707a"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 1.6957202557337067e-23,
+            "energy_error_J": 2.150669592637872e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/closure-8-partition.txt",
+            "input_sha256": "32a6e81b2e048e448d657b1903bc196ce4f73ef6da2b74be90ec1bcff9509bdd",
+            "output": "out/contact-partition/closure-8-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=5.6868667113020653e-25"
+          },
+          "pressure": {
+            "opening_m2": 2.047204072930242e-14,
+            "conductance_m3_per_Pa_s": 2.382201103046112e-18,
+            "pressure_Pa": [
+              599.9999882557923,
+              0.00011487010951082779
+            ],
+            "flow_m3_per_s": 1.4293203602069011e-15,
+            "analytic_pressure_error_Pa": 4.0657581468206416e-20,
+            "mass_error_m3": 1.4887009950700707e-28,
+            "local_mass_error_m3": 1.4887007543288277e-28,
+            "instantaneously_merged_pressure_Pa": 544.3465419730394,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/closure-8-pressure.txt",
+            "input_sha256": "008609d94931a163738e219c93b6c00d2486d317b19ba24630c8afbe1ed4429b",
+            "output": "out/contact-partition/closure-8-pressure.csv",
+            "output_sha256": "14fbcee9e84b8f3c104967b54053c3048581409cc55f0eebde17ec81af3f24f8",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=1.2819056763018386e-24 max_Newton=1"
+          }
+        }
+      ],
+      "closed_geometry": {
+        "time": 5.031332131814727,
+        "regions": 2,
+        "links": 0,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          1.7376454423101716e-10,
+          1.6995970158309685e-09
+        ],
+        "maximum_region_volume_error_m3": 2.7917345673664684e-23,
+        "maximum_port_area_error_m2": 0.0,
+        "maximum_component_volume_error_m3": 2.750375536738817e-23,
+        "command": [
+          "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+        ],
+        "input": "out/contact-partition/closure-closed.txt",
+        "input_sha256": "5ece8a1c771b202366ba693c3a5bb87e34e83da5d3a5dae86adb9dc1294d9622",
+        "output": "out/contact-partition/closure-closed.json",
+        "output_sha256": "a8dafee573dbdbafed03416ff0d4e5fe4bd9318b4b8dd1a3ad522d7ecea03de3"
+      },
+      "closed_pressure": {
+        "command": [
+          "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+        ],
+        "input": "out/contact-partition/closure-closed-pressure.txt",
+        "input_sha256": "870794599bb806007f2ae240c934d73fdeac26bf068f4c5f9064c695d7ed3341",
+        "output": "out/contact-partition/closure-closed-pressure.csv",
+        "output_sha256": "34d9502cc4cbb5c614880fda7c7f2a5e9943c91253029fe031e2ca98a3f40e51",
+        "native_report": "nodes=2 edges=0 steps=1 max_residual=1.1373733422604131e-23 max_Newton=0"
+      }
+    },
+    {
+      "event": {
+        "fraction": 0.40359489615834654,
+        "point_m": [
+          0.07003642976434435,
+          0.09607270798539957
+        ],
+        "vertex": [
+          3,
+          105
+        ],
+        "edge": [
+          0,
+          228
+        ],
+        "normalized_polynomial": [
+          -0.40359489615834654,
+          1.0,
+          -0.0
+        ],
+        "cell": 3758,
+        "time": 5.062403594896159,
+        "component_counts": [
+          2,
+          1
+        ],
+        "independent_bisection_fraction_bracket": [
+          0.40359489615836125,
+          0.4035948961583613
+        ],
+        "root_difference_fraction": 1.4765966227514582e-14,
+        "candidate_count": 91
+      },
+      "samples": [
+        {
+          "offset_fraction": 0.001,
+          "time": 5.062404594896158,
+          "refined_geometry": {
+            "time": 5.062404594896158,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5751298501174434e-09
+            ],
+            "maximum_region_volume_error_m3": 1.8301371052735737e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 2.8537731133079455e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-3-refined.txt",
+            "input_sha256": "7d3c4ea1829955f30fb4385154f1dd838f26a97f1a5b8d1261e43b13f0622b86",
+            "output": "out/contact-partition/release-3-refined.json",
+            "output_sha256": "7f583ab39eb36d4e4e0853bccbb2a22d8a08f0e00d7da3a49a0fcbd3511bbf09"
+          },
+          "coarse_geometry": {
+            "time": 5.062404594896158,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5751298501174494e-09
+            ],
+            "maximum_region_volume_error_m3": 3.74299227180245e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 3.4534790574088905e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-3-coarse.txt",
+            "input_sha256": "9a26693000f331e650965b21f4dd01e6d21174cf44511512102a55e7789f068b",
+            "output": "out/contact-partition/release-3-coarse.json",
+            "output_sha256": "38fce6a4f97f7b00492030484220f63858f1917f6101368ee3a8c048f9f1bd14"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 5.997059441009451e-24,
+            "energy_error_J": 7.858215819253763e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-3-partition.txt",
+            "input_sha256": "6eda2a4b322ebeaefb8bdddb3dfd19be04e06acd49d52eb390582a791d7f9c07",
+            "output": "out/contact-partition/release-3-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=2.1713491079516976e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.2503022592576e-09,
+            "conductance_m3_per_Pa_s": 6.10944262895428e-13,
+            "pressure_Pa": [
+              595.2874882023171,
+              9.702175073337239
+            ],
+            "flow_m3_per_s": 3.5775998749197305e-10,
+            "analytic_pressure_error_Pa": 0.0,
+            "mass_error_m3": 3.9758589623138995e-28,
+            "local_mass_error_m3": 3.9758589623138995e-28,
+            "instantaneously_merged_pressure_Pa": 403.84540407227075,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-3-pressure.txt",
+            "input_sha256": "2032a2fe44c5cc23dd83b9bd47848caa5ff86e3d61136d981e15b250f9edb285",
+            "output": "out/contact-partition/release-3-pressure.csv",
+            "output_sha256": "a165fbf1cdef9db32d59d519b665735ff1c80acf23fcccf7ef79b3c9ebe2c505",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=1.809457589959748e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 0.0001,
+          "time": 5.062403694896158,
+          "refined_geometry": {
+            "time": 5.062403694896158,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.568316188945497e-09
+            ],
+            "maximum_region_volume_error_m3": 7.465305028291075e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.149199313142597e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-4-refined.txt",
+            "input_sha256": "60ecf85a13bd531afd6e224a6cfe317b25aec0315e0f1b07238aff6b8c47dee2",
+            "output": "out/contact-partition/release-4-refined.json",
+            "output_sha256": "0c8ed267ca4cd0978c7343d112c37b76288fa40e0ab6fd6742cfdd6438432cec"
+          },
+          "coarse_geometry": {
+            "time": 5.062403694896158,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5683161889454887e-09
+            ],
+            "maximum_region_volume_error_m3": 5.852302833812671e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.976379925695625e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-4-coarse.txt",
+            "input_sha256": "9e1d272035f29323a17fe95f6cccf43dd04b17f2df370dd9a321b99a008b22dd",
+            "output": "out/contact-partition/release-4-coarse.json",
+            "output_sha256": "2f0c11292836dcaea14b5587957082eea35ba6476b0c404889d525cd0c093f67"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 8.271806125530277e-24,
+            "energy_error_J": 1.0339757656912846e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-4-partition.txt",
+            "input_sha256": "2c858d7088a6d7d3cc56f25b5062ed429602c44ca0fd88d83fbbe14ee5446da5",
+            "output": "out/contact-partition/release-4-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=3.825710333057753e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.250302260173533e-10,
+            "conductance_m3_per_Pa_s": 6.109442630020094e-14,
+            "pressure_Pa": [
+              599.517793484954,
+              1.0025517387432747
+            ],
+            "flow_m3_per_s": 3.656594532641082e-11,
+            "analytic_pressure_error_Pa": 1.1368683772161603e-13,
+            "mass_error_m3": 6.626431603856499e-28,
+            "local_mass_error_m3": 6.634320212908709e-28,
+            "instantaneously_merged_pressure_Pa": 405.13736273953634,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-4-pressure.txt",
+            "input_sha256": "172233cd8b35b1d001d8a7a870d1b1ea977c9673d4a38d358c84121a764f7d4f",
+            "output": "out/contact-partition/release-4-pressure.csv",
+            "output_sha256": "36de65393aca1614ec614f7066860d33938c912c2e744588a24c41907074f8b6",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=2.8046592644376095e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-05,
+          "time": 5.062403604896159,
+          "refined_geometry": {
+            "time": 5.062403604896159,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5676355268802949e-09
+            ],
+            "maximum_region_volume_error_m3": 3.5361971186641933e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.583469134732937e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-5-refined.txt",
+            "input_sha256": "414a32880beacc5f4f527a9ac32bed4cb09b2740da4ca0028b6762079b64ee7a",
+            "output": "out/contact-partition/release-5-refined.json",
+            "output_sha256": "faf77a989c769fd6ef8f74bce204b7d1187b1ddef2ac1a4381a44a21100ea86a"
+          },
+          "coarse_geometry": {
+            "time": 5.062403604896159,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5676355268803015e-09
+            ],
+            "maximum_region_volume_error_m3": 1.0339757656912846e-24,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 1.0339757656912846e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-5-coarse.txt",
+            "input_sha256": "da5fe2179e9da040886e31e39ebd6b68b6883532ed9f266e52afa1dfd16c561f",
+            "output": "out/contact-partition/release-5-coarse.json",
+            "output_sha256": "6a29e91c4ea1ef4fedd3c72a2d415dedbf9530698d804b957824196e0eb8e0e4"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 6.4106497472859645e-24,
+            "energy_error_J": 8.271806125530277e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-5-partition.txt",
+            "input_sha256": "ec82c84fd4ea18c1040e68ebf97bca932e0c394251bab05ed5c344164abf56b7",
+            "output": "out/contact-partition/release-5-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=2.2747466845208261e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.250302254067307e-11,
+            "conductance_m3_per_Pa_s": 6.109442622914666e-15,
+            "pressure_Pa": [
+              599.95166622244,
+              0.1005895523139045
+            ],
+            "flow_m3_per_s": 3.664755735209723e-12,
+            "analytic_pressure_error_Pa": 1.3877787807814457e-17,
+            "mass_error_m3": 2.4010953802664547e-29,
+            "local_mass_error_m3": 2.4010953802664547e-29,
+            "instantaneously_merged_pressure_Pa": 405.2671360455611,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-5-pressure.txt",
+            "input_sha256": "d8c22aedacb06052b0ab879764b729e631c5a8287680bb764cead597386e6c71",
+            "output": "out/contact-partition/release-5-pressure.csv",
+            "output_sha256": "5e358e49e2e34d45e082bab69cf79597bb9c1517fdf5ae52fdbefa7f1fb089c5",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=3.8047077003171488e-25 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-06,
+          "time": 5.062403595896158,
+          "refined_geometry": {
+            "time": 5.062403595896158,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675674677143344e-09
+            ],
+            "maximum_region_volume_error_m3": 8.333844671471754e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 7.175791813897515e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-6-refined.txt",
+            "input_sha256": "f7c45e1b10fa1d8d8292d107f7048a3bade20e6652b7de294bb7e303089946c3",
+            "output": "out/contact-partition/release-6-refined.json",
+            "output_sha256": "30506b537a736f11de939ab17d3c3979cb244a8f783cd3091573d0ab8b62d836"
+          },
+          "coarse_geometry": {
+            "time": 5.062403595896158,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675674677143475e-09
+            ],
+            "maximum_region_volume_error_m3": 5.997059441009451e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.872982349126496e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-6-coarse.txt",
+            "input_sha256": "c4d88c6c104746de0939a18cd3c3c5e82ec0e7b09456c7b943b0879c15b421da",
+            "output": "out/contact-partition/release-6-coarse.json",
+            "output_sha256": "1d1fdfa3563c5b596d9ad7350eabe7f80e682bbc280d728eac659c190258414e"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 1.3028094647710186e-23,
+            "energy_error_J": 1.6957202557337067e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-6-partition.txt",
+            "input_sha256": "0f164e525204aee3e5098bc60f0e5267d62be7080540fb2d3e671d2949f598e3",
+            "output": "out/contact-partition/release-6-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=1.2407709188295415e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.2503021930050405e-12,
+            "conductance_m3_per_Pa_s": 6.109442551860392e-16,
+            "pressure_Pa": [
+              599.9951654873447,
+              0.010062310313439685
+            ],
+            "flow_m3_per_s": 3.665574519832103e-13,
+            "analytic_pressure_error_Pa": 1.734723475976807e-18,
+            "mass_error_m3": 2.2345717735549567e-28,
+            "local_mass_error_m3": 2.2345717735549567e-28,
+            "instantaneously_merged_pressure_Pa": 405.2801191719767,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-6-pressure.txt",
+            "input_sha256": "cd068ea98f94cb51ac045c275c93761b437ba601f3f45e975f465bd46031b7ec",
+            "output": "out/contact-partition/release-6-pressure.csv",
+            "output_sha256": "f2857a142d33c760ed97f73922ff1d0bc258d57fdc084324afed7ca1b41186f6",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=9.9383852283363951e-25 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-07,
+          "time": 5.062403594996159,
+          "refined_geometry": {
+            "time": 5.062403594996159,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675606618681063e-09
+            ],
+            "maximum_region_volume_error_m3": 2.9158116592494226e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 4.9217246446905147e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-7-refined.txt",
+            "input_sha256": "b1c1a5680f22220ad7edaa08aaa8a648ac209697926f2ccdea923cb7b0c0a7d6",
+            "output": "out/contact-partition/release-7-refined.json",
+            "output_sha256": "865510ca1ec3b47f5cd91f6d817cf19fd4054278607686029ca0b8f25c98f26b"
+          },
+          "coarse_geometry": {
+            "time": 5.062403594996159,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675606618681007e-09
+            ],
+            "maximum_region_volume_error_m3": 5.2732764050255514e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 5.480071558163808e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-7-coarse.txt",
+            "input_sha256": "95901e060b9766162df6d259d16172e37cb84d74178ad6b8565820bc48c81c3d",
+            "output": "out/contact-partition/release-7-coarse.json",
+            "output_sha256": "0ef9f29af1483565f420c56d5d0f20be040b33c95ddccd5d6abcad7692ea8b7a"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 5.583469134732937e-24,
+            "energy_error_J": 7.031035206700735e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-7-partition.txt",
+            "input_sha256": "8a0100bcd038504b80e49501dadb3bcb33e519eaed7543596b64bcf0bca8da15",
+            "output": "out/contact-partition/release-7-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=5.2732764050255514e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.250304635495695e-13,
+            "conductance_m3_per_Pa_s": 6.109445394031337e-17,
+            "pressure_Pa": [
+              599.9995165371562,
+              0.001006265062909189
+            ],
+            "flow_m3_per_s": 3.665658135007504e-14,
+            "analytic_pressure_error_Pa": 1.1368683772161603e-13,
+            "mass_error_m3": 8.494945724741663e-28,
+            "local_mass_error_m3": 8.494945724741663e-28,
+            "instantaneously_merged_pressure_Pa": 405.2814175425704,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-7-pressure.txt",
+            "input_sha256": "1d71145bc1546de68f66efd0d4703d615c6c7b36fece7322e92ee55049cf7903",
+            "output": "out/contact-partition/release-7-pressure.csv",
+            "output_sha256": "7f2829dae1803a4a6daa327baa44964eba1b082980b0758245c5a1eee5e4dae0",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=3.2216763824864034e-24 max_Newton=1"
+          }
+        },
+        {
+          "offset_fraction": 1e-08,
+          "time": 5.062403594906159,
+          "refined_geometry": {
+            "time": 5.062403594906159,
+            "regions": 2,
+            "links": 1,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675599812839624e-09
+            ],
+            "maximum_region_volume_error_m3": 5.01478246360273e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 6.989676176073084e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-8-refined.txt",
+            "input_sha256": "b4b038af48e752d280d99cdcb52f2bae4192491013611cb6735a48fcb9eb7327",
+            "output": "out/contact-partition/release-8-refined.json",
+            "output_sha256": "dc949d0de317f6bb0440faf3e704ad93d9536728bb0707948203f81cb6686e90"
+          },
+          "coarse_geometry": {
+            "time": 5.062403594906159,
+            "regions": 1,
+            "links": 0,
+            "split_cells": [],
+            "components": 1,
+            "component_volumes_m3": [
+              1.5675599812839645e-09
+            ],
+            "maximum_region_volume_error_m3": 6.658803931051873e-23,
+            "maximum_port_area_error_m2": 0.0,
+            "maximum_component_volume_error_m3": 6.782881022934827e-23,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+            ],
+            "input": "out/contact-partition/release-8-coarse.txt",
+            "input_sha256": "8a86c38ac13be743c8a2ca8cdcd8a4df197ef1d01aa7970dc31ee66ff583ed64",
+            "output": "out/contact-partition/release-8-coarse.json",
+            "output_sha256": "c981aea3188990b2c18d301de7f1a38e98e6e5b2cc672b7f8142c349dd314aaf"
+          },
+          "partition": {
+            "maximum_pressure_change_Pa": 0.0,
+            "mass_error_m3": 2.0679515313825692e-24,
+            "energy_error_J": 2.481541837659083e-24,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe",
+              "--partition"
+            ],
+            "input": "out/contact-partition/release-8-partition.txt",
+            "input_sha256": "7981b30d5d13ca279d2629b726ddd774ef977d54693730b1f68a2206c69bfb07",
+            "output": "out/contact-partition/release-8-partition.csv",
+            "output_sha256": "537f398227658dc8fee8af1456a2296fe3b6154b93a1891bb5c288300d23b3d1",
+            "native_report": "steps=1 max_mass_residual=1.1890721305449773e-24"
+          },
+          "pressure": {
+            "opening_m2": 5.250316847948966e-14,
+            "conductance_m3_per_Pa_s": 6.109459604886051e-18,
+            "pressure_Pa": [
+              599.9999516534897,
+              0.00010062707599977577
+            ],
+            "flow_m3_per_s": 3.6656748527835235e-15,
+            "analytic_pressure_error_Pa": 0.0,
+            "mass_error_m3": 3.8914324528242823e-28,
+            "local_mass_error_m3": 3.8914334157892545e-28,
+            "instantaneously_merged_pressure_Pa": 405.2815473802761,
+            "command": [
+              "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+            ],
+            "input": "out/contact-partition/release-8-pressure.txt",
+            "input_sha256": "f746ab018664c64ac2e44cd5081fc3b64f3a5df3e733af41e2268982389d92fe",
+            "output": "out/contact-partition/release-8-pressure.csv",
+            "output_sha256": "889935525c961eb93f96204b12d87debcda59a35e0b8fc9da4e204b1997d8b64",
+            "native_report": "nodes=2 edges=1 steps=1 max_residual=2.9608553013931802e-24 max_Newton=1"
+          }
+        }
+      ],
+      "closed_geometry": {
+        "time": 5.062403593896159,
+        "regions": 2,
+        "links": 0,
+        "split_cells": [],
+        "components": 2,
+        "component_volumes_m3": [
+          5.087151379789196e-10,
+          1.0588372058415526e-09
+        ],
+        "maximum_region_volume_error_m3": 3.6602742105471475e-23,
+        "maximum_port_area_error_m2": 0.0,
+        "maximum_component_volume_error_m3": 3.6602742105471475e-23,
+        "command": [
+          "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+        ],
+        "input": "out/contact-partition/release-closed.txt",
+        "input_sha256": "1725addec2b20a4531d4d982d871439081eb2688edf743b5b491d1ab3297f8a1",
+        "output": "out/contact-partition/release-closed.json",
+        "output_sha256": "803c287d5c07e4b89bea1554628cf308f5914c218b961be6da4ae9b1f3747975"
+      },
+      "closed_pressure": {
+        "command": [
+          "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+        ],
+        "input": "out/contact-partition/release-closed-pressure.txt",
+        "input_sha256": "a0c3b3289f5051119d00cb854461de481eb3eef3c41f58555522ed029bf10f31",
+        "output": "out/contact-partition/release-closed-pressure.csv",
+        "output_sha256": "34d9502cc4cbb5c614880fda7c7f2a5e9943c91253029fe031e2ca98a3f40e51",
+        "native_report": "nodes=2 edges=0 steps=1 max_residual=2.481541837659083e-24 max_Newton=0"
+      }
+    }
+  ],
+  "input_poses": {
+    "out/planar-airspace/motion/pose-5.031.json": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+    "out/planar-airspace/motion/pose-5.032.json": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+    "out/planar-airspace/motion/pose-5.062.json": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+    "out/planar-airspace/motion/pose-5.063.json": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132"
+  },
+  "hashes": {
+    "include/ducklips/cavity_network.hpp": "aa563ba020df6a2e36daa721c319f1fc58fc4361116e0de067ee4e5673ecb66c",
+    "src/cavity_network.cpp": "3b266c392ed71580e6604f6b3f5ad149717364d52f1a0ed8fe3be37118b23584",
+    "tests/cavity_network_tests.cpp": "15d56feabdd3307621748ba03263a5192e92afe61b1eb7a89c492929f6c33a2a",
+    "tools/cavity_region_motion_probe.cpp": "9f26b4f0034ad77a818029cfb42405e6860c1ff30d6b94ddb6f0b436f41eeab8",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/cavity_graph_reference.py": "c95f865606e3371a8895d9d3eddf6cfce9d49dc834cb01f31fd71f17fe1e616e",
+    "include/ducklips/planar_airspace.hpp": "8707baa999676c4f50b293aac68383761d5fe9dc2055d393e5e85884d76957b4",
+    "src/planar_airspace.cpp": "0be379880ff602aedd79a91f6d7b47463136f33d4dc1a8fbb3bca74315a6e15f",
+    "build/ducklips_planar_regions_probe": "d61a26b542281b3ec440d447040d3a21b32dd07c4ddf3323e7d1466531c4b234",
+    "build/ducklips_cavity_graph_probe": "b1f9ce84409cd5fed21a45e8953a6f78e17196bf1dc526eb88d37392260267be",
+    "build/ducklips_cavity_region_motion_probe": "ac808d0e17396193186c8c0270b4be097e04fb99f2de1bb35f535ff8bcbd5ea9"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

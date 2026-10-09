@@ -18,6 +18,12 @@ struct CavityPassage final {
     double area{},resistance{},reservoir_pressure{};
     double forward_loss{1.0},reverse_loss{1.0}; // multiplier of rho Q |Q| / (2 A^2); zero is purely viscous
 };
+// A zero-time refinement of one existing uniform-pressure storage node.
+// These are actual child volumes/compliances, not mass-transfer weights.
+struct CavityPartition final {
+    std::size_t old_node{cavity_reservoir};
+    double volume{},compliance{};
+};
 struct CavityStepReport final {
     bool converged{false};
     std::size_t iterations{};
@@ -44,6 +50,17 @@ public:
     // accepted state; allocation failure may throw, also leaving it unchanged.
     bool reconfigure(std::span<const CavityConnection> connections,
                      std::span<const std::size_t> old_node_for_new);
+    // The caller establishes an actual disjoint partition at the SAME
+    // geometry/time. Children inherit their
+    // parent's pressure; their V and C must sum to its stored V and C within
+    // 64 machine epsilons (relative, no absolute floor). This preserves mass
+    // and quadratic compression energy to that roundoff allowance. Different
+    // old parents cannot be merged or pressure-averaged by this operation.
+    // An unparented child must start with V=C=0. This is not wall motion;
+    // subsequent geometry change and flow still go through advance.
+    // Allocation, failure and diagnostic-flow semantics match reconfigure.
+    bool partition(std::span<const CavityConnection> connections,
+                   std::span<const CavityPartition> children);
     // Zero compliance is allowed only with zero volume (an absent grid cell).
     bool reset(std::span<const double> volumes,std::span<const double> compliances,
                std::span<const double> pressures) noexcept;
@@ -71,11 +88,11 @@ private:
     std::vector<CavityConnection> connections_{};
     std::vector<std::size_t> slots_{};
     std::vector<double> pressure_{},volume_{},compliance_{},flow_{};
-    std::vector<double> candidate_{},trial_{},residual_{},gradient_{},delta_{},storage_{},rhs_{},working_flow_{},linearization_flow_{},roundoff_{};
+    std::vector<double> candidate_{},trial_{},residual_{},gradient_{},delta_{},storage_{},rhs_{},working_flow_{},linearization_flow_{},roundoff_{},residual_scale_{};
     std::vector<double> slope_{},boundary_diagonal_{},cg_residual_{},cg_direction_{},cg_image_{},cg_preconditioned_{};
     std::vector<std::size_t> component_{},open_degree_{};
     std::vector<bool> anchored_{},pinned_{};
-    double balance_residual_{},balance_roundoff_{};
+    double balance_residual_{},balance_roundoff_{},balance_scale_{};
     bool ready_{false};
     bool direct_tree_{false};
 };

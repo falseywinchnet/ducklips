@@ -44,8 +44,12 @@ between poses](reports/PLANAR_FACE_MOTION.md) now retain within-step contact and
 resolve a false post-closure pressure transfer in a controlled fixture.
 [Stored-state continuation](reports/REGION_STATE_CONTINUATION.md) now preserves
 air behind a moving seal through graph reindexing and audits correspondence
-across all 520 saved subintervals. Split/merge events, physical interval flow
-and acoustic integration remain required for speech.
+across all 520 saved subintervals. [Partitions through the Foxtrot contact
+points](reports/CONTACT_PRESSURE_PARTITION.md) now retain finite neck coupling
+without an instantaneous pressure merge, and the native solver now checks
+small-region conservation against each region's own scale. Full contact-event
+evolution, physical interval flow and acoustic integration remain required
+for speech.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

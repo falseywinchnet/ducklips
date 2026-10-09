@@ -278,5 +278,43 @@ int main() {
     check(valid && report.converged && std::abs(compact_v[0]+compact_c[0]*remapped.pressures()[0]-oldmass)<1e-18
         && std::abs(mass_after-oldmass)<1e-18,
           "a disappeared region is discarded only after its air has left conservatively",mass_after-oldmass);
+    // Refining one pressure volume introduces no pressure pulse or mixing.
+    ducklips::CavityNetwork refined;refined.prepare(2,{});valid=refined.reset(oldv,oldc,oldp);
+    const std::array<ducklips::CavityPartition,3> children{{{0,.3*oldv[0],.3*oldc[0]},
+        {1,oldv[1],oldc[1]},{0,.7*oldv[0],.7*oldc[0]}}};
+    valid=refined.partition({},children)&&valid;
+    const std::array<double,3> childv{children[0].volume,children[1].volume,children[2].volume},
+        childc{children[0].compliance,children[1].compliance,children[2].compliance};
+    report=refined.advance(childv,childc,{},mapped_in,.001,air);double child_mass=0,child_energy=0;
+    for(std::size_t i=0;i<3;++i){child_mass+=childv[i]+childc[i]*refined.pressures()[i];child_energy+=.5*childc[i]*refined.pressures()[i]*refined.pressures()[i];}
+    const double old_energy=.5*(oldc[0]*oldp[0]*oldp[0]+oldc[1]*oldp[1]*oldp[1]);
+    check(valid && report.converged && refined.pressures()[0]==500 && refined.pressures()[1]==100 && refined.pressures()[2]==500
+        && std::abs(child_mass-oldmass)<1e-20 && std::abs(child_energy-old_energy)<1e-20,
+          "zero-time region partition retains distinct parent pressures, mass and compression energy",child_energy-old_energy);
+    ducklips::CavityNetwork rejected_partition;rejected_partition.prepare(2,{});rejected_partition.reset(oldv,oldc,oldp);
+    auto wrong_children=children;wrong_children[0].volume*=1.01;
+    bool rejected=!rejected_partition.partition({},wrong_children);wrong_children=children;wrong_children[0].compliance*=1.01;
+    rejected=rejected&&!rejected_partition.partition({},wrong_children);wrong_children=children;wrong_children[1].old_node=0;
+    rejected=rejected&&!rejected_partition.partition({},wrong_children);wrong_children=children;wrong_children[0].old_node=ducklips::cavity_reservoir;
+    rejected=rejected&&!rejected_partition.partition({},wrong_children);
+    report=rejected_partition.advance(oldv,oldc,{},pi,.001,air);
+    check(rejected && report.converged && rejected_partition.pressures()[0]==500 && rejected_partition.pressures()[1]==100,
+          "partition rejects geometric volume changes, altered compliance, dropped parents and invented air transactionally");
+    // Conservation accuracy must not depend on the size chosen for a pressure
+    // volume. In particular, tiny flux cannot be reported with unchanged mass.
+    bool scaled_valid=true;double scaled_error=0,scaled_local_error=0;
+    for(double size:{1e-6,1.,1e6}){
+        ducklips::CavityNetwork scaled;scaled.prepare(2,connection);
+        const std::array<double,2> sv{size*1.7e-9,size*1.74e-10},sc{sv[0]/bulk,sv[1]/bulk},sp{600,0};
+        const double conductance=size*2.4e-18,dt=.0001;
+        const std::array<ducklips::CavityPassage,1> port{{{size*2e-14,1/conductance,0,0,0}}};
+        scaled_valid=scaled.reset(sv,sc,sp)&&scaled_valid;report=scaled.advance(sv,sc,port,pi,dt,air);scaled_valid=report.converged&&scaled_valid;
+        const double expected_q=conductance*600/(1+dt*conductance*(1/sc[0]+1/sc[1]));
+        const double expected_front=dt*expected_q/sc[1];
+        scaled_error=std::max(scaled_error,std::abs(scaled.pressures()[1]-expected_front));
+        scaled_local_error=std::max(scaled_local_error,std::abs(sc[1]*scaled.pressures()[1]-dt*scaled.flows()[0])/(dt*expected_q));
+    }
+    check(scaled_valid && scaled_error<1e-10 && scaled_local_error<1e-10,
+          "tiny passage flow updates local stored air with scale-independent accuracy",scaled_local_error);
     return failures?1:0;
 }

@@ -52,7 +52,7 @@ void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> 
     cg_residual_.resize(nodes);cg_direction_.resize(nodes);cg_image_.resize(nodes);cg_preconditioned_.resize(nodes);
     pressure_.assign(nodes,0);volume_.resize(nodes);compliance_.resize(nodes);flow_.assign(connections.size(),0);
     candidate_.resize(nodes);trial_.resize(nodes);residual_.resize(nodes);gradient_.resize(nodes);delta_.resize(nodes);
-    storage_.resize(nodes);rhs_.resize(nodes);roundoff_.resize(nodes);working_flow_.resize(connections.size());linearization_flow_.resize(connections.size());ready_=false;
+    storage_.resize(nodes);rhs_.resize(nodes);roundoff_.resize(nodes);residual_scale_.resize(nodes);working_flow_.resize(connections.size());linearization_flow_.resize(connections.size());ready_=false;
 }
 bool CavityNetwork::reconfigure(std::span<const CavityConnection> connections,
                                 std::span<const std::size_t> old_node_for_new) {
@@ -69,6 +69,41 @@ bool CavityNetwork::reconfigure(std::span<const CavityConnection> connections,
     }
     CavityNetwork rebuilt;
     try{rebuilt.prepare(old_node_for_new.size(),connections);}catch(const std::invalid_argument&){return false;}
+    if(!rebuilt.reset(volume,compliance,pressure)){return false;}
+    static_assert(std::is_nothrow_move_assignable_v<CavityNetwork>);
+    *this=std::move(rebuilt);return true;
+}
+bool CavityNetwork::partition(std::span<const CavityConnection> connections,
+                              std::span<const CavityPartition> children) {
+    if(!ready_ || children.empty()){return false;}
+    struct Sum {
+        double value{},correction{};
+        void add(double x) noexcept {
+            const double next=value+x;
+            correction+=std::abs(value)>=std::abs(x)?(value-next)+x:(x-next)+value;value=next;
+        }
+        double total() const noexcept {return value+correction;}
+    };
+    std::vector<Sum> volume_sum(pressure_.size()),compliance_sum(pressure_.size());
+    std::vector<double> volume(children.size()),compliance(children.size()),pressure(children.size());
+    for(std::size_t i=0;i<children.size();++i){
+        const CavityPartition& child=children[i];
+        if(!std::isfinite(child.volume) || child.volume<0 || !std::isfinite(child.compliance) || child.compliance<0
+            || (child.compliance==0 && child.volume!=0)){return false;}
+        volume[i]=child.volume;compliance[i]=child.compliance;
+        if(child.old_node==cavity_reservoir){if(child.volume!=0 || child.compliance!=0){return false;}continue;}
+        if(child.old_node>=pressure_.size()){return false;}
+        pressure[i]=pressure_[child.old_node];volume_sum[child.old_node].add(child.volume);compliance_sum[child.old_node].add(child.compliance);
+    }
+    constexpr double tolerance=64*std::numeric_limits<double>::epsilon();
+    for(std::size_t i=0;i<pressure_.size();++i){
+        const double v=volume_sum[i].total(),c=compliance_sum[i].total();
+        if(!std::isfinite(v) || !std::isfinite(c)
+            || std::abs(v-volume_[i])>tolerance*std::max(v,volume_[i])
+            || std::abs(c-compliance_[i])>tolerance*std::max(c,compliance_[i])){return false;}
+    }
+    CavityNetwork rebuilt;
+    try{rebuilt.prepare(children.size(),connections);}catch(const std::invalid_argument&){return false;}
     if(!rebuilt.reset(volume,compliance,pressure)){return false;}
     static_assert(std::is_nothrow_move_assignable_v<CavityNetwork>);
     *this=std::move(rebuilt);return true;
@@ -90,11 +125,12 @@ bool CavityNetwork::reset(std::span<const double> volumes,std::span<const double
 double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const CavityPassage> passages,
                               const AirProperties& air,bool jacobian) noexcept {
     constexpr double eps=std::numeric_limits<double>::epsilon();
-    balance_residual_=0;
+    balance_residual_=0;balance_scale_=0;
     if(jacobian){balance_roundoff_=0;}
     for (std::size_t i=0;i<pressure.size();++i) {
         residual_[i]=storage_[i]*pressure[i]-rhs_[i];
         balance_residual_+=residual_[i];
+        residual_scale_[i]=std::abs(storage_[i]*pressure[i])+std::abs(rhs_[i]);balance_scale_+=residual_scale_[i];
         if (jacobian) {
             matrix_.diagonal[i]=pinned_[i]?1:storage_[i];matrix_.parent_coupling[i]=0;boundary_diagonal_[i]=matrix_.diagonal[i];
             roundoff_[i]=6*eps*std::abs(storage_[i]*pressure[i])+4*eps*std::abs(rhs_[i]);
@@ -108,10 +144,10 @@ double CavityNetwork::evaluate(std::span<const double> pressure,std::span<const 
         const double loss=drop>=0?passage.forward_loss:passage.reverse_loss;
         double flow=0;
         if(passage.area>0){flow=loss>0?orifice_flow(passage.area/std::sqrt(loss),drop,passage.resistance,air):drop/passage.resistance;}
-        working_flow_[e]=flow;residual_[c.from]+=flow;
+        working_flow_[e]=flow;residual_[c.from]+=flow;residual_scale_[c.from]+=std::abs(flow);
         if(jacobian){linearization_flow_[e]=flow;slope_[e]=0;}
-        if (c.to!=cavity_reservoir) { residual_[c.to]-=flow; }
-        else {balance_residual_+=flow;}
+        if (c.to!=cavity_reservoir) { residual_[c.to]-=flow;residual_scale_[c.to]+=std::abs(flow); }
+        else {balance_residual_+=flow;balance_scale_+=std::abs(flow);}
         if (jacobian && passage.area>0) {
             const double slope=1/(passage.resistance+loss*air.density*std::abs(flow)/(passage.area*passage.area));
             // Nearly equal node pressures cannot encode arbitrarily small
@@ -193,7 +229,7 @@ bool CavityNetwork::solve_jacobian() noexcept {
     const std::size_t n=delta_.size();double scale=0;
     std::fill(delta_.begin(),delta_.end(),0);
     for(std::size_t i=0;i<n;++i){cg_residual_[i]=-residual_[i];scale=std::max(scale,std::abs(residual_[i]));}
-    const double tolerance=1e-17+1e-11*scale;
+    const double tolerance=1e-11*scale;
     double previous=0;bool restart=true;
     for(std::size_t iteration=0;iteration<4*n+64;++iteration){
         std::copy(cg_residual_.begin(),cg_residual_.end(),cg_preconditioned_.begin());matrix_.solve(cg_preconditioned_);
@@ -219,12 +255,13 @@ bool CavityNetwork::solve_jacobian() noexcept {
 }
 bool CavityNetwork::balanced(double tolerance) const noexcept {
     for(std::size_t i=0;i<residual_.size();++i){
-        if(!std::isfinite(residual_[i]) || !std::isfinite(roundoff_[i]) || std::abs(residual_[i])>tolerance+roundoff_[i]){return false;}
+        if(!std::isfinite(residual_[i]) || !std::isfinite(roundoff_[i]) || !std::isfinite(residual_scale_[i])
+            || std::abs(residual_[i])>tolerance*residual_scale_[i]+roundoff_[i]){return false;}
     }
     // Internal port errors cancel in total mass. Do not let their large local
     // pressure-quantization allowance excuse an error at external boundaries.
-    return std::isfinite(balance_residual_) && std::isfinite(balance_roundoff_)
-        && std::abs(balance_residual_)<=double(residual_.size())*tolerance+balance_roundoff_;
+    return std::isfinite(balance_residual_) && std::isfinite(balance_roundoff_) && std::isfinite(balance_scale_)
+        && std::abs(balance_residual_)<=tolerance*balance_scale_+balance_roundoff_;
 }
 double CavityNetwork::potential_change(std::span<const CavityPassage> passages,const AirProperties& air) const noexcept {
     // The residual is the gradient of a strictly convex storage + passage
@@ -253,7 +290,6 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
     CavityStepReport report{};const std::size_t n=pressure_.size();
     if (!ready_ || volumes.size()!=n || compliances.size()!=n || inflow.size()!=n || passages.size()!=connections_.size()
         || !std::isfinite(dt) || dt<=0 || !std::isfinite(air.density) || air.density<=0) { return report; }
-    double scale=0;
     for (std::size_t i=0;i<n;++i) {
         if (!std::isfinite(volumes[i]) || volumes[i]<0 || !std::isfinite(compliances[i]) || compliances[i]<0
             || (compliances[i]==0 && volumes[i]!=0)
@@ -261,7 +297,7 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
         storage_[i]=compliances[i]/dt;
         rhs_[i]=(compliance_[i]*pressure_[i]-(volumes[i]-volume_[i]))/dt+inflow[i];
         if (!std::isfinite(storage_[i]) || !std::isfinite(rhs_[i])) { return report; }
-        scale=std::max(scale,std::abs(rhs_[i]));candidate_[i]=pressure_[i];
+        candidate_[i]=pressure_[i];
     }
     for (const CavityPassage& p:passages) {
         if (!std::isfinite(p.area) || p.area<0 || !std::isfinite(p.resistance) || p.resistance<0
@@ -269,7 +305,10 @@ CavityStepReport CavityNetwork::advance(std::span<const double> volumes,std::spa
         if(!std::isfinite(p.forward_loss) || p.forward_loss<0 || !std::isfinite(p.reverse_loss) || p.reverse_loss<0){return report;}
     }
     if(!constrain_empty_cells(passages)){return report;}
-    const double tolerance=1e-14+1e-11*scale;
+    // A fixed dimensional residual floor can report flow through a tiny
+    // passage without changing either chamber's stored air. Use each node
+    // equation's own scale, plus explicit floating-point roundoff allowances.
+    const double tolerance=1e-11;
     for (std::size_t iteration=0;iteration<64;++iteration) {
         const double norm=evaluate(candidate_,passages,air,true);
         report.maximum_mass_residual=norm;report.iterations=iteration;
