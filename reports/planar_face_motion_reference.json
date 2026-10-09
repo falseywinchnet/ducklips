@@ -1,0 +1,2176 @@
+{
+  "use": "geometric temporal face openings; no moving region identity or production speech integration",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_face_motion_reference.py"
+  ],
+  "cases": [
+    {
+      "name": "foxtrot-050-v-3743",
+      "axis": "v",
+      "face": 3743,
+      "time_first": 5.07,
+      "time_last": 5.071,
+      "average_area_m2": 4.501686506359906e-06,
+      "native_quadrature_error_estimate_m2": 5.849554923227862e-21,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 4.501686701539989e-06,
+          "estimated_error_m2": 8.012844606038703e-14,
+          "evaluations": 4284,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 4.501686701539989e-06,
+          "estimated_error_m2": 8.012844606038703e-14,
+          "evaluations": 5838,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.951800825589255e-13,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 905,
+      "closed_fraction_intervals": [
+        [
+          0.18877162879254578,
+          1
+        ]
+      ],
+      "closed_duration_fraction": 0.8112283712074542,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687500000007e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3743"
+      ],
+      "input": "out/planar-face-motion/foxtrot-050-v-3743.txt",
+      "input_sha256": "385b77ccadaddcd8e4065e62ab2ae887dd4aea983a450cfaf8bc077109da6533",
+      "output": "out/planar-face-motion/foxtrot-050-v-3743.json",
+      "output_sha256": "e85f14961812ed222961941c9bba587cbd37fb8fb2adb5bddd82722b3ca7b2ae"
+    },
+    {
+      "name": "foxtrot-000-v-3211",
+      "axis": "v",
+      "face": 3211,
+      "time_first": 5.02,
+      "time_last": 5.021,
+      "average_area_m2": 1.566420728635532e-05,
+      "native_quadrature_error_estimate_m2": 5.759824041329242e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.5664207286355314e-05,
+          "estimated_error_m2": 1.739076359181281e-19,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.5664207286355338e-05,
+          "estimated_error_m2": 1.739076359181283e-19,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.6940658945086007e-20,
+      "independent_refinement_difference_m2": 2.371692252312041e-20,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.5664207286325946e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3211"
+      ],
+      "input": "out/planar-face-motion/foxtrot-000-v-3211.txt",
+      "input_sha256": "a957aec43d8610f4e6710fe66baeb5a75b60f9066c508faa26507bcc1cd72a16",
+      "output": "out/planar-face-motion/foxtrot-000-v-3211.json",
+      "output_sha256": "50dd4aedab54ecba77757afff75981809eb970bbbf39e790b5e1a3ddf2be113e"
+    },
+    {
+      "name": "foxtrot-000-h-3163",
+      "axis": "h",
+      "face": 3163,
+      "time_first": 5.02,
+      "time_last": 5.021,
+      "average_area_m2": 3.6937910724174334e-06,
+      "native_quadrature_error_estimate_m2": 9.740878893424454e-21,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 3.693791072417437e-06,
+          "estimated_error_m2": 4.1009318967526866e-20,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 3.6937910724174313e-06,
+          "estimated_error_m2": 4.1009318967526824e-20,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.117582368135751e-21,
+      "independent_refinement_difference_m2": 5.505714157152952e-21,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 3.7065556067263777e-06,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3163"
+      ],
+      "input": "out/planar-face-motion/foxtrot-000-h-3163.txt",
+      "input_sha256": "a957aec43d8610f4e6710fe66baeb5a75b60f9066c508faa26507bcc1cd72a16",
+      "output": "out/planar-face-motion/foxtrot-000-h-3163.json",
+      "output_sha256": "0a6fafc205704f654bec019da113a1a04531d8eb16567e47af6c282b99af77d6"
+    },
+    {
+      "name": "foxtrot-008-v-3622",
+      "axis": "v",
+      "face": 3622,
+      "time_first": 5.028,
+      "time_last": 5.029,
+      "average_area_m2": 1.613952258890383e-05,
+      "native_quadrature_error_estimate_m2": 5.783966083177571e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.6139523030596067e-05,
+          "estimated_error_m2": 1.3655988922976761e-11,
+          "evaluations": 3948,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.6139522705231328e-05,
+          "estimated_error_m2": 1.8934405875134073e-12,
+          "evaluations": 5670,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 512,
+          "average_area_m2": 1.6139522593138444e-05,
+          "estimated_error_m2": 2.1243299342375323e-13,
+          "evaluations": 12390,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.234612470789892e-15,
+      "independent_refinement_difference_m2": 1.1209288434520931e-13,
+      "event_windows": 700,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.0739125147942972e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3622"
+      ],
+      "input": "out/planar-face-motion/foxtrot-008-v-3622.txt",
+      "input_sha256": "d137829cfa3348358e228521f4beccf60726be1acb4f010938004c92e58a5ae5",
+      "output": "out/planar-face-motion/foxtrot-008-v-3622.json",
+      "output_sha256": "84c6fef90c2a2152d96a53b94747fba63a838ec1e5e7cef312e4673ab558290a"
+    },
+    {
+      "name": "foxtrot-008-h-3760",
+      "axis": "h",
+      "face": 3760,
+      "time_first": 5.028,
+      "time_last": 5.029,
+      "average_area_m2": 3.554855824297816e-05,
+      "native_quadrature_error_estimate_m2": 1.1194778067456312e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 3.554855889478243e-05,
+          "estimated_error_m2": 2.0503331921445113e-12,
+          "evaluations": 2394,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 3.5548558274474324e-05,
+          "estimated_error_m2": 1.1083766809361787e-12,
+          "evaluations": 4200,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 512,
+          "average_area_m2": 3.554855825348014e-05,
+          "estimated_error_m2": 7.286661915127321e-14,
+          "evaluations": 11592,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.0501975265982122e-14,
+      "independent_refinement_difference_m2": 2.0994185936148296e-14,
+      "event_windows": 137,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 3.1268940865892127e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3760"
+      ],
+      "input": "out/planar-face-motion/foxtrot-008-h-3760.txt",
+      "input_sha256": "d137829cfa3348358e228521f4beccf60726be1acb4f010938004c92e58a5ae5",
+      "output": "out/planar-face-motion/foxtrot-008-h-3760.json",
+      "output_sha256": "f28bf9f8ba8dc33da66ed28fe0c91082865c81e1d0f0a72e7331bcfda08e702a"
+    },
+    {
+      "name": "foxtrot-010-v-2088",
+      "axis": "v",
+      "face": 2088,
+      "time_first": 5.03,
+      "time_last": 5.031,
+      "average_area_m2": 1.820198452104062e-05,
+      "native_quadrature_error_estimate_m2": 1.424074142571355e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.8201984524926286e-05,
+          "estimated_error_m2": 6.999299533832697e-13,
+          "evaluations": 1806,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.8201984524926283e-05,
+          "estimated_error_m2": 6.999299533818221e-13,
+          "evaluations": 3402,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 3.885662001575432e-15,
+      "independent_refinement_difference_m2": 3.3881317890172014e-21,
+      "event_windows": 14,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.3375443342061887e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "2088"
+      ],
+      "input": "out/planar-face-motion/foxtrot-010-v-2088.txt",
+      "input_sha256": "1fccb708c9dce3e08eedc30de253b1d645b8adae9b354fde603889c514ad7147",
+      "output": "out/planar-face-motion/foxtrot-010-v-2088.json",
+      "output_sha256": "0773ef466a139d6e5b71b5ecbed8a3563cd1e5a653f7ada9e3b082f1a2a60273"
+    },
+    {
+      "name": "foxtrot-010-h-3760",
+      "axis": "h",
+      "face": 3760,
+      "time_first": 5.03,
+      "time_last": 5.031,
+      "average_area_m2": 2.40455426032775e-06,
+      "native_quadrature_error_estimate_m2": 3.4823220512703317e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.4045542710053897e-06,
+          "estimated_error_m2": 7.194725864764115e-13,
+          "evaluations": 1176,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.4045542676115244e-06,
+          "estimated_error_m2": 6.947149671285792e-13,
+          "evaluations": 2814,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 7.283774379810131e-15,
+      "independent_refinement_difference_m2": 3.3938653550371657e-15,
+      "event_windows": 44,
+      "closed_fraction_intervals": [
+        [
+          0.6339655850087089,
+          1
+        ]
+      ],
+      "closed_duration_fraction": 0.3660344149912911,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 3.870321413908389e-06,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3760"
+      ],
+      "input": "out/planar-face-motion/foxtrot-010-h-3760.txt",
+      "input_sha256": "1fccb708c9dce3e08eedc30de253b1d645b8adae9b354fde603889c514ad7147",
+      "output": "out/planar-face-motion/foxtrot-010-h-3760.json",
+      "output_sha256": "aed9d4b5acd6eed01eddad64e0314ef39a992acd1013260610a9d3f9308a0ff9"
+    },
+    {
+      "name": "foxtrot-011-v-3560",
+      "axis": "v",
+      "face": 3560,
+      "time_first": 5.031,
+      "time_last": 5.032,
+      "average_area_m2": 1.5198046712232583e-05,
+      "native_quadrature_error_estimate_m2": 4.501186021443892e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.519804671223257e-05,
+          "estimated_error_m2": 1.6873221389249257e-19,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.5198046712232556e-05,
+          "estimated_error_m2": 1.6873221389249252e-19,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.710505431213761e-20,
+      "independent_refinement_difference_m2": 1.3552527156068805e-20,
+      "event_windows": 36,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.5213262125133754e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3560"
+      ],
+      "input": "out/planar-face-motion/foxtrot-011-v-3560.txt",
+      "input_sha256": "d0b2963eee62a21976e124f45c95c376a7b09d9a782afa66fd111fca0a5357b5",
+      "output": "out/planar-face-motion/foxtrot-011-v-3560.json",
+      "output_sha256": "9e51474fe27c88a94d4c3a4f34ef90ce10f50b0431bbfe1e5dac28fb263039a5"
+    },
+    {
+      "name": "foxtrot-011-h-3759",
+      "axis": "h",
+      "face": 3759,
+      "time_first": 5.031,
+      "time_last": 5.032,
+      "average_area_m2": 2.873632924276995e-05,
+      "native_quadrature_error_estimate_m2": 7.099194889215318e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.8736329248803803e-05,
+          "estimated_error_m2": 8.377290868956823e-13,
+          "evaluations": 882,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.873632924452685e-05,
+          "estimated_error_m2": 2.906909145130664e-13,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.7568987985359247e-15,
+      "independent_refinement_difference_m2": 4.27695395375724e-15,
+      "event_windows": 28,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.8818950185837853e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3759"
+      ],
+      "input": "out/planar-face-motion/foxtrot-011-h-3759.txt",
+      "input_sha256": "d0b2963eee62a21976e124f45c95c376a7b09d9a782afa66fd111fca0a5357b5",
+      "output": "out/planar-face-motion/foxtrot-011-h-3759.json",
+      "output_sha256": "94bcef52695ebb4fb053f720a9a26e8e5befdbb22bb5fc55f3054d61b98ea088"
+    },
+    {
+      "name": "foxtrot-012-v-3560",
+      "axis": "v",
+      "face": 3560,
+      "time_first": 5.032,
+      "time_last": 5.033,
+      "average_area_m2": 2.4356785467590033e-05,
+      "native_quadrature_error_estimate_m2": 6.929788299793116e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.4356785467590047e-05,
+          "estimated_error_m2": 2.704146403197388e-19,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.4356785467590047e-05,
+          "estimated_error_m2": 2.704146403197388e-19,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.3552527156068805e-20,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 36,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.437038097727084e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3560"
+      ],
+      "input": "out/planar-face-motion/foxtrot-012-v-3560.txt",
+      "input_sha256": "ade7280c4a78d2f5c7b9e2b3a188874acad50d367350d5d12c95aede5571871c",
+      "output": "out/planar-face-motion/foxtrot-012-v-3560.json",
+      "output_sha256": "ae08b518c41f602a744d5e93469a5df787d7bb993fdf9b927f49671cea186dfb"
+    },
+    {
+      "name": "foxtrot-012-h-3759",
+      "axis": "h",
+      "face": 3759,
+      "time_first": 5.032,
+      "time_last": 5.033,
+      "average_area_m2": 1.9677381514127857e-05,
+      "native_quadrature_error_estimate_m2": 5.012052767612274e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.9677381532855204e-05,
+          "estimated_error_m2": 6.922048827612362e-13,
+          "evaluations": 798,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.9677381515201082e-05,
+          "estimated_error_m2": 1.8863257918869318e-13,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.0732246254890887e-15,
+      "independent_refinement_difference_m2": 1.7654121572821882e-14,
+      "event_windows": 21,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.9725201013268258e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3759"
+      ],
+      "input": "out/planar-face-motion/foxtrot-012-h-3759.txt",
+      "input_sha256": "ade7280c4a78d2f5c7b9e2b3a188874acad50d367350d5d12c95aede5571871c",
+      "output": "out/planar-face-motion/foxtrot-012-h-3759.json",
+      "output_sha256": "5f155497ca33d1be10dc64f5a2a072e17227562d8fcb67ed2e23661b4a765312"
+    },
+    {
+      "name": "foxtrot-029-v-3493",
+      "axis": "v",
+      "face": 3493,
+      "time_first": 5.049,
+      "time_last": 5.05,
+      "average_area_m2": 4.927179938692702e-06,
+      "native_quadrature_error_estimate_m2": 6.776263578034403e-21,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 4.9271799386926755e-06,
+          "estimated_error_m2": 5.470268614407777e-20,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 4.927179938692678e-06,
+          "estimated_error_m2": 5.470268614407778e-20,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.371692252312041e-20,
+      "independent_refinement_difference_m2": 2.541098841762901e-21,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 4.927441257666809e-06,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3493"
+      ],
+      "input": "out/planar-face-motion/foxtrot-029-v-3493.txt",
+      "input_sha256": "70a6f7dd33dde5923bc7e147436f3f780617fbdae9908f14c0935d3992c8d5ae",
+      "output": "out/planar-face-motion/foxtrot-029-v-3493.json",
+      "output_sha256": "0bc00013ee407d3b14e5c1d7b8f22943c6131b25c7efa40c9af7bf7c7e6bbc4a"
+    },
+    {
+      "name": "foxtrot-029-h-3159",
+      "axis": "h",
+      "face": 3159,
+      "time_first": 5.049,
+      "time_last": 5.05,
+      "average_area_m2": 2.7114449339189973e-05,
+      "native_quadrature_error_estimate_m2": 1.4465734552327565e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.711444935320045e-05,
+          "estimated_error_m2": 7.685407418431787e-14,
+          "evaluations": 1596,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.711444935320074e-05,
+          "estimated_error_m2": 7.685407418431787e-14,
+          "evaluations": 3276,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.4010768592401593e-14,
+      "independent_refinement_difference_m2": 2.913793338554793e-19,
+      "event_windows": 14,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.6756734294899217e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3159"
+      ],
+      "input": "out/planar-face-motion/foxtrot-029-h-3159.txt",
+      "input_sha256": "70a6f7dd33dde5923bc7e147436f3f780617fbdae9908f14c0935d3992c8d5ae",
+      "output": "out/planar-face-motion/foxtrot-029-h-3159.json",
+      "output_sha256": "3ea2f36b108470f24314470cbbd7af3443f80dd9a855e826aa6a969da0a31412"
+    },
+    {
+      "name": "foxtrot-040-v-3685",
+      "axis": "v",
+      "face": 3685,
+      "time_first": 5.06,
+      "time_last": 5.061,
+      "average_area_m2": 1.6671367834349155e-05,
+      "native_quadrature_error_estimate_m2": 1.0004792744949964e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.6671368020922893e-05,
+          "estimated_error_m2": 2.5769074272768073e-12,
+          "evaluations": 3948,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.6671368003402393e-05,
+          "estimated_error_m2": 2.566172355317518e-12,
+          "evaluations": 5250,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 512,
+          "average_area_m2": 1.6671367924982978e-05,
+          "estimated_error_m2": 2.288283623130064e-12,
+          "evaluations": 12348,
+          "warning": "The occurrence of roundoff error is detected, which prevents \n  the requested tolerance from being achieved.  The error may be \n  underestimated."
+        },
+        {
+          "divisions": 2048,
+          "average_area_m2": 1.667136783864158e-05,
+          "estimated_error_m2": 8.333249091845857e-13,
+          "evaluations": 43848,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.2924241635058924e-15,
+      "independent_refinement_difference_m2": 8.634139884717944e-14,
+      "event_windows": 930,
+      "closed_fraction_intervals": [
+        [
+          0.5712130497383245,
+          1
+        ]
+      ],
+      "closed_duration_fraction": 0.42878695026167546,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687499999992e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3685"
+      ],
+      "input": "out/planar-face-motion/foxtrot-040-v-3685.txt",
+      "input_sha256": "b8a1f2812811f34888283458090dd46d2f397dcdd900de3e172074ffd4a79456",
+      "output": "out/planar-face-motion/foxtrot-040-v-3685.json",
+      "output_sha256": "ff291bc548c7030eeb930655753d4215788be2607274e1e2b8744c5c8886fcd2"
+    },
+    {
+      "name": "foxtrot-040-h-2786",
+      "axis": "h",
+      "face": 2786,
+      "time_first": 5.06,
+      "time_last": 5.061,
+      "average_area_m2": 1.959816482448015e-05,
+      "native_quadrature_error_estimate_m2": 1.9481757786849293e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.9598164809385544e-05,
+          "estimated_error_m2": 1.29900894537814e-13,
+          "evaluations": 756,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.9598164809385558e-05,
+          "estimated_error_m2": 1.299008945378156e-13,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.5094591294126727e-14,
+      "independent_refinement_difference_m2": 1.3552527156068805e-20,
+      "event_windows": 3,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.9415329173007858e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "2786"
+      ],
+      "input": "out/planar-face-motion/foxtrot-040-h-2786.txt",
+      "input_sha256": "b8a1f2812811f34888283458090dd46d2f397dcdd900de3e172074ffd4a79456",
+      "output": "out/planar-face-motion/foxtrot-040-h-2786.json",
+      "output_sha256": "f145cb22110d579135b3498dd2685206871f60995175788f828e04167a64abf5"
+    },
+    {
+      "name": "foxtrot-042-v-3424",
+      "axis": "v",
+      "face": 3424,
+      "time_first": 5.062,
+      "time_last": 5.063,
+      "average_area_m2": 2.044210905841908e-05,
+      "native_quadrature_error_estimate_m2": 2.9578390518120168e-18,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.0442109057164854e-05,
+          "estimated_error_m2": 5.624388253255924e-13,
+          "evaluations": 1176,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.0442109057164854e-05,
+          "estimated_error_m2": 5.624388253280223e-13,
+          "evaluations": 3024,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.2542254019219656e-15,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 3,
+      "closed_fraction_intervals": [
+        [
+          0.998992922082961,
+          1
+        ]
+      ],
+      "closed_duration_fraction": 0.0010070779170390232,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687499999992e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3424"
+      ],
+      "input": "out/planar-face-motion/foxtrot-042-v-3424.txt",
+      "input_sha256": "608e2bd56ce2b76264229d0fb899e0caa998f9d42832f1eafd1f77385818f177",
+      "output": "out/planar-face-motion/foxtrot-042-v-3424.json",
+      "output_sha256": "d50016266b394d3844d9e4ce658551f85c2f1b7cd649a668b4f89593dcd97673"
+    },
+    {
+      "name": "foxtrot-042-h-2784",
+      "axis": "h",
+      "face": 2784,
+      "time_first": 5.062,
+      "time_last": 5.063,
+      "average_area_m2": 2.0659400501989384e-05,
+      "native_quadrature_error_estimate_m2": 2.096737416699473e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.065939987417645e-05,
+          "estimated_error_m2": 7.655742291739868e-13,
+          "evaluations": 1722,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.0659399874176465e-05,
+          "estimated_error_m2": 5.776652993569244e-13,
+          "evaluations": 3318,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 6.278129193815554e-13,
+      "independent_refinement_difference_m2": 1.3552527156068805e-20,
+      "event_windows": 36,
+      "closed_fraction_intervals": [
+        [
+          0.7079642401752249,
+          1
+        ]
+      ],
+      "closed_duration_fraction": 0.29203575982477514,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.8870546667362444e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "2784"
+      ],
+      "input": "out/planar-face-motion/foxtrot-042-h-2784.txt",
+      "input_sha256": "608e2bd56ce2b76264229d0fb899e0caa998f9d42832f1eafd1f77385818f177",
+      "output": "out/planar-face-motion/foxtrot-042-h-2784.json",
+      "output_sha256": "9604fb0dab8f57a79841f4a0a46723e836efb0cb88a4c38875c0376438b25658"
+    },
+    {
+      "name": "foxtrot-047-v-3227",
+      "axis": "v",
+      "face": 3227,
+      "time_first": 5.067,
+      "time_last": 5.068,
+      "average_area_m2": 1.6696863368320952e-05,
+      "native_quadrature_error_estimate_m2": 2.583450489125616e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.6696863370761325e-05,
+          "estimated_error_m2": 8.221282236529816e-13,
+          "evaluations": 1176,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.6696863371816508e-05,
+          "estimated_error_m2": 4.643910885021035e-13,
+          "evaluations": 3066,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 3.4955558955197807e-15,
+      "independent_refinement_difference_m2": 1.0551828237125721e-15,
+      "event_windows": 4,
+      "closed_fraction_intervals": [
+        [
+          0,
+          0.29619500564295576
+        ]
+      ],
+      "closed_duration_fraction": 0.29619500564295576,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687500000007e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3227"
+      ],
+      "input": "out/planar-face-motion/foxtrot-047-v-3227.txt",
+      "input_sha256": "eabf6064a73efa4f58a56a130dd9a1c5ae2bef6f30d5007fae20b01ae99a430c",
+      "output": "out/planar-face-motion/foxtrot-047-v-3227.json",
+      "output_sha256": "5223e9044140cc6ffbee01b38751a7c0e7070bf9d3430c33a3f1e99060c82adc"
+    },
+    {
+      "name": "foxtrot-047-h-3563",
+      "axis": "h",
+      "face": 3563,
+      "time_first": 5.067,
+      "time_last": 5.068,
+      "average_area_m2": 1.8060731216342487e-05,
+      "native_quadrature_error_estimate_m2": 0,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.806073121634247e-05,
+          "estimated_error_m2": 2.005143963794972e-19,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.8060731216342474e-05,
+          "estimated_error_m2": 2.0051439637949722e-19,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.3552527156068805e-20,
+      "independent_refinement_difference_m2": 3.3881317890172014e-21,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.8000891319011488e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3563"
+      ],
+      "input": "out/planar-face-motion/foxtrot-047-h-3563.txt",
+      "input_sha256": "eabf6064a73efa4f58a56a130dd9a1c5ae2bef6f30d5007fae20b01ae99a430c",
+      "output": "out/planar-face-motion/foxtrot-047-h-3563.json",
+      "output_sha256": "a56374639e443dcb797e486632d36f36f09382800b310165b9cb44a3ba7df3fe"
+    },
+    {
+      "name": "foxtrot-051-v-3225",
+      "axis": "v",
+      "face": 3225,
+      "time_first": 5.071,
+      "time_last": 5.072,
+      "average_area_m2": 1.3294783183858734e-05,
+      "native_quadrature_error_estimate_m2": 1.5043305143236374e-18,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.3294783203643428e-05,
+          "estimated_error_m2": 4.806782057754705e-13,
+          "evaluations": 1176,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.3294783188283912e-05,
+          "estimated_error_m2": 1.9372044827916258e-13,
+          "evaluations": 3108,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.425177943263164e-15,
+      "independent_refinement_difference_m2": 1.535951609497356e-14,
+      "event_windows": 3,
+      "closed_fraction_intervals": [
+        [
+          0,
+          0.46263723555451064
+        ]
+      ],
+      "closed_duration_fraction": 0.46263723555451064,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687500000007e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3225"
+      ],
+      "input": "out/planar-face-motion/foxtrot-051-v-3225.txt",
+      "input_sha256": "5b6d9a25dbbd3e764ad59b6cc8a5f6d5ffd2b93a827abc3443a3a8520bc0a4fa",
+      "output": "out/planar-face-motion/foxtrot-051-v-3225.json",
+      "output_sha256": "f726d0974c65e446b25103d89d15550c4bb123c9372feb675dd92c35dc39f785"
+    },
+    {
+      "name": "foxtrot-051-h-3813",
+      "axis": "h",
+      "face": 3813,
+      "time_first": 5.071,
+      "time_last": 5.072,
+      "average_area_m2": 2.423820720322493e-05,
+      "native_quadrature_error_estimate_m2": 2.4563955470399362e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.423820719908982e-05,
+          "estimated_error_m2": 2.2367913240759584e-13,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.423820720342502e-05,
+          "estimated_error_m2": 1.3095080152536118e-14,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.0008951093219984e-16,
+      "independent_refinement_difference_m2": 4.3351993273422346e-15,
+      "event_windows": 6,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 2.4244744226035366e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3813"
+      ],
+      "input": "out/planar-face-motion/foxtrot-051-h-3813.txt",
+      "input_sha256": "5b6d9a25dbbd3e764ad59b6cc8a5f6d5ffd2b93a827abc3443a3a8520bc0a4fa",
+      "output": "out/planar-face-motion/foxtrot-051-h-3813.json",
+      "output_sha256": "49d66e2cdfc0298f18e4b0ccacc0e39756ae688557a47877aebeefbd9cae3cb6"
+    },
+    {
+      "name": "foxtrot-055-v-3484",
+      "axis": "v",
+      "face": 3484,
+      "time_first": 5.075,
+      "time_last": 5.076,
+      "average_area_m2": 2.8158365881710282e-05,
+      "native_quadrature_error_estimate_m2": 1.6771252355635147e-19,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 2.8158365872321237e-05,
+          "estimated_error_m2": 5.23354142776475e-13,
+          "evaluations": 1134,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 2.8158365872321183e-05,
+          "estimated_error_m2": 5.233541428259508e-13,
+          "evaluations": 2982,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 9.389099334166165e-15,
+      "independent_refinement_difference_m2": 5.421010862427522e-20,
+      "event_windows": 4,
+      "closed_fraction_intervals": [
+        [
+          0,
+          0.13966307032453773
+        ]
+      ],
+      "closed_duration_fraction": 0.13966307032453773,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687500000007e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3484"
+      ],
+      "input": "out/planar-face-motion/foxtrot-055-v-3484.txt",
+      "input_sha256": "6c594c8a0efae62a4cd3e6e99583385576bcf18e6f0c7ce6f3e72410cb336075",
+      "output": "out/planar-face-motion/foxtrot-055-v-3484.json",
+      "output_sha256": "f10355f59aee813db79d897fe8e30d3337dd7b1ca6eb00c8cb555836d669c3c9"
+    },
+    {
+      "name": "foxtrot-055-h-3811",
+      "axis": "h",
+      "face": 3811,
+      "time_first": 5.075,
+      "time_last": 5.076,
+      "average_area_m2": 1.79294509738168e-05,
+      "native_quadrature_error_estimate_m2": 2.4563955470448666e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 1.7929450978673704e-05,
+          "estimated_error_m2": 7.887866041931023e-15,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 1.7929450973524245e-05,
+          "estimated_error_m2": 1.0826507174568872e-14,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.925550155862683e-16,
+      "independent_refinement_difference_m2": 5.1494588758013715e-15,
+      "event_windows": 3,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.7932239495223766e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3811"
+      ],
+      "input": "out/planar-face-motion/foxtrot-055-h-3811.txt",
+      "input_sha256": "6c594c8a0efae62a4cd3e6e99583385576bcf18e6f0c7ce6f3e72410cb336075",
+      "output": "out/planar-face-motion/foxtrot-055-h-3811.json",
+      "output_sha256": "615b976af71a47a062fd2a70a2275cd35047ea77b0e88c55fb7762282ff22456"
+    },
+    {
+      "name": "foxtrot-064-v-3612",
+      "axis": "v",
+      "face": 3612,
+      "time_first": 5.084,
+      "time_last": 5.085,
+      "average_area_m2": 8.827663972869916e-06,
+      "native_quadrature_error_estimate_m2": 3.5151867311053464e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 8.827663967180069e-06,
+          "estimated_error_m2": 5.668708470023872e-13,
+          "evaluations": 1176,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 8.82766397492966e-06,
+          "estimated_error_m2": 8.070416389674563e-13,
+          "evaluations": 3066,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.0597435703654382e-15,
+      "independent_refinement_difference_m2": 7.749590831790214e-15,
+      "event_windows": 4,
+      "closed_fraction_intervals": [
+        [
+          0,
+          0.5367710429855415
+        ]
+      ],
+      "closed_duration_fraction": 0.5367710429855415,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 1.804687500000007e-05,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "3612"
+      ],
+      "input": "out/planar-face-motion/foxtrot-064-v-3612.txt",
+      "input_sha256": "c26cd0947c26a85d671a69035a54b6fa4b2111df828d290d7a89726e6fcd7f00",
+      "output": "out/planar-face-motion/foxtrot-064-v-3612.json",
+      "output_sha256": "64ef18c60d4e5d26f4d76627e3db1b2753da769056828d9bb80780558869fcc6"
+    },
+    {
+      "name": "foxtrot-064-h-3809",
+      "axis": "h",
+      "face": 3809,
+      "time_first": 5.084,
+      "time_last": 5.085,
+      "average_area_m2": 6.558471898395971e-06,
+      "native_quadrature_error_estimate_m2": 4.319868030996932e-20,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 6.558471898395958e-06,
+          "estimated_error_m2": 7.28136650795625e-20,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 6.558471898395956e-06,
+          "estimated_error_m2": 7.281366507956255e-20,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.5246593050577406e-20,
+      "independent_refinement_difference_m2": 1.6940658945086007e-21,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 6.558471898395979e-06,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-h",
+        "3809"
+      ],
+      "input": "out/planar-face-motion/foxtrot-064-h-3809.txt",
+      "input_sha256": "c26cd0947c26a85d671a69035a54b6fa4b2111df828d290d7a89726e6fcd7f00",
+      "output": "out/planar-face-motion/foxtrot-064-h-3809.json",
+      "output_sha256": "308ae58aaa48844f5da2f2f3de588b2022a027355621e97fdeeada977310a857"
+    },
+    {
+      "name": "affine-triangles-00",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.0538256862906817,
+      "native_quadrature_error_estimate_m2": 3.892188221027437e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.053825686290662894,
+          "estimated_error_m2": 8.144734886528227e-13,
+          "evaluations": 2226,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05382568629066288,
+          "estimated_error_m2": 8.144734886528227e-13,
+          "evaluations": 3948,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.8818280267396403e-14,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 7,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05310389328964445,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-00.txt",
+      "input_sha256": "47e68e1fac443b6e22ceff6e59ea4602bfacdaa247c68a86d273c4578bc39628",
+      "output": "out/planar-face-motion/affine-triangles-00.json",
+      "output_sha256": "29915010d4d3033ef404a75c6ebe1cc8fd58dc9880efe135bcae9f1211f7decb"
+    },
+    {
+      "name": "affine-triangles-01",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05963937919632473,
+      "native_quadrature_error_estimate_m2": 3.0525170065243135e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05963937919634447,
+          "estimated_error_m2": 8.927882408948624e-13,
+          "evaluations": 1848,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.059639379196344475,
+          "estimated_error_m2": 8.927882390949174e-13,
+          "evaluations": 3612,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.9748092050519972e-14,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 8,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.061876618189101285,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-01.txt",
+      "input_sha256": "25554386a203d70857bdaad609df0169ad69c076c24800141df3a623830de380",
+      "output": "out/planar-face-motion/affine-triangles-01.json",
+      "output_sha256": "0c19109e9e8f5de8ba4c0788b25a94c796267cd8c14d3e49cb31a8af45d77fa1"
+    },
+    {
+      "name": "affine-triangles-02",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.043023974640564164,
+      "native_quadrature_error_estimate_m2": 1.8583225236401546e-16,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.043023974639193864,
+          "estimated_error_m2": 7.239556176763529e-13,
+          "evaluations": 1344,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04302397463937386,
+          "estimated_error_m2": 8.251524463709359e-13,
+          "evaluations": 3150,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.1903047991701499e-12,
+      "independent_refinement_difference_m2": 1.799949078673535e-13,
+      "event_windows": 6,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.0406089665101334,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-02.txt",
+      "input_sha256": "0aff52222fb601614f2b2276a35e284d548c62e608970217a3312ffc51a89eba",
+      "output": "out/planar-face-motion/affine-triangles-02.json",
+      "output_sha256": "7bd0e343167323a6f989b2c98068e6baa6686893a9a631dc0caf58e2a6b0b896"
+    },
+    {
+      "name": "affine-triangles-03",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05965760670332625,
+      "native_quadrature_error_estimate_m2": 8.493639819251442e-16,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05965760670333661,
+          "estimated_error_m2": 3.8934437719613356e-13,
+          "evaluations": 1512,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.0596576067033366,
+          "estimated_error_m2": 3.893443759785237e-13,
+          "evaluations": 3360,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.0345890810725678e-14,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 5,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.06176379747685733,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-03.txt",
+      "input_sha256": "1010dd4d89356b6f6c2214d68864e5868b8c64887f4f8509c992849a9374b606",
+      "output": "out/planar-face-motion/affine-triangles-03.json",
+      "output_sha256": "04cf2f265c201dd4952def2a7b439e48a43caa61df47470d95f071a8c8437f45"
+    },
+    {
+      "name": "affine-triangles-04",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05527390377375538,
+      "native_quadrature_error_estimate_m2": 2.7150590803382002e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05527390377375623,
+          "estimated_error_m2": 5.027887131184041e-13,
+          "evaluations": 1092,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05527390377375626,
+          "estimated_error_m2": 5.027887131217129e-13,
+          "evaluations": 3024,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 8.81239525796218e-16,
+      "independent_refinement_difference_m2": 2.7755575615628914e-17,
+      "event_windows": 7,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05562832913942544,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-04.txt",
+      "input_sha256": "30de3fdadfe76036def192ecf0f4c0d37ef9e945aac6224c8234cb2da2f9e265",
+      "output": "out/planar-face-motion/affine-triangles-04.json",
+      "output_sha256": "524b392c2828f2011a07e11ac054da1a5d6e3f2367a11f4b627ed1091a64701a"
+    },
+    {
+      "name": "affine-triangles-05",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.04271301318073299,
+      "native_quadrature_error_estimate_m2": 9.450122975818154e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.04271301318073298,
+          "estimated_error_m2": 4.742097068436757e-16,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04271301318073299,
+          "estimated_error_m2": 4.742097068436757e-16,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 0.0,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.042134852764719365,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-05.txt",
+      "input_sha256": "50af25a3cb76ca1a19b0bfa0e41452aced71e37bb3be4c0f1006d2aab25baac7",
+      "output": "out/planar-face-motion/affine-triangles-05.json",
+      "output_sha256": "48e06e177da500cc6587e0557871da85ea1393916c696aa4ac77d8d1eb330129"
+    },
+    {
+      "name": "affine-triangles-06",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05910353372515745,
+      "native_quadrature_error_estimate_m2": 2.0001361678012586e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05910353372530293,
+          "estimated_error_m2": 8.960887587505795e-13,
+          "evaluations": 1008,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05910353372517908,
+          "estimated_error_m2": 2.399275100345934e-13,
+          "evaluations": 2982,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.1635471192382738e-14,
+      "independent_refinement_difference_m2": 1.238453783969362e-13,
+      "event_windows": 2,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.06570562952641153,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-06.txt",
+      "input_sha256": "c87443117560322679c44834b7a1184c6f16900ab1cbda09e5f6eb8bf96a4662",
+      "output": "out/planar-face-motion/affine-triangles-06.json",
+      "output_sha256": "919719d5d727ed85180129c25b421235fa64f53e7c6445151372fa0ed31238b4"
+    },
+    {
+      "name": "affine-triangles-07",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.046479466697754615,
+      "native_quadrature_error_estimate_m2": 2.8275992658421956e-16,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.04647946669766408,
+          "estimated_error_m2": 3.13020442899159e-13,
+          "evaluations": 1470,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.0464794666976641,
+          "estimated_error_m2": 3.13020442899159e-13,
+          "evaluations": 3318,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 9.05178709764698e-14,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 3,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.03909653523940508,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-07.txt",
+      "input_sha256": "9db0550a741de24ecd1235e96fa1f22ca7359eb2a6c60550ddd4b5b6be577cfe",
+      "output": "out/planar-face-motion/affine-triangles-07.json",
+      "output_sha256": "8e1dac23da3ef4c7d545181f7c4731ba3ba80cb4cad241dd19ac0eee6516ae29"
+    },
+    {
+      "name": "affine-triangles-08",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.04363923438436664,
+      "native_quadrature_error_estimate_m2": 4.640171845935251e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.043639234384349405,
+          "estimated_error_m2": 6.820038905830733e-13,
+          "evaluations": 2436,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.043639234384349405,
+          "estimated_error_m2": 6.820038930712391e-13,
+          "evaluations": 4116,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.7236212457305555e-14,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 13,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.047057946281854265,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-08.txt",
+      "input_sha256": "c189d899abd308b7b461233ce0a5b67071e0bf39a3663a53d9c46643e2230169",
+      "output": "out/planar-face-motion/affine-triangles-08.json",
+      "output_sha256": "bc393a1fb23532df9c294072f3ecf91bb98dc84ea1568c6b812228c0b8aff20f"
+    },
+    {
+      "name": "affine-triangles-09",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05244510770889005,
+      "native_quadrature_error_estimate_m2": 6.746339598073803e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05244510770889004,
+          "estimated_error_m2": 5.822576610735603e-16,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05244510770889007,
+          "estimated_error_m2": 5.822576610735603e-16,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.0816681711721685e-17,
+      "independent_refinement_difference_m2": 2.7755575615628914e-17,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05243874312956807,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-09.txt",
+      "input_sha256": "42a689988dd39837f9879b60f900c029a14ca2f590891ea6db2f767bf5129899",
+      "output": "out/planar-face-motion/affine-triangles-09.json",
+      "output_sha256": "4285522f86c3f51506ac672cbce28c6d16fe46607a03084ae62cdec61eff1a8a"
+    },
+    {
+      "name": "affine-triangles-10",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05800947996672472,
+      "native_quadrature_error_estimate_m2": 2.1697921237517903e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.058009479966721386,
+          "estimated_error_m2": 3.3744304353395295e-13,
+          "evaluations": 1596,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05800947996672802,
+          "estimated_error_m2": 3.5178804314028866e-13,
+          "evaluations": 3360,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 3.3029134982598407e-15,
+      "independent_refinement_difference_m2": 6.63358257213531e-15,
+      "event_windows": 9,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.06350964173584923,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-10.txt",
+      "input_sha256": "1af39512cb73ffe49ea3e7b559630e80d007a67e75953d878a93da79af727e9e",
+      "output": "out/planar-face-motion/affine-triangles-10.json",
+      "output_sha256": "ed90753927da91bc404a51311de761b27a6cff5ffeee12544379707489a97f68"
+    },
+    {
+      "name": "affine-triangles-11",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.052091960688939704,
+      "native_quadrature_error_estimate_m2": 2.1046532572288612e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05209196068898896,
+          "estimated_error_m2": 5.681774495336356e-13,
+          "evaluations": 1512,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.052091960688988956,
+          "estimated_error_m2": 5.681774495336356e-13,
+          "evaluations": 3360,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.925226892993351e-14,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 5,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05411481328359617,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-11.txt",
+      "input_sha256": "b9ea659ef9fcda43e08947881d2c2444f91875bf0afdaf6b4a6a92c678faaa3f",
+      "output": "out/planar-face-motion/affine-triangles-11.json",
+      "output_sha256": "7eeae322d3a848816dc96792925908fd134cc720dd17c8dca0b64a02a1375fde"
+    },
+    {
+      "name": "affine-triangles-12",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.052872648688142225,
+      "native_quadrature_error_estimate_m2": 4.7791631763161035e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05287264868814223,
+          "estimated_error_m2": 5.870043194649257e-16,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.052872648688142246,
+          "estimated_error_m2": 5.870043194649258e-16,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.0816681711721685e-17,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05364936653593299,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-12.txt",
+      "input_sha256": "74f414bfff47d84132359d2674358e04bf5a16afa32b3378dc1a4d2ed32d63cd",
+      "output": "out/planar-face-motion/affine-triangles-12.json",
+      "output_sha256": "feacc0201f935ae032814f146f5b112301614c19710a98ca508e56eff9a67c52"
+    },
+    {
+      "name": "affine-triangles-13",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05110337115531936,
+      "native_quadrature_error_estimate_m2": 5.908511527263904e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05110337115531823,
+          "estimated_error_m2": 2.2413576571731846e-13,
+          "evaluations": 1092,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05110337115531823,
+          "estimated_error_m2": 2.241357656643789e-13,
+          "evaluations": 3024,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.1310397063368782e-15,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 2,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.050983707561042174,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-13.txt",
+      "input_sha256": "410219ead682cb97b195a993d8ebaf0f2c79579e69daa8a04c25dded19436d17",
+      "output": "out/planar-face-motion/affine-triangles-13.json",
+      "output_sha256": "64115ddfbefdd45a87a0c811db588b3da27e9d97f4b07ecd36079c903ff429d1"
+    },
+    {
+      "name": "affine-triangles-14",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.06078290832818229,
+      "native_quadrature_error_estimate_m2": 2.5993530244905472e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.06078290832817162,
+          "estimated_error_m2": 5.869255555973927e-14,
+          "evaluations": 1470,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.06078290832817162,
+          "estimated_error_m2": 5.869255611560464e-14,
+          "evaluations": 3318,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.0672018824209317e-14,
+      "independent_refinement_difference_m2": 0.0,
+      "event_windows": 3,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.06254735786909377,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-14.txt",
+      "input_sha256": "782c6a71426f86dc71c611fefdd5370b8c3d262cadff0e278f3ff17825f99ec3",
+      "output": "out/planar-face-motion/affine-triangles-14.json",
+      "output_sha256": "c255697bc4fa9cebc8fb24a817ee0c0b44505844376281455e396864d1be141a"
+    },
+    {
+      "name": "affine-triangles-15",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.045727063343380135,
+      "native_quadrature_error_estimate_m2": 1.3845261742639892e-16,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.04572706334333344,
+          "estimated_error_m2": 1.5442508383145537e-13,
+          "evaluations": 1890,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04572706334333346,
+          "estimated_error_m2": 1.5442508383145537e-13,
+          "evaluations": 3654,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.6677939291583925e-14,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 11,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05156239868758962,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-15.txt",
+      "input_sha256": "b8a68a6ad13099ccef46ecec0bad54bbf50c868c9b6e9509230ba8a0c4ba4c74",
+      "output": "out/planar-face-motion/affine-triangles-15.json",
+      "output_sha256": "a25bb4600ace94cf06f46af8fed972f2855b2a3dfdd191a88f6e143eaa69d8a0"
+    },
+    {
+      "name": "affine-triangles-16",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05482821551420686,
+      "native_quadrature_error_estimate_m2": 1.6979473382860988e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05482821551418657,
+          "estimated_error_m2": 7.583753114728593e-13,
+          "evaluations": 2268,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.054828215514186575,
+          "estimated_error_m2": 7.583753121080153e-13,
+          "evaluations": 3948,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.028238688112083e-14,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 12,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.0666485117558574,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-16.txt",
+      "input_sha256": "98efb1c42079e24c871202aaad2ae0bfdb1f24a15fb8d1686ce33541a2c633d9",
+      "output": "out/planar-face-motion/affine-triangles-16.json",
+      "output_sha256": "40d01765c4c1f83ed1238184b835a1dadb65f906db28f8ad6ca7ffe27a551b2f"
+    },
+    {
+      "name": "affine-triangles-17",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.044267958298368854,
+      "native_quadrature_error_estimate_m2": 2.168404344971009e-17,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.04426795829832932,
+          "estimated_error_m2": 5.730851931872839e-13,
+          "evaluations": 1344,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04426795829832933,
+          "estimated_error_m2": 5.730851940872564e-13,
+          "evaluations": 3192,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 3.952393967665557e-14,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.04493483870067683,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-17.txt",
+      "input_sha256": "717d5d0b85b4cffe79c04c18eb1a67483fcd43033fe9d24553a93fb9665f1f98",
+      "output": "out/planar-face-motion/affine-triangles-17.json",
+      "output_sha256": "644b62c2ef3553c3333279636fa53b1f6805f4cfd69a215ada8f0b73080cbeb1"
+    },
+    {
+      "name": "affine-triangles-18",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.052642434701001405,
+      "native_quadrature_error_estimate_m2": 3.6099595535077356e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.052642434700999864,
+          "estimated_error_m2": 5.483877241196922e-13,
+          "evaluations": 1848,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05264243470099985,
+          "estimated_error_m2": 5.483877241196922e-13,
+          "evaluations": 3612,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.5543122344752192e-15,
+      "independent_refinement_difference_m2": 1.3877787807814457e-17,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.05562967422980225,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-18.txt",
+      "input_sha256": "c3ac8b83896f02f91c3f0ed13d783b0a862c7985acb7e39a6f6fbd8ff5e27b56",
+      "output": "out/planar-face-motion/affine-triangles-18.json",
+      "output_sha256": "e31f030573fb79f812a4cfdc4c6b5b991712b2355c6216c4232085bc2cffae0b"
+    },
+    {
+      "name": "affine-triangles-19",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.05546978918500765,
+      "native_quadrature_error_estimate_m2": 1.1587952819525071e-15,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.05546978918499376,
+          "estimated_error_m2": 9.637429313932601e-13,
+          "evaluations": 1428,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.055469789184993755,
+          "estimated_error_m2": 9.637429313667904e-13,
+          "evaluations": 3276,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.3891665595622271e-14,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.053455062616803835,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-19.txt",
+      "input_sha256": "ac74ad7858da2a806f075632f4428328b37ec24b1857d2500af4b7868cf25f7f",
+      "output": "out/planar-face-motion/affine-triangles-19.json",
+      "output_sha256": "6809ccd7f4c990d8aad4f845878c0604bdb16c6a0e05bcdd1b5b640621d88a54"
+    },
+    {
+      "name": "affine-triangles-20",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.061858866825872424,
+      "native_quadrature_error_estimate_m2": 2.1947721418058563e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.06185886682589774,
+          "estimated_error_m2": 6.47204512205235e-13,
+          "evaluations": 1092,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.06185886682589771,
+          "estimated_error_m2": 6.47204512205235e-13,
+          "evaluations": 3024,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 2.528532938583794e-14,
+      "independent_refinement_difference_m2": 2.7755575615628914e-17,
+      "event_windows": 5,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.06473557074293372,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-20.txt",
+      "input_sha256": "0f7406348acd87b893a3373d466ffe1e6cb1058ee8000cff1e192aa2d12e5c87",
+      "output": "out/planar-face-motion/affine-triangles-20.json",
+      "output_sha256": "231f816c9fcc01224933591d305d9186ac2bc62c17a053613bb288a98303f575"
+    },
+    {
+      "name": "affine-triangles-21",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.043528601483553295,
+      "native_quadrature_error_estimate_m2": 3.208804749688099e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.04352860148355601,
+          "estimated_error_m2": 9.970259200219068e-13,
+          "evaluations": 1638,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04352860148355282,
+          "estimated_error_m2": 8.529149608804687e-13,
+          "evaluations": 3444,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 4.718447854656915e-16,
+      "independent_refinement_difference_m2": 3.184952301893418e-15,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.048752949987474294,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-21.txt",
+      "input_sha256": "7725f77fe32755583779e30646c23323e5383d36b0663a44b7dbc73624ba5019",
+      "output": "out/planar-face-motion/affine-triangles-21.json",
+      "output_sha256": "d5c093aadb6aaaf766f317c82359c20837840c16c9b8ff523fc7d9d33faf0f2d"
+    },
+    {
+      "name": "affine-triangles-22",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.04398467235920699,
+      "native_quadrature_error_estimate_m2": 1.0335482469869817e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.043984672359208145,
+          "estimated_error_m2": 5.326185236771554e-13,
+          "evaluations": 1554,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.04398467235920814,
+          "estimated_error_m2": 5.326185250006444e-13,
+          "evaluations": 3402,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 1.1449174941446927e-15,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 4,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.044050797605993786,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-22.txt",
+      "input_sha256": "d11946f9c6bc34a82c40d164a84fc4ca8a445df19d55498371062df0fad37712",
+      "output": "out/planar-face-motion/affine-triangles-22.json",
+      "output_sha256": "f24989cff6420b62dd50fab77ccaff206af532b9c14721d048bb884ff39421c6"
+    },
+    {
+      "name": "affine-triangles-23",
+      "axis": "v",
+      "face": 1,
+      "time_first": 0.0,
+      "time_last": 1.0,
+      "average_area_m2": 0.051779940668493604,
+      "native_quadrature_error_estimate_m2": 1.0168949016176043e-14,
+      "independent": [
+        {
+          "divisions": 32,
+          "average_area_m2": 0.051779940668493604,
+          "estimated_error_m2": 5.748728234388612e-16,
+          "evaluations": 672,
+          "warning": null
+        },
+        {
+          "divisions": 128,
+          "average_area_m2": 0.05177994066849361,
+          "estimated_error_m2": 5.748728234388612e-16,
+          "evaluations": 2688,
+          "warning": null
+        }
+      ],
+      "absolute_error_m2": 6.938893903907228e-18,
+      "independent_refinement_difference_m2": 6.938893903907228e-18,
+      "event_windows": 1,
+      "closed_fraction_intervals": [],
+      "closed_duration_fraction": 0,
+      "maximum_closed_probe_area_m2": 0,
+      "endpoint_trapezoid_area_m2": 0.051990398895317536,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe",
+        "--face-v",
+        "1"
+      ],
+      "input": "out/planar-face-motion/affine-triangles-23.txt",
+      "input_sha256": "18f14e4c93ee42b23a0979c53c006059742693b48182964d5d54502fab4e69f2",
+      "output": "out/planar-face-motion/affine-triangles-23.json",
+      "output_sha256": "8a019cd15c0ce1c03574024dafc097aef0fd97c4f36d5a6e29545b81ae48f3b7"
+    }
+  ],
+  "maximum_absolute_integral_error_m2": 1.1903047991701499e-12,
+  "maximum_independent_refinement_difference_m2": 1.799949078673535e-13,
+  "hashes": {
+    "include/ducklips/planar_face_motion.hpp": "0212b82dc5baf6ec7ff9248434fdb825d214c9651c441c900aadffa8b86fad36",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "tests/planar_face_motion_tests.cpp": "642528f27c65e861658df0b8b980ff81d16cf510d9d862c1668dd4fb22324c4b",
+    "tools/planar_regions_probe.cpp": "5f1407f501e56e66913cf0c61dac641134d82797049d8e062f2d08909a1bc29e",
+    "tools/planar_face_motion_reference.py": "af6d367bfd01b383862b1ada5662bd1136d572c1ae1eeb5f87797d4b3689e7ed",
+    "tools/planar_motion_reference.py": "01ea969d334ed65cc3c4b575ab94b8842637b4d26f3fe2e8c697bcb9295810b3",
+    "build/ducklips_planar_regions_probe": "d61a26b542281b3ec440d447040d3a21b32dd07c4ddf3323e7d1466531c4b234"
+  },
+  "input_poses": {
+    "out/planar-airspace/motion/pose-5.020.json": "ec671120027e50f15c091c53df963a8c26e3c09a1297d86e9a4fd9397a214cc6",
+    "out/planar-airspace/motion/pose-5.021.json": "ea5e036ccbfdc94be899826d41e7d0f14fbc0495a97abfed1184efb05d587125",
+    "out/planar-airspace/motion/pose-5.022.json": "c375a43649e1e10ceebe847ff6402239769ec9457ca53ef053e6515500cfc6d7",
+    "out/planar-airspace/motion/pose-5.023.json": "4748959407e1b932148f450ac9401f7f2b017007974fda9eb3db528ae47d62ab",
+    "out/planar-airspace/motion/pose-5.024.json": "6289c4b23882c1a9d83c19d39885bf7654a4a3fdcf4b6c1820a076c90d73d102",
+    "out/planar-airspace/motion/pose-5.025.json": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab",
+    "out/planar-airspace/motion/pose-5.026.json": "cf1b14cab04bd3e3a1efce7d0980dfbe1ec57b92f9f01ab974d4df70643b5b7e",
+    "out/planar-airspace/motion/pose-5.027.json": "ea9867746d450e2d41acb7d1f0e8bddc0662a9432c55fd20638463c93139a7a3",
+    "out/planar-airspace/motion/pose-5.028.json": "570f13fd770c50417261402de0a425d6a09eb2b4b8c045b4d8d05151469cbea1",
+    "out/planar-airspace/motion/pose-5.029.json": "6a769e60e6e9e5bf7bd23f466d6d959aae6233332f38a5e249263961a34fc584",
+    "out/planar-airspace/motion/pose-5.030.json": "3be34a24754f74aca5ca5759a1b7308fcec43d125e0cd63104b1e762ed7b2774",
+    "out/planar-airspace/motion/pose-5.031.json": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+    "out/planar-airspace/motion/pose-5.032.json": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+    "out/planar-airspace/motion/pose-5.033.json": "5ffa51ccb3fb01fbd7343af9be13dadaeb379086e46d826ffb159c3b4ea1579b",
+    "out/planar-airspace/motion/pose-5.034.json": "6e66c83365f76dabfab3ccdd64c1a9960578cf1e73006c050df8d59eec2b76f2",
+    "out/planar-airspace/motion/pose-5.035.json": "9230c518c1cc79b0ffeac3dcd6ad52f9751be501c20ff643609d240f947e2349",
+    "out/planar-airspace/motion/pose-5.036.json": "15a11478df8f41e56d780c6d83301b702b87503dcbcf49dd614ca3d9cfa86a48",
+    "out/planar-airspace/motion/pose-5.037.json": "4c21f67debd929addd9d95515a2064b69e42dedaf45296c54d26856a9c3728cc",
+    "out/planar-airspace/motion/pose-5.038.json": "9867499099c9d80a4085147194b486c604a8c1de842439770378e76ec8a27f71",
+    "out/planar-airspace/motion/pose-5.039.json": "853a7ab27f0241f3311bc3bdb09209a0b383384c2a817fa15172a5d51a354048",
+    "out/planar-airspace/motion/pose-5.040.json": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239",
+    "out/planar-airspace/motion/pose-5.041.json": "d718a92a0045b4b061e4c5f73700c3aaac602c65963168357026ee82889f9085",
+    "out/planar-airspace/motion/pose-5.042.json": "505b8a33db6afafbda8a13934607ac15ad02e98b65b9933b281dd6d1b163e02b",
+    "out/planar-airspace/motion/pose-5.043.json": "3302a3d0e4fbeaeff6e8f3d643220caa86fdeead0573a9d363ff0c0b3eb1b599",
+    "out/planar-airspace/motion/pose-5.044.json": "61c4d4291acb611573c43e7f0429cbff59f6f40f41e2f8858c650fcf7ba5f3b5",
+    "out/planar-airspace/motion/pose-5.045.json": "f7f85b19adc339647eb4f46d2c1edd022d638500117733759007827282ce6f17",
+    "out/planar-airspace/motion/pose-5.046.json": "5d9e84363c44c8f5caab7b75110cbf21d045031388b12cdc2219024525a59d8b",
+    "out/planar-airspace/motion/pose-5.047.json": "d60a12fcc9f95ee54e53b55e04a991ace6c07db04ea26dc3c3b0edd761c6b8e4",
+    "out/planar-airspace/motion/pose-5.048.json": "9a781207ff436c010f53cbec179770e2f7de59cefffb36b377084568f832ef3a",
+    "out/planar-airspace/motion/pose-5.049.json": "133a9b4958ab128b4b08d0a09b0e8285df0748327349178adb9640d88f0f46b8",
+    "out/planar-airspace/motion/pose-5.050.json": "cc0772a00d82df43eec06be884fcadc8371ac425aa093ce27dc4f303aebcf978",
+    "out/planar-airspace/motion/pose-5.051.json": "96651bda2250f3902064676308f5d78c6d14edac8c23e872ed524eb934da297c",
+    "out/planar-airspace/motion/pose-5.052.json": "554f211a5fe4bc15b1b9616811357605fb0002559d6d18a96ff4f236eb01955a",
+    "out/planar-airspace/motion/pose-5.053.json": "a8705dfbddb1c1ed97fa635c59b5324b711f47bba8339045385c61fd384b2e41",
+    "out/planar-airspace/motion/pose-5.054.json": "1e5f693c62fe8758acec4d4941dc879c015b4494287a3a87e86383d75c6f56e4",
+    "out/planar-airspace/motion/pose-5.055.json": "fdf9df00944d7e193aa6d0f90b86d26454ee9c18442fd324e48fbec626845dc8",
+    "out/planar-airspace/motion/pose-5.056.json": "b700d015ed22f25426ad68d2478f41bdec6f223708806fb0289747594750db86",
+    "out/planar-airspace/motion/pose-5.057.json": "852f8043af17684704de2d87fb6d4ccce96cc9f42eb227b9fa34fdef92152718",
+    "out/planar-airspace/motion/pose-5.058.json": "a91bf6fff9fb4457f62a78aac037f649794afc53701eab875b153715deb1cc80",
+    "out/planar-airspace/motion/pose-5.059.json": "751cf622f0e44851913cb4debc5ced8377783af93d4b2e9a4a65ad12bc126400",
+    "out/planar-airspace/motion/pose-5.060.json": "096add39dacff6f47684e6447f6e0a740cac838f43868493039a4cfde8dc81f6",
+    "out/planar-airspace/motion/pose-5.061.json": "db1393f67315d9930ba21d44e57fc6d4fd02fefbd43b35a768c1bf72667fac54",
+    "out/planar-airspace/motion/pose-5.062.json": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+    "out/planar-airspace/motion/pose-5.063.json": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132",
+    "out/planar-airspace/motion/pose-5.064.json": "06d5d6c505856107a8c1c007b3603be0bf07483ac0c2b6391377c5bf5fa412e9",
+    "out/planar-airspace/motion/pose-5.065.json": "af9823b5baf4184a17044ae301441c0e55a25795336c54255dbc191d6f002522",
+    "out/planar-airspace/motion/pose-5.066.json": "62c0445db98e963a4ec4a63310dd56879cfe2a1798c316043bca8ea1a00bd606",
+    "out/planar-airspace/motion/pose-5.067.json": "279728e1aaf39c06528d26a5e486db239c1479c056a9a40e238b64f10e06f90b",
+    "out/planar-airspace/motion/pose-5.068.json": "700d3639276b82d4a2f21195436889e00615d861afbc56ed7adde3608428e78e",
+    "out/planar-airspace/motion/pose-5.069.json": "113a00ec46d586a3ff717cdba66c02deb3b9b474307e695d8512ebb15bdaf6b9",
+    "out/planar-airspace/motion/pose-5.070.json": "3fc32b6d14fe1f69a1f078972f759d95c61ecdccc3e27c188fd4aaf399896271",
+    "out/planar-airspace/motion/pose-5.071.json": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2",
+    "out/planar-airspace/motion/pose-5.072.json": "a1321bdc700944eb1df115d2b99884b753c8f51fd1efe629046bc162c5735e51",
+    "out/planar-airspace/motion/pose-5.073.json": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0",
+    "out/planar-airspace/motion/pose-5.074.json": "5cff2d3e9b0002c3ab518fe21843e4e831c659084ad864c49c42f27be552568e",
+    "out/planar-airspace/motion/pose-5.075.json": "ca22f3fc0643530d31630405bac36d2940cdb6b29e3d0d7d1dde21c326ffa3db",
+    "out/planar-airspace/motion/pose-5.076.json": "91860970188d5f6ddb0c0e6729b2b27aaafec1eb4a4cc8a51ddedac71deb524e",
+    "out/planar-airspace/motion/pose-5.077.json": "560201a8b9d30dfa00d8597a1974c8081cd4639c1e8ba66a7438a7239d95e607",
+    "out/planar-airspace/motion/pose-5.078.json": "7cf024f8b181f895b1c7b68a18b4ce9f492abb0febb0b73410000908c0c31492",
+    "out/planar-airspace/motion/pose-5.079.json": "9ccfece3daf503b744c4b7d366b14a8e11580e2ef196ef4ce93166fdf6499775",
+    "out/planar-airspace/motion/pose-5.080.json": "fb6bd8d441644220bce89ae15b5a517d61a4544a371131f03167d1cccf7ccecc",
+    "out/planar-airspace/motion/pose-5.081.json": "d23bba40ba44a6a3d0528732f4cac0376f19f2439f2581ffa2f4348a122ed552",
+    "out/planar-airspace/motion/pose-5.082.json": "775c92a32078645f7a68ba00391c95140a35820249f26d3b63ac7516436b56f8",
+    "out/planar-airspace/motion/pose-5.083.json": "68f90aa1bfdfb6f2a6771586408f1120256d00daf3ac9c50af21f17291e15e21",
+    "out/planar-airspace/motion/pose-5.084.json": "b99903e27e1284b8ca8e9c0cbe5069e270cc8a600e373f821abca6dbe9ebe117",
+    "out/planar-airspace/motion/pose-5.085.json": "9e81a538a042e14f274f0996f5673db285bd7241efb93e01276c7e9603ddff1f"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

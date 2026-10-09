@@ -1,6 +1,7 @@
 // stdin: nx ny solid_count depth, x edges, y edges, then domain and each
 // solid as: vertex_count followed by x y pairs. All coordinates are metres.
 #include "ducklips/planar_airspace.hpp"
+#include "ducklips/planar_face_motion.hpp"
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -12,8 +13,9 @@ void contour(ducklips::PlanarContour points){
 }
 }
 int main(int argc,char** argv){
-    const bool moving=argc==3 && std::string(argv[1])=="--between";
-    if(argc!=1 && !moving){std::fprintf(stderr,"usage: planar_regions_probe [--between FRACTION] < contours.txt\n");return 2;}
+    const bool face_mode=argc==3 && (std::string(argv[1])=="--face-v" || std::string(argv[1])=="--face-h");
+    const bool moving=argc==3 && (std::string(argv[1])=="--between" || face_mode);
+    if(argc!=1 && !moving){std::fprintf(stderr,"usage: planar_regions_probe [--between FRACTION | --face-v INDEX | --face-h INDEX] < contours.txt\n");return 2;}
     double fraction=0;
     if(moving){char* end=nullptr;fraction=std::strtod(argv[2],&end);if(end==argv[2] || *end){return 2;}}
     std::size_t nx=0,ny=0,count=0;double depth=0;
@@ -32,6 +34,20 @@ int main(int argc,char** argv){
             last[i].resize(size);for(ducklips::Point2& p:last[i]){if(std::scanf("%lf %lf",&p.x,&p.y)!=2){return 2;}}
             if(i){last_solids.emplace_back(last[i]);}
         }
+    }
+    if(face_mode){
+        char* end=nullptr;const unsigned long index=std::strtoul(argv[2],&end,10);if(end==argv[2] || *end){return 2;}
+        const bool vertical=std::string(argv[1])=="--face-v";ducklips::PlanarFace face;face.vertical=vertical;
+        if(vertical){if(index>=(nx+1)*ny || index%(nx+1)==0 || index%(nx+1)==nx){return 2;}
+            face.coordinate=x[index%(nx+1)];face.low=y[index/(nx+1)];face.high=y[index/(nx+1)+1];}
+        else{if(index>=nx*(ny+1) || index/nx==0 || index/nx==ny){return 2;}
+            face.coordinate=y[index/nx];face.low=x[index%nx];face.high=x[index%nx+1];}
+        ducklips::PlanarFaceMotion motion;motion.prepare(edges,262144);
+        if(!motion.build(polygons[0],solids,last[0],last_solids,face,depth)){std::fprintf(stderr,"face motion failed\n");return 1;}
+        std::printf("{\"average_area\":%.17g,\"error_estimate\":%.17g,\"windows\":[",motion.average_area,motion.error_estimate);
+        for(std::size_t i=0;i<motion.windows.size();++i){const auto& w=motion.windows[i];
+            std::printf("%s[%.17g,%.17g,%.17g,%.17g]",i?",":"",w.first,w.last,w.average_area,w.error_estimate);}
+        std::puts("]}");return 0;
     }
     ducklips::PlanarAirspace space;
     try{space.prepare(x,y,edges);space.prepare_regions(262144,524288);}catch(const std::exception& error){std::fprintf(stderr,"%s\n",error.what());return 2;}

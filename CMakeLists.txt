@@ -25,6 +25,7 @@ add_library(ducklips STATIC
     src/cavity_network.cpp
     src/mean_airway.cpp
     src/planar_airspace.cpp
+    src/planar_face_motion.cpp
     src/air_path.cpp
     src/voice.cpp
     src/body_config.cpp
@@ -151,3 +152,7 @@ target_link_libraries(ducklips_cavity_transport_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_regions_probe tools/planar_regions_probe.cpp)
 target_link_libraries(ducklips_planar_regions_probe PRIVATE ducklips)
+
+add_executable(ducklips_planar_face_motion_tests tests/planar_face_motion_tests.cpp)
+target_link_libraries(ducklips_planar_face_motion_tests PRIVATE ducklips)
+add_test(NAME ducklips_planar_face_motion_tests COMMAND ducklips_planar_face_motion_tests)
