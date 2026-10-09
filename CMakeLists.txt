@@ -22,6 +22,7 @@ add_library(ducklips STATIC
     src/modal_transport.cpp
     src/motion_segment.cpp
     src/sources.cpp
+    src/cavity_network.cpp
     src/air_path.cpp
     src/voice.cpp
     src/body_config.cpp
@@ -117,3 +118,10 @@ add_test(NAME ducklips_planner_tests COMMAND ducklips_planner_tests)
 
 add_executable(ducklips_tongue_reach_audit tools/tongue_reach_audit.cpp)
 target_link_libraries(ducklips_tongue_reach_audit PRIVATE ducklips)
+
+add_executable(ducklips_cavity_network_tests tests/cavity_network_tests.cpp)
+target_link_libraries(ducklips_cavity_network_tests PRIVATE ducklips)
+add_test(NAME ducklips_cavity_network_tests COMMAND ducklips_cavity_network_tests)
+
+add_executable(ducklips_cavity_network_probe tools/cavity_network_probe.cpp)
+target_link_libraries(ducklips_cavity_network_probe PRIVATE ducklips)

@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-09",
+  "source": "user listening feedback in this chat",
+  "audio": "out/nato-local-material.wav",
+  "audio_sha256": "9836e9a7b5b135b2dd030a68d24f483c0aa9d9d4078694bdeb6b18da7aa389b8",
+  "engine": "canonical moving acoustic network with conservative dorsal and local attachment material motion",
+  "source_commit": "5b7ac41291bb753ab07f744c166119ba80525c3c",
+  "raw_word_list": "alpha charlie foxtrot(clicks) GOLF india juliet november(clicks) PAPA QUEBEC UNICORN  yankee zulu",
+  "clarification": "capitals totally garbage, listed distorted, unlisted legible if mechanic",
+  "groups": {
+    "legible_but_mechanical": [
+      "Bravo",
+      "Delta",
+      "Echo",
+      "Hotel",
+      "Kilo",
+      "Lima",
+      "Mike",
+      "Oscar",
+      "Romeo",
+      "Sierra",
+      "Tango",
+      "Victor",
+      "Whiskey",
+      "X-ray"
+    ],
+    "distorted": [
+      "Alfa",
+      "Charlie",
+      "India",
+      "Juliett",
+      "Yankee",
+      "Zulu"
+    ],
+    "clicks": [
+      "Foxtrot",
+      "November"
+    ],
+    "unintelligible": [
+      "Golf",
+      "Papa",
+      "Quebec",
+      "Uniform"
+    ]
+  },
+  "counts": {
+    "legible_but_mechanical": 14,
+    "distorted": 6,
+    "clicks": 2,
+    "unintelligible": 4
+  },
+  "u_entry_note": "User wrote UNICORN. Associated with the expected Uniform slot in the alphabet; raw observation preserved. This does not establish whether UNICORN was a mishearing or a label error.",
+  "realistic_verified_count": 0,
+  "scope": "one listener, one alphabet rendering; no blinded or multi-speaker validation; listed defective words are not counted as cleanly legible"
+}

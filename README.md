@@ -9,7 +9,11 @@ configuration, not a speaker embedding or a bank of recorded sounds.
 volume-conserving tongue body to the canonical moving acoustic network and
 fixes physical and pronunciation-planning failures. Local material transport
 now resolves the tested Foxtrot attachment miss while retaining the dorsal
-contact and lower anchor. Performance optimization
+contact and lower anchor. Human listening of that alphabet found 14 words
+legible but mechanical, six distorted, two with clicks and four unintelligible;
+see the [listening record](reports/LISTENING_2026_10_09.md). A separate
+[pressure-topology correction](reports/CAVITY_TOPOLOGY.md) is tested but not
+yet connected to rendering. Performance optimization
 is parked by user instruction. Numerical stability and a plausible enhanced
 spectrogram do not establish intelligibility or human realism. See the
 [current attachment model](reports/LOCAL_TONGUE_ATTACHMENT.md), its

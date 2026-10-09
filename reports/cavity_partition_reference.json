@@ -1,0 +1,104 @@
+{
+  "scope": "prescribed two-chamber pressure reference; not production speech integration",
+  "text": "Foxtrot.",
+  "interval_seconds": [
+    0.87,
+    0.88
+  ],
+  "fixed_partition_section": 42,
+  "control_dt_seconds": 0.001,
+  "air": {
+    "density_kg_m3": 1.14,
+    "sound_speed_m_s": 350.0,
+    "viscosity_pa_s": 1.86e-05
+  },
+  "wall_compliance_m3_pa": 1e-08,
+  "wall_partition": "equal halves, illustrative",
+  "initial_pressure_pa": [
+    600.0,
+    0.0
+  ],
+  "geometry_replay_maximum_difference_cm": 0.0,
+  "geometry_replay_compared_steps": 1653,
+  "rear_volume_change_m3": 0.0,
+  "front_volume_change_m3": -9.984458764607715e-06,
+  "separate_rear_motion_effect_maximum_pa": 0.0,
+  "sealed_neck_maximum_flow_m3_s": 0.0,
+  "lumped_rear_motion_effect_final_pa": 432.5991330114239,
+  "baseline_production_interval_peak_pressure_pa": 1674.7636,
+  "final": {
+    "moving_separate": {
+      "time": 0.88,
+      "rear_pa": 625.6025938923971,
+      "front_pa": 333.8046826378315,
+      "glottal_inflow": -8.547961502428669e-06,
+      "neck_flow": 0.0,
+      "mouth_outflow": 0.000782115329595096,
+      "mass_residual": 2.1667102790765003e-18,
+      "iterations": 9.0
+    },
+    "moving_lumped": {
+      "time": 0.88,
+      "rear_pa": 1058.514305171109,
+      "front_pa": 1058.514305171109,
+      "glottal_inflow": -0.0006289766228372955,
+      "neck_flow": 0.0,
+      "mouth_outflow": 0.0,
+      "mass_residual": 1.843772530485399e-14,
+      "iterations": 2.0
+    },
+    "frozen_separate": {
+      "time": 0.88,
+      "rear_pa": 625.6025938923971,
+      "front_pa": 0.0,
+      "glottal_inflow": -8.547961502428669e-06,
+      "neck_flow": 0.0,
+      "mouth_outflow": 0.0,
+      "mass_residual": 2.1667102790765003e-18,
+      "iterations": 9.0
+    },
+    "frozen_lumped": {
+      "time": 0.88,
+      "rear_pa": 625.9151721596852,
+      "front_pa": 625.9151721596852,
+      "glottal_inflow": -1.832250881768494e-05,
+      "neck_flow": 0.0,
+      "mouth_outflow": 0.0,
+      "mass_residual": 2.733720910232107e-15,
+      "iterations": 5.0
+    }
+  },
+  "maximum_mass_residual_m3_s": 6.711341551945971e-14,
+  "inputs": {
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "samples/nato.dict": "05db9444381785cf1f193f65fbf1a597c7b4ef5dffbe79749c516617b94a6de5",
+    "out/foxtrot-local-material.csv": "14cc0dd341f3d688f2ce407a74223b7767074d2a128b037d90d9d5f7b58c025d",
+    "out/foxtrot-source-audit.csv": "96b15d2b7e32cf1e7b31c93b67a4851b6a21a374270f67b9a75d3812aca78569"
+  },
+  "native_sha256": {
+    "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+    "src/cavity_network.cpp": "a7c7d827a0e47c08808659d932707d97db47208083fdf7bc760ab86306ac7118",
+    "include/ducklips/cavity_network.hpp": "ab53d5939ef5a2667068869afd623511fb454d7770c0468bc3e0aa846f5b49af",
+    "tools/cavity_network_probe.cpp": "cf2d54070e8f04c23c3945b85bfad813ddc55e2b0dd545a0aa17a7336bfcf7f6",
+    "tools/tongue_reach_audit.cpp": "6b1109553e0590d9718ec18c3ca17e70a2da76ece76a57e1f95a2b7c6616c41b"
+  },
+  "binary_sha256": {
+    "ducklips_cavity_network_probe": "2188fbaa39cf3c98bd6f0be67da7484649d7ea373eb919cc7652ade788a2f0f9",
+    "ducklips_tongue_reach_audit": "f9cb7ce8da0bd4087ca389564c2ac4549d1cf3981dfd6cadc8d2a3488d884e2a"
+  },
+  "artifacts": {
+    "frozen-input.csv": "ef3b7cdb71af39c6581e87673edd42d777d3eeed3a57f6618a5ce1607d7166de",
+    "frozen-lumped.csv": "e34b67fcc911f8895c76ddbfafb3450dad84bffdcb9b2309b3cc7445d1fd84e0",
+    "frozen-separate.csv": "a9fcce641f72c277b5ec2e4c8f5aa7bc956b2ddfeda08e5ec89c9a6ee62bbe48",
+    "geometry.csv": "2cf060fcbf05fef2830234e02db2a404c7593a6c5662218fe70082da94106617",
+    "moving-input.csv": "14ed7930eb8a2395b9509e7c32c594a6236c48b645567381c999684fd94e57cd",
+    "moving-lumped.csv": "3ccdab15092ac5c59ed364908a9a457fa90ccf6f4289b8724dd88e8cedb7dc2f",
+    "moving-separate.csv": "d369d0525c96e9cbb091bf5316732f7cd6deae6bb52fa8c0378e59f0923a5ee1"
+  },
+  "source_baseline_commit": "5b7ac41291bb753ab07f744c166119ba80525c3c",
+  "validation": {
+    "release": "11/11 passed; followed by focused new-component rerun after prepare invalidation guard",
+    "asan_ubsan": "new cavity component 1/1 passed after final native changes",
+    "new_speech_render": "none; production pressure path remains single cavity"
+  }
+}
