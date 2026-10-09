@@ -1,11 +1,11 @@
 {
-  "scope": "six native glottal storage controls under ASan/UBSan; four focused CTests",
+  "scope": "six native glottal storage controls under ASan/UBSan; five focused CTests after displacement solver correction",
   "sanitizer_exit_code": 0,
   "ctest_exit_code": 0,
   "hashes": {
-    "out/glottal-storage/asan-checks.log": "f638fafaa9e8dcdf48a4540089680e3c6012371dd50fa147c8e71a72a0118a0d",
-    "out/glottal-storage/ctest.log": "c46e4c32001c95c0dbbcd37709838f17d4f305407585e0337c6e6ed815c621c9",
-    ".build/asan/ducklips_glottal_storage_probe": "83ece7fa6a1fcd9c8c7104758411358379a2981f6db0b7b6a54a12409f10963c",
-    "reports/glottal_storage_reference.json": "98af8e7c5f77ad6d563b679a45127c4d2fe5898b60e55951731537a54233faeb"
+    "out/glottal-storage/asan-checks.log": "54be2e0a48f5d096d14b7078a4034f5e8f98fb98d1bfa15363ad617824536164",
+    "out/graph-glottal/ctest.log": "41a084a123230f7774045428be8c3566d253fea3704d869e2f0723f9c469a14d",
+    ".build/asan/ducklips_glottal_storage_probe": "54bce8f2e240352b19595b567695be8e45fc86de25ddbaed02780be163ef7a32",
+    "reports/glottal_storage_reference.json": "025b0682c0294f4826c9e6aa39f61208bbb929d9251c01e50db08a3a23517538"
   }
 }

@@ -1,0 +1,20 @@
+{
+  "scope": "four native graph/chamber controls under ASan/UBSan; five focused CTests; 100ms forward native control",
+  "sanitizer_exit_code": 0,
+  "ctest_exit_code": 0,
+  "long_control_command": [
+    "build/ducklips_graph_glottal_probe",
+    "--trajectory",
+    "19200",
+    "0.1",
+    "forward"
+  ],
+  "long_control_exit_code": 0,
+  "hashes": {
+    "out/graph-glottal/asan-checks.log": "e7bc5ffec4284be03cfd66a838c994bc14a081cdf370bd6e1c4ec81147282a0a",
+    "out/graph-glottal/ctest.log": "41a084a123230f7774045428be8c3566d253fea3704d869e2f0723f9c469a14d",
+    "out/graph-glottal/forward-100ms.json": "ce5456856c322af37dae079e320ce0bbc8a512a817f3d0d9d67dae0f10948431",
+    ".build/asan/ducklips_graph_glottal_probe": "3188714a1360df27cf7974f4f1ccd326b5d522201c71ad36d8ebabcf18cc516b",
+    "reports/graph_glottal_reference.json": "be2a728338054e47b4c6dad67c1215cf19c521e13f7f72fe1e80d1a1e3ea4a3e"
+  }
+}

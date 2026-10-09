@@ -189,6 +189,14 @@ Prescribed flow ports have not yet been connected to passage momentum, jet
 losses or the tract. This supplies the missing storage/force constitutive
 component, not a complete replacement for the audited source trajectory.
 
+[Pressure-driven coupling](reports/GRAPH_GLOTTAL_STORAGE.md) now connects
+that storage to the tract through three inertive, dissipative passages.
+All flows are solved jointly with gas/tissue and network feedback. The
+fixed-coefficient controls conserve mass/work and converge to independent
+continuous equations. Moving passage geometry must next supply consistent
+kinetic-energy changes and forces; simply varying inertance would leave
+another missing work term. Contact and full speech integration remain open.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

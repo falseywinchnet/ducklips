@@ -1,6 +1,7 @@
 #include "ducklips/glottal_storage.hpp"
 #include <algorithm>
 #include <cmath>
+#include <limits>
 
 namespace ducklips {
 namespace {
@@ -68,51 +69,63 @@ bool GlottalStorage::advance(const std::array<double,3>& flow,double rest_area,
     std::array<double,2> v0;if(!volumes(v0)){return false;}double energy0=0;if(!energy(energy0)){return false;}
     const std::array<double,2> m1={state.mass[0]+dt*(flow[0]-flow[1]),state.mass[1]+dt*(flow[1]-flow[2])};
     for(double m:m1){if(!std::isfinite(m) || m<=0){return false;}}
-    const auto x0=positions(state.folds),velocity0=velocities(state.folds);auto x1=x0;
+    const auto x0=positions(state.folds),velocity0=velocities(state.folds);
+    // Solve the small displacement directly, rather than recovering it by
+    // subtracting two large positions at every Newton/velocity update.
+    std::array<double,4> displacement{};
     // Feasible initial guess keeps the old volume even if the rest opening
     // moves. This is a Newton starting point, not a volume floor or a state reset.
-    for(double& x:x1){x-=.5*(rest_area-state.folds.rest_area)/length_;}
+    for(double& x:displacement){x-=.5*(rest_area-state.folds.rest_area)/length_;}
     std::array<GasTransfer,2> effort;std::array<double,2> v1;
     std::array<double,4> residual{},delta{};std::array<double,16> jacobian{};
-    double norm=0,scale=0;
-    const auto evaluate=[&](const std::array<double,4>& x){
-        if(!finite(x)){return false;}norm=0;scale=0;jacobian.fill(0.);
+    double norm=0,scale=0,roundoff=0;
+    const auto evaluate=[&](const std::array<double,4>& step){
+        auto x=x0;for(std::size_t i=0;i<4;++i){x[i]+=step[i];}
+        if(!finite(step) || !finite(x)){return false;}norm=0;scale=0;roundoff=0;jacobian.fill(0.);
         for(std::size_t i=0;i<2;++i){
             v1[i]=thickness_[i]*(rest_area+length_*(x[2*i]+x[2*i+1]));
             if(!gas_.transfer(state.mass[i],v0[i],m1[i],v1[i],effort[i])){return false;}
         }
         for(std::size_t i=0;i<4;++i){
             const std::size_t cell=i/2,side=i%2,other=i<2?i+2:i-2;
-            const double dx=x[i]-x0[i],speed=dx/dt;
+            const double speed=step[i]/dt;
             const double inertial=2*tissue_mass_[i]*(speed-velocity0[i])/dt;
             const double spring=.5*stiffness_[i]*(x[i]+x0[i]);
             const double coupled=.5*coupling_[side]*(x[i]+x0[i]-x[other]-x0[other]);
             const double drag=damping_[i]*speed,force=wall_area_[cell]*effort[cell].pressure;
             residual[i]=inertial+spring+coupled+drag-force-external_force[i];
             norm=std::max(norm,std::abs(residual[i]));
-            scale=std::max(scale,2*tissue_mass_[i]*(std::abs(speed)+std::abs(velocity0[i]))/dt+std::abs(spring)+std::abs(coupled)+std::abs(drag)+std::abs(force)+std::abs(external_force[i]));
+            scale=std::max(scale,std::abs(inertial)+std::abs(spring)+std::abs(coupled)+std::abs(drag)+std::abs(force)+std::abs(external_force[i]));
+            // Subtracting close velocities has a representable
+            // force floor. Keep it separate from physical-force convergence:
+            // scaling tolerance by both large opposing inertial terms lets
+            // accepted force error grow as the time step shrinks.
+            const double subtraction=(2*tissue_mass_[i]/(dt*dt)+damping_[i]/dt)*std::abs(step[i])
+                +2*tissue_mass_[i]*std::abs(velocity0[i])/dt;
+            roundoff=std::max(roundoff,8*std::numeric_limits<double>::epsilon()*subtraction);
             jacobian[4*i+i]=2*tissue_mass_[i]/(dt*dt)+.5*(stiffness_[i]+coupling_[side])+damping_[i]/dt;
             jacobian[4*i+other]=-.5*coupling_[side];
             for(std::size_t j=2*cell;j<2*cell+2;++j){jacobian[4*i+j]-=wall_area_[cell]*wall_area_[cell]*effort[cell].pressure_volume_slope;}
         }
-        return finite(residual) && std::isfinite(norm) && std::isfinite(scale);
+        return finite(residual) && std::isfinite(norm) && std::isfinite(scale) && std::isfinite(roundoff);
     };
     std::size_t iteration=0;
     for(;iteration<64;++iteration){
-        if(!evaluate(x1)){return false;}
-        if(norm<=1e-10*scale){break;}
+        if(!evaluate(displacement)){return false;}
+        if(norm<=1e-10*scale+roundoff){break;}
         auto rhs=residual;for(double& v:rhs){v=-v;}if(!solve(jacobian,rhs,delta)){return false;}
         const double old_norm=norm;double fraction=1.;bool accepted=false;
-        for(int line=0;line<64;++line){auto trial=x1;for(std::size_t i=0;i<4;++i){trial[i]+=fraction*delta[i];}
-            if(evaluate(trial) && (norm<old_norm || norm<=1e-10*scale)){x1=trial;accepted=true;break;}fraction*=.5;
+        for(int line=0;line<64;++line){auto trial=displacement;for(std::size_t i=0;i<4;++i){trial[i]+=fraction*delta[i];}
+            if(evaluate(trial) && (norm<old_norm || norm<=1e-10*scale+roundoff)){displacement=trial;accepted=true;break;}fraction*=.5;
         }
         if(!accepted){return false;}
     }
     if(iteration==64){return false;}
+    auto x1=x0;for(std::size_t i=0;i<4;++i){x1[i]+=displacement[i];}
     GlottalStorageState next=state;next.mass=m1;next.folds.rest_area=rest_area;
     std::array<double,4> velocity1{};GlottalStorageStep receipt;
     for(std::size_t i=0;i<4;++i){
-        const double dx=x1[i]-x0[i],speed=dx/dt;velocity1[i]=2*speed-velocity0[i];
+        const double dx=displacement[i],speed=dx/dt;velocity1[i]=2*speed-velocity0[i];
         receipt.external_work+=external_force[i]*dx;receipt.damping_loss+=dt*damping_[i]*speed*speed;
         receipt.wall_work+=effort[i/2].pressure*wall_area_[i/2]*dx;
     }

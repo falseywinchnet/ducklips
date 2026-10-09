@@ -80,7 +80,7 @@ Delta (gas + mechanical energy) + tissue_damping_loss
     = port_work + rest_opening_actuator_work + external_force_work
 ```
 
-A four-coordinate implicit solve advances tissue and gas together using
+A four-displacement implicit solve advances tissue and gas together using
 midpoint mechanics and the finite-change efforts. It uses a fixed-size
 Jacobian and a positive-volume line search. A feasible Newton starting
 guess offsets the changed rest opening; it does not reset the accepted
@@ -115,12 +115,12 @@ At the finest step, halving the step reduces the normalized endpoint error
 by 3.997–4.003 across all five ODE controls, consistent with second order.
 The worst endpoint position error is `4.03e-10 m`; the worst velocity error
 is `7.75e-6 m/s`. Across all 35 trajectories the largest accumulated work
-residual is `6.61e-15 J`. The finest moving-rest case accumulates more solver
-roundoff/residual than its coarser runs; a small energy residual does not
-establish temporal accuracy. Some coarse runs have substantial phase error
+residual is `9.18e-17 J` after the displacement-solver correction described in
+[the coupled-flow report](GRAPH_GLOTTAL_STORAGE.md). A small energy residual
+does not establish temporal accuracy. Some coarse runs have substantial phase error
 despite preserving the work balance.
 
-The 960-step native controls need at most four Newton iterations per step.
+The native controls use a bounded Newton solve.
 This is a solver observation, not an end-to-end rendering-speed measurement.
 Performance optimization remains parked.
 
@@ -133,6 +133,10 @@ control, not a calibrated larynx. Their three flow ports must next connect
 to momentum/loss elements and the tract with matching power variables.
 The existing tract's linear acoustic pressure cannot simply be substituted
 for finite-compression enthalpy without checking the energy connection.
+
+Follow-up: [pressure-driven coupling](GRAPH_GLOTTAL_STORAGE.md) now solves
+these flows with fixed inertive/dissipative passages and tract feedback.
+Moving passage geometry and contact remain unfinished.
 
 The earlier instantaneous fold/orifice work gap remains evidence about the
 earlier model. The new component demonstrates a consistent storage and wall

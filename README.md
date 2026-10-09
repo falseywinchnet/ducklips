@@ -119,6 +119,12 @@ obey one work balance. Independent thermodynamic and continuous-motion
 checks pass. Its flows are still supplied inputs; connecting passage
 momentum, jet losses and the tract remains necessary before speech.
 
+[Pressure-driven chamber coupling](reports/GRAPH_GLOTTAL_STORAGE.md) now
+solves those three flows against retained passage momentum and the tract
+load. Independent continuous controls pass, including reverse flow and
+undriven decay. The passage coefficients remain fixed controls; their
+dependence on moving fold geometry and full contact is still required.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

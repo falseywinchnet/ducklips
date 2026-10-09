@@ -23,6 +23,7 @@ add_library(ducklips STATIC
     src/graph_phonation.cpp
     src/gas_storage.cpp
     src/glottal_storage.cpp
+    src/graph_glottal_storage.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
     src/motion_segment.cpp
@@ -171,6 +172,10 @@ target_link_libraries(ducklips_planar_pressure_motion_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_inertive_motion_probe tools/planar_inertive_motion_probe.cpp)
 target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)
+
+add_executable(ducklips_graph_glottal_probe tools/graph_glottal_probe.cpp)
+target_link_libraries(ducklips_graph_glottal_probe PRIVATE ducklips)
+add_test(NAME ducklips_graph_glottal_reference COMMAND ducklips_graph_glottal_probe)
 
 add_executable(ducklips_glottal_storage_probe tools/glottal_storage_probe.cpp)
 target_link_libraries(ducklips_glottal_storage_probe PRIVATE ducklips)
