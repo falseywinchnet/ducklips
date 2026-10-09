@@ -11,6 +11,7 @@ from scipy.io import wavfile
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
+from display import enhanced_rgba
 
 from oracle.fourier_unrolled_densified import (
     DEFAULT_APERTURES, DEFAULT_OFFSETS,
@@ -88,28 +89,13 @@ def main():
                         sample_rate=fs, samples=x, hop=hop, target_n_fft=n,
                         display_reference=reference,
                         ordinary_hz=np.fft.rfftfreq(n, 1 / fs))
-    panels = [
-        ("Ordinary STFT magnitude, N=2048 (own display reference)", ordinary, fs/n, ordinary_reference),
-        ("Literal double inverse: abs(cosine), N=2048", literal, df, reference),
-        ("Registered sub-hop observations, N=2048", registered, df, reference),
-        ("Full enhanced field: registered apertures + reassigned texture", texture.merged, df, reference),
-    ]
-    fig, axes = plt.subplots(4, 1, figsize=(14, 12), layout="constrained", sharex=True)
-    for ax, (title, field, step, ref) in zip(axes, panels):
-        db = 20 * np.log10(np.maximum(field / ref, 10 ** (-a.db_range / 20)))
-        im = ax.imshow(db, origin="lower", aspect="auto", interpolation="nearest",
-                       cmap="magma", vmin=-a.db_range, vmax=0,
-                       extent=(seconds[0]-hop/(2*fs), seconds[-1]+hop/(2*fs),
-                               -step/2, (field.shape[0]-.5)*step))
-        ax.set_ylim(0, hz[-1])
-        ax.set_xlim(first/fs, last/fs)
-        ax.set_ylabel("Hz")
-        ax.set_title(title, loc="left", fontsize=10)
-        fig.colorbar(im, ax=ax, label="dB re display reference")
-    axes[-1].set_xlabel("Source time (seconds)")
-    fig.suptitle(f"{a.wav.name} · visual speech analysis\nEnhanced-family panels share one amplitude display reference; no image interpolation.")
-    fig.savefig(str(a.out) + ".png", dpi=160)
-    plt.close(fig)
+    # The delivered image is ONLY the full enhanced field. Figure layouts can
+    # silently squeeze hundreds of rows into too few pixels even with nearest
+    # interpolation. Map cells directly to RGBA, repeat columns by an integer,
+    # and save without a plotting resampler. Exact axes remain in NPZ/JSON and
+    # the full-field viewer adds axes without scaling away any image cells.
+    rgba = enhanced_rgba(texture.merged, reference, a.db_range)
+    plt.imsave(str(a.out) + ".png", np.repeat(rgba, 4, axis=1))
     report = dict(source=str(a.wav.resolve()),
                   source_sha256=hashlib.sha256(a.wav.read_bytes()).hexdigest(),
                   sample_rate=int(fs), start_sample=first, end_sample=last,
@@ -119,6 +105,8 @@ def main():
                   highest_row_hz=float(hz[-1]), shape=list(texture.merged.shape),
                   display_reference=reference, ordinary_display_reference=ordinary_reference,
                   db_range=a.db_range, texture_amplitude_scale=texture.texture_amplitude_scale,
+                  png=dict(field="enhanced", colormap="magma", row_pixels=1,
+                           column_pixels=4, full_field=True),
                   elapsed_seconds=time.perf_counter()-started,
                   use="offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum")
     Path(str(a.out) + ".json").write_text(json.dumps(report, indent=2) + "\n")

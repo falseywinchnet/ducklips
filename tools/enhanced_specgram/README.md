@@ -17,10 +17,19 @@ needed. From `/Users/joshuahkuttenkuler/ducklips`:
   --start 0 --duration 1 --out out/enhanced_specgram/speech
 ```
 
-Outputs: `speech.png` (four aligned comparison panels), `speech.npz` (linear
+Outputs: `speech.png` (the full enhanced field alone, original magma colors), `speech.npz` (linear
 fields and exact axes), `speech.json` (settings, timing, source hash, display
 references). Existing filenames are overwritten if the same output prefix is
 reused; choose a different prefix for each experiment.
+
+The PNG preserves every computed frequency row and time column. Each row is
+one image pixel high and each column is four pixels wide; there is no subplot
+layout or image reduction. Use the full-field viewer in `../native_fields.py`
+for labelled axes at native cell size. Narrow displays show the complete field
+vertically rather than cropping it. Keep the original magma map, saved display
+reference, and dB range. Ordinary STFT and intermediate arrays remain available
+in the NPZ for targeted numerical diagnostics; they are not companion panels
+in the speech inspection view.
 
 The default preserves the original reference geometry: apertures 1024/2048/4096,
 hop 512 samples, target N=2048, and 256 rows. At 48 kHz it covers 0–2989.741 Hz.
@@ -102,15 +111,16 @@ it is not a replacement for this construction.
   The windows span about 21.3, 42.7, and 85.3 ms.
 - This is a deterministic transformed field. Its apparent fine structure is
   affected by cosine phase, registration, maximum fusion, reassignment, and
-  the explicit 3-by-3 average. Keep the ordinary STFT and literal field beside
-  it when deciding whether a feature represents a change in the speech output.
+  the explicit 3-by-3 average. The saved intermediate arrays allow targeted
+  numerical checks when needed; enhanced-field inspection uses the enhanced
+  field itself without automatically adding conventional comparison panels.
 - The final field has no complex synthesis phase, is not calibrated PSD or
   energy, and is not an invertible replacement for a waveform. Inspect the
   existing speech system through it; do not feed it into that system as audio.
-- The renderer uses nearest-neighbor image display. The three enhanced-family
-  panels share one amplitude display reference; the ordinary STFT has its own
-  reference because its amplitude convention differs. The original historical
-  five-row comparison used independent log normalization per representation.
+- The renderer maps each enhanced cell directly to its original magma RGBA
+  color and saves the entire matrix. It performs no spatial interpolation or
+  reduction. The original historical five-row comparison used independent log
+  normalization per representation; that layout is not the inspection default.
 - For comparisons across renders, pass the same `--display-reference VALUE`
   from a saved report and the same `--db-range`. This fixes plotting contrast;
   internal quantile matching remains part of the original algorithm, so image

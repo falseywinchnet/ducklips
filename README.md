@@ -131,9 +131,9 @@ python tools/enhanced_specgram/render.py out/nato.wav \
 ```
 
 It saves PNG, NPZ, and a JSON receipt with exact axes, parameters, source hash,
-and timing. Keep its ordinary STFT beside the enhanced field: registration and
-reassignment improve inspection but do not make an invertible spectrum, a
-calibrated energy measure, or a realism score.
+and timing. The PNG shows the complete enhanced field alone, using the original
+magma colors and display range. Every computed row is preserved. The enhanced
+field is not an invertible spectrum, calibrated energy measure, or realism score.
 
 Inspect fine structure with the native-cell viewer, not the overview PNGs:
 
@@ -142,19 +142,18 @@ python tools/native_fields.py \
   out/enhanced_specgram/nato_human.npz \
   out/enhanced_specgram/nato_generated.npz \
   --out out/enhanced_specgram/native-fields.html \
-  --crop-prefix out/enhanced_specgram/human-native
+  --png-prefix out/enhanced_specgram/full-enhanced
 ```
 
-This emits an inline visualization fragment plus optional 384×256 native PNG
-crops and an axis receipt. The viewer preserves every supplied spatial cell in
-the selected 0–8 kHz band. It shows a cropped time/frequency window at a minimum
-of one CSS pixel per enhanced row; resizing changes the crop, not the cell
-scale. Frequency and time zoom enlarge cells, and controls pan the window.
-Both methods use the same physical axes; ordinary rows occupy approximately
-twice the height of enhanced rows. The fields use independent display peaks.
-Intensity is packed at 16-bit precision across −60 to 0 dB, then mapped to an
-8-bit grayscale display; original full-precision linear NPZ fields are retained.
-Small negative values at floating-point roundoff are floored for display.
+This emits an inline visualization fragment plus optional complete color PNGs.
+The viewer displays every supplied row and time column of the enhanced field,
+with at least one CSS pixel per row and column. The plot grows vertically when
+rows are enlarged. There is no cropped viewport and no ordinary-STFT panel.
+The original saved amplitude reference and dB range determine the original
+magma colors; lossless PNG embedding preserves those colors exactly. The NPZ
+retains full-precision linear fields and the original axes. Ordinary STFT and
+intermediate fields remain available for targeted numerical investigations,
+without being added to the inspection view by default.
 
 `tools/compare_fields.py` is only a coarse timing overview. Setting
 `interpolation='nearest'` does **not** preserve details when a dense field is
