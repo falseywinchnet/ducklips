@@ -1,5 +1,9 @@
 # A closed stop must separate pressure storage
 
+Historical component experiment: the subsequent opt-in speech integration is
+documented in [SPATIAL_PRESSURE.md](SPATIAL_PRESSURE.md). The measurements below
+remain the original two-chamber reference, not results from that integration.
+
 The production renderer still assigns one mean pressure to the entire oral
 volume. Its outlet area is the narrowest oral area (plus the nasal path).
 When a tongue stop closes, motion anywhere in the mouth therefore changes

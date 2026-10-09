@@ -1,0 +1,249 @@
+{
+  "use": "experimental physical integration; not an intelligibility or realism score",
+  "launch": {
+    "command": [
+      "./build/ducklips_say",
+      "--canonical-motion",
+      "--conservative-tongue",
+      "--body",
+      "bodies/reference.body",
+      "--dictionary",
+      "samples/nato.dict",
+      "--text",
+      "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. X-ray. Yankee. Zulu.",
+      "--chunk",
+      "48",
+      "--out",
+      "out/nato-spatial-pressure.wav",
+      "--probe",
+      "out/nato-spatial-pressure.csv",
+      "--trace",
+      "4.5",
+      "out/nato-spatial-pressure-trace.csv",
+      "--report",
+      "--spatial-pressure"
+    ],
+    "sha256": {
+      "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+      "build/ducklips_say": "52c039378ca3b864db1765c5c10dc698b781c9d2a46b2378bd2403d3ca9be0cb",
+      "include/ducklips/acoustic_network.hpp": "9eed5e78beb792700e7b15121225dcb1114599fca7257f7fd89906a53a9fce2f",
+      "include/ducklips/air_path.hpp": "54c02a1dad42ea477ed6a7c8eb0549b8996fe8dd20c5f65ca041a213049fe3ee",
+      "include/ducklips/articulation.hpp": "82a1671eaed62a46d93ff34b91b5ea7ffb2f1876e1fb29364ea7608ac4bd49a5",
+      "include/ducklips/articulation_speeds.hpp": "b193955fd0ebaceade7dbaf973fb231a1bfb8297af8412964ba38a0eb6130781",
+      "include/ducklips/body_config.hpp": "e6026167c9e45be5527cdc27f80d23adc0bf3aa8782e1149b78659972f3c6c1b",
+      "include/ducklips/canonical_speech.hpp": "e4b99a983f8990a9b44e63e3cb313c2f835b87debd95b72d5310a364e965e8ec",
+      "include/ducklips/cavity_network.hpp": "fd816fa1316fd5feeabc5b785959d8d72c05534fa5ace0543aa7a1631f225711",
+      "include/ducklips/connected_speech.hpp": "a659a80e6ba9c6fadab99f2eaac4740556d118b68ccfb5c7d5d6370e147c8e5c",
+      "include/ducklips/continuous_modes.hpp": "81880825cc159963706de4146ab7bbe16603379a2c1e0058732bb6a7bdde72b7",
+      "include/ducklips/cues.hpp": "4c9e0a80cc730dc28da64fcfdfc1407c5b36557fd27976104ce8c7318a7419c9",
+      "include/ducklips/gui_forms_voice.hpp": "997ba825a4d6fe8d3546686d7631f47b2fb1dc31664d78be43c2f07d521406fc",
+      "include/ducklips/mean_airway.hpp": "4fd821fdfe344dc8190a36135fbdf72a65cf1f76e2b168d7ed255d6552ae3a65",
+      "include/ducklips/modal.hpp": "cea58d51b9bb921979ad7427180d8c2aae11c8247efa426613b6575db7480f4d",
+      "include/ducklips/modal_transport.hpp": "5d5526c9f64aab6cfbbc573c1e2c287fdced5c1fcedccf982bcb0be636808807",
+      "include/ducklips/motion_segment.hpp": "6aef5724fac1544773b6f864247eaae91d65d26773f483d473463dddefcb96e4",
+      "include/ducklips/moving_mode.hpp": "722bd74f0142eb0c337661177e36ba10b20e670a862c321a7ce5b08c10a964ee",
+      "include/ducklips/moving_tree.hpp": "84bb7058c8691b408106650b6f319c27fc29e45aaab2cf617656ae3fbfd66a8e",
+      "include/ducklips/nudges.hpp": "50a69c9906f36c5770fd687466947d07b5e7cdf3a4516ed38b75b2b0103c2f69",
+      "include/ducklips/phonetics.hpp": "5fc468bdad3ed0f8840e8da898f07943a628b29a59817016a3ae51fed32f4c2b",
+      "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+      "include/ducklips/planner.hpp": "708b4575d6e1db244f75af41fe2065f0d5d1b34e7b668b6fc54d472c863579b8",
+      "include/ducklips/sources.hpp": "49e1e7c5d96be992639b13ab5fabc9ff3d37dfd33bcdf39395b7790b5bdbbfb3",
+      "include/ducklips/synthesizer.hpp": "4e2ea4305b2bd31b02379e55856d6fbf03af4b2236166086b92b54b86bf87e08",
+      "include/ducklips/tongue.hpp": "5309d172d53dd93d3d1d2c33bbd3ba7960127f453a215bd455f335486278f235",
+      "include/ducklips/tongue_flow.hpp": "836bf3882c39d0592e348bb7faf04de4d45612bcccc0927523e36cbbde37faa9",
+      "include/ducklips/tongue_surface.hpp": "67dbde17023e7658e9a59d65e9f131658ad2206f291d1225b54c5594a7c4dc48",
+      "include/ducklips/tree_operator.hpp": "d06d519a97aba819a6810b41b428579794b79202134bbfee987573fac6155a6b",
+      "include/ducklips/voice.hpp": "4be60640f1b304320ed5a1390370be8e9147b8fbe8ed7a049e7c112db18bf599",
+      "include/ducklips/vowel_library.hpp": "1636d297e82c797df002ee56e17fe0cfcd5021717ae1500b9d5afda9b1216e5b",
+      "include/ducklips/wav.hpp": "c173a71e234e5570595deb6c91cc59f4977000c0da4c0a95aeb7a68118aae650",
+      "samples/nato.dict": "05db9444381785cf1f193f65fbf1a597c7b4ef5dffbe79749c516617b94a6de5",
+      "src/acoustic_network.cpp": "16c2eacb4a8880e315954075736d40500c9c831fcec920fd8f14bbec53526e81",
+      "src/air_path.cpp": "b1f3cc8308ade5f5ba10f03ed40481757252e9bc12c5850eb624c2e862ff29cf",
+      "src/articulation.cpp": "3f2673cf924dd57738c361ef4dce9d16e0a10760d385963b7e7097821838bd38",
+      "src/body_config.cpp": "d236591366f2707b5e221c160c5f55b2b9c6a132d0891e59c9e9ac14549476dc",
+      "src/canonical_speech.cpp": "7501214919b19db95af9c8296ecc49a707634834770904d7f59106285e6155d0",
+      "src/cavity_network.cpp": "c9c8f0ec3883037c67c36cc08673311901fae413170d32e9d8bbba110334fcfd",
+      "src/connected_speech.cpp": "69225ff4ba76951f37fe7d2d5f36cbf3f30b63b4766edd02ca8abe0496ef848e",
+      "src/continuous_modes.cpp": "1313d7e9ce96e13c7cbee6ab51f81d4f3e52f1ef58f4796f2191606499dc8e9c",
+      "src/cues.cpp": "ab593f27d6c3c958f7256f23cea0bae6ebf4b38bd644535388116d98929efd5b",
+      "src/gui_forms_voice.cpp": "82301e8667d7ed4bd3106a764fe8210db51e2271ecb0423644ece6cf06a89204",
+      "src/mean_airway.cpp": "c2138eddd18eb909fb1a5e67f9587ca62f3e8347684ea00903f7fc9a982f420e",
+      "src/modal.cpp": "c6c187f0988011ef158faf1285c0bdf180c127033058bd1d89abd8bebbab3e03",
+      "src/modal_transport.cpp": "ab92fb76594ff58b635041181b7877cc6e3e96ebb111121457b3aa8b0ace259b",
+      "src/motion_segment.cpp": "fd7fda3eb378898a036676c2694ad1801f01745e1654729ac0da3ac36c1de8c4",
+      "src/moving_mode.cpp": "13bfb6f9093bae55339aebf23a77911318e2b7e5254aaad9dcab9d31336f5874",
+      "src/moving_tree.cpp": "62d9ff74cd554cb3b06547fc699ffb8a91bffbcf09c1ee28879095c8b8860102",
+      "src/nudges.cpp": "72a492573310c616959fff50f2cc1ce03823597ec80126aa9a618fdb839ecf11",
+      "src/phonetics.cpp": "eb2975fe1510d639b952b8dc9621a5b9b2056ce5b7aa10f14203d2e33520a1f0",
+      "src/physics.cpp": "fe62f185c76f14cde53fdc23fc3a5021a1bf12dec9a3bba7c42eb97b21e976ab",
+      "src/planner.cpp": "4aedb22028237ef16bc262452b1b11d0f00d621ae17e363d93d72f24f1f47ac2",
+      "src/sources.cpp": "66167fbd6dcbd63fe5aacca8f90748046ef26ccdf8ebde8a0c78f256e0b5b4b5",
+      "src/synthesizer.cpp": "0587b38d0955bc94e5e80002c92cae87bd33569f4326b6022b736b0a3aa4b078",
+      "src/tongue.cpp": "a4cf577fc89074d90eff012f185b6cb36f8834bf419fc6fc59a464e292e99c14",
+      "src/tongue_flow.cpp": "f83873621e4270266e572b8bee2b42f127c47edb32e36921740c17b91e119590",
+      "src/tongue_surface.cpp": "8f33d2d322ea103f0e6d2779cf6e044b59c0ef8ce3b212e544d8bc2228c49a06",
+      "src/tree_operator.cpp": "cf78a2d778f7201c6c1f799e80342c97b5722066d8ee431fd5294b920a43ee86",
+      "src/voice.cpp": "df08c24c1e11a853cfd4d12ad544271d93c253e8894f9de243378a74c2e303d3",
+      "src/vowel_library.cpp": "72b9fa7b3a27e51eb189c3e5ecec1c5a1d716d3d0e75748ccd71d98d9412e560",
+      "src/wav.cpp": "ec7d81058fae761156c4a59df17254864025e06ce4417a22fefa77765c2e7e7c",
+      "tools/ducklips_say.cpp": "1f2daa0cd1a4b40b9b80d3c6d4b7a59c5b3f9ffb7752325abec1aab4058db9e6"
+    }
+  },
+  "before": {
+    "sha256": "d1042e9a5f81fa1d9f22fa4906ecb7e192befca8015c3d881951e9a277254b9f",
+    "frames": 1115472,
+    "rate": 48000,
+    "intervals": {
+      "foxtrot": {
+        "start": 4.55,
+        "end": 5.65,
+        "peak": 0.14013558626174927,
+        "rms": 0.013426996463122585,
+        "largest_left_jump": 0.2379268929362297,
+        "jump_time": 4.962041666666666
+      },
+      "november": {
+        "start": 11.7,
+        "end": 12.65,
+        "peak": 0.051292676478624344,
+        "rms": 0.01145921546266018,
+        "largest_left_jump": 0.021027139388024807,
+        "jump_time": 12.139875
+      },
+      "foxtrot_ks": {
+        "start": 4.952,
+        "end": 4.97,
+        "peak": 0.14013558626174927,
+        "rms": 0.029683874124591208,
+        "largest_left_jump": 0.2379268929362297,
+        "jump_time": 4.962041666666667
+      },
+      "foxtrot_later": {
+        "start": 5.023,
+        "end": 5.029,
+        "peak": 0.057249028235673904,
+        "rms": 0.014781175153564332,
+        "largest_left_jump": 0.10335463285446167,
+        "jump_time": 5.0245625
+      }
+    }
+  },
+  "after": {
+    "sha256": "8284f366f2df5f3496d3139f7cbbaf4a8947ad839737d6a7e40b78635083b307",
+    "frames": 1115472,
+    "rate": 48000,
+    "intervals": {
+      "foxtrot": {
+        "start": 4.55,
+        "end": 5.65,
+        "peak": 0.6241169571876526,
+        "rms": 0.013990979687855313,
+        "largest_left_jump": 0.8053819984197617,
+        "jump_time": 5.026
+      },
+      "november": {
+        "start": 11.7,
+        "end": 12.65,
+        "peak": 0.05143783241510391,
+        "rms": 0.011392144938494239,
+        "largest_left_jump": 0.020937521825544536,
+        "jump_time": 12.139770833333333
+      },
+      "foxtrot_ks": {
+        "start": 4.952,
+        "end": 4.97,
+        "peak": 0.044948678463697433,
+        "rms": 0.008397564048962075,
+        "largest_left_jump": 0.05490980111062527,
+        "jump_time": 4.962041666666667
+      },
+      "foxtrot_later": {
+        "start": 5.023,
+        "end": 5.029,
+        "peak": 0.6241169571876526,
+        "rms": 0.055954132249424665,
+        "largest_left_jump": 0.8053819984197617,
+        "jump_time": 5.026
+      }
+    }
+  },
+  "geometry_rows": 23239,
+  "maximum_printed_geometry_error": 0.0,
+  "silhouette_crossings": [
+    {
+      "time": 5.025,
+      "section": 58,
+      "ray_x_cm": 7.854501096410207,
+      "before_tip_distance_cm": 0.3323133905502065,
+      "after_tip_distance_cm": 0.3520942828802065,
+      "tip_radius_cm": 0.35,
+      "before_area_cm2": 0.33039372442056736,
+      "after_area_cm2": 8.979707508194059,
+      "section_volume_jump_mL": 2.365046737750564,
+      "total_volume_jump_mL": 2.2913092885681814
+    },
+    {
+      "time": 5.071,
+      "section": 52,
+      "ray_x_cm": 6.213876096410207,
+      "before_tip_distance_cm": 0.3214675579002071,
+      "after_tip_distance_cm": 0.43704159035020673,
+      "tip_radius_cm": 0.35,
+      "before_area_cm2": 0.29829886008008794,
+      "after_area_cm2": 10.90411064296462,
+      "section_volume_jump_mL": 2.9000266593824886,
+      "total_volume_jump_mL": 2.731570043664654
+    },
+    {
+      "time": 5.073,
+      "section": 51,
+      "ray_x_cm": 5.940438596410207,
+      "before_tip_distance_cm": 0.2698607382102072,
+      "after_tip_distance_cm": 0.3666594465002069,
+      "tip_radius_cm": 0.35,
+      "before_area_cm2": 0.25783700961544054,
+      "after_area_cm2": 11.397962085616298,
+      "section_volume_jump_mL": 3.046127950468984,
+      "total_volume_jump_mL": 2.8446069029929646
+    }
+  ],
+  "controlled_pad_reference": {
+    "model": "controlled pad and floor only; no body, blade, anatomy residual or smoothing",
+    "section": 58,
+    "tip_y_cm": 9.1231823054,
+    "jaw": 0.999999989729,
+    "rows": [
+      {
+        "tip_displacement_cm": 0.02,
+        "midpoint_volume_jump_mL": 2.3624215452918746,
+        "integrated_volume_change_mL": 0.17818820152321635,
+        "quadrature_error_mL": 2.6629809468659005e-12
+      },
+      {
+        "tip_displacement_cm": 0.002,
+        "midpoint_volume_jump_mL": 2.336010282196314,
+        "integrated_volume_change_mL": 0.017819106049737687,
+        "quadrature_error_mL": 2.2728485760126205e-12
+      },
+      {
+        "tip_displacement_cm": 0.0002,
+        "midpoint_volume_jump_mL": 2.3271796283792145,
+        "integrated_volume_change_mL": 0.0017819108905940961,
+        "quadrature_error_mL": 2.2368773500147654e-12
+      },
+      {
+        "tip_displacement_cm": 2e-05,
+        "midpoint_volume_jump_mL": 2.3243456998803924,
+        "integrated_volume_change_mL": 0.00017819108933880834,
+        "quadrature_error_mL": 2.23443485936059e-12
+      }
+    ]
+  },
+  "inputs": {
+    "out/nato-spatial-geometry.csv": "48efeb41fde9d08ac7805ec558b69ed471be9832e1d7bf2a5f4d6ad790327021",
+    "out/nato-spatial-airway.csv": "85f3269d93397fe7c1b20089ffffb502038524f96bd2274411a01562a0402f7e",
+    "out/nato-spatial-pressure.csv": "7f77fe4b8e1f1be8b06aecfe1c39153403bbfd82a18f4abd1c6a1616443db824",
+    "out/nato-spatial-pressure-launch.json": "15f289a77ff77a32790c3a0ea484fd7cbe3e09510cc59af734237dbb12c7532e"
+  },
+  "audit_source_sha256": "b8847f0c9742957febe965b48dd0bd2f3461534e4efd166d33875dee447096ec"
+}

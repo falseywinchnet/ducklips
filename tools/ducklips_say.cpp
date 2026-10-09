@@ -28,6 +28,7 @@ struct Arguments final {
     std::string probe_path{};
     bool conservative_tongue{false};
     bool canonical_motion{false};
+    bool spatial_pressure{false};
     std::size_t canonical_substeps{8};
     bool room{false};
     bool report{false};
@@ -44,6 +45,7 @@ struct Arguments final {
     double frication_gain{-1.0};
     double aspiration_gain{-1.0};
     double lung_pressure{-1.0};
+    double until{-1.0}; // diagnostic prefix; keep the complete plan and its preceding state
 };
 
 void print_usage() {
@@ -52,8 +54,9 @@ void print_usage() {
                 "                    [--probe FILE.csv] [--chunk FRAMES] [--control-block SAMPLES] [--diagnostics]\n"
                 "                    [--no-pop] [--frication-gain G] [--aspiration-gain G] [--lung-pressure PA]\n"
                 "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
+                "                    [--until SECONDS] (render a prefix of the complete plan)\n"
                 "                    [--invariant passive|charge|pressure]\n"
-                "[--canonical-motion] [--conservative-tongue] [--canonical-substeps 1..64]\n"
+                "[--canonical-motion] [--conservative-tongue] [--spatial-pressure] [--canonical-substeps 1..64]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
 
@@ -65,6 +68,8 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
             arguments.conservative_tongue=true;
         } else if (flag == "--canonical-motion") {
             arguments.canonical_motion=true;
+        } else if (flag == "--spatial-pressure") {
+            arguments.spatial_pressure=true;
         } else if (flag == "--canonical-substeps" && has_value) {
             std::istringstream parsed(values[++index]);std::string extra;
             if (!(parsed>>arguments.canonical_substeps) || (parsed>>extra) || arguments.canonical_substeps<1 || arguments.canonical_substeps>64) { return false; }
@@ -73,6 +78,10 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
             std::string extra{};
             if (!(parsed >> arguments.rate) || (parsed >> extra) || !std::isfinite(arguments.rate)
                 || arguments.rate < 0.25 || arguments.rate > 4.0) { return false; }
+        } else if (flag == "--until" && has_value) {
+            std::istringstream parsed(values[++index]);std::string extra;
+            if (!(parsed>>arguments.until) || (parsed>>extra) || !std::isfinite(arguments.until)
+                || arguments.until<1./48000 || arguments.until>86400) { return false; }
         } else if (flag == "--body" && has_value) {
             arguments.body_path = values[++index];
         } else if (flag == "--voice" && has_value) {
@@ -158,9 +167,12 @@ int main(int argc, char** argv) {
     options.conservative_tongue=arguments.conservative_tongue;
     if (options.conservative_tongue && !arguments.canonical_motion) { std::fprintf(stderr,"--conservative-tongue requires --canonical-motion\n");return 2; }
     options.canonical_motion=arguments.canonical_motion;
+    options.spatial_pressure=arguments.spatial_pressure;
+    if(options.spatial_pressure && !options.canonical_motion){std::fprintf(stderr,"--spatial-pressure requires --canonical-motion\n");return 2;}
     options.canonical_substeps=arguments.canonical_substeps;
     std::printf("tongue body: %s\n",options.conservative_tongue?"conservative material map":"rigid circle");
     std::printf("acoustic path: %s\n",options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
+    std::printf("mean airflow: %s\n",options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity");
     options.radiate_mean_flow = !arguments.no_pop;
     if (arguments.tap == "lips") {
         options.tap = ducklips::OutputTap::lips;
@@ -242,7 +254,8 @@ int main(int argc, char** argv) {
 
     const std::size_t chunk_frames = std::max<std::size_t>(arguments.chunk_frames, 1);
     const ducklips::SampleCount lookahead = ducklips::samples_from_seconds(options.rate, 0.25);
-    const ducklips::SampleCount limit = ducklips::samples_from_seconds(options.rate, plan.duration + 2.0);
+    ducklips::SampleCount limit = ducklips::samples_from_seconds(options.rate, plan.duration + 2.0);
+    if(arguments.until>0){limit=std::min(limit,ducklips::samples_from_seconds(options.rate,arguments.until));}
     std::vector<float> chunk(2 * chunk_frames, 0.0f);
     ducklips::AudioBuffer audio{};
     audio.channels = 2;
@@ -258,10 +271,11 @@ int main(int argc, char** argv) {
             next_cue += 1;
         }
         std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
-        synthesizer.render(std::span<float>(chunk));
+        const std::size_t run=std::min(chunk_frames,static_cast<std::size_t>(limit-synthesizer.position()));
+        synthesizer.render(std::span<float>(chunk.data(),2*run));
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         render_seconds += std::chrono::duration<double>(end - start).count();
-        audio.samples.insert(audio.samples.end(), chunk.begin(), chunk.end());
+        audio.samples.insert(audio.samples.end(), chunk.begin(), chunk.begin()+static_cast<std::ptrdiff_t>(2*run));
         if (probe != nullptr) {
             const ducklips::SynthesisProbe& state = synthesizer.probe();
             double time = ducklips::seconds_from_samples(options.rate, synthesizer.position());
@@ -284,6 +298,9 @@ int main(int argc, char** argv) {
     }
     if (probe != nullptr) {
         std::fclose(probe);
+    }
+    if(arguments.until>0 && !synthesizer.finished()){
+        std::printf("diagnostic prefix: stopped at %.9g s; complete plan is unchanged\n",ducklips::seconds_from_samples(options.rate,synthesizer.position()));
     }
 
     double peak = 0.0;
@@ -316,6 +333,7 @@ int main(int argc, char** argv) {
         std::printf("maximum local attachment motion: %.9g cm\n",statistics.maximum_attachment_motion);
     }
     if (options.canonical_motion) { std::printf("moving cavity maximum mass residual: %.9e m^3/s\n",statistics.maximum_cavity_mass_residual); }
+    if(options.spatial_pressure){std::printf("spatial airflow solve failures: %zu\n",statistics.airflow_failures);}
     std::printf("fold cycles %zu, peak %.3f, rms %.4f (before normalization)\n", statistics.pitch_cycles, peak, rms);
     if (arguments.diagnostics && !options.canonical_motion) {
         std::printf("worst basis orthogonality defect %.3e at %.3f s\n", statistics.worst_orthogonality,
@@ -324,11 +342,11 @@ int main(int argc, char** argv) {
     if (!arguments.trace_path.empty()) {
         std::FILE* trace = std::fopen(arguments.trace_path.c_str(), "w");
         if (trace != nullptr) {
-            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change,frication_pressure,frication_branch,constriction_area,cavity_pressure,cavity_displacement_flow,cavity_mass_residual\n");
+            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change,frication_pressure,frication_branch,constriction_area,cavity_pressure,cavity_displacement_flow,cavity_mass_residual,oral_mean_flow,nasal_mean_flow,constriction_flow\n");
             const std::vector<ducklips::TraceSample>& samples = synthesizer.trace();
             for (std::size_t index = 0; index < samples.size(); ++index) {
                 double time = arguments.trace_start + static_cast<double>(index) / options.rate.samples_per_second;
-                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%zu,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
+                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%zu,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
                              samples[index].nostrils, samples[index].throat, samples[index].glottal_pressure,
                              samples[index].energy, samples[index].modes, samples[index].glottal_area,
                              samples[index].glottal_flow, samples[index].tension, samples[index].geometry_lip_metric_jump,
@@ -336,7 +354,8 @@ int main(int argc, char** argv) {
                              samples[index].geometry_lip_slope_jump, samples[index].geometry_energy_ratio,
                              samples[index].geometry_parameter_change, samples[index].frication_pressure, samples[index].frication_branch,
                              samples[index].constriction_area, samples[index].cavity_pressure,
-                             samples[index].cavity_displacement_flow,samples[index].cavity_mass_residual);
+                             samples[index].cavity_displacement_flow,samples[index].cavity_mass_residual,
+                             samples[index].oral_mean_flow,samples[index].nasal_mean_flow,samples[index].constriction_flow);
             }
             std::fclose(trace);
         }
@@ -349,6 +368,7 @@ int main(int argc, char** argv) {
     if (synthesizer.statistics().geometry_failures) {
         std::fprintf(stderr,"geometry audit failed at %.6f s: %s; diagnostic WAV retained\n",synthesizer.statistics().geometry_failure_time,synthesizer.statistics().geometry_error);return 1;
     }
+    if(synthesizer.statistics().airflow_failures){std::fprintf(stderr,"spatial airflow solve failed at %.6f s, residual %.12g m^3/s after %zu iterations; diagnostic WAV retained\n",statistics.airflow_failure_time,statistics.airflow_failure_residual,statistics.airflow_failure_iterations);return 1;}
     if (synthesizer.statistics().nonfinite_samples || synthesizer.statistics().clipped_samples) {
         std::fprintf(stderr,"output audit failed; diagnostic WAV retained\n");return 1;
     }

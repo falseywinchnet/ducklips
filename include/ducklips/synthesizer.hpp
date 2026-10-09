@@ -5,6 +5,7 @@
 #include "ducklips/cues.hpp"
 #include "ducklips/modal.hpp"
 #include "ducklips/canonical_speech.hpp"
+#include "ducklips/mean_airway.hpp"
 #include "ducklips/sources.hpp"
 #include "ducklips/tree_operator.hpp"
 #include "ducklips/voice.hpp"
@@ -23,6 +24,7 @@ enum class OutputTap { microphones, lips, glottal_source };
 struct SynthesisOptions final {
     bool conservative_tongue{false}; // material body map; explicit research option
     bool canonical_motion{false}; // experimental full physical moving-state path
+    bool spatial_pressure{false}; // experimental local mean-pressure/flow coupling; requires canonical motion
     std::size_t canonical_substeps{8};
     SynthesisRate rate{};
     std::size_t oral_sections{64};
@@ -45,6 +47,10 @@ struct SynthesisOptions final {
 };
 
 struct SynthesisStatistics final {
+    std::size_t airflow_failures{};
+    double airflow_failure_time{};
+    double airflow_failure_residual{};
+    std::size_t airflow_failure_iterations{};
     std::size_t geometry_failures{};
     const char* geometry_error{nullptr};
     double geometry_failure_time{};
@@ -93,6 +99,7 @@ struct TraceSample final {
     double cavity_pressure{};
     double cavity_displacement_flow{};
     double cavity_mass_residual{};
+    double oral_mean_flow{},nasal_mean_flow{},constriction_flow{};
 };
 
 // Values from the most recent control block, for diagnostics.
@@ -177,6 +184,7 @@ private:
     bool canonical_ready_{false};
     TwoMassGlottis glottis_{};
     IntraoralPressure intraoral_{};
+    MeanAirway mean_airway_{};
     TurbulenceNoise aspiration_noise_{};
     TurbulenceNoise frication_noise_{};
     SlowNoise jitter_noise_{};

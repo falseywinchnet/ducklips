@@ -7,13 +7,20 @@
 #include <cmath>
 #include <algorithm>
 #include <charconv>
+#include <fstream>
+#include <iomanip>
 #include <string>
 int main(int argc,char** argv) {
- if(argc!=4 && argc!=6){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] > trajectory.csv\n");return 2;}
+ if(argc<4 || argc%2!=0){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] [--airway CSV] > trajectory.csv\n");return 2;}
  std::size_t partition=0;
- if(argc==6){
-  const std::string value=argv[5];const auto parsed=std::from_chars(value.data(),value.data()+value.size(),partition);
-  if(std::string(argv[4])!="--partition" || parsed.ec!=std::errc{} || parsed.ptr!=value.data()+value.size() || partition==0){std::fprintf(stderr,"invalid partition section\n");return 2;}
+ std::ofstream airway_file;
+ for(int arg=4;arg<argc;arg+=2){
+  if(std::string(argv[arg])=="--partition"){
+   const std::string value=argv[arg+1];const auto parsed=std::from_chars(value.data(),value.data()+value.size(),partition);
+   if(parsed.ec!=std::errc{} || parsed.ptr!=value.data()+value.size() || partition==0){std::fprintf(stderr,"invalid partition section\n");return 2;}
+  }else if(std::string(argv[arg])=="--airway" && !airway_file.is_open()){
+   airway_file.open(argv[arg+1]);if(!airway_file){std::fprintf(stderr,"cannot write airway CSV\n");return 2;}
+  }else{std::fprintf(stderr,"unknown or repeated option\n");return 2;}
  }
  ducklips::VoiceProfile voice=ducklips::baritone_voice();std::string error;
  if(!ducklips::load_body_config(argv[1],voice,error)){std::fprintf(stderr,"%s\n",error.c_str());return 2;}
@@ -28,6 +35,11 @@ int main(int argc,char** argv) {
  ducklips::ArticulatorState state;state.apply_speeds(voice.speeds);state.place_vowel(engine.vowels().shape(ducklips::Phone::AX));
  ducklips::TractModel model;model.prepare(voice,options.oral_sections,options.nasal_sections);model.set_conservative_body(true);
  ducklips::TractShape airway;model.allocate(airway);std::size_t cue=0,phone=0;
+ if(airway_file.is_open()){
+  airway_file<<std::setprecision(17)<<"time,narrowest_section,oral_volume";
+  for(std::size_t i=0;i<airway.oral_area.size();++i){airway_file<<",area_"<<i<<",length_"<<i;}
+  airway_file<<'\n';
+ }
  std::printf("time,phone,body_activation,body_place,body_gap,body_width,tip_activation,tip_place,tip_gap,tip_down,posture_x,posture_y,jaw,blade,offset_x,offset_y,root_x,root_y,tip_x,tip_y,miss,overlap,drag_x,drag_y,attachment_motion");
  if(partition){std::printf(",partition_section,upstream_volume,downstream_volume,neck_area,front_area,neck_length");}
  std::puts("");
@@ -43,6 +55,11 @@ int main(int argc,char** argv) {
   const ducklips::TongueShape& s=model.tongue();
   const ducklips::Point2 pull=model.required_drag();state.body_offset_x.target=pull.x;state.body_offset_y.target=pull.y;
   const double time=ducklips::seconds_from_samples(options.rate,sample);while(phone+1<plan.phones.size() && plan.phones[phone+1].start<=time)++phone;
+  if(airway_file.is_open()){
+   airway_file<<time<<','<<model.narrowest_section()<<','<<model.oral_volume();
+   for(std::size_t i=0;i<airway.oral_area.size();++i){airway_file<<','<<airway.oral_area[i]<<','<<airway.oral_length[i];}
+   airway_file<<'\n';
+  }
   const ducklips::ConstrictionSlotState& b=state.slot[2];const ducklips::ConstrictionSlotState& t=state.slot[1];
   const double bg=ducklips::MidsagittalTongue::gap_from_area(b.target_area.value*1e4,17.5-b.place.value*100);
   const double tg=ducklips::MidsagittalTongue::gap_from_area(t.target_area.value*1e4,17.5-t.place.value*100);
@@ -62,4 +79,5 @@ int main(int argc,char** argv) {
   }
   std::puts("");
  }
+ if(airway_file.is_open() && !airway_file){std::fprintf(stderr,"failed writing airway CSV\n");return 1;}
 }

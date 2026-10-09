@@ -110,6 +110,8 @@ int main() {
     check(canonical_whole.engine().statistics().factorizations==0,"canonical speech never enters the old modal solver");
     check(canonical_whole.submit("1 pitch 140 70",error),"new nudge accepted after canonical rendering begins");
     canonical_whole.render(std::span<float>(a.data(),960));
+    for(bool spatial:{false,true}){
+    canonical_options.spatial_pressure=spatial;
     canonical_options.conservative_tongue=true;canonical_options.diagnostics=true;
     canonical_whole.prepare(body,1,4096,canonical_options);
     canonical_options.diagnostics=false;canonical_chunks.prepare(body,1,4096,canonical_options);
@@ -120,16 +122,18 @@ int main() {
     }
     constexpr std::size_t material_frames=14400;
     before=allocations.load();canonical_whole.render(std::span<float>(a.data(),2*material_frames));
-    check(allocations.load()==before,"conservative tongue and diagnostics allocate no render storage");
+    check(allocations.load()==before,spatial?"spatial airflow and conservative tongue allocate no render storage":"conservative tongue and diagnostics allocate no render storage");
     for (std::size_t frame=0;frame<material_frames;) {
         const std::size_t run=std::min<std::size_t>(17,material_frames-frame);
         canonical_chunks.render(std::span<float>(b.data()+2*frame,2*run));frame+=run;
     }
-    check(std::equal(a.begin(),a.begin()+2*material_frames,b.begin()),"conservative tongue output is independent of host chunks and diagnostics");
+    check(std::equal(a.begin(),a.begin()+2*material_frames,b.begin()),spatial?"spatial airflow output is independent of host chunks and diagnostics":"conservative tongue output is independent of host chunks and diagnostics");
     const ducklips::SynthesisStatistics& material_stats=canonical_whole.engine().statistics();
-    check(!material_stats.geometry_failures && !material_stats.nonfinite_samples && !material_stats.clipped_samples,
+    check(!material_stats.airflow_failures && !material_stats.geometry_failures && !material_stats.nonfinite_samples && !material_stats.clipped_samples,
           "combined body and tip nudges pass geometry and output audits");
-    check(material_stats.maximum_cavity_mass_residual<1e-12,"conservative tongue retains moving cavity balance");
+    check(material_stats.maximum_cavity_mass_residual<(spatial?1e-10:1e-12),"conservative tongue retains moving cavity balance");
+    }
+    canonical_options.spatial_pressure=false;
     ducklips::Synthesizer invalid_geometry{};invalid_geometry.prepare(body,canonical_options);
     ducklips::Cue unsupported{};unsupported.kind=ducklips::CueKind::constriction;unsupported.slot=ducklips::ConstrictionSlot::tongue_body;
     unsupported.gesture.place_from_lips=.10;unsupported.gesture.width=.009;unsupported.value=1;unsupported.angular_rate=120;

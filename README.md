@@ -13,9 +13,12 @@ contact and lower anchor. Human listening of that alphabet found 14 words
 legible but mechanical, six distorted, two with clicks and four unintelligible;
 see the [listening record](reports/LISTENING_2026_10_09.md). The canonical
 renderer now removes [unphysical history in fully closed passages](reports/CLOSED_PASSAGE_HISTORY.md).
-The preceding listening result does not score that new rendering. A separate
-[pressure-topology correction](reports/CAVITY_TOPOLOGY.md) is tested but not
-yet connected to rendering. Performance optimization
+The preceding listening result does not score subsequent renderings. The
+[spatial pressure experiment](reports/SPATIAL_PRESSURE.md) now connects local
+pressure storage and airflow to this engine. It reduces one Foxtrot transient
+but worsens another, exposing a discontinuity in the midpoint airway-area
+measurement when the tip passes a section. It remains opt-in research.
+Performance optimization
 is parked by user instruction. Numerical stability and a plausible enhanced
 spectrogram do not establish intelligibility or human realism. See the
 [current attachment model](reports/LOCAL_TONGUE_ATTACHMENT.md), its
@@ -48,6 +51,15 @@ solve stops rendering; it does not substitute the rigid body. The blade still
 has a fixed length; local body deformation now advances its attachment when
 needed. This is conservative kinematics, not calibrated muscle dynamics.
 See [LOCAL_TONGUE_ATTACHMENT.md](reports/LOCAL_TONGUE_ATTACHMENT.md).
+
+Add `--spatial-pressure` to either canonical CLI to exercise pressure storage
+on the airway tree, local constriction flow, and separate mouth/nose outflow.
+It requires `--canonical-motion`. Solver failure stops the render explicitly.
+This experiment is not a new listening-approved voice: its remaining geometry
+transients are documented in [SPATIAL_PRESSURE.md](reports/SPATIAL_PRESSURE.md).
+For diagnostics, `ducklips_say --until SECONDS` renders a prefix of the full
+plan without changing its preceding cues. The geometry replay tool accepts
+`--airway CSV` to export every oral section's area and length at each block.
 
 ## Build
 

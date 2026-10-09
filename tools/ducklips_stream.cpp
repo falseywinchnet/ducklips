@@ -24,6 +24,8 @@ int main(int argc, char** argv) {
             options.conservative_tongue=true;
         } else if (flag == "--canonical-motion") {
             options.canonical_motion=true;
+        } else if (flag == "--spatial-pressure") {
+            options.spatial_pressure=true;
         } else if (flag == "--body" && i + 1 < argc) {
             if (!ducklips::load_body_config(argv[++i], voice, error)) { std::cerr << error << '\n'; return 2; }
         } else if (flag == "--speed" && i + 1 < argc) {
@@ -31,15 +33,17 @@ int main(int argc, char** argv) {
             std::string extra{};
             if (!(value >> speed) || (value >> extra) || !std::isfinite(speed) || speed < .25 || speed > 4) { return 2; }
         } else {
-            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] [--conservative-tongue] < nudges > stereo.f32\n";
+            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] [--conservative-tongue] [--spatial-pressure] < nudges > stereo.f32\n";
             return 2;
         }
     }
     if (options.conservative_tongue && !options.canonical_motion) { std::cerr << "--conservative-tongue requires --canonical-motion\n";return 2; }
+    if(options.spatial_pressure && !options.canonical_motion){std::cerr<<"--spatial-pressure requires --canonical-motion\n";return 2;}
     std::cerr << "tongue body: " << (options.conservative_tongue?"conservative material map":"rigid circle") << '\n';
     ducklips::NudgeStream stream{};
     stream.prepare(voice, speed,4096,options);
     std::cerr << "acoustic path: " << (options.canonical_motion ? "canonical moving network" : "compact modal") << '\n';
+    std::cerr << "mean airflow: " << (options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity") << '\n';
     std::array<float, 960> chunk{};
     std::string line{};
     std::size_t line_number = 0;
@@ -67,6 +71,7 @@ int main(int argc, char** argv) {
             std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
             stream.render(std::span<float>(chunk.data(), count * 2));
             if (stream.engine().statistics().geometry_failures) { std::cerr << "geometry audit failed: " << stream.engine().statistics().geometry_error << '\n';return 1; }
+            if(stream.engine().statistics().airflow_failures){std::cerr<<"spatial airflow solve failed at "<<stream.engine().statistics().airflow_failure_time<<" s\n";return 1;}
             render_seconds += std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
             if (std::fwrite(chunk.data(), sizeof(float), count * 2, stdout) != count * 2) { return 1; }
         }

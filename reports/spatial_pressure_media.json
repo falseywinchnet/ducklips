@@ -1,0 +1,106 @@
+{
+  "foxtrot": {
+    "metadata": {
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/nato-spatial-pressure.wav",
+      "source_sha256": "8284f366f2df5f3496d3139f7cbbaf4a8947ad839737d6a7e40b78635083b307",
+      "sample_rate": 48000,
+      "start_sample": 218400,
+      "end_sample": 271200,
+      "channel": "mean",
+      "apertures": [
+        1024,
+        2048,
+        4096
+      ],
+      "offsets": [
+        -379,
+        -241,
+        -64,
+        0,
+        83,
+        214,
+        427
+      ],
+      "target_n_fft": 2048,
+      "hop": 512,
+      "rows": 684,
+      "row_spacing_hz": 11.72447484123107,
+      "highest_row_hz": 8007.81631656082,
+      "shape": [
+        684,
+        104
+      ],
+      "display_reference": 0.015974152821882408,
+      "ordinary_display_reference": 14.426727792638015,
+      "db_range": 70.0,
+      "texture_amplitude_scale": 0.9721435383186475,
+      "png": {
+        "field": "enhanced",
+        "colormap": "magma",
+        "row_pixels": 1,
+        "column_pixels": 4,
+        "full_field": true
+      },
+      "elapsed_seconds": 12.098720875103027,
+      "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+    },
+    "exact_pixel_match": true,
+    "excerpt": {
+      "file": "out/foxtrot-spatial-pressure-context.wav",
+      "sha256": "484634b02c7c7a753008a7ba4e57bccd124e1451befae288814e29b46570eefb",
+      "exact_original_samples": true
+    }
+  },
+  "november": {
+    "metadata": {
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/nato-spatial-pressure.wav",
+      "source_sha256": "8284f366f2df5f3496d3139f7cbbaf4a8947ad839737d6a7e40b78635083b307",
+      "sample_rate": 48000,
+      "start_sample": 561600,
+      "end_sample": 607200,
+      "channel": "mean",
+      "apertures": [
+        1024,
+        2048,
+        4096
+      ],
+      "offsets": [
+        -379,
+        -241,
+        -64,
+        0,
+        83,
+        214,
+        427
+      ],
+      "target_n_fft": 2048,
+      "hop": 512,
+      "rows": 684,
+      "row_spacing_hz": 11.72447484123107,
+      "highest_row_hz": 8007.81631656082,
+      "shape": [
+        684,
+        90
+      ],
+      "display_reference": 0.015974152821882408,
+      "ordinary_display_reference": 9.054206271455223,
+      "db_range": 70.0,
+      "texture_amplitude_scale": 0.9294021355412724,
+      "png": {
+        "field": "enhanced",
+        "colormap": "magma",
+        "row_pixels": 1,
+        "column_pixels": 4,
+        "full_field": true
+      },
+      "elapsed_seconds": 9.481575458310544,
+      "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+    },
+    "exact_pixel_match": true,
+    "excerpt": {
+      "file": "out/november-spatial-pressure-context.wav",
+      "sha256": "2f251b38faee9ef151abacc932b98f7128fa468cebb4cafd546280c25a798e24",
+      "exact_original_samples": true
+    }
+  }
+}

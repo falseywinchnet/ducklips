@@ -86,5 +86,35 @@ int main() {
     valid=tree.reset(tv,tc,tp);for (std::size_t i=0;i<200;++i) { valid=valid&&tree.advance(tv,tc,te,ti,.001,air).converged; }
     double tree_error=0;for (double value:tree.pressures()) { tree_error=std::max(tree_error,std::abs(value-100)); }
     check(valid && tree_error<1e-7,"branched cavity tree reaches charge-weighted equilibrium",tree_error);
+    ducklips::CavityNetwork sensitive{};
+    const std::array<ducklips::CavityConnection,1> connection{{{0,1}}};sensitive.prepare(2,connection);
+    const std::array<double,2> sv{1e-5,1e-5},sc{1e-8,1e-8},sp{273,273},si{1e-8,-1e-8};
+    const std::array<ducklips::CavityPassage,1> passage{{{1e-4,.001,0,0,0}}};
+    sensitive.reset(sv,sc,sp);report=sensitive.advance(sv,sc,passage,si,1./48000,air);
+    check(report.converged && report.maximum_mass_residual<1e-10 && std::abs(sensitive.flows()[0]-1e-8)<1e-10,
+          "high conductance converges within pressure representation error",report.maximum_mass_residual);
+    check(std::abs(sensitive.pressures()[0]+sensitive.pressures()[1]-546)<1e-12,
+          "roundoff-aware solve preserves total isolated charge",sensitive.pressures()[0]+sensitive.pressures()[1]-546);
+    // Pressure reversals and reopening mix linear and directional quadratic
+    // passages. With fixed volume and no nodal source, pressures must remain
+    // within the initial/reservoir bounds, regardless of the Newton path.
+    constexpr std::size_t count=12;ducklips::CavityNetwork switching{};
+    std::vector<ducklips::CavityConnection> slinks{{0,ducklips::cavity_reservoir}};
+    std::vector<ducklips::CavityPassage> sports{{2.5e-5,1e5,600}};
+    for(std::size_t i=0;i+1<count;++i){slinks.push_back({i,i+1});sports.push_back({1e-4,i%2?.001:1e5,0,i%2?0.:1.,i%2?1.:0.});}
+    slinks.push_back({count-1,ducklips::cavity_reservoir});sports.push_back({1e-4,1e5,0});
+    std::vector<double> vv(count,1e-5),cc(count),pp(count),ii(count,0);
+    for(std::size_t i=0;i<count;++i){cc[i]=double(i+1)*1e-10;pp[i]=i%2?600:0;}
+    switching.prepare(count,slinks);valid=switching.reset(vv,cc,pp);mass_error=0;double excess=0;
+    for(std::size_t step=0;step<100;++step){
+        sports[0].reservoir_pressure=(step/10)%2?-600:600;sports[5].area=step%20>=10 && step%20<15?0:1e-4;
+        double old_charge=0;for(std::size_t i=0;i<count;++i){old_charge+=cc[i]*switching.pressures()[i];}
+        report=switching.advance(vv,cc,sports,ii,.001,air);valid=report.converged&&valid;
+        double charge=0;for(std::size_t i=0;i<count;++i){charge+=cc[i]*switching.pressures()[i];excess=std::max(excess,std::abs(switching.pressures()[i])-600);}
+        mass_error=std::max(mass_error,std::abs(charge-old_charge+.001*(switching.flows().front()+switching.flows().back())));
+    }
+    check(valid,"reversing and reopening passive network converges");
+    check(excess<1e-7,"reversing and reopening passive network obeys pressure bounds",excess);
+    check(mass_error<1e-13,"reversing and reopening passive network conserves mass",mass_error);
     return failures?1:0;
 }

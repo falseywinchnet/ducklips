@@ -43,6 +43,7 @@ float finite_sample(double value, SynthesisStatistics& statistics) noexcept {
 void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& options) {
     if (options.canonical_substeps<1 || options.canonical_substeps>64) { throw std::invalid_argument("canonical substeps outside [1,64]"); }
     if (options.conservative_tongue && !options.canonical_motion) { throw std::invalid_argument("conservative tongue requires canonical motion"); }
+    if (options.spatial_pressure && !options.canonical_motion) { throw std::invalid_argument("spatial pressure requires canonical motion"); }
     voice_ = voice;
     options_ = options;
     air_ = options.air;
@@ -69,6 +70,7 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
         model_.build(articulators_,geometry_shape_);
         networks_[0].assemble(geometry_shape_,air_,voice_.losses);
         canonical_.prepare(networks_[0],air_);
+        if(options.spatial_pressure){mean_airway_.prepare(networks_[0],geometry_shape_,air_,voice.static_wall_compliance);}
     }
     air_path_.prepare(options.air_path, air_, options.rate);
     queue_.prepare(options.cue_capacity);
@@ -150,6 +152,7 @@ void Synthesizer::reset() noexcept {
     }
     glottis_.reset(voice_.folds);
     intraoral_.reset();
+    if(options_.spatial_pressure){mean_airway_.reset();}
     resonator_.clear();
     canonical_ready_=false;
     if (options_.canonical_motion) { canonical_.reset(); }
@@ -382,6 +385,7 @@ void Synthesizer::begin_block() noexcept {
     previous_cavity_volume_=cavity_volume_;
     cavity_volume_=model_.oral_volume();
     cavity_compliance_=cavity_volume_/bulk_stiffness+voice_.static_wall_compliance;
+    if(options_.spatial_pressure){mean_airway_.target(shape_);}
     if (options_.canonical_motion && !canonical_ready_) {
         previous_cavity_compliance_=cavity_compliance_;
         previous_cavity_volume_=cavity_volume_;
@@ -416,7 +420,7 @@ void Synthesizer::begin_block() noexcept {
     flow_sum_ = 0.0;
     area_sum_ = 0.0;
     probe_samples_ = 0;
-    probe_.intraoral_pressure = intraoral_.pressure();
+    probe_.intraoral_pressure = options_.spatial_pressure?mean_airway_.pressure():intraoral_.pressure();
     probe_.lung_pressure = lung_pressure_;
     probe_.intended_pitch = intended;
     probe_.measured_pitch = measured_pitch_;
@@ -596,6 +600,7 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
     std::array<double, radiator_count> radiated{};
     std::array<double, microphone_count> microphone{};
     for (std::size_t frame = 0; frame < frames; ++frame) {
+        const double ramp = (block_length - static_cast<double>(block_remaining_ - frame) + 1.0) / block_length;
         articulators_.advance_physiology(period);
         const double effort = std::clamp(articulators_.effort.value, 0.3, 2.0);
         lung_pressure_ = articulators_.lung_pressure.value * effort * shimmer_multiplier_;
@@ -622,17 +627,33 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         }
         glottal_area_ = area;
         track_pitch(area);
-        double cavity = intraoral_.pressure();
+        double cavity = options_.spatial_pressure?mean_airway_.pressure():intraoral_.pressure();
         double constriction_jet = std::sqrt(2.0 * std::fabs(cavity) / air_.density);
-        double frication = frication_scale_ * turbulence_pressure(constriction_jet, constriction_diameter, air_)
-            * area_strength * frication_noise_.next();
+        const std::size_t constriction=model_.narrowest_section();
+        double local_diameter=constriction_diameter,local_strength=area_strength,constriction_flow=0;
+        double local_frication_scale=frication_scale_;
+        std::size_t source_branch=frication_branch_;
+        if(options_.spatial_pressure){
+            const double local_area=mean_airway_.oral_area(constriction);
+            constriction_flow=mean_airway_.oral_flow(constriction);
+            constriction_jet=local_area>1e-12?std::abs(constriction_flow)/local_area:0;
+            local_diameter=2*std::sqrt(std::max(local_area,0.)/pi);
+            local_strength=std::sqrt(std::max(local_area,0.)/(.1*square_centimetre));
+            if(constriction_flow<0){
+                // A reversing jet cannot strike the forward teeth obstacle.
+                source_branch=networks_[current_].oral_branch(constriction>0?constriction-1:0);
+                local_frication_scale=voice_.frication_gain;
+            }
+        }
+        double frication = local_frication_scale * turbulence_pressure(constriction_jet, local_diameter, air_)
+            * local_strength * frication_noise_.next();
 
         // Free acoustic evolution with series pressure sources.
         double free_pressure = 0.0;
         if (options_.canonical_motion) {
             const double fraction=(block_length-double(block_remaining_-frame))/block_length;
             canonical_.free_step(networks_[1-current_],networks_[current_],fraction,1/block_length,period,
-                                 options_.canonical_substeps,aspiration_branch_,frication_branch_,aspiration,frication);
+                                 options_.canonical_substeps,aspiration_branch_,source_branch,aspiration,frication);
         }
         for (std::size_t mode = 0; mode < modes; ++mode) {
             double series = resonator_.aspiration_weight[mode] * aspiration + resonator_.frication_weight[mode] * frication;
@@ -655,7 +676,19 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
             half_impedance=canonical_.load_impedance();
             free_drop=lung_pressure_-cavity-canonical_.load_pressure()+half_impedance*mean_flow_;
         }
-        double flow = orifice_flow(area, free_drop, half_impedance, air_);
+        double flow = 0,glottal_mean_pressure=cavity;
+        CavityStepReport airflow_step{};
+        if(options_.spatial_pressure){
+            airflow_step=mean_airway_.advance(ramp,area,lung_pressure_-canonical_.load_pressure()+half_impedance*mean_flow_,half_impedance,period);
+            if(!airflow_step.converged){
+                ++statistics_.airflow_failures;statistics_.airflow_failure_time=seconds_from_samples(options_.rate,position_);
+                statistics_.airflow_failure_residual=airflow_step.maximum_mass_residual;
+                statistics_.airflow_failure_iterations=airflow_step.iterations;
+                std::fill(stereo.begin()+static_cast<std::ptrdiff_t>(2*frame),stereo.end(),0.f);
+                position_+=static_cast<SampleCount>(frames-frame);finish_time_=position_;return;
+            }
+            flow=mean_airway_.glottal_flow();glottal_mean_pressure=mean_airway_.glottal_load_pressure();
+        }else{flow=orifice_flow(area, free_drop, half_impedance, air_);}
         double fluctuation = flow - mean_flow_;
 
         double next_pressure = 0.0;
@@ -679,9 +712,9 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
             nostrils=canonical_.flow_derivative(layout.nostril_branch(),period);
             for (std::size_t node=0;node<layout.oral_sections();++node) { throat+=canonical_.flow_derivative(layout.wall_branch(node),period); }
         }
-        transglottal_ = lung_pressure_ - cavity - 0.5 * (glottal_pressure_ + next_pressure);
+        transglottal_ = lung_pressure_ - glottal_mean_pressure - 0.5 * (glottal_pressure_ + next_pressure);
         if (options_.canonical_motion) {
-            transglottal_=lung_pressure_-cavity-canonical_.load_pressure()-canonical_.load_impedance()*fluctuation;
+            transglottal_=lung_pressure_-glottal_mean_pressure-canonical_.load_pressure()-canonical_.load_impedance()*fluctuation;
         }
         glottal_pressure_ = next_pressure;
         glottal_flow_ = flow;
@@ -690,13 +723,16 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
 
         // Aerodynamics on the slow flow. Outlet areas ramp across the block so
         // the radiated mean-flow derivative has no block-rate steps.
-        double ramp = (static_cast<double>(block_length) - static_cast<double>(block_remaining_ - frame) + 1.0) / block_length;
         double oral_area = previous_oral_outlet_ + ramp * (oral_outlet_ - previous_oral_outlet_);
         double nasal_area = previous_nasal_outlet_ + ramp * (nasal_outlet_ - previous_nasal_outlet_);
         // The cavity conserves mass, so it receives the true glottal flow; a
         // lagging mean would overfill it past lung pressure during closures.
         double vented,displacement_flow=0,mass_residual=0;
-        if (options_.canonical_motion) {
+        if(options_.spatial_pressure){
+            vented=mean_airway_.pressure();mass_residual=airflow_step.maximum_mass_residual;
+            displacement_flow=(cavity_volume_-previous_cavity_volume_)/(block_length*period);
+            statistics_.maximum_cavity_mass_residual=std::max(statistics_.maximum_cavity_mass_residual,mass_residual);
+        }else if (options_.canonical_motion) {
             const double change=cavity_compliance_-previous_cavity_compliance_;
             const double first=previous_cavity_compliance_+(ramp-1/block_length)*change;
             const double last=previous_cavity_compliance_+ramp*change;
@@ -718,9 +754,11 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         // outflow follows the glottal pulses when the tract is open; those
         // already reach the air through the modes, so only its slow part
         // (the same two-pole 20 Hz smoothing) is radiated here.
-        oral_stage_ += mean_coefficient_ * (oral_area * jet - oral_stage_);
+        const double oral_mean_flow=options_.spatial_pressure?mean_airway_.lip_flow():oral_area*jet;
+        const double nasal_mean_flow=options_.spatial_pressure?mean_airway_.nasal_flow():nasal_area*jet;
+        oral_stage_ += mean_coefficient_ * (oral_mean_flow - oral_stage_);
         double oral_outflow = previous_oral_outflow_ + mean_coefficient_ * (oral_stage_ - previous_oral_outflow_);
-        nasal_stage_ += mean_coefficient_ * (nasal_area * jet - nasal_stage_);
+        nasal_stage_ += mean_coefficient_ * (nasal_mean_flow - nasal_stage_);
         double nasal_outflow = previous_nasal_outflow_ + mean_coefficient_ * (nasal_stage_ - previous_nasal_outflow_);
         if (options_.radiate_mean_flow) {
             lips += (oral_outflow - previous_oral_outflow_) / period;
@@ -746,9 +784,10 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
                                          .geometry_lip_slope_jump = geometry_lip_slope_jump_,
                                          .geometry_energy_ratio = geometry_energy_ratio_,
                                          .geometry_parameter_change = geometry_parameter_change_,
-                                         .frication_pressure = frication, .frication_branch = frication_branch_,
+                                         .frication_pressure = frication, .frication_branch = source_branch,
                                          .constriction_area = constriction_area_, .cavity_pressure = cavity,
-                                         .cavity_displacement_flow = displacement_flow, .cavity_mass_residual = mass_residual});
+                                         .cavity_displacement_flow = displacement_flow, .cavity_mass_residual = mass_residual,
+                                         .oral_mean_flow=oral_mean_flow,.nasal_mean_flow=nasal_mean_flow,.constriction_flow=constriction_flow});
         }
         geometry_lip_metric_jump_ = 0.0;
         geometry_lip_projection_jump_ = 0.0;
@@ -785,10 +824,10 @@ void Synthesizer::render(std::span<float> stereo) noexcept {
     const std::size_t frames = stereo.size() / 2;
     std::size_t frame = 0;
     while (frame < frames) {
-        if (block_remaining_ == 0 && !statistics_.geometry_failures) {
+        if (block_remaining_ == 0 && !statistics_.geometry_failures && !statistics_.airflow_failures) {
             begin_block();
         }
-        if (statistics_.geometry_failures) {
+        if (statistics_.geometry_failures || statistics_.airflow_failures) {
             std::fill(stereo.begin()+static_cast<std::ptrdiff_t>(2*frame),stereo.end(),0.0f);
             position_+=static_cast<SampleCount>(frames-frame);finish_time_=position_;return;
         }
