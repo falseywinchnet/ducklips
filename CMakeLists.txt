@@ -93,3 +93,6 @@ add_test(NAME ducklips_modal_transport_reference COMMAND ducklips_modal_transpor
 add_executable(ducklips_motion_segment_probe tools/motion_segment_probe.cpp)
 target_link_libraries(ducklips_motion_segment_probe PRIVATE ducklips)
 add_test(NAME ducklips_motion_segment_reference COMMAND ducklips_motion_segment_probe)
+
+add_executable(ducklips_tongue_geometry_probe tools/tongue_geometry_probe.cpp)
+target_link_libraries(ducklips_tongue_geometry_probe PRIVATE ducklips)

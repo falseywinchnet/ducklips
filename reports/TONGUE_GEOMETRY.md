@@ -92,3 +92,7 @@ Source hashes, the native limit comparison, geometry measurements and render
 logs are recorded in [tongue_geometry_reference.json](tongue_geometry_reference.json).
 Performance work remains deferred by user instruction. Anatomical fidelity,
 perceptual pronunciation and the final throughput goal remain unfinished.
+
+The subsequent [constrained tissue experiment](TONGUE_TISSUE.md) tests a
+deforming replacement and records why neither global area conservation nor
+the current elementwise-constrained solver is sufficient for integration.
