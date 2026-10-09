@@ -4,6 +4,19 @@
 
 namespace ducklips {
 
+FoldState TwoMassGlottis::state() const noexcept {
+    return {lower_position_,lower_velocity_,upper_position_,upper_velocity_,rest_area_};
+}
+bool TwoMassGlottis::restore(const FoldState& state) noexcept {
+    for(const auto& values:{state.lower_position,state.lower_velocity,state.upper_position,state.upper_velocity}){
+        for(double value:values){if(!std::isfinite(value)){return false;}}
+    }
+    if(!std::isfinite(state.rest_area)){return false;}
+    lower_position_=state.lower_position;lower_velocity_=state.lower_velocity;
+    upper_position_=state.upper_position;upper_velocity_=state.upper_velocity;rest_area_=state.rest_area;
+    return true;
+}
+
 void TwoMassGlottis::reset(const FoldParameters& folds) noexcept {
     folds_ = folds;
     strips_ = std::clamp<std::size_t>(folds.strips, 1, maximum_fold_strips);

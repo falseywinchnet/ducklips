@@ -11,6 +11,8 @@
 #include "ducklips/moving_graph.hpp"
 #include "ducklips/lip_profile.hpp"
 #include "ducklips/graph_orifice.hpp"
+#include "ducklips/graph_phonation.hpp"
+#include "ducklips/body_config.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -40,6 +42,12 @@ void sample(const Polygons& first,const Polygons& last,double t,Polygons& result
     }}
 }
 std::vector<PlanarContour> views(const Polygons& p){std::vector<PlanarContour> r;for(const auto& c:p){r.emplace_back(c);}return r;}
+void fold_state(const ducklips::TwoMassGlottis& folds){
+    const auto s=folds.state();
+    std::printf(",\"fold_state\":[%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g,%.17g]",
+        s.lower_position[0],s.lower_position[1],s.lower_velocity[0],s.lower_velocity[1],
+        s.upper_position[0],s.upper_position[1],s.upper_velocity[0],s.upper_velocity[1],s.rest_area);
+}
 void values(const char* name,std::span<const double> a){
     std::printf(",\"%s\":[",name);for(std::size_t i=0;i<a.size();++i){std::printf("%s%.17g",i?",":"",a[i]);}std::putchar(']');
 }
@@ -195,13 +203,15 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 
 }
 int main(int argc,char** argv){
-    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false;
+    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false;
+    std::string fold_body;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
         else if(arg=="--lip-profile" && !lip_mode){lip_mode=true;profile_mode=true;}
         else if(arg=="--epilarynx" && !epi_mode){epi_mode=true;}
         else if(arg=="--glottal-orifice" && !orifice_mode){orifice_mode=true;}
+        else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--initial-state" && !initial_state){initial_state=true;}
         else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
         else{return 2;}
@@ -305,9 +315,10 @@ int main(int argc,char** argv){
             if(std::find(selected.begin(),selected.end(),b.edge)==selected.end()){selected.push_back(b.edge);}
         }
     }
-    double glottal_area=0,reservoir_pressure=0;
+    double glottal_area=0,reservoir_pressure=0,tension=1,surface_pressure=0;
     if(orifice_mode && (std::scanf("%lf %lf",&glottal_area,&reservoir_pressure)!=2 || !std::isfinite(glottal_area)
-        || glottal_area<0 || !std::isfinite(reservoir_pressure))){return 2;}
+        || (!fold_mode && glottal_area<0) || !std::isfinite(reservoir_pressure))){return 2;}
+    if(fold_mode && (std::scanf("%lf %lf",&tension,&surface_pressure)!=2 || !std::isfinite(tension) || tension<=0 || !std::isfinite(surface_pressure))){return 2;}
     const std::size_t total_nodes=nodes+lip.sections.size()+epi.sections.size();
     initial.resize(total_nodes,0.);
     if(lip_mode && total_nodes>256){return 2;}
@@ -316,7 +327,8 @@ int main(int argc,char** argv){
         +(epi_mode?epi.attachments.size()+epi.sections.size()-1:0);std::vector<double> series(channels,0.);
     for(std::size_t i=0;i<loads.size();++i){series[ports.size()+i]=-loads[i].pressure;}
     ducklips::PlanarAirspace geometry;ducklips::PlanarFaceMotion face_motion;
-    ducklips::MovingTreeReference acoustic;ducklips::MovingGraphReference passive;ducklips::GraphOrifice source;
+    ducklips::MovingTreeReference acoustic;ducklips::MovingGraphReference passive;ducklips::GraphOrifice orifice;
+    ducklips::GraphPhonation phonation;auto& source=fold_mode?phonation.source:orifice;
     auto& graph=orifice_mode?source.state:passive;
     try{
         geometry.prepare(x,y,edges);geometry.prepare_regions(262144,524288);face_motion.prepare(edges,262144);
@@ -330,7 +342,11 @@ int main(int argc,char** argv){
             const std::size_t base=nodes+lip.sections.size();
             for(const auto& b:epi.attachments){branches.push_back({b.region,base});}
             for(std::size_t i=1;i<epi.sections.size();++i){branches.push_back({base+i-1,base+i});}
-            if(orifice_mode){source.prepare(total_nodes,branches,total_nodes-1);}else{graph.prepare(total_nodes,branches);}
+            if(fold_mode){
+                ducklips::VoiceProfile body;std::string error;
+                if(!ducklips::load_body_config(fold_body,body,error)){std::fprintf(stderr,"%s\n",error.c_str());return 2;}
+                phonation.prepare(total_nodes,branches,total_nodes-1,body.folds);
+            }else if(orifice_mode){source.prepare(total_nodes,branches,total_nodes-1);}else{graph.prepare(total_nodes,branches);}
         }
         else{acoustic.prepare(nodes,branches);}
     }
@@ -352,6 +368,11 @@ int main(int argc,char** argv){
         for(double& q:charge){if(std::scanf("%lf",&q)!=1 || !std::isfinite(q)){return 2;}}
         for(double& m:momentum){if(std::scanf("%lf",&m)!=1 || !std::isfinite(m)){return 2;}}
         if(orifice_mode && (std::scanf("%lf",&source.momentum)!=1 || !std::isfinite(source.momentum))){return 2;}
+        if(fold_mode){
+            ducklips::FoldState s;
+            if(std::scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf",&s.lower_position[0],&s.lower_position[1],&s.lower_velocity[0],&s.lower_velocity[1],
+                &s.upper_position[0],&s.upper_position[1],&s.upper_velocity[0],&s.upper_velocity[1],&s.rest_area)!=9 || !phonation.folds.restore(s)){return 2;}
+        }
         for(std::size_t i=0;i<channels;++i){if(gend[i]==0){momentum[i]=0;}}
     }
     const auto snapshot=[&](){if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
@@ -381,7 +402,7 @@ int main(int argc,char** argv){
     std::putchar(']');
     if(profile_mode){values("lip_contact_cuts",lip_contact_cuts);}
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
-    snapshot();if(orifice_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}std::printf("},\"steps\":[");
+    snapshot();if(orifice_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
     constexpr double offset=.28867513459481288225;
     for(std::size_t step=1;step<cuts.size();++step){
@@ -405,11 +426,19 @@ int main(int argc,char** argv){
         if(orifice_mode){
             const double midpoint=.5*(t0+t1);const auto& e=epi.sections.back();
             const double inlet_inertance=ducklips::AirProperties{}.density*.5*std::lerp(e.first_length,e.last_length,midpoint)/std::lerp(e.first_area,e.last_area,midpoint);
-            if(!source.advance(c1,c2,g1,g2,dt,glottal_area,reservoir_pressure,inlet_inertance,ducklips::AirProperties{},inflow,series)){
+            const bool advanced=fold_mode?
+                phonation.advance(c1,c2,g1,g2,dt,glottal_area,tension,reservoir_pressure,inlet_inertance,surface_pressure,ducklips::AirProperties{},inflow,series):
+                source.advance(c1,c2,g1,g2,dt,glottal_area,reservoir_pressure,inlet_inertance,ducklips::AirProperties{},inflow,series);
+            if(!advanced){
                 std::fprintf(stderr,"glottal source solve failed\n");return 1;
             }
             std::printf(",\"source_flow\":%.17g,\"source_pressure\":%.17g,\"source_impedance\":%.17g",source.flow,source.load_pressure,source.load_impedance);
             std::printf(",\"source_momentum\":%.17g,\"source_inertance\":%.17g",source.momentum,inlet_inertance);
+            if(fold_mode){
+                fold_state(phonation.folds);
+                std::printf(",\"glottal_midpoint_area\":%.17g,\"transglottal_pressure\":%.17g,\"coupling_residual\":%.17g,\"coupling_iterations\":%zu",
+                    phonation.midpoint_area,phonation.transglottal_pressure,phonation.coupling_residual,phonation.iterations);
+            }
         }
         else if(lip_mode){if(!graph.advance(c1,c2,g1,g2,dt,inflow,series)){std::fprintf(stderr,"shared-lip solve failed\n");return 1;}}
         else{acoustic.advance(c1,c2,g1,g2,dt,inflow,series);}

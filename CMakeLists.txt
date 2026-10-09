@@ -20,6 +20,7 @@ add_library(ducklips STATIC
     src/moving_tree.cpp
     src/moving_graph.cpp
     src/graph_orifice.cpp
+    src/graph_phonation.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
     src/motion_segment.cpp
@@ -168,6 +169,10 @@ target_link_libraries(ducklips_planar_pressure_motion_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_inertive_motion_probe tools/planar_inertive_motion_probe.cpp)
 target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)
+
+add_executable(ducklips_graph_phonation_probe tools/graph_phonation_probe.cpp)
+target_link_libraries(ducklips_graph_phonation_probe PRIVATE ducklips)
+add_test(NAME ducklips_graph_phonation_reference COMMAND ducklips_graph_phonation_probe)
 
 add_executable(ducklips_graph_orifice_probe tools/graph_orifice_probe.cpp)
 target_link_libraries(ducklips_graph_orifice_probe PRIVATE ducklips)

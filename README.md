@@ -102,8 +102,16 @@ The [throat and source connection](reports/PLANAR_SOURCE.md) now adds the
 existing epilarynx sections and an implicit held-aperture glottal inlet to
 that same stored-air network. It includes source-path inertia and pressure
 feedback, with independent mass, energy and continuous-equation checks.
-Dynamic folds and tract losses remain unfinished, and the moving inviscid
-controls still need temporal convergence; this is not yet a speech path.
+The moving inviscid controls still need temporal convergence; this is not
+yet a speech path.
+
+[Moving vocal folds](reports/GRAPH_PHONATION.md) now couple to that source
+with pressure feedback within each step and complete state continuation.
+Independent calculations agree, but a work audit exposes an unresolved
+exchange between the inherited fold forces and the algebraic glottis during
+closure. Internal glottal storage/displacement and matching pressure work
+need resolution before this source can be treated as physically complete.
+No new listening result is attributed to it.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

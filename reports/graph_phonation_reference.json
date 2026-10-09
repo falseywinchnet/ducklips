@@ -1,0 +1,182 @@
+{
+  "use": "dynamic fold and total-flow pressure coupling; no speech-quality claim",
+  "runs": [
+    {
+      "steps": 144,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "144",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-144.json",
+      "output_sha256": "e31bd32a6879b1bfa78ed0f57fb6fce4900dc4994784064dc54becd2fbac723b",
+      "maximum_pressure_error_Pa": 0.08625682607009821,
+      "maximum_flow_error_m3_s": 7.21793718119274e-08,
+      "maximum_fold_position_error_m": 1.5398653675467586e-07,
+      "maximum_fold_velocity_error_m_s": 1.257558062389523e-05,
+      "normalized_error": 0.0015398653675467585,
+      "refinement_ratio": null
+    },
+    {
+      "steps": 288,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "288",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-288.json",
+      "output_sha256": "367b41dc546281b5a39b51d2bfd4232509d6fd5aeb53481cb9631b4c91333f37",
+      "maximum_pressure_error_Pa": 0.05611744533504748,
+      "maximum_flow_error_m3_s": 3.7065400641689175e-08,
+      "maximum_fold_position_error_m": 7.706680223112494e-08,
+      "maximum_fold_velocity_error_m_s": 6.3414587764560465e-06,
+      "normalized_error": 0.0007706680223112494,
+      "refinement_ratio": 1.998091685351976
+    },
+    {
+      "steps": 576,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "576",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-576.json",
+      "output_sha256": "1c28334e720d9f7bece390a1a02624a56314a8603e5e157168d38f9dd14b28b5",
+      "maximum_pressure_error_Pa": 0.030681210715684415,
+      "maximum_flow_error_m3_s": 1.8742442297391506e-08,
+      "maximum_fold_position_error_m": 3.8556561024388e-08,
+      "maximum_fold_velocity_error_m_s": 3.186801939249889e-06,
+      "normalized_error": 0.00038556561024388,
+      "refinement_ratio": 1.9987986527734731
+    },
+    {
+      "steps": 1152,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "1152",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-1152.json",
+      "output_sha256": "e002a614d33a9f9ab66c51f64a23fd8575f56b4ec6d84c0e72eaed1b17b3fc0e",
+      "maximum_pressure_error_Pa": 0.011908953373861664,
+      "maximum_flow_error_m3_s": 9.103152756660508e-09,
+      "maximum_fold_position_error_m": 1.9303611858711457e-08,
+      "maximum_fold_velocity_error_m_s": 1.606607759687545e-06,
+      "normalized_error": 0.00019303611858711457,
+      "refinement_ratio": 1.9973754811583588
+    },
+    {
+      "steps": 2304,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "2304",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-2304.json",
+      "output_sha256": "f1e7a4eb79c8a06f7106ea70f0d2160cc9305893e787cf7336b723051436d9a6",
+      "maximum_pressure_error_Pa": 0.004009012996235128,
+      "maximum_flow_error_m3_s": 4.400501426817709e-09,
+      "maximum_fold_position_error_m": 9.663306001009422e-09,
+      "maximum_fold_velocity_error_m_s": 8.090212716346801e-07,
+      "normalized_error": 9.663306001009422e-05,
+      "refinement_ratio": 1.997619847358142
+    },
+    {
+      "steps": 4608,
+      "duration_s": 0.003,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "4608",
+        "0.003"
+      ],
+      "output": "out/graph-phonation/continuous-4608.json",
+      "output_sha256": "3edaf8a922c724ed83b6a7ef11514e492830a95cfda78c076e1ad43696e28c0d",
+      "maximum_pressure_error_Pa": 0.0014171219118139788,
+      "maximum_flow_error_m3_s": 2.1547033482400895e-09,
+      "maximum_fold_position_error_m": 4.835007441814055e-09,
+      "maximum_fold_velocity_error_m_s": 4.061636310493527e-07,
+      "normalized_error": 4.835007441814055e-05,
+      "refinement_ratio": 1.9986124359270538
+    }
+  ],
+  "discrete": {
+    "steps": 2400,
+    "duration_s": 0.025,
+    "command": [
+      "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+      "--trajectory",
+      "2400",
+      "0.025"
+    ],
+    "output": "out/graph-phonation/discrete-2400.json",
+    "output_sha256": "34b5985c16a4180654419d96e05f3a7b2eef84e6e0175416342c4f5e707f8eef",
+    "maximum_pressure_error_Pa": 2.1053467125148665e-08,
+    "maximum_momentum_error_Pa_s": 2.3430701823201616e-12,
+    "source_momentum_error_Pa_s": 7.67353574345625e-15,
+    "maximum_fold_state_error": 2.314995417584953e-12,
+    "transglottal_error_Pa": 2.2517042452818714e-08,
+    "aperture_range_m2": [
+      5.219613129176252e-40,
+      1.4419909325432723e-05
+    ]
+  },
+  "continuous_prefix_s": 0.003,
+  "oracle_final": [
+    -83.20252072215607,
+    -67.49254886235768,
+    -83.30180036175668,
+    -2.584019655179143e-05,
+    -3.8608407781558886e-05,
+    -0.00010315827014566157,
+    8.26975454356088e-05,
+    0.00011719902568634082,
+    2.4590204917470118e-05,
+    0.02870950009172275,
+    6.986156751754935e-06,
+    0.008292517256506895
+  ],
+  "oracle_refinement": [
+    7.105427357601002e-14,
+    4.973799150320701e-13,
+    3.268496584496461e-13,
+    2.608861477543245e-19,
+    1.4230153513872246e-19,
+    8.673617379884035e-19,
+    6.098637220230962e-19,
+    4.0657581468206416e-20,
+    5.421010862427522e-20,
+    1.3183898417423734e-16,
+    3.5575383784680614e-20,
+    1.734723475976807e-18
+  ],
+  "native_checks": "out/graph-phonation/native-checks.log",
+  "native_checks_sha256": "dd683003a3081d058d6d1e87b6ea3278e3eb8717f85fd08010b4cef80e9cd5af",
+  "hashes": {
+    "src/graph_phonation.cpp": "c907627814c3c4a99e52363459d09e7bfa0a5c23e120fdfa6e09ec63280d3210",
+    "include/ducklips/graph_phonation.hpp": "d52c3c2a08501dccda0c9292fb4910411323d908622cebd6a0db86cba3fdbbbf",
+    "src/graph_orifice.cpp": "c41b2e62f1ff58a541d46dcddb0a9fc5b381b57ca455cd9adf56f66c71c48b56",
+    "include/ducklips/graph_orifice.hpp": "87aebe95fb91fb63cb5813b39fe39f61298fdca85d40ed513e79fde324d67dbc",
+    "src/sources.cpp": "d78e4365c8373b54f1e46bfec72997e51286af0c64b3647b14aed4070b5fe85d",
+    "include/ducklips/sources.hpp": "fe89057806121ba08016cf51c660788bcb3cf8c12fbc6f7d1b24936a25dcb4d9",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "tools/graph_phonation_probe.cpp": "eb1d21424bb648c2499c7520135b79244220c991c9555547b2f88f254a186af2",
+    "tools/graph_phonation_reference.py": "932c021e18ff497dfd0fcd18f6abd03dd4370cef094f7af86b6696ce66e77916",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "build/ducklips_graph_phonation_probe": "2b2d90fa3fd574d2fbb6927e6e56b7ff4d6abc411eb5117c6af2bde163014fce"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3"
+  }
+}

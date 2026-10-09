@@ -10,6 +10,10 @@ This is a held-aperture integration control. It does not yet move the vocal
 folds, replace the production speech path or produce a new recording. The
 latest listening result remains November improved, Foxtrot jammed at /tr/.
 
+Subsequent [moving-fold integration](GRAPH_PHONATION.md) adds dynamic tissue
+feedback and identifies a remaining glottal work-accounting gap. The fixed-
+aperture results below retain their original scope.
+
 ## Source law and stored air
 
 The source solves against the network's average pressure over the step,

@@ -1,0 +1,84 @@
+{
+  "finding": "unresolved: inherited fold aerodynamic work exceeds instantaneous orifice port work during parts of closure",
+  "interpretation": "The current algebraic glottis has no internal air-storage/displacement state to account for this interval work difference. Total net orifice work remains larger over the whole control; this is not a claim of net energy creation over 25 ms.",
+  "work_accounting_complete": false,
+  "cases": [
+    {
+      "steps": 2400,
+      "dt_s": 1.0416666666666668e-05,
+      "duration_s": 0.025,
+      "fold_aerodynamic_work_J": 4.766969696994667e-05,
+      "orifice_port_work_J": 0.0024417884214319053,
+      "integrated_positive_shortfall_J": 1.0647768434235678e-05,
+      "maximum_shortfall_W": 0.008025394442292248,
+      "shortfall_steps": 236,
+      "native_pressure_difference_Pa": 2.1053467125148665e-08,
+      "native_fold_state_difference": 2.314995417584953e-12,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "2400",
+        ".025"
+      ],
+      "trace": "out/fold-port-work/work-2400.csv",
+      "trace_sha256": "438ffdfb1487f92b3a5f2f5169fa80c7a5bedc458a1a061504413400f315bebc",
+      "native": "out/fold-port-work/native-2400.json",
+      "native_sha256": "34b5985c16a4180654419d96e05f3a7b2eef84e6e0175416342c4f5e707f8eef"
+    },
+    {
+      "steps": 4800,
+      "dt_s": 5.208333333333334e-06,
+      "duration_s": 0.025,
+      "fold_aerodynamic_work_J": 4.7711029524309326e-05,
+      "orifice_port_work_J": 0.002441876292932564,
+      "integrated_positive_shortfall_J": 1.0683633335756355e-05,
+      "maximum_shortfall_W": 0.008031572032404179,
+      "shortfall_steps": 472,
+      "native_pressure_difference_Pa": 3.8638047575345287e-08,
+      "native_fold_state_difference": 7.579176869443316e-12,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "4800",
+        ".025"
+      ],
+      "trace": "out/fold-port-work/work-4800.csv",
+      "trace_sha256": "066c14509144a15887714d67d9106b9dc9119b168b36696bf8a14f7ab56cd854",
+      "native": "out/fold-port-work/native-4800.json",
+      "native_sha256": "c5a587fbd281c7a4301ec8fbbab3a8c615b1673487e720f840c73d8eb6297187"
+    },
+    {
+      "steps": 9600,
+      "dt_s": 2.604166666666667e-06,
+      "duration_s": 0.025,
+      "fold_aerodynamic_work_J": 4.7720941060354836e-05,
+      "orifice_port_work_J": 0.00244204391766528,
+      "integrated_positive_shortfall_J": 1.0698415932004557e-05,
+      "maximum_shortfall_W": 0.008033972470740473,
+      "shortfall_steps": 946,
+      "native_pressure_difference_Pa": 1.5028129136264733e-08,
+      "native_fold_state_difference": 2.73137068518281e-12,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_phonation_probe",
+        "--trajectory",
+        "9600",
+        ".025"
+      ],
+      "trace": "out/fold-port-work/work-9600.csv",
+      "trace_sha256": "be8fc910819a3a5b2e8a1470e78ded6a9a8a82e5c88b7caf1c560c261ef451ef",
+      "native": "out/fold-port-work/native-9600.json",
+      "native_sha256": "c63efa71f6208a5165aaa13259d341684420dad974264f8517376c46c41eb9d2"
+    }
+  ],
+  "hashes": {
+    "tools/fold_port_work_reference.py": "12fdd6b9d43d4e5c91660671e6357dfa4f82f8d185813bee22fd6e64f363b68e",
+    "tools/graph_phonation_reference.py": "932c021e18ff497dfd0fcd18f6abd03dd4370cef094f7af86b6696ce66e77916",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "src/graph_phonation.cpp": "c907627814c3c4a99e52363459d09e7bfa0a5c23e120fdfa6e09ec63280d3210",
+    "src/graph_orifice.cpp": "c41b2e62f1ff58a541d46dcddb0a9fc5b381b57ca455cd9adf56f66c71c48b56",
+    "src/sources.cpp": "d78e4365c8373b54f1e46bfec72997e51286af0c64b3647b14aed4070b5fe85d",
+    "include/ducklips/sources.hpp": "fe89057806121ba08016cf51c660788bcb3cf8c12fbc6f7d1b24936a25dcb4d9",
+    "tools/graph_phonation_probe.cpp": "eb1d21424bb648c2499c7520135b79244220c991c9555547b2f88f254a186af2",
+    "build/ducklips_graph_phonation_probe": "2b2d90fa3fd574d2fbb6927e6e56b7ff4d6abc411eb5117c6af2bde163014fce"
+  }
+}

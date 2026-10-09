@@ -57,6 +57,11 @@ struct FoldParameters final {
 
 inline constexpr std::size_t maximum_fold_strips = 64;
 
+struct FoldState final {
+    std::array<double,2> lower_position{},lower_velocity{},upper_position{},upper_velocity{};
+    double rest_area{};
+};
+
 // Self-oscillating vocal folds. Positions are the lateral displacement of
 // each mass from its rest position; the glottal area at a mass is
 // rest_area + 2 * length * displacement. Flow separates at the narrowest
@@ -74,6 +79,10 @@ public:
     [[nodiscard]] double lower_area() const noexcept;
     [[nodiscard]] double upper_area() const noexcept;
     [[nodiscard]] double minimum_area() const noexcept;
+    [[nodiscard]] FoldState state() const noexcept;
+    // Restore physical state under the already configured tissue parameters.
+    // Nonfinite input is rejected without changing the folds.
+    [[nodiscard]] bool restore(const FoldState& state) noexcept;
 
 private:
     // position_sum: the two folds' displacements added (left + right).

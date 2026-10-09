@@ -168,8 +168,18 @@ Source feedback uses work-conjugate average pressure and retains the
 inlet half-section momentum. Static source controls conserve reservoir work
 including orifice dissipation and converge to an independent continuous ODE.
 The moving Bravo controls conserve stored air but their undamped endpoint
-pressures are not yet temporally converged. Dynamic folds, losses/radiation
-and full-utterance state transport remain open.
+pressures are not yet temporally converged. Losses/radiation and full-utterance
+state transport remain open.
+
+The [moving-fold integration and work audit](reports/GRAPH_PHONATION.md)
+now couples the existing tissue model to pressure across the actual orifice,
+excluding the inlet air-column acceleration. It preserves physical state
+across intervals and agrees with independent discrete/continuous references.
+However, the inherited force model delivers more mechanical work than the
+instantaneous orifice port supplies in some closure intervals, persisting
+under refinement. The algebraic glottis has no internal volume/pressure state
+to account for that exchange. This is a physical work-accounting gate, not
+an invitation to tune damping or claim the coupled source ready for speech.
 
 ## Moving-energy reference
 
