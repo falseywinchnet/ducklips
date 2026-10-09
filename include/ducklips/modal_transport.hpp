@@ -18,9 +18,11 @@ public:
                               std::span<const double> compliance_rate,
                               std::span<const double> conductance_rate) noexcept;
     [[nodiscard]] ModalMotionSample view() const noexcept;
+    [[nodiscard]] ModalMotionSample canonical_view() const noexcept;
     [[nodiscard]] std::span<const double> frequency_rate() const noexcept;
 private:
     std::size_t modes_{},nodes_{},branches_{};
+    std::vector<double> flow_diagonal_{},next_diagonal_{};
     std::vector<double> omega_{},pressure_{},flow_{},frequency_rate_{};
     std::vector<double> weighted_pressure_{},weighted_differences_{};
     std::vector<double> differences_{},next_pressure_{},next_flow_{},next_rate_{};

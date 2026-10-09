@@ -51,6 +51,8 @@ void tests() {
     require(transport.derive(network,basis,dc2,dg2),"nonuniform metric rejected");
     require(transport.view().pressure_transport[0]==1 && transport.view().flow_transport[0]==1.5 &&
             transport.frequency_rate()[0]==250,"independent compliance/inertance derivatives wrong");
+    require(transport.canonical_view().flow_transport.empty() && transport.canonical_view().flow_diagonal[0]==2.5,
+            "canonical coefficient view is inconsistent");
     basis.angular_frequency[0]=0;
     require(!transport.derive(network,basis,dc,dg) && transport.view().flow_transport[0]==1.5 &&
             transport.view().angular_frequency[0]==100,"failed transport replaced last valid coefficients");

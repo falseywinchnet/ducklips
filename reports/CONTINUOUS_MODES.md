@@ -161,3 +161,8 @@ reference verifier passes its stated component gates. A fresh production Alfa
 render is byte-identical to `out/geometry_clock/alfa.wav`, has zero nonfinite or
 clipped samples, and renders 1.31 seconds in 0.079 seconds in this single-run
 regression check. This does not measure the new components inside speech.
+
+The subsequent compact canonical representation and native 1 kHz coefficient
+segments are documented in [CANONICAL_SEGMENTS.md](CANONICAL_SEGMENTS.md). That
+work closes the half-audio-sample coefficient-supply gap for the isolated
+network fixture and retains the complete-engine limitations stated above.

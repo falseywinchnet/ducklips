@@ -13,6 +13,11 @@ struct ModalMotionSample final {
     std::span<const double> angular_frequency;
     std::span<const double> pressure_transport;
     std::span<const double> flow_transport;
+    // If flow_transport is empty, use the canonical dual form
+    // flow = -Omega pressure^T Omega^-1 + diag(flow_diagonal).
+    // Physical lossless transport has flow_diagonal = omega_dot / omega.
+    // This form requires strictly positive angular frequencies.
+    std::span<const double> flow_diagonal{};
 };
 
 // Local interaction-coordinate RK4: integrate the diagonal acoustic phase
@@ -36,7 +41,7 @@ private:
                   std::span<double> output) noexcept;
     std::size_t modes_{};
     std::array<std::vector<double>,4> k_{};
-    std::vector<double> work_{},rotated_{};
+    std::vector<double> work_{},rotated_{},dual_{};
     std::vector<double> half_cos_{},half_sin_{},whole_cos_{},whole_sin_{};
 };
 }

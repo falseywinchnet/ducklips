@@ -30,4 +30,23 @@ inline double real_dot(const double* first,const double* second,std::size_t coun
     for (;i<count;++i) { result+=first[i]*second[i]; }
     return result;
 }
+// y += scale*row while returning dot(row,x). Reuse each loaded matrix row
+// for the primal and canonical-dual products; no transposed dense matrix.
+inline double dot_and_accumulate(const double* row,const double* x,double* y,double scale,std::size_t count) noexcept {
+    std::size_t i=0;double result=0;
+#if defined(__aarch64__)
+    float64x2_t s0=vdupq_n_f64(0),s1=s0;
+    const float64x2_t multiplier=vdupq_n_f64(scale);
+    for (;i+4<=count;i+=4) {
+        const float64x2_t a=vld1q_f64(row+i),b=vld1q_f64(row+i+2);
+        s0=vfmaq_f64(s0,a,vld1q_f64(x+i));s1=vfmaq_f64(s1,b,vld1q_f64(x+i+2));
+        vst1q_f64(y+i,vfmaq_f64(vld1q_f64(y+i),a,multiplier));
+        vst1q_f64(y+i+2,vfmaq_f64(vld1q_f64(y+i+2),b,multiplier));
+    }
+    result=vaddvq_f64(vaddq_f64(s0,s1));
+#endif
+    for (;i<count;++i) { result+=row[i]*x[i];y[i]+=scale*row[i]; }
+    return result;
+}
+
 }

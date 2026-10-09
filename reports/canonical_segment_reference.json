@@ -1,0 +1,234 @@
+{
+  "schema": 1,
+  "scope": "Native physical-rate construction at 1kHz, compact coefficient interpolation, and unforced acoustic stepping; isolated gradient modes. Timing excludes geometry/eigenbasis solving, source, physical losses and microphone.",
+  "lookahead_seconds": 0.003,
+  "command_scheduler": "Not implemented; diagnostic supplies future knots",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "binary_sha256": "4eecef1056ce27ece5b553a0644175ad59087b2872c9a24854f1068fed468967",
+  "transport_binary_sha256": "d7cdf5fb0c4d2378b87c9b3fb858adea93ee029107ed47fdb6d24a31e89f7c38",
+  "source_sha256": {
+    "include/ducklips/continuous_modes.hpp": "e371ec03d76d1a32f27a13b4ccc863a4f9819de7135a02a973a6fcb711316d6d",
+    "src/continuous_modes.cpp": "3f03bcccde99c9c3fda2dfbb7c28fa38df6464b28a21f6d0858bff5fb0e893ae",
+    "src/real_dot.hpp": "3fda54b8fb003c89a01d4780130fb2469967a59887283938a7c67d549b44d5df",
+    "include/ducklips/modal_transport.hpp": "5d5526c9f64aab6cfbbc573c1e2c287fdced5c1fcedccf982bcb0be636808807",
+    "src/modal_transport.cpp": "ab92fb76594ff58b635041181b7877cc6e3e96ebb111121457b3aa8b0ace259b",
+    "include/ducklips/motion_segment.hpp": "6aef5724fac1544773b6f864247eaae91d65d26773f483d473463dddefcb96e4",
+    "src/motion_segment.cpp": "fd7fda3eb378898a036676c2694ad1801f01745e1654729ac0da3ac36c1de8c4",
+    "tools/motion_segment_probe.cpp": "ee8478bc813e690f3a9ad05da950a34a9506764762d1cb57e8a7e3e69d895e5f",
+    "tools/modal_transport_probe.cpp": "9e7f5e078eb4a091c97cb0c05f3e2a68654ef3620a81319aea01d359ce17b008",
+    "tools/verify_motion_segment.py": "1e136c708a0d319066aaa51fd89648e13c9614654c0b3358f10d763279ce3804",
+    "tools/canonical_motion_reference.py": "271c2eeac7bc1370eb8be31f530fd17bc52ed79d5262459243ed56421b82ded7"
+  },
+  "comparisons": [
+    {
+      "initial_condition": "low",
+      "max_relative_state_error": 3.499313990403487e-08,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 13508,
+        "max_work_balance_residual": 2.6721067703182582e-11,
+        "final_wall_work": -2.9681900824652714e-06,
+        "initial_energy": 0.2899999999999997,
+        "final_energy": 0.28999703180706055
+      }
+    },
+    {
+      "initial_condition": "high",
+      "max_relative_state_error": 4.910056070656364e-07,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45881,
+        "max_work_balance_residual": 1.2445487782702935e-10,
+        "final_wall_work": 8.903888891970462e-07,
+        "initial_energy": 0.2900000000000002,
+        "final_energy": 0.2900008902874659
+      }
+    },
+    {
+      "initial_condition": "mixed",
+      "max_relative_state_error": 3.46790385364356e-07,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45245,
+        "max_work_balance_residual": 7.1592541668759856e-12,
+        "final_wall_work": -9.818724529509634e-07,
+        "initial_energy": 0.03931300045905082,
+        "final_energy": 0.03931201858095103
+      }
+    }
+  ],
+  "interpolation_and_step_timings": [
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.177181458,
+      "realtime_multiple": 28.2196571607397,
+      "heap_allocations": 0,
+      "checksum": 1.001741904041226
+    },
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.180010625,
+      "realtime_multiple": 27.776138214063753,
+      "heap_allocations": 0,
+      "checksum": 1.001741904041226
+    },
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.177691667,
+      "realtime_multiple": 28.138629595950608,
+      "heap_allocations": 0,
+      "checksum": 1.001741904041226
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.232322667,
+      "realtime_multiple": 21.521791500439342,
+      "heap_allocations": 0,
+      "checksum": 1.0023398825632561
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.236082583,
+      "realtime_multiple": 21.17902954323403,
+      "heap_allocations": 0,
+      "checksum": 1.0023398825632561
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.232361458,
+      "realtime_multiple": 21.518198599012063,
+      "heap_allocations": 0,
+      "checksum": 1.0023398825632561
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.3590485,
+      "realtime_multiple": 13.92569527515085,
+      "heap_allocations": 0,
+      "checksum": 1.0027896541720065
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.365383375,
+      "realtime_multiple": 13.684256980767119,
+      "heap_allocations": 0,
+      "checksum": 1.0027896541720065
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.360312125,
+      "realtime_multiple": 13.8768574607363,
+      "heap_allocations": 0,
+      "checksum": 1.0027896541720065
+    }
+  ],
+  "physical_rate_construction_timings": [
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.044525792,
+      "equivalent_realtime_multiple": 112.29446519446526
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.044267292,
+      "equivalent_realtime_multiple": 112.95021163707055
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.045056084,
+      "equivalent_realtime_multiple": 110.97280447186665
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.062499459,
+      "equivalent_realtime_multiple": 80.00069248599416
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.062707,
+      "equivalent_realtime_multiple": 79.73591465067696
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.063578708,
+      "equivalent_realtime_multiple": 78.64268018783899
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.103243,
+      "equivalent_realtime_multiple": 48.42943347248724
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.102098792,
+      "equivalent_realtime_multiple": 48.97217589019075
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.103952833,
+      "equivalent_realtime_multiple": 48.09873724172578
+    }
+  ],
+  "summed_cost_not_complete_speech_benchmark": [
+    {
+      "modes": 20,
+      "sum_of_separate_worst_wall_seconds": 0.225066709,
+      "equivalent_realtime_multiple": 22.215635631833937
+    },
+    {
+      "modes": 24,
+      "sum_of_separate_worst_wall_seconds": 0.299661291,
+      "equivalent_realtime_multiple": 16.685505102492534
+    },
+    {
+      "modes": 32,
+      "sum_of_separate_worst_wall_seconds": 0.469336208,
+      "equivalent_realtime_multiple": 10.653343839178076
+    }
+  ]
+}

@@ -29,14 +29,15 @@ namespace {
 constexpr double pi=3.14159265358979323846;
 void require(bool okay,const char* message) { if (!okay) { throw std::runtime_error(message); } }
 struct Motion final {
-    std::vector<double> omega,pressure,flow;
-    explicit Motion(std::size_t n):omega(n),pressure(n*n),flow(n*n) {}
+    std::vector<double> omega,pressure,flow,diagonal;
+    explicit Motion(std::size_t n):omega(n),pressure(n*n),flow(n*n),diagonal(n) {}
     ducklips::ModalMotionSample view() const { return {omega,pressure,flow}; }
+    ducklips::ModalMotionSample canonical_view() const { return {omega,pressure,{},diagonal}; }
 };
 void read(std::ifstream& in,void* target,std::size_t bytes) {
     in.read(static_cast<char*>(target),static_cast<std::streamsize>(bytes));require(bool(in),"truncated fixture");
 }
-void fixture(const char* input,const char* output) {
+void fixture(const char* input,const char* output,bool canonical=false) {
     std::ifstream in(input,std::ios::binary);std::uint64_t header[2];double dt;
     read(in,header,sizeof(header));read(in,&dt,sizeof(dt));
     require(header[0]>0 && header[0]<=256 && header[1]<=10000000 && std::isfinite(dt) && dt>0,"invalid fixture header");
@@ -49,11 +50,16 @@ void fixture(const char* input,const char* output) {
         for (Motion* motion:{&first,&middle,&last}) {
             read(in,motion->omega.data(),n*sizeof(double));
             read(in,motion->pressure.data(),n*n*sizeof(double));read(in,motion->flow.data(),n*n*sizeof(double));
-            for (double w:motion->omega) { require(std::isfinite(w) && w>=0,"invalid frequency"); }
+            for (double w:motion->omega) { require(std::isfinite(w) && (canonical ? w>0 : w>=0),"invalid frequency"); }
             for (double v:motion->pressure) { require(std::isfinite(v),"invalid pressure transport"); }
             for (double v:motion->flow) { require(std::isfinite(v),"invalid flow transport"); }
         }
-        solver.advance(first.view(),middle.view(),last.view(),dt);
+        if (canonical) {
+            for (Motion* motion:{&first,&middle,&last}) {
+                for (std::size_t i=0;i<n;++i) { motion->diagonal[i]=motion->flow[i*n+i]+motion->pressure[i*n+i]; }
+            }
+            solver.advance(first.canonical_view(),middle.canonical_view(),last.canonical_view(),dt);
+        } else { solver.advance(first.view(),middle.view(),last.view(),dt); }
         out.write(reinterpret_cast<const char*>(solver.state.data()),static_cast<std::streamsize>(2*n*sizeof(double)));
     }
     require(bool(out),"failed output");
@@ -80,6 +86,7 @@ void dense_rotation_test(std::size_t n) {
     motion.pressure=q;motion.flow=q;
     ducklips::ContinuousModesReference solver;solver.prepare(n);
     for (std::size_t i=0;i<2*n;++i) { solver.state[i]=.02*std::sin(double(i+1)); }
+    const std::vector<double> initial=solver.state;
     for (std::size_t block=0;block<2;++block) {
         for (std::size_t i=0;i<n;++i) {
             for (std::size_t j=0;j<n;++j) { paired[block*n+i]+=h[i*n+j]*solver.state[block*n+j]; }
@@ -101,6 +108,15 @@ void dense_rotation_test(std::size_t n) {
     for (int i=0;i<480;++i) { solver.advance(motion.view(),motion.view(),motion.view(),1.0/48000); }
     require(allocations.load()==before,"continuous acoustic step allocates");
     for (std::size_t i=0;i<2*n;++i) { require(std::abs(solver.state[i]-expected[i])<1e-10,"dense rotation mismatch"); }
+    const std::vector<double> full=solver.state;
+    solver.state=initial;
+    const std::size_t canonical_before=allocations.load();
+    for (int i=0;i<480;++i) { solver.advance(motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),1.0/48000); }
+    require(allocations.load()==canonical_before,"canonical acoustic step allocates");
+    for (std::size_t i=0;i<2*n;++i) {
+        require(std::abs(solver.state[i]-expected[i])<1e-10,"dense canonical rotation mismatch");
+        require(std::abs(solver.state[i]-full[i])<1e-12,"canonical/full transport diverged");
+    }
 }
 void tests() {
     for (std::size_t n:{8,9,20,32}) { dense_rotation_test(n); }
@@ -124,6 +140,15 @@ void tests() {
     const double phase=2*pi*(300*duration+2000*duration*duration+7000*duration*duration*duration/3);
     const std::complex<double> expected=std::exp(std::complex<double>(0,phase))*std::complex<double>(.3,.7);
     require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-expected)<1e-11,"quadratic frequency integration failed");
+    // Verify both sides of the bounded phase-reuse threshold and its direct
+    // trigonometric fallback against the independently integrated phase.
+    for (double correction:{-0.001001,-0.001,0.0,0.001,0.001001,0.03}) {
+        first.omega[0]=12000;middle.omega[0]=13000;last.omega[0]=12000+4*correction/dt;
+        solver.state={.3,.7};solver.advance(first.view(),middle.view(),last.view(),dt);
+        const double whole=dt*(first.omega[0]+4*middle.omega[0]+last.omega[0])/6;
+        const std::complex<double> exact_phase=std::exp(std::complex<double>(0,whole))*std::complex<double>(.3,.7);
+        require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact_phase)<1e-14,"phase reuse/fallback mismatch");
+    }
     // Uniform moving metric has an independently derived exact propagator.
     motion.pressure[0]=-7;motion.flow[0]=7;motion.omega[0]=2*pi*1234;
     solver.state={.3,.7};
@@ -131,9 +156,13 @@ void tests() {
     ducklips::UniformAreaModeStep exact;exact.prepare(motion.omega[0],0,14,duration);
     require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact.apply({.3,.7}))<1e-7,
             "uniform moving transport mismatch");
+    solver.state={.3,.7};motion.diagonal[0]=motion.flow[0]+motion.pressure[0];
+    for (int i=0;i<4800;++i) { solver.advance(motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),dt); }
+    require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact.apply({.3,.7}))<1e-7,
+            "canonical uniform moving transport mismatch");
     std::cout<<"Continuous modes dense rotations, allocation check, stationary phase, quadratic chirp and uniform metric reference passed\n";
 }
-void benchmark(std::size_t n) {
+void benchmark(std::size_t n,bool canonical=false) {
     require(n>0 && n<=256,"invalid benchmark mode count");
     ducklips::ContinuousModesReference solver;solver.prepare(n);solver.state[0]=.3;solver.state[n]=.7;
     Motion first(n),middle(n),last(n),base(n);
@@ -154,16 +183,17 @@ void benchmark(std::size_t n) {
             for (std::size_t i=0;i<n;++i) { sample->omega[i]=base.omega[i]*modulation; }
             for (std::size_t i=0;i<n*n;++i) {
                 sample->pressure[i]=base.pressure[i]*modulation;
-                sample->flow[i]=base.flow[i]*modulation;
+                if (!canonical) { sample->flow[i]=base.flow[i]*modulation; }
             }
             ++stage;
         }
-        solver.advance(first.view(),middle.view(),last.view(),1.0/48000);
+        if (canonical) { solver.advance(first.canonical_view(),middle.canonical_view(),last.canonical_view(),1.0/48000); }
+        else { solver.advance(first.view(),middle.view(),last.view(),1.0/48000); }
     }
     const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count();
     double checksum=0;for (double v:solver.state) { checksum+=v; }
     require(std::isfinite(checksum),"nonfinite benchmark");
-    std::cout<<std::setprecision(17)<<"{\"modes\":"<<n<<",\"states\":"<<2*n<<",\"simulated_seconds\":5,\"wall_seconds\":"<<seconds
+    std::cout<<std::setprecision(17)<<"{\"canonical\":"<<(canonical ? "true" : "false")<<",\"modes\":"<<n<<",\"states\":"<<2*n<<",\"simulated_seconds\":5,\"wall_seconds\":"<<seconds
              <<",\"realtime_multiple\":"<<5/seconds<<",\"checksum\":"<<checksum<<"}\n";
 }
 }
@@ -171,6 +201,8 @@ int main(int argc,char** argv) {
     try {
         if (argc==1) { tests(); }
         else if (argc==4 && std::string(argv[1])=="--fixture") { fixture(argv[2],argv[3]); }
+        else if (argc==4 && std::string(argv[1])=="--canonical-fixture") { fixture(argv[2],argv[3],true); }
+        else if (argc==3 && std::string(argv[1])=="--canonical-benchmark") { benchmark(std::stoul(argv[2]),true); }
         else if (argc==3 && std::string(argv[1])=="--benchmark") { benchmark(std::stoul(argv[2])); }
         else { throw std::invalid_argument("continuous_modes_probe [--fixture input output | --benchmark modes]"); }
     } catch (const std::exception& error) { std::cerr<<error.what()<<'\n';return 1; }

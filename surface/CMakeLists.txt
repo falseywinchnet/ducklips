@@ -28,7 +28,7 @@ add_executable(surface_linear_tests surface_linear_tests.cpp)
 target_link_libraries(surface_linear_tests PRIVATE ducklips_surface)
 # The parent project registers these with CTest even when its other tools are
 # excluded from the surface build. Keep the registered test executables built.
-add_dependencies(surface_linear_tests ducklips_tests ducklips_stream_tests ducklips_moving_mode_tests ducklips_moving_tree_probe ducklips_continuous_modes_probe ducklips_modal_transport_probe)
+add_dependencies(surface_linear_tests ducklips_tests ducklips_stream_tests ducklips_moving_mode_tests ducklips_moving_tree_probe ducklips_continuous_modes_probe ducklips_modal_transport_probe ducklips_motion_segment_probe)
 enable_testing()
 add_test(NAME surface_linear_tests COMMAND surface_linear_tests)
 

@@ -1,0 +1,225 @@
+{
+  "schema": 1,
+  "scope": "Native physical-rate construction at 1kHz, compact coefficient interpolation, and unforced acoustic stepping; isolated gradient modes. Timing excludes geometry/eigenbasis solving, source, physical losses and microphone.",
+  "lookahead_seconds": 0.002,
+  "command_scheduler": "Not implemented; diagnostic supplies future knots",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "binary_sha256": "f7c2807cafc446bc02e69c9303baa5fb63c018308d1d504bddeb6079558f613d",
+  "transport_binary_sha256": "d7cdf5fb0c4d2378b87c9b3fb858adea93ee029107ed47fdb6d24a31e89f7c38",
+  "source_sha256": {
+    "include/ducklips/continuous_modes.hpp": "e371ec03d76d1a32f27a13b4ccc863a4f9819de7135a02a973a6fcb711316d6d",
+    "src/continuous_modes.cpp": "3f03bcccde99c9c3fda2dfbb7c28fa38df6464b28a21f6d0858bff5fb0e893ae",
+    "src/real_dot.hpp": "3fda54b8fb003c89a01d4780130fb2469967a59887283938a7c67d549b44d5df",
+    "include/ducklips/modal_transport.hpp": "5d5526c9f64aab6cfbbc573c1e2c287fdced5c1fcedccf982bcb0be636808807",
+    "src/modal_transport.cpp": "ab92fb76594ff58b635041181b7877cc6e3e96ebb111121457b3aa8b0ace259b",
+    "include/ducklips/motion_segment.hpp": "ab9e9443883f2ce8621e56818b3971add6008d27d34b0eb6c63f8845612910b8",
+    "src/motion_segment.cpp": "508c1d2e3d9012837c329b15e85ef44eaf257bdb23acdfccc5e201da05be1c50",
+    "tools/motion_segment_probe.cpp": "7a8656de4cc2ad71d076d6a284f430065d1ec455f659524af50f8be108e6474c",
+    "tools/modal_transport_probe.cpp": "9e7f5e078eb4a091c97cb0c05f3e2a68654ef3620a81319aea01d359ce17b008",
+    "tools/verify_motion_segment.py": "0c569f39ca4d5bdcb20e30a7f197eead9ebb523691a95a4544362c8972b8ad77",
+    "tools/canonical_motion_reference.py": "271c2eeac7bc1370eb8be31f530fd17bc52ed79d5262459243ed56421b82ded7"
+  },
+  "comparisons": [
+    {
+      "initial_condition": "low",
+      "max_relative_state_error": 2.2778653700590778e-07,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 13508,
+        "max_work_balance_residual": 2.6721067703182582e-11,
+        "final_wall_work": -2.9681900824652714e-06,
+        "initial_energy": 0.2899999999999997,
+        "final_energy": 0.28999703180706055
+      }
+    },
+    {
+      "initial_condition": "high",
+      "max_relative_state_error": 6.070138872381508e-07,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45881,
+        "max_work_balance_residual": 1.2445487782702935e-10,
+        "final_wall_work": 8.903888891970462e-07,
+        "initial_energy": 0.2900000000000002,
+        "final_energy": 0.2900008902874659
+      }
+    },
+    {
+      "initial_condition": "mixed",
+      "max_relative_state_error": 1.4703273268749005e-06,
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45245,
+        "max_work_balance_residual": 7.1592541668759856e-12,
+        "final_wall_work": -9.818724529509634e-07,
+        "initial_energy": 0.03931300045905082,
+        "final_energy": 0.03931201858095103
+      }
+    }
+  ],
+  "interpolation_and_step_timings": [
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.177766209,
+      "realtime_multiple": 28.126830335904838,
+      "checksum": 1.0017419040404412
+    },
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.17794375,
+      "realtime_multiple": 28.098767166590562,
+      "checksum": 1.0017419040404412
+    },
+    {
+      "modes": 20,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.180061917,
+      "realtime_multiple": 27.768225970847574,
+      "checksum": 1.0017419040404412
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.235209458,
+      "realtime_multiple": 21.257648576359543,
+      "checksum": 1.002339882561591
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.232798875,
+      "realtime_multiple": 21.47776702099613,
+      "checksum": 1.002339882561591
+    },
+    {
+      "modes": 24,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.231629125,
+      "realtime_multiple": 21.58623186958894,
+      "checksum": 1.002339882561591
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.356800958,
+      "realtime_multiple": 14.013415289092357,
+      "checksum": 1.0027896541734584
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.358189459,
+      "realtime_multiple": 13.959093084311005,
+      "checksum": 1.0027896541734584
+    },
+    {
+      "modes": 32,
+      "simulated_seconds": 5,
+      "control_rate_hz": 1000,
+      "wall_seconds": 0.354932666,
+      "realtime_multiple": 14.087179003129568,
+      "checksum": 1.0027896541734584
+    }
+  ],
+  "physical_rate_construction_timings": [
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.04435475,
+      "equivalent_realtime_multiple": 112.7274981822691
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.044824792,
+      "equivalent_realtime_multiple": 111.54541442155492
+    },
+    {
+      "modes": 20,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.045014292,
+      "equivalent_realtime_multiple": 111.07583342641489
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.062820833,
+      "equivalent_realtime_multiple": 79.59143107828575
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.063431084,
+      "equivalent_realtime_multiple": 78.8257063366598
+    },
+    {
+      "modes": 24,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.063603,
+      "equivalent_realtime_multiple": 78.61264405767022
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.1026115,
+      "equivalent_realtime_multiple": 48.72748181246742
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.102851833,
+      "equivalent_realtime_multiple": 48.613620721761954
+    },
+    {
+      "modes": 32,
+      "nodes": 96,
+      "updates": 5000,
+      "updates_per_simulated_second": 1000,
+      "wall_seconds": 0.104734625,
+      "equivalent_realtime_multiple": 47.73970403770482
+    }
+  ],
+  "summed_cost_not_complete_speech_benchmark": [
+    {
+      "modes": 20,
+      "sum_of_separate_worst_wall_seconds": 0.22507620899999997,
+      "equivalent_realtime_multiple": 22.214697955926567
+    },
+    {
+      "modes": 24,
+      "sum_of_separate_worst_wall_seconds": 0.298812458,
+      "equivalent_realtime_multiple": 16.73290341863859
+    },
+    {
+      "modes": 32,
+      "sum_of_separate_worst_wall_seconds": 0.46292408399999996,
+      "equivalent_realtime_multiple": 10.800907044620303
+    }
+  ]
+}

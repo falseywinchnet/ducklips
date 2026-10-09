@@ -10,6 +10,7 @@ void ModalTransportReference::prepare(std::size_t modes,std::size_t nodes,std::s
         throw std::invalid_argument("invalid transport dimensions");
     }
     modes_=modes;nodes_=nodes;branches_=branches;
+    flow_diagonal_.assign(modes,0);next_diagonal_.resize(modes);
     omega_.assign(modes,0);frequency_rate_.assign(modes,0);next_rate_.resize(modes);
     pressure_.assign(modes*modes,0);flow_.assign(modes*modes,0);
     next_pressure_.resize(modes*modes);next_flow_.resize(modes*modes);
@@ -17,6 +18,7 @@ void ModalTransportReference::prepare(std::size_t modes,std::size_t nodes,std::s
     weighted_pressure_.resize(modes*nodes);
 }
 ModalMotionSample ModalTransportReference::view() const noexcept { return {omega_,pressure_,flow_}; }
+ModalMotionSample ModalTransportReference::canonical_view() const noexcept { return {omega_,pressure_,{},flow_diagonal_}; }
 std::span<const double> ModalTransportReference::frequency_rate() const noexcept { return frequency_rate_; }
 bool ModalTransportReference::derive(const AcousticNetwork& network,const ModalBasis& basis,
                                      std::span<const double> compliance_rate,
@@ -67,12 +69,14 @@ bool ModalTransportReference::derive(const AcousticNetwork& network,const ModalB
             next_pressure_[i*modes_+j]=pij;next_pressure_[j*modes_+i]=pji;
             next_flow_[i*modes_+j]=fij;next_flow_[j*modes_+i]=fji;
             if (i==j) {
+                next_diagonal_[i]=rate;
                 next_rate_[i]=rate*wi;
                 if (!std::isfinite(next_rate_[i])) { return false; }
             }
         }
     }
     std::copy_n(basis.angular_frequency.begin(),modes_,omega_.begin());
+    flow_diagonal_.swap(next_diagonal_);
     pressure_.swap(next_pressure_);flow_.swap(next_flow_);frequency_rate_.swap(next_rate_);
     return true;
 }

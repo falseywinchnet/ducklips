@@ -19,6 +19,7 @@ add_library(ducklips STATIC
     src/moving_tree.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp
+    src/motion_segment.cpp
     src/sources.cpp
     src/air_path.cpp
     src/voice.cpp
@@ -87,3 +88,7 @@ add_test(NAME ducklips_continuous_modes_reference COMMAND ducklips_continuous_mo
 add_executable(ducklips_modal_transport_probe tools/modal_transport_probe.cpp)
 target_link_libraries(ducklips_modal_transport_probe PRIVATE ducklips)
 add_test(NAME ducklips_modal_transport_reference COMMAND ducklips_modal_transport_probe)
+
+add_executable(ducklips_motion_segment_probe tools/motion_segment_probe.cpp)
+target_link_libraries(ducklips_motion_segment_probe PRIVATE ducklips)
+add_test(NAME ducklips_motion_segment_reference COMMAND ducklips_motion_segment_probe)

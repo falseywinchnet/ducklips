@@ -1,0 +1,55 @@
+{
+  "schema": 1,
+  "scope": "Use canonical dual transport and reuse physical frequency derivatives.\n\nOne dense pressure matrix determines the flow matrix. Frequencies and their\nrates supply a three-knot quintic Hermite interpolant; its own derivative\nprovides the diagonal flow connection. This is a numerical scheduling oracle,\nnot yet an online/native interpolator or whole speech benchmark.\n",
+  "initial_condition": "highest nominal mode",
+  "cases": [
+    {
+      "pressure_polynomial_degree": 3,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 500,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.004,
+      "max_relative_state_error": 9.113135333619955e-06
+    },
+    {
+      "pressure_polynomial_degree": 3,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 1000,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.002,
+      "max_relative_state_error": 6.070138785598396e-07
+    },
+    {
+      "pressure_polynomial_degree": 3,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 2000,
+      "required_future_knots": 2,
+      "lookahead_seconds": 0.001,
+      "max_relative_state_error": 4.44085821561626e-07
+    },
+    {
+      "pressure_polynomial_degree": 5,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 500,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.006,
+      "max_relative_state_error": 9.027432397447202e-06
+    },
+    {
+      "pressure_polynomial_degree": 5,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 1000,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.003,
+      "max_relative_state_error": 4.847612501683621e-07
+    },
+    {
+      "pressure_polynomial_degree": 5,
+      "frequency_interpolation": "quintic Hermite, three knots with exact rates",
+      "control_rate_hz": 2000,
+      "required_future_knots": 3,
+      "lookahead_seconds": 0.0015,
+      "max_relative_state_error": 4.4271222526526684e-07
+    }
+  ]
+}
