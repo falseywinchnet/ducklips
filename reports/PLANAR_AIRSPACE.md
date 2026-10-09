@@ -42,7 +42,10 @@ with exact polygon connectivity before accepting its selected reference poses.
 General component reconstruction is still required before arbitrary moving
 anatomy can use one pressure unknown per geometrical cell. The subsequent
 [66-pose transport audit](CAVITY_TRANSPORT.md) finds eight poses with split
-cells, including one that would falsely join the sealed /t/ chambers.
+cells, including one that would falsely join the sealed /t/ chambers. The
+[native region decomposition](PLANAR_REGIONS.md) now resolves those pieces and
+matches the independent component/port audit at all 66 poses; moving-state
+identity and temporal geometry remain unfinished.
 
 ## Controlled physical checks
 

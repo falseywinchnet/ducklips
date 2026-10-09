@@ -1,0 +1,1564 @@
+{
+  "use": "spatial component geometry; no moving-state identity or acoustic speech integration",
+  "versions": {
+    "shapely": "2.1.2",
+    "geos": "3.13.1",
+    "numpy": "2.3.5"
+  },
+  "audit_command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_regions_reference.py"
+  ],
+  "poses": [
+    {
+      "time": 5.02,
+      "regions": 1270,
+      "links": 2377,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.848979353782387e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.020.json",
+      "geometry_sha256": "ec671120027e50f15c091c53df963a8c26e3c09a1297d86e9a4fd9397a214cc6",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.020.txt",
+      "input_sha256": "c19494c515b9ce62856942656437e224882ce8868af12c14ec1429e40529ea93",
+      "output": "out/planar-regions/pose-5.020.json",
+      "output_sha256": "5baa9e92364483bd894cc6e4403f34aecc09df0525627790e471c31a101e2e90"
+    },
+    {
+      "time": 5.021,
+      "regions": 1270,
+      "links": 2377,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.85055217577682e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.021.json",
+      "geometry_sha256": "ea5e036ccbfdc94be899826d41e7d0f14fbc0495a97abfed1184efb05d587125",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.021.txt",
+      "input_sha256": "90683873c16389ec0eaf048a6920f46ffdd3c2846de205d113c68bef3c2a7fbb",
+      "output": "out/planar-regions/pose-5.021.json",
+      "output_sha256": "ae54340a1198f6ed5e3873f3fd2be2056350454fa157f45c8d7f00f1b4ff8076"
+    },
+    {
+      "time": 5.022,
+      "regions": 1270,
+      "links": 2377,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.852235617059923e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.022.json",
+      "geometry_sha256": "c375a43649e1e10ceebe847ff6402239769ec9457ca53ef053e6515500cfc6d7",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.022.txt",
+      "input_sha256": "29cef9d9c87a1aed28eced00534297f449850822bad5e0f5c07b5dbc2823c01d",
+      "output": "out/planar-regions/pose-5.022.json",
+      "output_sha256": "e1e744940b4a8702012e89a7618f421946b465e94ce2107bca7c9a477490d3e7"
+    },
+    {
+      "time": 5.023,
+      "regions": 1271,
+      "links": 2379,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.854095411865681e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.531435568635775e-18,
+      "maximum_component_volume_error_m3": 2.0328790734103208e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.023.json",
+      "geometry_sha256": "4748959407e1b932148f450ac9401f7f2b017007974fda9eb3db528ae47d62ab",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.023.txt",
+      "input_sha256": "1abc3f21595f1397cc6aa0ee0b6083bbc63a9e90e681675522150986caacb1a3",
+      "output": "out/planar-regions/pose-5.023.json",
+      "output_sha256": "00b17e020864595f05b894808b9fe725076e5e3d9995a87971221f4be9bafe0e"
+    },
+    {
+      "time": 5.024,
+      "regions": 1272,
+      "links": 2381,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.856135049516151e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.024.json",
+      "geometry_sha256": "6289c4b23882c1a9d83c19d39885bf7654a4a3fdcf4b6c1820a076c90d73d102",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.024.txt",
+      "input_sha256": "b0e45b275b54d51e0cc24b2bf038bcf35c5dd262d61aed5f3f45d15059482c2d",
+      "output": "out/planar-regions/pose-5.024.json",
+      "output_sha256": "df0c38e974b1d70f2e8755de85b2e02ad989ffa75529672c3b6383ac99b96675"
+    },
+    {
+      "time": 5.025,
+      "regions": 1270,
+      "links": 2377,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.858320316074591e-05
+      ],
+      "maximum_region_volume_error_m3": 3.520480687025686e-21,
+      "maximum_port_area_error_m2": 2.1480755542369057e-18,
+      "maximum_component_volume_error_m3": 2.439454888092385e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.025.json",
+      "geometry_sha256": "6f7aaa7e29349d0fc317fac5215ab08d07ed087ab4a2e00fa2b5aac67518b4ab",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.025.txt",
+      "input_sha256": "201d285bb44aae4b72f2fa379cc4b46c77316561b38ef68aa8345e27ed12250a",
+      "output": "out/planar-regions/pose-5.025.json",
+      "output_sha256": "4ca1c5c98a2d54c5b0d4b1155a1634acf9cfc4e9f3920e30673b1cce809a9ecd"
+    },
+    {
+      "time": 5.026,
+      "regions": 1269,
+      "links": 2375,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.860598915017069e-05
+      ],
+      "maximum_region_volume_error_m3": 3.017554874593445e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 1.6263032587282567e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.026.json",
+      "geometry_sha256": "cf1b14cab04bd3e3a1efce7d0980dfbe1ec57b92f9f01ab974d4df70643b5b7e",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.026.txt",
+      "input_sha256": "f02662b5a060715c8867359e2366f67da780505e528d124420226f41dac151d3",
+      "output": "out/planar-regions/pose-5.026.json",
+      "output_sha256": "daec51ec39874c52b14d8c717cad51bda66b2deedd242cda83c08ded2bd358bf"
+    },
+    {
+      "time": 5.027,
+      "regions": 1270,
+      "links": 2378,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.862914276022833e-05
+      ],
+      "maximum_region_volume_error_m3": 3.507245797224837e-21,
+      "maximum_port_area_error_m2": 2.15485181781494e-18,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.027.json",
+      "geometry_sha256": "ea9867746d450e2d41acb7d1f0e8bddc0662a9432c55fd20638463c93139a7a3",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.027.txt",
+      "input_sha256": "f17164aa15e3fc2b0a3721efcc4db9d281d7a85cb323bc0397b7e70c27633b8e",
+      "output": "out/planar-regions/pose-5.027.json",
+      "output_sha256": "913a1d2383be0b07f6df78cbe12fb8ea71fa4deb4f3c33db5b10445fa49312b5"
+    },
+    {
+      "time": 5.028,
+      "regions": 1272,
+      "links": 2382,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.865213963820605e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0381730293306602e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 3.9302328752599536e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.028.json",
+      "geometry_sha256": "570f13fd770c50417261402de0a425d6a09eb2b4b8c045b4d8d05151469cbea1",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.028.txt",
+      "input_sha256": "e4b3949137f1add2c4aafb10125270c6541d19f78f305069c7cf72087b1020bb",
+      "output": "out/planar-regions/pose-5.028.json",
+      "output_sha256": "04746ddd524f249146e660c8decbe7b70f43e62535b6e6d6f7a57ca32db2f5e7"
+    },
+    {
+      "time": 5.029,
+      "regions": 1272,
+      "links": 2381,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.867453987601224e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0572595439959903e-21,
+      "maximum_port_area_error_m2": 1.849919956803392e-18,
+      "maximum_component_volume_error_m3": 5.421010862427522e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.029.json",
+      "geometry_sha256": "6a769e60e6e9e5bf7bd23f466d6d959aae6233332f38a5e249263961a34fc584",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.029.txt",
+      "input_sha256": "a9e1348cb46187068e4c8f3a70ad6686b26f6d73c217602d68fe21809ec01311",
+      "output": "out/planar-regions/pose-5.029.json",
+      "output_sha256": "bd6b25daa5b931028d8228d7ec350b86dba80e1e1c487fccb32f8af46d6950df"
+    },
+    {
+      "time": 5.03,
+      "regions": 1272,
+      "links": 2381,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.86960032988207e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 2.303929616531697e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.030.json",
+      "geometry_sha256": "3be34a24754f74aca5ca5759a1b7308fcec43d125e0cd63104b1e762ed7b2774",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.030.txt",
+      "input_sha256": "7757bc5b1e45530d7013554e21425ace911005ecf59b785a36a9406574680c0f",
+      "output": "out/planar-regions/pose-5.030.json",
+      "output_sha256": "33dc05511b5ec36178f89a756fd27d97d23687c089f8e66a08344774d42d4b5a"
+    },
+    {
+      "time": 5.031,
+      "regions": 1272,
+      "links": 2380,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.871628779824739e-05
+      ],
+      "maximum_region_volume_error_m3": 3.017554874593445e-21,
+      "maximum_port_area_error_m2": 1.836367429647323e-18,
+      "maximum_component_volume_error_m3": 2.439454888092385e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.031.json",
+      "geometry_sha256": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.031.txt",
+      "input_sha256": "78dde7ed518778b86336adfd4c3d14f06b9090628e8aa7cf8465b3a273a97fcc",
+      "output": "out/planar-regions/pose-5.031.json",
+      "output_sha256": "870c9100dfe646636436cc5e3224273de7c32bbf5423fb4c9ad5c3b78e6a2b41"
+    },
+    {
+      "time": 5.032,
+      "regions": 1272,
+      "links": 2378,
+      "split_cells": [
+        3760
+      ],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2053198742264036e-05,
+        5.6683191999116054e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 6.098637220230962e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.032.json",
+      "geometry_sha256": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.032.txt",
+      "input_sha256": "ba117b6cb83880a3cdac87200def00c8984ad460417b1ac6f89de50972af9930",
+      "output": "out/planar-regions/pose-5.032.json",
+      "output_sha256": "881d7966e67fce6dc332d6cd0ccc5e5b6178b0921a0cad46052fe5a18610de21"
+    },
+    {
+      "time": 5.033,
+      "regions": 1270,
+      "links": 2376,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2159027311605368e-05,
+        5.659802419734895e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 1.4907779871675686e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.033.json",
+      "geometry_sha256": "5ffa51ccb3fb01fbd7343af9be13dadaeb379086e46d826ffb159c3b4ea1579b",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.033.txt",
+      "input_sha256": "22a2d97309b2b6fab8bf40da7600896ca13fd4c4ec98dc55dcc7f279bd5a5f80",
+      "output": "out/planar-regions/pose-5.033.json",
+      "output_sha256": "7c93806f4754c7de593fa515a9a7532714a4d95a3d32731e8c138bdda5cf135d"
+    },
+    {
+      "time": 5.034,
+      "regions": 1271,
+      "links": 2378,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2256509340272612e-05,
+        5.652051902133003e-05
+      ],
+      "maximum_region_volume_error_m3": 2.541098841762901e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 5.759824041329242e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.034.json",
+      "geometry_sha256": "6e66c83365f76dabfab3ccdd64c1a9960578cf1e73006c050df8d59eec2b76f2",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.034.txt",
+      "input_sha256": "6e04add58577585365b25c8a35b0c466f438ef4de030c30e9a4cc8422c0b8139",
+      "output": "out/planar-regions/pose-5.034.json",
+      "output_sha256": "db4c9429ded86f94773cd8da260a511ee974553366dc6ef494418d454efafee6"
+    },
+    {
+      "time": 5.035,
+      "regions": 1271,
+      "links": 2378,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.234541365556547e-05,
+        5.645022547730979e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 1.0164395367051604e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.035.json",
+      "geometry_sha256": "9230c518c1cc79b0ffeac3dcd6ad52f9751be501c20ff643609d240f947e2349",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.035.txt",
+      "input_sha256": "87602e71e2e594fe8c866e59d7d12a27413ae06dd48808df6c0a463a6108f5a8",
+      "output": "out/planar-regions/pose-5.035.json",
+      "output_sha256": "4f31e2bcf366085dc069ec3167b900cf56499f72fb98d29d77051823c14a64d1"
+    },
+    {
+      "time": 5.036,
+      "regions": 1271,
+      "links": 2378,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2425845020114634e-05,
+        5.638685907155848e-05
+      ],
+      "maximum_region_volume_error_m3": 1.998468359928115e-21,
+      "maximum_port_area_error_m2": 1.2332799712022613e-18,
+      "maximum_component_volume_error_m3": 7.453889935837843e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.036.json",
+      "geometry_sha256": "15a11478df8f41e56d780c6d83301b702b87503dcbcf49dd614ca3d9cfa86a48",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.036.txt",
+      "input_sha256": "5cf97111729dd005d586d471d4223b683e45739a98141db04de14700d4094f7c",
+      "output": "out/planar-regions/pose-5.036.json",
+      "output_sha256": "18d7afe536efef764749f9e4dc11c15d9c8c6c3c400d4146a62e734b2ac13f55"
+    },
+    {
+      "time": 5.037,
+      "regions": 1272,
+      "links": 2380,
+      "split_cells": [
+        3630
+      ],
+      "components": 2,
+      "component_volumes_m3": [
+        1.249812127064519e-05,
+        5.633013981543771e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2332799712022613e-18,
+      "maximum_component_volume_error_m3": 1.2197274440461925e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.037.json",
+      "geometry_sha256": "4c21f67debd929addd9d95515a2064b69e42dedaf45296c54d26856a9c3728cc",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.037.txt",
+      "input_sha256": "6799abd5fe6684f450de63bf911a80861d96bc0fe36d8256b17abbaeb5c5ce56",
+      "output": "out/planar-regions/pose-5.037.json",
+      "output_sha256": "29c5b3719e76a5c22f14831c2696b819ea3d1948a630a0144b3923c7a7999adf"
+    },
+    {
+      "time": 5.038,
+      "regions": 1272,
+      "links": 2381,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2562696044347948e-05,
+        5.6279685337348e-05
+      ],
+      "maximum_region_volume_error_m3": 1.5352472168984194e-21,
+      "maximum_port_area_error_m2": 9.486769009248164e-19,
+      "maximum_component_volume_error_m3": 9.486769009248164e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.038.json",
+      "geometry_sha256": "9867499099c9d80a4085147194b486c604a8c1de842439770378e76ec8a27f71",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.038.txt",
+      "input_sha256": "474e10702d0d04fc391f29af26dd05e9e420739472c874eca59d9c2c0092c3a9",
+      "output": "out/planar-regions/pose-5.038.json",
+      "output_sha256": "68ff6cc9853c126a43f35b42a3add7f043aa5c1fbf3016dcb82265165bdc2ea3"
+    },
+    {
+      "time": 5.039,
+      "regions": 1270,
+      "links": 2378,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.262010382240884e-05,
+        5.623505101294379e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0043199847925965e-21,
+      "maximum_port_area_error_m2": 1.849919956803392e-18,
+      "maximum_component_volume_error_m3": 1.4907779871675686e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.039.json",
+      "geometry_sha256": "853a7ab27f0241f3311bc3bdb09209a0b383384c2a817fa15172a5d51a354048",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.039.txt",
+      "input_sha256": "3a1a0a583735ae3debae543928b5ef6a8a36e74167b95caca063efaddc635600",
+      "output": "out/planar-regions/pose-5.039.json",
+      "output_sha256": "5da1a9223f1d2ca5639e5a67c2f8fc79f250c8877907a471972a172b23ebce5d"
+    },
+    {
+      "time": 5.04,
+      "regions": 1270,
+      "links": 2378,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2670919754251379e-05,
+        5.61957606186166e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2332799712022613e-18,
+      "maximum_component_volume_error_m3": 1.1519648082658485e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.040.json",
+      "geometry_sha256": "ecc8627aa5c3b90716c64f9a7b0e1e119b45f64f347f3ed2a2483a01135e8239",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.040.txt",
+      "input_sha256": "830e248195f5f892e1235d25154593f88bddbc364afd817b88c681fc8d5e4e49",
+      "output": "out/planar-regions/pose-5.040.json",
+      "output_sha256": "13660679bdab2956cf7d4f0b520955750fa549ade37e9291ec4e7b3c11a7b99a"
+    },
+    {
+      "time": 5.041,
+      "regions": 1271,
+      "links": 2380,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2715730656361273e-05,
+        5.6161329161917734e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.041.json",
+      "geometry_sha256": "d718a92a0045b4b061e4c5f73700c3aaac602c65963168357026ee82889f9085",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.041.txt",
+      "input_sha256": "09f988a76608bf716539e75de955ed8f3ebf4349382c3063e4fd6fae826afa5d",
+      "output": "out/planar-regions/pose-5.041.json",
+      "output_sha256": "4575b6c3c59d1fdd352b48074e4469d75a39b82fa772f2b7dd037abc4cd89c1b"
+    },
+    {
+      "time": 5.042,
+      "regions": 1269,
+      "links": 2377,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.275511452748785e-05,
+        5.613127931121805e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 1.8973538018496328e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.042.json",
+      "geometry_sha256": "505b8a33db6afafbda8a13934607ac15ad02e98b65b9933b281dd6d1b163e02b",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.042.txt",
+      "input_sha256": "7424855fdfa753d15a5461fc8aa1c115e97c33a1da75699b92ee2f4d0b12e1e0",
+      "output": "out/planar-regions/pose-5.042.json",
+      "output_sha256": "49b9f8876dea9adec0fa716a69c440fab59b23801e0491af46faffcc9e98c4f0"
+    },
+    {
+      "time": 5.043,
+      "regions": 1269,
+      "links": 2376,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.278995881054295e-05,
+        5.61047916849416e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 8.809142651444724e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.043.json",
+      "geometry_sha256": "3302a3d0e4fbeaeff6e8f3d643220caa86fdeead0573a9d363ff0c0b3eb1b599",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.043.txt",
+      "input_sha256": "c9dad83bd5d65d31c1383108bc579f1d881dac6d9ddecbc099f0ea95ebf76c27",
+      "output": "out/planar-regions/pose-5.043.json",
+      "output_sha256": "2b8cac8ee95c84619867cfb2d6ce0d7d02a3da82133e08047042edc52988ef80"
+    },
+    {
+      "time": 5.044,
+      "regions": 1271,
+      "links": 2380,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2822181930310393e-05,
+        5.607994854816066e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 8.978549240895584e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.044.json",
+      "geometry_sha256": "61c4d4291acb611573c43e7f0429cbff59f6f40f41e2f8858c650fcf7ba5f3b5",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.044.txt",
+      "input_sha256": "ef14c145d171795d32303b398e54e02af11fbcf54412f3974ea4cdbf79fd9d06",
+      "output": "out/planar-regions/pose-5.044.json",
+      "output_sha256": "99e0cef25008c464bd18fdfdd87189a9e52f1e9869a01ecd1ba0ab924488d5ff"
+    },
+    {
+      "time": 5.045,
+      "regions": 1271,
+      "links": 2380,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2850282181362895e-05,
+        5.605851684727503e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.531435568635775e-18,
+      "maximum_component_volume_error_m3": 7.792703114739563e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.045.json",
+      "geometry_sha256": "f7f85b19adc339647eb4f46d2c1edd022d638500117733759007827282ce6f17",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.045.txt",
+      "input_sha256": "e97fe106688750d46e0ce870d1de57daea210badd35caa00961ab7c9323dc323",
+      "output": "out/planar-regions/pose-5.045.json",
+      "output_sha256": "76962d31b2c9e6d89fbeb5e013a936285dd9b03a689ead816af5752a65993def"
+    },
+    {
+      "time": 5.046,
+      "regions": 1271,
+      "links": 2380,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2874733964081726e-05,
+        5.6040083181194624e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.531435568635775e-18,
+      "maximum_component_volume_error_m3": 6.606856988583543e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.046.json",
+      "geometry_sha256": "5d9e84363c44c8f5caab7b75110cbf21d045031388b12cdc2219024525a59d8b",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.046.txt",
+      "input_sha256": "65c19be3e76d2ee106aeb76736e1638f09b458d2c47d402fe02cf331147fb724",
+      "output": "out/planar-regions/pose-5.046.json",
+      "output_sha256": "f3fa93254f7cb056e291979a65013af39f9f9474407423456cbcce3022b6806e"
+    },
+    {
+      "time": 5.047,
+      "regions": 1273,
+      "links": 2384,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.289596971923332e-05,
+        5.6024273924986356e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.531435568635775e-18,
+      "maximum_component_volume_error_m3": 8.300922883092143e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.047.json",
+      "geometry_sha256": "d60a12fcc9f95ee54e53b55e04a991ace6c07db04ea26dc3c3b0edd761c6b8e4",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.047.txt",
+      "input_sha256": "cc26c521dc21cd5607d7d01554180fd8f247fb862ff0b08fe2a794b5b7d7c776",
+      "output": "out/planar-regions/pose-5.047.json",
+      "output_sha256": "7c3fd14133fb63a4c1e5ee37eca235a7eb7e5d5999fe7682d2bfac48c5e768e7"
+    },
+    {
+      "time": 5.048,
+      "regions": 1273,
+      "links": 2384,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2914380299850929e-05,
+        5.6010753883099374e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5609511764641737e-21,
+      "maximum_port_area_error_m2": 1.5246593050577406e-18,
+      "maximum_component_volume_error_m3": 2.507217523872729e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.048.json",
+      "geometry_sha256": "9a781207ff436c010f53cbec179770e2f7de59cefffb36b377084568f832ef3a",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.048.txt",
+      "input_sha256": "73a990185b052a2fa17bafe4ef121dd032ff1f15cc70113fa06f7dd92ee69bdb",
+      "output": "out/planar-regions/pose-5.048.json",
+      "output_sha256": "83af8632cd4247b02dea540061db6183b970a596a2145804aa4cd48b0771c104"
+    },
+    {
+      "time": 5.049,
+      "regions": 1272,
+      "links": 2382,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2930316467429861e-05,
+        5.599922423432035e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 2.303929616531697e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.049.json",
+      "geometry_sha256": "133a9b4958ab128b4b08d0a09b0e8285df0748327349178adb9640d88f0f46b8",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.049.txt",
+      "input_sha256": "459dbb7674598fbbd90808823c61b0b4bd7af5bcde76b3f7f06b072678f6e704",
+      "output": "out/planar-regions/pose-5.049.json",
+      "output_sha256": "548203a0db6de0f0f718482d0ab10287a86a9687d34344c0e7aed67ac85b6119"
+    },
+    {
+      "time": 5.05,
+      "regions": 1273,
+      "links": 2385,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2944091141679554e-05,
+        5.598941997586384e-05
+      ],
+      "maximum_region_volume_error_m3": 2.541098841762901e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 6.776263578034403e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.050.json",
+      "geometry_sha256": "cc0772a00d82df43eec06be884fcadc8371ac425aa093ce27dc4f303aebcf978",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.050.txt",
+      "input_sha256": "8325016bd6f998b6c693d585b08c0e9e09f1108bd8d4a104ccfa754c5762e88a",
+      "output": "out/planar-regions/pose-5.050.json",
+      "output_sha256": "a05136bf69d9e4318757d28ac741898cd56606bb155156878f05bc13dbd31907"
+    },
+    {
+      "time": 5.051,
+      "regions": 1273,
+      "links": 2385,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2955982068301901e-05,
+        5.598110728884959e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 2.168404344971009e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.051.json",
+      "geometry_sha256": "96651bda2250f3902064676308f5d78c6d14edac8c23e872ed524eb934da297c",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.051.txt",
+      "input_sha256": "da912552a037a81eedc35af94cf129a9092ef2d416fd5285e01a9aacf6ebd46f",
+      "output": "out/planar-regions/pose-5.051.json",
+      "output_sha256": "ef623f6f8540d453909c11f7c8061d3add7766bfc4201f0174d056806469d75a"
+    },
+    {
+      "time": 5.052,
+      "regions": 1273,
+      "links": 2385,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2966234740015053e-05,
+        5.5974080632805706e-05
+      ],
+      "maximum_region_volume_error_m3": 3.533715576826534e-21,
+      "maximum_port_area_error_m2": 2.1480755542369057e-18,
+      "maximum_component_volume_error_m3": 9.825582188149884e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.052.json",
+      "geometry_sha256": "554f211a5fe4bc15b1b9616811357605fb0002559d6d18a96ff4f236eb01955a",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.052.txt",
+      "input_sha256": "0da93c25dd6c5c6710ddc442082bdb794e23a250fff0e9edee3ab2dfc042c9cd",
+      "output": "out/planar-regions/pose-5.052.json",
+      "output_sha256": "4c12ab90853298e1ab6a77ad6a6df7302faa94f2928578d1839b063c1313e046"
+    },
+    {
+      "time": 5.053,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.297506527139514e-05,
+        5.596816008858867e-05
+      ],
+      "maximum_region_volume_error_m3": 3.024172319493869e-21,
+      "maximum_port_area_error_m2": 1.849919956803392e-18,
+      "maximum_component_volume_error_m3": 2.371692252312041e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.053.json",
+      "geometry_sha256": "a8705dfbddb1c1ed97fa635c59b5324b711f47bba8339045385c61fd384b2e41",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.053.txt",
+      "input_sha256": "398027f1fe001303bc1a5511edc8004d11731e4233a866f5b3b44d3b0200c4c2",
+      "output": "out/planar-regions/pose-5.053.json",
+      "output_sha256": "c7f5bef91118f7d01aa41e67eed189822bf2974cc2d7ca619ecf1d4537780974"
+    },
+    {
+      "time": 5.054,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.298196047849522e-05,
+        5.596389094571065e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.531435568635775e-18,
+      "maximum_component_volume_error_m3": 7.962109704190423e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.054.json",
+      "geometry_sha256": "1e5f693c62fe8758acec4d4941dc879c015b4494287a3a87e86383d75c6f56e4",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.054.txt",
+      "input_sha256": "11c1e4802cda2bff1c22355e8f99c41f6d3c7310100d1aa95184a2154814feab",
+      "output": "out/planar-regions/pose-5.054.json",
+      "output_sha256": "a01e80a2ffb630cce865d46a04b646983f1b22983e244ff789e26c1e75db0b21"
+    },
+    {
+      "time": 5.055,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.298606298831463e-05,
+        5.59621556462224e-05
+      ],
+      "maximum_region_volume_error_m3": 4.1425205076655626e-21,
+      "maximum_port_area_error_m2": 2.4530074152484538e-18,
+      "maximum_component_volume_error_m3": 2.846030702774449e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.055.json",
+      "geometry_sha256": "fdf9df00944d7e193aa6d0f90b86d26454ee9c18442fd324e48fbec626845dc8",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.055.txt",
+      "input_sha256": "28e737ad6e78a0e6fbeef97836a1fae0a8f1bec3de29e6c942ed9044b7a9712a",
+      "output": "out/planar-regions/pose-5.055.json",
+      "output_sha256": "3353251951a1a53280dad58d593cd932740580400808be9320dd35c98b298457"
+    },
+    {
+      "time": 5.056,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2987283225437004e-05,
+        5.5963079184851885e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 2.710505431213761e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.056.json",
+      "geometry_sha256": "b700d015ed22f25426ad68d2478f41bdec6f223708806fb0289747594750db86",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.056.txt",
+      "input_sha256": "01e1a73f51586104a4a9a6e9cfc2d4c948e224f80e7fa81a6592c058cae00180",
+      "output": "out/planar-regions/pose-5.056.json",
+      "output_sha256": "2e758839945b7f46d3fca521d004f7c22f4ae132d4805e36b77295dd85fe123a"
+    },
+    {
+      "time": 5.057,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.298593791797203e-05,
+        5.5966398862943995e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5517643593698782e-18,
+      "maximum_component_volume_error_m3": 1.4230153513872246e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.057.json",
+      "geometry_sha256": "852f8043af17684704de2d87fb6d4ccce96cc9f42eb227b9fa34fdef92152718",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.057.txt",
+      "input_sha256": "3aef1b70b12675db385e1829961cbe0a5a7b8ecb76440335bcd9f15a83f21078",
+      "output": "out/planar-regions/pose-5.057.json",
+      "output_sha256": "9d9fb74c96cc6dc5753dbe15f8aede88770f5044e2b42717dc8e50e4a4237655"
+    },
+    {
+      "time": 5.058,
+      "regions": 1272,
+      "links": 2383,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.2982519678767017e-05,
+        5.597168517994606e-05
+      ],
+      "maximum_region_volume_error_m3": 2.0117032497289633e-21,
+      "maximum_port_area_error_m2": 1.2332799712022613e-18,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.058.json",
+      "geometry_sha256": "a91bf6fff9fb4457f62a78aac037f649794afc53701eab875b153715deb1cc80",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.058.txt",
+      "input_sha256": "bc38ac43ce3470a3f9eb6602130372bfac6a2d50d1265666621a81a8dcee2e8b",
+      "output": "out/planar-regions/pose-5.058.json",
+      "output_sha256": "5464306f3ebab103cf390111e24d639731e65c6a902a392cbafa45e025a947f0"
+    },
+    {
+      "time": 5.059,
+      "regions": 1276,
+      "links": 2389,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.3022437061245898e-05,
+        5.594333058874996e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 2.236166980751353e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.059.json",
+      "geometry_sha256": "751cf622f0e44851913cb4debc5ced8377783af93d4b2e9a4a65ad12bc126400",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.059.txt",
+      "input_sha256": "6a4e4b6d3111f06e49e29071e29e0f9b2ff94cadbc00ff8ff4dfb2b3b4519c01",
+      "output": "out/planar-regions/pose-5.059.json",
+      "output_sha256": "8a9e5ea4b166f1a7a2b4672a6480389bcc5dc97c66278dc05dcaa18a43389056"
+    },
+    {
+      "time": 5.06,
+      "regions": 1276,
+      "links": 2389,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.318265764141787e-05,
+        5.581447058003649e-05
+      ],
+      "maximum_region_volume_error_m3": 4.486627642487622e-21,
+      "maximum_port_area_error_m2": 2.757939276260002e-18,
+      "maximum_component_volume_error_m3": 1.4907779871675686e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.060.json",
+      "geometry_sha256": "096add39dacff6f47684e6447f6e0a740cac838f43868493039a4cfde8dc81f6",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.060.txt",
+      "input_sha256": "846fba157a245ca3425b998b4bba5c7853f56ec54d39a6a6afa2cee4d16717ed",
+      "output": "out/planar-regions/pose-5.060.json",
+      "output_sha256": "210789d2051824a6b3fdd9a3c96e061d7034b60dd0edf93f9e27f7b1139cc191"
+    },
+    {
+      "time": 5.061,
+      "regions": 1274,
+      "links": 2386,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.348210752486356e-05,
+        5.556454862782741e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0043199847925965e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 1.6263032587282567e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.061.json",
+      "geometry_sha256": "db1393f67315d9930ba21d44e57fc6d4fd02fefbd43b35a768c1bf72667fac54",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.061.txt",
+      "input_sha256": "b852b0430a1356996711d557d05cddcbf810555ee83424a32410095d6f2c8f67",
+      "output": "out/planar-regions/pose-5.061.json",
+      "output_sha256": "f0f94a73e8d0738797dbc2a25dd3a4edb9aa1d403e19793777187612538f6fa8"
+    },
+    {
+      "time": 5.062,
+      "regions": 1280,
+      "links": 2397,
+      "split_cells": [],
+      "components": 2,
+      "component_volumes_m3": [
+        1.3908959979133205e-05,
+        5.519964822594504e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.062.json",
+      "geometry_sha256": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.062.txt",
+      "input_sha256": "eec1e26c3c4c08a2c1cc0ac3a97a9a5756725f268884d8782735a6e14ff0d9b9",
+      "output": "out/planar-regions/pose-5.062.json",
+      "output_sha256": "131bf37b5da92c32872d82bf2ca127cb40a6fee426e38f3baf21007c24f00b09"
+    },
+    {
+      "time": 5.063,
+      "regions": 1276,
+      "links": 2392,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.917984206007134e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5278639519620526e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 2.710505431213761e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.063.json",
+      "geometry_sha256": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.063.txt",
+      "input_sha256": "3dd90e6e15058b59f3f315f12c6459bccefcb164f49df8bc22ace5aef75c00b8",
+      "output": "out/planar-regions/pose-5.063.json",
+      "output_sha256": "d29f7ee8b20647936d8f301520e8bb6d6259e727640e1edf1f7e6a2db07370bc"
+    },
+    {
+      "time": 5.064,
+      "regions": 1277,
+      "links": 2394,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.925956788898063e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 1.4907779871675686e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.064.json",
+      "geometry_sha256": "06d5d6c505856107a8c1c007b3603be0bf07483ac0c2b6391377c5bf5fa412e9",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.064.txt",
+      "input_sha256": "ec2913c9059696413f9d7289d33b6fceceec8ba63eaaa3bf37ed9ab26b352fe7",
+      "output": "out/planar-regions/pose-5.064.json",
+      "output_sha256": "a22ea3adc4f082679f147f4f33ccfa3a0a224c6c1fd9dccb2f35fa4902c167ad"
+    },
+    {
+      "time": 5.065,
+      "regions": 1279,
+      "links": 2399,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.93425012314213e-05
+      ],
+      "maximum_region_volume_error_m3": 2.5013941723603557e-21,
+      "maximum_port_area_error_m2": 1.5382118322138094e-18,
+      "maximum_component_volume_error_m3": 1.6263032587282567e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.065.json",
+      "geometry_sha256": "af9823b5baf4184a17044ae301441c0e55a25795336c54255dbc191d6f002522",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.065.txt",
+      "input_sha256": "a559ff74b596998e472cded321ba64f7ef5935061aeb10ceeb4d1c3e2b8bb585",
+      "output": "out/planar-regions/pose-5.065.json",
+      "output_sha256": "0ffed098501679e481858124575b351a4560dd6d8b8c55f66783cbe20363e1d5"
+    },
+    {
+      "time": 5.066,
+      "regions": 1279,
+      "links": 2398,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.942595991574385e-05
+      ],
+      "maximum_region_volume_error_m3": 4.036641389258775e-21,
+      "maximum_port_area_error_m2": 2.4530074152484538e-18,
+      "maximum_component_volume_error_m3": 2.710505431213761e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.066.json",
+      "geometry_sha256": "62c0445db98e963a4ec4a63310dd56879cfe2a1798c316043bca8ea1a00bd606",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.066.txt",
+      "input_sha256": "bb63e79d410e596dc56fc2afe884bfa33585f23bfea20bc166088b600511933f",
+      "output": "out/planar-regions/pose-5.066.json",
+      "output_sha256": "c2d3755c026143cd751914a8edd2235244f7091320614731b075f80a12e12510"
+    },
+    {
+      "time": 5.067,
+      "regions": 1280,
+      "links": 2401,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.95077319005033e-05
+      ],
+      "maximum_region_volume_error_m3": 3.0307897643942934e-21,
+      "maximum_port_area_error_m2": 1.8431436932253575e-18,
+      "maximum_component_volume_error_m3": 3.3881317890172014e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.067.json",
+      "geometry_sha256": "279728e1aaf39c06528d26a5e486db239c1479c056a9a40e238b64f10e06f90b",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.067.txt",
+      "input_sha256": "f7b177398e086a750f2b547c46a393f501fe5f44fff85d728a20225d99d8d5e9",
+      "output": "out/planar-regions/pose-5.067.json",
+      "output_sha256": "8a1d6cb6c34857de8b6764f5e015d08119731353474912e2a250879aacb0eb09"
+    },
+    {
+      "time": 5.068,
+      "regions": 1281,
+      "links": 2403,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.95860539127953e-05
+      ],
+      "maximum_region_volume_error_m3": 3.2160782216061716e-21,
+      "maximum_port_area_error_m2": 2.134523027080837e-18,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.068.json",
+      "geometry_sha256": "700d3639276b82d4a2f21195436889e00615d861afbc56ed7adde3608428e78e",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.068.txt",
+      "input_sha256": "9f0e8db0a18696d63dff7e3cb1efd3c4b259170fe87c94dc01ff2f8afb91ad71",
+      "output": "out/planar-regions/pose-5.068.json",
+      "output_sha256": "08b751ec317844ee8c03e8b8db2031b3482edfd8cb2df3de13ed4713472afd9e"
+    },
+    {
+      "time": 5.069,
+      "regions": 1280,
+      "links": 2402,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.965961658475407e-05
+      ],
+      "maximum_region_volume_error_m3": 2.514629062161204e-21,
+      "maximum_port_area_error_m2": 1.5449880957918438e-18,
+      "maximum_component_volume_error_m3": 9.486769009248164e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.069.json",
+      "geometry_sha256": "113a00ec46d586a3ff717cdba66c02deb3b9b474307e695d8512ebb15bdaf6b9",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.069.txt",
+      "input_sha256": "294c931214cd8d202718c4e27ff1d063c97f69a9870188c569e7d133ee4e6ad7",
+      "output": "out/planar-regions/pose-5.069.json",
+      "output_sha256": "4d5920cd194294152a18c13097e8e7bf65c43eefd2860e25218ec0722541dfd8"
+    },
+    {
+      "time": 5.07,
+      "regions": 1280,
+      "links": 2404,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.973442613393385e-05
+      ],
+      "maximum_region_volume_error_m3": 1.5087774372967225e-21,
+      "maximum_port_area_error_m2": 9.283481101907132e-19,
+      "maximum_component_volume_error_m3": 1.3552527156068805e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.070.json",
+      "geometry_sha256": "3fc32b6d14fe1f69a1f078972f759d95c61ecdccc3e27c188fd4aaf399896271",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.070.txt",
+      "input_sha256": "c65668dae3a6c65916349b5a8f999228d8ce9c198c328d5d509dc5f26b10c194",
+      "output": "out/planar-regions/pose-5.070.json",
+      "output_sha256": "70dbbe6d664aa310aef6f4c2babba5824396cd76f51cbc6011d80204b011065b"
+    },
+    {
+      "time": 5.071,
+      "regions": 1282,
+      "links": 2407,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.980382078372393e-05
+      ],
+      "maximum_region_volume_error_m3": 1.7734752333136913e-21,
+      "maximum_port_area_error_m2": 1.2197274440461925e-18,
+      "maximum_component_volume_error_m3": 2.439454888092385e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.071.json",
+      "geometry_sha256": "e4403c52855b73dac7ef05893672d152b82822eedef058310b63d789555b28e2",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.071.txt",
+      "input_sha256": "5c9a8e14fca7d093f4aa40dab95a2ea723cfe4f55c215541b5da5e87689506e7",
+      "output": "out/planar-regions/pose-5.071.json",
+      "output_sha256": "f63a060ccd844360a0b1686ab399ce8f02d6ce0051b0d99530e1fd9c793d5be6"
+    },
+    {
+      "time": 5.072,
+      "regions": 1283,
+      "links": 2410,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.986659827560316e-05
+      ],
+      "maximum_region_volume_error_m3": 1.522012327097571e-21,
+      "maximum_port_area_error_m2": 9.283481101907132e-19,
+      "maximum_component_volume_error_m3": 3.1170812458958252e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.072.json",
+      "geometry_sha256": "a1321bdc700944eb1df115d2b99884b753c8f51fd1efe629046bc162c5735e51",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.072.txt",
+      "input_sha256": "93293cd368a4343e9cda82a16e70bbc47bd4e57d57e5d14d36cc7aecd7123cd8",
+      "output": "out/planar-regions/pose-5.072.json",
+      "output_sha256": "49f427c4b6b9db04fa06e610eeb75a39649c55445d89684c92d76bce78299998"
+    },
+    {
+      "time": 5.073,
+      "regions": 1286,
+      "links": 2416,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.9922865989543e-05
+      ],
+      "maximum_region_volume_error_m3": 1.733770563911146e-21,
+      "maximum_port_area_error_m2": 1.07742590890747e-18,
+      "maximum_component_volume_error_m3": 1.0842021724855044e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.073.json",
+      "geometry_sha256": "6f8e2c7563efa3ce0ac5412521949b57fafdca50a42a72481a70d6cfdb5c0fa0",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.073.txt",
+      "input_sha256": "2b326b6f25a78d880c3121ab540c4191dd0f924dbc7285cb1691f1c515f9f6c6",
+      "output": "out/planar-regions/pose-5.073.json",
+      "output_sha256": "7c1c524280558d3f654edf840db94cb483c9a8662025083231c01a71c8e31628"
+    },
+    {
+      "time": 5.074,
+      "regions": 1281,
+      "links": 2407,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        6.997288236948161e-05
+      ],
+      "maximum_region_volume_error_m3": 8.07328277851755e-22,
+      "maximum_port_area_error_m2": 4.811147140404426e-19,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.074.json",
+      "geometry_sha256": "5cff2d3e9b0002c3ab518fe21843e4e831c659084ad864c49c42f27be552568e",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.074.txt",
+      "input_sha256": "6eb47ea08746e00928657c5ed5fd6c4eec2f5c7e8bab60b621566d6683f97a96",
+      "output": "out/planar-regions/pose-5.074.json",
+      "output_sha256": "d93a8a7f755ec1d69071212b6c16c38d9ced950398818f4c7a0272bc987a25fc"
+    },
+    {
+      "time": 5.075,
+      "regions": 1285,
+      "links": 2415,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        7.001642645577197e-05
+      ],
+      "maximum_region_volume_error_m3": 1.3499587596865412e-21,
+      "maximum_port_area_error_m2": 9.181837148236616e-19,
+      "maximum_component_volume_error_m3": 2.846030702774449e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.075.json",
+      "geometry_sha256": "ca22f3fc0643530d31630405bac36d2940cdb6b29e3d0d7d1dde21c326ffa3db",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.075.txt",
+      "input_sha256": "b962990f8ec64b453b3cdfae8fdb37e66e04979e4d27df2b1859338e68746f2a",
+      "output": "out/planar-regions/pose-5.075.json",
+      "output_sha256": "642c92006207b88bb5fecdbe28dd56bfc48f1e5a2a2ce46a0c375d8ae4dba6ae"
+    },
+    {
+      "time": 5.076,
+      "regions": 1289,
+      "links": 2423,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        7.005397311459981e-05
+      ],
+      "maximum_region_volume_error_m3": 9.992341799640574e-22,
+      "maximum_port_area_error_m2": 7.724940478959219e-19,
+      "maximum_component_volume_error_m3": 2.439454888092385e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.076.json",
+      "geometry_sha256": "91860970188d5f6ddb0c0e6729b2b27aaafec1eb4a4cc8a51ddedac71deb524e",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.076.txt",
+      "input_sha256": "763e30cfba2714904141aa6a65ecfa0535cea80ea09842429e218f659ecb5c74",
+      "output": "out/planar-regions/pose-5.076.json",
+      "output_sha256": "d197941ee054cf44237e613268e20a54d3adbcec2ea72ae05209d44708f4051e"
+    },
+    {
+      "time": 5.077,
+      "regions": 1285,
+      "links": 2415,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        7.008628436331471e-05
+      ],
+      "maximum_region_volume_error_m3": 1.1249656330721176e-21,
+      "maximum_port_area_error_m2": 9.0801931945661e-19,
+      "maximum_component_volume_error_m3": 1.2197274440461925e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.077.json",
+      "geometry_sha256": "560201a8b9d30dfa00d8597a1974c8081cd4639c1e8ba66a7438a7239d95e607",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.077.txt",
+      "input_sha256": "145b2991a242a54bd4c5898a160923a1c364507fa33c78658c0ab948b55bf893",
+      "output": "out/planar-regions/pose-5.077.json",
+      "output_sha256": "9e482f8cd7a6ddd01c20aff6d734c7c99ce19200a8661277caa4aa699d68e88e"
+    },
+    {
+      "time": 5.078,
+      "regions": 1283,
+      "links": 2411,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        7.011405418879332e-05
+      ],
+      "maximum_region_volume_error_m3": 1.4293680984916318e-21,
+      "maximum_port_area_error_m2": 1.0503208545953324e-18,
+      "maximum_component_volume_error_m3": 2.168404344971009e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.078.json",
+      "geometry_sha256": "7cf024f8b181f895b1c7b68a18b4ce9f492abb0febb0b73410000908c0c31492",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.078.txt",
+      "input_sha256": "19e1d9c662b467b95fac84c8561205a352616a3a3628613efe6ef2671055a0d1",
+      "output": "out/planar-regions/pose-5.078.json",
+      "output_sha256": "a263ba9434f67d16bf3001582a7c0ec16163f049816f7528d2438f6fd2973a1e"
+    },
+    {
+      "time": 5.079,
+      "regions": 1298,
+      "links": 2439,
+      "split_cells": [
+        2853,
+        2917,
+        2981,
+        3045
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.013790396836113e-05
+      ],
+      "maximum_region_volume_error_m3": 1.0190865146653301e-21,
+      "maximum_port_area_error_m2": 7.521652571618187e-19,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.079.json",
+      "geometry_sha256": "9ccfece3daf503b744c4b7d366b14a8e11580e2ef196ef4ce93166fdf6499775",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.079.txt",
+      "input_sha256": "7f1fbae959b06fe62509d153e5776b9e3d2732137d34e835c4a526c60046e6ad",
+      "output": "out/planar-regions/pose-5.079.json",
+      "output_sha256": "64f5fc578cb6b560d5d3567e2394c7f2835244efb3de58dfc8067d12148a7e01"
+    },
+    {
+      "time": 5.08,
+      "regions": 1294,
+      "links": 2431,
+      "split_cells": [
+        2853,
+        2917,
+        2981
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.01583805663248e-05
+      ],
+      "maximum_region_volume_error_m3": 1.5352472168984194e-21,
+      "maximum_port_area_error_m2": 9.351243737687476e-19,
+      "maximum_component_volume_error_m3": 2.574980159653073e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.080.json",
+      "geometry_sha256": "fb6bd8d441644220bce89ae15b5a517d61a4544a371131f03167d1cccf7ccecc",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.080.txt",
+      "input_sha256": "38e5acc49fdaccdda7700ee4fd09930fab56cc5478a2f0771097a31e2f0a9212",
+      "output": "out/planar-regions/pose-5.080.json",
+      "output_sha256": "bf29806e1b07a5cf70f5465d2995c498ead19ad3b77aa255e06028a3c6ea7188"
+    },
+    {
+      "time": 5.081,
+      "regions": 1293,
+      "links": 2429,
+      "split_cells": [
+        2853,
+        2917
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.017595932204563e-05
+      ],
+      "maximum_region_volume_error_m3": 1.8131799027162367e-21,
+      "maximum_port_area_error_m2": 1.2400562347802957e-18,
+      "maximum_component_volume_error_m3": 1.7618285302889447e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.081.json",
+      "geometry_sha256": "d23bba40ba44a6a3d0528732f4cac0376f19f2439f2581ffa2f4348a122ed552",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.081.txt",
+      "input_sha256": "fb46d0c51ebde43e78f8199e1d741e4f42b08511fa411fc546849eb8339faa41",
+      "output": "out/planar-regions/pose-5.081.json",
+      "output_sha256": "2141c44c0b0b0b581a0774597df3937e8c2948cb72b38b5ab59d42200502be8b"
+    },
+    {
+      "time": 5.082,
+      "regions": 1292,
+      "links": 2427,
+      "split_cells": [
+        2853,
+        2917
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.019105031807338e-05
+      ],
+      "maximum_region_volume_error_m3": 1.522012327097571e-21,
+      "maximum_port_area_error_m2": 9.351243737687476e-19,
+      "maximum_component_volume_error_m3": 8.131516293641283e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.082.json",
+      "geometry_sha256": "775c92a32078645f7a68ba00391c95140a35820249f26d3b63ac7516436b56f8",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.082.txt",
+      "input_sha256": "a58546d73e7c2c8c660ecc185c3785165f70697cf16ea7b5cf9560d861de09d9",
+      "output": "out/planar-regions/pose-5.082.json",
+      "output_sha256": "7ccb4ed9ab908672102adc419caeafc974740b7cdf934dc19931e968612d75fd"
+    },
+    {
+      "time": 5.083,
+      "regions": 1291,
+      "links": 2425,
+      "split_cells": [
+        2853,
+        2917
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.020400986920037e-05
+      ],
+      "maximum_region_volume_error_m3": 1.1315830779725419e-21,
+      "maximum_port_area_error_m2": 7.521652571618187e-19,
+      "maximum_component_volume_error_m3": 5.421010862427522e-20,
+      "geometry": "out/planar-airspace/motion/pose-5.083.json",
+      "geometry_sha256": "68f90aa1bfdfb6f2a6771586408f1120256d00daf3ac9c50af21f17291e15e21",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.083.txt",
+      "input_sha256": "5624c12ec3268df05f45008a129f10ffbf2d9a662cc688f9b545370228e652b2",
+      "output": "out/planar-regions/pose-5.083.json",
+      "output_sha256": "bc6c8b4df563b7c3cec34537d963a241693a5d615de83ab4ad827a5889438fa2"
+    },
+    {
+      "time": 5.084,
+      "regions": 1289,
+      "links": 2420,
+      "split_cells": [
+        2853
+      ],
+      "components": 1,
+      "component_volumes_m3": [
+        7.021514101951852e-05
+      ],
+      "maximum_region_volume_error_m3": 1.6080391108030858e-21,
+      "maximum_port_area_error_m2": 1.07742590890747e-18,
+      "maximum_component_volume_error_m3": 2.168404344971009e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.084.json",
+      "geometry_sha256": "b99903e27e1284b8ca8e9c0cbe5069e270cc8a600e373f821abca6dbe9ebe117",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.084.txt",
+      "input_sha256": "3f0310b9e997d3cd931cc39a2f6fcb40490dc06c1759ee30502d713ebf7ab938",
+      "output": "out/planar-regions/pose-5.084.json",
+      "output_sha256": "1ce2a33f29775e9ec0619baadeaf633014e883a9369888a1ebfe51cb1a465b4d"
+    },
+    {
+      "time": 5.085,
+      "regions": 1289,
+      "links": 2421,
+      "split_cells": [],
+      "components": 1,
+      "component_volumes_m3": [
+        7.022470397161009e-05
+      ],
+      "maximum_region_volume_error_m3": 1.495542547495874e-21,
+      "maximum_port_area_error_m2": 9.181837148236616e-19,
+      "maximum_component_volume_error_m3": 1.7618285302889447e-19,
+      "geometry": "out/planar-airspace/motion/pose-5.085.json",
+      "geometry_sha256": "9e81a538a042e14f274f0996f5673db285bd7241efb93e01276c7e9603ddff1f",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_regions_probe"
+      ],
+      "input": "out/planar-regions/pose-5.085.txt",
+      "input_sha256": "3b5c0eeffd5e19c61851f7faf49ea1b02740a37ca68fbf18b83341cbdc18cb6d",
+      "output": "out/planar-regions/pose-5.085.json",
+      "output_sha256": "8e50a2a93dce73164c1d02dea26b86d796897bd237c349dccf212d1da0fda544"
+    }
+  ],
+  "pressure_control": {
+    "time": 5.032,
+    "boundary": "sealed",
+    "initial_rear_Pa": 600.0,
+    "initial_front_Pa": 0.0,
+    "dt": 0.001,
+    "mobility_m2_per_Pa_s": 1e-07,
+    "separated_maximum_pressure_change_Pa": 0.0,
+    "separated_maximum_flow_m3_per_s": 0.0,
+    "merged_initial_front_gain_m3": 1.9900539990051987e-14,
+    "merged_final_front_gain_m3": 6.322422016784609e-12,
+    "merged_mean_front_pressure_Pa": 0.07325244140777556,
+    "separated": {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/planar-regions/pressure-separated.txt",
+      "input_sha256": "b3db4d02dbfef1da3e10516c1e09ea8e10bf60fd119620e9981c6530ea164044",
+      "output": "out/planar-regions/pressure-separated.csv",
+      "output_sha256": "38f8042cc3b64fb23e7996cbd7fca56ce20699515a116621fb2b55c408f428ce",
+      "native_report": "nodes=1272 edges=2378 steps=1 max_residual=5.6248281653605882e-23 max_Newton=0"
+    },
+    "merged": {
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_graph_probe"
+      ],
+      "input": "out/planar-regions/pressure-merged.txt",
+      "input_sha256": "2b583f815793ad09097a89b4a161251146d24196149ea8d3b25926bcaff3859d",
+      "output": "out/planar-regions/pressure-merged.csv",
+      "output_sha256": "a8d061b8ce59c9d56eb390712c714b84accf5a32c3ec75e27d5392ad047b4ea8",
+      "native_report": "nodes=1271 edges=2378 steps=1 max_residual=5.4140080547592248e-18 max_Newton=1"
+    }
+  },
+  "hashes": {
+    "include/ducklips/planar_airspace.hpp": "55e844b828cbd28ef6b6e7ad9205e4d2ed33c9d13ac91721ec472df7b125d8f8",
+    "src/planar_airspace.cpp": "e12068f6fced9115c160bf0c9fb52e77d39c27e152524b37d661c4de295e2cd4",
+    "tests/planar_airspace_tests.cpp": "3b121fcc1cf334485038754881d62965093e27bd4562eb526595e628a68868c8",
+    "tools/planar_regions_probe.cpp": "faad6c842a0f97a8e8429937fc9299a860f92231f9667751c0583def28305f74",
+    "tools/planar_regions_reference.py": "924201bb01dbfd2ad0cc845e790d3210434032dece7148d339140aeb4e1dfeb1",
+    "build/ducklips_planar_regions_probe": "0413b4134cd5f8a356a541c557f832e01be35b50216af6258e536b8114b14a49",
+    "tools/cavity_graph_reference.py": "c95f865606e3371a8895d9d3eddf6cfce9d49dc834cb01f31fd71f17fe1e616e",
+    "build/ducklips_cavity_graph_probe": "7ebe5753afe4cbdfe96d2f3ed2ff5d9c5da18e53d8614e920836364f387194b5"
+  }
+}

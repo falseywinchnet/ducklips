@@ -81,5 +81,51 @@ int main(){
         const double error=std::abs(sum(space.volume)-(.0016-ducklips::pi*radius*radius)*.022);
         check(error<old_error*.26,"polygon refinement approaches analytical circle air volume",error);old_error=error;
     }
+    // Grid cells are control volumes, not an assertion of fluid connectivity.
+    // A wall crossing the interior of a cell must create separate regions.
+    ducklips::PlanarAirspace split;split.prepare(grid(1,0,1),grid(1,0,1),32);split.prepare_regions(2048,4096);
+    const auto unit=box(0,1,0,1),interior_wall=box(.45,.55,-1,2);
+    const std::array<ducklips::PlanarContour,1> internal{{interior_wall}};
+    const std::size_t regions_before=allocations.load();const bool split_valid=split.build_regions(unit,internal,1);
+    const std::size_t regions_after=allocations.load();
+    check(split_valid && split.regions.size()==2 && split.region_links.empty()
+        && std::abs(split.regions[0].volume-.45)<1e-14 && std::abs(split.regions[1].volume-.45)<1e-14,
+        "one grid cell retains two separated air regions");
+    check(regions_before==regions_after,"component decomposition performs no allocation after preparation");
+    // Two pieces of tissue meet only at one vertex. Fluid cannot pass through
+    // that point, even though they do not overlap in positive area.
+    const std::array<ducklips::Point2,3> upper{{{.2,1.1},{.8,1.1},{.431,.517}}};
+    const std::array<ducklips::Point2,3> lower{{{.2,-.1},{.8,-.1},{.431,.517}}};
+    const std::array<ducklips::PlanarContour,2> contact{{upper,lower}};
+    const bool contact_valid=split.build_regions(unit,contact,1);
+    check(contact_valid && split.regions.size()==2 && split.region_links.empty(),"point contact closes a within-cell air route exactly",double(split.regions.size()));
+    const auto narrow_wall=box(.5,.5+1e-12,-1,2);const std::array<ducklips::PlanarContour,1> thin{{narrow_wall}};
+    check(split.build_regions(unit,thin,1) && split.regions.size()==2,"thin positive tissue is not removed by a contact threshold");
+    // A small positive gap at the contact reconnects the air; all pieces in
+    // this one cell now belong to one region, not one pressure per strip.
+    auto raised=upper;for(ducklips::Point2& point:raised){point.y+=1e-10;}
+    const std::array<ducklips::PlanarContour,2> opened{{raised,lower}};
+    check(split.build_regions(unit,opened,1) && split.regions.size()==1,"small positive opening reconnects the cell without an aperture floor");
+    ducklips::PlanarAirspace limited;limited.prepare(grid(1,0,1),grid(1,0,1),32);limited.prepare_regions(1,1);
+    check(!limited.build_regions(unit,contact,1),"insufficient component capacity is explicit failure");
+    for(bool vertical_wall:{false,true}){
+        ducklips::PlanarAirspace ports;
+        ports.prepare(grid(vertical_wall?1:2,0,1),grid(vertical_wall?2:1,0,1),32);ports.prepare_regions(2048,4096);
+        const auto barrier=vertical_wall?box(.45,.55,-1,2):box(-1,2,.45,.55);
+        const std::array<ducklips::PlanarContour,1> wall{{barrier}};
+        bool ports_valid=ports.build_regions(unit,wall,1) && ports.regions.size()==4 && ports.region_links.size()==2;
+        for(const ducklips::PlanarRegionLink& link:ports.region_links){
+            const auto a=ports.regions[link.first].interior,b=ports.regions[link.second].interior;
+            const double side_a=vertical_wall?a.x-.5:a.y-.5,side_b=vertical_wall?b.x-.5:b.y-.5;
+            ports_valid=ports_valid && side_a*side_b>0 && link.vertical!=vertical_wall && std::abs(link.area-.45)<1e-14;
+        }
+        check(ports_valid,"two openings on one grid face attach to their own air regions");
+    }
+    split.prepare(grid(2,0,1),grid(3,0,1),32);
+    check(!split.build_regions(unit,{},1),"changing the grid invalidates old component scratch dimensions");
+    split.prepare_regions(2048,4096);
+    check(split.build_regions(unit,{},1) && split.regions.size()==6,"component preparation can be repeated for a changed grid");
+    split.build(unit,{},1);
+    check(split.regions.empty() && split.region_links.empty(),"ordinary geometry build does not expose stale component outputs");
     return failures?1:0;
 }

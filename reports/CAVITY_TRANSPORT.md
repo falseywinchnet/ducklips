@@ -13,6 +13,11 @@ realism gates. No new speech recording or enhanced spectrogram is attributed
 to this work; the latest [listening feedback](LISTENING_SPATIAL_2026_10_09.md)
 still reports November improved and Foxtrot jammed around /tr/.
 
+A subsequent [native region decomposition](PLANAR_REGIONS.md) resolves every
+split-cell pose in this audit and preserves the /t/ seal in a fixed-pressure
+control. The temporal refinement failure below remains unresolved; the
+combined-cell experiments are retained as failure evidence.
+
 ## Zero storage without deleting air
 
 Each persistent Eulerian cell uses the existing linearized storage variable
@@ -151,8 +156,9 @@ The tool intentionally produces a diagnostic report with
 The existing fixed-graph audit was rerun against the extended implementation.
 Local detailed outputs are under `out/cavity-transport/`.
 
-The next work is component-resolved cell geometry and consistent geometry
-over the time interval. The mean-pressure model then still needs physical
+Component-resolved spatial geometry is now independently checked at all 66
+poses. The next work is consistent geometry and conservative region-state
+correspondence over the time interval. The mean-pressure model then still needs physical
 flow laws, acoustic state and moving-boundary work, preserved nasal/side
 cavities and glottal/radiation coupling, and new listening evidence. The blade
 and transverse anatomy also remain unvalidated. No speech-realism or speed

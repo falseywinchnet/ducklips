@@ -130,9 +130,10 @@ inertance and acoustic boundary terms must come from actual tissue geometry.
 The subsequent [zero-storage transport work](CAVITY_TRANSPORT.md) now allows
 zero compliance at zero volume, draining a disappearing cell through an
 interval-open passage without artificial storage. Persistent node identity
-is still required. Split/merge geometry and consistent interval openings
-remain unresolved: the full 66-pose audit finds split cells outside the four
-snapshots checked here, including a false connection across the /t/ seal.
+is still required. The [spatial region decomposition](PLANAR_REGIONS.md) now resolves the split
+cells found by the full 66-pose audit, including the false connection across
+the /t/ seal. State correspondence through splits/merges and consistent
+interval openings remain unresolved.
 
 The production spatial-pressure speech route still uses section geometry,
 and the acoustic representation remains a tree. Nasal flow, side cavities,

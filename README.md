@@ -35,8 +35,10 @@ geometry and is not yet a speech-rendering path. The native
 [mean-pressure solver now retains cyclic and disconnected air routes](reports/CAVITY_GRAPH.md);
 fixed Foxtrot snapshots preserve the sealed /t/ chambers. Moving-state and
 acoustic integration remain unfinished. [Zero-storage transport checks](reports/CAVITY_TRANSPORT.md)
-now conserve cell contents through disappearance, while a full 66-pose audit
-exposes split cells and unresolved pressure refinement that block speech integration.
+now conserve cell contents through disappearance. [Separate regions within
+cells](reports/PLANAR_REGIONS.md) resolve the split-cell contacts at all 66 saved
+Foxtrot poses and preserve the /t/ seal in a pressure control. Consistent geometry
+and region-state transfer over time remain required before speech integration.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
