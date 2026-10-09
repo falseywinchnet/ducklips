@@ -1,0 +1,75 @@
+{
+  "schema": 1,
+  "scope": "Five-node, ten-branch lossless network; smooth nonuniform positive metrics; no speech or closure claim",
+  "frozen_frequencies_hz": [
+    651.1730391514824,
+    1206.4008825655924,
+    2001.4107132375314,
+    2459.734104408074,
+    3263.7674036760322
+  ],
+  "full": {
+    "states": 15,
+    "rhs_evaluations": 13508,
+    "max_work_balance_residual": 2.6721067703182582e-11,
+    "final_wall_work": -2.9681900824652714e-06,
+    "initial_energy": 0.2899999999999997,
+    "final_energy": 0.28999703180706055
+  },
+  "canonical_vs_energy_max_relative_state_error": 7.038138752255549e-10,
+  "maximum_energy_in_nominal_frozen_circulation_subspace": 0.0024443481828639395,
+  "uniform_exact_max_relative_state_error": 2.3398738250161544e-10,
+  "canonical_potential": {
+    "states": 10,
+    "max_relative_state_error": 8.597523235008036e-10,
+    "canonical_circulation_norm": 9.697122333917997e-16,
+    "scope": "Exact gradient momentum invariant only; no arbitrary branch source or branch-specific damping"
+  },
+  "reductions": [
+    {
+      "states": 10,
+      "rhs_evaluations": 17660,
+      "max_work_balance_residual": 2.498785124535564e-12,
+      "final_wall_work": -2.259642227012615e-07,
+      "initial_energy": 0.2899999999999997,
+      "final_energy": 0.28999977403568666,
+      "basis": "single_pose",
+      "pose_parameters": [
+        0.0
+      ],
+      "relative_state_rms_error": 0.17015857654315847,
+      "max_relative_state_error": 0.2535409574986251
+    },
+    {
+      "states": 14,
+      "rhs_evaluations": 17402,
+      "max_work_balance_residual": 5.583268636105091e-12,
+      "final_wall_work": -2.968187182374262e-06,
+      "initial_energy": 0.2899999999999994,
+      "final_energy": 0.28999703181263886,
+      "basis": "two_poses",
+      "pose_parameters": [
+        0.0,
+        1.0
+      ],
+      "relative_state_rms_error": 5.5954222533248956e-05,
+      "max_relative_state_error": 0.0001261480958982771
+    },
+    {
+      "states": 15,
+      "rhs_evaluations": 17339,
+      "max_work_balance_residual": 9.103565854947369e-12,
+      "final_wall_work": -2.9681900249379412e-06,
+      "initial_energy": 0.2899999999999994,
+      "final_energy": 0.2899970318098057,
+      "basis": "three_poses",
+      "pose_parameters": [
+        0.0,
+        0.5,
+        1.0
+      ],
+      "relative_state_rms_error": 6.80864513019568e-10,
+      "max_relative_state_error": 1.1057697706172732e-09
+    }
+  ]
+}

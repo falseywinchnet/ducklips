@@ -1,0 +1,20 @@
+{
+  "schema": 1,
+  "scope": "Continuous changing-mode coordinates; isolated eigenvalues; gradient momentum; lossless fixture only",
+  "states": 10,
+  "max_relative_state_error": 1.0233408432167602e-09,
+  "highest_mode_max_relative_state_error": 1.3319886269176855e-09,
+  "max_instantaneous_wall_power_residual": 5.924150059399835e-13,
+  "max_geometry_transport_operator_norm_per_second": 59.232031389288075,
+  "min_frozen_angular_frequency": 3585.6426060209674,
+  "max_frozen_angular_frequency": 25052.4206440925,
+  "native_speed": "Not implemented or measured; this numerical oracle is not a speed claim",
+  "direct_reference": {
+    "states": 15,
+    "rhs_evaluations": 13508,
+    "max_work_balance_residual": 2.6721067703182582e-11,
+    "final_wall_work": -2.9681900824652714e-06,
+    "initial_energy": 0.2899999999999997,
+    "final_energy": 0.28999703180706055
+  }
+}

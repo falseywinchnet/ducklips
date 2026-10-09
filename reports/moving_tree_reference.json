@@ -1,0 +1,218 @@
+{
+  "schema": 1,
+  "scope": "Lossless moving-tree kernel only; not a complete speech-rendering speed claim",
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "binary_sha256": "ad35ade2f708cac81584c4bc028ea617c79c90aca462b5d64b5e4c5912bcf089",
+  "source_sha256": {
+    "include/ducklips/moving_tree.hpp": "f2d580464c421534c5e7b6a9358bf963e7c0cca1a4ecfa7383a1178036fd0920",
+    "src/moving_tree.cpp": "8703b079944357cde265eb71df74d762d13c7f52dbf3fb281808a30135f81730",
+    "tools/moving_tree_probe.cpp": "0f92d0271ed85f21ee171d359298bb5b7ba7dcf57d3a90ad88d0c735ed9c192e",
+    "tools/nonuniform_metric_reference.py": "0e75e70352991c60e184b5270c3cd7aafeecd5dfce43cbe42c5cd53157f246b4",
+    "tools/verify_moving_tree.py": "73abf120048050d7aee78508c76ecc3374096e311d8a0391ffcb384a3a483fea"
+  },
+  "comparisons": [
+    {
+      "initial_condition": "gradient",
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 13508,
+        "max_work_balance_residual": 2.6721067703182582e-11,
+        "final_wall_work": -2.9681900824652714e-06,
+        "initial_energy": 0.2899999999999997,
+        "final_energy": 0.28999703180706055
+      },
+      "cases": [
+        {
+          "substeps": 1,
+          "max_relative_state_error": 9.108538281608675e-06,
+          "refinement_ratio": null
+        },
+        {
+          "substeps": 2,
+          "max_relative_state_error": 5.693847629843673e-07,
+          "refinement_ratio": 15.997158466038464
+        },
+        {
+          "substeps": 4,
+          "max_relative_state_error": 3.5535370018656006e-08,
+          "refinement_ratio": 16.02304303248964
+        }
+      ]
+    },
+    {
+      "initial_condition": "circulation",
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 13139,
+        "max_work_balance_residual": 2.8233945980189702e-11,
+        "final_wall_work": -3.054483027235894e-05,
+        "initial_energy": 0.3099999999999997,
+        "final_energy": 0.30996945516687363
+      },
+      "cases": [
+        {
+          "substeps": 1,
+          "max_relative_state_error": 8.809391123787773e-06,
+          "refinement_ratio": null
+        },
+        {
+          "substeps": 2,
+          "max_relative_state_error": 5.506837746607582e-07,
+          "refinement_ratio": 15.997186641670506
+        },
+        {
+          "substeps": 4,
+          "max_relative_state_error": 3.436899739489075e-08,
+          "refinement_ratio": 16.022689528401028
+        }
+      ]
+    },
+    {
+      "initial_condition": "highest_mode",
+      "reference": {
+        "states": 15,
+        "rhs_evaluations": 45881,
+        "max_work_balance_residual": 1.2445487782702935e-10,
+        "final_wall_work": 8.903888891970462e-07,
+        "initial_energy": 0.2900000000000002,
+        "final_energy": 0.2900008902874659
+      },
+      "cases": [
+        {
+          "substeps": 1,
+          "max_relative_state_error": 0.0630023856268839,
+          "refinement_ratio": null
+        },
+        {
+          "substeps": 2,
+          "max_relative_state_error": 0.003979771110363416,
+          "refinement_ratio": 15.830655552733731
+        },
+        {
+          "substeps": 4,
+          "max_relative_state_error": 0.00024938255140951335,
+          "refinement_ratio": 15.958498651448144
+        }
+      ]
+    }
+  ],
+  "stationary_phase_bias_at_48khz": [
+    {
+      "frequency_hz": 651,
+      "numerical_frequency_hz": 650.9999523416275,
+      "relative_frequency_error": -7.320794548348886e-08
+    },
+    {
+      "frequency_hz": 1234,
+      "numerical_frequency_hz": 1233.9988350083768,
+      "relative_frequency_error": -9.440774904057037e-07
+    },
+    {
+      "frequency_hz": 3264,
+      "numerical_frequency_hz": 3263.8505731582554,
+      "relative_frequency_error": -4.578028239721199e-05
+    },
+    {
+      "frequency_hz": 8000,
+      "numerical_frequency_hz": 7987.505913501458,
+      "relative_frequency_error": -0.0015617608123177362
+    },
+    {
+      "frequency_hz": 12000,
+      "numerical_frequency_hz": 11913.101646499837,
+      "relative_frequency_error": -0.007241529458346885
+    }
+  ],
+  "timings": [
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 1,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.307579625,
+      "realtime_multiple": 16.255953234873733,
+      "checksum": 2.2665368757141795e-11
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 1,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.30618925,
+      "realtime_multiple": 16.329769905377148,
+      "checksum": 2.2665368757141795e-11
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 1,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.312644958,
+      "realtime_multiple": 15.992581591544491,
+      "checksum": 2.2665368757141795e-11
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 2,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.616808334,
+      "realtime_multiple": 8.106245853675512,
+      "checksum": 5.887933852603393e-10
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 2,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.617252375,
+      "realtime_multiple": 8.100414356445368,
+      "checksum": 5.887933852603393e-10
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 2,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 0.618295167,
+      "realtime_multiple": 8.086752520257045,
+      "checksum": 5.887933852603393e-10
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 4,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 1.235778459,
+      "realtime_multiple": 4.046032655437313,
+      "checksum": 6.07375160443218e-10
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 4,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 1.241397417,
+      "realtime_multiple": 4.027719029803652,
+      "checksum": 6.07375160443218e-10
+    },
+    {
+      "nodes": 96,
+      "branches": 191,
+      "substeps": 4,
+      "states": 287,
+      "simulated_seconds": 5,
+      "wall_seconds": 1.239713209,
+      "realtime_multiple": 4.033190873261075,
+      "checksum": 6.07375160443218e-10
+    }
+  ]
+}

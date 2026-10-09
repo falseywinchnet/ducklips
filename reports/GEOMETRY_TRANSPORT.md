@@ -152,3 +152,8 @@ per-case compact benchmark passes the 10× floor (see
 [geometry_clock_performance.json](geometry_clock_performance.json)); this is
 separate from the prior 21-run receipt. The new reference propagator is not
 being counted as a complete speech-rendering benchmark.
+
+The subsequent nonuniform work is documented in
+[NONUNIFORM_MOTION.md](NONUNIFORM_MOTION.md): canonical-coordinate compression,
+a direct moving-tree reference whose accurate substeps fail the 10x floor,
+and a verified continuous modal-transport oracle for the next representation.

@@ -16,6 +16,7 @@ add_library(ducklips STATIC
     src/acoustic_network.cpp
     src/modal.cpp
     src/moving_mode.cpp
+    src/moving_tree.cpp
     src/sources.cpp
     src/air_path.cpp
     src/voice.cpp
@@ -72,3 +73,7 @@ target_compile_definitions(ducklips_stream_tests PRIVATE DUCKLIPS_SOURCE_DIR="${
 add_executable(ducklips_moving_mode_tests tests/moving_mode_tests.cpp)
 target_link_libraries(ducklips_moving_mode_tests PRIVATE ducklips)
 add_test(NAME ducklips_moving_mode_tests COMMAND ducklips_moving_mode_tests)
+
+add_executable(ducklips_moving_tree_probe tools/moving_tree_probe.cpp)
+target_link_libraries(ducklips_moving_tree_probe PRIVATE ducklips)
+add_test(NAME ducklips_moving_tree_reference COMMAND ducklips_moving_tree_probe)
