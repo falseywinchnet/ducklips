@@ -2,7 +2,7 @@
 #include "ducklips/contour_pressure_loss.hpp"
 #include "ducklips/fold_contact.hpp"
 namespace ducklips {
-enum class ContinuousGlottalUpdate { symmetric, dissipative };
+enum class ContinuousGlottalUpdate { symmetric, dissipative, relaxation };
 struct ContinuousGlottalState final {
     FoldState folds{};
     std::array<double,2> mass{},effort{},area{};
@@ -26,7 +26,9 @@ struct ContinuousGlottalStep final {
     std::size_t iterations{};
 };
 // Continuous-pressure, shared fluid/tissue Hamiltonian reference. Rest area
-// remains fixed. Symmetric steps preserve topology; dissipative steps may
+// remains fixed. Symmetric and resistance-fitted relaxation steps preserve
+// topology. Relaxation fits each coupled linear viscous mode and reports its
+// nonnegative work defect separately. Dissipative steps may
 // cross cap contact with the explicit linear-span profile and a loss ledger. No disappearing chamber, independent passage inertia,
 // source waveform, or prescribed tissue oscillation is used.
 class ContinuousGlottis final {

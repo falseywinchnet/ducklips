@@ -1,4 +1,5 @@
 #include "ducklips/continuous_glottis.hpp"
+#include "ducklips/glottal_relaxation.hpp"
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -79,7 +80,8 @@ bool ContinuousGlottis::state(ContinuousGlottalState& result) const noexcept {
 bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_load,double load_slope,const std::array<double,4>& force,ContinuousGlottalUpdate update) noexcept {
     if(!std::isfinite(dt) || dt<=0 || !std::isfinite(free_load) || !std::isfinite(load_slope) || load_slope<0 || !finite(force)){return false;}
     const bool dissipative=update==ContinuousGlottalUpdate::dissipative;
-    if(update!=ContinuousGlottalUpdate::symmetric && !dissipative){return false;}
+    const bool fitted=update==ContinuousGlottalUpdate::relaxation;
+    if(update!=ContinuousGlottalUpdate::symmetric && !dissipative && !fitted){return false;}
     Configuration c0;if(!configuration(coordinates(position_),c0)){return false;}double reservoir_mass;GasEnergy reservoir;if(!gas_.mass_at_pressure(1.,reservoir_pressure,reservoir_mass) || !gas_.evaluate(reservoir_mass,1.,reservoir)){return false;}
     const double step=dt/time_scale;const Vector v0=multiply(c0.inverse,momentum_);Vector change{},residual{},p1{},q1{},speed{},external{};for(std::size_t j=0;j<7;++j){change[j]=step*v0[j];}
     external[0]=reservoir.mass_effort*mass_scale/energy_scale;external[2]=-free_load*mass_scale/energy_scale;for(std::size_t j=0;j<4;++j){external[3+j]=force[j]*position_scale/energy_scale;}
@@ -91,7 +93,7 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;rhs[3+i]-=g[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*position_[3+i]+coupling_[i%2]*(position_[3+i]-position_[3+other]))*position_scale*position_scale/energy_scale;}
         const Vector acceleration=multiply(c0.inverse,rhs);for(std::size_t j=0;j<7;++j){change[j]+=.5*step*step*acceleration[j];}
     }
-    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0,exit_loss=0,roundoff_scale=0;bool converged=false,roundoff_limited=false;
+    Configuration c1,cm;Matrix drag{},relaxation{};double norm=0,load_loss=0,exit_loss=0,roundoff_scale=0;bool converged=false,roundoff_limited=false;
     const auto evaluate=[&](const Vector& trial){
         if(!finite(trial)){return false;}for(std::size_t j=0;j<7;++j){q1[j]=position_[j]+trial[j];speed[j]=trial[j]/step;}
         // Eliminate a closed coordinate exactly. Newton still solves its
@@ -104,8 +106,15 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         if(dissipative){p1=multiply(c1.metric,speed);}
         else {
         Matrix average;for(std::size_t j=0;j<49;++j){average[j]=.5*(c0.inverse[j]+c1.inverse[j]);}
+        if(fitted){
+            if(!glottal_relaxation_bias(average,drag,active_,step,relaxation)){return false;}
+            Matrix implicit,explicit_part;for(std::size_t j=0;j<49;++j){implicit[j]=.5*(average[j]+relaxation[j]);explicit_part[j]=.5*(average[j]-relaxation[j]);}
+            Vector right=multiply(explicit_part,momentum_);for(std::size_t j=0;j<7;++j){right[j]=speed[j]-right[j];if(!active_[j]){implicit[7*j+j]=1.;}}
+            if(!solve(implicit,right,p1)){return false;}for(std::size_t j=0;j<7;++j){if(!active_[j]){p1[j]=0.;}}
+        }else{
         for(std::size_t j=0;j<7;++j){if(!active_[j]){average[7*j+j]=1;}}
         Vector pavg;if(!solve(average,speed,pavg)){return false;}for(std::size_t j=0;j<7;++j){p1[j]=2*pavg[j]-momentum_[j];if(!active_[j]){p1[j]=0;}}
+        }
         }
         // Symmetric discrete kinetic derivative in the four actual state
         // coordinates. Preserving this dependence retains the cyclic common
@@ -176,6 +185,7 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
     receipt.fluid_loss=step*energy_scale*dot(speed,multiply(drag,speed))-receipt.tissue_loss;
     const double e0=energy_scale*(c0.potential+mechanical(position_)+.5*dot(momentum_,v0));const double e1=energy_scale*(c1.potential+mechanical(q1)+.5*dot(p1,multiply(c1.inverse,p1)));
     if(dissipative){Vector delta_p;for(std::size_t j=0;j<7;++j){delta_p[j]=p1[j]-momentum_[j];}receipt.numerical_loss=.5*energy_scale*dot(delta_p,multiply(c1.inverse,delta_p));}
+    else if(fitted){Vector delta_p;for(std::size_t j=0;j<7;++j){delta_p[j]=p1[j]-momentum_[j];}receipt.numerical_loss=.5*energy_scale*dot(delta_p,multiply(relaxation,delta_p));}
     receipt.energy_roundoff_scale=energy_scale*roundoff_scale;receipt.roundoff_limited_gradient=roundoff_limited;receipt.energy_change=e1-e0;receipt.energy_residual=receipt.energy_change+receipt.numerical_loss+receipt.tissue_loss+receipt.fluid_loss+receipt.load_work-receipt.reservoir_work-receipt.external_work;receipt.iterations=iteration+1;receipt.maximum_scaled_residual=norm;
     if(!std::isfinite(receipt.energy_residual)){return false;}next.last=receipt;*this=next;return true;
 }

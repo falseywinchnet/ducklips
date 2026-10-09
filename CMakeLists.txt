@@ -26,6 +26,7 @@ add_library(ducklips STATIC
     src/glottal_kinetics.cpp
     src/glottal_contour.cpp
     src/continuous_glottis.cpp
+    src/glottal_relaxation.cpp
     src/graph_continuous_glottis.cpp
     src/contour_pressure_loss.cpp
     src/contour_pressure_flow.cpp
@@ -299,3 +300,7 @@ target_link_libraries(ducklips_graph_continuous_glottis_probe PRIVATE ducklips)
 add_test(NAME ducklips_graph_continuous_glottis COMMAND ducklips_graph_continuous_glottis_probe)
 add_executable(ducklips_continuous_tract_probe tools/continuous_tract_probe.cpp)
 target_link_libraries(ducklips_continuous_tract_probe PRIVATE ducklips)
+add_executable(ducklips_glottal_relaxation_probe tools/glottal_relaxation_probe.cpp)
+target_link_libraries(ducklips_glottal_relaxation_probe PRIVATE ducklips)
+add_test(NAME ducklips_glottal_relaxation COMMAND ducklips_glottal_relaxation_probe)
+add_test(NAME ducklips_graph_continuous_relaxation COMMAND ducklips_graph_continuous_glottis_probe --relaxation)

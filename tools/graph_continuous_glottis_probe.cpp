@@ -53,7 +53,9 @@ void fixture(){
     for(unsigned step=0;step<steps;++step){
         const double dt=number(),pressure=number();const int mode=static_cast<int>(number());
         read(c1);read(c2);read(g1);read(g2);read(nodal);read(series);
-        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,mode?ducklips::ContinuousGlottalUpdate::dissipative:ducklips::ContinuousGlottalUpdate::symmetric)){
+        require(mode>=0 && mode<=2,"fixture update mode");
+        const ducklips::ContinuousGlottalUpdate updates[]={ducklips::ContinuousGlottalUpdate::symmetric,ducklips::ContinuousGlottalUpdate::dissipative,ducklips::ContinuousGlottalUpdate::relaxation};
+        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode])){
             std::fprintf(stderr,"coupled fixture failed at step %u\n",step);throw std::runtime_error("fixture advance");
         }
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"fixture state");
@@ -65,7 +67,7 @@ void fixture(){
             s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);std::puts("");
     }
 }
-void controls(){
+void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlottalUpdate::symmetric){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
     const std::array<double,4> c={1e-11,1.4e-11,8e-12,2e-11},g={.002,.003,.001,.0025};
     const std::array<double,4> nodal={0.,1e-6,0.,-2e-6},series={0.,30.,0.,-10.};
@@ -77,7 +79,7 @@ void controls(){
     for(int step=0;step<300;++step){
         ducklips::MovingGraphReference direct=model.network;const double dt=2.5e-6;
         const std::size_t count=allocations.load();
-        require(model.advance(c,c,g,g,dt,1400.,{},nodal,series),"coupled fixed advance");
+        require(model.advance(c,c,g,g,dt,1400.,{},nodal,series,update),"coupled fixed advance");
         require(allocations.load()==count,"coupled advance allocated");
         auto drives=nodal;drives[1]+=model.last.flow;require(direct.advance(c,c,g,g,dt,drives,series),"direct graph advance");
         for(std::size_t i=0;i<c.size();++i){worst_direct=std::max(worst_direct,std::abs(direct.charge[i]-model.network.charge[i])/c[i]);worst_direct=std::max(worst_direct,std::abs(direct.average_pressure[i]-model.network.average_pressure[i]));}
@@ -107,7 +109,7 @@ void controls(){
     // Exact sealed outlet: source receives no graph work, graph evolves freely.
     auto sealed=initial;sealed[2]=3e-6;sealed[3]=-1e-7;sealed[0]=sealed[1]=0.;sealed[4]=sealed[5]=sealed[6]=0.;
     prepare(model,4,edges,1,sealed);model.network.charge[1]=1e-9;
-    require(model.advance(c,c,g,g,1e-7,0.),"sealed outlet advance");
+    require(model.advance(c,c,g,g,1e-7,0.,{},{},{},update),"sealed outlet advance");
     require(model.last.flow==0. && model.last.graph_port_work==0. && model.source.last.outlet_loss==0.,"sealed outlet zero transport/work");
     auto reverse=initial;reverse[0]=reverse[1]=0.;reverse[4]=reverse[5]=reverse[6]=-1e-4;
     prepare(model,4,edges,1,reverse);model.network.charge[1]=500*c[1];
@@ -126,5 +128,7 @@ void controls(){
 }
 }
 int main(int argc,char** argv){try{
-    if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}else{require(argc==1,"arguments");controls();}return 0;
+    if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}
+    else if(argc==2 && std::string(argv[1])=="--relaxation"){controls(ducklips::ContinuousGlottalUpdate::relaxation);}
+    else{require(argc==1,"arguments");controls();}return 0;
 }catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 1;}}

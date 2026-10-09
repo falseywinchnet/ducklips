@@ -1,0 +1,729 @@
+{
+  "scope": "Common-state restart at 8 ms of the frozen-tube control; separates event-step localization and mode-fitted viscous decay. Neither alone establishes converged contact motion.",
+  "seed": {
+    "step": 6400,
+    "time": 0.008,
+    "source": [
+      979.5867899066965,
+      -624.0089800344899,
+      1.44726129004783e-06,
+      1.7229023828661024e-06,
+      4.46146848075176e-05,
+      5.696054468555235e-05,
+      7.299790738220483e-05,
+      -0.005877425203711986,
+      -0.013235139913909011
+    ],
+    "charge": [
+      -2.3538005636246813e-08,
+      -2.0450914715261797e-08,
+      -1.716875595997838e-08,
+      -1.3915291480021192e-08,
+      -1.0696462180484308e-08,
+      -7.584466472181129e-09,
+      -4.629393858327561e-09,
+      -1.5743850214103679e-09
+    ],
+    "momentum": [
+      0.013291804644172248,
+      0.017459280330987443,
+      0.021141509487879944,
+      0.024160530238520248,
+      0.026553716946356175,
+      0.028366114284368714,
+      0.02950682370921638,
+      0.014950609646649144
+    ],
+    "closures": 0,
+    "reopenings": 0,
+    "port_work": -1.9428482134306553e-05,
+    "numerical_loss": 0
+  },
+  "seed_origin": "3a9eb8b tube-19200 at 0.008 s",
+  "elapsed_duration_s": 0.016,
+  "timescale_scope": "Local open-source Jacobian with tract effort held at the recorded value; not equilibrium stability or a full coupled-tract eigensystem",
+  "timescale_inputs": [
+    {
+      "time": 0.008,
+      "source": [
+        979.5867899066965,
+        -624.0089800344899,
+        1.44726129004783e-06,
+        1.7229023828661024e-06,
+        4.46146848075176e-05,
+        5.696054468555235e-05,
+        7.299790738220483e-05,
+        -0.005877425203711986,
+        -0.013235139913909011
+      ],
+      "tract_pressure_Pa": -751.3331399089983
+    },
+    {
+      "time": 0.0083,
+      "source": [
+        4175.618918659852,
+        -1939.630311927752,
+        1.7422979243576005e-07,
+        2.1096804947184604e-07,
+        -1.1484067361464623e-06,
+        1.408609246058766e-07,
+        -7.224293268170275e-07,
+        -0.002279099381477482,
+        0.0020266019657321542
+      ],
+      "tract_pressure_Pa": -729.1816113131412
+    },
+    {
+      "time": 0.008400000000000001,
+      "source": [
+        3245.1272100555557,
+        -2233.6220625728038,
+        1.5739399309677827e-08,
+        4.080267040408623e-07,
+        -7.18804743022412e-08,
+        -7.326412039535436e-08,
+        -1.3492417009338905e-06,
+        -0.0007836915336729779,
+        0.0016951910677337288
+      ],
+      "tract_pressure_Pa": -618.7858269345304
+    },
+    {
+      "time": 0.008425,
+      "source": [
+        377.06834750857445,
+        -1397.844846126451,
+        1.6994797876600989e-09,
+        4.4589444361885704e-07,
+        -6.307822677869599e-09,
+        -2.357621299381884e-07,
+        -1.348500624373388e-06,
+        -0.0003481589174890286,
+        0.0013016021332082177
+      ],
+      "tract_pressure_Pa": -587.4404196252133
+    }
+  ],
+  "timescales": [
+    {
+      "time": 0.008,
+      "source": [
+        979.5867899066965,
+        -624.0089800344899,
+        1.44726129004783e-06,
+        1.7229023828661024e-06,
+        4.46146848075176e-05,
+        5.696054468555235e-05,
+        7.299790738220483e-05,
+        -0.005877425203711986,
+        -0.013235139913909011
+      ],
+      "tract_pressure_Pa": -751.3331399089983,
+      "refinements": [
+        {
+          "quadrature_order": 96,
+          "difference_step": 1e-06,
+          "fastest_real_s": -44561.83915059798,
+          "fastest_imag_s": 904904.3538915183,
+          "maximum_frequency_Hz": 144020.00094721292
+        },
+        {
+          "quadrature_order": 192,
+          "difference_step": 5e-07,
+          "fastest_real_s": -44561.839197715075,
+          "fastest_imag_s": 904904.3554055903,
+          "maximum_frequency_Hz": 144020.00118818495
+        }
+      ]
+    },
+    {
+      "time": 0.0083,
+      "source": [
+        4175.618918659852,
+        -1939.630311927752,
+        1.7422979243576005e-07,
+        2.1096804947184604e-07,
+        -1.1484067361464623e-06,
+        1.408609246058766e-07,
+        -7.224293268170275e-07,
+        -0.002279099381477482,
+        0.0020266019657321542
+      ],
+      "tract_pressure_Pa": -729.1816113131412,
+      "refinements": [
+        {
+          "quadrature_order": 96,
+          "difference_step": 1e-06,
+          "fastest_real_s": -1059828.5499139852,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 119792.18131431892
+        },
+        {
+          "quadrature_order": 192,
+          "difference_step": 5e-07,
+          "fastest_real_s": -1059828.5509127285,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 119792.1809142752
+        }
+      ]
+    },
+    {
+      "time": 0.008400000000000001,
+      "source": [
+        3245.1272100555557,
+        -2233.6220625728038,
+        1.5739399309677827e-08,
+        4.080267040408623e-07,
+        -7.18804743022412e-08,
+        -7.326412039535436e-08,
+        -1.3492417009338905e-06,
+        -0.0007836915336729779,
+        0.0016951910677337288
+      ],
+      "tract_pressure_Pa": -618.7858269345304,
+      "refinements": [
+        {
+          "quadrature_order": 96,
+          "difference_step": 1e-06,
+          "fastest_real_s": -32520779.579477258,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 97216.23399880287
+        },
+        {
+          "quadrature_order": 192,
+          "difference_step": 5e-07,
+          "fastest_real_s": -32520779.54060993,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 97216.23410592967
+        }
+      ]
+    },
+    {
+      "time": 0.008425,
+      "source": [
+        377.06834750857445,
+        -1397.844846126451,
+        1.6994797876600989e-09,
+        4.4589444361885704e-07,
+        -6.307822677869599e-09,
+        -2.357621299381884e-07,
+        -1.348500624373388e-06,
+        -0.0003481589174890286,
+        0.0013016021332082177
+      ],
+      "tract_pressure_Pa": -587.4404196252133,
+      "refinements": [
+        {
+          "quadrature_order": 96,
+          "difference_step": 1e-06,
+          "fastest_real_s": -451963509.0513424,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 100043.35051696625
+        },
+        {
+          "quadrature_order": 192,
+          "difference_step": 5e-07,
+          "fastest_real_s": -451963511.8903041,
+          "fastest_imag_s": 0.0,
+          "maximum_frequency_Hz": 100043.35054118001
+        }
+      ]
+    }
+  ],
+  "native": {
+    "baseline-6400": {
+      "summary": {
+        "complete": true,
+        "steps": 6400,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 6401,
+        "minimum_dt": 1.25e-06,
+        "closures": 4,
+        "reopenings": 4,
+        "maximum_work_residual_J": 1.8362047993214503e-15,
+        "maximum_mass_residual_m3": 7.755645423297187e-21,
+        "numerical_loss_J": 1.3862499230010608e-08,
+        "port_work_J": -2.9045469289248348e-05,
+        "pressure_range_Pa": [
+          -1025.95773021246,
+          1019.6508381359562
+        ]
+      },
+      "final": {
+        "step": 6400,
+        "time": 0.016,
+        "source": [
+          80.48780771412771,
+          344.9922360203221,
+          4.513980049030088e-06,
+          5.346154008257997e-06,
+          0.00021706856278453458,
+          0.00021056042717182094,
+          0.00020287642052041667,
+          0.003563688790168471,
+          0.00587124205213411
+        ],
+        "charge": [
+          1.0687668460818611e-08,
+          8.906329491538516e-09,
+          7.463515785092213e-09,
+          6.5267646885291876e-09,
+          5.670275729988342e-09,
+          4.971268354196414e-09,
+          3.3255462550599403e-09,
+          1.0792587810236064e-09
+        ],
+        "momentum": [
+          0.023261356108489614,
+          0.021411335424265793,
+          0.018932952916923478,
+          0.016805788922591717,
+          0.014845962858552008,
+          0.01341535530937302,
+          0.01218673999328575,
+          0.005637252396013492
+        ],
+        "closures": 4,
+        "reopenings": 4,
+        "port_work": -2.9045469289248348e-05,
+        "numerical_loss": 1.3862499230010608e-08
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/continuous-tract-contact/control-probe",
+        "6400",
+        ".016",
+        "--graph-state"
+      ],
+      "localized_contact": false,
+      "fitted_damping": false
+    },
+    "local-6400": {
+      "summary": {
+        "complete": true,
+        "steps": 6400,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 6430,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.5439038936193583e-15,
+        "maximum_mass_residual_m3": 7.279189390466644e-21,
+        "numerical_loss_J": 3.0488230341681427e-10,
+        "port_work_J": 1.8803204649345236e-05,
+        "pressure_range_Pa": [
+          -1025.6051367973137,
+          1019.4103945619437
+        ]
+      },
+      "final": {
+        "step": 6400,
+        "time": 0.016,
+        "source": [
+          -501.0540598864206,
+          284.8433626674733,
+          6.641611849042224e-06,
+          8.824720329599642e-06,
+          0.00038764821613228545,
+          0.00038171319293163497,
+          0.00037433741491128136,
+          0.0030397818601280878,
+          0.005863797987188655
+        ],
+        "charge": [
+          7.535350297153802e-09,
+          6.04226945073607e-09,
+          4.884435536361927e-09,
+          4.1298806483315e-09,
+          3.6881348545234025e-09,
+          3.4630581477025965e-09,
+          2.4676259328178623e-09,
+          8.74627576507737e-10
+        ],
+        "momentum": [
+          0.046609286345425584,
+          0.04616727976297207,
+          0.044942845692663075,
+          0.04428979269646135,
+          0.04364197029309876,
+          0.043578375847255664,
+          0.04379130672604097,
+          0.02181451040407034
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": 1.8803204649345236e-05,
+        "numerical_loss": 3.0488230341681427e-10
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/continuous-tract-contact/control-probe",
+        "6400",
+        ".016",
+        "--graph-state",
+        "--contact-step",
+        "7.8125001e-8"
+      ],
+      "localized_contact": true,
+      "fitted_damping": false
+    },
+    "local-12800": {
+      "summary": {
+        "complete": true,
+        "steps": 12800,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 12824,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.4304963463773746e-15,
+        "maximum_mass_residual_m3": 1.045556294267027e-20,
+        "numerical_loss_J": 2.2577492848349228e-10,
+        "port_work_J": -3.276797916263553e-05,
+        "pressure_range_Pa": [
+          -1023.5592967742946,
+          1016.9656468286047
+        ]
+      },
+      "final": {
+        "step": 12800,
+        "time": 0.016,
+        "source": [
+          610.6952996771329,
+          435.33426251809624,
+          2.889403459441456e-06,
+          3.2744602616434455e-06,
+          0.0001062172832069862,
+          9.888613215742776e-05,
+          9.03120946701106e-05,
+          0.0040653290482415005,
+          0.006501699877630458
+        ],
+        "charge": [
+          1.4117353789688057e-08,
+          1.1912887396746372e-08,
+          9.822746820234079e-09,
+          8.14550638355472e-09,
+          6.627218514442048e-09,
+          5.283297088532968e-09,
+          3.09719074529448e-09,
+          8.332753429550482e-10
+        ],
+        "momentum": [
+          0.007706138700072681,
+          0.0053386988961845235,
+          0.0022779893935627473,
+          -0.0014786292087583127,
+          -0.005196127846774941,
+          -0.008838208581890135,
+          -0.011860862767301394,
+          -0.006598997083014297
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": -3.276797916263553e-05,
+        "numerical_loss": 2.2577492848349228e-10
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/continuous-tract-contact/control-probe",
+        "12800",
+        ".016",
+        "--graph-state",
+        "--contact-step",
+        "7.8125001e-8"
+      ],
+      "localized_contact": true,
+      "fitted_damping": false
+    },
+    "fitted-3200": {
+      "summary": {
+        "complete": true,
+        "steps": 3200,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 3236,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.0641661163379723e-14,
+        "maximum_mass_residual_m3": 1.1514354126738145e-21,
+        "numerical_loss_J": 9.146542003632499e-08,
+        "port_work_J": 0.0002296672931332963,
+        "pressure_range_Pa": [
+          -1220.5365192569975,
+          1231.7096103775211
+        ]
+      },
+      "final": {
+        "step": 3200,
+        "time": 0.016,
+        "source": [
+          -1340.6660727828234,
+          296.34792486136917,
+          1.0799385409037695e-05,
+          1.6910451279272566e-05,
+          0.0007724447459808551,
+          0.0007739326433838669,
+          0.0007743168504289386,
+          -0.0017056021233229396,
+          0.00041996037459680484
+        ],
+        "charge": [
+          4.914852596382636e-09,
+          4.593423045816652e-09,
+          4.5892764138814e-09,
+          4.559198278851005e-09,
+          3.6999536289699104e-09,
+          2.762295582491111e-09,
+          9.990265694607786e-10,
+          -1.418560322983855e-10
+        ],
+        "momentum": [
+          0.09475626998196544,
+          0.09512111675408703,
+          0.09521347936340349,
+          0.09419302472095945,
+          0.09408829954692131,
+          0.09522685296344088,
+          0.09621690809236536,
+          0.04809980332795829
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": 0.0002296672931332963,
+        "numerical_loss": 9.146542003632499e-08
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_continuous_tract_probe",
+        "3200",
+        ".016",
+        "--graph-state",
+        "--contact-step",
+        "7.8125001e-8",
+        "--relaxation"
+      ],
+      "localized_contact": true,
+      "fitted_damping": true
+    },
+    "fitted-6400": {
+      "summary": {
+        "complete": true,
+        "steps": 6400,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 6430,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.560383766641138e-15,
+        "maximum_mass_residual_m3": 7.72917564369549e-21,
+        "numerical_loss_J": 1.5432347700959095e-08,
+        "port_work_J": 8.988310047852729e-06,
+        "pressure_range_Pa": [
+          -1025.4975209595873,
+          1019.2933120984226
+        ]
+      },
+      "final": {
+        "step": 6400,
+        "time": 0.016,
+        "source": [
+          -425.73648602484445,
+          285.03818670846294,
+          6.3212964094715965e-06,
+          8.257263046537156e-06,
+          0.0003609171927755732,
+          0.00035499630831664663,
+          0.00034771128235615723,
+          0.003073298426044053,
+          0.005749079887637622
+        ],
+        "charge": [
+          7.761788940662896e-09,
+          6.264885496567703e-09,
+          5.0912217936255695e-09,
+          4.324331828493372e-09,
+          3.845204579018425e-09,
+          3.5841819259143755e-09,
+          2.541135651329088e-09,
+          8.94237837390065e-10
+        ],
+        "momentum": [
+          0.04306057174600282,
+          0.0424590155643847,
+          0.041130744981901855,
+          0.040394254237660285,
+          0.039671600529982705,
+          0.03951926147489551,
+          0.03962109109614948,
+          0.019695334252723667
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": 8.988310047852729e-06,
+        "numerical_loss": 1.5432347700959095e-08
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_continuous_tract_probe",
+        "6400",
+        ".016",
+        "--graph-state",
+        "--contact-step",
+        "7.8125001e-8",
+        "--relaxation"
+      ],
+      "localized_contact": true,
+      "fitted_damping": true
+    },
+    "fitted-12800": {
+      "summary": {
+        "complete": true,
+        "steps": 12800,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 12824,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.4237742929079644e-15,
+        "maximum_mass_residual_m3": 1.1249656330721176e-20,
+        "numerical_loss_J": 4.149465837124659e-09,
+        "port_work_J": -3.2506791107987337e-05,
+        "pressure_range_Pa": [
+          -1023.5091081507351,
+          1016.9063105827089
+        ]
+      },
+      "final": {
+        "step": 12800,
+        "time": 0.016,
+        "source": [
+          637.4406301516631,
+          438.298555881714,
+          2.8369904868831357e-06,
+          3.2021833082249317e-06,
+          0.00010240285909022288,
+          9.507054094038775e-05,
+          8.649347694791928e-05,
+          0.00406437074293121,
+          0.006505003511688116
+        ],
+        "charge": [
+          1.4237495333963235e-08,
+          1.20279785441824e-08,
+          9.915586506658456e-09,
+          8.203021560100082e-09,
+          6.656116288196821e-09,
+          5.280564083448159e-09,
+          3.0773002306209427e-09,
+          8.232029348867527e-10
+        ],
+        "momentum": [
+          0.007185277672357508,
+          0.0048077437825427,
+          0.0017383815923773006,
+          -0.0020441053868129762,
+          -0.005784119961421206,
+          -0.00946087377685804,
+          -0.012502417957505282,
+          -0.006915456146732423
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": -3.2506791107987337e-05,
+        "numerical_loss": 4.149465837124659e-09
+      },
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_continuous_tract_probe",
+        "12800",
+        ".016",
+        "--graph-state",
+        "--contact-step",
+        "7.8125001e-8",
+        "--relaxation"
+      ],
+      "localized_contact": true,
+      "fitted_damping": true
+    }
+  },
+  "comparisons": [
+    {
+      "cases": [
+        "baseline-6400",
+        "local-12800"
+      ],
+      "maximum_scaled_source_difference": 2.0716937466145513,
+      "maximum_tract_pressure_difference_Pa": 109.47555569751272
+    },
+    {
+      "cases": [
+        "local-6400",
+        "local-12800"
+      ],
+      "maximum_scaled_source_difference": 5.550260067956197,
+      "maximum_tract_pressure_difference_Pa": 210.09755148169342
+    },
+    {
+      "cases": [
+        "fitted-3200",
+        "fitted-6400"
+      ],
+      "maximum_scaled_source_difference": 8.65318823273541,
+      "maximum_tract_pressure_difference_Pa": 90.87420810942592
+    },
+    {
+      "cases": [
+        "fitted-6400",
+        "fitted-12800"
+      ],
+      "maximum_scaled_source_difference": 5.055079738312224,
+      "maximum_tract_pressure_difference_Pa": 206.70454807414683
+    },
+    {
+      "cases": [
+        "local-12800",
+        "fitted-12800"
+      ],
+      "maximum_scaled_source_difference": 0.07227695341851376,
+      "maximum_tract_pressure_difference_Pa": 3.83491809326366
+    }
+  ],
+  "temporal_convergence_established": false,
+  "hashes": {
+    "tools/continuous_tract_contact_reference.py": "c8ebeef181ced17de03c36aa8038588bb9b9857d4fe4980687a52807778929a6",
+    "tools/continuous_tract_probe.cpp": "5612d487fad6d2259cbf1afef98085b9f8c48169d1ccb8bc5a7276f91a92917c",
+    "src/continuous_glottis.cpp": "c4719cddfe49a9bf982ba179ccf1b44cfbf93cc4eb0f10285709a76ce03fcdf6",
+    "include/ducklips/continuous_glottis.hpp": "978ca369a5b7b314504d05b90e18d67d91640aae31ce4a94ad535a85563fe7de",
+    "src/glottal_relaxation.cpp": "47b54943eacf8a8493adb3ee30dab8a5965f8cbc586cc6368781ea5ca5db9d55",
+    "include/ducklips/glottal_relaxation.hpp": "1caecabae9d92d2b92cc4cce074c41d438c0204814fda7328622123cff72c9da",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "build/ducklips_continuous_tract_probe": "603bcba17dbed594977d2104fcd1b94b92b2dc2b8b663446145ee0c19b03b5ab",
+    "out/continuous-tract-contact/control-probe": "9b5be04330dbec7b415b4c79437b08f51002c46eb1f6f4437859cf18eff08737",
+    "out/continuous-tract-contact/seed.input": "aa2e241b7f0bd5f617dd0b7d0daf7c4196ed19df721a76a7f4cfbdecb9ed6904",
+    "out/continuous-tract-contact/baseline-6400.jsonl": "ec892db4c0b28395c31de97cd5eb5624f8eabc92719079e5d8815fb7eca9a9c9",
+    "out/continuous-tract-contact/baseline-6400.stderr": "6dcc617221ed6759adaf61ab388800c40a0364a265b5ae798523d9cc1f685f3a",
+    "out/continuous-tract-contact/local-6400.jsonl": "94d64edff5ceea2c5b0eb5283c8e72805a4ed78215f121592d66c4a2682c43b8",
+    "out/continuous-tract-contact/local-6400.stderr": "a70cea8bb824e5cb5c064403e7b83ebd2397fa87957d52966f830e214d393601",
+    "out/continuous-tract-contact/local-12800.jsonl": "542f46498c6a0f249ff2ba3ed4199bf9fe1e1722bbf0a2215c129d15d854a597",
+    "out/continuous-tract-contact/local-12800.stderr": "a6a61240bcbda162db2cc843613678bfc409a3e27333060d019b545543df92ac",
+    "out/continuous-tract-contact/fitted-3200.jsonl": "1801349ccd5e150658ac18f49268b542c942d4ccb6ab89f6eb8b03b478cf5eff",
+    "out/continuous-tract-contact/fitted-3200.stderr": "56d712029aaa5cf8b72b83f5ca19d06fd3232d555d55cb3d366442f6c1f613ef",
+    "out/continuous-tract-contact/fitted-6400.jsonl": "1f15cb442bf3253989d8a1a0c3cc2c25fff8c6f6371e8bfc68801e35990dd907",
+    "out/continuous-tract-contact/fitted-6400.stderr": "e0e0d6bcca4fa3c7c8e56fb74cf8bbf7e0e39f7580e4357f38a200f919a67c94",
+    "out/continuous-tract-contact/fitted-12800.jsonl": "baa53acb341a18fb9a9862fcb3ffb7d629d700fca5a1373ca912be5b1ca0e451",
+    "out/continuous-tract-contact/fitted-12800.stderr": "2268be0781c3728cc7d2f3855e2e4e9faa72bf60feee0643ed86630106f428aa"
+  }
+}

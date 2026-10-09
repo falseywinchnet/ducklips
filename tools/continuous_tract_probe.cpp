@@ -21,18 +21,18 @@ struct Ledger final {
 // from its own accepted initial state and recomputes its affine load. Moving
 // geometry would need new Gauss-stage metrics at the substep times.
 bool segment(ducklips::GraphContinuousGlottis& model,std::span<const double> c,std::span<const double> g,
-    double dt,int remaining,Ledger& ledger){
+    double dt,double contact_step,ducklips::ContinuousGlottalUpdate update,int remaining,Ledger& ledger){
     auto trial=model;
-    if(trial.advance(c,c,g,g,dt,1400.)){ledger.step(trial,dt);model=std::move(trial);return true;}
+    if(trial.advance(c,c,g,g,dt,1400.,{},{},{},update)){ledger.step(trial,dt);model=std::move(trial);return true;}
     trial=model;ducklips::ContinuousGlottalState before,after;
-    if(model.source.state(before) && trial.advance(c,c,g,g,dt,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::dissipative)
+    if((contact_step==0 || dt<=contact_step) && model.source.state(before) && trial.advance(c,c,g,g,dt,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::dissipative)
         && trial.source.state(after) && ((before.area[0]>0)!=(after.area[0]>0) || (before.area[1]>0)!=(after.area[1]>0))){
         Ledger accepted;accepted.step(trial,dt);
         for(std::size_t j=0;j<2;++j){accepted.closures+=before.area[j]>0 && after.area[j]<=0?1:0;accepted.reopenings+=before.area[j]<=0 && after.area[j]>0?1:0;}
         ledger.add(accepted);model=std::move(trial);return true;
     }
     if(!remaining){return false;}trial=model;Ledger halves;
-    if(!segment(trial,c,g,dt/2,remaining-1,halves) || !segment(trial,c,g,dt/2,remaining-1,halves)){return false;}
+    if(!segment(trial,c,g,dt/2,contact_step,update,remaining-1,halves) || !segment(trial,c,g,dt/2,contact_step,update,remaining-1,halves)){return false;}
     ledger.add(halves);model=std::move(trial);return true;
 }
 double graph_energy(const ducklips::MovingGraphReference& graph,std::span<const double> c,std::span<const double> g){
@@ -44,8 +44,16 @@ double mass(const ducklips::GraphContinuousGlottis& model,const ducklips::Contin
 }
 }
 int main(int argc,char** argv){try{
-    if(argc!=3){throw std::runtime_error("steps duration; stdin: 9 physical source state values");}
+    if(argc<3){throw std::runtime_error("steps duration [--graph-state] [--contact-step seconds]; stdin: 9 physical source values, optionally 8 charges and 8 momenta");}
     const int steps=std::stoi(argv[1]);const double duration=std::stod(argv[2]);
+    bool graph_state=false;double contact_step=0.;ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlottalUpdate::symmetric;
+    for(int argument=3;argument<argc;++argument){
+        const std::string option=argv[argument];
+        if(option=="--graph-state"){graph_state=true;}
+        else if(option=="--relaxation"){update=ducklips::ContinuousGlottalUpdate::relaxation;}
+        else if(option=="--contact-step" && argument+1<argc){contact_step=std::stod(argv[++argument]);if(!std::isfinite(contact_step) || contact_step<=0){throw std::runtime_error("contact step must be positive");}}
+        else{throw std::runtime_error("unknown option");}
+    }
     if(steps<=0 || duration<=0 || !std::isfinite(duration)){throw std::runtime_error("invalid duration or steps");}
     std::array<double,9> y;for(double& v:y){if(std::scanf("%lf",&v)!=1){throw std::runtime_error("source seed");}}
     constexpr std::size_t nodes=8;constexpr double length=.175,area=2e-4,dx=length/nodes;
@@ -58,6 +66,10 @@ int main(int argc,char** argv){try{
     ducklips::GraphContinuousGlottis model;
     model.prepare(nodes,edges,0,f,air,1.,initial,{y[0],y[1]},{y[4],y[5],y[6]},1.,ducklips::ContourPressureProfile::linear_span);
     for(std::size_t j=0;j<nodes;++j){model.network.momentum[j]=y[6]/g[j];}
+    if(graph_state){
+        for(double& value:model.network.charge){if(std::scanf("%lf",&value)!=1 || !std::isfinite(value)){throw std::runtime_error("initial graph charge");}}
+        for(double& value:model.network.momentum){if(std::scanf("%lf",&value)!=1 || !std::isfinite(value)){throw std::runtime_error("initial graph momentum");}}
+    }
     ducklips::ContinuousGlottalState state;
     if(!model.source.state(state)){throw std::runtime_error("initial state");}
     const double initial_energy=state.energy+graph_energy(model.network,c,g),initial_mass=mass(model,state),dt=duration/steps;
@@ -78,7 +90,7 @@ int main(int argc,char** argv){try{
         if(step==steps){
             std::fprintf(stderr,"{\"complete\":true,\"steps\":%d,\"duration\":%.17g,\"nodes\":%zu,\"length_m\":%.17g,\"area_m2\":%.17g,\"segments\":%zu,\"minimum_dt\":%.17g,\"closures\":%zu,\"reopenings\":%zu,\"maximum_work_residual_J\":%.17g,\"maximum_mass_residual_m3\":%.17g,\"numerical_loss_J\":%.17g,\"port_work_J\":%.17g,\"pressure_range_Pa\":[%.17g,%.17g]}\n",steps,duration,nodes,length,area,total.segments,total.minimum_dt,total.closures,total.reopenings,maximum_work,maximum_mass,total.numerical,total.port,minimum_pressure,maximum_pressure);return 0;
         }
-        Ledger accepted;if(!segment(model,c,g,dt,12,accepted)){
+        Ledger accepted;if(!segment(model,c,g,dt,contact_step,update,12,accepted)){
             std::fprintf(stderr,"{\"complete\":false,\"failed_step\":%d,\"time\":%.17g,\"closures\":%zu,\"reopenings\":%zu}\n",step,step*dt,total.closures,total.reopenings);return 2;
         }total.add(accepted);
     }

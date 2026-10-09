@@ -51,6 +51,12 @@ discontinuous roundoff safeguard. Fast internal pressure modes also explain
 why coarse conservative steps can be inaccurate. Whole-utterance integration
 and accurate contact motion under tract feedback remain in progress.
 
+Near sealing, [local viscous decay becomes much faster than tissue motion](reports/GLOTTAL_RELAXATION.md).
+An opt-in update now fits each coupled resistance mode and passes independent
+matrix-decay and smooth-trajectory checks. Contact localization and this decay
+fit alone do not converge the longer tract-coupled motion; the full fast
+pressure evolution remains an accuracy requirement before new speech.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

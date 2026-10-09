@@ -307,6 +307,17 @@ only the resolved excess repairs it without relaxing the force tolerance.
 Pressure-driven contact in a frozen tube is still sensitive to temporal
 resolution. This integration reference is not yet the articulated speech path.
 
+[Mode-fitted continuous-source relaxation](reports/GLOTTAL_RELAXATION.md)
+now handles the exact constant-inertia viscous-decay limit in the shared
+fluid/tissue metric. Independent local equations show a roughly 2 ns decay
+time just before sealing, explaining why a symmetric step can preserve a
+spurious alternating remnant. The fitted mode keeps a positive work ledger
+and passes independent matrix-exponential and nonlinear endpoint-refinement
+checks. Common-state tube controls show that localizing crossings or fitting
+viscous decay alone does not converge the longer motion. Fast pressure
+oscillations, coupled geometry and the incomplete tract loss model remain
+part of the actual speech-integration problem.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the
