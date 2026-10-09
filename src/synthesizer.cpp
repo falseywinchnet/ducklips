@@ -347,7 +347,14 @@ void Synthesizer::begin_block() noexcept {
     oral_outlet_ = constriction_area_;
     nasal_outlet_ = nasal_outlet;
     const double bulk_stiffness = air_.density * air_.sound_speed * air_.sound_speed;
-    cavity_compliance_ = model_.oral_volume() / bulk_stiffness + voice_.static_wall_compliance;
+    previous_cavity_compliance_=cavity_compliance_;
+    previous_cavity_volume_=cavity_volume_;
+    cavity_volume_=model_.oral_volume();
+    cavity_compliance_=cavity_volume_/bulk_stiffness+voice_.static_wall_compliance;
+    if (options_.canonical_motion && !canonical_ready_) {
+        previous_cavity_compliance_=cavity_compliance_;
+        previous_cavity_volume_=cavity_volume_;
+    }
     frication_scale_ = voice_.frication_gain * frication_multiplier;
 
     // Larynx: breathing pressure with shimmer; tension from intended pitch,
@@ -657,7 +664,20 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         double nasal_area = previous_nasal_outlet_ + ramp * (nasal_outlet_ - previous_nasal_outlet_);
         // The cavity conserves mass, so it receives the true glottal flow; a
         // lagging mean would overfill it past lung pressure during closures.
-        double vented = intraoral_.advance(flow, oral_area + nasal_area, cavity_compliance_, period, air_);
+        double vented,displacement_flow=0,mass_residual=0;
+        if (options_.canonical_motion) {
+            const double change=cavity_compliance_-previous_cavity_compliance_;
+            const double first=previous_cavity_compliance_+(ramp-1/block_length)*change;
+            const double last=previous_cavity_compliance_+ramp*change;
+            const double displaced=(cavity_volume_-previous_cavity_volume_)/block_length;
+            vented=intraoral_.advance_moving(flow,oral_area+nasal_area,first,last,displaced,period,air_);
+            displacement_flow=displaced/period;
+            const double outlet=std::copysign((oral_area+nasal_area)*std::sqrt(2*std::abs(vented)/air_.density),vented);
+            mass_residual=(last*vented-first*cavity+displaced)/period-flow+outlet;
+            statistics_.maximum_cavity_mass_residual=std::max(statistics_.maximum_cavity_mass_residual,std::abs(mass_residual));
+        } else {
+            vented=intraoral_.advance(flow,oral_area+nasal_area,cavity_compliance_,period,air_);
+        }
         double jet = root_two_over_density * std::sqrt(std::fabs(vented));
         if (vented < 0.0) {
             jet = -jet;
@@ -694,7 +714,10 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
                                          .geometry_pressure_jump = geometry_pressure_jump_,
                                          .geometry_lip_slope_jump = geometry_lip_slope_jump_,
                                          .geometry_energy_ratio = geometry_energy_ratio_,
-                                         .geometry_parameter_change = geometry_parameter_change_});
+                                         .geometry_parameter_change = geometry_parameter_change_,
+                                         .frication_pressure = frication, .frication_branch = frication_branch_,
+                                         .constriction_area = constriction_area_, .cavity_pressure = cavity,
+                                         .cavity_displacement_flow = displacement_flow, .cavity_mass_residual = mass_residual});
         }
         geometry_lip_metric_jump_ = 0.0;
         geometry_lip_projection_jump_ = 0.0;

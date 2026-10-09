@@ -357,6 +357,34 @@ void test_sources() {
     double after = cavity.advance(inflow, outlet, compliance, step, air);
     double balance = compliance * (after - before) / step - inflow + outlet * std::sqrt(2.0 * after / air.density);
     check(std::fabs(balance) < 1.0e-12, "implicit intraoral step satisfies its equation", std::fabs(balance), 1.0e-12);
+    // Sealed moving cavity: ambient-equivalent air volume is conserved,
+    // including elastic wall storage and changing air compliance.
+    cavity.reset();const double bulk=air.density*air.sound_speed*air.sound_speed;
+    const double initial_volume=5e-5,wall_compliance=1e-8;
+    double old_volume=initial_volume,worst_mass_error=0;
+    for (int i=1;i<=200;++i) {
+        const double new_volume=initial_volume-1e-5*std::sin(ducklips::pi*i/200.0);
+        const double old_c=old_volume/bulk+wall_compliance,new_c=new_volume/bulk+wall_compliance;
+        const double pressure=cavity.advance_moving(0,0,old_c,new_c,new_volume-old_volume,step,air);
+        worst_mass_error=std::max(worst_mass_error,std::abs(new_volume+new_c*pressure-initial_volume));
+        if (i==100) { check(pressure>900,"tongue compression raises pressure in a sealed cavity",pressure,900); }
+        old_volume=new_volume;
+    }
+    check(worst_mass_error<1e-16 && std::abs(cavity.pressure())<1e-9,
+          "sealed compression/expansion conserves air and returns to ambient",worst_mass_error,1e-16);
+    // Vented compression and expansion must satisfy the same mass balance,
+    // including signed backflow during expansion.
+    cavity.reset();double worst_flow_error=0;old_volume=initial_volume;
+    for (int i=1;i<=200;++i) {
+        const double new_volume=initial_volume+1e-5*std::sin(2*ducklips::pi*i/200.0);
+        const double old_c=old_volume/bulk+wall_compliance,new_c=new_volume/bulk+wall_compliance;
+        const double old_p=cavity.pressure();
+        const double new_p=cavity.advance_moving(inflow,outlet,old_c,new_c,new_volume-old_volume,step,air);
+        const double vent=std::copysign(outlet*std::sqrt(2*std::abs(new_p)/air.density),new_p);
+        const double error=(new_c*new_p-old_c*old_p+new_volume-old_volume)/step-inflow+vent;
+        worst_flow_error=std::max(worst_flow_error,std::abs(error));old_volume=new_volume;
+    }
+    check(worst_flow_error<1e-12,"moving vented cavity conserves signed mass flow",worst_flow_error,1e-12);
 }
 
 void test_cue_queue() {

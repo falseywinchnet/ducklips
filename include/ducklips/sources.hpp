@@ -108,6 +108,13 @@ public:
     void reset() noexcept;
     double advance(double inflow, double outlet_area, double compliance, double sample_period,
                    const AirProperties& air) noexcept;
+    // Linearized mass balance for moving geometry:
+    // C_new P_new - C_old P_old = dt*(U_in-U_out) - (V_new-V_old).
+    // Compliance includes yielding walls; volume_change is geometric air
+    // volume displacement only. Volumes/flows are referenced to ambient.
+    double advance_moving(double inflow,double outlet_area,double old_compliance,
+                          double new_compliance,double volume_change,double sample_period,
+                          const AirProperties& air) noexcept;
     [[nodiscard]] double pressure() const noexcept;
 
 private:

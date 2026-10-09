@@ -188,10 +188,16 @@ void IntraoralPressure::reset() noexcept {
 
 double IntraoralPressure::advance(double inflow, double outlet_area, double compliance, double sample_period,
                                   const AirProperties& air) noexcept {
+    return advance_moving(inflow,outlet_area,compliance,compliance,0,sample_period,air);
+}
+
+double IntraoralPressure::advance_moving(double inflow,double outlet_area,double old_compliance,
+                                         double new_compliance,double volume_change,double sample_period,
+                                         const AirProperties& air) noexcept {
     // alpha s^2 + beta s - |gamma| = 0 with P = sign(gamma) s^2.
-    double alpha = compliance / sample_period;
+    double alpha = new_compliance / sample_period;
     double beta = std::max(outlet_area, 0.0) * std::sqrt(2.0 / air.density);
-    double gamma = alpha * pressure_ + inflow;
+    double gamma = (old_compliance * pressure_ - volume_change) / sample_period + inflow;
     double magnitude = std::fabs(gamma);
     double root = 0.0;
     if (magnitude > 0.0) {

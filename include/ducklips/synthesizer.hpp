@@ -55,6 +55,7 @@ struct SynthesisStatistics final {
     std::size_t pitch_cycles{};
     std::size_t geometry_updates{};
     std::size_t most_geometry_steps{};
+    double maximum_cavity_mass_residual{}; // m^3/s, moving mean-cavity balance
     double worst_orthogonality{};           // max |phi_i^T C phi_j - delta_ij| when diagnostics are on
     double worst_orthogonality_time{};      // s
 };
@@ -79,6 +80,12 @@ struct TraceSample final {
     double geometry_lip_slope_jump{};
     double geometry_energy_ratio{};
     double geometry_parameter_change{};
+    double frication_pressure{};
+    std::size_t frication_branch{};
+    double constriction_area{};
+    double cavity_pressure{};
+    double cavity_displacement_flow{};
+    double cavity_mass_residual{};
 };
 
 // Values from the most recent control block, for diagnostics.
@@ -186,6 +193,9 @@ private:
     double previous_oral_outlet_{};
     double previous_nasal_outlet_{};
     double cavity_compliance_{};
+    double previous_cavity_compliance_{};
+    double cavity_volume_{};
+    double previous_cavity_volume_{};
     double constriction_area_{};
     double frication_scale_{};
     double tremor_phase_{};

@@ -1,0 +1,126 @@
+{
+  "schema": 1,
+  "scope": "Moving mean-cavity mass balance in the actual canonical speech renderer. Numerical conservation is not a pronunciation or realism score.",
+  "source_sha256": {
+    "include/ducklips/sources.hpp": "49e1e7c5d96be992639b13ab5fabc9ff3d37dfd33bcdf39395b7790b5bdbbfb3",
+    "include/ducklips/synthesizer.hpp": "2e47fb8d8f0fe928ded1da8f584b0d5cfe0b4a0c732922c750271cdff02bc597",
+    "src/sources.cpp": "66167fbd6dcbd63fe5aacca8f90748046ef26ccdf8ebde8a0c78f256e0b5b4b5",
+    "src/synthesizer.cpp": "e1d1c3eff96d15187b810c4725fb28e273a6a1031e3d4e3cffcadadc797e10c5",
+    "tests/ducklips_tests.cpp": "ff859577c6b8989c020c2a62650232652efb338796ca9e189007b5a9925f2bcf",
+    "tests/stream_tests.cpp": "fcf9c0a71720247b9e9235eb4a1334b3a320fa42a286cd7420cfd380c8232044",
+    "tools/ducklips_say.cpp": "b520b89cb37d84af91e59e0598ff4507411e33e5ae9f4ed000b6ee98b6d9b41e"
+  },
+  "audited_binary_sha256": "fdfe6cc0eb9a3d5af3c49393ffe5ab08f997259199ad05c8e00225bec211ebe6",
+  "renders": [
+    {
+      "wav": "out/canonical-sierra-source-baseline.wav",
+      "wav_sha256": "46ddabb58e50ec928eb98caacab66b81c9df1012efeeb5d7d809453402173c4f",
+      "trace": "out/canonical-sierra-source-baseline.csv",
+      "trace_sha256": "5663c90d8a8ca2628144ee716e1ccae1272da735dc33d32d7cfb62f8b49dc576",
+      "seconds": 1.4,
+      "peak": 0.047326162457466125,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "cavity_pressure_range_pa": [
+        -79.20430093,
+        575.8372187
+      ],
+      "source_branch_changes": 19,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.363 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: S IY0 EH1 R AX0\nplan: 89 cues, 1.40 s\noutput audit: nonfinite 0, clipped 0\nrendered 1.40 s in 17.228 s: real-time factor 12.306 (lower is faster)\ngeometry steps 1400 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nfold cycles 44, peak 0.047, rms 0.0084 (before normalization)\nwrote out/canonical-sierra-source-baseline.wav\n"
+    },
+    {
+      "wav": "out/canonical-sierra-moving-volume.wav",
+      "wav_sha256": "d72b3e60f902c672f56c1ef75d269169217d91a01638ff214e89f78828b4caa3",
+      "trace": "out/canonical-sierra-moving-volume.csv",
+      "trace_sha256": "52f49aa7053049d4ee03581ccfa302ebfc512c2e861c394e2b8dd2312e72a732",
+      "seconds": 1.4,
+      "peak": 0.04877186566591263,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "cavity_pressure_range_pa": [
+        -166.5888828,
+        575.8381038
+      ],
+      "source_branch_changes": 19,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.330 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: S IY0 EH1 R AX0\nplan: 89 cues, 1.40 s\noutput audit: nonfinite 0, clipped 0\nrendered 1.40 s in 17.759 s: real-time factor 12.685 (lower is faster)\ngeometry steps 1400 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nfold cycles 44, peak 0.049, rms 0.0084 (before normalization)\nwrote out/canonical-sierra-moving-volume.wav\n"
+    },
+    {
+      "wav": "out/canonical-stops-volume-audit.wav",
+      "wav_sha256": "9080c1bc0c31c38b114bcff355600c2f249e7a2b707a779fd417d8a1f1793fe0",
+      "trace": "out/canonical-stops-volume-audit.csv",
+      "trace_sha256": "3aef5f90d4831ee1e467fec04cce8c3d1aaaa514b0a57d61ae502c99e3489e6a",
+      "seconds": 2.21,
+      "peak": 0.13315138220787048,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "cavity_pressure_range_pa": [
+        -88.75987679,
+        830.2713051
+      ],
+      "source_branch_changes": 30,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.364 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: P AX0 P AA1 | K EH0 B EH1 K\nplan: 177 cues, 2.21 s\noutput audit: nonfinite 0, clipped 0\nrendered 2.21 s in 30.459 s: real-time factor 13.782 (lower is faster)\ngeometry steps 2210 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nmoving cavity maximum mass residual: 2.423402894e-16 m^3/s\nfold cycles 46, peak 0.133, rms 0.0068 (before normalization)\nwrote out/canonical-stops-volume-audit.wav\n",
+      "maximum_mass_residual_m3_per_second": 2.423402894e-16,
+      "geometric_displacement_flow_range_m3_per_second": [
+        -0.003166518576,
+        0.0002814471922
+      ]
+    }
+  ],
+  "diagnostic_instrumentation_preserves_pcm": true,
+  "enhanced": {
+    "source": "/Users/joshuahkuttenkuler/ducklips/out/canonical-stops-moving-volume.wav",
+    "source_sha256": "9080c1bc0c31c38b114bcff355600c2f249e7a2b707a779fd417d8a1f1793fe0",
+    "sample_rate": 48000,
+    "start_sample": 0,
+    "end_sample": 106080,
+    "channel": 0,
+    "apertures": [
+      1024,
+      2048,
+      4096
+    ],
+    "offsets": [
+      -379,
+      -241,
+      -64,
+      0,
+      83,
+      214,
+      427
+    ],
+    "target_n_fft": 2048,
+    "hop": 512,
+    "rows": 684,
+    "row_spacing_hz": 11.72447484123107,
+    "highest_row_hz": 8007.81631656082,
+    "shape": [
+      684,
+      208
+    ],
+    "display_reference": 0.015974152821882408,
+    "ordinary_display_reference": 8.701858888062933,
+    "db_range": 70.0,
+    "texture_amplitude_scale": 0.9118400005899345,
+    "png": {
+      "field": "enhanced",
+      "colormap": "magma",
+      "row_pixels": 1,
+      "column_pixels": 4,
+      "full_field": true
+    },
+    "elapsed_seconds": 38.69327137526125,
+    "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+  },
+  "validation": {
+    "release_full_ctest": "7/7 pass after moving-cavity implementation",
+    "asan_ubsan_full_ctest": "7/7 pass after moving-cavity implementation",
+    "final_diagnostic_release_tests": "core and stream tests 2/2 pass, including per-sample mass audit"
+  },
+  "limitations": [
+    "Linearized single-cavity constant-bulk-modulus model",
+    "Large geometric volume displacement requires anatomical investigation",
+    "Frication source snapping unchanged",
+    "No empirical pronunciation score",
+    "Performance optimization deferred"
+  ]
+}

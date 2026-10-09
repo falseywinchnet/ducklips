@@ -126,3 +126,8 @@ known limitations are in [canonical_speech_reference.json](canonical_speech_refe
 The final Alfa build produces exactly the same PCM as the causal-loss render
 used to generate the enhanced field. No human word-recognition score has
 been assigned to any of these files.
+
+The subsequent [moving-cavity correction](MOVING_CAVITY.md) accounts for
+tongue/lip displacement in the mean-cavity mass balance and audits that
+balance in actual speech. It also identifies a large modeled volume change
+that needs further anatomical investigation.

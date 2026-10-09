@@ -291,6 +291,7 @@ int main(int argc, char** argv) {
                 statistics.blocks, statistics.most_geometry_steps, statistics.fewest_modes, statistics.most_modes, statistics.warm_modes,
                 statistics.bisected_modes,
                 static_cast<double>(statistics.factorizations) / std::max<double>(1.0, static_cast<double>(statistics.blocks)));
+    if (options.canonical_motion) { std::printf("moving cavity maximum mass residual: %.9e m^3/s\n",statistics.maximum_cavity_mass_residual); }
     std::printf("fold cycles %zu, peak %.3f, rms %.4f (before normalization)\n", statistics.pitch_cycles, peak, rms);
     if (arguments.diagnostics) {
         std::printf("worst basis orthogonality defect %.3e at %.3f s\n", statistics.worst_orthogonality,
@@ -299,17 +300,19 @@ int main(int argc, char** argv) {
     if (!arguments.trace_path.empty()) {
         std::FILE* trace = std::fopen(arguments.trace_path.c_str(), "w");
         if (trace != nullptr) {
-            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change\n");
+            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change,frication_pressure,frication_branch,constriction_area,cavity_pressure,cavity_displacement_flow,cavity_mass_residual\n");
             const std::vector<ducklips::TraceSample>& samples = synthesizer.trace();
             for (std::size_t index = 0; index < samples.size(); ++index) {
                 double time = arguments.trace_start + static_cast<double>(index) / options.rate.samples_per_second;
-                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
+                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%zu,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
                              samples[index].nostrils, samples[index].throat, samples[index].glottal_pressure,
                              samples[index].energy, samples[index].modes, samples[index].glottal_area,
                              samples[index].glottal_flow, samples[index].tension, samples[index].geometry_lip_metric_jump,
                              samples[index].geometry_lip_projection_jump, samples[index].geometry_pressure_jump,
                              samples[index].geometry_lip_slope_jump, samples[index].geometry_energy_ratio,
-                             samples[index].geometry_parameter_change);
+                             samples[index].geometry_parameter_change, samples[index].frication_pressure, samples[index].frication_branch,
+                             samples[index].constriction_area, samples[index].cavity_pressure,
+                             samples[index].cavity_displacement_flow,samples[index].cavity_mass_residual);
             }
             std::fclose(trace);
         }

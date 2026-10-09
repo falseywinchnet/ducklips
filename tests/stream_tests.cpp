@@ -102,6 +102,8 @@ int main() {
     check(a==b,"canonical motion/source result is independent of host buffer size");
     check(energy>1e-6 && !canonical_whole.engine().statistics().nonfinite_samples
           && !canonical_whole.engine().statistics().clipped_samples,"canonical nudges generate finite nonzero unclipped audio");
+    check(canonical_whole.engine().statistics().maximum_cavity_mass_residual<1e-12,
+          "canonical moving-cavity mass balance holds during streamed diphthongs and frication");
     check(canonical_whole.engine().statistics().factorizations==0,"canonical speech never enters the old modal solver");
     check(canonical_whole.submit("1 pitch 140 70",error),"new nudge accepted after canonical rendering begins");
     canonical_whole.render(std::span<float>(a.data(),960));
