@@ -151,10 +151,16 @@ controls do not establish speech quality or efficient rendering.
 that the default terminal section need not disappear at complete closure:
 its inner shoulder retains air even when the sampled midpoint is in contact.
 Independent integration and coupled closed-port controls preserve that volume
-without a compliance floor. The native geometry is available from the same
-articulator state, but the planar adapter and production speech network still
-need to consume its distinct storage and passage metrics. General empty-cell
+without a compliance floor. The native geometry supplies distinct storage and
+passage metrics from the same articulator state. General empty-cell
 transport remains required for finer partitions and other contact geometries.
+
+The [planar profile adapter](reports/PLANAR_LIP_PROFILE.md) now consumes those
+distinct lip metrics and continues canonical state across successive native
+Bravo intervals on a certified fixed graph. Complete terminal closure retains
+positive lip storage and zero exterior flow. The inlet remains sealed in
+these controls; laryngeal/source coupling, losses, radiation and full-utterance
+topology transport remain required before this becomes a speech path.
 
 ## Moving-energy reference
 

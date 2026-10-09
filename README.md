@@ -89,8 +89,14 @@ actual air volume from the contact aperture. In all 562 NATO frames with a
 zero final-section midpoint area, the existing axial lip law still leaves
 air in that section's inner shoulder. Native integration retains that air
 while sealing the outlet, and coupled controls preserve its pressure through
-contact. This geometry still needs to replace the planar adapter's uniform
-section approximation before a new speech rendering can use it.
+contact.
+
+The [coupled profile adapter](reports/PLANAR_LIP_PROFILE.md) now uses those
+separate measurements in the native planar reference. Moving Bravo closure and reopening
+controls carry mouth and lip state through successive intervals, retain the
+air behind the seal, and conserve stored air including exterior flow. This
+remains an inviscid control with a sealed inlet, pending source, loss and
+full-utterance integration; no new listening result is attributed to it.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

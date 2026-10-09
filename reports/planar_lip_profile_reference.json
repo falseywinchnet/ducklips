@@ -1,0 +1,2576 @@
+{
+  "use": "coupled planar mouth and integrated lip geometry, with interval continuation; no new speech",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_lip_profile_reference.py"
+  ],
+  "runs": [
+    {
+      "name": "closing-0",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-16.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-16.json",
+      "log": "out/planar-lip-profile/audit/closing-0-16.log",
+      "input_sha256": "aa8468fc05b718c5ff8c55b9dded79420cc88e375eb24dc3ba11d4effe48e27c",
+      "output_sha256": "4b18f637082aaebab4851ff89b30b61867f20d3b9bea90de286d90e5a56d94fd",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "independent_audit": true,
+      "geometry_checks": 52,
+      "intermediate_witness_checks": 102,
+      "maxima": {
+        "volume_m3": 3.049318610115481e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.3877787807814457e-17,
+        "conductance": 2.914335439641036e-16,
+        "pressure_Pa": 1.747675781871294e-09,
+        "momentum_Pa_s": 1.0856387064827298e-13,
+        "average_flow_m3_s": 1.933864310008082e-15,
+        "local_mass_m3": 6.048370488381881e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8284267354388017,
+        1.4679590211533433,
+        -7.564569128360766,
+        -10.617411343630318,
+        -13.245593803849458,
+        -1.1876457260220916
+      ],
+      "relative_density_range": [
+        0.9997816610285303,
+        1.000397593488483
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.5650456339320595e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-16.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-16.json",
+      "log": "out/planar-lip-profile/audit/closing-1-16.log",
+      "input_sha256": "52f5d4886f7ca861630212a29d68190282d6e6687cc5f07d84681b7f19ccc6ee",
+      "output_sha256": "d9eb85a06b51d8e297c565652e068ddae6b10c7b257f093f7ce626edfec352bf",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "independent_audit": true,
+      "geometry_checks": 49,
+      "intermediate_witness_checks": 96,
+      "maxima": {
+        "volume_m3": 2.913793338554793e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.452830911130576e-17,
+        "conductance": 3.0531133177191805e-16,
+        "pressure_Pa": 1.866586885057586e-09,
+        "momentum_Pa_s": 1.49575908299851e-13,
+        "average_flow_m3_s": 2.9825810959595517e-15,
+        "local_mass_m3": 5.027707160673871e-21,
+        "global_mass_m3": 6.776263578034403e-21,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.5799162110719063,
+        0.9403118196852477,
+        3.9556468615692157,
+        0.8725054186406204,
+        -3.220870095908038,
+        19.073390419306637
+      ],
+      "relative_density_range": [
+        0.9996501645505551,
+        1.0003932400557518
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-32.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-32.json",
+      "log": "out/planar-lip-profile/audit/closing-0-32.log",
+      "input_sha256": "707c3b134841ce7910c6b133dac8f14601049c3537c29da3fe6d889d2c1d35ac",
+      "output_sha256": "57133c9f971d3647599c1544995702fb40e43db6ac113485d572f494cc6d623c",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "independent_audit": true,
+      "geometry_checks": 100,
+      "intermediate_witness_checks": 198,
+      "maxima": {
+        "volume_m3": 3.5236570605778894e-19,
+        "cap_area_m2": 3.1170812458958252e-19,
+        "internal_area_m2": 1.3877787807814457e-17,
+        "conductance": 2.914335439641036e-16,
+        "pressure_Pa": 1.430046303596555e-09,
+        "momentum_Pa_s": 9.264029837306384e-14,
+        "average_flow_m3_s": 2.155723202959428e-15,
+        "local_mass_m3": 5.147753362657763e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8095131732599434,
+        1.5166854871082762,
+        -7.584774839199837,
+        -10.247370142639921,
+        -14.640222508389751,
+        22.73966339138799
+      ],
+      "relative_density_range": [
+        0.9996865345653884,
+        1.0003662262959887
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.590645543215426e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-32.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-32.json",
+      "log": "out/planar-lip-profile/audit/closing-1-32.log",
+      "input_sha256": "7bf2c1342ed8c816d7cdabef04c8b6e7da46ce504205afa25be01dea71339260",
+      "output_sha256": "fbcfbf9e44ec14a40b81e0b6e3ee9ae42b55ca360060f8ffd0f399f00ba14aa5",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "independent_audit": true,
+      "geometry_checks": 97,
+      "intermediate_witness_checks": 192,
+      "maxima": {
+        "volume_m3": 2.981555974335137e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.496198998029996e-17,
+        "conductance": 3.122502256758253e-16,
+        "pressure_Pa": 1.6446115580492915e-09,
+        "momentum_Pa_s": 1.3546295704082445e-13,
+        "average_flow_m3_s": 3.2512900164982433e-15,
+        "local_mass_m3": 6.476514003560499e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6268319358239174,
+        0.8875095614376086,
+        2.709793279076394,
+        0.7038786058570256,
+        -3.765328303535723,
+        14.08586347109905
+      ],
+      "relative_density_range": [
+        0.9996772137766803,
+        1.0003447081538328
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-64.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-64.json",
+      "log": "out/planar-lip-profile/audit/closing-0-64.log",
+      "input_sha256": "f8ae0df6552601aae47b3da306dc7a9bf0148eeefc351c2b22e02f078bd5169e",
+      "output_sha256": "86d1f2b3aac3b1b0e2e3da8d41caf1d2e91a2085740f521d1792a3a2c43f32fa",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "independent_audit": true,
+      "geometry_checks": 196,
+      "intermediate_witness_checks": 390,
+      "maxima": {
+        "volume_m3": 3.4558944247975454e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.3877787807814457e-17,
+        "conductance": 2.914335439641036e-16,
+        "pressure_Pa": 1.0311875797697212e-09,
+        "momentum_Pa_s": 5.700591366140928e-14,
+        "average_flow_m3_s": 1.2819239086927733e-15,
+        "local_mass_m3": 6.272265015745257e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8073261341609381,
+        1.521490199597511,
+        -7.70898618930507,
+        -10.36599305349376,
+        -11.13378685136723,
+        -48.46468513493601
+      ],
+      "relative_density_range": [
+        0.999652956067777,
+        1.00033509837543
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.5971837690021535e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-64.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-64.json",
+      "log": "out/planar-lip-profile/audit/closing-1-64.log",
+      "input_sha256": "99087a1ef66dc631b0de7d43e6e140afaa4c49e9f286f00568bef6de4c31114c",
+      "output_sha256": "712ceb857340db19ef640eaa030cdb2d0b0435ce9868450b7be3e60a39658bb4",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "independent_audit": true,
+      "geometry_checks": 193,
+      "intermediate_witness_checks": 384,
+      "maxima": {
+        "volume_m3": 2.981555974335137e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.496198998029996e-17,
+        "conductance": 3.122502256758253e-16,
+        "pressure_Pa": 1.4231980038914571e-09,
+        "momentum_Pa_s": 8.767238237478159e-14,
+        "average_flow_m3_s": 1.89911707298291e-15,
+        "local_mass_m3": 6.4576261743781605e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6314033042346492,
+        0.8826372512827959,
+        2.9943958094244794,
+        0.1714975361931001,
+        -2.8213671672665392,
+        -13.550056253141516
+      ],
+      "relative_density_range": [
+        0.9996703308064324,
+        1.000368772525084
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-128.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-128.json",
+      "log": "out/planar-lip-profile/audit/closing-0-128.log",
+      "input_sha256": "6cfa62033db8c1ee63469a3f68782280e4d248618f33c8835ea0a33d42e62a2f",
+      "output_sha256": "feceb1eb42cb635a025493a1bf4e9bafdd414f4abbefb2d2b05ee5c0c009718f",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.0895421109020005e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8070461849983326,
+        1.5225974211444513,
+        -8.498213241787655,
+        -8.89005833031079,
+        -14.632755695308246,
+        12.246091439043141
+      ],
+      "relative_density_range": [
+        0.9996540658758598,
+        1.0003695215006478
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.598833376201432e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 128,
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-128.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-128.json",
+      "log": "out/planar-lip-profile/audit/closing-1-128.log",
+      "input_sha256": "5fccbce94e82e8e89a28bc5d6820986bfc76f41b27a631c8b93678a82cc7a4ba",
+      "output_sha256": "e4ed09b7660be7cdf38e06091a0af00c1fe5243782ecbdd2f9d3e1fae7049dbc",
+      "log_sha256": "6e1c70282283efb9cb8ceebc0972d247e12f78480e922a44e6c8e68ae24883b6",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.264535239103148e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6329601956871151,
+        0.8853943640366654,
+        -1.5614517449896232,
+        3.3577304391295013,
+        3.0073558084632204,
+        -0.19455852274831031
+      ],
+      "relative_density_range": [
+        0.9996615923816741,
+        1.0003528800636554
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 256,
+      "steps": 257,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-256.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-256.json",
+      "log": "out/planar-lip-profile/audit/closing-0-256.log",
+      "input_sha256": "15db53fce7a1e328ceba2ff4b7ef64d977de75d1f668ca447444b9c3b9ed4158",
+      "output_sha256": "c5e0c158267690553b3dc2a23acd00f44d8e3327a3b014a09a953b5aa8e7e261",
+      "log_sha256": "9a9aeb488ed2a75b67f30f14cfc97ebc21042958f58bd25d1c1bf7b17d819f68",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.5632290273850524e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8067866430423205,
+        1.5219746915072345,
+        -7.042833882043856,
+        -11.60568159482718,
+        -11.970428938873606,
+        1.0080752036066862
+      ],
+      "relative_density_range": [
+        0.9996270499562345,
+        1.0003623424607602
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.599245566002837e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 256,
+      "steps": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-256.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-256.json",
+      "log": "out/planar-lip-profile/audit/closing-1-256.log",
+      "input_sha256": "c75fab59e20dc9638a966888fb1549c7d4a5edaee00aa465082be3d7cae3b6df",
+      "output_sha256": "db9cdf47481b8e2db1fbd461525de833d062f75af0f7d20eebc3bbdd6fdcb856",
+      "log_sha256": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.586630807019487e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6330919337100906,
+        0.8850999134813792,
+        -1.4056811519358772,
+        3.319639406447764,
+        1.4357706681580078,
+        30.17450172817718
+      ],
+      "relative_density_range": [
+        0.9996508226437768,
+        1.0003510662111614
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 512,
+      "steps": 513,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-512.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-512.json",
+      "log": "out/planar-lip-profile/audit/closing-0-512.log",
+      "input_sha256": "b0dd85e8c3adaad31c60da84e9f3e6ebff6f2178f205e6c1218709b75bc648a2",
+      "output_sha256": "6063685e6d6d7cdcbf0df5ba6c0cacbe4f32fcf8df34f812fb5280132332b572",
+      "log_sha256": "05afdd9e82208a2319956addd3cd836deebb139da0e77e2ebb4fe40bd81137ad",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.5836629734545265e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8067676370000907,
+        1.522010793659128,
+        -7.090626371683848,
+        -11.513103558152553,
+        -10.338683326104881,
+        -44.01459073433148
+      ],
+      "relative_density_range": [
+        0.9996330834612741,
+        1.000367145618535
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.5993482959674626e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 512,
+      "steps": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-512.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-512.json",
+      "log": "out/planar-lip-profile/audit/closing-1-512.log",
+      "input_sha256": "c98db25ba43808c8044cd635fa7a086d7347542aa03345105e24893ce42bcd7e",
+      "output_sha256": "8d3f187bc9d5d32a959b3e2a4e4da01ff7d01eca761ef747e833823ac167b092",
+      "log_sha256": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.493218366731382e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6331225899007762,
+        0.8850244106909001,
+        -1.375527249697145,
+        3.2451912983595816,
+        3.4984933870679558,
+        -21.772775643702033
+      ],
+      "relative_density_range": [
+        0.9996636316190773,
+        1.0003744754215338
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 1024,
+      "steps": 1025,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-1024.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-1024.json",
+      "log": "out/planar-lip-profile/audit/closing-0-1024.log",
+      "input_sha256": "7867ea076858f106b31339965642be8ff9b5298856d85fe6d7f416ab6b15786d",
+      "output_sha256": "0549b51f13c5ae825ddc08a258a6d3206f65f9cfcaee8251d06a559559b108ee",
+      "log_sha256": "d9e7c7d668bf2fd0f1da93d07e53273d9769075c61b4ccdbaacc6fc277e2b719",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.685846840189318e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8067628890664544,
+        1.522019055149813,
+        -7.094732681904522,
+        -11.502895246450278,
+        -10.267384827318159,
+        -46.21351623506033
+      ],
+      "relative_density_range": [
+        0.9996336477171008,
+        1.0003719335125572
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.599374110395777e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 1024,
+      "steps": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-1024.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-1024.json",
+      "log": "out/planar-lip-profile/audit/closing-1-1024.log",
+      "input_sha256": "e19180a3c702c1f1096a1101d8b9ceff976c8ce7d4d0275c99c877c9aff248b7",
+      "output_sha256": "5a96be8c316556ef1af789573857fbc77a7d13203e75db318327ef434bfb14b8",
+      "log_sha256": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.560341569280003e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.633131416987691,
+        0.88501104785924,
+        -1.3764931379891734,
+        3.341933248299899,
+        1.74619505103071,
+        17.949292675049982
+      ],
+      "relative_density_range": [
+        0.9996503919343717,
+        1.0003752372607373
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 2048,
+      "steps": 2049,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-2048.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-2048.json",
+      "log": "out/planar-lip-profile/audit/closing-0-2048.log",
+      "input_sha256": "206f35924bc9b5b74900dc2142f6c69d98714eb7fc584419252bb5e76bb4ba42",
+      "output_sha256": "19349db57b244686f3fb5573e8dd10148e57e9f6ffa5295816b19080d8c7fee7",
+      "log_sha256": "d9a1a69bd04d359a2adf9f5258d2a9ccd83aaa4c8cd86b0f1907c0f3054ce73f",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.682751779137563e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8067616840557672,
+        1.5220209920777397,
+        -7.095071857032831,
+        -11.5010766632328,
+        -10.28187994150991,
+        -45.921980245133504
+      ],
+      "relative_density_range": [
+        0.9996338766661568,
+        1.0003720087454278
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.599380549281131e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 2048,
+      "steps": 2048,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-2048.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-2048.json",
+      "log": "out/planar-lip-profile/audit/closing-1-2048.log",
+      "input_sha256": "52576d71db45ec502bc5c4014860c26c53676efc212ed144120f1dbacd58d2f4",
+      "output_sha256": "ca31ddba4582d9897923946ce45624b0157f34eca016854a1f4a250b7f552165",
+      "log_sha256": "68f2b3dc8f3782c31d5c3a52c6c7f58c6c1c2ea86e6a615bcee98c9ced404af1",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.679700742835207e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6331337531932717,
+        0.8850082975390735,
+        -1.376506202414811,
+        3.347769701961837,
+        1.638055075899846,
+        20.40015360132989
+      ],
+      "relative_density_range": [
+        0.9996472976796864,
+        1.0003758978950041
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 4096,
+      "steps": 4097,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-4096.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-4096.json",
+      "log": "out/planar-lip-profile/audit/closing-0-4096.log",
+      "input_sha256": "9e0fe2973552651b43df7f802b37fb82e249c94e95e74ac3b67111cc47f3bd8d",
+      "output_sha256": "237ed0dd3cb2a31f0c44c7b833b00f6f9c333084e0915d878fecac537db6c7e9",
+      "log_sha256": "261395bbfddaf47b11cc4b11e38ee0059c28dbfabd949ac36b215b6954972138",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.660305114421847e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.8067613820892234,
+        1.5220214650205375,
+        -7.095094392957021,
+        -11.500947943454971,
+        -10.282879286726313,
+        -45.901705782051614
+      ],
+      "relative_density_range": [
+        0.999633564959609,
+        1.0003720080418619
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.599382158044278e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 4096,
+      "steps": 4096,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-4096.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-4096.json",
+      "log": "out/planar-lip-profile/audit/closing-1-4096.log",
+      "input_sha256": "f459ab4339692a4829a98b1198af153a13fe99a85983f6a3a8895f4f2e9fb93b",
+      "output_sha256": "e94d05f4d6186056e6fa054cf803baae45dfb4ef56ebecd1b8085b32f79ab128",
+      "log_sha256": "54197e556262f57674fcad2da6211a72124deb693685e9b976c057b7acd29cae",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.584024562049931e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6331343460704,
+        0.8850076489645089,
+        -1.3765009274374895,
+        3.3481095588439667,
+        1.6313625160782932,
+        20.55136369806836
+      ],
+      "relative_density_range": [
+        0.9996459857988528,
+        1.0003759072263068
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 8192,
+      "steps": 8193,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/closing-0-8192.txt",
+      "output": "out/planar-lip-profile/audit/closing-0-8192.json",
+      "log": "out/planar-lip-profile/audit/closing-0-8192.log",
+      "input_sha256": "6b7af111dcda5483a7412bbd9cca9d4326cc1a272fb9be968fc2e4f11ec951e0",
+      "output_sha256": "998908a1100bfe935342daeb87d38eee851b3d1bafe27fc36a949b8c56392f4c",
+      "log_sha256": "7268e198b6ea8db1592a002ef9c7c0aa67d01bfa563d4491b03a10fd045b35de",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.666985971117276e-21,
+        "global_mass_m3": 2.0328790734103208e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [
+        0.4987278312279807
+      ],
+      "final_pressure_Pa": [
+        1.80676130663896,
+        1.5220215823756407,
+        -7.095096033833793,
+        -11.500937432009934,
+        -10.28294369119162,
+        -45.900410821317465
+      ],
+      "relative_density_range": [
+        0.9996332444209348,
+        1.0003720072430542
+      ],
+      "minimum_lip_storage_m3": 9.081920170410045e-09,
+      "net_outlet_volume_m3": 6.599382560174196e-12
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 8192,
+      "steps": 8192,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/closing-1-8192.txt",
+      "output": "out/planar-lip-profile/audit/closing-1-8192.json",
+      "log": "out/planar-lip-profile/audit/closing-1-8192.log",
+      "input_sha256": "880742ad4b690a71c5242ef5e2065b0ac43ef22dd5f140d9746876386738f534",
+      "output_sha256": "676819d36cd2179b34c94c51a45b17298932e97e144fce573a04d12ba0de9c9d",
+      "log_sha256": "9c0440a24eb2b89700295fa54789f30811bcf2bcc3e53cf01524bf9689c6a362",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.756078066352088e-21,
+        "global_mass_m3": 1.3552527156068805e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        1.6331344948618436,
+        0.885007489325872,
+        -1.376499173425514,
+        3.3481258917503944,
+        1.6309390949464893,
+        20.560812802642772
+      ],
+      "relative_density_range": [
+        0.9996459861638682,
+        1.000375907526522
+      ],
+      "minimum_lip_storage_m3": 9.081920170409972e-09,
+      "net_outlet_volume_m3": 0.0
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-16.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-16.json",
+      "log": "out/planar-lip-profile/audit/opening-0-16.log",
+      "input_sha256": "012c5a6b93c97f652ef120fe4e3ff484f530146b9de1880f2ee65c224866f92c",
+      "output_sha256": "bf03db75e3dbdc0a2986869b2506bf12cca39159cd8c924cbf8610418b72a14c",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "independent_audit": true,
+      "geometry_checks": 49,
+      "intermediate_witness_checks": 96,
+      "maxima": {
+        "volume_m3": 2.303929616531697e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.214306433183765e-17,
+        "conductance": 3.885780586188048e-16,
+        "pressure_Pa": 1.6232206689892337e-09,
+        "momentum_Pa_s": 2.1782575743145571e-13,
+        "average_flow_m3_s": 5.744069228510312e-16,
+        "local_mass_m3": 5.280721030538529e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8520818264269,
+        624.6388006255224,
+        604.3638404507875,
+        604.2312470400058,
+        603.3980753805785,
+        592.8321113488354
+      ],
+      "relative_density_range": [
+        1.0041970807259921,
+        1.0052043380000817
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.1705872044328317e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-16.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-16.json",
+      "log": "out/planar-lip-profile/audit/opening-1-16.log",
+      "input_sha256": "be9b8725525eebc6a0428d064672b15ebce9f880c7fc45938533cc48a57ce496",
+      "output_sha256": "f55051e367e0a3825840b06b1a9d44bb77097147f3dfb6a779e8342137b72138",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "independent_audit": true,
+      "geometry_checks": 49,
+      "intermediate_witness_checks": 96,
+      "maxima": {
+        "volume_m3": 3.049318610115481e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.3877787807814457e-17,
+        "conductance": 3.608224830031759e-16,
+        "pressure_Pa": 1.683815753494855e-09,
+        "momentum_Pa_s": 2.871036741680655e-13,
+        "average_flow_m3_s": 1.9250890486745276e-15,
+        "local_mass_m3": 5.25094252848662e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.6332632496815,
+        -314.1263468010175,
+        -282.7012997494593,
+        -278.8066729865246,
+        -275.64298302661615,
+        -251.80618835282107
+      ],
+      "relative_density_range": [
+        0.9977398262567155,
+        1.0043502151276436
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073115937553564e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-32.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-32.json",
+      "log": "out/planar-lip-profile/audit/opening-0-32.log",
+      "input_sha256": "9a423197190c5f1f9e8428c7115a18cd5fabeaeb3841a9c6c210f253e515e551",
+      "output_sha256": "503eff8654ad8bc1c3e60b7b89079cd2f180d698e2f74f219fb8617ea66f0c72",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "independent_audit": true,
+      "geometry_checks": 97,
+      "intermediate_witness_checks": 192,
+      "maxima": {
+        "volume_m3": 2.168404344971009e-19,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "internal_area_m2": 1.2576745200831851e-17,
+        "conductance": 3.885780586188048e-16,
+        "pressure_Pa": 2.941874299722258e-09,
+        "momentum_Pa_s": 1.780797731498751e-13,
+        "average_flow_m3_s": 9.857786380804492e-16,
+        "local_mass_m3": 5.961283879516532e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8179002984036,
+        624.8337633280909,
+        603.8963800748243,
+        603.755854296543,
+        603.397583107211,
+        590.8459467135222
+      ],
+      "relative_density_range": [
+        1.0042127626531412,
+        1.0051695904549929
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170615895180199e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-32.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-32.json",
+      "log": "out/planar-lip-profile/audit/opening-1-32.log",
+      "input_sha256": "7fddd24b0d1da071652afc8749de77527ed8242752e5ac7730752ba37d8d3fb1",
+      "output_sha256": "f74abeffb4e7674df3d706cad542a5774b3a6386f1142af8be20687c72a0780e",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "independent_audit": true,
+      "geometry_checks": 97,
+      "intermediate_witness_checks": 192,
+      "maxima": {
+        "volume_m3": 2.710505431213761e-19,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "internal_area_m2": 1.3877787807814457e-17,
+        "conductance": 4.163336342344337e-16,
+        "pressure_Pa": 4.622449978342047e-09,
+        "momentum_Pa_s": 2.524647157997606e-13,
+        "average_flow_m3_s": 1.7355230750790152e-15,
+        "local_mass_m3": 6.627371067774858e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.54407317643637,
+        -314.49219241559047,
+        -281.8689732206718,
+        -279.38355029946376,
+        -271.7254579169807,
+        -303.31431861709757
+      ],
+      "relative_density_range": [
+        0.9977404649253389,
+        1.0044178491878257
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073030483174115e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-64.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-64.json",
+      "log": "out/planar-lip-profile/audit/opening-0-64.log",
+      "input_sha256": "f7db1e953cee25d34b7781107e432fef750ec1c4c2b99c4385618f02c9ee785b",
+      "output_sha256": "64c0806700f137ee03cb65c6e0b954ac32e08c80f44f2469fb9ff23cd4053878",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "independent_audit": true,
+      "geometry_checks": 193,
+      "intermediate_witness_checks": 384,
+      "maxima": {
+        "volume_m3": 2.371692252312041e-19,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "internal_area_m2": 1.2793585635328952e-17,
+        "conductance": 4.163336342344337e-16,
+        "pressure_Pa": 7.1706836024532095e-09,
+        "momentum_Pa_s": 1.667554982986985e-13,
+        "average_flow_m3_s": 1.0435954129941333e-15,
+        "local_mass_m3": 6.098802656353473e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155647789796,
+        624.8468011223448,
+        603.9630194050726,
+        603.7021169308058,
+        603.6582915195676,
+        577.7754620298367
+      ],
+      "relative_density_range": [
+        1.004137310863085,
+        1.0052146127770922
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619079076336e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-64.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-64.json",
+      "log": "out/planar-lip-profile/audit/opening-1-64.log",
+      "input_sha256": "7c440e4ffb340d183c355ae492b4769773a2e0ea2b4ca2134778b4bd3c7484a9",
+      "output_sha256": "d970780ba38f16a31bf4a4270613b9584ba3970d75d98d07b59fb744fd8eaead",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "independent_audit": true,
+      "geometry_checks": 193,
+      "intermediate_witness_checks": 384,
+      "maxima": {
+        "volume_m3": 3.049318610115481e-19,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "internal_area_m2": 1.4094628242311558e-17,
+        "conductance": 4.718447854656915e-16,
+        "pressure_Pa": 7.965127224451862e-09,
+        "momentum_Pa_s": 1.9517720772910252e-13,
+        "average_flow_m3_s": 1.4330509977462935e-15,
+        "local_mass_m3": 6.040072832862208e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": 0.001840110590685928,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.53780424574734,
+        -314.51571129629883,
+        -281.9675766944339,
+        -279.39001920428143,
+        -271.47797728851515,
+        -298.52212649164426
+      ],
+      "relative_density_range": [
+        0.9977313625026161,
+        1.0044471645003783
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.507301613027371e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 128,
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-128.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-128.json",
+      "log": "out/planar-lip-profile/audit/opening-0-128.log",
+      "input_sha256": "5ef0d41eb07e7a49e01032a5aa280aa010c4c1ec9f1f9929afeb81112b96a12e",
+      "output_sha256": "8861b00f3255452db7c43ff250ac03b182f570d625eb01502a080c61f9c5c308",
+      "log_sha256": "6e1c70282283efb9cb8ceebc0972d247e12f78480e922a44e6c8e68ae24883b6",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.658044605098943e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8152644629355,
+        624.8473906784358,
+        604.3401013221579,
+        603.206350470453,
+        602.6454582163251,
+        604.01341529268
+      ],
+      "relative_density_range": [
+        1.004167530285252,
+        1.0052226294386952
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.1706165603137456e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 128,
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-128.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-128.json",
+      "log": "out/planar-lip-profile/audit/opening-1-128.log",
+      "input_sha256": "438859405fd2a1fff57c386a3420a1bb6fe3ae06771148963be72d265e9d0fde",
+      "output_sha256": "896b356c66bd0be5236e0ee27b7c7d360c27ce34d57cc16f758c609615014c39",
+      "log_sha256": "6e1c70282283efb9cb8ceebc0972d247e12f78480e922a44e6c8e68ae24883b6",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.347370430425658e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.53988706346996,
+        -314.52065115335256,
+        -277.7432196552856,
+        -281.3099272635393,
+        -281.4376386898603,
+        -268.39424409001776
+      ],
+      "relative_density_range": [
+        0.9976251741358656,
+        1.0044609919723924
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073027546604696e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 256,
+      "steps": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-256.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-256.json",
+      "log": "out/planar-lip-profile/audit/opening-0-256.log",
+      "input_sha256": "1796e8b8852527b4465b860d69835b6e491ab42b75428c04ff76a520bdb6dbb3",
+      "output_sha256": "a89721f0282364bec4d20fcb07af2b83672d76cc49388180219b3abdaf63b0bf",
+      "log_sha256": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 5.8855774664223235e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155364344293,
+        624.8478230387974,
+        603.5910894003888,
+        604.5371929228075,
+        602.6781865864072,
+        578.8275867758018
+      ],
+      "relative_density_range": [
+        1.0041448448748715,
+        1.005213657556497
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619224144293e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 256,
+      "steps": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-256.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-256.json",
+      "log": "out/planar-lip-profile/audit/opening-1-256.log",
+      "input_sha256": "b70671e9e177479fa319f9fc5858a7d1b9be8e45a200606de0780c591e99a281",
+      "output_sha256": "31c251417f399708ca8166eea1177898694b142752b3218835ecc399038f90a3",
+      "log_sha256": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.359571344460815e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390669148469,
+        -314.51965052997554,
+        -279.74058726616397,
+        -278.0478933704614,
+        -281.3446019039573,
+        -310.97944027664687
+      ],
+      "relative_density_range": [
+        0.9976907331832087,
+        1.0044677357092395
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.507304821962473e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 512,
+      "steps": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-512.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-512.json",
+      "log": "out/planar-lip-profile/audit/opening-0-512.log",
+      "input_sha256": "c6d08a72e848c50a27db3e9480403831a9a6a64bb0223b7d8cc2ddf479181d25",
+      "output_sha256": "d4276c20ceb095ffd8d92f5fab90aa9a8092297449c6dff168a9fac8e645c154",
+      "log_sha256": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.6033440559196065e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155360911729,
+        624.8478238967177,
+        603.6138989323618,
+        604.4379864966091,
+        602.9571078303896,
+        576.3082308814058
+      ],
+      "relative_density_range": [
+        1.0041268043743745,
+        1.0052196398610185
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619395927586e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 512,
+      "steps": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-512.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-512.json",
+      "log": "out/planar-lip-profile/audit/opening-1-512.log",
+      "input_sha256": "276af7f5c4078033fe9057052b97aa548b600ddedd39a47392499960879ccc3d",
+      "output_sha256": "5de237af52d9f9d4e14854697b80db1f546e31091e1740c9957120e352651597",
+      "log_sha256": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.482924653307785e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390307460989,
+        -314.519609375976,
+        -279.78774396641745,
+        -277.90087791757145,
+        -283.36807977548943,
+        -272.0488187812678
+      ],
+      "relative_density_range": [
+        0.9976811932585176,
+        1.0044710715741862
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.507302581893579e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 1024,
+      "steps": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-1024.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-1024.json",
+      "log": "out/planar-lip-profile/audit/opening-0-1024.log",
+      "input_sha256": "d3d6fc01f6af4a43ec99e6e103e403811c00ed1a30bdc00458c7489b1ad7e608",
+      "output_sha256": "a548c3517ee39e622a84ea361a757cf1520082a690595a7e715f953b5b46816b",
+      "log_sha256": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.5754913337312975e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155361186924,
+        624.8478234838536,
+        603.6153306644605,
+        604.4371745777802,
+        602.880966019487,
+        578.1411394564113
+      ],
+      "relative_density_range": [
+        1.0041280728631727,
+        1.0052262043873923
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619202932087e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 1024,
+      "steps": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-1024.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-1024.json",
+      "log": "out/planar-lip-profile/audit/opening-1-1024.log",
+      "input_sha256": "8334785375f243e9cb8a5da594d364ea461df9d034af8a742dba72cac540e477",
+      "output_sha256": "8d7e5a2cc30af7b8cabf7e04c8dcc518fcd5902d526ae13df822d5482d54a102",
+      "log_sha256": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.4404282493378735e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390284960903,
+        -314.5196070512341,
+        -279.78599059172905,
+        -277.93564896164844,
+        -283.0977855672236,
+        -276.11414790438374
+      ],
+      "relative_density_range": [
+        0.9977250031314561,
+        1.0044727309164558
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073028188024757e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 2048,
+      "steps": 2048,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-2048.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-2048.json",
+      "log": "out/planar-lip-profile/audit/opening-0-2048.log",
+      "input_sha256": "e0e651a3490dd67f9c88538b4fd0e51c1e2cfe153ecdf99de08e0f211679a27f",
+      "output_sha256": "3f7ef8bfdbfd5ecce7ab6df4b95cc831fcf567339bbbdedc6eded7615083fe56",
+      "log_sha256": "68f2b3dc8f3782c31d5c3a52c6c7f58c6c1c2ea86e6a615bcee98c9ced404af1",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.565910902027314e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155361578251,
+        624.8478233763192,
+        603.6153870662483,
+        604.4376001080481,
+        602.8693485289247,
+        578.3991189706437
+      ],
+      "relative_density_range": [
+        1.0041282303327845,
+        1.0052260928321863
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.17061917611274e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 2048,
+      "steps": 2048,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-2048.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-2048.json",
+      "log": "out/planar-lip-profile/audit/opening-1-2048.log",
+      "input_sha256": "7ffbc9b43280ef6a4343107b7d5167c2599b452dead989a83ecf72f6a374b025",
+      "output_sha256": "85e430c14af3068ba8129589a19ac03a3e932b1e49f10e1ac081ff77f657164b",
+      "log_sha256": "68f2b3dc8f3782c31d5c3a52c6c7f58c6c1c2ea86e6a615bcee98c9ced404af1",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.7296958944870815e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390282918371,
+        -314.51960685068644,
+        -279.78580847097714,
+        -277.93849289201404,
+        -283.0748223570444,
+        -276.4677505278239
+      ],
+      "relative_density_range": [
+        0.997726667680475,
+        1.004473558493521
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073028402072476e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 4096,
+      "steps": 4096,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-4096.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-4096.json",
+      "log": "out/planar-lip-profile/audit/opening-0-4096.log",
+      "input_sha256": "195b9405aced0a1c43e0874cbc001d95534f8cc59631429a5bc27494acfef097",
+      "output_sha256": "65ef804d7b0e89e003ecabedf770ea001b8831f4d63d803b2d65677aa874415a",
+      "log_sha256": "54197e556262f57674fcad2da6211a72124deb693685e9b976c057b7acd29cae",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.709979269105056e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.8155361692338,
+        624.8478233486651,
+        603.615390444047,
+        604.4376290025714,
+        602.8685887231352,
+        578.4159491436701
+      ],
+      "relative_density_range": [
+        1.0041282446086623,
+        1.0052261052070632
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619174281417e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 4096,
+      "steps": 4096,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-4096.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-4096.json",
+      "log": "out/planar-lip-profile/audit/opening-1-4096.log",
+      "input_sha256": "b1058d3d84fee023ee58254041bc0a765fd6cd56b6727045f12a0f9154ddcdb4",
+      "output_sha256": "5f1c7e494d1ef9d4705c27c13cdffe049deb3cd8cfc32918dd5d5bab7cc7e129",
+      "log_sha256": "54197e556262f57674fcad2da6211a72124deb693685e9b976c057b7acd29cae",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.70181732290463e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390282617047,
+        -314.51960682244976,
+        -279.78579685757757,
+        -277.93867270936886,
+        -283.07336875164833,
+        -276.4901504244523
+      ],
+      "relative_density_range": [
+        0.9977268575364322,
+        1.0044739717667912
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.5073028414997834e-07
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 8192,
+      "steps": 8192,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": false,
+      "input": "out/planar-lip-profile/audit/opening-0-8192.txt",
+      "output": "out/planar-lip-profile/audit/opening-0-8192.json",
+      "log": "out/planar-lip-profile/audit/opening-0-8192.log",
+      "input_sha256": "f7b635376d314366bd5ee7e5d4a688cb141b16bfd1ba1a46593b44d1afef99d4",
+      "output_sha256": "d0e9e4d1d5f5841c00d7c32426c3b810c52bcfe3940fe60b0a4244ca4f50cb83",
+      "log_sha256": "9c0440a24eb2b89700295fa54789f30811bcf2bcc3e53cf01524bf9689c6a362",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.740369636918603e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        623.815536172183,
+        624.847823341706,
+        603.6153906542908,
+        604.4376308240481,
+        602.8685410002788,
+        578.4170059735843
+      ],
+      "relative_density_range": [
+        1.0041282036806232,
+        1.0052263165447053
+      ],
+      "minimum_lip_storage_m3": 1.7486933146397576e-08,
+      "net_outlet_volume_m3": 5.170619174145471e-08
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 8192,
+      "steps": 8192,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--initial-state",
+        "--compact-geometry"
+      ],
+      "attachments": [
+        [
+          217,
+          0,
+          0.046323286732051036
+        ],
+        [
+          217,
+          1,
+          0.046323286732051036
+        ]
+      ],
+      "continued_from_previous": true,
+      "input": "out/planar-lip-profile/audit/opening-1-8192.txt",
+      "output": "out/planar-lip-profile/audit/opening-1-8192.json",
+      "log": "out/planar-lip-profile/audit/opening-1-8192.log",
+      "input_sha256": "f3e79e6f76d75dfe296ea765f4e48030dbb19d34aff07ce88e41f95c9099251b",
+      "output_sha256": "7d81a78ccd063e194d65ad0c92d7950c724ce8e4e1e94f30a5af8bd5a98be756",
+      "log_sha256": "9c0440a24eb2b89700295fa54789f30811bcf2bcc3e53cf01524bf9689c6a362",
+      "independent_audit": false,
+      "geometry_checks": 0,
+      "intermediate_witness_checks": 0,
+      "maxima": {
+        "volume_m3": 0.0,
+        "cap_area_m2": 0.0,
+        "internal_area_m2": 0.0,
+        "conductance": 0.0,
+        "pressure_Pa": 0.0,
+        "momentum_Pa_s": 0.0,
+        "average_flow_m3_s": 0.0,
+        "local_mass_m3": 6.7404363177532e-21,
+        "global_mass_m3": 2.710505431213761e-20,
+        "sealed_lip_flow_m3_s": 0.0
+      },
+      "internal_port_continuously_open_witness_m2": null,
+      "lip_contact_cuts": [],
+      "final_pressure_Pa": [
+        -315.5390282554677,
+        -314.5196068167646,
+        -279.7857961272604,
+        -277.93868397572123,
+        -283.0732776476815,
+        -276.4915545139278
+      ],
+      "relative_density_range": [
+        0.9977267003205019,
+        1.004474178275702
+      ],
+      "minimum_lip_storage_m3": 1.8691920321159282e-08,
+      "net_outlet_volume_m3": 4.507302841563664e-07
+    }
+  ],
+  "refinement": [
+    {
+      "name": "closing",
+      "changes": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 4.987526948207588
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 27.635919724240566
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 13.355497730393205
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 30.36906025092549
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 51.94727737187921
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 39.722068318752015
+        },
+        {
+          "subdivisions": 2048,
+          "maximum_endpoint_difference_Pa": 2.4508609262799084
+        },
+        {
+          "subdivisions": 4096,
+          "maximum_endpoint_difference_Pa": 0.1512100967384704
+        },
+        {
+          "subdivisions": 8192,
+          "maximum_endpoint_difference_Pa": 0.009449104574411393
+        }
+      ]
+    },
+    {
+      "name": "opening",
+      "changes": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 51.5081302642765
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 4.792192125453312
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 30.127882401626493
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 42.585196186629105
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 38.93062149537906
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 4.06532912311593
+        },
+        {
+          "subdivisions": 2048,
+          "maximum_endpoint_difference_Pa": 0.35360262344016746
+        },
+        {
+          "subdivisions": 4096,
+          "maximum_endpoint_difference_Pa": 0.022399896628371607
+        },
+        {
+          "subdivisions": 8192,
+          "maximum_endpoint_difference_Pa": 0.001404089475499859
+        }
+      ]
+    }
+  ],
+  "input_poses": {
+    "out/planar-lip-profile/poses/pose-1.284.json": "0ad7bf0a0e4d1142a5d18a282ccd3aafda4a7fd41c915906528bac7c5f26cd76",
+    "out/planar-lip-profile/poses/pose-1.285.json": "21bcae7a8e28dbbf5479ecccf32b144d8bb36328e6be9a4d76eafeaa5d6efa05",
+    "out/planar-lip-profile/poses/pose-1.286.json": "a2847df108f32bb63ad443243b4065111977aaa1f6957421d19884d3ca8de0b2",
+    "out/planar-lip-profile/poses/pose-1.374.json": "fe90f9de25a3e6db37673b24435391a5afba9f0fde51564e1773dafb2bab269c",
+    "out/planar-lip-profile/poses/pose-1.375.json": "a799e7970d0827a546caa8bd6a17c9808c179e35ec3fd21f19f78eed208f5e3a",
+    "out/planar-lip-profile/poses/pose-1.376.json": "a21d5342016b295d1c1f11d5ecd37341d703fd505c272c72c0452e74a4a59ab1"
+  },
+  "cap_clearance_m": {
+    "closing-0": {
+      "supraglottal_entry": 0.008430495255497166,
+      "mouth_end": 0.03243239770951796
+    },
+    "closing-1": {
+      "supraglottal_entry": 0.0084304952553741,
+      "mouth_end": 0.0324323977098649
+    },
+    "opening-0": {
+      "supraglottal_entry": 0.013597535981208412,
+      "mouth_end": 0.019644067970190058
+    },
+    "opening-1": {
+      "supraglottal_entry": 0.013639607532106664,
+      "mouth_end": 0.019546806326187636
+    }
+  },
+  "hashes": {
+    "tools/planar_lip_profile_reference.py": "1ee9eab282756bb364581a0b70f5c429c812a009818884b4f08a481a0c2e5196",
+    "tools/planar_inertive_motion_probe.cpp": "9a01ae8e7b1b654d4a68579a2e7232b0f573d803760d92e7e0609a5c79a89d4d",
+    "tools/airspace_geometry_probe.cpp": "ef074cccc95d35c4346d357781d3b9ea52ec5d5926195885503d4738f4fc0ea4",
+    "tools/lip_profile_reference.py": "aea9a6d869018ed578f2a77eff63e249d707b78226672bd290d1b24cd88eb7fe",
+    "src/lip_profile.cpp": "a8c314104236be2fad3cac94fa5fbb73d75bd892a7122ff3d52dce4865b72fb9",
+    "include/ducklips/lip_profile.hpp": "7fde7207647179aea0f775152389333db60c4aa24c906be0fc0ce7b77fd1b4e6",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "include/ducklips/moving_graph.hpp": "0a29b09b4183373950ffcae3d6d1b5eebcd11b61b5b369b3b2959dc393b1a82e",
+    "src/planar_airspace.cpp": "f19a73ddd492d7b8d15c9ce35e649c87bec85be84fce400b506446aa9634a337",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "tools/planar_pressure_motion_reference.py": "3e0ef308b005136eb3b50d4680e7b1da7533102a9c4bd56deed2e0e0d130fa2c",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "tools/planar_boundary_reference.py": "73accfa3f3dc2c666048212636b0b24c1dac387cf01ec3820eac18acff72dcaa",
+    "tools/planar_open_boundary_reference.py": "3a14e27ff92c3e3d9f5510ade68557e36865607d8b47e8cb408849e4e21cf5d5",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "out/nato-airspace-geometry.csv": "f7c69147401ec4526c19135d7b45cceac020921f0939c98b10e90c13bcdf04d9",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "build/ducklips_planar_inertive_motion_probe": "4506bd4926c77b6cfe890d8666bf1a51133e239a0fc7b6822186ea75d773b0f8",
+    "build/ducklips_airspace_geometry_probe": "a71559f0c60ad3fbbcbea81b2bea5032bb47405c29ac7ff746b10dd662feca7e"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

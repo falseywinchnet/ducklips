@@ -9,7 +9,9 @@
 #include "ducklips/cavity_network.hpp"
 #include "ducklips/moving_tree.hpp"
 #include "ducklips/moving_graph.hpp"
+#include "ducklips/lip_profile.hpp"
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <cstdio>
 #include <exception>
@@ -20,7 +22,15 @@ using ducklips::Point2;using ducklips::PlanarContour;
 using Polygons=std::vector<std::vector<Point2>>;
 struct BoundaryLoad {std::size_t edge{},region{};double distance{},pressure{};};
 struct TubeSection {double first_area{},first_length{},last_area{},last_length{};};
-struct LipTube {std::vector<TubeSection> sections;std::vector<BoundaryLoad> attachments;};
+struct LipTube {
+    std::vector<TubeSection> sections;std::vector<BoundaryLoad> attachments;
+    bool integrated{};ducklips::LipProfile first_profile{},last_profile{};
+    ducklips::LipProfile profile(double t)const{
+        const auto& a=first_profile;const auto& b=last_profile;
+        return {std::lerp(a.length,b.length,t),std::lerp(a.base_area,b.base_area,t),std::lerp(a.activation,b.activation,t),
+                std::lerp(a.place,b.place,t),std::lerp(a.core,b.core,t),std::lerp(a.width,b.width,t),std::lerp(a.target_area,b.target_area,t)};
+    }
+};
 struct Port {ducklips::CavityConnection connection{};ducklips::PlanarFace face{};std::size_t index{};double distance{};};
 void sample(const Polygons& first,const Polygons& last,double t,Polygons& result){
     for(std::size_t c=0;c<first.size();++c){for(std::size_t v=0;v<first[c].size();++v){
@@ -78,7 +88,7 @@ void geometry_json(double fraction,const ducklips::PlanarAirspace& geometry,
     }
     std::putchar('}');
 }
-void metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> ports,std::span<const BoundaryLoad> loads,
+bool metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> ports,std::span<const BoundaryLoad> loads,
              std::span<double> v,std::span<double> c,std::span<double> g,const LipTube& lip,double fraction){
     const ducklips::AirProperties air{};const double bulk=air.density*air.sound_speed*air.sound_speed;
     for(std::size_t i=0;i<geometry.regions.size();++i){v[i]=geometry.regions[i].volume;c[i]=v[i]/bulk;}
@@ -90,10 +100,36 @@ void metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> port
     for(const auto& port:geometry.boundary_ports){for(std::size_t i=0;i<loads.size();++i){
         if(port.edge==loads[i].edge && port.region==loads[i].region){g[ports.size()+i]+=port.area/(air.density*loads[i].distance);}
     }}
-    if(lip.sections.empty()){return;}
+    if(lip.sections.empty()){return true;}
     const std::size_t base=ports.size()+loads.size(),core=geometry.regions.size();
     double total_cap_area=0;
     for(const auto& port:geometry.boundary_ports){if(port.edge==lip.attachments[0].edge){total_cap_area+=port.area;}}
+    if(lip.integrated){
+        const auto profile=lip.profile(fraction);const std::size_t count=lip.sections.size();
+        if(profile.minimum_area()==0 && profile.place-profile.core>0 && profile.place+profile.core<profile.length){
+            std::fprintf(stderr,"interior lip contact requires separate storage regions\n");return false;
+        }
+        std::array<double,256> centre{};
+        for(std::size_t i=0;i<count;++i){
+            const double a=profile.length*double(count-i-1)/double(count),b=profile.length*double(count-i)/double(count);
+            if(!profile.measure(a,b,v[core+i],centre[i])){std::fprintf(stderr,"lip volume integral failed\n");return false;}
+            if(v[core+i]<=0){std::fprintf(stderr,"empty lip storage requires state transport\n");return false;}
+            c[core+i]=v[core+i]/bulk;
+        }
+        double entry=0;
+        if(!profile.conductance(centre[0],profile.length,air.density,entry)){return false;}
+        for(const auto& port:geometry.boundary_ports){for(std::size_t i=0;i<lip.attachments.size();++i){
+            const auto& attachment=lip.attachments[i];
+            if(port.edge==attachment.edge && port.region==attachment.region && entry>0){
+                const double share=port.area/total_cap_area;
+                g[base+i]=1/(air.density*attachment.distance/port.area+1/(entry*share));
+            }
+        }}
+        for(std::size_t i=1;i<count;++i){
+            if(!profile.conductance(centre[i],centre[i-1],air.density,g[base+lip.attachments.size()+i-1])){return false;}
+        }
+        return profile.conductance(0,centre[count-1],air.density,g.back());
+    }
     const auto area=[&](std::size_t i){return std::lerp(lip.sections[i].first_area,lip.sections[i].last_area,fraction);};
     const auto length=[&](std::size_t i){return std::lerp(lip.sections[i].first_length,lip.sections[i].last_length,fraction);};
     for(std::size_t i=0;i<lip.sections.size();++i){
@@ -116,6 +152,7 @@ void metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> port
     // is included once; no radiation resistance or end correction is implied.
     const std::size_t last=lip.sections.size()-1;
     g.back()=area(last)/(air.density*.5*length(last));
+    return true;
 }
 template<class Acoustic>
 void state(const Acoustic& acoustic,std::span<const double> v,
@@ -131,10 +168,13 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 
 }
 int main(int argc,char** argv){
-    bool boundary_mode=false,lip_mode=false;
+    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
+        else if(arg=="--lip-profile" && !lip_mode){lip_mode=true;profile_mode=true;}
+        else if(arg=="--initial-state" && !initial_state){initial_state=true;}
+        else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
         else{return 2;}
     }
     // Boundary loads append: count, then domain_edge region distance pressure.
@@ -143,7 +183,7 @@ int main(int argc,char** argv){
 
     std::size_t nx=0,ny=0,solid_count=0,subdivisions=0;double depth=0,duration=0;
     if(std::scanf("%zu %zu %zu %lf %lf %zu",&nx,&ny,&solid_count,&depth,&duration,&subdivisions)!=6
-        || !nx || !ny || nx>256 || ny>256 || solid_count>32 || !subdivisions || subdivisions>2048
+        || !nx || !ny || nx>256 || ny>256 || solid_count>32 || !subdivisions || subdivisions>(profile_mode?8192u:2048u)
         || !std::isfinite(duration) || duration<=0){return 2;}
     std::vector<double> x(nx+1),y(ny+1);
     for(double& v:x){if(std::scanf("%lf",&v)!=1){return 2;}}for(double& v:y){if(std::scanf("%lf",&v)!=1){return 2;}}
@@ -186,8 +226,17 @@ int main(int argc,char** argv){
     if(lip_mode){
         std::size_t sections=0,attachments=0;
         if(std::scanf("%zu %zu",&sections,&attachments)!=2 || !sections || sections>256 || !attachments || attachments>nodes){return 2;}
-        lip.sections.resize(sections);lip.attachments.resize(attachments);
-        for(auto& s:lip.sections){
+        lip.sections.resize(sections);lip.attachments.resize(attachments);lip.integrated=profile_mode;
+        // Profile mode replaces the section rows with two endpoint profiles:
+        // length base_area activation place core width target_area (SI),
+        // followed by the initial pressure of each lip storage node.
+        if(profile_mode){
+            for(auto* p:{&lip.first_profile,&lip.last_profile}){
+                if(std::scanf("%lf %lf %lf %lf %lf %lf %lf",&p->length,&p->base_area,&p->activation,&p->place,&p->core,&p->width,&p->target_area)!=7 || !p->valid()){return 2;}
+            }
+            initial.resize(nodes+sections);
+            for(std::size_t i=nodes;i<initial.size();++i){if(std::scanf("%lf",&initial[i])!=1 || !std::isfinite(initial[i])){return 2;}}
+        }else for(auto& s:lip.sections){
             if(std::scanf("%lf %lf %lf %lf",&s.first_area,&s.first_length,&s.last_area,&s.last_length)!=4){return 2;}
             for(double value:{s.first_area,s.first_length,s.last_area,s.last_length}){
                 if(!std::isfinite(value) || value<=0){std::fprintf(stderr,"lip reference requires positive section area and length; closed-lip storage transport is not implemented\n");return 2;}
@@ -203,6 +252,7 @@ int main(int argc,char** argv){
         }
     }
     const std::size_t total_nodes=nodes+lip.sections.size();
+    initial.resize(total_nodes,0.);
     if(lip_mode && total_nodes>256){return 2;}
     volume.resize(total_nodes);compliance.resize(total_nodes);inflow.resize(total_nodes);
     const std::size_t channels=ports.size()+loads.size()+lip.attachments.size()+lip.sections.size();std::vector<double> series(channels,0.);
@@ -226,15 +276,31 @@ int main(int argc,char** argv){
     std::vector<double> gend(channels),old_volume(total_nodes),c1(total_nodes),c2(total_nodes),g1(channels),g2(channels),scratch(total_nodes);
     for(std::size_t i=0;i<nodes;++i){cells[i]=geometry.regions[i].cell;}
     if(!compatible(geometry,cells,ports,loads,lip)){return 1;}
-    metrics(geometry,ports,loads,volume,compliance,gend,lip,0);
+    if(!metrics(geometry,ports,loads,volume,compliance,gend,lip,0)){return 1;}
     auto& charge=lip_mode?graph.charge:acoustic.charge;
     auto& momentum=lip_mode?graph.momentum:acoustic.momentum;
-    for(std::size_t i=0;i<nodes;++i){charge[i]=compliance[i]*initial[i];}
+    for(std::size_t i=0;i<total_nodes;++i){charge[i]=compliance[i]*initial[i];}
+    // Optional continuation appends canonical charge then branch momentum.
+    // The caller must certify identical endpoint geometry and node/branch
+    // ownership across calls; this is not a general remeshing operation.
+    if(initial_state){
+        for(double& q:charge){if(std::scanf("%lf",&q)!=1 || !std::isfinite(q)){return 2;}}
+        for(double& m:momentum){if(std::scanf("%lf",&m)!=1 || !std::isfinite(m)){return 2;}}
+        for(std::size_t i=0;i<channels;++i){if(gend[i]==0){momentum[i]=0;}}
+    }
     const auto snapshot=[&](){if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
     std::vector<double> cuts;for(std::size_t i=0;i<=subdivisions;++i){cuts.push_back(double(i)/double(subdivisions));}
     std::vector<double> contact_cuts;
+    std::vector<double> lip_contact_cuts;
+    if(profile_mode){
+        const auto& p=lip.first_profile;const auto& q=lip.last_profile;
+        if(p.target_area==0 && q.target_area==0 && (p.activation<1)!=(q.activation<1)){
+            const double contact=(1-p.activation)/(q.activation-p.activation);
+            if(contact>0 && contact<1){cuts.push_back(contact);lip_contact_cuts.push_back(contact);}
+        }
+    }
     for(const Port& p:ports){
         if(!face_motion.build(first[0],std::span<const PlanarContour>(original_first).subspan(1),last[0],std::span<const PlanarContour>(original_last).subspan(1),p.face,depth)){return 1;}
         bool first_window=true,was_open=false;
@@ -246,7 +312,9 @@ int main(int argc,char** argv){
     }
     std::sort(cuts.begin(),cuts.end());cuts.erase(std::unique(cuts.begin(),cuts.end()),cuts.end());
     std::printf("{\"contact_cuts\":[");for(std::size_t i=0;i<contact_cuts.size();++i){std::printf("%s%.17g",i?",":"",contact_cuts[i]);}
-    std::printf("],\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
+    std::putchar(']');
+    if(profile_mode){values("lip_contact_cuts",lip_contact_cuts);}
+    std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
     constexpr double offset=.28867513459481288225;
@@ -257,13 +325,13 @@ int main(int argc,char** argv){
         std::printf("%s{\"dt\":%.17g,\"stage1\":",step>1?",":"",dt);
         sample(first,last,first_stage,a);
         if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip)){return 1;}
-        metrics(geometry,ports,loads,scratch,c1,g1,lip,first_stage);geometry_json(first_stage,geometry,{});
+        if(!metrics(geometry,ports,loads,scratch,c1,g1,lip,first_stage)){return 1;}geometry_json(first_stage,geometry,{});
         std::printf(",\"stage2\":");sample(first,last,second_stage,a);
         if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip)){return 1;}
-        metrics(geometry,ports,loads,scratch,c2,g2,lip,second_stage);geometry_json(second_stage,geometry,{});
+        if(!metrics(geometry,ports,loads,scratch,c2,g2,lip,second_stage)){return 1;}geometry_json(second_stage,geometry,{});
         std::printf(",\"geometry\":");sample(first,last,t1,a);
         if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip)){return 1;}
-        metrics(geometry,ports,loads,volume,compliance,gend,lip,t1);geometry_json(t1,geometry,va);
+        if(!metrics(geometry,ports,loads,volume,compliance,gend,lip,t1)){return 1;}geometry_json(t1,geometry,compact_geometry?std::span<const PlanarContour>{}:va);
         for(std::size_t i=0;i<total_nodes;++i){inflow[i]=-(volume[i]-old_volume[i])/dt;}
         // A closed passage has no kinetic state to accumulate pressure history.
         // The zero-metric momentum is discarded, as in CanonicalSpeech.

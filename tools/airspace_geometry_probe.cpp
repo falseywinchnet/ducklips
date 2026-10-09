@@ -72,17 +72,19 @@ int main(int argc,char** argv){
         if(values.size()<26){std::fprintf(stderr,"geometry CSV must include posture_root\n");return 2;}const double time=values[0];if(time<start || time>end){continue;}
         const ducklips::TonguePosture posture{.body_x=values[10],.body_y=values[11],.jaw=values[12],.blade=values[13],
                                                .root=values[25],.offset_x=values[14],.offset_y=values[15]};
-        const ducklips::TongueGesture dorsal{.activation=values[2],.place_from_lips=values[3],.gap=values[4],.width=values[5]};
-        const ducklips::TongueGesture apical{.activation=values[6],.place_from_lips=values[7],.gap=values[8],.tip_down=values[9]};
+        // The CSV stores raw tracker widths. Match ConstrictionSlotState's
+        // effective minimum width (1e-4 m = .01 cm), including idle slots.
+        const ducklips::TongueGesture dorsal{.activation=std::max(values[2],0.),.place_from_lips=values[3],.gap=values[4],.width=std::max(values[5],.01)};
+        const ducklips::TongueGesture apical{.activation=std::max(values[6],0.),.place_from_lips=values[7],.gap=values[8],.tip_down=std::clamp(values[9],0.,1.)};
         const ducklips::Point2 centre{posture.body_x+posture.offset_x,posture.body_y-.9*std::clamp(posture.jaw,0.,1.)+posture.offset_y};
-        ducklips::ConservativeTongueSurface surface;if(!surface.configure(centre,dorsal)){return 1;}
-        const ducklips::TongueShape tongue=ducklips::MidsagittalTongue::pose(posture,dorsal,apical,&surface);if(!tongue.valid){return 1;}
+        ducklips::ConservativeTongueSurface surface;if(!surface.configure(centre,dorsal)){std::fprintf(stderr,"%.6f surface: %s\n",time,surface.error());return 1;}
+        const ducklips::TongueShape tongue=ducklips::MidsagittalTongue::pose(posture,dorsal,apical,&surface);if(!tongue.valid){std::fprintf(stderr,"%.6f invalid reconstructed tongue\n",time);return 1;}
         const double error=std::max({std::abs(tongue.blade_root.x-values[16]),std::abs(tongue.blade_root.y-values[17]),
                                     std::abs(tongue.tip.x-values[18]),std::abs(tongue.tip.y-values[19])});
         if(error>1e-8){std::fprintf(stderr,"reconstructed pose differs at %.6f: %.12g cm\n",time,error);return 1;}
         for(std::size_t i=0;i<vertices;++i){
             const double angle=2*ducklips::pi*double(i)/double(vertices),c=std::cos(angle),s=std::sin(angle);
-            const ducklips::TongueMaterialPoint point=surface.material({centre.x+2.7*c,centre.y+2.7*s});if(!point.valid){return 1;}
+            const ducklips::TongueMaterialPoint point=surface.material({centre.x+2.7*c,centre.y+2.7*s});if(!point.valid){std::fprintf(stderr,"%.6f invalid body contour point %zu\n",time,i);return 1;}
             body[i]={.01*point.position.x,.01*point.position.y};pad[i]={.01*(tongue.tip.x+.35*c),.01*(tongue.tip.y+.35*s)};
         }
         // Explicit diagnostic solidification of the former zero-thickness
@@ -92,10 +94,10 @@ int main(int argc,char** argv){
         // at one point, leaving an unphysical air route through the attachment.
         // This is not a muscle/constant-volume model of the combined blade.
         const double dx=tongue.tip.x-tongue.blade_root.x,dy=tongue.tip.y-tongue.blade_root.y,length=std::hypot(dx,dy);
-        if(length<=0){return 1;}const ducklips::Point2 down{dy/length,-dx/length};
+        if(length<=0){std::fprintf(stderr,"%.6f zero blade length\n",time);return 1;}const ducklips::Point2 down{dy/length,-dx/length};
         const ducklips::TongueShape rest=ducklips::MidsagittalTongue::pose(posture,{},{});
         const ducklips::TongueMaterialPoint lower=surface.material({rest.blade_root.x,rest.blade_root.y-ducklips::MidsagittalTongue::blade_root_thickness});
-        if(!lower.valid){return 1;}
+        if(!lower.valid){std::fprintf(stderr,"%.6f invalid lower blade attachment\n",time);return 1;}
         blade={{{.01*tongue.blade_root.x,.01*tongue.blade_root.y},{.01*tongue.tip.x,.01*tongue.tip.y},
                  {.01*(tongue.tip.x+.35*down.x),.01*(tongue.tip.y+.35*down.y)},
                  {.01*lower.position.x,.01*lower.position.y}}};
@@ -113,7 +115,7 @@ int main(int argc,char** argv){
             for(auto* contour:{&domain,&body,&pad}){for(auto& point:*contour){point.x*=scale;point.y*=scale;}}
             for(auto& point:blade){point.x*=scale;point.y*=scale;}
         }
-        if(!cells.build(domain,solids,.022*scale)){return 1;}
+        if(!cells.build(domain,solids,.022*scale)){std::fprintf(stderr,"%.6f planar airspace build failed\n",time);return 1;}
         double area=0;for(std::size_t i=0;i<vertices;++i){const auto a=body[i],b=body[(i+1)%vertices];area+=a.x*b.y-a.y*b.x;}
         std::size_t vertical=0,horizontal=0;for(double v:cells.vertical_face){vertical+=v>0;}for(double v:cells.horizontal_face){horizontal+=v>0;}
         output<<time<<','<<std::accumulate(cells.volume.begin(),cells.volume.end(),0.)<<','<<std::abs(area)/2<<','<<error<<','<<*std::max_element(cells.volume.begin(),cells.volume.end())<<','<<vertical<<','<<horizontal<<'\n';++rows;

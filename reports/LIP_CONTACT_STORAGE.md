@@ -17,6 +17,10 @@ reference. It has not yet replaced the planar adapter's piecewise-uniform
 lip input or the production speech network. No new speech recording or
 listening improvement is claimed.
 
+Subsequent [planar adapter integration](PLANAR_LIP_PROFILE.md) now consumes
+these metrics in the coupled mouth/lip reference; the standalone results
+and production-speech distinction documented here remain applicable.
+
 ## Integrate the field already specified by the articulator
 
 `TractModel::lip_profile(state)` exports the current physical tube length,
