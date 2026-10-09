@@ -226,7 +226,11 @@ int main(int argc, char** argv) {
         probe = std::fopen(arguments.probe_path.c_str(), "w");
         if (probe != nullptr) {
             std::fprintf(probe, "time,flow_cm3s,glottal_area_cm2,intraoral_pa,lung_pa,intended_hz,measured_hz,"
-                                "tension,narrowest_cm2,modes,m1_hz,m2_hz,m3_hz,m4_hz,energy,transglottal_pa,p0_pa\n");
+                                "tension,narrowest_cm2,modes,m1_hz,m2_hz,m3_hz,m4_hz,energy,transglottal_pa,p0_pa");
+            if (arguments.diagnostics) {
+                std::fprintf(probe,",oral_volume_m3,floor_volume_m3,volume_without_body_m3,volume_without_tip_m3,tongue_x_cm,tongue_y_cm,tip_x_cm,tip_y_cm,body_activation,tip_activation");
+            }
+            std::fprintf(probe,"\n");
         }
     }
 
@@ -255,12 +259,19 @@ int main(int argc, char** argv) {
         if (probe != nullptr) {
             const ducklips::SynthesisProbe& state = synthesizer.probe();
             double time = ducklips::seconds_from_samples(options.rate, synthesizer.position());
-            std::fprintf(probe, "%.4f,%.2f,%.4f,%.1f,%.1f,%.1f,%.1f,%.3f,%.4f,%zu,%.0f,%.0f,%.0f,%.0f,%.4e,%.1f,%.1f\n", time,
+            std::fprintf(probe, "%.4f,%.2f,%.4f,%.1f,%.1f,%.1f,%.1f,%.3f,%.4f,%zu,%.0f,%.0f,%.0f,%.0f,%.4e,%.1f,%.1f", time,
                          state.glottal_flow * 1.0e6, state.glottal_area * 1.0e4, state.intraoral_pressure,
                          state.lung_pressure, state.intended_pitch, state.measured_pitch, state.tension,
                          state.narrowest_area * 1.0e4, state.modes, state.lowest_mode_hz[0],
                          state.lowest_mode_hz[1], state.lowest_mode_hz[2], state.lowest_mode_hz[3],
                          state.acoustic_energy, state.transglottal, state.glottal_pressure);
+            if (arguments.diagnostics) {
+                std::fprintf(probe,",%.12e,%.12e,%.12e,%.12e,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f",
+                             state.oral_volume,state.floor_volume,state.volume_without_body,state.volume_without_tip,
+                             state.tongue_centre.x,state.tongue_centre.y,state.tongue_tip.x,state.tongue_tip.y,
+                             state.body_activation,state.tip_activation);
+            }
+            std::fprintf(probe,"\n");
         }
     }
     if (probe != nullptr) {
@@ -293,7 +304,7 @@ int main(int argc, char** argv) {
                 static_cast<double>(statistics.factorizations) / std::max<double>(1.0, static_cast<double>(statistics.blocks)));
     if (options.canonical_motion) { std::printf("moving cavity maximum mass residual: %.9e m^3/s\n",statistics.maximum_cavity_mass_residual); }
     std::printf("fold cycles %zu, peak %.3f, rms %.4f (before normalization)\n", statistics.pitch_cycles, peak, rms);
-    if (arguments.diagnostics) {
+    if (arguments.diagnostics && !options.canonical_motion) {
         std::printf("worst basis orthogonality defect %.3e at %.3f s\n", statistics.worst_orthogonality,
                     statistics.worst_orthogonality_time);
     }

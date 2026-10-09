@@ -88,7 +88,10 @@ int main() {
     check(!whole.submit("1.00001 pitch 100 50", error), "partially rendered control block rejects retroactive nudge");
     ducklips::SynthesisOptions canonical_options{};canonical_options.canonical_motion=true;
     ducklips::NudgeStream canonical_whole{},canonical_chunks{};
-    canonical_whole.prepare(body,1,4096,canonical_options);canonical_chunks.prepare(body,1,4096,canonical_options);
+    canonical_options.diagnostics=true;
+    canonical_whole.prepare(body,1,4096,canonical_options);
+    canonical_options.diagnostics=false;
+    canonical_chunks.prepare(body,1,4096,canonical_options);
     for (const char* line:lines) {
         check(canonical_whole.submit(line,error) && canonical_chunks.submit(line,error),"canonical nudge accepted");
     }
@@ -99,7 +102,7 @@ int main() {
         canonical_chunks.render(std::span<float>(b.data()+2*frame,2*run));frame+=run;
     }
     energy=0;for (float value:a) { energy+=value*value; }
-    check(a==b,"canonical motion/source result is independent of host buffer size");
+    check(a==b,"canonical output is independent of host buffer size and geometry diagnostics");
     check(energy>1e-6 && !canonical_whole.engine().statistics().nonfinite_samples
           && !canonical_whole.engine().statistics().clipped_samples,"canonical nudges generate finite nonzero unclipped audio");
     check(canonical_whole.engine().statistics().maximum_cavity_mass_residual<1e-12,

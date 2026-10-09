@@ -103,6 +103,10 @@ struct SynthesisProbe final {
     double glottal_pressure{};   // Pa, acoustic pressure above the glottis, last sample
     std::size_t modes{};
     std::array<double, 4> lowest_mode_hz{};
+    // Geometry attribution, populated only with diagnostics enabled.
+    double oral_volume{},floor_volume{},volume_without_body{},volume_without_tip{};
+    Point2 tongue_centre{},tongue_tip{};
+    double body_activation{},tip_activation{};
 };
 
 // The DuckLips engine: a simulated body that is always running.
@@ -148,6 +152,8 @@ private:
     AirProperties air_{};
     VowelLibrary vowels_{};
     TractModel model_{};
+    TractModel diagnostic_model_{};
+    TractShape diagnostic_shape_{};
     TractShape shape_{};          // target geometry of the current block
     TractShape start_shape_{};    // geometry at the start of the block
     TractShape geometry_shape_{}; // geometry currently simulated

@@ -233,13 +233,14 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
         double arc = length - tip.place_from_lips;
         Point2 wall_normal = normal(arc);
         Point2 wall = add(midline(arc), scaled(wall_normal, outer_offset(arc)));
-        Point2 target = add(wall, scaled(wall_normal, -tip.gap));
+        // Both rest_tip and target are pad centres. Offset the target
+        // surface by its radius BEFORE interpolation; subtracting a whole
+        // radius afterwards teleports the pad as activation leaves zero.
+        Point2 target = add(wall, scaled(wall_normal, -(tip.gap + tip_radius)));
         double reach = std::clamp(tip.activation, 0.0, 1.0);
         double amount = reach * reach * (3.0 - 2.0 * reach);
         tip_point = add(rest_tip, scaled(Point2{.x = target.x - rest_tip.x, .y = target.y - rest_tip.y}, amount));
-        // The tip point is the centre of the tip pad, one pad radius below the
-        // surface that touches; pressing pushes the pad into the ridge.
-        tip_point = add(tip_point, scaled(wall_normal, -tip_radius));
+        // Pressing above full activation pushes the pad into the ridge.
         double press = 0.4 * std::max(tip.activation - 1.0, 0.0);
         tip_point = add(tip_point, scaled(wall_normal, press));
         // A laminal gesture leaves the tip down, its pad against the lingual

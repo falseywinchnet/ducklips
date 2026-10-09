@@ -48,6 +48,10 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
     sample_period_ = 1.0 / options.rate.samples_per_second;
     vowels_.build(voice, options.oral_sections, options.nasal_sections, air_);
     model_.prepare(voice, options.oral_sections, options.nasal_sections);
+    if (options.diagnostics) {
+        diagnostic_model_=model_;diagnostic_model_.set_floor(true);
+        diagnostic_model_.allocate(diagnostic_shape_);
+    }
     model_.allocate(shape_);
     model_.allocate(start_shape_);
     model_.allocate(geometry_shape_);
@@ -267,6 +271,22 @@ void Synthesizer::begin_block() noexcept {
     // their continuous trajectories in render_samples, not a block hold.
     articulators_.advance_geometry(block_seconds);
     model_.build(articulators_, shape_);
+    if (options_.diagnostics) {
+        probe_.oral_volume=model_.oral_volume();
+        probe_.tongue_centre=model_.tongue().body_centre;probe_.tongue_tip=model_.tongue().tip;
+        probe_.body_activation=articulators_.slot[static_cast<std::size_t>(ConstrictionSlot::tongue_body)].activation.value;
+        probe_.tip_activation=articulators_.slot[static_cast<std::size_t>(ConstrictionSlot::tongue_tip)].activation.value;
+        diagnostic_model_.build(articulators_,diagnostic_shape_);probe_.floor_volume=0;
+        for (std::size_t i=0;i<diagnostic_shape_.oral_area.size();++i) {
+            probe_.floor_volume+=diagnostic_shape_.sublingual_area[i]*diagnostic_shape_.oral_length[i];
+        }
+        ArticulatorState counterfactual=articulators_;
+        counterfactual.slot[static_cast<std::size_t>(ConstrictionSlot::tongue_body)].activation.value=0;
+        diagnostic_model_.build(counterfactual,diagnostic_shape_);probe_.volume_without_body=diagnostic_model_.oral_volume();
+        counterfactual=articulators_;
+        counterfactual.slot[static_cast<std::size_t>(ConstrictionSlot::tongue_tip)].activation.value=0;
+        diagnostic_model_.build(counterfactual,diagnostic_shape_);probe_.volume_without_tip=diagnostic_model_.oral_volume();
+    }
     // The tongue body follows the blade's pull with its own inertia.
     Point2 pull = model_.required_drag();
     articulators_.body_offset_x.target = pull.x;

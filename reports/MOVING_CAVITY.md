@@ -78,3 +78,7 @@ Reproduce the speech-level audit:
 
 The source hashes, render logs, trace measurements and artifact hashes are
 recorded in [moving_cavity_reference.json](moving_cavity_reference.json).
+
+Follow-up [geometry attribution](TONGUE_GEOMETRY.md) identifies the rigid
+tongue-body gesture as the source of the large Quebec displacement. It also
+documents a separate corrected discontinuity at the onset of tip activation.

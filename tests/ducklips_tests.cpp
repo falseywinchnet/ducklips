@@ -339,6 +339,29 @@ void test_sensitivity() {
     check(solved && worst < 2.0e-3, "analytic formant sensitivities match finite differences", worst, 2.0e-3);
 }
 
+void test_tip_activation_continuity() {
+    const ducklips::TonguePosture posture{};
+    const ducklips::TongueGesture idle{};
+    const ducklips::TongueShape rest=ducklips::MidsagittalTongue::pose(posture,idle,idle);
+    double worst=0;
+    for (double place:{1.2,2.2,4.5}) {
+        for (double down:{0.0,.5,1.0}) {
+            ducklips::TongueGesture gesture{.activation=1e-7,.place_from_lips=place,.gap=.1,.tip_down=down};
+            const ducklips::TongueShape tiny=ducklips::MidsagittalTongue::pose(posture,idle,gesture);
+            worst=std::max(worst,std::hypot(tiny.tip.x-rest.tip.x,tiny.tip.y-rest.tip.y));
+            worst=std::max(worst,std::hypot(tiny.body_centre.x-rest.body_centre.x,tiny.body_centre.y-rest.body_centre.y));
+        }
+        ducklips::TongueGesture gesture{.activation=1,.place_from_lips=place,.gap=.1};
+        const ducklips::TongueShape contact=ducklips::MidsagittalTongue::pose(posture,idle,gesture);
+        const double arc=ducklips::MidsagittalTongue::length-place;
+        const ducklips::Point2 mid=ducklips::MidsagittalTongue::midline(arc),normal=ducklips::MidsagittalTongue::normal(arc);
+        const double offset=ducklips::MidsagittalTongue::outer_offset(arc)-gesture.gap-ducklips::MidsagittalTongue::tip_radius;
+        const double error=std::hypot(contact.tip.x-mid.x-normal.x*offset,contact.tip.y-mid.y-normal.y*offset);
+        check(error<1e-12,"full tip activation retains its specified surface gap",error,1e-12);
+    }
+    check(worst<1e-11,"tip and body approach rest continuously as activation vanishes",worst,1e-11);
+}
+
 void test_sources() {
     ducklips::AirProperties air{};
     double area = 0.12 * ducklips::square_centimetre;
@@ -480,6 +503,7 @@ int main() {
     test_reprojection_identity();
     test_passive_reprojection();
     test_sensitivity();
+    test_tip_activation_continuity();
     test_sources();
     test_cue_queue();
     report_vowel_bandwidths();

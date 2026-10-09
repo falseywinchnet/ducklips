@@ -1,0 +1,580 @@
+{
+  "baseline_commit": "457d6ec0ccddc36481de67ebd4b1f2afa1dc447a",
+  "engine": "canonical moving network, causal losses; --canonical-motion; no old modal eigensolver",
+  "source_at_receipt": [
+    {
+      "path": "src/tongue.cpp",
+      "sha256": "17c0402a81f5a5dbca44391c395780f301ed79c13bb98ddca2958e60219a1ba1"
+    },
+    {
+      "path": "src/synthesizer.cpp",
+      "sha256": "6fb1583e89be408652713afd3a289b0b95df38224fbaaedd9618bd84a7e877cf"
+    },
+    {
+      "path": "include/ducklips/synthesizer.hpp",
+      "sha256": "96a968eb6e7deb85f8cfb5d49681ca4c4e7c90d152e257b991158701ebb51e62"
+    },
+    {
+      "path": "tools/ducklips_say.cpp",
+      "sha256": "eae1257275754f7831b35dcd451e660f1e137c993dc99970f490981becdd370e"
+    },
+    {
+      "path": "tests/ducklips_tests.cpp",
+      "sha256": "ab096f63c63de64aee68c76fd650cc284672081feae61a9d47a7fe0f198e4ee5"
+    },
+    {
+      "path": "tests/stream_tests.cpp",
+      "sha256": "a71bdf988ee3f52fcd26939755daee638ce03dcda4b6123f24d07c8f0aa30862"
+    }
+  ],
+  "provenance_note": "Geometry attribution was rendered before the tip fix, with tip activation identically zero in the measured phrase. Sierra was rendered after the physical tip fix. Later CLI-only changes conditionally omit diagnostic columns and suppress irrelevant modal diagnostics; no render-time executable hash was captured.",
+  "tip_limit": {
+    "old_source": {
+      "path": "out/tongue_geometry/previous.cpp",
+      "sha256": "4c24d6117ca18ff984041cd89fdaf8400710d5b360b6b24ff8395b2f6b298f0b"
+    },
+    "fixture": {
+      "path": "out/tongue_geometry/limit.cpp",
+      "sha256": "5cd38523fc1c88f8f068fb6138ad70f9da71bf5b30647ce74fa515b3d050f150"
+    },
+    "previous": [
+      {
+        "activation": 0.0,
+        "tip_displacement_cm": 0.0,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 1e-09,
+        "tip_displacement_cm": 0.35,
+        "body_displacement_cm": 0.142906532647
+      },
+      {
+        "activation": 1e-07,
+        "tip_displacement_cm": 0.35,
+        "body_displacement_cm": 0.142906532647
+      },
+      {
+        "activation": 0.001,
+        "tip_displacement_cm": 0.349989976169,
+        "body_displacement_cm": 0.142901403456
+      },
+      {
+        "activation": 0.01,
+        "tip_displacement_cm": 0.349003638247,
+        "body_displacement_cm": 0.142396848393
+      },
+      {
+        "activation": 0.1,
+        "tip_displacement_cm": 0.256419007661,
+        "body_displacement_cm": 0.0964151948488
+      },
+      {
+        "activation": 1.0,
+        "tip_displacement_cm": 2.99756550726,
+        "body_displacement_cm": 0.745457147822
+      }
+    ],
+    "current": [
+      {
+        "activation": 0.0,
+        "tip_displacement_cm": 0.0,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 1e-09,
+        "tip_displacement_cm": 0.0,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 1e-07,
+        "tip_displacement_cm": 8.98158761956e-14,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 0.001,
+        "tip_displacement_cm": 8.98670139088e-06,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 0.01,
+        "tip_displacement_cm": 0.000893274521164,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 0.1,
+        "tip_displacement_cm": 0.0839318342033,
+        "body_displacement_cm": 0.0
+      },
+      {
+        "activation": 1.0,
+        "tip_displacement_cm": 2.99756550726,
+        "body_displacement_cm": 0.745457147822
+      }
+    ],
+    "units": "cm",
+    "place_from_lips_cm": 2.2,
+    "gap_cm": 0.1,
+    "tip_down": 0
+  },
+  "geometry_attribution": {
+    "artifacts": [
+      {
+        "path": "out/canonical-geometry-attribution.wav",
+        "sha256": "3701091bf98897a811d051313c90526aa7cd87e97f760e4b76f8ae00f4784ac7"
+      },
+      {
+        "path": "out/canonical-geometry-attribution.csv",
+        "sha256": "17b6f694d2f233c6a7b26a85cdac774d4026898bce345be6271edf9708e5643e"
+      },
+      {
+        "path": "out/canonical-geometry-attribution.log",
+        "sha256": "519342d09e3e78cd5fbe427767dad0b14a73ef97cb9eff2a6d63ed99837f2d68"
+      }
+    ],
+    "oral_volume_range_ml": [
+      31.483800106759997,
+      81.18918021933
+    ],
+    "peak_displacement_ml_per_second": -3166.5185755203474,
+    "peak_control_endpoint_seconds": 1.339,
+    "maximum_floor_volume_ml": 1.918152601942,
+    "tip_activation_max": 0.0,
+    "selected_control_endpoints": [
+      {
+        "time": 1.31,
+        "flow_cm3s": -555.16,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": -2.5,
+        "lung_pa": -112.3,
+        "intended_hz": 92.6,
+        "measured_hz": 86.5,
+        "tension": 0.687,
+        "narrowest_cm2": 1.9389,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.0010822,
+        "transglottal_pa": -110.7,
+        "p0_pa": 0.9,
+        "oral_volume_m3": 8.118868414913e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414913e-05,
+        "volume_without_tip_m3": 8.118868414913e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 5.322166367,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 5.711408283,
+        "body_activation": 0.0,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.33,
+        "flow_cm3s": -556.36,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": -0.0,
+        "lung_pa": -111.3,
+        "intended_hz": 100.0,
+        "measured_hz": 86.5,
+        "tension": 0.734,
+        "narrowest_cm2": 1.9271,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.0010149,
+        "transglottal_pa": -111.3,
+        "p0_pa": -0.1,
+        "oral_volume_m3": 7.913974428574e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414912e-05,
+        "volume_without_tip_m3": 7.913974428574e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 5.446573763,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 5.835815678,
+        "body_activation": 0.151763945,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.337,
+        "flow_cm3s": -580.31,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": 22.9,
+        "lung_pa": -110.7,
+        "intended_hz": 106.6,
+        "measured_hz": 86.5,
+        "tension": 0.782,
+        "narrowest_cm2": 1.9004,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00098783,
+        "transglottal_pa": -123.4,
+        "p0_pa": -9.8,
+        "oral_volume_m3": 6.783086810102e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414912e-05,
+        "volume_without_tip_m3": 6.783086810102e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 6.000311212,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 6.389553128,
+        "body_activation": 0.390614614,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.338,
+        "flow_cm3s": -596.51,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": 38.3,
+        "lung_pa": -110.7,
+        "intended_hz": 107.5,
+        "measured_hz": 86.5,
+        "tension": 0.789,
+        "narrowest_cm2": 1.8925,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00098449,
+        "transglottal_pa": -131.9,
+        "p0_pa": -17.4,
+        "oral_volume_m3": 6.474836592452e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414912e-05,
+        "volume_without_tip_m3": 6.474836592452e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 6.105397096,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 6.494639011,
+        "body_activation": 0.426810539,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.339,
+        "flow_cm3s": -619.32,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": 54.0,
+        "lung_pa": -110.8,
+        "intended_hz": 108.4,
+        "measured_hz": 86.5,
+        "tension": 0.796,
+        "narrowest_cm2": 1.893,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00098176,
+        "transglottal_pa": -142.9,
+        "p0_pa": -21.9,
+        "oral_volume_m3": 6.1581847349e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414912e-05,
+        "volume_without_tip_m3": 6.1581847349e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 6.212189881,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 6.601431796,
+        "body_activation": 0.462806325,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.34,
+        "flow_cm3s": -643.17,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": 58.8,
+        "lung_pa": -110.8,
+        "intended_hz": 109.2,
+        "measured_hz": 86.5,
+        "tension": 0.803,
+        "narrowest_cm2": 1.8928,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.0009792,
+        "transglottal_pa": -152.7,
+        "p0_pa": -15.0,
+        "oral_volume_m3": 5.850608953844e-05,
+        "floor_volume_m3": 0.0,
+        "volume_without_body_m3": 8.118868414912e-05,
+        "volume_without_tip_m3": 5.850608953844e-05,
+        "tongue_x_cm": 3.059093051,
+        "tongue_y_cm": 6.319001933,
+        "tip_x_cm": 7.57367228,
+        "tip_y_cm": 6.708243849,
+        "body_activation": 0.498422987,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.35,
+        "flow_cm3s": -673.78,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": 39.7,
+        "lung_pa": -110.8,
+        "intended_hz": 115.4,
+        "measured_hz": 86.5,
+        "tension": 0.86,
+        "narrowest_cm2": 0.1284,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00093884,
+        "transglottal_pa": -161.1,
+        "p0_pa": 9.8,
+        "oral_volume_m3": 3.891976114371e-05,
+        "floor_volume_m3": 9.949071469874e-07,
+        "volume_without_body_m3": 8.111608508687e-05,
+        "volume_without_tip_m3": 3.891976114371e-05,
+        "tongue_x_cm": 3.061573769,
+        "tongue_y_cm": 7.134380048,
+        "tip_x_cm": 7.576715293,
+        "tip_y_cm": 7.525170096,
+        "body_activation": 0.809219596,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.36,
+        "flow_cm3s": -513.1,
+        "glottal_area_cm2": 0.3983,
+        "intraoral_pa": -58.2,
+        "lung_pa": -110.6,
+        "intended_hz": 118.6,
+        "measured_hz": 86.5,
+        "tension": 0.886,
+        "narrowest_cm2": 0.0,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00086609,
+        "transglottal_pa": -90.3,
+        "p0_pa": 36.9,
+        "oral_volume_m3": 3.534964302604e-05,
+        "floor_volume_m3": 1.652559230356e-06,
+        "volume_without_body_m3": 7.913790532474e-05,
+        "volume_without_tip_m3": 3.534964302604e-05,
+        "tongue_x_cm": 3.131153981,
+        "tongue_y_cm": 7.32375139,
+        "tip_x_cm": 7.661593606,
+        "tip_y_cm": 7.758132217,
+        "body_activation": 1.013745207,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.38,
+        "flow_cm3s": -257.37,
+        "glottal_area_cm2": 0.3822,
+        "intraoral_pa": -85.1,
+        "lung_pa": -81.1,
+        "intended_hz": 120.6,
+        "measured_hz": 86.5,
+        "tension": 0.904,
+        "narrowest_cm2": 0.0,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00064797,
+        "transglottal_pa": -24.1,
+        "p0_pa": 27.8,
+        "oral_volume_m3": 3.332556319817e-05,
+        "floor_volume_m3": 1.8532993716e-06,
+        "volume_without_body_m3": 6.848894173684e-05,
+        "volume_without_tip_m3": 3.332556319817e-05,
+        "tongue_x_cm": 3.505701528,
+        "tongue_y_cm": 7.389220957,
+        "tip_x_cm": 8.102557295,
+        "tip_y_cm": 8.063114089,
+        "body_activation": 1.191319191,
+        "tip_activation": 0.0
+      },
+      {
+        "time": 1.4,
+        "flow_cm3s": 119.03,
+        "glottal_area_cm2": 0.318,
+        "intraoral_pa": 48.7,
+        "lung_pa": 102.9,
+        "intended_hz": 121.0,
+        "measured_hz": 86.5,
+        "tension": 0.911,
+        "narrowest_cm2": 0.0,
+        "modes": 0.0,
+        "m1_hz": 0.0,
+        "m2_hz": 0.0,
+        "m3_hz": 0.0,
+        "m4_hz": 0.0,
+        "energy": 0.00057472,
+        "transglottal_pa": 8.9,
+        "p0_pa": 45.8,
+        "oral_volume_m3": 3.2272793017e-05,
+        "floor_volume_m3": 1.844730045236e-06,
+        "volume_without_body_m3": 5.683731260066e-05,
+        "volume_without_tip_m3": 3.2272793017e-05,
+        "tongue_x_cm": 3.89396624,
+        "tongue_y_cm": 7.457034209,
+        "tip_x_cm": 8.530697055,
+        "tip_y_cm": 8.385465723,
+        "body_activation": 1.236782997,
+        "tip_activation": 0.0
+      }
+    ],
+    "diagnostic_neutrality": {
+      "common_pcm_prefix_identical": true,
+      "diagnostic_frames": 105888,
+      "previous_frames": 106080,
+      "diagnostic_chunk_frames": 48,
+      "previous_chunk_frames": 480,
+      "explanation": "CLI completion rounds to host chunk boundary"
+    }
+  },
+  "sierra": {
+    "artifacts": [
+      {
+        "path": "out/canonical-sierra-continuous-tip.wav",
+        "sha256": "b39117d784ad207abf4fed88fa4ffc594f2077f96339023054b1d25826712f81"
+      },
+      {
+        "path": "out/canonical-sierra-continuous-tip.csv",
+        "sha256": "a0c08d40a7276521f82923f6671615d5ac04520830a6c413a474c1ce2e3a93fb"
+      },
+      {
+        "path": "out/canonical-sierra-continuous-tip.log",
+        "sha256": "92ca08706c72dd9b5ae24c0e57164bf6e48e5f09951f5c20423d60ff001836bb"
+      }
+    ],
+    "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.364 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: S IY0 EH1 R AX0\nplan: 89 cues, 1.40 s\noutput audit: nonfinite 0, clipped 0\nrendered 1.40 s in 17.486 s: real-time factor 12.490 (lower is faster)\ngeometry steps 1400 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nmoving cavity maximum mass residual: 2.037215882e-16 m^3/s\nfold cycles 44, peak 0.044, rms 0.0083 (before normalization)\nwrote out/canonical-sierra-continuous-tip.wav\n",
+    "nonfinite_samples": 0,
+    "clipped_samples": 0,
+    "maximum_cavity_mass_residual_m3s": 2.037215882e-16,
+    "pronunciation": "not verified"
+  },
+  "enhanced_fields": {
+    "human": {
+      "source": "/Users/joshuahkuttenkuler/ducklips/samples/derived/nato_s.wav",
+      "source_sha256": "b4867aeff12f40238fbb93c9564c75b743be48cbe76cacac4724ac207baadc0e",
+      "sample_rate": 48000,
+      "start_sample": 0,
+      "end_sample": 42624,
+      "channel": 0,
+      "apertures": [
+        1024,
+        2048,
+        4096
+      ],
+      "offsets": [
+        -379,
+        -241,
+        -64,
+        0,
+        83,
+        214,
+        427
+      ],
+      "target_n_fft": 2048,
+      "hop": 512,
+      "rows": 684,
+      "row_spacing_hz": 11.72447484123107,
+      "highest_row_hz": 8007.81631656082,
+      "shape": [
+        684,
+        84
+      ],
+      "display_reference": 0.452622146369007,
+      "ordinary_display_reference": 258.38368892369294,
+      "db_range": 70.0,
+      "texture_amplitude_scale": 1.056382550436542,
+      "png": {
+        "field": "enhanced",
+        "colormap": "magma",
+        "row_pixels": 1,
+        "column_pixels": 4,
+        "full_field": true
+      },
+      "elapsed_seconds": 9.100129125174135,
+      "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+    },
+    "synthetic": {
+      "source": "/Users/joshuahkuttenkuler/ducklips/out/canonical-sierra-continuous-tip.wav",
+      "source_sha256": "b39117d784ad207abf4fed88fa4ffc594f2077f96339023054b1d25826712f81",
+      "sample_rate": 48000,
+      "start_sample": 0,
+      "end_sample": 67200,
+      "channel": 0,
+      "apertures": [
+        1024,
+        2048,
+        4096
+      ],
+      "offsets": [
+        -379,
+        -241,
+        -64,
+        0,
+        83,
+        214,
+        427
+      ],
+      "target_n_fft": 2048,
+      "hop": 512,
+      "rows": 684,
+      "row_spacing_hz": 11.72447484123107,
+      "highest_row_hz": 8007.81631656082,
+      "shape": [
+        684,
+        132
+      ],
+      "display_reference": 0.015974152821882408,
+      "ordinary_display_reference": 9.43041046716877,
+      "db_range": 70.0,
+      "texture_amplitude_scale": 1.2148112697200004,
+      "png": {
+        "field": "enhanced",
+        "colormap": "magma",
+        "row_pixels": 1,
+        "column_pixels": 4,
+        "full_field": true
+      },
+      "elapsed_seconds": 18.364803582895547,
+      "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+    },
+    "artifacts": [
+      {
+        "path": "out/human-sierra-enhanced.npz",
+        "sha256": "02383833a88f62aa03d9550bbe337349fc70697df1eed14e7a9884ed3189ab32"
+      },
+      {
+        "path": "out/canonical-sierra-continuous-tip-enhanced.npz",
+        "sha256": "ac517698f9e90aab2a3f9d0bfb3c1d60956d84141d3c289b319c60b8a0419ec6"
+      },
+      {
+        "path": "out/canonical-sierra-enhanced.html",
+        "sha256": "ef2c122cfb73b64150d6cae953cac0658bbf37be405481a0127b1290f1c8f7f3"
+      }
+    ],
+    "presentation": "Complete enhanced-only magma fields, 70 dB; saved amplitude references; no crop, grayscale or ordinary companion; one pixel per row, four per column in PNGs"
+  },
+  "validation": {
+    "release_full": "7/7 passed",
+    "release_final_core_and_stream": "2/2 passed after CLI/test cleanup",
+    "asan_ubsan_final": "7/7 passed, 200.29 seconds",
+    "stream_checks": "diagnostics on/off and host chunk size independent, allocation free rendering, finite nonzero unclipped canonical output, cavity balance"
+  },
+  "unresolved": [
+    "Rigid body dorsum motion and anatomical tissue-volume redistribution",
+    "Human pronunciation and realism assessment",
+    "Final >=10x realtime requirement; performance work deferred by explicit user instruction"
+  ]
+}
