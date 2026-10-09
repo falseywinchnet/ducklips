@@ -1,0 +1,76 @@
+{
+  "scope": "diagnostic continuation and independent density-profile investigation; no production source changes or new speech",
+  "base_commit": "719a4ce8d05b27df5c237022b315fba5a83bdef9",
+  "native_runs": [
+    {
+      "command": [
+        "build/ducklips_contour_pocket_probe",
+        "76800"
+      ],
+      "process_exit_code": 0,
+      "result": {
+        "status": "completed",
+        "accepted": 8496,
+        "rejected": 14,
+        "maximum_work_residual_J": 1.4965508588258966e-16,
+        "numerical_loss_J": 1.4019154843090694e-09,
+        "minimum_volume_m3": 1.0577093231231568e-23,
+        "maximum_relative_density": 201816364.97985807
+      }
+    },
+    {
+      "command": [
+        "build/ducklips_contour_pocket_probe",
+        "307200"
+      ],
+      "process_exit_code": 0,
+      "result": {
+        "status": "minimum_step",
+        "accepted": 33512,
+        "rejected": 27,
+        "maximum_work_residual_J": 6.377768513777092e-15,
+        "numerical_loss_J": 4.343325024480953e-11,
+        "minimum_volume_m3": 3.6313457419913023e-25,
+        "maximum_relative_density": 2780934393.70218
+      }
+    }
+  ],
+  "independent_audit_exit_code": 0,
+  "continuous_runs_exit_code": 0,
+  "sanitizer_command": [
+    ".build/asan/ducklips_contour_pocket_probe",
+    "76800"
+  ],
+  "sanitizer_exit_code": 0,
+  "sanitizers": "address,undefined; -fno-omit-frame-pointer",
+  "sanitizer_output_byte_identical": true,
+  "acceptance_limitation": "passing mathematical checks do not validate the extreme-compression trajectory as physical speech",
+  "hashes": {
+    ".build/asan/ducklips_contour_pocket_probe": "0625e72a18cdbaf023420ea2d807e955baaeae6adeb1c2a19288d522c69fdf92",
+    "CMakeLists.txt": "d977979b2928e87b96a8b50b827fd9ab00d099d678a77af5fa6e6663c818dc75",
+    "build/ducklips_contour_pocket_probe": "ba2c7a62d3a4281f635070635f910758d1d7fea101b6f7170c09e5d860846910",
+    "out/contour-pocket/asan-build.log": "e529d23752828d7ec33586560ba1f867101eefe8559d45c07ea51a3302e3ef97",
+    "out/contour-pocket/asan-native-76800.jsonl": "fdfecb0eda33a5b83e8bab948403d4dc47f9faad46a7a1f1348c15318c89b647",
+    "out/contour-pocket/audit.log": "cbd9dfcf24be52be7b622082acf7f555d56937683f56bf17616cd5f32de8345d",
+    "out/contour-pocket/continuous-fine.json": "94b392d082bc1faa40d248954e32f31f8cc83c2dc3da0aec31bd0521fded8c6c",
+    "out/contour-pocket/continuous-fine.log": "9a4b1c59f5f3e15ffc1698a57edf3681a6257613bbe62f0cb9e7ea46794b8f99",
+    "out/contour-pocket/continuous-finer-start.json": "d53c5b0b187fa6f0321bce0aad35a64238afd7e6e718b50a640c20b30f1d93c7",
+    "out/contour-pocket/continuous-finer-start.log": "4e76dd55b64f4047611561517145df62673d3c15716cd8bc20db1c7eecebd563",
+    "out/contour-pocket/continuous.json": "f1c2fd2ca1c20568bee863b50503632cefd40db40511cdb8fc1ea0bf0dcf3640",
+    "out/contour-pocket/continuous.log": "ed2e7fda2e9ba429a946c4f49fd341f6740b154815189bec9efb1f91158f02a3",
+    "out/contour-pocket/native-307200.jsonl": "a9d2d3fcfdb32868eaea586d12ae653aaa7e202cb85fed48033bde3985cdaa79",
+    "out/contour-pocket/native-76800.jsonl": "fdfecb0eda33a5b83e8bab948403d4dc47f9faad46a7a1f1348c15318c89b647",
+    "out/contour-pocket/pressure-loss-small.json": "d6257efc47781a3efcc7fbf605ec008da85a069fc9c16cd4cb704ea0e2ffb016",
+    "out/contour-pocket/pressure-loss-small.log": "f74950e38183b1c09b4d4c8dd41dcb097eb371ecd6b3b8440900bca7877e5fbf",
+    "out/contour-pocket/pressure-loss.json": "27907ba9c2a35760de231659a71bd144004658f4fb6005e8846885a5f3c99530",
+    "out/contour-pocket/pressure-loss.log": "c12bd57cda4f6873705ae4ec982c247fe55f2a00dfef0389291261e711552666",
+    "reports/CONTOUR_POCKET_DIAGNOSIS.md": "475fcdb7662c9a8354ec6d2cfb6db27260ba2187f133ae350eb4665be24dc196",
+    "reports/contour_pocket_reference.json": "a1de8f98a1d9e36ae8c4de8c6d56e068a5449d1439b10ba7fa6d70760b635961",
+    "src/contour_glottal_storage.cpp": "ad42d008cbaef7a8eeb15e5a860bf6a0c54f631ec4500bc78d8e272981d175b5",
+    "src/contour_kinetics.cpp": "bdfca24b382553b3e31a725af1945961383a7766b3d37c3dd32d8a769cafecbc",
+    "tools/contour_pocket_audit.py": "c35f508bebc6ca7b2b7d631ce9c19e35d25ec65c160ab0df2a3ba9deaf033733",
+    "tools/contour_pocket_probe.cpp": "edf5cf27aab7b845236a78f7ae3adce43211c516572341e86c888a8fa8cc7c30",
+    "tools/contour_pocket_reference.py": "befeaf269b59147e11b163693e21bd9af1960709e6015d32e8cbb3ac589f1b4d",
+    "tools/contour_sealed_reference.py": "0eb916e8278cf13fc6cea66742cf04e10898fad63682a43f04d1239316de9a2d"
+  }
+}

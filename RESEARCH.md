@@ -236,6 +236,14 @@ Sustained pressure-driven motion still stops near a vanishing lower chamber;
 its air and energy cannot be removed without explicit transport. These
 controls are not new speech or evidence of improved pronunciation.
 
+[The shrinking-pocket investigation](reports/CONTOUR_POCKET_DIAGNOSIS.md)
+resolves the remaining stop with independent continuous equations: the current
+model rebounds only after extreme gas compression. Numerical convergence and
+energy conservation do not make that trajectory credible for speech. An
+analytically integrated compressible viscous law changes the residual-air
+escape, motivating consistent passage density and disappearing-cell transport.
+The alternative is a diagnostic, not a replacement production source.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

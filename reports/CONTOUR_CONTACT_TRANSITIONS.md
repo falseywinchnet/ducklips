@@ -1,5 +1,9 @@
 # Contour sealing and reopening with viscous relaxation
 
+Follow-up: [the shrinking-pocket diagnosis](CONTOUR_POCKET_DIAGNOSIS.md)
+examines the sustained-drive stop below with independent continuous equations
+and isolates the role of the passage density/loss representation.
+
 The contour source now completes two free-motion contact controls: the lower
 cap seals and reopens in one, and the upper cap does so in the other. Tissue
 motion is solved from initial velocity, elasticity, gas forces and damping;

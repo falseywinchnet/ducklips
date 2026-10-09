@@ -246,3 +246,6 @@ add_test(NAME ducklips_contour_dissipation_kernel COMMAND ducklips_contour_dissi
 add_test(NAME ducklips_contour_relaxation_reference COMMAND ducklips_contour_glottal_probe --relaxation)
 add_test(NAME ducklips_contour_relaxation_lower_cycle COMMAND ducklips_contour_cycle_probe 2000 lower --relaxation)
 add_test(NAME ducklips_contour_relaxation_upper_cycle COMMAND ducklips_contour_cycle_probe 2000 upper --relaxation)
+
+add_executable(ducklips_contour_pocket_probe tools/contour_pocket_probe.cpp)
+target_link_libraries(ducklips_contour_pocket_probe PRIVATE ducklips)

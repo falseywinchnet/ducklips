@@ -157,6 +157,12 @@ and passes open-motion accuracy checks. Sustained pressure-driven motion still
 stops near a vanishing lower chamber; a complete voiced cycle and speech
 integration remain unfinished.
 
+[The shrinking-pocket diagnosis](reports/CONTOUR_POCKET_DIAGNOSIS.md) now
+shows that an independent continuous solve also reaches extreme compression.
+A pressure-integrated viscous law changes residual-air escape, identifying
+the density representation and disappearing-cell transport as the next work.
+This is a model diagnosis, with no new speech result.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,
