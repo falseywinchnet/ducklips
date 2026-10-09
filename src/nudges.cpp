@@ -5,11 +5,11 @@
 #include <stdexcept>
 
 namespace ducklips {
-void NudgeStream::prepare(const VoiceProfile& body, double speed, std::size_t pending_capacity) {
+void NudgeStream::prepare(const VoiceProfile& body, double speed, std::size_t pending_capacity,const SynthesisOptions& configuration) {
     if (!std::isfinite(speed) || speed < 0.25 || speed > 4.0 || pending_capacity < 4 || pending_capacity > 65536) {
         throw std::invalid_argument("speed must be in [0.25,4]; cue capacity in [4,65536]");
     }
-    SynthesisOptions options{};
+    SynthesisOptions options=configuration;
     options.cue_capacity = pending_capacity;
     engine_.prepare(body, options);
     speed_ = speed;

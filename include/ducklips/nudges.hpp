@@ -13,7 +13,8 @@ namespace ducklips {
 // each 1 ms boundary. Queue/memory is bounded by pending_capacity.
 class NudgeStream final {
 public:
-    void prepare(const VoiceProfile& body, double speed = 1.0, std::size_t pending_capacity = 4096);
+    void prepare(const VoiceProfile& body, double speed = 1.0, std::size_t pending_capacity = 4096,
+                 const SynthesisOptions& configuration = {});
     // "TIME vowel PHONE RATE", "TIME diphthong PHONE DURATION RATE",
     // "TIME constrict PHONE ACTIVATION RATE", "TIME release SLOT RATE",
     // "TIME pitch|lungs|glottis|velum|effort|loudness VALUE RATE".

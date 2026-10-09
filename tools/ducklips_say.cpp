@@ -26,6 +26,8 @@ struct Arguments final {
     std::string output{"ducklips.wav"};
     std::string dictionary{};
     std::string probe_path{};
+    bool canonical_motion{false};
+    std::size_t canonical_substeps{8};
     bool room{false};
     bool report{false};
     double rate{0.0};
@@ -50,6 +52,7 @@ void print_usage() {
                 "                    [--no-pop] [--frication-gain G] [--aspiration-gain G] [--lung-pressure PA]\n"
                 "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
                 "                    [--invariant passive|charge|pressure]\n"
+                "[--canonical-motion] [--canonical-substeps 1..64]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
 
@@ -57,7 +60,12 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
     for (int index = 1; index < count; ++index) {
         std::string flag = values[index];
         bool has_value = index + 1 < count;
-        if (flag == "--rate" && has_value) {
+        if (flag == "--canonical-motion") {
+            arguments.canonical_motion=true;
+        } else if (flag == "--canonical-substeps" && has_value) {
+            std::istringstream parsed(values[++index]);std::string extra;
+            if (!(parsed>>arguments.canonical_substeps) || (parsed>>extra) || arguments.canonical_substeps<1 || arguments.canonical_substeps>64) { return false; }
+        } else if (flag == "--rate" && has_value) {
             std::istringstream parsed(values[++index]);
             std::string extra{};
             if (!(parsed >> arguments.rate) || (parsed >> extra) || !std::isfinite(arguments.rate)
@@ -144,6 +152,9 @@ int main(int argc, char** argv) {
     }
     if (arguments.rate > 0.0) { voice.speaking_rate = arguments.rate; }
     ducklips::SynthesisOptions options{};
+    options.canonical_motion=arguments.canonical_motion;
+    options.canonical_substeps=arguments.canonical_substeps;
+    std::printf("acoustic path: %s\n",options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
     options.radiate_mean_flow = !arguments.no_pop;
     if (arguments.tap == "lips") {
         options.tap = ducklips::OutputTap::lips;
@@ -308,5 +319,8 @@ int main(int argc, char** argv) {
         return 1;
     }
     std::printf("wrote %s\n", arguments.output.c_str());
+    if (synthesizer.statistics().nonfinite_samples || synthesizer.statistics().clipped_samples) {
+        std::fprintf(stderr,"output audit failed; diagnostic WAV retained\n");return 1;
+    }
     return 0;
 }

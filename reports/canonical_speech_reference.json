@@ -1,0 +1,119 @@
+{
+  "schema": 1,
+  "scope": "Integrated full canonical moving acoustic network with source feedback and causal losses. Not the reduced Gauss modal kernel or old compact modal renderer. Pronunciation unverified; performance optimization deferred by user.",
+  "source_sha256": {
+    "include/ducklips/canonical_speech.hpp": "6bf94df11e4bb5aa352bf97ec54f90ca830abcc2ff9589dae8277671fc9e1a6e",
+    "src/canonical_speech.cpp": "ef7e82c8b9eb83e69772a4b5e794b1da24b987a9cf47812c1780ff017545e3e4",
+    "include/ducklips/moving_tree.hpp": "84bb7058c8691b408106650b6f319c27fc29e45aaab2cf617656ae3fbfd66a8e",
+    "src/moving_tree.cpp": "62d9ff74cd554cb3b06547fc699ffb8a91bffbcf09c1ee28879095c8b8860102",
+    "src/synthesizer.cpp": "72468c807f89d1ca85f47ecc31296aed3733e33617110da54fcf34d5d42b7ba7",
+    "src/nudges.cpp": "72a492573310c616959fff50f2cc1ce03823597ec80126aa9a618fdb839ecf11",
+    "tools/ducklips_say.cpp": "6cf49eba1355816ff55fb801d60a130c75d12b37262044844f73658d754c9514",
+    "tools/ducklips_stream.cpp": "d155f2199d843e101527bc7e74fca625acaa9eb41b61fd112747938ac1ea926d",
+    "tests/stream_tests.cpp": "19a8cf13a009635cb1df7ab13aa4fed60aa8eea44f8ea1a9588adbeeccdc6fcf",
+    "tools/moving_tree_probe.cpp": "c650149a13cbcecb65e3eed046c578c82b118816b6027b6a1d07a49126c36f5d"
+  },
+  "final_alfa_binary_sha256": "8ba096203fa6919a94559874e1904085cd57df71f9804b771c192e90323b741f",
+  "alphabet_binary_note": "Alphabet started before removal of unused endpoint-pressure helper methods; final Alfa PCM is byte-identical to the earlier causal-loss Alfa PCM.",
+  "renders": [
+    {
+      "file": "out/canonical-alfa.wav",
+      "sha256": "9832fcd045c88664ffd12fc6da4147358ea92c44f6e3896b4089e8f4bba90ab8",
+      "seconds": 1.31,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "peak": 0.051771294325590134,
+      "rms": 0.00902096437057328,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.356 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: AE1 L F AX0\nplan: 78 cues, 1.30 s\noutput audit: nonfinite 0, clipped 0\nrendered 1.31 s in 17.288 s: real-time factor 13.197 (lower is faster)\ngeometry steps 1310 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nfold cycles 45, peak 0.052, rms 0.0090 (before normalization)\nwrote out/canonical-alfa.wav\n"
+    },
+    {
+      "file": "out/canonical-nato-losses.wav",
+      "sha256": "31b01dbeaea0a633b95816c20553ae5502bc062e7118c1edef6effecc18a4891",
+      "seconds": 23.24,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "peak": 0.6657713651657104,
+      "rms": 0.012231875876100935,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.345 s\nvowel  target F1 F2 F3 (Hz)        posture F1 F2 F3 (Hz)        worst  iterations\nAA       768  1333  2522              718  1311  2373              6.5%  60\nAE       588  1952  2601              555  1805  2414              7.5%  60\nAH       623  1200  2550              625  1201  2542              0.3%  2\nAO       652   997  2538              596  1000  2427              8.6%  60\nAW       768  1333  2522              718  1311  2373              6.5%  60\nAY       768  1333  2522              718  1311  2373              6.5%  60\nEH       580  1799  2605              556  1713  2418              7.2%  47\nER       474  1379  1710              474  1381  1757              2.7%  14\nEY       476  2089  2691              454  1936  2511              7.3%  48\nIH       427  2034  2684              420  1974  2547              5.1%  60\nIY       342  2322  3000              334  2224  2759              8.0%  28\nOW       497   910  2459              500   910  2415              1.8%  31\nOY       652   997  2538              596  1000  2427              8.6%  60\nUH       469  1122  2434              473  1123  2377              2.3%  25\nUW       378   997  2343              380   997  2298              1.9%  16\nAX       500  1500  2500              507  1509  2480              1.4%  60\ndictionary: 29 definitions installed from samples/nato.dict\nphones: AE1 L F AX0 | B R AA1 V OW0 | CH AA1 R L IY0 | D EH1 L T AX0 | EH1 K OW0 | F AA1 K S T R AA0 T | G AA1 L F | HH OW0 T EH1 L | IH1 N D IY0 AX0 | JH UW0 L IY0 EH1 T | K IY1 L OW0 | L IY1 M AX0 | M AY1 K | N OW0 V EH1 M B ER0 | AA1 S K ER0 | P AX0 P AA1 | K EH0 B EH1 K | R OW1 M IY0 OW0 | S IY0 EH1 R AX0 | T AE1 NG G OW0 | Y UW1 N IH0 F AO0 R M | V IH1 K T ER0 | W IH1 S K IY0 | EH1 K S R EY0 | Y AE1 NG K IY0 | Z UW1 L UW0\nplan: 2375 cues, 23.24 s\ntimeline: AE@0.600 L@0.756 F@0.802 AX@0.876 B@1.354 R@1.410 AA@1.458 V@1.629 OW@1.701 CH@2.274 AA@2.385 R@2.566 L@2.613 IY@2.660 D@3.184 EH@3.241 L@3.360 T@3.410 AX@3.468 EH@3.942 K@4.031 OW@4.104 F@4.664 AA@4.759 K@4.888 S@4.949 T@5.036 R@5.094 AA@5.144 T@5.252 G@5.753 AA@5.816 L@6.059 F@6.123 HH@6.626 OW@6.686 T@6.797 EH@6.870 L@7.039 IH@7.523 N@7.642 D@7.693 IY@7.753 AX@7.844 JH@8.321 UW@8.431 L@8.538 IY@8.600 EH@8.689 T@8.812 K@9.318 IY@9.392 L@9.564 OW@9.625 L@10.190 IY@10.251 M@10.428 AX@10.493 M@10.968 AY@11.036 K@11.274 N@11.778 OW@11.840 V@11.976 EH@12.044 M@12.158 B@12.209 ER@12.269 AA@12.789 S@12.925 K@13.014 ER@13.073 P@13.604 AX@13.682 P@13.738 AA@13.811 K@14.420 EH@14.497 B@14.567 EH@14.627 K@14.758 R@15.266 OW@15.325 M@15.534 IY@15.600 OW@15.688 S@16.254 IY@16.366 EH@16.454 R@16.573 AX@16.631 T@17.111 AE@17.186 NG@17.338 G@17.390 OW@17.451 Y@18.017 UW@18.073 N@18.243 IH@18.309 F@18.364 AO@18.457 R@18.602 M@18.670 V@19.145 IH@19.215 K@19.307 T@19.366 ER@19.424 W@19.949 IH@20.003 S@20.097 K@20.181 IY@20.241 EH@20.766 K@20.853 S@20.914 R@21.001 EY@21.048 Y@21.611 AE@21.665 NG@21.811 K@21.864 IY@21.927 Z@22.458 UW@22.528 L@22.700 UW@22.759\noutput audit: nonfinite 0, clipped 0\nrendered 23.24 s in 309.252 s: real-time factor 13.307 (lower is faster)\ngeometry steps 23240 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nfold cycles 1206, peak 0.666, rms 0.0122 (before normalization)\nwrote out/canonical-nato-losses.wav\n"
+    },
+    {
+      "file": "out/canonical-alfa-losses-16.wav",
+      "sha256": "91ac46a9aa47747b1fa896575dba4ed847513cc2f7e285e6f58868fda5bf7241",
+      "seconds": 1.31,
+      "nonfinite_before_clamp": 0,
+      "clipped_before_clamp": 0,
+      "peak": 0.05202195420861244,
+      "rms": 0.009041285042700468,
+      "log": "acoustic path: canonical moving network (causal-loss integration reference)\nvoice reference-adult: tract 17.5 cm, folds 132.6 Hz at Q=1, prepared in 0.371 s\ndictionary: 29 definitions installed from samples/nato.dict\nphones: AE1 L F AX0\nplan: 78 cues, 1.30 s\noutput audit: nonfinite 0, clipped 0\nrendered 1.31 s in 36.836 s: real-time factor 28.119 (lower is faster)\ngeometry steps 1310 (at most 1 per block), modes 0..0, warm-started 0, bisected 0, factorizations/step 0.0\nfold cycles 45, peak 0.052, rms 0.0090 (before normalization)\nwrote out/canonical-alfa-losses-16.wav\n"
+    }
+  ],
+  "alfa_8_vs_16_substeps_waveform_rms_relative_error": 0.009974470001158295,
+  "validation": {
+    "release_ctest": "7/7 passed",
+    "asan_ubsan_ctest": "7/7 passed",
+    "stream_checks": [
+      "zero heap allocation",
+      "bit-identical full buffer versus 17-frame buffers",
+      "finite nonzero unclipped nudge audio",
+      "late additional nudge accepted",
+      "old modal eigensolver never entered"
+    ],
+    "physics_checks": [
+      "analytic forced oscillator",
+      "Gauss nodal source work identity through 400000 rad/s",
+      "combined acoustic/loss-memory passive decay at fixed geometry"
+    ]
+  },
+  "enhanced": {
+    "source": "/Users/joshuahkuttenkuler/ducklips/out/canonical-alfa-losses.wav",
+    "source_sha256": "9832fcd045c88664ffd12fc6da4147358ea92c44f6e3896b4089e8f4bba90ab8",
+    "sample_rate": 48000,
+    "start_sample": 0,
+    "end_sample": 62880,
+    "channel": 0,
+    "apertures": [
+      1024,
+      2048,
+      4096
+    ],
+    "offsets": [
+      -379,
+      -241,
+      -64,
+      0,
+      83,
+      214,
+      427
+    ],
+    "target_n_fft": 2048,
+    "hop": 512,
+    "rows": 684,
+    "row_spacing_hz": 11.72447484123107,
+    "highest_row_hz": 8007.81631656082,
+    "shape": [
+      684,
+      123
+    ],
+    "display_reference": 0.015974152821882408,
+    "ordinary_display_reference": 9.981107306108221,
+    "db_range": 70.0,
+    "texture_amplitude_scale": 1.0973615697967223,
+    "png": {
+      "field": "enhanced",
+      "colormap": "magma",
+      "row_pixels": 1,
+      "column_pixels": 4,
+      "full_field": true
+    },
+    "elapsed_seconds": 17.072618416976184,
+    "use": "offline visual inspection of generated speech; enhanced is not a complex synthesis spectrum"
+  },
+  "limitations": [
+    "Unverified perceptual pronunciation and realism",
+    "Offline reference far below 10x goal; optimization deferred",
+    "Moving loss-memory/closure work audit unfinished",
+    "Piecewise linear geometry metric interpolation",
+    "One-pole radiation approximation",
+    "Original coarse tract anatomy, no detailed surface transverse/floor physics"
+  ]
+}

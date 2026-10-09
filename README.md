@@ -25,6 +25,18 @@ This repository preserves the supplied research snapshot as its first commit.
 listening feedback, and rejected ideas. Their earlier machine/path references
 and performance values are historical, not fresh validation of this checkout.
 
+## Current speech integration
+
+`ducklips_say --canonical-motion` and `ducklips_stream --canonical-motion`
+select the new full canonical moving-network path. It connects branch-history
+transport, work-conjugate glottal feedback, viscothermal memory and a passive
+radiation load to the articulators and vocal folds. The old compact modal
+path remains the default; both CLIs print their selected path. This reference
+is slow, and pronunciation/realism remain unverified. Performance work is
+deferred by user instruction while the integrated speech path is developed.
+See [CANONICAL_SPEECH.md](reports/CANONICAL_SPEECH.md) for the implementation,
+rejected instability and remaining physical limitations.
+
 ## Build
 
 Requires a C++20 compiler and CMake 3.24+. The core has no downloaded dependencies.

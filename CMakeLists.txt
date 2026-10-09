@@ -16,6 +16,7 @@ add_library(ducklips STATIC
     src/acoustic_network.cpp
     src/modal.cpp
     src/moving_mode.cpp
+    src/canonical_speech.cpp
     src/moving_tree.cpp
     src/continuous_modes.cpp
     src/modal_transport.cpp

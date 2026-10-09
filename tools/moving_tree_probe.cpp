@@ -1,5 +1,6 @@
 #include "ducklips/moving_tree.hpp"
 #include "ducklips/moving_mode.hpp"
+#include "ducklips/canonical_speech.hpp"
 #include <chrono>
 #include <cmath>
 #include <cstdint>
@@ -107,6 +108,39 @@ void tests() {
         previous_error=error;
     }
     require(previous_error<4e-6,"uniform reference mismatch");
+    // Affine pressure and volume-flow forcing against a closed-form oscillator.
+    solver.prepare(1,ground);
+    const double compliance[]={1},conductance[]={omega*omega},nodal[]={.2},series[]={.3/omega};
+    for (int i=0;i<1024;++i) { solver.advance(compliance,compliance,conductance,conductance,duration/1024,nodal,series); }
+    const std::complex<double> pole(0,omega),drive(.2,.3);
+    const std::complex<double> forced=drive*(std::exp(pole*duration)-std::complex<double>(1,0))/pole;
+    require(std::abs(std::complex<double>(solver.charge[0],omega*solver.momentum[0])-forced)<1e-12,"forced oscillator mismatch");
+    // A held source must exchange work with the Gauss average, not the
+    // endpoint trapezoid. Include acoustics far above the output Nyquist.
+    for (double w:{1000.,25000.,200000.,400000.}) {
+        solver.prepare(1,ground);const double metric[]={w*w},input[]={.4};
+        solver.advance(compliance,compliance,metric,metric,1.0/48000,input);
+        const double energy=(solver.charge[0]*solver.charge[0]+w*w*solver.momentum[0]*solver.momentum[0])/2;
+        const double work=input[0]*solver.average_pressure[0]/48000;
+        require(std::abs(energy-work)<1e-22 && work>=0,"source port does not conserve discrete work");
+    }
+    // Source work and passive decay including viscothermal/radiation memory.
+    ducklips::AcousticNetwork network;network.prepare(4,2,1,{});
+    ducklips::TractShape shape;shape.oral_area.assign(4,2e-4);shape.oral_length.assign(4,.04);
+    shape.nasal_area.assign(2,1e-4);shape.nasal_length.assign(2,.04);shape.port_area=3e-5;
+    const ducklips::AirProperties air{};network.assemble(shape,air,{});
+    ducklips::CanonicalSpeech acoustic;acoustic.prepare(network,air);
+    acoustic.free_step(network,network,0,0,1.0/48000,8,0,1,0,0);
+    const double input=1e-5,source_work=input*input*acoustic.load_impedance()/48000;
+    acoustic.inject(input);double previous_energy=acoustic.energy();
+    require(previous_energy>0 && source_work>=previous_energy*(1-1e-12),"causal loss source port generates energy");
+    const double starting_energy=previous_energy;
+    for (int i=0;i<500;++i) {
+        acoustic.free_step(network,network,0,0,1.0/48000,8,0,1,0,0);
+        const double now=acoustic.energy();
+        require(now<=previous_energy*(1+1e-11),"unforced causal loss memory is not passive");previous_energy=now;
+    }
+    require(previous_energy<starting_energy*.8,"causal memory did not dissipate energy");
     bool rejected=false;
     try { const ducklips::TreeEdge cyclic[]={{0,1},{1,2},{2,0}};solver.prepare(3,cyclic); }
     catch (const std::invalid_argument&) { rejected=true; }

@@ -86,6 +86,25 @@ int main() {
     check(whole.submit("1 pitch 100 50", error), "next uncommitted block accepts nudge");
     whole.render(std::span<float>(a.data(), 2));
     check(!whole.submit("1.00001 pitch 100 50", error), "partially rendered control block rejects retroactive nudge");
+    ducklips::SynthesisOptions canonical_options{};canonical_options.canonical_motion=true;
+    ducklips::NudgeStream canonical_whole{},canonical_chunks{};
+    canonical_whole.prepare(body,1,4096,canonical_options);canonical_chunks.prepare(body,1,4096,canonical_options);
+    for (const char* line:lines) {
+        check(canonical_whole.submit(line,error) && canonical_chunks.submit(line,error),"canonical nudge accepted");
+    }
+    before=allocations.load();canonical_whole.render(a);
+    check(allocations.load()==before,"canonical render retains state without heap allocation");
+    for (std::size_t frame=0;frame<48000;) {
+        const std::size_t run=std::min<std::size_t>(17,48000-frame);
+        canonical_chunks.render(std::span<float>(b.data()+2*frame,2*run));frame+=run;
+    }
+    energy=0;for (float value:a) { energy+=value*value; }
+    check(a==b,"canonical motion/source result is independent of host buffer size");
+    check(energy>1e-6 && !canonical_whole.engine().statistics().nonfinite_samples
+          && !canonical_whole.engine().statistics().clipped_samples,"canonical nudges generate finite nonzero unclipped audio");
+    check(canonical_whole.engine().statistics().factorizations==0,"canonical speech never enters the old modal solver");
+    check(canonical_whole.submit("1 pitch 140 70",error),"new nudge accepted after canonical rendering begins");
+    canonical_whole.render(std::span<float>(a.data(),960));
     ducklips::NudgeStream bounded{};
     bounded.prepare(body, 2.0, 4);
     check(bounded.submit("0 diphthong AY .4 75", error) && bounded.submit("0 diphthong AW .4 75", error),

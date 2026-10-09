@@ -52,15 +52,17 @@ void MovingTreeReference::prepare(std::size_t nodes,std::span<const TreeEdge> br
     if (order.size()!=nodes) { throw std::invalid_argument("moving network is disconnected"); }
     branches_.assign(branches.begin(),branches.end());parent_=std::move(parent);order_=std::move(order);
     diagonal_.resize(nodes);coupling_.resize(nodes);inverse_.resize(nodes);stage_.resize(nodes);
-    charge.assign(nodes,0.0);momentum.assign(branches.size(),0.0);
+    average_pressure.assign(nodes,0.0);charge.assign(nodes,0.0);momentum.assign(branches.size(),0.0);
 }
 void MovingTreeReference::advance(std::span<const double> c1,std::span<const double> c2,
-                                  std::span<const double> g1,std::span<const double> g2,double dt) noexcept {
+                                  std::span<const double> g1,std::span<const double> g2,double dt,
+                                  std::span<const double> nodal_flow,std::span<const double> series_pressure) noexcept {
     constexpr double a11=.25,a12=.25-0.28867513459481288225;
     constexpr double a21=.25+0.28867513459481288225,a22=.25;
     for (std::size_t node=0;node<charge.size();++node) {
         diagonal_[node]={c1[node],0,0,c2[node]};coupling_[node]={};
-        stage_[node]={charge[node],charge[node]};
+        const double drive=nodal_flow.empty() ? 0 : nodal_flow[node];
+        stage_[node]={charge[node]+dt*(a11+a12)*drive,charge[node]+dt*(a21+a22)*drive};
     }
     for (std::size_t branch=0;branch<branches_.size();++branch) {
         const TreeEdge& edge=branches_[branch];
@@ -68,8 +70,11 @@ void MovingTreeReference::advance(std::span<const double> c1,std::span<const dou
         // h^2 A diag(G1,G2) A: 2x2 stage coupling along this branch.
         const Matrix block{h2*(a11*first*a11+a12*second*a21),h2*(a11*first*a12+a12*second*a22),
                            h2*(a21*first*a11+a22*second*a21),h2*(a21*first*a12+a22*second*a22)};
-        const Pair load{dt*(a11*first+a12*second)*momentum[branch],
-                        dt*(a21*first+a22*second)*momentum[branch]};
+        const double source=series_pressure.empty() ? 0 : series_pressure[branch];
+        const double driven_first=momentum[branch]+dt*(a11+a12)*source;
+        const double driven_second=momentum[branch]+dt*(a21+a22)*source;
+        const Pair load{dt*(a11*first*driven_first+a12*second*driven_second),
+                        dt*(a21*first*driven_first+a22*second*driven_second)};
         for (std::size_t k=0;k<4;++k) { diagonal_[edge.first_node][k]+=block[k]; }
         for (std::size_t k=0;k<2;++k) { stage_[edge.first_node][k]-=load[k]; }
         if (edge.second_node!=ground_node) {
@@ -99,6 +104,7 @@ void MovingTreeReference::advance(std::span<const double> c1,std::span<const dou
             for (std::size_t k=0;k<2;++k) { stage_[node][k]-=load[k]; }
         }
         stage_[node]=product(inverse_[node],stage_[node]);
+        average_pressure[node]=.5*(stage_[node][0]+stage_[node][1]);
     }
     for (std::size_t branch=0;branch<branches_.size();++branch) {
         const TreeEdge& edge=branches_[branch];
@@ -106,12 +112,17 @@ void MovingTreeReference::advance(std::span<const double> c1,std::span<const dou
         if (edge.second_node!=ground_node) {
             for (std::size_t k=0;k<2;++k) { pressure[k]-=stage_[edge.second_node][k]; }
         }
+        const double source=series_pressure.empty() ? 0 : series_pressure[branch];
+        pressure[0]+=source;pressure[1]+=source;
         const double first=momentum[branch]+dt*(a11*pressure[0]+a12*pressure[1]);
         const double second=momentum[branch]+dt*(a21*pressure[0]+a22*pressure[1]);
         const double transfer=dt*.5*(g1[branch]*first+g2[branch]*second);
         charge[edge.first_node]-=transfer;
         if (edge.second_node!=ground_node) { charge[edge.second_node]+=transfer; }
         momentum[branch]+=dt*.5*(pressure[0]+pressure[1]);
+    }
+    if (!nodal_flow.empty()) {
+        for (std::size_t node=0;node<charge.size();++node) { charge[node]+=dt*nodal_flow[node]; }
     }
 }
 }

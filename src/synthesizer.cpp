@@ -1,6 +1,7 @@
 #include "ducklips/synthesizer.hpp"
 #include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace ducklips {
 namespace {
@@ -40,6 +41,7 @@ float finite_sample(double value, SynthesisStatistics& statistics) noexcept {
 }
 
 void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& options) {
+    if (options.canonical_substeps<1 || options.canonical_substeps>64) { throw std::invalid_argument("canonical substeps outside [1,64]"); }
     voice_ = voice;
     options_ = options;
     air_ = options.air;
@@ -57,6 +59,11 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
     matrix_.prepare(networks_[0].node_count(), networks_[0].tree_edges(), model_.port_section());
     solver_.prepare(networks_[0].node_count());
     resonator_.prepare(options.mode_capacity, networks_[0].node_count(), networks_[0].branch_count());
+    if (options.canonical_motion) {
+        model_.build(articulators_,geometry_shape_);
+        networks_[0].assemble(geometry_shape_,air_,voice_.losses);
+        canonical_.prepare(networks_[0],air_);
+    }
     air_path_.prepare(options.air_path, air_, options.rate);
     queue_.prepare(options.cue_capacity);
     double block_rate = options.rate.samples_per_second / static_cast<double>(options.control_block);
@@ -138,6 +145,8 @@ void Synthesizer::reset() noexcept {
     glottis_.reset(voice_.folds);
     intraoral_.reset();
     resonator_.clear();
+    canonical_ready_=false;
+    if (options_.canonical_motion) { canonical_.reset(); }
     bases_[0].mode_count = 0;
     bases_[1].mode_count = 0;
     current_ = 0;
@@ -294,6 +303,7 @@ void Synthesizer::begin_block() noexcept {
         }
         geometry_ready_ = true;
     }
+    if (options_.canonical_motion) { steps=1; }
     geometry_steps_ = steps;
     geometry_step_index_ = 0;
     statistics_.geometry_updates += steps;
@@ -374,7 +384,7 @@ void Synthesizer::begin_block() noexcept {
     probe_.measured_pitch = measured_pitch_;
     probe_.tension = tension_;
     probe_.narrowest_area = constriction_area_;
-    probe_.acoustic_energy = resonator_.energy();
+    probe_.acoustic_energy = options_.canonical_motion ? canonical_.energy() : resonator_.energy();
     probe_.transglottal = transglottal_;
     probe_.glottal_pressure = glottal_pressure_;
     probe_.modes = bases_[current_].mode_count;
@@ -406,6 +416,15 @@ void Synthesizer::begin_geometry_step() noexcept {
     const std::size_t next = 1 - current_;
     AcousticNetwork& network = networks_[next];
     network.assemble(geometry_shape_, air_, voice_.losses);
+    if (options_.canonical_motion) {
+        if (!canonical_ready_) {
+            networks_[current_].assemble(geometry_shape_,air_,voice_.losses);
+            canonical_ready_=true;
+        }
+        current_=next;geometry_remaining_=options_.control_block;
+        ++statistics_.blocks;statistics_.fewest_modes=0;
+        return;
+    }
     network.write_operator(matrix_);
     const double maximum = 2.0 * pi * options_.maximum_mode_frequency;
     ModalSolveReport report = solver_.solve(network, matrix_, maximum, bases_[current_], bases_[next]);
@@ -529,7 +548,7 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
     const std::size_t frames = stereo.size() / 2;
     const std::size_t modes = resonator_.mode_count;
     const double period = sample_period_;
-    const double half_impedance = 0.5 * resonator_.glottal_impedance;
+    double half_impedance = 0.5 * resonator_.glottal_impedance;
     const double constriction_diameter = 2.0 * std::sqrt(constriction_area_ / pi);
     // Turbulent source strength grows with the jet's cross-section (Stevens):
     // sqrt(A / 0.1 cm^2) relative to a mid-sized fricative constriction.
@@ -570,8 +589,13 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         double frication = frication_scale_ * turbulence_pressure(constriction_jet, constriction_diameter, air_)
             * area_strength * frication_noise_.next();
 
-        // Free modal update with the series sources; glottal pressure it would reach.
+        // Free acoustic evolution with series pressure sources.
         double free_pressure = 0.0;
+        if (options_.canonical_motion) {
+            const double fraction=(block_length-double(block_remaining_-frame))/block_length;
+            canonical_.free_step(networks_[1-current_],networks_[current_],fraction,1/block_length,period,
+                                 options_.canonical_substeps,aspiration_branch_,frication_branch_,aspiration,frication);
+        }
         for (std::size_t mode = 0; mode < modes; ++mode) {
             double series = resonator_.aspiration_weight[mode] * aspiration + resonator_.frication_weight[mode] * frication;
             std::complex<double> drive(0.0, series);
@@ -587,6 +611,12 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         // the acoustic modes; the mean flow belongs to the aerodynamic cavity.
         double free_drop = lung_pressure_ - cavity - 0.5 * (glottal_pressure_ + free_pressure)
             + half_impedance * mean_flow_;
+        if (options_.canonical_motion) {
+            // The full network includes modes above output Nyquist. Use the
+            // work-conjugate pressure integral, not an endpoint trapezoid.
+            half_impedance=canonical_.load_impedance();
+            free_drop=lung_pressure_-cavity-canonical_.load_pressure()+half_impedance*mean_flow_;
+        }
         double flow = orifice_flow(area, free_drop, half_impedance, air_);
         double fluctuation = flow - mean_flow_;
 
@@ -604,7 +634,17 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
             nostrils += resonator_.nostril_output[mode] * amplitude;
             throat += resonator_.wall_output[mode] * amplitude;
         }
+        if (options_.canonical_motion) {
+            canonical_.inject(fluctuation);next_pressure=canonical_.pressure();
+            const AcousticNetwork& layout=networks_[current_];
+            lips=canonical_.flow_derivative(layout.lip_branch(),period);
+            nostrils=canonical_.flow_derivative(layout.nostril_branch(),period);
+            for (std::size_t node=0;node<layout.oral_sections();++node) { throat+=canonical_.flow_derivative(layout.wall_branch(node),period); }
+        }
         transglottal_ = lung_pressure_ - cavity - 0.5 * (glottal_pressure_ + next_pressure);
+        if (options_.canonical_motion) {
+            transglottal_=lung_pressure_-cavity-canonical_.load_pressure()-canonical_.load_impedance()*fluctuation;
+        }
         glottal_pressure_ = next_pressure;
         glottal_flow_ = flow;
         mean_stage_ += mean_coefficient_ * (flow - mean_stage_);
@@ -647,7 +687,7 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
         air_path_.process(radiated, microphone);
         if (trace_begin_ >= 0 && position_ >= trace_begin_ && trace_.size() < trace_.capacity()) {
             trace_.push_back(TraceSample{.lips = lips, .nostrils = nostrils, .throat = throat,
-                                         .glottal_pressure = next_pressure, .energy = resonator_.energy(),
+                                         .glottal_pressure = next_pressure, .energy = options_.canonical_motion ? canonical_.energy() : resonator_.energy(),
                                          .modes = modes, .glottal_area = area, .glottal_flow = flow,
                                          .tension = tension_, .geometry_lip_metric_jump = geometry_lip_metric_jump_,
                                          .geometry_lip_projection_jump = geometry_lip_projection_jump_,

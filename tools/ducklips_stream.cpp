@@ -16,22 +16,26 @@ int main(int argc, char** argv) {
     static_assert(std::endian::native == std::endian::little);
     ducklips::VoiceProfile voice = ducklips::baritone_voice();
     double speed = 1.0;
+    ducklips::SynthesisOptions options{};
     std::string error{};
     for (int i = 1; i < argc; ++i) {
         std::string flag = argv[i];
-        if (flag == "--body" && i + 1 < argc) {
+        if (flag == "--canonical-motion") {
+            options.canonical_motion=true;
+        } else if (flag == "--body" && i + 1 < argc) {
             if (!ducklips::load_body_config(argv[++i], voice, error)) { std::cerr << error << '\n'; return 2; }
         } else if (flag == "--speed" && i + 1 < argc) {
             std::istringstream value(argv[++i]);
             std::string extra{};
             if (!(value >> speed) || (value >> extra) || !std::isfinite(speed) || speed < .25 || speed > 4) { return 2; }
         } else {
-            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] < nudges > stereo.f32\n";
+            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] < nudges > stereo.f32\n";
             return 2;
         }
     }
     ducklips::NudgeStream stream{};
-    stream.prepare(voice, speed);
+    stream.prepare(voice, speed,4096,options);
+    std::cerr << "acoustic path: " << (options.canonical_motion ? "canonical moving network" : "compact modal") << '\n';
     std::array<float, 960> chunk{};
     std::string line{};
     std::size_t line_number = 0;

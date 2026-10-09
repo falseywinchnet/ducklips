@@ -4,6 +4,7 @@
 #include "ducklips/articulation.hpp"
 #include "ducklips/cues.hpp"
 #include "ducklips/modal.hpp"
+#include "ducklips/canonical_speech.hpp"
 #include "ducklips/sources.hpp"
 #include "ducklips/tree_operator.hpp"
 #include "ducklips/voice.hpp"
@@ -20,6 +21,8 @@ namespace ducklips {
 enum class OutputTap { microphones, lips, glottal_source };
 
 struct SynthesisOptions final {
+    bool canonical_motion{false}; // experimental full physical moving-state path
+    std::size_t canonical_substeps{8};
     SynthesisRate rate{};
     std::size_t oral_sections{64};
     std::size_t nasal_sections{24};
@@ -147,6 +150,8 @@ private:
     TreeOperator matrix_{};
     ModalSolver solver_{};
     ModalResonator resonator_{};
+    CanonicalSpeech canonical_{};
+    bool canonical_ready_{false};
     TwoMassGlottis glottis_{};
     IntraoralPressure intraoral_{};
     TurbulenceNoise aspiration_noise_{};
