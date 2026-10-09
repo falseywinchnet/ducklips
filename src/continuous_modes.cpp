@@ -6,6 +6,12 @@
 namespace ducklips {
 void ContinuousModesReference::prepare(std::size_t modes) {
     if (modes==0 || modes>4096) { throw std::invalid_argument("invalid continuous mode count"); }
+    for (std::size_t i=0;i<3;++i) {
+        GaussSample& sample=gauss_[i];sample.omega.resize(modes);sample.pressure.resize(modes*modes);
+        sample.flow.resize(modes*modes);sample.diagonal.resize(modes);
+        sample.cosine.resize(modes);sample.sine.resize(modes);
+        gauss_stage_[i].resize(2*modes);gauss_next_[i].resize(2*modes);
+    }
     modes_=modes;state.assign(2*modes,0.0);
     for (std::vector<double>& stage:k_) { stage.resize(2*modes); }
     work_.resize(2*modes);rotated_.resize(2*modes);dual_.resize(modes);
@@ -88,4 +94,57 @@ void ContinuousModesReference::advance(const ModalMotionSample& first,const Moda
         state[j]=whole_sin_[i]*a+whole_cos_[i]*b;
     }
 }
+void ContinuousModesReference::advance_gauss(const ModalMotionSample& first,const ModalMotionSample& middle,
+                                             const ModalMotionSample& last,double dt) noexcept {
+    constexpr double root15=3.8729833462074168852;
+    constexpr double nodes[3]={.5-root15/10,.5,.5+root15/10};
+    constexpr double weights[3]={5.0/18,4.0/9,5.0/18};
+    constexpr double tableau[3][3]={
+        {5.0/36,2.0/9-root15/15,5.0/36-root15/30},
+        {5.0/36+root15/24,2.0/9,5.0/36-root15/24},
+        {5.0/36+root15/30,2.0/9+root15/15,5.0/36}};
+    const bool canonical=first.flow_transport.empty();
+    std::array<ModalMotionSample,3> views;
+    for (std::size_t stage=0;stage<3;++stage) {
+        GaussSample& sample=gauss_[stage];const double c=nodes[stage],square=c*c,cube=square*c;
+        const double l0=2*square-3*c+1,lm=4*c-4*square,l1=2*square-c;
+        for (std::size_t i=0;i<modes_;++i) {
+            sample.omega[i]=l0*first.angular_frequency[i]+lm*middle.angular_frequency[i]+l1*last.angular_frequency[i];
+            const double phase=dt*((2*cube/3-1.5*square+c)*first.angular_frequency[i]
+                +(2*square-4*cube/3)*middle.angular_frequency[i]+(2*cube/3-.5*square)*last.angular_frequency[i]);
+            sample.cosine[i]=std::cos(phase);sample.sine[i]=std::sin(phase);
+            if (canonical) { sample.diagonal[i]=l0*first.flow_diagonal[i]+lm*middle.flow_diagonal[i]+l1*last.flow_diagonal[i]; }
+        }
+        // The center is already supplied. Only the two outer matrices need
+        // interpolation; all three Picard passes reuse the same coefficients.
+        if (stage==1) { views[stage]=middle; }
+        else {
+            for (std::size_t i=0;i<modes_*modes_;++i) {
+                sample.pressure[i]=l0*first.pressure_transport[i]+lm*middle.pressure_transport[i]+l1*last.pressure_transport[i];
+                if (!canonical) { sample.flow[i]=l0*first.flow_transport[i]+lm*middle.flow_transport[i]+l1*last.flow_transport[i]; }
+            }
+            views[stage]={sample.omega,sample.pressure,canonical ? std::span<const double>{} : std::span<const double>{sample.flow},sample.diagonal};
+        }
+        coupling(views[stage],state,sample.cosine,sample.sine,gauss_stage_[stage]);
+    }
+    for (std::size_t iteration=0;iteration<2;++iteration) {
+        for (std::size_t stage=0;stage<3;++stage) {
+            for (std::size_t i=0;i<state.size();++i) {
+                work_[i]=state[i]+dt*(tableau[stage][0]*gauss_stage_[0][i]
+                    +tableau[stage][1]*gauss_stage_[1][i]+tableau[stage][2]*gauss_stage_[2][i]);
+            }
+            coupling(views[stage],work_,gauss_[stage].cosine,gauss_[stage].sine,gauss_next_[stage]);
+        }
+        gauss_stage_.swap(gauss_next_);
+    }
+    for (std::size_t i=0;i<modes_;++i) {
+        const std::size_t j=modes_+i;
+        const double a=state[i]+dt*(weights[0]*gauss_stage_[0][i]+weights[1]*gauss_stage_[1][i]+weights[2]*gauss_stage_[2][i]);
+        const double b=state[j]+dt*(weights[0]*gauss_stage_[0][j]+weights[1]*gauss_stage_[1][j]+weights[2]*gauss_stage_[2][j]);
+        const double phase=dt*(first.angular_frequency[i]+4*middle.angular_frequency[i]+last.angular_frequency[i])/6;
+        const double cosine=std::cos(phase),sine=std::sin(phase);
+        state[i]=cosine*a-sine*b;state[j]=sine*a+cosine*b;
+    }
+}
+
 }

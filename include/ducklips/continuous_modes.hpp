@@ -33,12 +33,22 @@ public:
     // nonnegative frequencies and finite positive dt. Allocation-free.
     void advance(const ModalMotionSample& first,const ModalMotionSample& middle,
                  const ModalMotionSample& last,double dt) noexcept;
+    // Three-node Gauss quadrature in the same exact acoustic frame. Two
+    // Picard corrections retain terms through cubic order in coupling.
+    // This is not the fully converged sixth-order implicit Gauss method.
+    void advance_gauss(const ModalMotionSample& first,const ModalMotionSample& middle,
+                       const ModalMotionSample& last,double dt) noexcept;
     // [a_0...a_n-1, b_0...b_n-1], energy = dot(state,state)/2.
     std::vector<double> state{};
 private:
     void coupling(const ModalMotionSample& motion,std::span<const double> input,
                   std::span<const double> cosine,std::span<const double> sine,
                   std::span<double> output) noexcept;
+    struct GaussSample final {
+        std::vector<double> omega,pressure,flow,diagonal,cosine,sine;
+    };
+    std::array<GaussSample,3> gauss_{};
+    std::array<std::vector<double>,3> gauss_stage_{},gauss_next_{};
     std::size_t modes_{};
     std::array<std::vector<double>,4> k_{};
     std::vector<double> work_{},rotated_{},dual_{};

@@ -16,11 +16,19 @@ def sha(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--out',type=Path,required=True)
+    p.add_argument('--frequency-scale',type=float,default=1.0)
+    p.add_argument('--accuracy-only',action='store_true')
     p.add_argument('--binary',type=Path,default=Path('build/ducklips_motion_segment_probe'))
     p.add_argument('--transport-binary',type=Path,default=Path('build/ducklips_modal_transport_probe'))
     args=p.parse_args();args.out.mkdir(parents=True,exist_ok=True)
     binary=args.binary.resolve();transport=args.transport_binary.resolve()
-    network=MovingNetwork();n=network.n;interval=.001;cells=round(network.duration/interval);samples=48
+    if not np.isfinite(args.frequency_scale) or not 0<args.frequency_scale<=4:raise SystemExit('Invalid frequency scale')
+    network=MovingNetwork()
+    # Uniformly shorten lengths: C scales inversely and G directly, while
+    # normalized mode shapes stay fixed. Parameter rates retain their meaning.
+    network.c0/=args.frequency_scale;network.g0*=args.frequency_scale
+    network.k0*=args.frequency_scale;network.omega*=args.frequency_scale
+    n=network.n;interval=.001;cells=round(network.duration/interval);samples=48
     knot_times=np.arange(-2,cells+3)*interval
     operators=[operator(network,t) for t in knot_times]
     source=args.out/'physical-knots.fixture';output=args.out/'physical-knots.f64'
@@ -49,10 +57,10 @@ def main():
         physical=np.array([operator(network,t)[1]@x for t,x in zip(times,state)])
         error=float(np.max(np.linalg.norm(physical-reference,axis=1))/np.linalg.norm(network.initial))
         comparisons.append({'initial_condition':label,'max_relative_state_error':error,'reference':reference_report})
-    timings=[json.loads(subprocess.check_output([str(binary),'--benchmark',str(n)])) for n in [20,24,32] for _ in range(3)]
-    construction=[json.loads(subprocess.check_output([str(transport),'--benchmark',str(n)])) for n in [20,24,32] for _ in range(3)]
+    timings=[] if args.accuracy_only else [json.loads(subprocess.check_output([str(binary),'--benchmark',str(n)])) for n in [20,24,32] for _ in range(3)]
+    construction=[] if args.accuracy_only else [json.loads(subprocess.check_output([str(transport),'--benchmark',str(n)])) for n in [20,24,32] for _ in range(3)]
     budget=[]
-    for n in [20,24,32]:
+    for n in ([] if args.accuracy_only else [20,24,32]):
         seconds=max(t['wall_seconds'] for t in timings if t['modes']==n)+max(t['wall_seconds'] for t in construction if t['modes']==n)
         budget.append({'modes':n,'sum_of_separate_worst_wall_seconds':seconds,'equivalent_realtime_multiple':5/seconds})
     files=['include/ducklips/continuous_modes.hpp','src/continuous_modes.cpp','src/real_dot.hpp',
@@ -60,14 +68,15 @@ def main():
            'src/motion_segment.cpp','tools/motion_segment_probe.cpp','tools/modal_transport_probe.cpp',
            'tools/verify_motion_segment.py','tools/canonical_motion_reference.py']
     report={'schema':1,'scope':'Native physical-rate construction at 1kHz, compact coefficient interpolation, and unforced acoustic stepping; isolated gradient modes. Timing excludes geometry/eigenbasis solving, source, physical losses and microphone.',
-            'lookahead_seconds':.003,'command_scheduler':'Not implemented; diagnostic supplies future knots',
+            'frequency_scale':args.frequency_scale,'maximum_control_knot_frequency_hz':float(max(np.max(entry[3]) for entry in operators)/(2*np.pi)),
+            'acoustic_step':'advance_gauss: three nodes, two Picard corrections','accuracy_only':args.accuracy_only,'lookahead_seconds':.003,'command_scheduler':'Not implemented; diagnostic supplies future knots',
             'platform':platform.platform(),'binary_sha256':sha(binary),'transport_binary_sha256':sha(transport),
             'source_sha256':{f:sha(f) for f in files},'comparisons':comparisons,
             'interpolation_and_step_timings':timings,'physical_rate_construction_timings':construction,
             'summed_cost_not_complete_speech_benchmark':budget}
     (args.out/'verification.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
     if any(c['max_relative_state_error']>1e-6 for c in comparisons):raise SystemExit('Native motion segment accuracy gate failed')
-    if min(t['realtime_multiple'] for t in timings)<10 or min(t['equivalent_realtime_multiple'] for t in budget)<10:
+    if not args.accuracy_only and (min(t['realtime_multiple'] for t in timings)<10 or min(t['equivalent_realtime_multiple'] for t in budget)<10):
         raise SystemExit('Native motion segment cost below 10x: investigate representation')
 
 if __name__=='__main__':main()

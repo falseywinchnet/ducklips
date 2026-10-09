@@ -1,0 +1,34 @@
+{
+  "schema": 1,
+  "scope": "Exact source-history augmentation for a moving lossless acoustic network.\n\nReference only: fixed series-source locations, no branch-specific losses,\nclosure or speech quality claim. Generates numerical receipts, not audio.\n",
+  "cases": [
+    {
+      "moving": false,
+      "full_states": 15,
+      "augmented_states": 12,
+      "series_source_count": 2,
+      "residual_rank": 2,
+      "nominal_divergence_of_source_residual": 3.3192336417240805e-12,
+      "augmented_max_relative_state_error": 8.59674472255357e-11,
+      "gradient_only_pressure_rms_relative_error": 1.843796855471792e-11,
+      "max_energy_balance_residual": 4.295286348821037e-12,
+      "maximum_energy": 0.06575520276436889,
+      "final_wall_work": 0.0,
+      "final_source_work": 0.04534282200904111
+    },
+    {
+      "moving": true,
+      "full_states": 15,
+      "augmented_states": 12,
+      "series_source_count": 2,
+      "residual_rank": 2,
+      "nominal_divergence_of_source_residual": 3.3192336417240805e-12,
+      "augmented_max_relative_state_error": 2.8986287865718894e-10,
+      "gradient_only_pressure_rms_relative_error": 0.010052011210088509,
+      "max_energy_balance_residual": 3.888046135047674e-12,
+      "maximum_energy": 0.0311605067391832,
+      "final_wall_work": -0.0015226327902226045,
+      "final_source_work": 0.02224117173720488
+    }
+  ]
+}

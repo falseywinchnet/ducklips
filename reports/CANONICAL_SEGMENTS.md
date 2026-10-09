@@ -155,3 +155,27 @@ Production PCM and the preserved enhanced spectrogram are unchanged here.
 Validation: core Release 7/7, core ASan/UBSan 7/7, and surface Release 9/9
 CTest suites pass. The native physical-knot/segment/acoustic verifier passes
 its retained accuracy and component-cost gates.
+
+## Subsequent integration status
+
+The retained 4 kHz receipt above is not a wideband accuracy claim. Shortening
+the reference network to reach 11.96 kHz made the RK4 high-mode case fail at
+1.20e-5. Three-point Gauss interaction quadrature with two Picard corrections
+passes the native 1 kHz control-knot accuracy test (worst case 7.01e-7), but
+its summed component cost fails the 10x requirement at 24 and 32 modes.
+These rejected receipts are `canonical_wideband_rk4_rejected.json` and
+`gauss_wideband_cost_rejected.json`. No accuracy threshold was relaxed.
+The segment probe now exercises `advance_gauss`; reproducing the earlier
+RK4 receipt requires its recorded source revision.
+
+Performance work is deferred at the user's explicit request. Actual speech
+integration now proceeds through the full canonical network with source
+history and causal losses: see [CANONICAL_SPEECH.md](CANONICAL_SPEECH.md).
+
+The source-history oracle verifies that retaining two independent source
+impulses reproduces the moving lossless fixture to 2.90e-10 relative state
+error; dropping those residual histories causes about 1% pressure RMS error.
+That small augmentation assumes fixed source locations and no branch-specific
+losses. The integrated speech path therefore retains full branch momentum
+and loss memories. See `series_momentum_reference.json` and
+`tools/series_momentum_reference.py`.

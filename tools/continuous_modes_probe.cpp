@@ -26,6 +26,10 @@ void operator delete(void* pointer) noexcept { std::free(pointer); }
 void operator delete[](void* pointer) noexcept { std::free(pointer); }
 
 namespace {
+bool use_gauss=false;
+void advance(ducklips::ContinuousModesReference& solver,const ducklips::ModalMotionSample& a,const ducklips::ModalMotionSample& b,const ducklips::ModalMotionSample& c,double dt) {
+    if (use_gauss) { solver.advance_gauss(a,b,c,dt); } else { solver.advance(a,b,c,dt); }
+}
 constexpr double pi=3.14159265358979323846;
 void require(bool okay,const char* message) { if (!okay) { throw std::runtime_error(message); } }
 struct Motion final {
@@ -58,8 +62,8 @@ void fixture(const char* input,const char* output,bool canonical=false) {
             for (Motion* motion:{&first,&middle,&last}) {
                 for (std::size_t i=0;i<n;++i) { motion->diagonal[i]=motion->flow[i*n+i]+motion->pressure[i*n+i]; }
             }
-            solver.advance(first.canonical_view(),middle.canonical_view(),last.canonical_view(),dt);
-        } else { solver.advance(first.view(),middle.view(),last.view(),dt); }
+            advance(solver,first.canonical_view(),middle.canonical_view(),last.canonical_view(),dt);
+        } else { advance(solver,first.view(),middle.view(),last.view(),dt); }
         out.write(reinterpret_cast<const char*>(solver.state.data()),static_cast<std::streamsize>(2*n*sizeof(double)));
     }
     require(bool(out),"failed output");
@@ -105,13 +109,13 @@ void dense_rotation_test(std::size_t n) {
         const double a=expected[i],b=expected[n+i];expected[i]=c*a-s*b;expected[n+i]=s*a+c*b;
     }
     const std::size_t before=allocations.load();
-    for (int i=0;i<480;++i) { solver.advance(motion.view(),motion.view(),motion.view(),1.0/48000); }
+    for (int i=0;i<480;++i) { advance(solver,motion.view(),motion.view(),motion.view(),1.0/48000); }
     require(allocations.load()==before,"continuous acoustic step allocates");
     for (std::size_t i=0;i<2*n;++i) { require(std::abs(solver.state[i]-expected[i])<1e-10,"dense rotation mismatch"); }
     const std::vector<double> full=solver.state;
     solver.state=initial;
     const std::size_t canonical_before=allocations.load();
-    for (int i=0;i<480;++i) { solver.advance(motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),1.0/48000); }
+    for (int i=0;i<480;++i) { advance(solver,motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),1.0/48000); }
     require(allocations.load()==canonical_before,"canonical acoustic step allocates");
     for (std::size_t i=0;i<2*n;++i) {
         require(std::abs(solver.state[i]-expected[i])<1e-10,"dense canonical rotation mismatch");
@@ -123,7 +127,7 @@ void tests() {
     ducklips::ContinuousModesReference solver;solver.prepare(1);
     Motion motion(1);motion.omega[0]=2*pi*12000;
     solver.state={.3,.7};
-    for (int i=0;i<48000;++i) { solver.advance(motion.view(),motion.view(),motion.view(),1.0/48000); }
+    for (int i=0;i<48000;++i) { advance(solver,motion.view(),motion.view(),motion.view(),1.0/48000); }
     require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-std::complex<double>(.3,.7))<1e-10,
             "stationary acoustic rotation accumulated phase bias");
     // Independently known phase integral of a quadratic chirp; zero coupling.
@@ -135,7 +139,7 @@ void tests() {
             const double t=(i+.5*stage)*dt;
             sample->omega[0]=2*pi*(300+4000*t+7000*t*t);++stage;
         }
-        solver.advance(first.view(),middle.view(),last.view(),dt);
+        advance(solver,first.view(),middle.view(),last.view(),dt);
     }
     const double phase=2*pi*(300*duration+2000*duration*duration+7000*duration*duration*duration/3);
     const std::complex<double> expected=std::exp(std::complex<double>(0,phase))*std::complex<double>(.3,.7);
@@ -144,7 +148,7 @@ void tests() {
     // trigonometric fallback against the independently integrated phase.
     for (double correction:{-0.001001,-0.001,0.0,0.001,0.001001,0.03}) {
         first.omega[0]=12000;middle.omega[0]=13000;last.omega[0]=12000+4*correction/dt;
-        solver.state={.3,.7};solver.advance(first.view(),middle.view(),last.view(),dt);
+        solver.state={.3,.7};advance(solver,first.view(),middle.view(),last.view(),dt);
         const double whole=dt*(first.omega[0]+4*middle.omega[0]+last.omega[0])/6;
         const std::complex<double> exact_phase=std::exp(std::complex<double>(0,whole))*std::complex<double>(.3,.7);
         require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact_phase)<1e-14,"phase reuse/fallback mismatch");
@@ -152,12 +156,12 @@ void tests() {
     // Uniform moving metric has an independently derived exact propagator.
     motion.pressure[0]=-7;motion.flow[0]=7;motion.omega[0]=2*pi*1234;
     solver.state={.3,.7};
-    for (int i=0;i<4800;++i) { solver.advance(motion.view(),motion.view(),motion.view(),dt); }
+    for (int i=0;i<4800;++i) { advance(solver,motion.view(),motion.view(),motion.view(),dt); }
     ducklips::UniformAreaModeStep exact;exact.prepare(motion.omega[0],0,14,duration);
     require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact.apply({.3,.7}))<1e-7,
             "uniform moving transport mismatch");
     solver.state={.3,.7};motion.diagonal[0]=motion.flow[0]+motion.pressure[0];
-    for (int i=0;i<4800;++i) { solver.advance(motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),dt); }
+    for (int i=0;i<4800;++i) { advance(solver,motion.canonical_view(),motion.canonical_view(),motion.canonical_view(),dt); }
     require(std::abs(std::complex<double>(solver.state[0],solver.state[1])-exact.apply({.3,.7}))<1e-7,
             "canonical uniform moving transport mismatch");
     std::cout<<"Continuous modes dense rotations, allocation check, stationary phase, quadratic chirp and uniform metric reference passed\n";
@@ -187,8 +191,8 @@ void benchmark(std::size_t n,bool canonical=false) {
             }
             ++stage;
         }
-        if (canonical) { solver.advance(first.canonical_view(),middle.canonical_view(),last.canonical_view(),1.0/48000); }
-        else { solver.advance(first.view(),middle.view(),last.view(),1.0/48000); }
+        if (canonical) { advance(solver,first.canonical_view(),middle.canonical_view(),last.canonical_view(),1.0/48000); }
+        else { advance(solver,first.view(),middle.view(),last.view(),1.0/48000); }
     }
     const double seconds=std::chrono::duration<double>(std::chrono::steady_clock::now()-begin).count();
     double checksum=0;for (double v:solver.state) { checksum+=v; }
@@ -199,7 +203,7 @@ void benchmark(std::size_t n,bool canonical=false) {
 }
 int main(int argc,char** argv) {
     try {
-        if (argc==1) { tests(); }
+        if (argc==1) { tests();use_gauss=true;tests(); }
         else if (argc==4 && std::string(argv[1])=="--fixture") { fixture(argv[2],argv[3]); }
         else if (argc==4 && std::string(argv[1])=="--canonical-fixture") { fixture(argv[2],argv[3],true); }
         else if (argc==3 && std::string(argv[1])=="--canonical-benchmark") { benchmark(std::stoul(argv[2]),true); }

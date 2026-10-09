@@ -52,7 +52,7 @@ void fixture(const char* input,const char* output) {
         require(segment.evaluate(0,first),"invalid initial frame");
         for (std::size_t sample=0;sample<samples;++sample) {
             require(segment.evaluate((double(sample)+.5)/samples,middle) && segment.evaluate(double(sample+1)/samples,last),"invalid interpolated frame");
-            solver.advance(first.view(),middle.view(),last.view(),interval/samples);
+            solver.advance_gauss(first.view(),middle.view(),last.view(),interval/samples);
             std::swap(first,last);
             out.write(reinterpret_cast<const char*>(solver.state.data()),static_cast<std::streamsize>(2*n*sizeof(double)));
         }
@@ -127,7 +127,7 @@ void benchmark(std::size_t n) {
         require(segment.evaluate(0,first),"benchmark frame rejected");
         for (int sample=0;sample<48;++sample) {
             require(segment.evaluate((sample+.5)/48,middle) && segment.evaluate((sample+1.0)/48,last),"benchmark interpolation rejected");
-            solver.advance(first.view(),middle.view(),last.view(),1.0/48000);
+            solver.advance_gauss(first.view(),middle.view(),last.view(),1.0/48000);
             std::swap(first,last);
         }
         fill(knots[head],n,(double(cell)+4)*.001,base);
