@@ -1,0 +1,280 @@
+{
+  "scope": "open linear-span model in the symmetric tissue subspace; model onset, not measured physiological threshold",
+  "base_commit": "dc04d2abbf49ba076774c0602d54144cd2bfc2bc",
+  "constitutive": [
+    {
+      "input": [
+        3e-06,
+        4e-06,
+        300.0,
+        -100.0
+      ],
+      "maximum_scaled_errors": {
+        "inertia": 6.155683434694137e-14,
+        "resistance": 7.038179561562799e-12
+      }
+    },
+    {
+      "input": [
+        3.7e-06,
+        4.2e-06,
+        120.0,
+        -3.5
+      ],
+      "maximum_scaled_errors": {
+        "inertia": 7.171257997721273e-14,
+        "resistance": 3.0037354372811955e-11
+      }
+    },
+    {
+      "input": [
+        4.5e-06,
+        2e-06,
+        900.0,
+        -200.0
+      ],
+      "maximum_scaled_errors": {
+        "inertia": 2.1909358269676815e-14,
+        "resistance": 3.3992783596795226e-13
+      }
+    }
+  ],
+  "independent_ode_quadrature_refinement": 2.38905211396314e-14,
+  "tangent": {
+    "steps": [
+      {
+        "dt": 1e-09,
+        "maximum_scaled_error": 0.03221159315427423,
+        "accepted": true,
+        "initial": [
+          300,
+          -100,
+          3e-06,
+          4e-06,
+          0.00015000000000000001,
+          0.00010000000000000002,
+          7.000000000000002e-05,
+          0.0002,
+          -9.999999999999998e-05
+        ],
+        "final": [
+          302.05496689089796,
+          -99.84200249082852,
+          3.0000002000009105e-06,
+          3.999999899999713e-06,
+          0.0001499965908036475,
+          0.00010000114982739388,
+          6.999650446791364e-05,
+          0.00020000091033853837,
+          -0.00010000028686356447
+        ],
+        "maximum_step_work_residual": 2.7741789513347375e-20,
+        "maximum_energy_roundoff_scale": 2.1293524594466618e-19,
+        "roundoff_limited_steps": 1
+      },
+      {
+        "dt": 5e-10,
+        "maximum_scaled_error": 0.01610471258783131,
+        "accepted": true,
+        "initial": [
+          300,
+          -100,
+          3e-06,
+          4e-06,
+          0.00015000000000000001,
+          0.00010000000000000002,
+          7.000000000000002e-05,
+          0.0002,
+          -9.999999999999998e-05
+        ],
+        "final": [
+          301.027581908096,
+          -99.92108985496813,
+          3.0000001000002274e-06,
+          3.999999949999927e-06,
+          0.00014999829724784188,
+          0.00010000057487985141,
+          6.999825245599983e-05,
+          0.0002000004543481792,
+          -0.00010000014581891413
+        ],
+        "maximum_step_work_residual": 5.748840633758187e-22,
+        "maximum_energy_roundoff_scale": 2.1293473269956248e-19,
+        "roundoff_limited_steps": 1
+      },
+      {
+        "dt": 2.5e-10,
+        "maximum_scaled_error": 0.008052084030308328,
+        "accepted": true,
+        "initial": [
+          300,
+          -100,
+          3e-06,
+          4e-06,
+          0.00015000000000000001,
+          0.00010000000000000002,
+          7.000000000000002e-05,
+          0.0002,
+          -9.999999999999998e-05
+        ],
+        "final": [
+          300.5138155484332,
+          -99.96056706820562,
+          3.000000050000057e-06,
+          3.999999974999982e-06,
+          0.00014999914908547972,
+          0.00010000028743145906,
+          6.9999126283611e-05,
+          0.0002000002269688013,
+          -0.00010000007350617988
+        ],
+        "maximum_step_work_residual": 3.0543999547690003e-21,
+        "maximum_energy_roundoff_scale": 2.1293447621179076e-19,
+        "roundoff_limited_steps": 1
+      }
+    ],
+    "richardson_maximum_scaled_error": 5.445272146539346e-07
+  },
+  "threshold": [
+    {
+      "quadrature_order": 24,
+      "jacobian_step": 0.001,
+      "pressure_Pa": 870.7671585539341,
+      "frequency_Hz": 147.32030090258533
+    },
+    {
+      "quadrature_order": 48,
+      "jacobian_step": 0.0005,
+      "pressure_Pa": 870.7669371605916,
+      "frequency_Hz": 147.32030420193198
+    }
+  ],
+  "modes": [
+    {
+      "pressure_Pa": 700,
+      "reference_growth_s": -10.573390035808533,
+      "reference_frequency_Hz": 146.45169058311606,
+      "native": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "growth_s": -13.735498932728925,
+          "frequency_Hz": 146.6263971371156,
+          "relative_endpoint_error": 0.006811246457782499,
+          "roundoff_limited_steps": [
+            200,
+            200
+          ],
+          "maximum_step_work_residual": 5.494067454128206e-19
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "growth_s": -12.153665280624327,
+          "frequency_Hz": 146.53943191797345,
+          "relative_endpoint_error": 0.003408362370268882,
+          "roundoff_limited_steps": [
+            400,
+            400
+          ],
+          "maximum_step_work_residual": 1.8391202867258996e-19
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "growth_s": -11.363366636278894,
+          "frequency_Hz": 146.49565420504933,
+          "relative_endpoint_error": 0.0017047408472113214,
+          "roundoff_limited_steps": [
+            800,
+            800
+          ],
+          "maximum_step_work_residual": 3.898998535329951e-20
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        1.9983926935694833,
+        1.9993434050955063
+      ],
+      "richardson_growth_s": -10.57306799193346,
+      "richardson_frequency_Hz": 146.45187649212522
+    },
+    {
+      "pressure_Pa": 1400,
+      "reference_growth_s": 19.75520838872078,
+      "reference_frequency_Hz": 148.76509969201663,
+      "native": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "growth_s": 13.179014934201481,
+          "frequency_Hz": 148.89805160226493,
+          "relative_endpoint_error": 0.008020774014130918,
+          "roundoff_limited_steps": [
+            200,
+            200
+          ],
+          "maximum_step_work_residual": 8.504210790433175e-19
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "growth_s": 16.47462579097022,
+          "frequency_Hz": 148.8326408990907,
+          "relative_endpoint_error": 0.004013323832966125,
+          "roundoff_limited_steps": [
+            400,
+            400
+          ],
+          "maximum_step_work_residual": 3.7968251860674013e-19
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "growth_s": 18.11579979217284,
+          "frequency_Hz": 148.79901421692588,
+          "relative_endpoint_error": 0.002008920760387421,
+          "roundoff_limited_steps": [
+            800,
+            800
+          ],
+          "maximum_step_work_residual": 6.469214134654719e-20
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        1.9985364620335184,
+        1.997751186658131
+      ],
+      "richardson_growth_s": 19.75697379337546,
+      "richardson_frequency_Hz": 148.76538753476106
+    }
+  ],
+  "hashes": {
+    "tools/continuous_phonation_validation.py": "6e12870aa3612f3f690cdb710c878cde921bf0b37a764b34276e024c49ef791e",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/continuous_phonation_modal_experiment.py": "7b5e9482e4b9747ee4152f20277380593d36ed26f4ed5f9fb3b5d6d53924f1f0",
+    "tools/continuous_phonation_step_probe.cpp": "645756465ade0793d40a63187d2f119b6941cb0030dfad07e73665ae365f204f",
+    "tools/continuous_phonation_controls.cpp": "a4183d5de864618fa3397bbb2084e1b9984d378d3c6f859969cb8b9944339ad5",
+    "build/ducklips_continuous_phonation_step_probe": "90046cff2d5891b0ca66fc816f67a797cfcdb3b5d229c4aa134c3338e6878afa",
+    "build/ducklips_contour_profile_limit_probe": "5d3bfa2fadf17b878f5decceb90af6e18f04d25a64c35013625633f521c5d9cb",
+    "src/continuous_glottis.cpp": "9bdc42ff82091e1ae8fdcf1aaa910a1c97857004310d4a4a720316fc03613439",
+    "include/ducklips/continuous_glottis.hpp": "66cb90abdfacc21039579e60fe0ebfec7b5c7ed9a2c6757cdaa5f66b152554ad",
+    "out/continuous-phonation/mode-700-800.jsonl": "d3c66aaac9705aac53bbc58917df4ec921c6ef8afc62830b7c5aaaab72b43ffd",
+    "out/continuous-phonation/mode-1400-200.jsonl": "20909801831782ef5ad46575c6eb2d88838a651b8edd2e133bc5432173e5d40e",
+    "out/continuous-phonation/mode-700-200.jsonl": "8de6282d80b4254c043dbdca4460890fc05f9353a049ecb22e63b072f309d88d",
+    "out/continuous-phonation/mode-1400-800.jsonl": "37fd55ad22ec3b66e770aa0ef8153e31ce33e7749672e3ce6eb7b36b35fee89b",
+    "out/continuous-phonation/mode-1400-400.jsonl": "8650cfbd4c184da25d023b96368f80fbf6b900ac7f475528d4ad740101398597",
+    "out/continuous-phonation/mode-700-400.jsonl": "66617d31e1b9e9a3d260dd777df70a52fc19472b609f3123f989b054cf8c8325",
+    "out/continuous-phonation/mode-700-400.input": "ea167022d483b42de1a956b5b484200f483afa4a2868d6d8d5fdb8a51dbdde53",
+    "out/continuous-phonation/mode-1400-400.input": "b7f8e18b706c3aef72b1c15009b38c3562622d3fe561058a6ab20bcfd3e9b72e",
+    "out/continuous-phonation/mode-1400-800.input": "bf6c24c76e5e6e596f18f2cc75b9e0b20d6b974285d7a7ab332bb9238d3c87d0",
+    "out/continuous-phonation/mode-700-200.input": "ea2a99f1a96063106c76d7804dbdd685603ae9f38f69db1718a777f7ca1af7ab",
+    "out/continuous-phonation/mode-1400-200.input": "ceab922cd1a5fa59b271a0ed1bbe4c4d0c2bb36a6c86cff73814da2d2bfb87c2",
+    "out/continuous-phonation/mode-700-800.input": "6eb32ddfe44f9237d1e3f280fe58ecbb00886708d16277d622a4bb5a7a85fcdd",
+    "out/continuous-phonation/modal-inputs.json": "c0268d80d6080998810bd79c76a5ebdc58574ccbcff9effbc55df5214cd92884",
+    "out/continuous-phonation/constitutive.input": "8a0db86b7fc583eb35bcf10977dfa3a65c42bd9f227ddb732423ea1915fb139b",
+    "out/continuous-phonation/constitutive.jsonl": "23ea56f39cbe1397dbbd8ef550608ddbd58333ad54c716f04b0e3e3506771c45",
+    "out/continuous-phonation/tangent.input": "bbc4c745bd370fc0ac381349873da284f237021172b0e7e522ecba5c1d9ea45d",
+    "out/continuous-phonation/tangent.jsonl": "94682bfa2a6da7b3c52a65d713650531f992f031be01e79d89eed6f1343975c1"
+  }
+}

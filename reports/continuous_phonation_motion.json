@@ -1,0 +1,922 @@
+{
+  "base_commit": "dc04d2abbf49ba076774c0602d54144cd2bfc2bc",
+  "scope": "pressure-driven onset and transient contact cycles; not a settled voice or new speech",
+  "seeds": {
+    "mature_state": [
+      552.7071956063244,
+      -58.763085220984685,
+      1.569153873403823e-06,
+      2.3603063942384476e-06,
+      5.717578562722153e-05,
+      5.851950313356548e-05,
+      5.981967707023075e-05,
+      -0.0009272862004762697,
+      -0.0008378027963934059
+    ],
+    "contact_state": [
+      -294.24215590726214,
+      7.9125749739788045,
+      6.6299851797866545e-06,
+      7.827636504444634e-06,
+      0.00036097289612151205,
+      0.00036461287847149823,
+      0.00036784700982796757,
+      -0.0026865773500757053,
+      -0.0018859546546706294
+    ]
+  },
+  "independent_open_reference": {
+    "coarse": {
+      "scope": "independent open-domain ODE; stops at 1e-8 m2 area before contact, without flooring area or changing equations",
+      "method": "Radau",
+      "rtol": 2e-07,
+      "atol": 2e-09,
+      "maximum_step_s": 0.0001,
+      "pressure_Pa": 1400,
+      "initial_scaled": [
+        0.5527071956063244,
+        -0.05876308522098468,
+        1.569153873403823,
+        2.3603063942384477,
+        0.5717578562722153,
+        0.5851950313356548,
+        0.5981967707023075,
+        -0.9272862004762698,
+        -0.8378027963934058
+      ],
+      "success": true,
+      "message": "A termination event occurred.",
+      "final_time": 0.057901026091988404,
+      "near_contact_event": [
+        0.057901026091988404
+      ],
+      "seconds": 21.231748832855374,
+      "nfev": 22872,
+      "njev": 1571
+    },
+    "fine": {
+      "scope": "independent open-domain ODE; stops at 1e-8 m2 area before contact, without flooring area or changing equations",
+      "method": "Radau",
+      "quadrature_order": 64,
+      "rtol": 1e-08,
+      "atol": 1e-10,
+      "maximum_step_s": 0.0001,
+      "pressure_Pa": 1400,
+      "initial_scaled": [
+        0.5527071956063244,
+        -0.05876308522098468,
+        1.569153873403823,
+        2.3603063942384477,
+        0.5717578562722153,
+        0.5851950313356548,
+        0.5981967707023075,
+        -0.9272862004762698,
+        -0.8378027963934058
+      ],
+      "success": true,
+      "message": "A termination event occurred.",
+      "final_time": 0.057901026094028474,
+      "near_contact_event": [
+        0.057901026094028474
+      ],
+      "seconds": 107.87724941596389,
+      "nfev": 49635,
+      "njev": 3414
+    },
+    "near_contact_time_change_s": 2.0400695022182447e-12,
+    "symmetric": [
+      {
+        "steps": 4000,
+        "dt_s": 1e-05,
+        "maximum_scaled_endpoint_error": 0.0007860808948095301,
+        "receipt": {
+          "complete": true,
+          "steps": 4000,
+          "duration": 0.04,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 2.235191198796116e-14,
+          "maximum_mass_residual": 1.4684110234041347e-20
+        }
+      },
+      {
+        "steps": 8000,
+        "dt_s": 5e-06,
+        "maximum_scaled_endpoint_error": 0.0001965398588395402,
+        "receipt": {
+          "complete": true,
+          "steps": 8000,
+          "duration": 0.04,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 1.392982951209376e-15,
+          "maximum_mass_residual": 3.226004388956808e-20
+        }
+      }
+    ],
+    "symmetric_endpoint_refinement_ratio": 3.9996003836112712,
+    "source_stage": "after roundoff fix, before coordinate rebase; independently verified equations unchanged by rebase"
+  },
+  "developmental_runs": [
+    {
+      "name": "pressure1400-15000",
+      "stage": "before both fixes",
+      "receipt": {
+        "complete": false,
+        "failed_step": 11805,
+        "time": 0.11804999999999999,
+        "area": [
+          3.312254618143889e-06,
+          4.07534167568774e-06
+        ],
+        "effort": [
+          6.547620111918299,
+          -5.1878801170954185
+        ],
+        "maximum_work_residual": 2.3543667015957226e-14,
+        "maximum_mass_residual": 9.461043692197765e-20
+      },
+      "last_saved_state": {
+        "step": 11800,
+        "time": 0.118,
+        "area": [
+          3.401838777473702e-06,
+          4.167941773179107e-06
+        ],
+        "effort": [
+          -7.0516932038333735,
+          -4.323508436996837
+        ],
+        "flow": [
+          0.00016841993630672063,
+          0.00017113731951348056,
+          0.0001738860367213847
+        ],
+        "area_rate": [
+          -0.0017973789845782307,
+          -0.0018531889216049915
+        ],
+        "energy": 1.3938699291741178e-05,
+        "physical_loss": 0.029226330272760156,
+        "numerical_loss": 6.832595051418989e-07,
+        "work": 0.02924095223153364
+      }
+    },
+    {
+      "name": "pressure1400-30000",
+      "stage": "before both fixes",
+      "receipt": {
+        "complete": false,
+        "failed_step": 23647,
+        "time": 0.11823499999999999,
+        "area": [
+          2.1945452830544006e-06,
+          2.9897141090736404e-06
+        ],
+        "effort": [
+          249.3159600990058,
+          -24.151483790115066
+        ],
+        "maximum_work_residual": 4.246603069191224e-15,
+        "maximum_mass_residual": 1.8491622593622934e-19
+      },
+      "last_saved_state": {
+        "step": 23640,
+        "time": 0.11819999999999999,
+        "area": [
+          2.2584743400793354e-06,
+          3.056587244762194e-06
+        ],
+        "effort": [
+          224.41667017982942,
+          -21.954116941381827
+        ],
+        "flow": [
+          0.00010117804285926856,
+          0.00010400333126225734,
+          0.00010687862658756577
+        ],
+        "area_rate": [
+          -0.0018593680359127952,
+          -0.001949861672804011
+        ],
+        "energy": 7.739544227461003e-06,
+        "physical_loss": 0.029499614945561588,
+        "numerical_loss": 4.1736818474934005e-07,
+        "work": 0.02950777185796957
+      }
+    },
+    {
+      "name": "mature-10000",
+      "stage": "roundoff fix, all-step dissipative",
+      "receipt": {
+        "complete": true,
+        "steps": 10000,
+        "duration": 0.1,
+        "pressure": 1400,
+        "rest_area": 3e-06,
+        "maximum_work_residual": 3.1820032719842573e-13,
+        "maximum_mass_residual": 7.63057571467917e-20
+      },
+      "last_saved_state": {
+        "step": 10000,
+        "time": 0.1,
+        "area": [
+          5.103596175861157e-06,
+          4.93717264358711e-06
+        ],
+        "effort": [
+          271.0709885147141,
+          3.711234677138548
+        ],
+        "flow": [
+          0.00022714426873566093,
+          0.00022458988258489736,
+          0.0002220985443628318
+        ],
+        "area_rate": [
+          0.001744617450746705,
+          0.001619145035206709
+        ],
+        "energy": 1.8224839613947297e-05,
+        "physical_loss": 0.025689539965179704,
+        "numerical_loss": 1.0293654239148975e-06,
+        "work": 0.02570539251466553
+      }
+    },
+    {
+      "name": "mature-20000",
+      "stage": "roundoff fix, all-step dissipative",
+      "receipt": {
+        "complete": false,
+        "failed_step": 14257,
+        "time": 0.071285,
+        "area": [
+          8.041684610553985e-07,
+          1.7440269483097871e-06
+        ],
+        "effort": [
+          845.0608332924013,
+          -127.02683105457211
+        ],
+        "maximum_work_residual": 2.3276519600656798e-14,
+        "maximum_mass_residual": 7.426262103378572e-20
+      },
+      "last_saved_state": {
+        "step": 14250,
+        "time": 0.07125000000000001,
+        "area": [
+          8.068606382983184e-07,
+          1.7404418104199457e-06
+        ],
+        "effort": [
+          848.6117631630151,
+          -127.1949787590102
+        ],
+        "flow": [
+          1.622591514830245e-05,
+          1.6374868776584736e-05,
+          1.6431180835914025e-05
+        ],
+        "area_rate": [
+          -0.000159672292420754,
+          2.4172987657929672e-05
+        ],
+        "energy": 9.169372895333174e-07,
+        "physical_loss": 0.01871887921466756,
+        "numerical_loss": 5.058120533262977e-07,
+        "work": 0.01871690030875331
+      }
+    },
+    {
+      "name": "transition-8000",
+      "stage": "roundoff fix, before coordinate rebase",
+      "receipt": {
+        "complete": false,
+        "failed_step": 5774,
+        "time": 0.05774000000000001,
+        "area": [
+          2.9569730620540634e-07,
+          1.3509619384266014e-06
+        ],
+        "effort": [
+          906.6243329766096,
+          -126.60791938210862
+        ],
+        "maximum_work_residual": 4.523464935957122e-14,
+        "maximum_mass_residual": 5.2042068238773736e-20
+      },
+      "last_saved_state": {
+        "step": 5770,
+        "time": 0.0577,
+        "area": [
+          3.8932690678746e-07,
+          1.450873949551497e-06
+        ],
+        "effort": [
+          887.0090765409346,
+          -131.10008388858174
+        ],
+        "flow": [
+          2.5263162319173942e-06,
+          6.286916393605584e-06,
+          1.0127860438353952e-05
+        ],
+        "area_rate": [
+          -0.0024419447284620478,
+          -0.002616327000852464
+        ],
+        "energy": 1.9997915590761066e-06,
+        "physical_loss": 0.015560534887456451,
+        "numerical_loss": 0,
+        "work": 0.015559133023826922
+      }
+    },
+    {
+      "name": "transition-16000",
+      "stage": "roundoff fix, before coordinate rebase",
+      "receipt": {
+        "complete": false,
+        "failed_step": 11550,
+        "time": 0.05775,
+        "area": [
+          2.744753202013418e-07,
+          1.328200684202585e-06
+        ],
+        "effort": [
+          914.0553096858097,
+          -126.06575435689571
+        ],
+        "maximum_work_residual": 4.4287490341687885e-15,
+        "maximum_mass_residual": 8.30820207248261e-20
+      },
+      "last_saved_state": {
+        "step": 11550,
+        "time": 0.05775,
+        "area": [
+          2.744753202013418e-07,
+          1.328200684202585e-06
+        ],
+        "effort": [
+          914.0553096858097,
+          -126.06575435689571
+        ],
+        "flow": [
+          7.670843418256934e-07,
+          4.119814347179299e-06,
+          7.530860271126646e-06
+        ],
+        "area_rate": [
+          -0.0021852611499342395,
+          -0.0023158780682561693
+        ],
+        "energy": 1.7922707131729467e-06,
+        "physical_loss": 0.015560471681608097,
+        "numerical_loss": 0,
+        "work": 0.01555886229709186
+      }
+    },
+    {
+      "name": "rebased-8000",
+      "stage": "both fixes, no subdivision",
+      "receipt": {
+        "complete": false,
+        "failed_step": 6447,
+        "time": 0.06447,
+        "area": [
+          2.2300319918758698e-08,
+          1.1935818561763789e-06
+        ],
+        "effort": [
+          2137.4582494370857,
+          -369.2455185687626
+        ],
+        "maximum_work_residual": 5.5191962111678095e-14,
+        "maximum_mass_residual": 5.8465125695247996e-21
+      },
+      "last_saved_state": {
+        "step": 6440,
+        "time": 0.0644,
+        "area": [
+          2.1004377615636475e-07,
+          1.3994483809367526e-06
+        ],
+        "effort": [
+          1001.7912727131632,
+          -129.24126740810135
+        ],
+        "flow": [
+          5.271775456063192e-08,
+          4.57657554304692e-06,
+          9.259562897776024e-06
+        ],
+        "area_rate": [
+          -0.002911075868782458,
+          -0.0032291822781366306
+        ],
+        "energy": 2.5966962962726635e-06,
+        "physical_loss": 0.017432279373595413,
+        "numerical_loss": 5.204396236949021e-09,
+        "work": 0.01743147961910927
+      }
+    },
+    {
+      "name": "rebased-16000",
+      "stage": "both fixes, no subdivision",
+      "receipt": {
+        "complete": true,
+        "steps": 16000,
+        "duration": 0.08,
+        "pressure": 1400,
+        "rest_area": 3e-06,
+        "maximum_work_residual": 1.4731271757995046e-14,
+        "maximum_mass_residual": 6.948317145445432e-21,
+        "dissipative_transitions": 6
+      },
+      "last_saved_state": {
+        "step": 16000,
+        "time": 0.08,
+        "area": [
+          6.032683297806655e-07,
+          1.8659316173023986e-06
+        ],
+        "effort": [
+          730.3857428735334,
+          -135.48440082223067
+        ],
+        "flow": [
+          1.0589826619371138e-05,
+          1.602469681357646e-05,
+          2.1663602759324626e-05
+        ],
+        "area_rate": [
+          -0.003479092091533421,
+          -0.0038993032887013447
+        ],
+        "energy": 3.425172831391847e-06,
+        "physical_loss": 0.02116757712750552,
+        "numerical_loss": 6.549718092900474e-09,
+        "work": 0.0211676071948359
+      }
+    }
+  ],
+  "driven_contact_refinement": {
+    "duration_s": 0.024,
+    "pressure_Pa": 1400,
+    "runs": [
+      {
+        "receipt": {
+          "complete": true,
+          "mode": "adaptive",
+          "steps": 2400,
+          "duration": 0.024,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 2.7748636721725006e-14,
+          "maximum_mass_residual": 7.107963003668167e-21,
+          "segments": 2402,
+          "minimum_step_s": 5e-06,
+          "dissipative_transitions": 6,
+          "closures": 3,
+          "reopenings": 3,
+          "first_closed_s": 0.0019100000000000002,
+          "first_reopened_s": 0.0023899999999999998
+        },
+        "initial_state": {
+          "step": 0,
+          "time": 0,
+          "area": [
+            6.6299851797866545e-06,
+            7.827636504444634e-06
+          ],
+          "effort": [
+            -294.24215590726214,
+            7.9125749739788045
+          ],
+          "flow": [
+            0.00036097289612151194,
+            0.0003646128784714981,
+            0.00036784700982796746
+          ],
+          "area_rate": [
+            -0.0026865773500757044,
+            -0.0018859546546706294
+          ],
+          "energy": 3.443219089475154e-05,
+          "physical_loss": 0,
+          "numerical_loss": 0,
+          "work": 0
+        },
+        "final_state": {
+          "step": 2400,
+          "time": 0.024,
+          "area": [
+            6.85123572328718e-08,
+            1.2667611318353035e-06
+          ],
+          "effort": [
+            1501.055272875368,
+            -222.1787925822061
+          ],
+          "flow": [
+            -2.883367476044174e-07,
+            3.605942012988366e-06,
+            7.629499460910818e-06
+          ],
+          "area_rate": [
+            -0.0025237464415972907,
+            -0.002769642829189608
+          ],
+          "energy": 2.2499733424621074e-06,
+          "physical_loss": 0.006094750322572585,
+          "numerical_loss": 2.125960944621686e-08,
+          "work": 0.00606258936465749
+        }
+      },
+      {
+        "receipt": {
+          "complete": true,
+          "mode": "adaptive",
+          "steps": 4800,
+          "duration": 0.024,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 1.1607902139498805e-14,
+          "maximum_mass_residual": 6.785362564772486e-21,
+          "segments": 4800,
+          "minimum_step_s": 5e-06,
+          "dissipative_transitions": 6,
+          "closures": 3,
+          "reopenings": 3,
+          "first_closed_s": 0.0019100000000000002,
+          "first_reopened_s": 0.002385
+        },
+        "initial_state": {
+          "step": 0,
+          "time": 0,
+          "area": [
+            6.6299851797866545e-06,
+            7.827636504444634e-06
+          ],
+          "effort": [
+            -294.24215590726214,
+            7.9125749739788045
+          ],
+          "flow": [
+            0.00036097289612151194,
+            0.0003646128784714981,
+            0.00036784700982796746
+          ],
+          "area_rate": [
+            -0.0026865773500757044,
+            -0.0018859546546706294
+          ],
+          "energy": 3.443219089475154e-05,
+          "physical_loss": 0,
+          "numerical_loss": 0,
+          "work": 0
+        },
+        "final_state": {
+          "step": 4800,
+          "time": 0.024,
+          "area": [
+            6.187170716870364e-07,
+            1.8828986280316783e-06
+          ],
+          "effort": [
+            723.7672731906418,
+            -135.0544062400985
+          ],
+          "flow": [
+            1.1305514836652352e-05,
+            1.67703143545831e-05,
+            2.2440895867642987e-05
+          ],
+          "area_rate": [
+            -0.003498545563865005,
+            -0.003921383983618523
+          ],
+          "energy": 3.4739708541089298e-06,
+          "physical_loss": 0.006093752336739761,
+          "numerical_loss": 6.544200080399861e-09,
+          "work": 0.006062800660910806
+        }
+      },
+      {
+        "receipt": {
+          "complete": true,
+          "mode": "adaptive",
+          "steps": 9600,
+          "duration": 0.024,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 6.210310043996969e-16,
+          "maximum_mass_residual": 6.954107409733304e-21,
+          "segments": 9600,
+          "minimum_step_s": 2.5e-06,
+          "dissipative_transitions": 6,
+          "closures": 3,
+          "reopenings": 3,
+          "first_closed_s": 0.00191,
+          "first_reopened_s": 0.0023925
+        },
+        "initial_state": {
+          "step": 0,
+          "time": 0,
+          "area": [
+            6.6299851797866545e-06,
+            7.827636504444634e-06
+          ],
+          "effort": [
+            -294.24215590726214,
+            7.9125749739788045
+          ],
+          "flow": [
+            0.00036097289612151194,
+            0.0003646128784714981,
+            0.00036784700982796746
+          ],
+          "area_rate": [
+            -0.0026865773500757044,
+            -0.0018859546546706294
+          ],
+          "energy": 3.443219089475154e-05,
+          "physical_loss": 0,
+          "numerical_loss": 0,
+          "work": 0
+        },
+        "final_state": {
+          "step": 9600,
+          "time": 0.024,
+          "area": [
+            8.170884116248029e-07,
+            2.1061536607691664e-06
+          ],
+          "effort": [
+            609.09260495475,
+            -119.58963479565554
+          ],
+          "flow": [
+            2.2206543788616638e-05,
+            2.8033277805038086e-05,
+            3.408672348381011e-05
+          ],
+          "area_rate": [
+            -0.003736586346872385,
+            -0.004188045072389812
+          ],
+          "energy": 4.270138221155646e-06,
+          "physical_loss": 0.006091840061520628,
+          "numerical_loss": 1.6753748927221627e-09,
+          "work": 0.006061679684222546
+        }
+      },
+      {
+        "receipt": {
+          "complete": true,
+          "mode": "adaptive",
+          "steps": 19200,
+          "duration": 0.024,
+          "pressure": 1400,
+          "rest_area": 3e-06,
+          "maximum_work_residual": 8.430756093247282e-16,
+          "maximum_mass_residual": 6.734904547406751e-21,
+          "segments": 19200,
+          "minimum_step_s": 1.25e-06,
+          "dissipative_transitions": 6,
+          "closures": 3,
+          "reopenings": 3,
+          "first_closed_s": 0.00191,
+          "first_reopened_s": 0.002395
+        },
+        "initial_state": {
+          "step": 0,
+          "time": 0,
+          "area": [
+            6.6299851797866545e-06,
+            7.827636504444634e-06
+          ],
+          "effort": [
+            -294.24215590726214,
+            7.9125749739788045
+          ],
+          "flow": [
+            0.00036097289612151194,
+            0.0003646128784714981,
+            0.00036784700982796746
+          ],
+          "area_rate": [
+            -0.0026865773500757044,
+            -0.0018859546546706294
+          ],
+          "energy": 3.443219089475154e-05,
+          "physical_loss": 0,
+          "numerical_loss": 0,
+          "work": 0
+        },
+        "final_state": {
+          "step": 19200,
+          "time": 0.024,
+          "area": [
+            8.533192580056674e-07,
+            2.14682308709019e-06
+          ],
+          "effort": [
+            583.4924220686808,
+            -115.23815882219293
+          ],
+          "flow": [
+            2.44653263366274e-05,
+            3.0350694899469102e-05,
+            3.646648591177506e-05
+          ],
+          "area_rate": [
+            -0.003775463274967652,
+            -0.0042316241449905576
+          ],
+          "energy": 4.445742454895317e-06,
+          "physical_loss": 0.006091351884741496,
+          "numerical_loss": 4.264402714862389e-10,
+          "work": 0.0060613658627410765
+        }
+      }
+    ],
+    "successive_scaled_endpoint_differences": [
+      1.151741154428915,
+      0.26666108877128814,
+      0.043579072600746116
+    ],
+    "endpoint_refinement_ratios": [
+      4.31911967259966,
+      6.119017061568278
+    ],
+    "scale": [
+      1000.0,
+      1000.0,
+      1e-06,
+      1e-06,
+      0.0001,
+      0.0001,
+      0.0001,
+      0.001,
+      0.001
+    ],
+    "scope": "three transient closures and reopenings, not proof of a settled periodic limit cycle"
+  },
+  "free_contact_regressions": [
+    {
+      "mode": "lower",
+      "receipt": {
+        "closures": 1,
+        "reopenings": 1,
+        "first_closed_s": 7.9e-05,
+        "first_reopened_s": 0.0008089999999999999,
+        "minimum_area": -1.9576998732196457e-07,
+        "physical_loss_J": 4.7585323281395635e-07,
+        "numerical_loss_J": 2.5179683864609985e-09,
+        "maximum_balance_J": 6.953081705773738e-19
+      },
+      "maximum_scaled_endpoint_change": 9.460748157108512e-13
+    },
+    {
+      "mode": "upper",
+      "receipt": {
+        "closures": 1,
+        "reopenings": 1,
+        "first_closed_s": 9.2e-05,
+        "first_reopened_s": 0.00043599999999999997,
+        "minimum_area": -5.704180160442379e-08,
+        "physical_loss_J": 2.6480566644808747e-07,
+        "numerical_loss_J": 1.400377765044388e-09,
+        "maximum_balance_J": 4.607938642402199e-17
+      },
+      "maximum_scaled_endpoint_change": 1.747674382990283e-11
+    }
+  ],
+  "default_regressions": {
+    "scope": "fresh native runs against historical default-profile fixtures, not fresh independent oracles",
+    "motion": [
+      {
+        "mode": "free",
+        "maximum_scaled_changes": {
+          "mass": 1.5178764240348058e-14,
+          "effort": 1.0054463928099721e-11,
+          "area": 3.134021904840911e-14,
+          "flow": 3.366412276062825e-11,
+          "position": 1.215492279309921e-14,
+          "velocity": 3.3685944658690126e-13,
+          "momentum": 6.490782303997245e-11
+        },
+        "reference_hash": "4ebecd6e39ac3dd3c28be257780a183e14a92bbc51f19721f2cc781fb02c5ead"
+      },
+      {
+        "mode": "driven",
+        "maximum_scaled_changes": {
+          "mass": 2.3243775212740078e-14,
+          "effort": 9.41344069360639e-12,
+          "area": 2.5368636770266295e-13,
+          "flow": 6.768132061740761e-12,
+          "position": 9.788312738470695e-14,
+          "velocity": 1.008091179977022e-12,
+          "momentum": 1.0325074129013956e-11
+        },
+        "reference_hash": "20c2dc0852b57035b225d5e91df0cce7f4d4f8d2d37725698ce4d81c5a0f8e58"
+      },
+      {
+        "mode": "lower",
+        "maximum_scaled_changes": {
+          "mass": 3.610643373793966e-14,
+          "effort": 7.410119451378705e-11,
+          "area": 2.668153783851046e-14,
+          "flow": 4.684663945555677e-11,
+          "position": 1.026603932072212e-14,
+          "velocity": 1.3461454173580023e-13,
+          "momentum": 9.07869699556807e-11
+        },
+        "reference_hash": "9755f0ba696e8532adc850c21aab94104e832413949f219304c18beb34a6afa3"
+      },
+      {
+        "mode": "upper",
+        "maximum_scaled_changes": {
+          "mass": 4.963083675318166e-15,
+          "effort": 1.043417796608992e-12,
+          "area": 9.571472303973594e-14,
+          "flow": 8.889293144078661e-13,
+          "position": 3.767602549387128e-14,
+          "velocity": 4.608813330975181e-13,
+          "momentum": 6.522560269672795e-12
+        },
+        "reference_hash": "cb6b1f8a39d60f15aaf10049b13e954ad4a71f6466bdbec7299bac2ccfe16c2c"
+      }
+    ],
+    "constitutive_maximum_scaled_change": 1.5842225612773803e-16,
+    "constitutive_fixture_hashes": {
+      "out/slit-kinetic/loss-input.txt": "b7ccb3a4ddfa700eb7bca4eec8b99b869902045a6501b6b6a654d7d955ee70b6",
+      "out/slit-kinetic/loss-output.txt": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604"
+    }
+  },
+  "release_ctests_passed": 10,
+  "address_undefined_sanitizer_ctests_passed": 10,
+  "restart_control": "PASS continuous/restarted 10 ms throughflow: maximum scaled difference 1.3525735056418853e-09, step work residual 5.3998350387461647e-19 J",
+  "hashes": {
+    ".build/asan/ducklips_continuous_glottis_rebase_controls": "9ca6436f79f079940f90c4a40c99f16fc88605db00a7fcbe4efdb4d2ccfa28e8",
+    ".build/asan/ducklips_continuous_phonation_controls": "df64bd7b7ab204087dd6c63cc2b0c4ef60aa1619c5f2dc895ce1040aa446a5c3",
+    "CMakeLists.txt": "5ed94dbd169c3f90c36ff4e0076c10c7413a957714cef3b5fed7546cbb6c7014",
+    "build/ducklips_continuous_glottis_rebase_controls": "325399cc3525de6964a7155fca07714043332e44379dfa1e1154f0e9404bff3e",
+    "build/ducklips_continuous_phonation_controls": "f30f575c6d5f01c5e725d1ae19103eeef028e1e03f25c358e39080aa593c19c9",
+    "build/ducklips_continuous_phonation_probe": "64bc701d2f2344f737569a069511c15a5d8a49e763ae3949e1218ec7e8dea15c",
+    "include/ducklips/continuous_glottis.hpp": "66cb90abdfacc21039579e60fe0ebfec7b5c7ed9a2c6757cdaa5f66b152554ad",
+    "out/continuous-phonation/adaptive-19200.jsonl": "c8b96e8092c7e17c54ea549c42c09c348ff8b6935321061094291cd85f8085e7",
+    "out/continuous-phonation/adaptive-19200.stderr": "e897bf22d61f956c70a601174fecf8bda6efca5d466ff9bfc1acc71e9a495840",
+    "out/continuous-phonation/adaptive-2400.jsonl": "afb2785170291f649953dba30634b3e8976bef82da7e09727803250f7e0d9ad1",
+    "out/continuous-phonation/adaptive-2400.stderr": "61f2e63e146c6c173d956fcb357a4cce5117098c02bf398e01e81c80421dd6ee",
+    "out/continuous-phonation/adaptive-4800.jsonl": "b15d73f6f3d28e95701ac4d1286e664802c451c6dde4aedf31d9a000bf071a3d",
+    "out/continuous-phonation/adaptive-4800.stderr": "8e03d892498c0f8c0a94b7a2bd17dd89d5af9aff71ed8b7d1ac3932ce4a67ff0",
+    "out/continuous-phonation/adaptive-9600.jsonl": "3002cd1779c659b190c26d336cd695693d4d120d29dcedfe02c71726b23e5808",
+    "out/continuous-phonation/adaptive-9600.stderr": "6f103c9792701fac9f1cd958a47a9be073bc3591876e246108769f9dfbb9ca7c",
+    "out/continuous-phonation/contact-lower.jsonl": "a7c42d8a81852bb3c016b6f118f27f15104fcbae6735e5133a8ac1bf77758704",
+    "out/continuous-phonation/contact-lower.stderr": "73638ee5506a2aeeac19926f031054875c6d19ad7fa809493bffc62bbfb9d070",
+    "out/continuous-phonation/contact-seed.input": "b616f2873e04d80ca70f55197e09af4d120b5b2e4822c40f6ade2c7d37d3315a",
+    "out/continuous-phonation/contact-upper.jsonl": "e5dcb4fb9c6399b61b3d709d03f9289b0c74d49b6a6833fd54eef35e7f97ea23",
+    "out/continuous-phonation/contact-upper.stderr": "5a7bacdfcd369aa072a1037aa9c237f57bdc1887ed1367d0f0d5a694e36d1bf4",
+    "out/continuous-phonation/final-asan-ctest.log": "3cf3d884362ad6416d6c6f8d453a2990c6371d10d4a03e0e6e770b0c2dc7d253",
+    "out/continuous-phonation/final-ctest.log": "9f04a312e894c1cf5f3e4554b06d737105a0ddd23894e177f8f530964c8d26f9",
+    "out/continuous-phonation/mature-10000.jsonl": "4f5479ea5784744a0f91701728cb8ea10563c1e1bcb5f95eb26af1143396adb3",
+    "out/continuous-phonation/mature-10000.stderr": "6c2b1ca5f8271aabac3ebc940f28053446c3a5e0646c227bc5d6f3058c73f062",
+    "out/continuous-phonation/mature-20000.jsonl": "b61abac5ed4ac0be294ca2b799ab5c86dbc12223edaf3bceb55171122da0dea2",
+    "out/continuous-phonation/mature-20000.stderr": "6337caad747f798f6e02c735aaf8259c36a8f96b7a686b6192d986f258641cbd",
+    "out/continuous-phonation/mature.input": "74744ed9f99fca00722f2add699aab1a26dae69dc0a1c84e655ef6169ed8ae6c",
+    "out/continuous-phonation/open-ode-fine.json": "5a8198df9ccca94218350ce2983a772ee57a299e2ca0d4e56dbc8c7c1ef8a7b0",
+    "out/continuous-phonation/open-ode.json": "3241c81399b267cc9d6205ec2a4b6922036071fc9cc44aba4297860d56dc8be3",
+    "out/continuous-phonation/pressure1400-15000.jsonl": "b55104a5cdcdee08476e9922b9d7c7ca4eb66be45748c7eeece793a0b54fd4e0",
+    "out/continuous-phonation/pressure1400-15000.stderr": "d78c52eea3ff48049c16295b311c7095210336a6fddfdc922d73f50b89476cd5",
+    "out/continuous-phonation/pressure1400-30000.jsonl": "9eef7d5cc156152b40994b0572bded73edf17629b60347afeab28b0b6046e6f0",
+    "out/continuous-phonation/pressure1400-30000.stderr": "b380d8f129b6d44ff0a4005f117cd96c7617ebfc45823b2cc4c9f31395e796e4",
+    "out/continuous-phonation/probe-before-subdivision": "748eaff2a582ccf86e3ac74e9ff5ffc702cebce2038a4b029ca094fa541906aa",
+    "out/continuous-phonation/rebase-control.log": "ea438a105a12ac3ea20057da17471a761f4dab2366cef0f5fa24d72ac95de3d9",
+    "out/continuous-phonation/rebased-16000.jsonl": "42818a5f47d3267c437033b5c621d369ec5455f1dfd82e6d19a1256e024c7847",
+    "out/continuous-phonation/rebased-16000.stderr": "5c2ad9b5d45f876e8d33dedcc91138f28f232692cbfed1ed0bfbf40bab58ddbe",
+    "out/continuous-phonation/rebased-8000.jsonl": "6fa72c10ee6ea6106cc1d2ea4859167cd1b975ac8f84095680281fb0c4c33171",
+    "out/continuous-phonation/rebased-8000.stderr": "6e2ee510ed7cd90eb2347788dc9c08c067b3cdf6406b0c4553c2abab81fafb2f",
+    "out/continuous-phonation/regression.json": "26a321792c0edca81540d49cfd8c630069a302f5b9463507c517e3f570e4226b",
+    "out/continuous-phonation/symmetric-4000.jsonl": "82cc49de5dfbf76f2999811dc2eed0c48c481385dc4ca697d19696546b3bca4d",
+    "out/continuous-phonation/symmetric-4000.stderr": "15561b28621403e15b640b621ca9234bf62d1ded6afb7e56194783eb2fed77e6",
+    "out/continuous-phonation/symmetric-8000.jsonl": "9bc638e1e2715958b17484ebc3f415d126028df5a1e3059d67d466f32034c637",
+    "out/continuous-phonation/symmetric-8000.stderr": "5ccd4650aa0f01d845ae595b54990253a43d064b8b91acd67bd6beed363d85f2",
+    "out/continuous-phonation/transition-16000.jsonl": "6600d80061ff7e189b9a889bb95521251e2c9d033e220c5c4e9bc2239f98f16c",
+    "out/continuous-phonation/transition-16000.stderr": "43a1b5a424a2cace04bedcc869667f9238339efafd0e089792217ec0bd31263b",
+    "out/continuous-phonation/transition-8000.jsonl": "b5fcf9cf618431964cde0b6f4b9aac24c62db418157536bbc2694f788936a241",
+    "out/continuous-phonation/transition-8000.stderr": "3cc9c6d51fb058d719ad1295a505494a46736f2a87b3a62342dfd0ebaa20a9f4",
+    "src/continuous_glottis.cpp": "9bdc42ff82091e1ae8fdcf1aaa910a1c97857004310d4a4a720316fc03613439",
+    "tools/continuous_glottis_rebase_controls.cpp": "c093d8eb94723c932cf55fe94e11635b5bf38c7b7fd3b0608d9970917d61cfb9",
+    "tools/continuous_phonation_controls.cpp": "a4183d5de864618fa3397bbb2084e1b9984d378d3c6f859969cb8b9944339ad5",
+    "tools/continuous_phonation_experiment.py": "6a73ec35b02f47b5dd7bb831f0546a34255d90367e8b2f80ba4c37c41f98022c",
+    "tools/continuous_phonation_modal_experiment.py": "7b5e9482e4b9747ee4152f20277380593d36ed26f4ed5f9fb3b5d6d53924f1f0",
+    "tools/continuous_phonation_motion_reference.py": "916b769e0a40b22945eb94e1f344de2c3e72a4b3ad87c5b38dfee77e7c8d5a41",
+    "tools/continuous_phonation_ode.py": "8b376748dd3b66c89b2cfbb90bfb89760d7da568ee69f945406c8f7dd99437c0",
+    "tools/continuous_phonation_probe.cpp": "7843e1ec3081c48ba2a336bcce7e43dd51081198a0d1dc426ce89970f8fb3195",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/continuous_phonation_step_probe.cpp": "645756465ade0793d40a63187d2f119b6941cb0030dfad07e73665ae365f204f",
+    "tools/continuous_phonation_validation.py": "6e12870aa3612f3f690cdb710c878cde921bf0b37a764b34276e024c49ef791e"
+  }
+}

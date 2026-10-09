@@ -1,6 +1,7 @@
 #include "ducklips/continuous_glottis.hpp"
 #include <algorithm>
 #include <cmath>
+#include <limits>
 namespace ducklips {
 namespace {
 using Vector=std::array<double,7>;using Matrix=std::array<double,49>;
@@ -90,7 +91,7 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;rhs[3+i]-=g[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*position_[3+i]+coupling_[i%2]*(position_[3+i]-position_[3+other]))*position_scale*position_scale/energy_scale;}
         const Vector acceleration=multiply(c0.inverse,rhs);for(std::size_t j=0;j<7;++j){change[j]+=.5*step*step*acceleration[j];}
     }
-    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0;bool converged=false;
+    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0,roundoff_scale=0;bool converged=false,roundoff_limited=false;
     const auto evaluate=[&](const Vector& trial){
         if(!finite(trial)){return false;}for(std::size_t j=0;j<7;++j){q1[j]=position_[j]+trial[j];speed[j]=trial[j]/step;}
         // Eliminate a closed coordinate exactly. Newton still solves its
@@ -123,7 +124,14 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
             gradient[k]+=dissipative?.5*dot(momentum_,multiply(derivative,momentum_)):.25*(dot(momentum_,multiply(derivative,momentum_))+dot(p1,multiply(derivative,p1)));dz[k]=z1[k]-c0.z[k];norm2+=dz[k]*dz[k];work+=gradient[k]*dz[k];}
         Matrix difference;for(std::size_t j=0;j<49;++j){difference[j]=c1.inverse[j]-c0.inverse[j];}
         const double delta=c1.potential-c0.potential+(dissipative?.5*dot(momentum_,multiply(difference,momentum_)):.25*(dot(momentum_,multiply(difference,momentum_))+dot(p1,multiply(difference,p1))));
-        if(norm2>1e-28){const double correction=(delta-work)/norm2;for(std::size_t k=0;k<4;++k){gradient[k]+=correction*dz[k];}}
+        // Dividing cancellation in endpoint energies by a vanishing state
+        // change creates a spurious force near steady throughflow. Correct
+        // only a discrepancy resolved above the endpoint arithmetic scale.
+        double arithmetic_scale=std::abs(c0.potential)+std::abs(c1.potential);
+        for(std::size_t i=0;i<7;++i){for(std::size_t j=0;j<7;++j){const double inverse_scale=std::abs(c0.inverse[7*i+j])+std::abs(c1.inverse[7*i+j]);arithmetic_scale+=inverse_scale*(dissipative?.5*std::abs(momentum_[i]*momentum_[j]):.25*(std::abs(momentum_[i]*momentum_[j])+std::abs(p1[i]*p1[j])));}}
+        const double energy_roundoff=64*std::numeric_limits<double>::epsilon()*arithmetic_scale;
+        roundoff_scale=energy_roundoff;roundoff_limited=std::abs(delta-work)<=energy_roundoff;
+        if(norm2>1e-28 && !roundoff_limited){const double correction=(delta-work)/norm2;for(std::size_t k=0;k<4;++k){gradient[k]+=correction*dz[k];}}
         Vector generalized={gradient[0],gradient[1]-gradient[0],-gradient[1],0,0,0,0};
         for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;const double x=.5*(position_[3+i]+q1[3+i]),y=.5*(position_[3+other]+q1[3+other]);
             generalized[3+i]=gradient[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*x+coupling_[i%2]*(x-y))*position_scale*position_scale/energy_scale;}
@@ -147,14 +155,21 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         Vector rhs=base,increment{};for(double& v:rhs){v=-v;}if(!solve(jacobian,rhs,increment)){return false;}double fraction=1;bool accepted=false;
         for(int line=0;line<24;++line){Vector next=change;for(std::size_t j=0;j<7;++j){next[j]+=fraction*increment[j];}if(evaluate(next) && (norm<old_norm || converged)){change=next;accepted=true;break;}fraction*=.5;}if(!accepted){return false;}
     }
-    if(iteration==24){return false;}for(std::size_t j=0;j<7;++j){if(!c1.active[j]){change[j]=0;}}ContinuousGlottis next=*this;next.position_=q1;next.momentum_=p1;next.effort_guess_=c1.gas.effort;next.active_=c1.active;ContinuousGlottalStep receipt;
+    if(iteration==24){return false;}for(std::size_t j=0;j<7;++j){if(!c1.active[j]){change[j]=0;}}ContinuousGlottis next=*this;next.position_=q1;next.momentum_=p1;next.effort_guess_=c1.gas.effort;next.active_=c1.active;
+    // The three transferred volumes contain a cyclic throughflow coordinate.
+    // Rebase their origins after each step, retaining the two actual gas
+    // moments. Otherwise long throughflow subtracts large nearly equal
+    // cumulative volumes and destroys pressure/Jacobian precision.
+    next.initial_mass_={c1.z[0]*mass_scale,c1.z[1]*mass_scale};
+    for(std::size_t j=0;j<3;++j){next.position_[j]=0.;}
+    ContinuousGlottalStep receipt;
     for(std::size_t j=0;j<3;++j){receipt.flow[j]=speed[j]*mass_scale/time_scale;}
     receipt.reservoir_work=reservoir.mass_effort*change[0]*mass_scale;receipt.load_work=free_load*change[2]*mass_scale+load_loss;
     for(std::size_t j=0;j<4;++j){receipt.external_work+=force[j]*change[3+j]*position_scale;receipt.tissue_loss+=dt*damping_[j]*std::pow(speed[3+j]*position_scale/time_scale,2);}
     receipt.fluid_loss=step*energy_scale*dot(speed,multiply(drag,speed))-receipt.tissue_loss;
     const double e0=energy_scale*(c0.potential+mechanical(position_)+.5*dot(momentum_,v0));const double e1=energy_scale*(c1.potential+mechanical(q1)+.5*dot(p1,multiply(c1.inverse,p1)));
     if(dissipative){Vector delta_p;for(std::size_t j=0;j<7;++j){delta_p[j]=p1[j]-momentum_[j];}receipt.numerical_loss=.5*energy_scale*dot(delta_p,multiply(c1.inverse,delta_p));}
-    receipt.energy_change=e1-e0;receipt.energy_residual=receipt.energy_change+receipt.numerical_loss+receipt.tissue_loss+receipt.fluid_loss+receipt.load_work-receipt.reservoir_work-receipt.external_work;receipt.iterations=iteration+1;receipt.maximum_scaled_residual=norm;
+    receipt.energy_roundoff_scale=energy_scale*roundoff_scale;receipt.roundoff_limited_gradient=roundoff_limited;receipt.energy_change=e1-e0;receipt.energy_residual=receipt.energy_change+receipt.numerical_loss+receipt.tissue_loss+receipt.fluid_loss+receipt.load_work-receipt.reservoir_work-receipt.external_work;receipt.iterations=iteration+1;receipt.maximum_scaled_residual=norm;
     if(!std::isfinite(receipt.energy_residual)){return false;}next.last=receipt;*this=next;return true;
 }
 }

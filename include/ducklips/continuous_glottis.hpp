@@ -17,6 +17,9 @@ struct ContinuousGlottalStep final {
     std::array<double,3> flow{};
     double reservoir_work{},load_work{},external_work{},fluid_loss{},tissue_loss{};
     double numerical_loss{},energy_change{},energy_residual{},maximum_scaled_residual{};
+    // Estimated endpoint-arithmetic scale, not a relaxed force tolerance.
+    double energy_roundoff_scale{};
+    bool roundoff_limited_gradient{};
     std::size_t iterations{};
 };
 // Continuous-pressure, shared fluid/tissue Hamiltonian reference. Rest area

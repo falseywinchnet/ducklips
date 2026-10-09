@@ -34,6 +34,15 @@ two free controls through sealing and reopening, with numerical damping reported
 separately from physical loss. Sustained phonation and connection to the speech
 tract remain unfinished; these results have not produced a new speech recording.
 
+The source now has [independently checked pressure-driven onset](reports/CONTINUOUS_PHONATION_ONSET.md):
+small disturbances decay at 700 Pa and grow at 1400 Pa in the configured
+symmetric model. A roundoff correction prevents spurious forces near steady
+flow, and transfer origins are reset without changing the physical gas state.
+The symmetric update matches a separate open-passage ODE under refinement.
+A source experiment now completes repeated pressure-driven contact cycles,
+with step refinement and a full work ledger. These remain mechanics results,
+with speech integration unfinished.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

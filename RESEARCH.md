@@ -284,6 +284,18 @@ momentum update reports its added damping separately, with mass/work checks and
 temporal refinement. Pressure-driven sustained motion, whole-passage closure
 and speech integration still remain unfinished.
 
+[Pressure-driven continuous-source onset](reports/CONTINUOUS_PHONATION_ONSET.md)
+now has an independent nine-state open-domain ODE and native modal refinement.
+Its configured symmetric mode crosses to growth near 871 Pa. Endpoint energy
+cancellation near steady throughflow no longer creates an amplified force
+correction. Large-motion controls distinguish real growth from numerical
+damping: the symmetric update converges to the independent open trajectory,
+while an all-step dissipative update can appear to settle prematurely.
+Resetting cyclic transfer origins removes a second long-throughflow precision
+failure. A driver selecting dissipative steps only for actual port-constraint
+changes now completes repeated pressure-driven closure/reopening controls.
+Longer settling, actuator work and speech coupling remain required.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the
