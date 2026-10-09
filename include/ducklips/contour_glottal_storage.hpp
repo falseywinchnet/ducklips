@@ -1,20 +1,23 @@
 #pragma once
 #include "ducklips/contour_kinetics.hpp"
 #include "ducklips/glottal_storage.hpp"
+#include "ducklips/fold_contact.hpp"
 #include "ducklips/moving_graph.hpp"
 namespace ducklips {
 struct ContourGlottalStep final {
     std::array<double,3> flow{},law_residual{};
     std::array<double,4> force_residual{},kinetic_effort{};
-    std::array<double,2> pressure{},area_effort{};
+    std::array<double,2> pressure{},area_effort{},contact_area_effort{};
     double reservoir_work{},load_work{},actuator_work{},external_work{},damping_loss{},passage_loss{};
     double energy_change{},energy_residual{};
     std::size_t iterations{};
 };
-// Joint gas, tissue and passage-momentum solve for the open medial contour.
+// Joint gas, tissue and passage-momentum solve for a medial contour with
+// positive chamber storage. Elastic contact may close either cap.
 // Ports carry ambient-reference mass volume. Outlet effort is free_load +
 // load_slope * average_outflow, allowing exact elimination of a linear tract.
-// Positive openings only: no collision law or topology change is hidden here.
+// Each advance preserves passage topology; sealing/reopening events require
+// an external owner. Closed passages require exactly zero momentum.
 class ContourGlottalStorage final {
 public:
     [[nodiscard]] bool prepare(const FoldParameters&,const AirProperties&,double tension,
@@ -30,6 +33,7 @@ private:
     double mechanical_energy(const std::array<double,4>&,const std::array<double,4>&) const noexcept;
     GasStorage gas_{};
     ContourKinetics kinetics_{};
+    FoldContact contact_{};
     std::array<double,4> tissue_mass_{},stiffness_{},damping_{};
     std::array<double,2> coupling_{};
     double width_{};

@@ -26,6 +26,7 @@ add_library(ducklips STATIC
     src/glottal_kinetics.cpp
     src/glottal_contour.cpp
     src/contour_kinetics.cpp
+    src/fold_contact.cpp
     src/contour_glottal_storage.cpp
     src/graph_glottal_storage.cpp
     src/continuous_modes.cpp
@@ -227,3 +228,7 @@ add_test(NAME ducklips_contour_source_controls COMMAND ducklips_contour_source_c
 
 add_executable(ducklips_contour_contact_probe tools/contour_contact_probe.cpp)
 target_link_libraries(ducklips_contour_contact_probe PRIVATE ducklips)
+
+add_executable(ducklips_contour_sealed_probe tools/contour_sealed_probe.cpp)
+target_link_libraries(ducklips_contour_sealed_probe PRIVATE ducklips)
+add_test(NAME ducklips_contour_sealed_reference COMMAND ducklips_contour_sealed_probe)

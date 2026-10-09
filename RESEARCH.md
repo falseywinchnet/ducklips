@@ -222,6 +222,16 @@ wedge storage. This moves the remaining contact work to collision and
 sealing/reopening state transport; it does not establish speech or complete
 a glottal cycle.
 
+[Sealed-cap phase equations](reports/SEALED_GLOTTAL_DYNAMICS.md) now keep
+positive wedge storage through elastic contact. Contact energy, nonlinear
+clipped-volume work and active passage momentum are solved together. Four
+independent closed-phase controls pass after the required temporal refinement;
+all four open controls still converge. The closing-cap limit has flow, momentum
+and energy scaling as area cubed, squared and to the fifth power, respectively,
+under bounded effort and positive viscosity/density/storage. Automatic event
+transport must still join the open and closed phases without hidden momentum
+or loss of chamber air.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

@@ -1,0 +1,81 @@
+{
+  "scope": "positive-storage fixed sealed phases with elastic contact; automatic sealing/reopening remains unfinished",
+  "initial_grid_reference_exit_code": 1,
+  "initial_grid_failure": "lower and lower_rest second-order ratios on grids through 6400 steps",
+  "additional_refinement_exit_code": 0,
+  "open_regression_exit_code": 0,
+  "sealing_limit_exit_code": 0,
+  "focused_ctests_passed": 12,
+  "sanitizer_exit_code": 0,
+  "sanitizers": "address,undefined; -fno-omit-frame-pointer",
+  "sanitizer_fixture_batches_byte_identical": true,
+  "unowned_contact": {
+    "status": "open_solver_stopped",
+    "planned_steps": 19200,
+    "accepted_steps": 2036,
+    "time_s": 0.010604166666666668,
+    "dt_s": 5.208333333333334e-06,
+    "minimum_area_m2": 1.5055463560642985e-08,
+    "maximum_relative_density": 1.0054836564583924,
+    "maximum_step_work_residual_J": 4.1675079796095645e-18,
+    "cells": [
+      {
+        "area_m2": 1.5055463560642985e-08,
+        "area_rate_m2_s": -0.006791938208663482,
+        "volume_m3": 1.413149167946322e-09,
+        "mass_volume_m3": 1.4105343399801677e-09,
+        "relative_density": 0.9981496447611725,
+        "pressure_Pa": -258.3064465479441
+      },
+      {
+        "area_m2": 2.656035640926494e-06,
+        "area_rate_m2_s": -0.007644657526306229,
+        "volume_m3": 1.2729974001014585e-09,
+        "mass_volume_m3": 1.2709395808756176e-09,
+        "relative_density": 0.9983834851307026,
+        "pressure_Pa": -225.67329343540564
+      }
+    ],
+    "momentum_Pa_s": [
+      -2.2473827492950612e-06,
+      0.006937673459869108,
+      0.002215002562466828
+    ],
+    "average_flow_m3_s": [
+      5.908368214582871e-10,
+      1.7439350571986775e-05,
+      2.123311898097921e-05
+    ]
+  },
+  "hashes": {
+    "out/contour-sealed/additional-refinement.log": "7ab929d2f10282f23af12eb361047164c8cdc3c270aabbbdf019c74f5d911187",
+    "out/contour-sealed/asan-controls.log": "b6370afdd5f3b05113a4f1c312c750f5e10747f35429d3733ff733e09abea3d8",
+    "out/contour-sealed/asan-kinetics.log": "f69a6d403f2eda69649d8445e6611c7cdd0dd0bd446abf9610a1fad3f61bbdb9",
+    "out/contour-sealed/asan-open.log": "c3870340e080ddffeb8cf7e2d315957c58beb7cffe21874b06e799a407c7134a",
+    "out/contour-sealed/asan-sealed.log": "3838e86e26e2c302905e3203c2743e346ce6fd7549344c060cfa557f34e251a2",
+    "out/contour-sealed/ctest.log": "6c4604c9c48b1f9546e825bb7374e11c0cc117b49e010020c2f3975c2337f4db",
+    "out/contour-sealed/early-coarse-reference.log": "06c4c13dc602c08499c19a700a0bb3006b1debd7ce6a5ed450e73e9eaa83e275",
+    "out/contour-sealed/initial-grid-reference.log": "19d119d68fb158a4ed2c77ecaf0a5316d9d38157b125497b22ab6bb296443b0a",
+    "out/contour-sealed/open-regression.log": "bd122890454353c7f17b1a17f946eddf39a84ca142eb4df4e22f9fd98f2147b7",
+    "out/contour-sealed/sealing-limit.log": "98549a8926ac9f28d7e8089bdbcc2fa89d91e9714c411347ec849de0f20b813a",
+    "out/contour-sealed/kernel-input.txt": "ada4ad9714d41c64650c0d166d1631d4421f6f3963be9d43210228fad9d7e017",
+    "out/contour-sealed/kernel-output.jsonl": "431c1fae81cd80ae269eeea878550988c1db328fc436f55ba594099cd8399c60",
+    "out/contour-sealed/pairs-input.txt": "bedefe042896bd11540775b79d7a4436fc2aa56f403bb73cbcc01dd1ba4ddd04",
+    "out/contour-sealed/pairs-output.jsonl": "98e5ab7dbb23832037887fba13df3b8d9cdf29b8c6b83fa6f115834d6a74a886",
+    "out/contour-sealed/asan-kernel-output.jsonl": "431c1fae81cd80ae269eeea878550988c1db328fc436f55ba594099cd8399c60",
+    "out/contour-sealed/asan-pairs-output.jsonl": "98e5ab7dbb23832037887fba13df3b8d9cdf29b8c6b83fa6f115834d6a74a886",
+    "out/contour-sealed/unowned-contact-19200.json": "d1cc9956e14d612252057420982771ea350d0471577c8c85c156d733b4ac857f",
+    "reports/contour_sealed_reference.json": "d575a35e8bed90b63da942589712236f825db351ead35b704e7d5b968b996454",
+    "reports/contour_sealed_endpoint_reference.json": "73a51b613a6fa1302485b64d77749600d8febbd3e398b6b265ec44440cd25deb",
+    "reports/contour_open_regression.json": "74ed3e29401e2fa7c8e7a6a075a6ea54b2b195fa7aa578b39afd1148f5e1b83a",
+    "reports/contour_sealing_limit.json": "0075a118acfe48d3e0189d83950ee5fc891dbd2fb7aad86d96f025ff5b236f6a",
+    "CMakeLists.txt": "50ead62442df5ce6cc2e0698f57fdf8e442f75d57ec0b1b6a383ddd043af4757",
+    "tools/contour_kinetics_probe.cpp": "5d2014bbe2703795d605e96f59a917d40126f74198fc6b8d2ccda84417e2487a",
+    "tools/contour_contact_probe.cpp": "51899b7e887a338bf600a298d40dadcfdd97fbcdc0ad78d651d15ad383d17e02",
+    "build/ducklips_contour_contact_probe": "5813089a502462aa23bdba537d21c9224eada0b7e02884303558e9acfeb4827d",
+    ".build/asan/ducklips_contour_sealed_probe": "d82a863902551d44c6ce82655d150c73316fb29af1f1f6360482a42d69199483",
+    ".build/asan/ducklips_contour_glottal_probe": "5bc4cb4729c92effee379e8a6b80c0d6316b9acd5319297201186db8fe0d5e7e",
+    ".build/asan/ducklips_contour_kinetics_probe": "68cb3c4624259c83d869223592077fabed2815826a639b7a631b176f3a0aefcd",
+    ".build/asan/ducklips_contour_source_controls": "4fec5f11bf320e606e91ab295897ca54b006db253028bf773166e674783c0cea"
+  }
+}

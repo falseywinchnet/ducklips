@@ -1,0 +1,615 @@
+{
+  "scope": "positive retained chambers with a fixed sealed cap and elastic tissue contact; no automatic sealing or reopening",
+  "kernel": {
+    "instant_cases": 160,
+    "transfer_cases": 92,
+    "digits": 80,
+    "maxima": {
+      "energy_scaled": 3.5186912009068238e-15,
+      "effort_scaled": 1.0772372302167185e-14,
+      "metric_relative": 4.2129097933008395e-15,
+      "resistance_relative": 9.78275460899058e-15,
+      "transfer_scaled": 2.3619202885226805e-13,
+      "volume_gradient_scaled": 5.283919521062133e-14,
+      "chain_scaled": 1.3719788086734177e-15
+    }
+  },
+  "runs": [
+    {
+      "mode": "lower",
+      "steps": 100,
+      "normalized_error": 0.0012026923657014457,
+      "refinement_ratio": null,
+      "maximum_position_error_m": 1.615457212694812e-10,
+      "maximum_mass_balance_m3": 1.0856745539758488e-24,
+      "maximum_work_balance_J": 6.385834328909374e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "100",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-100.json",
+      "output_sha256": "69d694ddaa903510703c7e0d4789fe7784d4110e9644915eee94a837b5e22390"
+    },
+    {
+      "mode": "lower",
+      "steps": 200,
+      "normalized_error": 0.0008340344113254334,
+      "refinement_ratio": 1.4420176786113024,
+      "maximum_position_error_m": 2.0940502462296867e-10,
+      "maximum_mass_balance_m3": 1.198765653348333e-24,
+      "maximum_work_balance_J": 1.9397054492123478e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "200",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-200.json",
+      "output_sha256": "d6ed5c14b020a88c2c05602dea974dc35c29375035743d004dc21199f989cedd"
+    },
+    {
+      "mode": "lower",
+      "steps": 400,
+      "normalized_error": 0.0002969577871100965,
+      "refinement_ratio": 2.8085958595058393,
+      "maximum_position_error_m": 5.3707600593903555e-11,
+      "maximum_mass_balance_m3": 1.822382287030889e-24,
+      "maximum_work_balance_J": 1.0218658415235083e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "400",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-400.json",
+      "output_sha256": "8e45e76491d60ef43ba65d4486d8cd6abb8cb4cc754282871fdabd542719f2be"
+    },
+    {
+      "mode": "lower",
+      "steps": 800,
+      "normalized_error": 0.0005285395254070958,
+      "refinement_ratio": 0.5618459411930855,
+      "maximum_position_error_m": 1.199451576735315e-11,
+      "maximum_mass_balance_m3": 5.919511258582604e-24,
+      "maximum_work_balance_J": 2.926234134967591e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "800",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-800.json",
+      "output_sha256": "bcc5b53bc1d903f6efe05c903d50e8e4fe75f488a5ed4002e37866bd814efc57"
+    },
+    {
+      "mode": "lower",
+      "steps": 1600,
+      "normalized_error": 0.00011760836819690374,
+      "refinement_ratio": 4.494063930231545,
+      "maximum_position_error_m": 2.196088077369634e-12,
+      "maximum_mass_balance_m3": 6.940562327202748e-24,
+      "maximum_work_balance_J": 9.158543742187122e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "1600",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-1600.json",
+      "output_sha256": "30f46e2a8ffb16841f91f9a4f791dab27d0fa1d4f0d9575ab829873daebc0e9e"
+    },
+    {
+      "mode": "lower",
+      "steps": 3200,
+      "normalized_error": 2.5694062084858022e-05,
+      "refinement_ratio": 4.577258660327302,
+      "maximum_position_error_m": 5.083710353079491e-13,
+      "maximum_mass_balance_m3": 6.71438012845778e-24,
+      "maximum_work_balance_J": 7.490947627280219e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "3200",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-3200.json",
+      "output_sha256": "5b9696b735d4363ef9cc8a447cf7b42b0b68c1689cc352124e0c2719e7ccbb3c"
+    },
+    {
+      "mode": "lower",
+      "steps": 6400,
+      "normalized_error": 6.155725689443851e-06,
+      "refinement_ratio": 4.174010243653237,
+      "maximum_position_error_m": 1.248509424541151e-13,
+      "maximum_mass_balance_m3": 4.449326966740309e-24,
+      "maximum_work_balance_J": 6.4718611126148885e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "6400",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-6400.json",
+      "output_sha256": "522a5b428e4730463d8e100d22ac257b0cdac4583a475fac305c01f6b158dbfd"
+    },
+    {
+      "mode": "upper",
+      "steps": 100,
+      "normalized_error": 0.008540830341577956,
+      "refinement_ratio": null,
+      "maximum_position_error_m": 3.2926670193151155e-09,
+      "maximum_mass_balance_m3": 7.34122793640812e-24,
+      "maximum_work_balance_J": 8.827671497165911e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "100",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-100.json",
+      "output_sha256": "ed65c97d70a6c468ccf314c028a396a05c5e4b9836716b61104e036186ed634b"
+    },
+    {
+      "mode": "upper",
+      "steps": 200,
+      "normalized_error": 0.0047539303508439025,
+      "refinement_ratio": 1.7965829768755057,
+      "maximum_position_error_m": 7.451344882368656e-10,
+      "maximum_mass_balance_m3": 7.599721877830942e-24,
+      "maximum_work_balance_J": 8.946785505373547e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "200",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-200.json",
+      "output_sha256": "7f4247ee4d431d55a80c49c0fac5e75ad8ef881f5862668177cd2265db7cb250"
+    },
+    {
+      "mode": "upper",
+      "steps": 400,
+      "normalized_error": 0.0013363933850490744,
+      "refinement_ratio": 3.557283659159485,
+      "maximum_position_error_m": 1.7624305660712825e-10,
+      "maximum_mass_balance_m3": 3.4638188150658034e-24,
+      "maximum_work_balance_J": 3.9559085614735996e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "400",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-400.json",
+      "output_sha256": "602123c5375ee6f84cbd09b7f90161bdbd534d0d1c4b7e5cb3bc3cc24067b067"
+    },
+    {
+      "mode": "upper",
+      "steps": 800,
+      "normalized_error": 0.00034287906265501587,
+      "refinement_ratio": 3.8975648577109894,
+      "maximum_position_error_m": 4.3347142607112754e-11,
+      "maximum_mass_balance_m3": 5.841963076155758e-24,
+      "maximum_work_balance_J": 3.6640792413648914e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "800",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-800.json",
+      "output_sha256": "69c6206861ce39e4d962f34918605478936ae5db78f66906d9ce4307863af77f"
+    },
+    {
+      "mode": "upper",
+      "steps": 1600,
+      "normalized_error": 8.62649830802979e-05,
+      "refinement_ratio": 3.9747189463406523,
+      "maximum_position_error_m": 1.0791963270294705e-11,
+      "maximum_mass_balance_m3": 6.769310091010129e-24,
+      "maximum_work_balance_J": 3.322486735604993e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "1600",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-1600.json",
+      "output_sha256": "3038052348d133b3976daa708134fffe5cd12872e4f3ac526abecb976ab1aaaf"
+    },
+    {
+      "mode": "upper",
+      "steps": 3200,
+      "normalized_error": 2.1600007380446823e-05,
+      "refinement_ratio": 3.9937478520673264,
+      "maximum_position_error_m": 2.6952946032823485e-12,
+      "maximum_mass_balance_m3": 1.6401440583278002e-23,
+      "maximum_work_balance_J": 8.938844571493038e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "3200",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-3200.json",
+      "output_sha256": "1bdc22cdfd6df09282e8c34f198d40f69ecc3201f922caf8bf8f83e36f4d54fd"
+    },
+    {
+      "mode": "upper",
+      "steps": 6400,
+      "normalized_error": 5.4021043884510626e-06,
+      "refinement_ratio": 3.998443167189548,
+      "maximum_position_error_m": 6.736593975795874e-13,
+      "maximum_mass_balance_m3": 1.7629286805036402e-23,
+      "maximum_work_balance_J": 4.039288367218945e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "6400",
+        "upper"
+      ],
+      "output": "out/contour-sealed/upper-6400.json",
+      "output_sha256": "38a34acb805ee7df7c9d809e0f3ccf6e8c0e8aff5549f524cba129428aa86079"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 100,
+      "normalized_error": 0.001153357737179533,
+      "refinement_ratio": null,
+      "maximum_position_error_m": 1.3609276437508976e-10,
+      "maximum_mass_balance_m3": 1.809457589959748e-24,
+      "maximum_work_balance_J": 1.04092408283673e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "100",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-100.json",
+      "output_sha256": "b8c63ccc4468f9ab2b338f9433056c3bc38a82c44cbc6ab62ec00cece1dd1a5e"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 200,
+      "normalized_error": 0.00019186551774550396,
+      "refinement_ratio": 6.011282020510744,
+      "maximum_position_error_m": 1.8980673460254656e-10,
+      "maximum_mass_balance_m3": 1.111523948118131e-24,
+      "maximum_work_balance_J": 2.2242555799305893e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "200",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-200.json",
+      "output_sha256": "847c1b38b66b74af28b832584c47f79ed32a90f2d287115beeda703169145689"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 400,
+      "normalized_error": 0.0004183584895627474,
+      "refinement_ratio": 0.458615093352198,
+      "maximum_position_error_m": 4.356473218804159e-11,
+      "maximum_mass_balance_m3": 1.0727498569047078e-24,
+      "maximum_work_balance_J": 1.1914047798723768e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "400",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-400.json",
+      "output_sha256": "10138c7e4c07e240a2fa8937bdc4d267ac75c90887759e3236e6574b4a3feea6"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 800,
+      "normalized_error": 0.00051142837486596,
+      "refinement_ratio": 0.8180197073977266,
+      "maximum_position_error_m": 9.099050860171477e-12,
+      "maximum_mass_balance_m3": 2.016252743098005e-24,
+      "maximum_work_balance_J": 3.5495974445875524e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "800",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-800.json",
+      "output_sha256": "47b30305618b37093dcbf35fecc8c92546877ac6b9d8d2682ff3b17398719bd4"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 1600,
+      "normalized_error": 0.00010534445469783732,
+      "refinement_ratio": 4.854820088374897,
+      "maximum_position_error_m": 1.413316644570178e-12,
+      "maximum_mass_balance_m3": 3.9549573037691636e-24,
+      "maximum_work_balance_J": 8.351215464335367e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "1600",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-1600.json",
+      "output_sha256": "db2301f88129f6bc3b2e746346cb20cde786da32886d813c6a6d0e24bfdd5e95"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 3200,
+      "normalized_error": 2.2345606648722688e-05,
+      "refinement_ratio": 4.714325117857518,
+      "maximum_position_error_m": 3.1030810914732857e-13,
+      "maximum_mass_balance_m3": 3.2053248736429822e-24,
+      "maximum_work_balance_J": 5.148372132530044e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "3200",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-3200.json",
+      "output_sha256": "b2e656963f7feadcc6a51572be1e0565d08209925579af5b85591a15f84e4870"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 6400,
+      "normalized_error": 5.305981472522386e-06,
+      "refinement_ratio": 4.211399298026556,
+      "maximum_position_error_m": 7.52120495705721e-14,
+      "maximum_mass_balance_m3": 1.0462542279088686e-23,
+      "maximum_work_balance_J": 9.290892640195607e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "6400",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-6400.json",
+      "output_sha256": "ebbbd6943a56a15d5e98ab07c94f64e0c7b89eb6b8178fb09c4f404be342098d"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 100,
+      "normalized_error": 0.011227699844583763,
+      "refinement_ratio": null,
+      "maximum_position_error_m": 3.2113005204900376e-09,
+      "maximum_mass_balance_m3": 1.34416849539867e-24,
+      "maximum_work_balance_J": 9.873227791432938e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "100",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-100.json",
+      "output_sha256": "92d4828d5e1e3dbe694131c13d26dc0d2ac39d10b23d85b336377296ddcbaa14"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 200,
+      "normalized_error": 0.0053569341062523895,
+      "refinement_ratio": 2.0959189756467715,
+      "maximum_position_error_m": 7.022039565080353e-10,
+      "maximum_mass_balance_m3": 2.662487596655058e-24,
+      "maximum_work_balance_J": 1.9746455582865877e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "200",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-200.json",
+      "output_sha256": "01040b63b9cf7533fcd040a2e78b7d4d8b373051c0f1399f18106a141b907f9c"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 400,
+      "normalized_error": 0.0014776234101675288,
+      "refinement_ratio": 3.625371707967888,
+      "maximum_position_error_m": 1.6423869798616163e-10,
+      "maximum_mass_balance_m3": 6.255553382432272e-24,
+      "maximum_work_balance_J": 2.8084436157400396e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "400",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-400.json",
+      "output_sha256": "9487189cecd9b2110193f5214a909cc8f366694d69a25d66cb97cc991b976330"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 800,
+      "normalized_error": 0.0003775056318046561,
+      "refinement_ratio": 3.914175804752336,
+      "maximum_position_error_m": 4.0279258390046174e-11,
+      "maximum_mass_balance_m3": 5.925973607118175e-24,
+      "maximum_work_balance_J": 4.318544542016847e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "800",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-800.json",
+      "output_sha256": "f33a815d29bcd6f0b9f7356f0d18530cf09a26a376e5ba860e0afab124658de7"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 1600,
+      "normalized_error": 9.487672770613605e-05,
+      "refinement_ratio": 3.9789065341072187,
+      "maximum_position_error_m": 1.0018601508295089e-11,
+      "maximum_mass_balance_m3": 1.1477130999173259e-23,
+      "maximum_work_balance_J": 1.9798071653089186e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "1600",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-1600.json",
+      "output_sha256": "86c236ece7b820207fdb47e8abc9b3db21c080d7b4e06ee06e6f53ec52e59dfc"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 3200,
+      "normalized_error": 2.3750406008917792e-05,
+      "refinement_ratio": 3.994741297075586,
+      "maximum_position_error_m": 2.5015585170809138e-12,
+      "maximum_mass_balance_m3": 1.8262596961522314e-23,
+      "maximum_work_balance_J": 8.515328097865888e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "3200",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-3200.json",
+      "output_sha256": "0499beceef55ba2477c63c55aafe08eb70b83863edc699222c7a6247dff23aa5"
+    },
+    {
+      "mode": "upper_rest",
+      "steps": 6400,
+      "normalized_error": 5.9395483118754484e-06,
+      "refinement_ratio": 3.9986889173763545,
+      "maximum_position_error_m": 6.251998566205938e-13,
+      "maximum_mass_balance_m3": 1.7151073013404183e-23,
+      "maximum_work_balance_J": 3.86591131082783e-20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "6400",
+        "upper_rest"
+      ],
+      "output": "out/contour-sealed/upper_rest-6400.json",
+      "output_sha256": "06feaf5cc6027be7082f44ceab26da95b07e4cadf059a4fe81fc6347b2b442bf"
+    }
+  ],
+  "oracles": [
+    {
+      "mode": "lower",
+      "endpoint": [
+        1.4199453608419547e-09,
+        1.4010593157022553e-09,
+        -0.00011266835365849977,
+        -0.00011263105864502414,
+        -2.1178801902340043e-06,
+        -2.8719804574725194e-06,
+        -0.019247209403430825,
+        -0.018827235796055754,
+        -0.020605153838459477,
+        -0.027805496584822394,
+        0.0,
+        0.00010487301659732499,
+        6.948084762144438e-05
+      ],
+      "normalized_refinement_difference": 2.2798280732878873e-12
+    },
+    {
+      "mode": "upper",
+      "endpoint": [
+        6.0956183718709106e-09,
+        5.728602475499033e-11,
+        2.6361559385398225e-06,
+        2.990004451526942e-06,
+        -0.00010871060328559983,
+        -0.00010783928433361713,
+        0.026398804448352853,
+        0.029904238538481155,
+        0.020275953579896366,
+        0.02877007188322257,
+        -0.00035671126609401255,
+        0.00017681130620918005,
+        0.0
+      ],
+      "normalized_refinement_difference": 3.4106289840962756e-14
+    },
+    {
+      "mode": "lower_rest",
+      "endpoint": [
+        1.396915928021419e-09,
+        1.3911511632504045e-09,
+        -0.00011265724604891913,
+        -0.0001126180887714172,
+        -2.1115705962605265e-06,
+        -2.8646773134568752e-06,
+        -0.019090166101181704,
+        -0.01864401663899014,
+        -0.020549421864094194,
+        -0.027741126603578168,
+        0.0,
+        0.00016810419987260425,
+        9.477847157789408e-05
+      ],
+      "normalized_refinement_difference": 1.0169194859018654e-11
+    },
+    {
+      "mode": "upper_rest",
+      "endpoint": [
+        6.04466524980014e-09,
+        5.2658451805503336e-11,
+        2.642785497611093e-06,
+        2.997732897987812e-06,
+        -0.00010871230581084996,
+        -0.00010784134567200885,
+        0.02641690241557937,
+        0.02992503314209309,
+        0.020072388618616537,
+        0.028532180395501858,
+        -0.00035667587417181825,
+        0.0001451454588676197,
+        0.0
+      ],
+      "normalized_refinement_difference": 6.770842567171975e-14
+    }
+  ],
+  "acceptance": [
+    {
+      "mode": "lower",
+      "second_order": false,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "upper",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "lower_rest",
+      "second_order": false,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "upper_rest",
+      "second_order": true,
+      "endpoint_accuracy": true
+    }
+  ],
+  "hashes": {
+    "include/ducklips/contour_kinetics.hpp": "c714bd85d403f41a06958f161f843012364b0c44b8e53dfe94b2accde42172a5",
+    "src/contour_kinetics.cpp": "1dcab037f708ccb3f5765f57194ecc471eb232e188bc95a54a5dc1cd43720996",
+    "include/ducklips/contour_glottal_storage.hpp": "305a8fe982e3bf3621135cd526d8a34b51e68e02df61bd76a05d06a716cb1098",
+    "src/contour_glottal_storage.cpp": "bdb8cdf471abfa344f093a0df53977df775b941e9dbfbe5685e00e99158bf8f8",
+    "include/ducklips/fold_contact.hpp": "88f9b233eb79a46964fa03e7bae6b6ed8e6d9ab4e115f2bab767d3bc16864038",
+    "src/fold_contact.cpp": "95d47f609fcdc534bb8042005ff0cfb69f2a7c8c00efa339ceecf3f8d142710b",
+    "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "src/glottal_storage.cpp": "047673700a53093ae7f77ba56c99866842e5fba88b8359e3388aa229e1652558",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "tools/contour_sealed_probe.cpp": "ee20b43788d704d0332f29b3cfbd8288ca2729c2ddeca84a1c8cbcd7cf794abd",
+    "tools/contour_sealed_reference.py": "0eb916e8278cf13fc6cea66742cf04e10898fad63682a43f04d1239316de9a2d",
+    "build/ducklips_contour_sealed_probe": "5b7f163c214b9d6dfe2afca1d139db9347d9f00d87afa68338c3bfe6f65d414c"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "scipy": "1.16.3",
+    "mpmath": "1.3.0"
+  }
+}

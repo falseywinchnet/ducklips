@@ -1,0 +1,69 @@
+{
+  "scope": "additional native lower-contact refinements; continuous oracles reused from the verified initial report",
+  "reference": "reports/contour_sealed_reference.json",
+  "reference_sha256": "d575a35e8bed90b63da942589712236f825db351ead35b704e7d5b968b996454",
+  "runs": [
+    {
+      "mode": "lower",
+      "steps": 12800,
+      "normalized_error": 1.52168804153362e-06,
+      "refinement_ratio": 4.045326979924122,
+      "previous_refinement_ratio": 4.174010243653237,
+      "maximum_position_error_m": 3.107723352949502e-14,
+      "maximum_work_balance_J": 1.0190865146653301e-20,
+      "maximum_mass_balance_m3": 1.0120037806703448e-23,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "12800",
+        "lower"
+      ],
+      "output": "out/contour-sealed/lower-12800.json",
+      "output_sha256": "d2090dbf75846bc16b9b4b0c63f31912e7fd9fdc7d554f414573d936a6982f3b"
+    },
+    {
+      "mode": "lower_rest",
+      "steps": 12800,
+      "normalized_error": 1.3085447712193952e-06,
+      "refinement_ratio": 4.054871938067426,
+      "previous_refinement_ratio": 4.211399298026556,
+      "maximum_position_error_m": 1.866221232928243e-14,
+      "maximum_work_balance_J": 9.502650877009182e-21,
+      "maximum_mass_balance_m3": 7.496324301261813e-24,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_sealed_probe",
+        "--trajectory",
+        "12800",
+        "lower_rest"
+      ],
+      "output": "out/contour-sealed/lower_rest-12800.json",
+      "output_sha256": "d6f1a7f6a7f4e2492ffcd5d3831a73b1506737c60ffebc7f4ec68c417a5087b3"
+    }
+  ],
+  "combined_acceptance": [
+    {
+      "mode": "lower",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "lower_rest",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "upper",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "upper_rest",
+      "second_order": true,
+      "endpoint_accuracy": true
+    }
+  ],
+  "hashes": {
+    "build/ducklips_contour_sealed_probe": "5b7f163c214b9d6dfe2afca1d139db9347d9f00d87afa68338c3bfe6f65d414c",
+    "tools/contour_sealed_endpoint_reference.py": "505e40c1765aed1f46fb83815545957a226d711790c2242b0af458d2786d0e83"
+  }
+}

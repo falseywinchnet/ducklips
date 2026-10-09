@@ -142,9 +142,14 @@ It is independently checked; its open portion is now coupled below.
 and kinetic shape forces together and solves tissue, air storage, passage
 momentum and tract feedback jointly. Four short independent motion controls
 converge and balance work. A longer drive approaches a sealed lower opening
-with retained wedge volume; collision and sealing/reopening transport remain
-unimplemented. This is a source reference component, with no new speech
-recording or performance claim.
+with retained wedge volume. This is a source reference component, with no
+new speech recording or performance claim.
+
+[Sealed-cap dynamics](reports/SEALED_GLOTTAL_DYNAMICS.md) now retains the
+chamber air during elastic tissue contact, with exact zero flow and no hidden
+momentum on the sealed passage. Four independent closed-phase motion controls
+converge; the open controls still pass. Joining these phases through automatic
+sealing/reopening and transporting disappearing chamber state remain required.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

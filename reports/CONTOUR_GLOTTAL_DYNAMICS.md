@@ -6,7 +6,10 @@ energy. `ContourGlottalStorage` solves the four tissue displacements and
 three passage flows together; `GraphContourGlottal` connects its outlet to
 the existing total-flow acoustic graph.
 
-This is a new dynamic reference component, not a new speech recording.
+This report records the initial open dynamic reference. The subsequent
+[sealed-cap extension](SEALED_GLOTTAL_DYNAMICS.md) adds elastic contact and
+fixed-topology sealed phases; automatic sealing/reopening remains unfinished.
+This is a dynamic reference component, not a new speech recording.
 The latest human pronunciation feedback still belongs to the spatial-pressure
 recording: November improved; Foxtrot remains jammed around /tr/. Performance
 optimization remains parked. These correctness controls carry no realtime claim.

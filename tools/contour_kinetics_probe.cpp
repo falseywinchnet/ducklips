@@ -33,5 +33,7 @@ int main(int argc,char** argv){try{
     }
     std::printf("metric %.17g chain %.17g limit %.17g symmetry %.17g\n",max_metric,max_chain,max_limit,max_symmetry);
     require(max_metric<1e-10,"metric mismatch");require(max_chain<1e-10,"kinetic finite chain");require(max_limit<1e-12,"coincident derivative");require(max_symmetry<1e-10,"time symmetry");
-    ContourKineticState sentinel;sentinel.energy=123;require(!model.evaluate({1e-9,1e-9},{0,1e-6},{},sentinel) && sentinel.energy==123,"closure rejection");return 0;
+    ContourKineticState sentinel;sentinel.energy=123;require(model.evaluate({1e-9,1e-9},{0,1e-6},{},sentinel) && sentinel.inverse_inertance[0]==0 && sentinel.geometry.chamber[0].volume>0,"sealed cap storage");sentinel.energy=123;
+    require(!model.evaluate({1e-9,1e-9},{0,1e-6},{.001,0,0},sentinel) && sentinel.energy==123,"sealed momentum rejection");
+    require(!model.evaluate({1e-9,1e-9},{0,0},{},sentinel) && sentinel.energy==123,"empty storage rejection");return 0;
 }catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 1;}}

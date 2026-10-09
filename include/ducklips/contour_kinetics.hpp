@@ -12,12 +12,14 @@ struct ContourKineticState final {
 struct ContourKineticTransfer final {
     std::array<double,3> flow{};
     std::array<double,4> effort{};
+    std::array<std::array<double,2>,2> volume_gradient{}; // chamber, control area
     double energy_change{},chain_residual{};
 };
-// Open-profile reference. Density is uniform within each chamber; the three
+// Positive-storage contour reference. Density is uniform within each chamber; the three
 // dual paths join the moving volume centroids. Mass and shape derivatives
-// belong to the same kinetic energy. Nonpositive control areas are rejected:
-// this solver does not perform contact/topology transport.
+// belong to the same kinetic energy. Sealed caps have zero inverse inertia
+// and require zero momentum. Both chambers must retain positive volume.
+// This constitutive kernel does not perform sealing/reopening state transport.
 class ContourKinetics final {
 public:
     [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&,double outlet_loss=1.) noexcept;
@@ -28,7 +30,8 @@ public:
         const std::array<double,3>& momentum1,ContourKineticTransfer&) const noexcept;
 private:
     [[nodiscard]] bool metric(const std::array<double,4>& first,const std::array<double,4>& last,
-        std::size_t coordinate,std::array<double,3>& value,std::array<double,3>& slope) const noexcept;
+        std::size_t coordinate,std::array<double,3>& value,std::array<double,3>& slope,
+        std::array<double,2>* volume_slope=nullptr) const noexcept;
     double density_{},viscosity_{},width_{},outlet_loss_{};
     std::array<double,2> thickness_{};
 };

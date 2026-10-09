@@ -1,0 +1,276 @@
+{
+  "scope": "constitutive and quasisteady limiting powers at fixed positive chamber masses and 700 Pa mass effort drop; not a simulated contact event",
+  "conditions": [
+    "positive viscosity",
+    "positive retained chamber volume",
+    "finite nonzero chamber density",
+    "finite passage driving effort"
+  ],
+  "rows": [
+    {
+      "cell": 0,
+      "area_m2": 1e-08,
+      "inverse_inertia": 6.7906961994431426e-06,
+      "resistance": 56190628892622.26,
+      "viscous_relaxation_s": 2.6207271365431423e-09,
+      "quasisteady_flow_m3_s": 1.2457593264130718e-11,
+      "quasisteady_momentum_Pa_s": 1.8345089955801997e-06,
+      "quasisteady_energy_J": 1.1426783453163553e-17
+    },
+    {
+      "cell": 0,
+      "area_m2": 3.1622776601683795e-09,
+      "inverse_inertia": 2.192897775130274e-06,
+      "resistance": 1744244559145839.5,
+      "viscous_relaxation_s": 2.614413251395115e-10,
+      "quasisteady_flow_m3_s": 4.013198701578817e-13,
+      "quasisteady_momentum_Pa_s": 1.8300892759765805e-07,
+      "quasisteady_energy_J": 3.6722559530612655e-20
+    },
+    {
+      "cell": 0,
+      "area_m2": 1e-09,
+      "inverse_inertia": 6.987926824673908e-07,
+      "resistance": 54833588713648472,
+      "viscous_relaxation_s": 2.6097865057251898e-11,
+      "quasisteady_flow_m3_s": 1.2765897991020329e-14,
+      "quasisteady_momentum_Pa_s": 1.8268505540076327e-08,
+      "quasisteady_energy_J": 1.1660693908650204e-22
+    },
+    {
+      "cell": 0,
+      "area_m2": 3.1622776601683795e-10,
+      "inverse_inertia": 2.215851538229531e-07,
+      "resistance": 1.730754988304915e+18,
+      "viscous_relaxation_s": 2.607496587068162e-12,
+      "quasisteady_flow_m3_s": 4.0444777263682674e-16,
+      "quasisteady_momentum_Pa_s": 1.8252476109477134e-09,
+      "quasisteady_energy_J": 3.69108665379246e-25
+    },
+    {
+      "cell": 0,
+      "area_m2": 1e-10,
+      "inverse_inertia": 7.013927687614966e-08,
+      "resistance": 5.469894815092005e+19,
+      "viscous_relaxation_s": 2.60651207329935e-13,
+      "quasisteady_flow_m3_s": 1.2797321039311901e-17,
+      "quasisteady_momentum_Pa_s": 1.824558451309545e-10,
+      "quasisteady_energy_J": 1.167473012819899e-27
+    },
+    {
+      "cell": 0,
+      "area_m2": 3.1622776601683794e-11,
+      "inverse_inertia": 2.218748192670629e-08,
+      "resistance": 1.7294093890524448e+21,
+      "viscous_relaxation_s": 2.6061185705134878e-14,
+      "quasisteady_flow_m3_s": 4.0476246077485144e-19,
+      "quasisteady_momentum_Pa_s": 1.8242829993594415e-11,
+      "quasisteady_energy_J": 3.692006379852272e-30
+    },
+    {
+      "cell": 0,
+      "area_m2": 1e-11,
+      "inverse_inertia": 7.017117482839528e-09,
+      "resistance": 5.468549470790899e+22,
+      "viscous_relaxation_s": 2.605968171292175e-15,
+      "quasisteady_flow_m3_s": 1.2800469370148373e-20,
+      "quasisteady_momentum_Pa_s": 1.8241777199045225e-12,
+      "quasisteady_energy_J": 1.1675165514672468e-32
+    },
+    {
+      "cell": 0,
+      "area_m2": 3.1622776601683794e-12,
+      "inverse_inertia": 2.2190963469674115e-09,
+      "resistance": 1.7292748626841367e+24,
+      "viscous_relaxation_s": 2.605912403566643e-16,
+      "quasisteady_flow_m3_s": 4.0479394866902634e-22,
+      "quasisteady_momentum_Pa_s": 1.8241386824966502e-13,
+      "quasisteady_energy_J": 3.692001501038672e-35
+    },
+    {
+      "cell": 0,
+      "area_m2": 1e-12,
+      "inverse_inertia": 7.017494756766219e-10,
+      "resistance": 5.468414946971909e+25,
+      "viscous_relaxation_s": 2.6058921732210837e-17,
+      "quasisteady_flow_m3_s": 1.2800784263593957e-23,
+      "quasisteady_momentum_Pa_s": 1.8241245212547586e-14,
+      "quasisteady_energy_J": 1.167511223325689e-37
+    },
+    {
+      "cell": 0,
+      "area_m2": 3.162277660168379e-13,
+      "inverse_inertia": 2.219136984185856e-10,
+      "resistance": 1.729261410382854e+27,
+      "viscous_relaxation_s": 2.6058849552392813e-18,
+      "quasisteady_flow_m3_s": 4.047970976493495e-25,
+      "quasisteady_momentum_Pa_s": 1.824119468667497e-15,
+      "quasisteady_energy_J": 3.691991333411382e-40
+    },
+    {
+      "cell": 0,
+      "area_m2": 1e-13,
+      "inverse_inertia": 7.01753830299655e-11,
+      "resistance": 5.468401494696119e+28,
+      "viscous_relaxation_s": 2.6058824132258497e-19,
+      "quasisteady_flow_m3_s": 1.2800815753542239e-26,
+      "quasisteady_momentum_Pa_s": 1.8241176892580948e-16,
+      "quasisteady_energy_J": 1.1675097226485042e-42
+    },
+    {
+      "cell": 0,
+      "area_m2": 0.0,
+      "sealed": true,
+      "retained_volume_m3": 1.5625000000000003e-09
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-08,
+      "inverse_inertia": 3.04745393178485e-05,
+      "resistance": 12805138538344.97,
+      "viscous_relaxation_s": 2.562586709581993e-09,
+      "quasisteady_flow_m3_s": 5.466555460558673e-11,
+      "quasisteady_momentum_Pa_s": 1.793810696707395e-06,
+      "quasisteady_energy_J": 4.9029828296471834e-17
+    },
+    {
+      "cell": 1,
+      "area_m2": 3.1622776601683795e-09,
+      "inverse_inertia": 1.0523817151106584e-05,
+      "resistance": 363973484606547.5,
+      "viscous_relaxation_s": 2.6106999433766665e-10,
+      "quasisteady_flow_m3_s": 1.9232170188350248e-12,
+      "quasisteady_momentum_Pa_s": 1.8274899603636665e-07,
+      "quasisteady_energy_J": 1.757329896760774e-19
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-09,
+      "inverse_inertia": 3.442107674111087e-06,
+      "resistance": 11116249183146880,
+      "viscous_relaxation_s": 2.613468530623144e-11,
+      "quasisteady_flow_m3_s": 6.297088059714025e-14,
+      "quasisteady_momentum_Pa_s": 1.829427971436201e-08,
+      "quasisteady_energy_J": 5.760034517518876e-22
+    },
+    {
+      "cell": 1,
+      "area_m2": 3.1622776601683795e-10,
+      "inverse_inertia": 1.1020368679366581e-06,
+      "resistance": 3.476409024139463e+17,
+      "viscous_relaxation_s": 2.6101953256243033e-12,
+      "quasisteady_flow_m3_s": 2.013572036947739e-15,
+      "quasisteady_momentum_Pa_s": 1.8271367279370122e-09,
+      "quasisteady_energy_J": 1.8395357115270783e-24
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-10,
+      "inverse_inertia": 3.5004052487701365e-07,
+      "resistance": 1.09546715824413e+19,
+      "viscous_relaxation_s": 2.607848221299922e-13,
+      "quasisteady_flow_m3_s": 6.389967921283878e-17,
+      "quasisteady_momentum_Pa_s": 1.8254937549099452e-10,
+      "quasisteady_energy_J": 5.832423267189301e-27
+    },
+    {
+      "cell": 1,
+      "area_m2": 3.1622776601683794e-11,
+      "inverse_inertia": 1.1086526746857497e-07,
+      "resistance": 3.460306432846558e+20,
+      "viscous_relaxation_s": 2.6066932706390303e-14,
+      "quasisteady_flow_m3_s": 2.022942226605514e-18,
+      "quasisteady_momentum_Pa_s": 1.8246852894473213e-11,
+      "quasisteady_energy_J": 1.8456164611444456e-29
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-11,
+      "inverse_inertia": 3.507772325113786e-08,
+      "resistance": 1.0938586425419008e+22,
+      "viscous_relaxation_s": 2.606197957787142e-15,
+      "quasisteady_flow_m3_s": 6.399364349065663e-20,
+      "quasisteady_momentum_Pa_s": 1.8243385704509992e-12,
+      "quasisteady_energy_J": 5.83730360418477e-32
+    },
+    {
+      "cell": 1,
+      "area_m2": 3.1622776601683794e-12,
+      "inverse_inertia": 1.1094630546896213e-08,
+      "resistance": 3.4586984683476394e+23,
+      "viscous_relaxation_s": 2.606000253912975e-16,
+      "quasisteady_flow_m3_s": 2.023882701559753e-21,
+      "quasisteady_momentum_Pa_s": 1.8242001777390825e-13,
+      "quasisteady_energy_J": 1.8459835919541775e-34
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-12,
+      "inverse_inertia": 3.508655791016164e-09,
+      "resistance": 1.0936978635214199e+25,
+      "viscous_relaxation_s": 2.6059247548432385e-17,
+      "quasisteady_flow_m3_s": 6.400305087423174e-23,
+      "quasisteady_momentum_Pa_s": 1.8241473283902668e-14,
+      "quasisteady_energy_J": 5.837549713052807e-37
+    },
+    {
+      "cell": 1,
+      "area_m2": 3.162277660168379e-13,
+      "inverse_inertia": 1.1095586868244321e-09,
+      "resistance": 3.458537694838702e+26,
+      "viscous_relaxation_s": 2.6058967764924804e-18,
+      "quasisteady_flow_m3_s": 2.023976783727512e-24,
+      "quasisteady_momentum_Pa_s": 1.824127743544736e-15,
+      "quasisteady_energy_J": 1.8459961017438994e-39
+    },
+    {
+      "cell": 1,
+      "area_m2": 1e-13,
+      "inverse_inertia": 3.5087586998195815e-10,
+      "resistance": 1.0936817863448148e+28,
+      "viscous_relaxation_s": 2.605886631464406e-19,
+      "quasisteady_flow_m3_s": 6.400399172225994e-26,
+      "quasisteady_momentum_Pa_s": 1.8241206420250843e-16,
+      "quasisteady_energy_J": 5.83755012362885e-42
+    },
+    {
+      "cell": 1,
+      "area_m2": 0.0,
+      "sealed": true,
+      "retained_volume_m3": 6.24999999999999e-11
+    }
+  ],
+  "checks": [
+    {
+      "cell": 0,
+      "exponents": {
+        "inverse_inertia": 0.999994417109149,
+        "resistance": -2.9999976565811766,
+        "viscous_relaxation_s": 2.0000032394720244,
+        "quasisteady_flow_m3_s": 2.999997656581174,
+        "quasisteady_momentum_Pa_s": 2.0000032394720235,
+        "quasisteady_energy_J": 5.000000896053194
+      },
+      "passed": true
+    },
+    {
+      "cell": 1,
+      "exponents": {
+        "inverse_inertia": 0.9999737027414696,
+        "resistance": -2.9999859967767377,
+        "viscous_relaxation_s": 2.0000122940352685,
+        "quasisteady_flow_m3_s": 2.9999859967767377,
+        "quasisteady_momentum_Pa_s": 2.0000122940352654,
+        "quasisteady_energy_J": 4.999998290812005
+      },
+      "passed": true
+    }
+  ],
+  "hashes": {
+    "build/ducklips_contour_sealed_probe": "5b7f163c214b9d6dfe2afca1d139db9347d9f00d87afa68338c3bfe6f65d414c",
+    "tools/contour_sealing_limit.py": "a7c406b66a261eec025a1b79140fcbf927a2c91321e9026086c122dd3485fdd7",
+    "tools/contour_sealed_reference.py": "0eb916e8278cf13fc6cea66742cf04e10898fad63682a43f04d1239316de9a2d",
+    "out/contour-sealed/sealing-limit-input.txt": "33950394cae3a46677e2744108e4a3bb513374891796066f3aa0defa587ae7c7",
+    "out/contour-sealed/sealing-limit-output.jsonl": "eaeabe3891dcbcb3b4e70098de27bcd686c8dfdd9b3c9244bd64db8b52d49951"
+  }
+}

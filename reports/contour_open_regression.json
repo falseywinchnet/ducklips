@@ -1,0 +1,248 @@
+{
+  "scope": "current open dynamics compared with reused independent open oracle",
+  "oracle_commit": "5bc0d1ace9273b158346921fd1a652edbb8c508f",
+  "reference": "reports/contour_glottal_reference.json",
+  "reference_sha256": "4be3be1bcdeaa3bce478ddebb846b53a71876024ef65b3b8e87175309368e3a7",
+  "runs": [
+    {
+      "mode": "forward",
+      "steps": 960,
+      "normalized_error": 0.00032750412964551183,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.003790356468414302,
+      "maximum_work_balance_J": 1.2224379494774062e-17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-sealed/open-forward-960.json",
+      "output_sha256": "1efd8772e5a35caf258d4205071c60d50629db55c3f73e3732decfbae7c3b5d2"
+    },
+    {
+      "mode": "forward",
+      "steps": 1920,
+      "normalized_error": 8.564304444302147e-05,
+      "refinement_ratio": 3.8240598728762047,
+      "maximum_network_pressure_error_Pa": 0.0008834159645942918,
+      "maximum_work_balance_J": 1.176901458233015e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-sealed/open-forward-1920.json",
+      "output_sha256": "6cedc127b392882e730030150dc6562e3eaae0b5caac40643b20590d85ffe68f"
+    },
+    {
+      "mode": "forward",
+      "steps": 3840,
+      "normalized_error": 2.1702085972277762e-05,
+      "refinement_ratio": 3.9463047263024333,
+      "maximum_network_pressure_error_Pa": 0.0002168270008695572,
+      "maximum_work_balance_J": 1.962405932198763e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "forward"
+      ],
+      "output": "out/contour-sealed/open-forward-3840.json",
+      "output_sha256": "d8594913d796e9f378a821c657c277281f9d581fe3f9d8cfe0c76b06f8b836df"
+    },
+    {
+      "mode": "reverse",
+      "steps": 960,
+      "normalized_error": 8.072774899561374e-06,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.0008454596384162016,
+      "maximum_work_balance_J": 4.2182240773264157e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-sealed/open-reverse-960.json",
+      "output_sha256": "c7a43fa6c3c604f5faa17432d5b0b8b79c10a529160b505895b6ed1b640bd4c7"
+    },
+    {
+      "mode": "reverse",
+      "steps": 1920,
+      "normalized_error": 1.9385195572617093e-06,
+      "refinement_ratio": 4.164402091957595,
+      "maximum_network_pressure_error_Pa": 0.00021744348617858122,
+      "maximum_work_balance_J": 6.700030612781516e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-sealed/open-reverse-1920.json",
+      "output_sha256": "54c6b1e89503aab2d5fa73c22bd90b28ba7fd845ab945b1899d2413e5d86e014"
+    },
+    {
+      "mode": "reverse",
+      "steps": 3840,
+      "normalized_error": 4.786315484067423e-07,
+      "refinement_ratio": 4.050129089305978,
+      "maximum_network_pressure_error_Pa": 5.476821180394609e-05,
+      "maximum_work_balance_J": 3.5151867311053464e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "reverse"
+      ],
+      "output": "out/contour-sealed/open-reverse-3840.json",
+      "output_sha256": "f15dc3a0a1c39a6a5c754875ca9cfcd3af3ec83c694c894812a6523b38afa7b2"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 3840,
+      "normalized_error": 8.403908363233123e-06,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.004692622618740927,
+      "maximum_work_balance_J": 3.663417496874849e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-sealed/open-relaxation-3840.json",
+      "output_sha256": "280c4bf5920081718249d0385702a2d33cca1812505d5ae8eddf6ebe948afb3a"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 7680,
+      "normalized_error": 2.1672800829597357e-06,
+      "refinement_ratio": 3.8776291210854326,
+      "maximum_network_pressure_error_Pa": 0.0012385138376131977,
+      "maximum_work_balance_J": 6.102872384967234e-19,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "7680",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-sealed/open-relaxation-7680.json",
+      "output_sha256": "9588142b4e12ef562746ee718525265667373f1596ea490cd51c3a1e9505d29f"
+    },
+    {
+      "mode": "relaxation",
+      "steps": 15360,
+      "normalized_error": 5.525626123990151e-07,
+      "refinement_ratio": 3.922234393583446,
+      "maximum_network_pressure_error_Pa": 0.0003117340409843905,
+      "maximum_work_balance_J": 1.3810872204981367e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "15360",
+        "0.005",
+        "relaxation"
+      ],
+      "output": "out/contour-sealed/open-relaxation-15360.json",
+      "output_sha256": "3e14afc3236290d2a7bbbefbffb236ed48fd91626e5bf42f83ac9d405810eadc"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 960,
+      "normalized_error": 0.00031248446938112275,
+      "refinement_ratio": null,
+      "maximum_network_pressure_error_Pa": 0.006798075972611173,
+      "maximum_work_balance_J": 9.038463587024024e-18,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "960",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-sealed/open-rest_motion-960.json",
+      "output_sha256": "203462d573ac27116b5f0bbeceb9bfc9014d8e46ec5a4f06efb45a72d5324349"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 1920,
+      "normalized_error": 8.163151694977864e-05,
+      "refinement_ratio": 3.827988025426129,
+      "maximum_network_pressure_error_Pa": 0.001829169869338898,
+      "maximum_work_balance_J": 1.0986676423400358e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "1920",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-sealed/open-rest_motion-1920.json",
+      "output_sha256": "f19b03a5acc7e89382f0e5545d69a7bc2da94af945a639ca8ad50a1a2ffdae7d"
+    },
+    {
+      "mode": "rest_motion",
+      "steps": 3840,
+      "normalized_error": 2.0682188193443525e-05,
+      "refinement_ratio": 3.9469477884190565,
+      "maximum_network_pressure_error_Pa": 0.0004664724178127244,
+      "maximum_work_balance_J": 1.872947126500929e-16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_contour_glottal_probe",
+        "--trajectory",
+        "3840",
+        "0.005",
+        "rest_motion"
+      ],
+      "output": "out/contour-sealed/open-rest_motion-3840.json",
+      "output_sha256": "49ade4257c4932ec24255326cbf546db1794f9879d457f61290e325b5da9efe0"
+    }
+  ],
+  "acceptance": [
+    {
+      "mode": "forward",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "reverse",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "relaxation",
+      "second_order": true,
+      "endpoint_accuracy": true
+    },
+    {
+      "mode": "rest_motion",
+      "second_order": true,
+      "endpoint_accuracy": true
+    }
+  ],
+  "hashes": {
+    "src/contour_kinetics.cpp": "1dcab037f708ccb3f5765f57194ecc471eb232e188bc95a54a5dc1cd43720996",
+    "src/contour_glottal_storage.cpp": "bdb8cdf471abfa344f093a0df53977df775b941e9dbfbe5685e00e99158bf8f8",
+    "src/fold_contact.cpp": "95d47f609fcdc534bb8042005ff0cfb69f2a7c8c00efa339ceecf3f8d142710b",
+    "src/glottal_contour.cpp": "9275bb1ee361403e1d7a9d2d32493857e2425dd8f412e1cfa4192fd7118706a3",
+    "src/gas_storage.cpp": "66f981fea8f69e3e22a5f37106eb4fff72907ee1cbf40696d4478061767d74c3",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "include/ducklips/contour_kinetics.hpp": "c714bd85d403f41a06958f161f843012364b0c44b8e53dfe94b2accde42172a5",
+    "include/ducklips/contour_glottal_storage.hpp": "305a8fe982e3bf3621135cd526d8a34b51e68e02df61bd76a05d06a716cb1098",
+    "include/ducklips/fold_contact.hpp": "88f9b233eb79a46964fa03e7bae6b6ed8e6d9ab4e115f2bab767d3bc16864038",
+    "tools/contour_open_regression.py": "ef1dab8d5165cbe50a7e129664cc5de27f5999d6e63c39d18665bc94674ef1dc",
+    "tools/contour_glottal_probe.cpp": "3140b6d10c1671d753a8d712d968e2f9e5e2db68984f9bb4ce63856714d1f54c",
+    "build/ducklips_contour_glottal_probe": "df33e3e0aefc96ddeea1cb1535a5635823e07f4f3315addcbdec3635c8d60226"
+  }
+}

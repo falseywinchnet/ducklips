@@ -18,9 +18,12 @@ bool solve(std::array<double,49> a,std::array<double,7> b,std::array<double,7>& 
 }
 bool ContourGlottalStorage::prepare(const FoldParameters& f,const AirProperties& air,double tension,
     const FoldState& initial,const std::array<double,2>& pressure,double outlet_loss) noexcept {
-    // Reuse the existing body-validation contract; only the air geometry changes.
-    GlottalStorage validation;if(!validation.prepare(f,air,tension,initial,pressure)){return false;}
-    ContourGlottalStorage candidate;if(!candidate.gas_.configure(air) || !candidate.kinetics_.configure(f,air,outlet_loss)){return false;}
+    // Validate body parameters with the existing contract. Its rectangular
+    // positivity restriction does not apply to this retained wedge geometry.
+    if(!finite(positions(initial)) || !finite(velocities(initial)) || !std::isfinite(initial.rest_area)){return false;}
+    FoldState validation_state;validation_state.rest_area=3e-6;
+    GlottalStorage validation;if(!validation.prepare(f,air,tension,validation_state,{})){return false;}
+    ContourGlottalStorage candidate;if(!candidate.gas_.configure(air) || !candidate.kinetics_.configure(f,air,outlet_loss) || !candidate.contact_.configure(f,tension)){return false;}
     candidate.width_=f.length;candidate.state.folds=initial;
     for(std::size_t side=0;side<2;++side){const double q=tension*(side?f.asymmetry:1.);
         candidate.coupling_[side]=f.coupling_stiffness*q;
@@ -30,7 +33,7 @@ bool ContourGlottalStorage::prepare(const FoldParameters& f,const AirProperties&
         candidate.damping_[side+2]=2*f.upper_damping_ratio*std::sqrt(candidate.tissue_mass_[side+2]*candidate.stiffness_[side+2]);}
     const auto x=positions(initial);const GlottalContour contour{f.lower_thickness,f.upper_thickness,
         initial.rest_area+f.length*(x[0]+x[1]),initial.rest_area+f.length*(x[2]+x[3])};GlottalContourGeometry geometry;
-    if(contour.lower_area<=0 || contour.upper_area<=0 || !contour.geometry(geometry)){return false;}
+    if(!contour.geometry(geometry)){return false;}
     for(std::size_t i=0;i<2;++i){if(!candidate.gas_.mass_at_pressure(geometry.chamber[i].volume,pressure[i],candidate.state.mass[i])){return false;}}
     double e=0;if(!candidate.energy(e)){return false;}*this=candidate;return true;
 }
@@ -44,7 +47,8 @@ double ContourGlottalStorage::mechanical_energy(const std::array<double,4>& x,co
 }
 bool ContourGlottalStorage::energy(double& result) const noexcept {
     ContourKineticState kinetic;std::array<double,2> area;if(!configuration(area,kinetic)){return false;}
-    double sum=mechanical_energy(positions(state.folds),velocities(state.folds))+kinetic.energy;
+    FoldContactState contact;if(!contact_.evaluate(area,contact)){return false;}
+    double sum=mechanical_energy(positions(state.folds),velocities(state.folds))+kinetic.energy+contact.energy;
     for(std::size_t i=0;i<2;++i){GasEnergy gas;if(!gas_.evaluate(state.mass[i],kinetic.geometry.chamber[i].volume,gas)){return false;}sum+=gas.energy;}
     if(!std::isfinite(sum)){return false;}result=sum;return true;
 }
@@ -58,27 +62,34 @@ bool ContourGlottalStorage::advance(double dt,double reservoir_pressure,double f
     const auto x0=positions(state.folds),v0=velocities(state.folds);
     std::array<double,7> y{},residual{},tolerance{};
     for(std::size_t i=0;i<4;++i){y[3+i]=-.5*(rest_area-state.folds.rest_area)/width_;}
-    std::array<double,2> m1{},a1{},area_effort{};std::array<double,3> p1{};std::array<GasTransfer,2> gas;
+    std::array<double,2> m1{},a1{},area_effort{};std::array<double,3> p1{},flow{};std::array<GasTransfer,2> gas;
+    FoldContactTransfer contact;
     ContourKineticState k1,mid;ContourKineticTransfer kinetic;double norm=0;bool converged=false;
     const auto evaluate=[&](const std::array<double,7>& trial){
         if(!finite(trial)){return false;}
-        m1={state.mass[0]+dt*(trial[0]-trial[1]),state.mass[1]+dt*(trial[1]-trial[2])};
+        for(std::size_t j=0;j<3;++j){flow[j]=k0.geometry.passage[j].open?trial[j]:0.;}
+        m1={state.mass[0]+dt*(flow[0]-flow[1]),state.mass[1]+dt*(flow[1]-flow[2])};
         // Accumulate area displacement directly to avoid subtracting fold positions.
         for(std::size_t i=0;i<2;++i){a1[i]=a0[i]+rest_area-state.folds.rest_area+width_*(trial[3+2*i]+trial[4+2*i]);}
         if(!kinetics_.evaluate(m1,a1,{},k1)){return false;}
-        for(std::size_t j=0;j<3;++j){p1[j]=4*trial[j]/(k0.inverse_inertance[j]+k1.inverse_inertance[j])-momentum[j];}
+        for(std::size_t j=0;j<3;++j){
+            if(k0.geometry.passage[j].open!=k1.geometry.passage[j].open){return false;}
+            p1[j]=k0.geometry.passage[j].open?4*flow[j]/(k0.inverse_inertance[j]+k1.inverse_inertance[j])-momentum[j]:0.;
+        }
         if(!kinetics_.transfer(state.mass,a0,momentum,m1,a1,p1,kinetic)){return false;}
         std::array<double,2> mm,am;for(std::size_t i=0;i<2;++i){mm[i]=.5*(state.mass[i]+m1[i]);am[i]=.5*(a0[i]+a1[i]);
             if(!gas_.transfer(state.mass[i],k0.geometry.chamber[i].volume,m1[i],k1.geometry.chamber[i].volume,gas[i])){return false;}}
-        if(!kinetics_.evaluate(mm,am,{},mid)){return false;}
-        for(std::size_t k=0;k<2;++k){area_effort[k]=kinetic.effort[k+2];
-            // Open contour volume is affine in both controls; these constant
-            // volume derivatives give the exact gas work for finite motion.
-            for(std::size_t i=0;i<2;++i){area_effort[k]-=gas[i].pressure*k0.geometry.chamber[i].area_derivative[k];}}
+        if(!kinetics_.evaluate(mm,am,{},mid) || !contact_.transfer(a0,a1,contact)){return false;}
+        for(std::size_t k=0;k<2;++k){area_effort[k]=kinetic.effort[k+2]+contact.area_effort[k];
+            // Contact clips the volume nonlinearly. Use the finite volume
+            // gradient belonging to the same contour transfer as the inertia.
+            for(std::size_t i=0;i<2;++i){area_effort[k]-=gas[i].pressure*kinetic.volume_gradient[i][k];}}
         const std::array<double,2> mu={gas[0].mass_effort+kinetic.effort[0],gas[1].mass_effort+kinetic.effort[1]};
-        const std::array<double,3> ports={mu[0]-reservoir.mass_effort,mu[1]-mu[0],free_load+load_slope*trial[2]-mu[1]};
+        const std::array<double,3> ports={mu[0]-reservoir.mass_effort,mu[1]-mu[0],free_load+load_slope*flow[2]-mu[1]};
         norm=0;converged=true;
-        for(std::size_t j=0;j<3;++j){const double inertia=(p1[j]-momentum[j])/dt,loss=(mid.resistance[j]+mid.quadratic_loss[j]*std::abs(trial[j]))*trial[j];
+        for(std::size_t j=0;j<3;++j){
+            if(!k0.geometry.passage[j].open){residual[j]=trial[j];tolerance[j]=1e-20;norm=std::max(norm,std::abs(trial[j])/1e-4);if(std::abs(trial[j])>tolerance[j]){converged=false;}continue;}
+            const double inertia=(p1[j]-momentum[j])/dt,loss=(mid.resistance[j]+mid.quadratic_loss[j]*std::abs(flow[j]))*flow[j];
             residual[j]=inertia+loss+ports[j];tolerance[j]=1e-8+1e-11*(std::abs(inertia)+std::abs(loss)+std::abs(ports[j]));
             norm=std::max(norm,std::abs(residual[j])/1000.);if(std::abs(residual[j])>tolerance[j]){converged=false;}}
         for(std::size_t i=0;i<4;++i){const std::size_t side=i%2,other=i<2?i+2:i-2;const double speed=trial[3+i]/dt;
@@ -108,9 +119,9 @@ bool ContourGlottalStorage::advance(double dt,double reservoir_pressure,double f
     for(std::size_t i=0;i<4;++i){x1[i]+=y[3+i];v1[i]=2*y[3+i]/dt-v0[i];receipt.force_residual[i]=residual[3+i];
         receipt.external_work+=external_force[i]*y[3+i];receipt.damping_loss+=damping_[i]*y[3+i]*y[3+i]/dt;}
     next.state.folds.lower_position={x1[0],x1[1]};next.state.folds.upper_position={x1[2],x1[3]};next.state.folds.lower_velocity={v1[0],v1[1]};next.state.folds.upper_velocity={v1[2],v1[3]};
-    for(std::size_t j=0;j<3;++j){receipt.flow[j]=y[j];receipt.law_residual[j]=residual[j];receipt.passage_loss+=dt*(mid.resistance[j]+mid.quadratic_loss[j]*std::abs(y[j]))*y[j]*y[j];}
+    for(std::size_t j=0;j<3;++j){receipt.flow[j]=flow[j];receipt.law_residual[j]=k0.geometry.passage[j].open?residual[j]:0.;receipt.passage_loss+=dt*(mid.resistance[j]+mid.quadratic_loss[j]*std::abs(flow[j]))*flow[j]*flow[j];}
     for(std::size_t i=0;i<2;++i){receipt.pressure[i]=gas[i].pressure;receipt.actuator_work+=area_effort[i]*(rest_area-state.folds.rest_area);}
-    receipt.kinetic_effort=kinetic.effort;receipt.area_effort=area_effort;receipt.reservoir_work=dt*reservoir.mass_effort*y[0];receipt.load_work=dt*(free_load+load_slope*y[2])*y[2];
+    receipt.kinetic_effort=kinetic.effort;receipt.area_effort=area_effort;receipt.contact_area_effort=contact.area_effort;receipt.reservoir_work=dt*reservoir.mass_effort*flow[0];receipt.load_work=dt*(free_load+load_slope*flow[2])*flow[2];
     double e1=0;if(!next.energy(e1)){return false;}receipt.energy_change=e1-e0;
     receipt.energy_residual=receipt.energy_change+receipt.damping_loss+receipt.passage_loss+receipt.load_work-receipt.reservoir_work-receipt.actuator_work-receipt.external_work;
     receipt.iterations=iteration+1;if(!std::isfinite(receipt.energy_residual)){return false;}next.last=receipt;*this=next;return true;
