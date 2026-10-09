@@ -1,0 +1,904 @@
+{
+  "use": "inviscid canonical pressure/momentum control on five moving regions; two separately initialized intervals; no speech",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_inertive_motion_reference.py"
+  ],
+  "runs": [
+    {
+      "name": "closure",
+      "subdivisions": 8,
+      "steps": 9,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/closure-8.txt",
+      "output": "out/planar-inertive-motion/closure-8.json",
+      "log": "out/planar-inertive-motion/closure-8.log",
+      "input_sha256": "23d5370c2d5285cf9e77eb5e6f142bf4fb56f7befd1c7c373f19168a81ba10f8",
+      "output_sha256": "583930e8ff454551ceb9f585846a8dcbb218b70d5d0b2c7a9c91bc8dd5b7a1b4",
+      "log_sha256": "bb7f7c411e3453eed6847ddc78fc751079abbef973ecb8b0c882a7d71865af74",
+      "maxima": {
+        "volume_error_m3": 3.5914196963582334e-19,
+        "port_area_error_m2": 3.469446951953614e-18,
+        "oracle_pressure_error_Pa": 1.2157670425949618e-09,
+        "oracle_momentum_error_Pa_s": 1.0950421989183731e-13,
+        "oracle_average_flow_error_m3_s": 1.6494679157697673e-15,
+        "oracle_average_pressure_error_Pa": 8.816414265311323e-10,
+        "local_mass_error_m3": 5.763070725233513e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 1.6940658945086007e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 28,
+      "intermediate_witness_checks": 135,
+      "relative_density_range": [
+        0.9904584774065989,
+        1.0059465439946238
+      ],
+      "final_pressure_Pa": [
+        830.434868849217,
+        827.9515084859202,
+        -1299.9331297166327,
+        -1332.47363016847,
+        -1238.1345900536005
+      ],
+      "final_flow_m3_s": [
+        3.15116281531097e-09,
+        0,
+        -1.2220958722564738e-05,
+        1.407288396327533e-05
+      ],
+      "maximum_sampled_normal_speed_m_s": 3.115260918615855,
+      "maximum_sampled_normal_mach": 0.008900745481759585,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        1.001128048209066e-08,
+        -1.0154627205946927e-08,
+        4.251679157544035e-08,
+        -4.4758224161207365e-08,
+        2.384779309619894e-09
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -1309.2023275427005,
+      "audit": "out/planar-inertive-motion/closure-8-audit.json",
+      "audit_sha256": "a5f362552899953434865a65e2748b42f062e58a599a3cf1607f008d5d6a9674"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/closure-16.txt",
+      "output": "out/planar-inertive-motion/closure-16.json",
+      "log": "out/planar-inertive-motion/closure-16.log",
+      "input_sha256": "f3b15b66777ced988c60e153e1f89cf8d7f1bdf4a05eddb4acabd3c703cd547f",
+      "output_sha256": "414018def4aedd98f1cedfc8e365fb030bddc0235d56570d1637cc6687c8f1ab",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 3.9302328752599536e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.661522557900753e-09,
+        "oracle_momentum_error_Pa_s": 1.6760033573655353e-13,
+        "oracle_average_flow_error_m3_s": 3.9353286254706354e-15,
+        "oracle_average_pressure_error_Pa": 2.253500497317873e-09,
+        "local_mass_error_m3": 4.166534594823743e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "intermediate_witness_checks": 255,
+      "relative_density_range": [
+        0.9901907372721067,
+        1.005947161558227
+      ],
+      "final_pressure_Pa": [
+        829.6399570080176,
+        830.5211116064038,
+        -1369.8635399503025,
+        -1295.8216473750483,
+        -1274.2475340124615
+      ],
+      "final_flow_m3_s": [
+        6.162718131561543e-07,
+        0,
+        -1.0317813533105397e-05,
+        -4.671087676807415e-06
+      ],
+      "maximum_sampled_normal_speed_m_s": 4.226020318295358,
+      "maximum_sampled_normal_mach": 0.012074343766558165,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.764869371228107e-09,
+        -9.908178570005232e-09,
+        4.1131413824624944e-08,
+        -4.285078597061985e-08,
+        1.8626813447703376e-09
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -1309.202762313333,
+      "audit": "out/planar-inertive-motion/closure-16-audit.json",
+      "audit_sha256": "40a71376e8d629b6f6f6b7fac984d7ff82bb47239af85ab342db161371620ff5"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/closure-32.txt",
+      "output": "out/planar-inertive-motion/closure-32.json",
+      "log": "out/planar-inertive-motion/closure-32.log",
+      "input_sha256": "c433fadf9c8ca25c219ab68619ed9f04ccaecf73c8f866506e29ac7925353010",
+      "output_sha256": "b6befba29105cf48172dd2f65aef4dfb1b64217f6125bb33f0ed546eff14f5b9",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.675621868843738e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 2.0105517251067795e-09,
+        "oracle_momentum_error_Pa_s": 1.3489209749195652e-13,
+        "oracle_average_flow_error_m3_s": 3.0760674870732984e-15,
+        "oracle_average_pressure_error_Pa": 1.7133743313024752e-09,
+        "local_mass_error_m3": 5.794551248330978e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "intermediate_witness_checks": 495,
+      "relative_density_range": [
+        0.9901391956861368,
+        1.005948846983144
+      ],
+      "final_pressure_Pa": [
+        829.5671390270609,
+        830.756481196058,
+        -1377.061322430984,
+        -1291.2596216615054,
+        -1280.806415703355
+      ],
+      "final_flow_m3_s": [
+        5.596875574354281e-07,
+        0,
+        -1.241633494330332e-05,
+        -4.129930863499727e-06
+      ],
+      "maximum_sampled_normal_speed_m_s": 4.227995639529676,
+      "maximum_sampled_normal_mach": 0.01207998754151336,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.74229685608201e-09,
+        -9.885604455796455e-09,
+        4.0988819956368704e-08,
+        -4.261336956339626e-08,
+        1.7678572067436996e-09
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -1309.202780840247,
+      "audit": "out/planar-inertive-motion/closure-32-audit.json",
+      "audit_sha256": "4bc3c45163d5473b042f097aa18a3ced47f24e954e0f5e403d24ece41b941ac3"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/closure-64.txt",
+      "output": "out/planar-inertive-motion/closure-64.json",
+      "log": "out/planar-inertive-motion/closure-64.log",
+      "input_sha256": "cb29b673853a4eed4e767497c24b52637e7ea319ee9b3f59982b602950cd7962",
+      "output_sha256": "287343be97c1173c75a78e539fcb88dc757b31aa949e4c012b8efa7162239df5",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 4.607859233063394e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.5003251974121667e-09,
+        "oracle_momentum_error_Pa_s": 1.6459056340067946e-13,
+        "oracle_average_flow_error_m3_s": 2.4393134335901935e-15,
+        "oracle_average_pressure_error_Pa": 1.4322267816169187e-09,
+        "local_mass_error_m3": 6.118499894689892e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "intermediate_witness_checks": 975,
+      "relative_density_range": [
+        0.9901356098788552,
+        1.0059489705947444
+      ],
+      "final_pressure_Pa": [
+        829.5617965413711,
+        830.7737435560678,
+        -1377.5620804178786,
+        -1290.9397201002253,
+        -1281.2717416978899
+      ],
+      "final_flow_m3_s": [
+        5.539764185236664e-07,
+        0,
+        -1.2586689608889322e-05,
+        -4.066284969799957e-06
+      ],
+      "maximum_sampled_normal_speed_m_s": 4.512178563637847,
+      "maximum_sampled_normal_mach": 0.012891938753250991,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.740640763209851e-09,
+        -9.883948836278495e-09,
+        4.097889953732246e-08,
+        -4.2596721283856505e-08,
+        1.761129819604806e-09
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -1309.202775355908,
+      "audit": "out/planar-inertive-motion/closure-64-audit.json",
+      "audit_sha256": "3079dde2e38b3bde2eb6f1c553b28c085a95f7676bdc13c120b3a2b05514a530"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/closure-128.txt",
+      "output": "out/planar-inertive-motion/closure-128.json",
+      "log": "out/planar-inertive-motion/closure-128.log",
+      "input_sha256": "4388ae69f6b20063ae61f11f93f80a3c55b088f22d7a89d56a3dc2b8557c0f4f",
+      "output_sha256": "07ebc358264223234a3709b249dd17193d4ec758fbc3e2d955bf685610904426",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.54009659728305e-19,
+        "port_area_error_m2": 4.9873299934333204e-18,
+        "oracle_pressure_error_Pa": 1.507032720837742e-09,
+        "oracle_momentum_error_Pa_s": 8.243405957841787e-14,
+        "oracle_average_flow_error_m3_s": 1.047771285424097e-15,
+        "oracle_average_pressure_error_Pa": 1.1601741789490916e-09,
+        "local_mass_error_m3": 6.3926844183570784e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "intermediate_witness_checks": 1935,
+      "relative_density_range": [
+        0.9901353767527211,
+        1.0059489805507649
+      ],
+      "final_pressure_Pa": [
+        829.5613678101172,
+        830.7751339143068,
+        -1377.5946364824945,
+        -1290.9191574782378,
+        -1281.3011802201852
+      ],
+      "final_flow_m3_s": [
+        5.531005017201964e-07,
+        0,
+        -1.2598702890697478e-05,
+        -4.061967229564254e-06
+      ],
+      "maximum_sampled_normal_speed_m_s": 4.51218451978466,
+      "maximum_sampled_normal_mach": 0.012891955770813314,
+      "volume_change_m3": [
+        -6.115741767178474e-08,
+        -3.188030670493384e-08,
+        6.826951388094232e-08,
+        2.4586212249193818e-08,
+        2.0284941379301298e-08
+      ],
+      "transferred_mass_m3": [
+        9.740507862751092e-09,
+        -9.883815488101837e-09,
+        4.097825457546085e-08,
+        -4.25956511662944e-08,
+        1.7607042161813336e-09
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -1309.2027805433095,
+      "audit": "out/planar-inertive-motion/closure-128-audit.json",
+      "audit_sha256": "3055577fbd0199ff91e2c78307d73e5f8692989b767ac5f66516e6a186ab720a"
+    },
+    {
+      "name": "release",
+      "subdivisions": 8,
+      "steps": 9,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/release-8.txt",
+      "output": "out/planar-inertive-motion/release-8.json",
+      "log": "out/planar-inertive-motion/release-8.log",
+      "input_sha256": "a5a05299fadb0b2cb7c06f1e4f883a3454d8c025d23ddb60e09ec38b8f28fde7",
+      "output_sha256": "facb2aedef465556fd4c2c1755c9c564577d807b2e20b0932e6a8e9499c447ee",
+      "log_sha256": "bb7f7c411e3453eed6847ddc78fc751079abbef973ecb8b0c882a7d71865af74",
+      "maxima": {
+        "volume_error_m3": 3.8624702394796095e-19,
+        "port_area_error_m2": 4.7704895589362195e-18,
+        "oracle_pressure_error_Pa": 2.3626398615306243e-09,
+        "oracle_momentum_error_Pa_s": 3.1530333899354446e-13,
+        "oracle_average_flow_error_m3_s": 1.9695345614828552e-15,
+        "oracle_average_pressure_error_Pa": 2.0363586372695863e-09,
+        "local_mass_error_m3": 5.047456097798575e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 28,
+      "intermediate_witness_checks": 135,
+      "relative_density_range": [
+        0.965023148515316,
+        1.0120867436394203
+      ],
+      "final_pressure_Pa": [
+        1687.9137492450336,
+        1634.8603006836074,
+        -4810.313681980226,
+        -4884.517309836125,
+        -4205.324816904737
+      ],
+      "final_flow_m3_s": [
+        0.00016100579947406614,
+        0.0002228386688682638,
+        -0.00018589821900825892,
+        -0.00017729720237444157
+      ],
+      "maximum_sampled_normal_speed_m_s": 46.44059592725689,
+      "maximum_sampled_normal_mach": 0.13268741693501968,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        2.8130284174040653e-08,
+        -6.522798271893774e-08,
+        2.2264966869834855e-07,
+        -2.525786005447178e-07,
+        6.702663039126208e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -4748.570436512115,
+      "audit": "out/planar-inertive-motion/release-8-audit.json",
+      "audit_sha256": "cf06ae489b65571e9c5a6e8b9041404cab878775f5e83d53f3c30a47c6bf7447"
+    },
+    {
+      "name": "release",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/release-16.txt",
+      "output": "out/planar-inertive-motion/release-16.json",
+      "log": "out/planar-inertive-motion/release-16.log",
+      "input_sha256": "330579bb6109f3f11badfd3a5e871505c7192385c27e4a760bf2905ca0421648",
+      "output_sha256": "1d35275db1446961321bbf6698a9bd52ddf52dfee78a92e0b6fb7fcb745ffa7a",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_error_m3": 4.1335207826009857e-19,
+        "port_area_error_m2": 4.336808689942018e-18,
+        "oracle_pressure_error_Pa": 1.7521415429655463e-09,
+        "oracle_momentum_error_Pa_s": 2.1671553440683056e-13,
+        "oracle_average_flow_error_m3_s": 3.224986467112445e-15,
+        "oracle_average_pressure_error_Pa": 1.5832029021112248e-09,
+        "local_mass_error_m3": 4.422779638956185e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 52,
+      "intermediate_witness_checks": 255,
+      "relative_density_range": [
+        0.9630932636897271,
+        1.0120532526041055
+      ],
+      "final_pressure_Pa": [
+        1683.236726163333,
+        1649.4766611896996,
+        -5154.025725729606,
+        -4668.677236947204,
+        -4632.375607518895
+      ],
+      "final_flow_m3_s": [
+        0.0001687655237592802,
+        0.00022248542526346747,
+        -0.0002163532549724155,
+        -0.00028176802037235024
+      ],
+      "maximum_sampled_normal_speed_m_s": 46.36697834733887,
+      "maximum_sampled_normal_mach": 0.13247708099239677,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        2.6722579595796995e-08,
+        -6.389763760341371e-08,
+        2.1637471348439678e-07,
+        -2.382413526814115e-07,
+        5.9041697204625524e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -4747.822131697102,
+      "audit": "out/planar-inertive-motion/release-16-audit.json",
+      "audit_sha256": "323e5345a4e6133d23773ceedcc86857150bdb15ef33f441d410fb7dd6b3d55c"
+    },
+    {
+      "name": "release",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/release-32.txt",
+      "output": "out/planar-inertive-motion/release-32.json",
+      "log": "out/planar-inertive-motion/release-32.log",
+      "input_sha256": "c09050c72165087afb60353c996b5261739c6a36b482ee719edcf254960f1b68",
+      "output_sha256": "bc9762e680549d9b6262ed7a8570bd1ffc8a7ea59c1980451baa594f705582a6",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_error_m3": 4.2690460541616737e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 1.4279066817834973e-09,
+        "oracle_momentum_error_Pa_s": 1.283417816466681e-13,
+        "oracle_average_flow_error_m3_s": 2.913969521407822e-15,
+        "oracle_average_pressure_error_Pa": 1.3340013538254425e-09,
+        "local_mass_error_m3": 5.487619581253355e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 100,
+      "intermediate_witness_checks": 495,
+      "relative_density_range": [
+        0.9629017523638077,
+        1.01205009390351
+      ],
+      "final_pressure_Pa": [
+        1682.7956136251628,
+        1650.801060444272,
+        -5180.770282394247,
+        -4648.135217185237,
+        -4678.585533669684
+      ],
+      "final_flow_m3_s": [
+        0.000168811394593795,
+        0.00022260179673812914,
+        -0.0002360582929346423,
+        -0.00027037609565709787
+      ],
+      "maximum_sampled_normal_speed_m_s": 46.39123069393414,
+      "maximum_sampled_normal_mach": 0.1325463734112404,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        2.6589812207513525e-08,
+        -6.377709404685559e-08,
+        2.1588645333076066e-07,
+        -2.3687684225942064e-07,
+        5.817767076799781e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -4747.703889509019,
+      "audit": "out/planar-inertive-motion/release-32-audit.json",
+      "audit_sha256": "84a09969af2e2497bab3b073b2c09eec495c1f2af9ea760f13421eee5f6c130a"
+    },
+    {
+      "name": "release",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/release-64.txt",
+      "output": "out/planar-inertive-motion/release-64.json",
+      "log": "out/planar-inertive-motion/release-64.log",
+      "input_sha256": "8be95d26ef02495557fc54f52b82c6cc868bf2e201ac621fbc8503ed9f8c055e",
+      "output_sha256": "13e622f84670545dfdeda9e849f9883856a1ae3a89d000d3552539ff3ad68274",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_error_m3": 3.8624702394796095e-19,
+        "port_area_error_m2": 5.421010862427522e-18,
+        "oracle_pressure_error_Pa": 1.374701241729781e-09,
+        "oracle_momentum_error_Pa_s": 1.0036416142611415e-13,
+        "oracle_average_flow_error_m3_s": 1.2399681433537812e-15,
+        "oracle_average_pressure_error_Pa": 1.027729013003409e-09,
+        "local_mass_error_m3": 6.461560129049189e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 196,
+      "intermediate_witness_checks": 975,
+      "relative_density_range": [
+        0.9628884746837658,
+        1.0120498983653758
+      ],
+      "final_pressure_Pa": [
+        1682.7683067247358,
+        1650.8786317352847,
+        -5182.6245104121,
+        -4646.73705266659,
+        -4681.68018760812
+      ],
+      "final_flow_m3_s": [
+        0.0001688042059144775,
+        0.00022261173643284916,
+        -0.00023760767921285675,
+        -0.00026936878476451945
+      ],
+      "maximum_sampled_normal_speed_m_s": 46.393302171691914,
+      "maximum_sampled_normal_mach": 0.13255229191911974,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        2.6581593293886047e-08,
+        -6.377003369909966e-08,
+        2.1585260174487636e-07,
+        -2.367839687212065e-07,
+        5.811980738154036e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -4747.6926826005065,
+      "audit": "out/planar-inertive-motion/release-64-audit.json",
+      "audit_sha256": "d3775ebf7d66943ef7dcb38f0d6199114a6b54f7d2c91fb88cbe8774d372a70f"
+    },
+    {
+      "name": "release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/release-128.txt",
+      "output": "out/planar-inertive-motion/release-128.json",
+      "log": "out/planar-inertive-motion/release-128.log",
+      "input_sha256": "3eb9f103c8f15746f9150e7a3d94aad315ad8401db90b2de214b3a7418ed3897",
+      "output_sha256": "6d93f6a3b77c01b10bafc86649494511afca6aa072dce34164c0de18e9bdccc5",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_error_m3": 4.404571325722362e-19,
+        "port_area_error_m2": 5.204170427930421e-18,
+        "oracle_pressure_error_Pa": 1.3196768122725189e-09,
+        "oracle_momentum_error_Pa_s": 1.3322676295501878e-13,
+        "oracle_average_flow_error_m3_s": 1.3302821843218238e-15,
+        "oracle_average_pressure_error_Pa": 9.38598532229662e-10,
+        "local_mass_error_m3": 6.387902280440756e-21,
+        "global_mass_error_m3": 1.3552527156068805e-20,
+        "sealed_group_mass_error_m3": 6.776263578034403e-21,
+        "closed_flow_m3_s": 0.0
+      },
+      "geometry_snapshots": 388,
+      "intermediate_witness_checks": 1935,
+      "relative_density_range": [
+        0.9628875347574344,
+        1.0120498859723834
+      ],
+      "final_pressure_Pa": [
+        1682.766576043351,
+        1650.8845507832668,
+        -5182.7557711242835,
+        -4646.649372275316,
+        -4681.8644696226565
+      ],
+      "final_flow_m3_s": [
+        0.0001688011965014821,
+        0.0002226124016845712,
+        -0.00023770276867091407,
+        -0.0002693039394330527
+      ],
+      "maximum_sampled_normal_speed_m_s": 46.39344081318789,
+      "maximum_sampled_normal_mach": 0.13255268803767967,
+      "volume_change_m3": [
+        -2.9803280771673095e-07,
+        -1.5873641325328796e-07,
+        3.104688285689722e-07,
+        7.187706899987023e-08,
+        1.4565717839422399e-07
+      ],
+      "transferred_mass_m3": [
+        2.6581072388159454e-08,
+        -6.37694949619387e-08,
+        2.1585020539273997e-07,
+        -2.367781445223647e-07,
+        5.8116361703401016e-08
+      ],
+      "front_uniform_pressure_at_same_final_mass_Pa": -4747.692855085527,
+      "audit": "out/planar-inertive-motion/release-128-audit.json",
+      "audit_sha256": "659aa65c16db6f36d8bd3954fcc162b51c25ab7dabfd8917d330f4efdc07be8a"
+    }
+  ],
+  "controls": [
+    {
+      "name": "tube-8",
+      "subdivisions": 8,
+      "steps": 8,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-8-8.txt",
+      "output": "out/planar-inertive-motion/tube-8-8.json",
+      "log": "out/planar-inertive-motion/tube-8-8.log",
+      "input_sha256": "6d99a6b8827b2757dc96beb2084c8301a8c4eed0c9e1fe21b3bd8f9f808b7da8",
+      "output_sha256": "9399caa27d7dc7ce348b6e3305363b15c5f86e64d329dfbc985d2d7c6ff6ec76",
+      "log_sha256": "cd1a42eb9f463573f85f647db37bcbf748ecaacc7988e081fac7367b26e3bbd8",
+      "exact_discrete_pressure_error_Pa": 0.003210599488326693,
+      "maximum_relative_energy_error": 2.220446049250313e-16,
+      "discrete_frequency_Hz": 1448.9808245853,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-8",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-8-16.txt",
+      "output": "out/planar-inertive-motion/tube-8-16.json",
+      "log": "out/planar-inertive-motion/tube-8-16.log",
+      "input_sha256": "77603d79d5faa3e3b04e4a72df37ed7faf7e47ad81696cd0a258469e010465ac",
+      "output_sha256": "77e05e1702dbf9b64fe285b515edd5cb47323598a24dbb47f0b9a23b58eb3b8a",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 0.00020232712522272323,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 1448.9808245853,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-8",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-8-32.txt",
+      "output": "out/planar-inertive-motion/tube-8-32.json",
+      "log": "out/planar-inertive-motion/tube-8-32.log",
+      "input_sha256": "86db5456c335d70d42d05da0405584ca4e15f55c9c8eeb23024c76944179a4a0",
+      "output_sha256": "226f751f05548852336e17245c6d9ba11dc4a9b2967280eecc0a36fb154abd46",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.2670769692135764e-05,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 1448.9808245853,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-16",
+      "subdivisions": 8,
+      "steps": 8,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-16-8.txt",
+      "output": "out/planar-inertive-motion/tube-16-8.json",
+      "log": "out/planar-inertive-motion/tube-16-8.log",
+      "input_sha256": "30e23485c0b5723d56674c25ca27cd34437e4f442a09600cd2d1f2c55d47864b",
+      "output_sha256": "8988bd5a6501af98f698af1423e069792efbde4128b90768bdfae1e25cf4ce65",
+      "log_sha256": "cd1a42eb9f463573f85f647db37bcbf748ecaacc7988e081fac7367b26e3bbd8",
+      "exact_discrete_pressure_error_Pa": 0.003572076854325701,
+      "maximum_relative_energy_error": 2.220446049250313e-16,
+      "discrete_frequency_Hz": 1455.9918231769439,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-16",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-16-16.txt",
+      "output": "out/planar-inertive-motion/tube-16-16.json",
+      "log": "out/planar-inertive-motion/tube-16-16.log",
+      "input_sha256": "f9d614be5b639c1ced8016dffbe9e77775efd8f0da5fe2f278d92e7d2cd7fddd",
+      "output_sha256": "609bd099afa77af33ace5a44db435371cec5cbe5563832e6d97a4e34032db336",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 0.0002251212770119082,
+      "maximum_relative_energy_error": 2.220446049250313e-16,
+      "discrete_frequency_Hz": 1455.9918231769439,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-16",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-16-32.txt",
+      "output": "out/planar-inertive-motion/tube-16-32.json",
+      "log": "out/planar-inertive-motion/tube-16-32.log",
+      "input_sha256": "e3b929ae7d61ecd339defb745ba5da9f068ef2f8b98416107bcd5f2048a87c18",
+      "output_sha256": "d335ce296d62b3573602890dcb7676bcd480dd1ee7736a0bb8c5a36ea753510c",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.4098516530225425e-05,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 1455.9918231769439,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-32",
+      "subdivisions": 8,
+      "steps": 8,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-32-8.txt",
+      "output": "out/planar-inertive-motion/tube-32-8.json",
+      "log": "out/planar-inertive-motion/tube-32-8.log",
+      "input_sha256": "20d25cb7b4f940423a197f719fd8b3beb2987746be5e087a2bd38b4ff82e3145",
+      "output_sha256": "e7bf93fcc8e4b888e6010ad0f82113da7b24250c60bdea0a0f6fdf1897e12b78",
+      "log_sha256": "cd1a42eb9f463573f85f647db37bcbf748ecaacc7988e081fac7367b26e3bbd8",
+      "exact_discrete_pressure_error_Pa": 0.0036659177042679403,
+      "maximum_relative_energy_error": 6.661338147750939e-16,
+      "discrete_frequency_Hz": 1457.7477441766157,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-32",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-32-16.txt",
+      "output": "out/planar-inertive-motion/tube-32-16.json",
+      "log": "out/planar-inertive-motion/tube-32-16.log",
+      "input_sha256": "d1b1e52b431deea63f45629f8d22de438a8e66f400c4a1058a503f6a16247391",
+      "output_sha256": "4de59b05d752aae010b8f8d850d1ef2dd07bcfd342c7c9894f7ff7f0ba4dd644",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_discrete_pressure_error_Pa": 0.0002310391449071858,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 1457.7477441766157,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "tube-32",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/tube-32-32.txt",
+      "output": "out/planar-inertive-motion/tube-32-32.json",
+      "log": "out/planar-inertive-motion/tube-32-32.log",
+      "input_sha256": "edef6dfeae0f8f0264d45965cc6c9d36f3934ca200a40e48ce3e456048980c95",
+      "output_sha256": "7f0fa1e17fdbd15064f367c2cd0205b6e9519220f9e1f16d4b7b56e0f3936b90",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "exact_discrete_pressure_error_Pa": 1.4469197935795819e-05,
+      "maximum_relative_energy_error": 4.440892098500626e-16,
+      "discrete_frequency_Hz": 1457.7477441766157,
+      "continuum_frequency_Hz": 1458.3333333333335
+    },
+    {
+      "name": "sealed-expansion",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/planar-inertive-motion/sealed-expansion-16.txt",
+      "output": "out/planar-inertive-motion/sealed-expansion-16.json",
+      "log": "out/planar-inertive-motion/sealed-expansion-16.log",
+      "input_sha256": "fe9fc33cd838cd0de9fced1a8130ca53f91187cc42569e58b0ad9a6453b2340f",
+      "output_sha256": "e3784eb88a7bcd1098edf5177ac05f1c690b3f32eedf27129cdcbde741ecb565",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "exact_sealed_pressure_error_Pa": 1.6825651982799172e-11
+    }
+  ],
+  "refinement": [
+    {
+      "name": "closure",
+      "comparisons": [
+        {
+          "subdivisions": 16,
+          "maximum_endpoint_difference_Pa": 69.93041023366982
+        },
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 7.197782480681553
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 0.5007579868945413
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.03255606461584648
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "comparisons": [
+        {
+          "subdivisions": 16,
+          "maximum_endpoint_difference_Pa": 427.05079061415745
+        },
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 46.209926150789215
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 3.0946539384358402
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 0.1842820145366204
+        }
+      ]
+    }
+  ],
+  "input_poses": {
+    "out/planar-airspace/motion/pose-5.031.json": "5a2716d62fee0dca10f979061a60fcb37997275c4997dd27b850b851113d2fd4",
+    "out/planar-airspace/motion/pose-5.032.json": "5bb66674d0136a2a766fa00ffdbe4db5a6b43c872dcb006e57749e6e9f4eb01b",
+    "out/planar-airspace/motion/pose-5.062.json": "675d2491c8d6677c42779adb61902fab9b403d5185c66718fa734077a7f8eec6",
+    "out/planar-airspace/motion/pose-5.063.json": "d980f72ebbbd35f77350b8e7bc2801d2a41ca71c484839a4fd4d701c90b9d132"
+  },
+  "contact_receipt": "reports/contact_partition_reference.json",
+  "contact_sha256": "6e56044140f100a4b6b3b1e1ca2075142195fdf8f6390773cece271e953f1275",
+  "boundaries": "sealed exterior",
+  "bulk_modulus_Pa": 139650.0,
+  "density_kg_m3": 1.14,
+  "inverse_inertance": "area / (density * grid-centre distance)",
+  "hashes": {
+    "tools/planar_inertive_motion_probe.cpp": "29ab145f06229239e8a5e229fa2de1aaa0e4f23ebde5ea8bbfb78aecc8815310",
+    "tools/planar_inertive_motion_reference.py": "60fb95599fa57e9a7446ec6e92fc7aa760299d59c5b0a99997830240edd54953",
+    "include/ducklips/moving_tree.hpp": "0f09f08b2c42545fed2ba21af3c30ee392c34b1b096bc02e7677a0d66d470738",
+    "src/moving_tree.cpp": "c7573c7657b4a5855ae4c54803c35c740a99076fe793653aa3b2dc29acd35b7f",
+    "tools/planar_pressure_motion_reference.py": "3e0ef308b005136eb3b50d4680e7b1da7533102a9c4bd56deed2e0e0d130fa2c",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "include/ducklips/planar_airspace.hpp": "8707baa999676c4f50b293aac68383761d5fe9dc2055d393e5e85884d76957b4",
+    "src/planar_airspace.cpp": "0be379880ff602aedd79a91f6d7b47463136f33d4dc1a8fbb3bca74315a6e15f",
+    "include/ducklips/planar_face_motion.hpp": "0212b82dc5baf6ec7ff9248434fdb825d214c9651c441c900aadffa8b86fad36",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "build/ducklips_planar_inertive_motion_probe": "8add182a644b5fd9f5d72abbfd9cfdaf7e77f538c17ef9c42d24695760141f76"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

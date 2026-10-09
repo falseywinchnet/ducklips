@@ -113,6 +113,16 @@ reports [November improved and Foxtrot's /tr/ still jammed](reports/LISTENING_SP
 The passive-representation speed gate, flexible-blade/tongue-root work,
 individual body matching and realistic speech remain unsatisfied requirements.
 
+[Moving pressure and momentum](reports/PLANAR_INERTIVE_MOTION.md) now run
+together on the two selected contact intervals. This uses the canonical
+integrator, actual stage geometry and explicit wall-displacement flow, with
+standing-wave and sealed-expansion controls. It removes arbitrary grid-face
+drag from that diagnostic and exposes sealed-lip volume expansion as a major
+remaining pressure driver. Full-trajectory correspondence, physical open
+boundaries, neck losses, spatially resolved inertance and nonlinear mean-flow
+coupling remain integration gates; the five-region inviscid control does not
+validate the production speech path.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

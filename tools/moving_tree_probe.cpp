@@ -125,6 +125,19 @@ void tests() {
         require(std::abs(energy-work)<1e-22 && work>=0,"source port does not conserve discrete work");
     }
     // Source work and passive decay including viscothermal/radiation memory.
+    // The other power port is a series pressure driving branch volume flow.
+    // Its average must account for the same transported volume as charge.
+    solver.prepare(2,std::vector<ducklips::TreeEdge>{{0,1}});
+    const double pair_c[]={2e-10,3e-10},pair_g[]={.02},pair_source[]={25};
+    const double pair_dt=1./48000;
+    solver.advance(pair_c,pair_c,pair_g,pair_g,pair_dt,{},pair_source);
+    const double transported=pair_dt*solver.average_flow[0];
+    require(std::abs(solver.charge[0]+transported)<1e-24 &&
+            std::abs(solver.charge[1]-transported)<1e-24,"branch flow is not the transported volume");
+    const double pair_energy=.5*(solver.charge[0]*solver.charge[0]/pair_c[0]+
+        solver.charge[1]*solver.charge[1]/pair_c[1]+pair_g[0]*solver.momentum[0]*solver.momentum[0]);
+    require(std::abs(pair_energy-pair_source[0]*transported)<1e-20,
+            "series source port does not conserve discrete work");
     ducklips::AcousticNetwork network;network.prepare(4,2,1,{});
     ducklips::TractShape shape;shape.oral_area.assign(4,2e-4);shape.oral_length.assign(4,.04);
     shape.nasal_area.assign(2,1e-4);shape.nasal_length.assign(2,.04);shape.port_area=3e-5;

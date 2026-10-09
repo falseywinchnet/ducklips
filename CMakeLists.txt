@@ -162,3 +162,6 @@ target_link_libraries(ducklips_cavity_region_motion_probe PRIVATE ducklips)
 
 add_executable(ducklips_planar_pressure_motion_probe tools/planar_pressure_motion_probe.cpp)
 target_link_libraries(ducklips_planar_pressure_motion_probe PRIVATE ducklips)
+
+add_executable(ducklips_planar_inertive_motion_probe tools/planar_inertive_motion_probe.cpp)
+target_link_libraries(ducklips_planar_inertive_motion_probe PRIVATE ducklips)

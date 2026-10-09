@@ -56,6 +56,14 @@ mobility and pressure magnitudes are not physically validated. Complete
 contact-event evolution, physical interval flow and acoustic integration
 remain required for speech.
 
+The subsequent [inertive airspace replay](reports/PLANAR_INERTIVE_MOTION.md)
+now connects these moving volumes and openings to the canonical pressure-and-
+momentum integrator. The opening's air inertia replaces the control's arbitrary
+resistance. In the reopening fixture, the worst density reduction falls from
+12% to 3.7%; the remaining shared front-mouth pressure drop is consistent with
+its sealed lips and expanding volume. This is a coarse inviscid diagnostic,
+not a new speech recording or a validated flow law for the human mouth.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

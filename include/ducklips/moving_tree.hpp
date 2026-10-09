@@ -25,6 +25,9 @@ public:
                  std::span<const double> series_pressure = {}) noexcept;
     // Gauss-weighted pressure over the last step; conjugate to held nodal flow.
     std::vector<double> average_pressure{};
+    // Gauss-weighted branch volume flow; conjugate to held series pressure.
+    // Multiplying by dt gives the actual transported volume in the step.
+    std::vector<double> average_flow{};
     std::vector<double> charge{};
     std::vector<double> momentum{};
 private:

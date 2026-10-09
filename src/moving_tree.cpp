@@ -52,7 +52,8 @@ void MovingTreeReference::prepare(std::size_t nodes,std::span<const TreeEdge> br
     if (order.size()!=nodes) { throw std::invalid_argument("moving network is disconnected"); }
     branches_.assign(branches.begin(),branches.end());parent_=std::move(parent);order_=std::move(order);
     diagonal_.resize(nodes);coupling_.resize(nodes);inverse_.resize(nodes);stage_.resize(nodes);
-    average_pressure.assign(nodes,0.0);charge.assign(nodes,0.0);momentum.assign(branches.size(),0.0);
+    average_pressure.assign(nodes,0.0);average_flow.assign(branches.size(),0.0);
+    charge.assign(nodes,0.0);momentum.assign(branches.size(),0.0);
 }
 void MovingTreeReference::advance(std::span<const double> c1,std::span<const double> c2,
                                   std::span<const double> g1,std::span<const double> g2,double dt,
@@ -117,6 +118,7 @@ void MovingTreeReference::advance(std::span<const double> c1,std::span<const dou
         const double first=momentum[branch]+dt*(a11*pressure[0]+a12*pressure[1]);
         const double second=momentum[branch]+dt*(a21*pressure[0]+a22*pressure[1]);
         const double transfer=dt*.5*(g1[branch]*first+g2[branch]*second);
+        average_flow[branch]=.5*(g1[branch]*first+g2[branch]*second);
         charge[edge.first_node]-=transfer;
         if (edge.second_node!=ground_node) { charge[edge.second_node]+=transfer; }
         momentum[branch]+=dt*.5*(pressure[0]+pressure[1]);
