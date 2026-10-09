@@ -1,0 +1,29 @@
+{
+  "scope": "four articulated coupled controls and kinetic-law probe under ASan/UBSan; seven focused CTests; full-step extrema and sampled motion diagnostic",
+  "sanitizer_exit_code": 0,
+  "ctest_exit_code": 0,
+  "long_doubling_audit_exit_code": 1,
+  "long_doubling_failure": "Second-order criterion passed; normalized endpoint error 0.00010756 exceeds 0.0001 at 2457600 steps",
+  "additional_endpoint_accuracy_passed": true,
+  "additional_endpoint_note": "3000000-step native result compared with the same previously computed continuous oracle; see endpoint receipt",
+  "motion_command": [
+    "build/ducklips_glottal_geometry_motion_probe",
+    "76800",
+    "out/glottal-geometry/motion-76800.csv"
+  ],
+  "motion_exit_code": 0,
+  "hashes": {
+    "out/glottal-geometry/asan-checks.log": "9750945ac8735a885c64f42e81a5636c62fb604426aa4d386d552010a59d4dc7",
+    "out/glottal-geometry/asan-kinetics.log": "ad227eec18a5c5f1be2f8cc546ede2c4ac2bfa64cbca8dd8fe702460735087a3",
+    "out/glottal-geometry/ctest.log": "ba68e0e6861c6339d07319b72a923b2368ff210568694c1213e9f69d24198355",
+    "out/glottal-geometry/motion-76800.csv": "dc82b608c30daec819db608187883995f847f1f3d7e5b4e3a70ff83c4beba1bc",
+    "out/glottal-geometry/motion-76800.json": "8391f7c9e50120b189a5291737cf7332ba2585ed133f07a17647ac456f86f329",
+    "tools/glottal_geometry_motion_probe.cpp": "db55069fdf55a3b5cc58ed178354554dea25f06e91f9748b9c08bde5db5cd292",
+    "build/ducklips_glottal_geometry_motion_probe": "cc570d260e105b7c70db8fde56b13464623bc832f164ca39e2c45d2a4f5450e4",
+    ".build/asan/ducklips_graph_glottal_probe": "2d4f5eea4176f1cc9e2f4474977352fb1659a181eacd9d9184c132a890f4146c",
+    ".build/asan/ducklips_glottal_kinetics_probe": "f83d2b1ec9b6a1070a8c75b2093431d5cda09a64bbc399d43a76147d2d06bfe2",
+    "reports/glottal_geometry_reference.json": "1285a1766ed422818a15597705899d31c4634dcc981f77e9152ca58de6c825e7",
+    "reports/glottal_geometry_long_reference.json": "c6db648f600916b18cb9b4f109c3fc58e8c31ee8899ecabd9d6ba989b3b70cbf",
+    "reports/glottal_geometry_endpoint_reference.json": "f203451d31f7631a18f09682ff870eb0bec13401e4f4c491de5ea2c1e921ef12"
+  }
+}

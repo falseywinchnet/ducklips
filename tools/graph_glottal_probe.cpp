@@ -21,9 +21,11 @@ double energy(const ducklips::GraphGlottalStorage& p,std::span<const double> c,s
 }
 }
 int main(int argc,char** argv){try{
+    const bool articulated=argc>1 && std::string(argv[argc-1])=="--articulated";
+    if(articulated){--argc;}
     const bool trajectory=argc==5 && std::string(argv[1])=="--trajectory";
     int steps=960;double duration=.005;std::string selected;
-    if(trajectory){steps=std::stoi(argv[2]);duration=std::stod(argv[3]);selected=argv[4];require(steps>0 && steps<=1000000 && std::isfinite(duration) && duration>0,"invalid trajectory");}
+    if(trajectory){steps=std::stoi(argv[2]);duration=std::stod(argv[3]);selected=argv[4];require(steps>0 && steps<=3000000 && std::isfinite(duration) && duration>0,"invalid trajectory");}
     else{require(argc==1,"unknown arguments");}
     const ducklips::TreeEdge edges[]={{0,1},{1,2},{0,2},{0,ducklips::ground_node}};
     const double c[]={2e-10,3e-10,1e-10},g[]={.002,.003,.004,.002};
@@ -33,7 +35,9 @@ int main(int argc,char** argv){try{
     for(const std::string mode:{"forward","reverse","relaxation","rest_motion"}){
         if(trajectory && mode!=selected){continue;}found=true;
         ducklips::GraphGlottalStorage p;ducklips::FoldState initial;initial.rest_area=3e-6;
-        p.prepare(3,edges,2,tissue,air,1.,initial,mode=="relaxation"?std::array<double,2>{700.,300.}:std::array<double,2>{},links);
+        const auto initial_pressure=mode=="relaxation"?std::array<double,2>{700.,300.}:std::array<double,2>{};
+        if(articulated){p.prepare_articulated(3,edges,2,tissue,air,1.,initial,initial_pressure);}
+        else{p.prepare(3,edges,2,tissue,air,1.,initial,initial_pressure,links);}
         if(mode=="relaxation"){p.momentum={.001,-.0005,.0004};p.network.charge={2e-8,-1e-8,3e-8};}
         const double initial_mass=p.chambers.state.mass[0]+p.chambers.state.mass[1]+p.network.charge[0]+p.network.charge[1]+p.network.charge[2];
         const double e0=energy(p,c,g),dt=duration/double(steps);double work=0,loss=0,actuator=0,entered=0,left=0,max_mass=0,max_law=0,max_balance=0,max_local=0,max_flow_difference=0,min_in=0,max_in=0;std::size_t max_iterations=0;
@@ -52,7 +56,9 @@ int main(int argc,char** argv){try{
             min_in=std::min(min_in,p.last.flow[0]);max_in=std::max(max_in,p.last.flow[0]);
         }
         require(allocations.load()==before,"coupled stepping allocated");require(max_mass<1e-17,"coupled mass balance");
-        require(max_balance<1e-11 && max_local<1e-12,"coupled work balance");require(max_law<1e-5,"passage momentum balance");
+        require(max_balance<1e-11 && max_local<1e-12,"coupled work balance");if(max_law>=1e-5){std::array<double,2> volume{};require(p.chambers.volumes(volume),"diagnostic volume");
+            std::fprintf(stderr,"law %.17g Pa, work %.17g J, mass %.17g m3; volumes %.17g %.17g; masses %.17g %.17g; momenta %.17g %.17g %.17g\n",max_law,max_balance,max_mass,volume[0],volume[1],p.chambers.state.mass[0],p.chambers.state.mass[1],p.momentum[0],p.momentum[1],p.momentum[2]);}
+        require(max_law<1e-5,"passage momentum balance");
         require(max_flow_difference>1e-9,"storage forced one through-flow");
         if(mode=="forward"){require(max_in>0,"no forward flow");}if(mode=="reverse"){require(min_in<0,"no reverse flow");}
         if(mode=="relaxation"){require(energy(p,c,g)<=e0,"undriven system gained energy");}
@@ -72,7 +78,9 @@ int main(int argc,char** argv){try{
             && p.chambers.state.folds.upper_position==saved.chambers.state.folds.upper_position && p.chambers.state.folds.lower_velocity==saved.chambers.state.folds.lower_velocity
             && p.chambers.state.folds.upper_velocity==saved.chambers.state.folds.upper_velocity && p.last.flow==saved.last.flow
             && p.last.energy_residual==saved.last.energy_residual,"rejected step changed state");
-        ducklips::GraphGlottalStorage restored;restored.prepare(3,edges,2,tissue,air,1.,initial,{},links);
+        ducklips::GraphGlottalStorage restored;
+        if(articulated){restored.prepare_articulated(3,edges,2,tissue,air,1.,initial,{});}
+        else{restored.prepare(3,edges,2,tissue,air,1.,initial,{},links);}
         restored.network.charge=p.network.charge;restored.network.momentum=p.network.momentum;restored.momentum=p.momentum;restored.chambers.state=p.chambers.state;
         require(p.advance(c,c,g,g,dt,700,3e-6) && restored.advance(c,c,g,g,dt,700,3e-6),"continuation failed");
         require(p.network.charge==restored.network.charge && p.network.momentum==restored.network.momentum && p.momentum==restored.momentum

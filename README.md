@@ -125,6 +125,13 @@ load. Independent continuous controls pass, including reverse flow and
 undriven decay. The passage coefficients remain fixed controls; their
 dependence on moving fold geometry and full contact is still required.
 
+[Mass- and geometry-derived passages](reports/GLOTTAL_PASSAGE_GEOMETRY.md)
+now replace those fixed coefficients in an explicit articulated mode.
+Kinetic head, changing inertia and viscous losses participate in the same
+work balance. Constant reservoir pressure produces repeated fold motion in
+a control; narrow-volume compression, contact and the loss model remain
+physical questions, and long-run temporal accuracy needs finer stepping.
+
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
 [surface/NOTES.md](surface/NOTES.md) preserve earlier mechanisms, measurements,

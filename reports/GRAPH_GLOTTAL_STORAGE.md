@@ -87,12 +87,12 @@ At the finest step:
 | Rest-opening motion | 3.970 | 5.75e-12 m | 4.29e-5 Pa |
 
 Across all refinements, maximum accumulated mass-balance error is
-`2.65e-21 m³`, maximum accumulated work-balance error is `1.86e-14 J`, and
-maximum passage-law residual is `1.50e-7 Pa`. These are numerical checks of
+`2.23e-21 m³`, maximum accumulated work-balance error is `2.19e-15 J`, and
+maximum passage-law residual is recorded in the current receipt. These are numerical checks of
 these equations, not anatomical or perceptual validation.
 
 A separate 100 ms forward control (19,200 steps) finishes with maximum mass
-residual `6.44e-20 m³` and maximum work residual `5.90e-17 J`. During that
+residual `8.56e-20 m³` and maximum work residual `2.13e-17 J`. During that
 control the inlet and outlet flows differ by up to `1.003e-5 m³/s`, showing
 why one algebraic through-flow cannot account for chamber filling. Its
 long-duration control is not an independent continuous-trajectory audit.
@@ -120,6 +120,10 @@ parameters or the constitutive law. The 15,360-step forward endpoint position
 error fell from `9.68e-11 m` to `5.74e-12 m`; accumulated work residual fell
 from `1.53e-12 J` to `1.87e-18 J`. Final convergence checks pass for all four
 controls. Coarse phase error remains distinct from work conservation.
+
+Follow-up: [the articulated passage mode](GLOTTAL_PASSAGE_GEOMETRY.md)
+now derives inertia and losses from chamber state, including kinetic
+mass-flow effort. The fixed-coefficient results above remain a control.
 
 ## Remaining source physics
 

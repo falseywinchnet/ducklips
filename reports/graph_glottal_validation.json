@@ -1,5 +1,5 @@
 {
-  "scope": "four native graph/chamber controls under ASan/UBSan; five focused CTests; 100ms forward native control",
+  "scope": "four fixed-passage controls under ASan/UBSan, seven focused CTests, fixed-passage 100ms control after coupled-tolerance correction",
   "sanitizer_exit_code": 0,
   "ctest_exit_code": 0,
   "long_control_command": [
@@ -11,10 +11,10 @@
   ],
   "long_control_exit_code": 0,
   "hashes": {
-    "out/graph-glottal/asan-checks.log": "e7bc5ffec4284be03cfd66a838c994bc14a081cdf370bd6e1c4ec81147282a0a",
-    "out/graph-glottal/ctest.log": "41a084a123230f7774045428be8c3566d253fea3704d869e2f0723f9c469a14d",
-    "out/graph-glottal/forward-100ms.json": "ce5456856c322af37dae079e320ce0bbc8a512a817f3d0d9d67dae0f10948431",
-    ".build/asan/ducklips_graph_glottal_probe": "3188714a1360df27cf7974f4f1ccd326b5d522201c71ad36d8ebabcf18cc516b",
-    "reports/graph_glottal_reference.json": "be2a728338054e47b4c6dad67c1215cf19c521e13f7f72fe1e80d1a1e3ea4a3e"
+    "out/graph-glottal/asan-checks.log": "1e02946a1117f716bc2bd95372033b9638c60d50e068f63ad3949c11d477ac74",
+    "out/glottal-geometry/ctest.log": "ba68e0e6861c6339d07319b72a923b2368ff210568694c1213e9f69d24198355",
+    "out/graph-glottal/forward-100ms.json": "f967e16b0a098977df35490facf0d4d09af15ae616c0b69340fad58d1b69294e",
+    ".build/asan/ducklips_graph_glottal_probe": "2d4f5eea4176f1cc9e2f4474977352fb1659a181eacd9d9184c132a890f4146c",
+    "reports/graph_glottal_reference.json": "3c9aa603690b2659f99ebd556eea4de550d95b8085bceaf5ffc5eb6c906cf770"
   }
 }

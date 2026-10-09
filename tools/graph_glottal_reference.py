@@ -66,7 +66,7 @@ def main():
         assert norm<1e-4,runs[-1]
     checks=subprocess.run([str(args.binary)],capture_output=True,text=True);assert checks.returncode==0,checks.stderr
     log=args.output/'native-checks.log';log.write_text(checks.stdout+checks.stderr)
-    sources=['include/ducklips/graph_glottal_storage.hpp','src/graph_glottal_storage.cpp','include/ducklips/glottal_storage.hpp','src/glottal_storage.cpp','include/ducklips/gas_storage.hpp','src/gas_storage.cpp','include/ducklips/moving_graph.hpp','src/moving_graph.cpp','include/ducklips/sources.hpp','include/ducklips/physics.hpp','tools/graph_glottal_probe.cpp','tools/graph_glottal_reference.py']
+    sources=['include/ducklips/graph_glottal_storage.hpp','src/graph_glottal_storage.cpp','include/ducklips/glottal_kinetics.hpp','src/glottal_kinetics.cpp','include/ducklips/glottal_storage.hpp','src/glottal_storage.cpp','include/ducklips/gas_storage.hpp','src/gas_storage.cpp','include/ducklips/moving_graph.hpp','src/moving_graph.cpp','include/ducklips/sources.hpp','include/ducklips/physics.hpp','tools/graph_glottal_probe.cpp','tools/graph_glottal_reference.py']
     args.report.write_text(json.dumps(dict(scope='pressure-driven chamber/tissue/graph coupling with fixed passage coefficients; no moving jet geometry or speech',runs=runs,oracles=oracles,
         native_checks=str(log.relative_to(ROOT)),native_checks_sha256=sha(log),hashes={str(p.relative_to(ROOT)):sha(p) for p in [*(ROOT/s for s in sources),args.binary]},versions=dict(numpy=np.__version__,scipy=scipy.__version__)),indent=2)+'\n')
 

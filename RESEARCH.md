@@ -197,6 +197,14 @@ continuous equations. Moving passage geometry must next supply consistent
 kinetic-energy changes and forces; simply varying inertance would leave
 another missing work term. Contact and full speech integration remain open.
 
+The [articulated passage mode](reports/GLOTTAL_PASSAGE_GEOMETRY.md) now
+derives half-cell inertia from stored mass and adds its kinetic mass effort
+to gas enthalpy. Viscous losses follow the same volume and density. Short
+independent continuous controls pass. Longer constant-drive motion exposes
+strong compression in very narrow openings and greater temporal-resolution
+requirements; complete contact/escape and validity of the loss model remain
+physical gates before a speech claim.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the
