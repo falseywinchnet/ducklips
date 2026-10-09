@@ -16,8 +16,7 @@ struct Integrand final {
     bool sample(double u,double t,double a,Values& f) const noexcept {
         const double mu=u*effort[0]+t*effort[1],scaled=(gamma-1)*mu/bulk;
         if(a<0 || scaled<=-1 || !std::isfinite(scaled)){return false;}
-        const double r=std::exp(std::log1p(scaled)/(gamma-1)),slope=std::pow(r,2-gamma)/bulk;
-        GasEnergy e;if(!gas.evaluate(r,1.,e)){return false;}
+        double r;GasEnergy e;if(!gas.evaluate_effort(mu,e,r)){return false;}const double slope=std::pow(r,2-gamma)/bulk;
         f={a,a*r*u,a*r*t,a*e.energy,a*e.pressure,-e.pressure*u,-e.pressure*t,
             a*slope*u*u,a*slope*u*t,a*slope*t*t,r*u*u,r*u*t,r*t*t};
         for(double v:f){if(!std::isfinite(v)){return false;}}return true;

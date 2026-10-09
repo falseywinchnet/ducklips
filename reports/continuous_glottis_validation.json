@@ -1,0 +1,380 @@
+{
+  "base_commit": "6426640d3ffb116cd90549533c4f0d1c177fd3a1",
+  "scope": "coupled motion within fixed topology; not a production speech renderer",
+  "focused_ctests_passed": 5,
+  "sanitizer_ctests_passed": 5,
+  "sanitizers": "address,undefined",
+  "sanitized_four_motion_controls_and_tangent_byte_identical": true,
+  "constitutive_fixture_reused_from": "6426640",
+  "constitutive_maximum_scaled_change": 0.0,
+  "inverse_maximum_effort_error_Pa": 4.085067075720872e-07,
+  "seam_sweeps": [
+    {
+      "steps": 100,
+      "maximum_mass_error_m3": 1.173562494059608e-23,
+      "maximum_relative_density": 1.3130261710628388,
+      "work_J": 1.1988129378625795e-07,
+      "work_residual_J": 1.5893329654688677e-13,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883624e-10,
+        "coenergy": 2.6618336541634443e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070412,
+          -0.34128212054948237
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421544287e-07,
+        "coenergy": 1.4791804403880895e-06,
+        "mass": [
+          7.468936321996139e-12,
+          3.7374557355263515e-10
+        ],
+        "effort": [
+          253168.94421804196,
+          -779.0701992809251
+        ],
+        "area_effort": [
+          -0.5758269140011205,
+          -4.473480393193919
+        ],
+        "compliance": [
+          4.146937204815004e-18,
+          4.643276770516866e-17,
+          4.643276770516866e-17,
+          2.6020047359187224e-15
+        ],
+        "mass_area": [
+          2.5791901795271555e-06,
+          2.0880725255537348e-05,
+          2.0880725255537348e-05,
+          0.00048232534488142954
+        ]
+      }
+    },
+    {
+      "steps": 200,
+      "maximum_mass_error_m3": 9.305781891221561e-25,
+      "maximum_relative_density": 1.3130261710624413,
+      "work_J": 1.1988141298593388e-07,
+      "work_residual_J": 3.9733329503469506e-14,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883624e-10,
+        "coenergy": 2.6618336541634443e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070412,
+          -0.34128212054948237
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421515176e-07,
+        "coenergy": 1.4791804403862972e-06,
+        "mass": [
+          7.468936321994953e-12,
+          3.737455735526243e-10
+        ],
+        "effort": [
+          253168.9442177436,
+          -779.0701992797583
+        ],
+        "area_effort": [
+          -0.5758269140003754,
+          -4.473480393188251
+        ],
+        "compliance": [
+          4.146937204814536e-18,
+          4.643276770516438e-17,
+          4.643276770516438e-17,
+          2.6020047359186838e-15
+        ],
+        "mass_area": [
+          2.579190179526554e-06,
+          2.0880725255533045e-05,
+          2.0880725255533045e-05,
+          0.00048232534488139615
+        ]
+      }
+    },
+    {
+      "steps": 400,
+      "maximum_mass_error_m3": 2.5849394142282115e-25,
+      "maximum_relative_density": 1.3130261710624171,
+      "work_J": 1.1988144278591166e-07,
+      "work_residual_J": 9.933333884644814e-15,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883624e-10,
+        "coenergy": 2.6618336541634443e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070412,
+          -0.34128212054948237
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421513391e-07,
+        "coenergy": 1.4791804403861781e-06,
+        "mass": [
+          7.46893632199488e-12,
+          3.7374557355262357e-10
+        ],
+        "effort": [
+          253168.94421772548,
+          -779.0701992797161
+        ],
+        "area_effort": [
+          -0.5758269140003295,
+          -4.473480393187893
+        ],
+        "compliance": [
+          4.1469372048145086e-18,
+          4.643276770516411e-17,
+          4.643276770516411e-17,
+          2.6020047359186806e-15
+        ],
+        "mass_area": [
+          2.579190179526517e-06,
+          2.0880725255532784e-05,
+          2.0880725255532784e-05,
+          0.00048232534488139403
+        ]
+      }
+    },
+    {
+      "steps": 800,
+      "maximum_mass_error_m3": 2.5849394142282115e-25,
+      "maximum_relative_density": 1.3130261710624165,
+      "work_J": 1.198814502359098e-07,
+      "work_residual_J": 2.4833350064084204e-15,
+      "initial": {
+        "volume": 3.7931034482758655e-10,
+        "energy": 6.667914958883624e-10,
+        "coenergy": 2.6618336541634443e-07,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262347e-10
+        ],
+        "effort": [
+          700,
+          700
+        ],
+        "area_effort": [
+          -0.015645573986070412,
+          -0.34128212054948237
+        ],
+        "compliance": [
+          4.601399420150275e-18,
+          4.877483385359287e-17,
+          4.877483385359287e-17,
+          2.622171879164512e-15
+        ],
+        "mass_area": [
+          2.575495283446511e-06,
+          1.9831313682538115e-05,
+          1.9831313682538115e-05,
+          0.00046893587922880627
+        ]
+      },
+      "final": {
+        "volume": 3.70967741935484e-10,
+        "energy": 1.2054824421513317e-07,
+        "coenergy": 1.4791804403861438e-06,
+        "mass": [
+          7.468936321994877e-12,
+          3.7374557355262326e-10
+        ],
+        "effort": [
+          253168.94421772586,
+          -779.0701992798149
+        ],
+        "area_effort": [
+          -0.5758269140003283,
+          -4.473480393187855
+        ],
+        "compliance": [
+          4.1469372048145086e-18,
+          4.6432767705164095e-17,
+          4.6432767705164095e-17,
+          2.6020047359186794e-15
+        ],
+        "mass_area": [
+          2.579190179526516e-06,
+          2.0880725255532777e-05,
+          2.0880725255532777e-05,
+          0.00048232534488139376
+        ]
+      }
+    }
+  ],
+  "seam_refinement_ratios": [
+    3.9999994597233224,
+    3.9999993924386494,
+    3.999997527120243
+  ],
+  "hashes": {
+    ".build/asan/ducklips_continuous_glottis_probe": "9308c758dea497839624653c8c7d993e79e912fce90788a26092a4cfa27e1f4c",
+    ".build/asan/ducklips_continuous_glottis_tangent_probe": "872baa4580ed3b0272f24b39da8af519b16449efeb368bd877b14610ebf3744f",
+    ".build/asan/ducklips_contour_pressure_flow_probe": "8659ba01ad96e1bb5f0462402720e3fe193bd17f12cb43786cb71d75a800454f",
+    ".build/asan/ducklips_contour_pressure_loss_probe": "f99f42dae0bdd78ea319f9b18b25bf7d0fc8a9ebede9ed732d5e82a50eea6dfb",
+    ".build/asan/ducklips_contour_pressure_probe": "62406b7126baded8bee3724bdcf3dc55e3f24a6efafea965ea3df1f5ce24638e",
+    ".build/asan/ducklips_glottal_storage_probe": "817532ed58df0509d4af5b2c83fe86a3258a2928d843aaf732f545b303f49312",
+    "CMakeLists.txt": "66efc1b11440e9938156d311aae805331fc135b0f8bd0959420c2d375c851903",
+    "build/ducklips_continuous_glottis_probe": "1592bb56163ce79f88a17034c404e8d11189a4b474edd2cdcc79d6478541e1e5",
+    "build/ducklips_continuous_glottis_tangent_probe": "8c39b81241f658d1eff4af05170f09cf8bdc396d488b88b4aeafee674d07820b",
+    "build/ducklips_contour_pressure_flow_probe": "c12bb963250bc344a447b0ccccf1604d108efca04d102f82852d142f9422fe18",
+    "build/ducklips_contour_pressure_loss_probe": "e90b1151b42c911198287b40f32933a879998dfed5b9aa4e525330dd38eff983",
+    "build/ducklips_contour_pressure_probe": "c798a6a2e0a16960def2fd39a80c6085d07b5a418a5adab0a5f1e8d55a3b27bd",
+    "build/ducklips_glottal_storage_probe": "c391dd052a5c2f37270f2d3e09bc88b4d39b5fca1977052ffcfe2d53b73386ab",
+    "include/ducklips/continuous_glottis.hpp": "25efa112c67ed379c40a4f24fe85969583758da79d52d54e844fd67fe77ba02e",
+    "include/ducklips/gas_storage.hpp": "ece473ed6b4aac779976304c4d76961fec39c2400f2de40b1d46f9e599892aa5",
+    "out/continuous-glottis/asan-ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/asan-ctest.stdout": "595f8c7a6eb05d418b0a76db7f79a0ff6224c4b9a04c3cfc398f7691b88150be",
+    "out/continuous-glottis/ctest.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/ctest.stdout": "67dda03786900c13e523699fd3f5f7f800d57216cd39bbc670020126c260d2f2",
+    "out/continuous-glottis/driven-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-1000-long.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-asan-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-asan-smoke.stdout": "718fc181746732e51f30cdf2c1562cab6167bbce35cbe0ee7a89ea8377639f23",
+    "out/continuous-glottis/driven-release-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/driven-release-smoke.stdout": "718fc181746732e51f30cdf2c1562cab6167bbce35cbe0ee7a89ea8377639f23",
+    "out/continuous-glottis/free-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-asan-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-asan-smoke.stdout": "710ae6b633c4dc610e7c23f727ea43098fd1bf4d3b657795095919c9a0deb8c2",
+    "out/continuous-glottis/free-release-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/free-release-smoke.stdout": "710ae6b633c4dc610e7c23f727ea43098fd1bf4d3b657795095919c9a0deb8c2",
+    "out/continuous-glottis/inverse-regression.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/inverse-regression.stdout": "816756d71e54a4ed23f460603ccdfab5e47cc2dc975397bd896247337d4e062c",
+    "out/continuous-glottis/linear-100-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-100-0.001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-1600-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-1600-0.001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-200-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-200-0.001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-400-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-400-0.001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-800-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/linear-800-0.001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/loss-regression.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/loss-regression.stdout": "f53f1d0973e82fc5c3013d4c6d64e8f092d74c50175c19febc7dc4f8bb2b3604",
+    "out/continuous-glottis/lower-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-6400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-asan-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-asan-smoke.stdout": "fa97b6d7a627fa8c4e5db6e39ea0aab3a31195d7da5eea85857fcab8363c3864",
+    "out/continuous-glottis/lower-release-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/lower-release-smoke.stdout": "fa97b6d7a627fa8c4e5db6e39ea0aab3a31195d7da5eea85857fcab8363c3864",
+    "out/continuous-glottis/seam-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/seam-100.stdout": "e395be4bfa98d5da34b920eee518b70ceafa983c3ed0760b36e33ba3d6dc6e7d",
+    "out/continuous-glottis/seam-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/seam-200.stdout": "bfdd5370957f67a168c3a82e02a339dc79cf729587fcc8eecb9d2933c5adfda3",
+    "out/continuous-glottis/seam-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/seam-400.stdout": "35d4b854ac8f9eaa2f851e0f4751dd129788d6beeb31b5405fd147a81f162efc",
+    "out/continuous-glottis/seam-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/seam-800.stdout": "bd7bf428eaf972a174905dfdf7b7577ceeb2da0dd0c75bfaf4451cc9d0278ef9",
+    "out/continuous-glottis/tangent-asan-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/tangent-asan-smoke.stdout": "ecc0ee4442c94061aae251c7b43c2797677cd8de7e092104deedd29a184a72a5",
+    "out/continuous-glottis/tangent-release-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/tangent-release-smoke.stdout": "ecc0ee4442c94061aae251c7b43c2797677cd8de7e092104deedd29a184a72a5",
+    "out/continuous-glottis/upper-100.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-asan-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-asan-smoke.stdout": "341eefd39f591db09a05d60f75ad4c4a2e7c33e013ba341edf831e0af7c55580",
+    "out/continuous-glottis/upper-release-smoke.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-glottis/upper-release-smoke.stdout": "341eefd39f591db09a05d60f75ad4c4a2e7c33e013ba341edf831e0af7c55580",
+    "reports/continuous_glottis_storage_audit.json": "fcf1426576f89fb4fea7a8fd95a5387b1720ca982704a3b078f6524aff676707",
+    "reports/continuous_glottis_tangent_reference.json": "8fecf99be0a7330732a4b98e3b1a94b5bb492e4bc1e012ad565b23da73728ca3",
+    "src/continuous_glottis.cpp": "bc6a68b330f99f50343977db523aea41cf4f9e5e7d1185893be78a85b2239cc3",
+    "src/contour_pressure_storage.cpp": "3afb3cb5910b6959acb9185737e2442ccbe332d964f375a6fa03b508e138b9a6",
+    "src/gas_storage.cpp": "158f58bc5282ee8aaad0bd324a2a6195b62e34242a0db5ff2690c095a918f848",
+    "tools/continuous_glottis_experiment.py": "ac66e13c8110c5a70d39fb9cf0cd256b78e975ff3c50fcd995867af905c9e3d3",
+    "tools/continuous_glottis_probe.cpp": "ac6a4ad451de28046a5bfc19e28868f979d994632349afe67a48948364349f36",
+    "tools/continuous_glottis_reference.py": "caecf81570bad88c8a8f2c489b600c522233087ce3e397618bc02f3f37ab627f",
+    "tools/continuous_glottis_storage_audit.py": "764659a790ced2ba150bd623375c2c82c56e4a43ef7161370e44cee9b39737c0",
+    "tools/continuous_glottis_tangent_probe.cpp": "4cdff7b1d509b0e53db46bff5b6782aeb9f342d71cc8ed09438b5c3ef23802f1",
+    "tools/continuous_glottis_tangent_reference.py": "6a5c98a29e68bddca7a8805c4e59f48e7631b1a60d3855c75c47d66b1342306e",
+    "tools/continuous_glottis_validation.py": "52734373e4291785755edcaffcb87e0325c5777d13847aecc001273875766c23",
+    "reports/continuous_glottis_reference.json": "98cc7dedaee2b5741e9c314df79ec178de592a0d1644c0710c0697ac5bc85aba"
+  }
+}

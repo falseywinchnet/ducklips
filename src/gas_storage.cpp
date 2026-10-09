@@ -19,7 +19,10 @@ bool GasStorage::configure(const AirProperties& air) noexcept {
     bulk_=bulk;gamma_=air.heat_capacity_ratio;return true;
 }
 double GasStorage::density_energy(double r) const noexcept {
-    const double d=r-1;
+    if(std::abs(r-1)<.01){return density_departure_energy(r-1);}
+    return bulk_/(gamma_*(gamma_-1))*(std::expm1(gamma_*log_density(r))-gamma_*(r-1));
+}
+double GasStorage::density_departure_energy(double d) const noexcept {
     if(std::abs(d)<.01){
         // Cancel the constant/linear terms analytically. First term is
         // exactly the ordinary quadratic acoustic compression energy.
@@ -27,7 +30,7 @@ double GasStorage::density_energy(double r) const noexcept {
         for(int order=3;order<=12;++order){term*=d*(gamma_-double(order-1))/double(order);sum+=term;}
         return bulk_*sum;
     }
-    return bulk_/(gamma_*(gamma_-1))*(std::expm1(gamma_*log_density(r))-gamma_*d);
+    return bulk_/(gamma_*(gamma_-1))*(std::expm1(gamma_*std::log1p(d))-gamma_*d);
 }
 bool GasStorage::evaluate(double mass,double volume,GasEnergy& result) const noexcept {
     if(!positive(bulk_) || !positive(mass) || !positive(volume)){return false;}
@@ -36,6 +39,13 @@ bool GasStorage::evaluate(double mass,double volume,GasEnergy& result) const noe
     const GasEnergy candidate{volume*density_energy(r),bulk_/gamma_*std::expm1(gamma_*l),bulk_/(gamma_-1)*std::expm1((gamma_-1)*l)};
     if(!std::isfinite(candidate.energy) || candidate.energy<0 || !std::isfinite(candidate.pressure) || !std::isfinite(candidate.mass_effort)){return false;}
     result=candidate;return true;
+}
+bool GasStorage::evaluate_effort(double effort,GasEnergy& result,double& relative_density) const noexcept {
+    if(!positive(bulk_) || !std::isfinite(effort)){return false;}const double scaled=(gamma_-1)*effort/bulk_;if(scaled<=-1){return false;}
+    const double log_r=std::log1p(scaled)/(gamma_-1),departure=std::expm1(log_r),r=std::exp(log_r);
+    const GasEnergy candidate{density_departure_energy(departure),bulk_/gamma_*std::expm1(gamma_*log_r),effort};
+    if(!positive(r) || !std::isfinite(candidate.energy) || candidate.energy<0 || !std::isfinite(candidate.pressure)){return false;}
+    result=candidate;relative_density=r;return true;
 }
 bool GasStorage::mass_at_pressure(double volume,double pressure,double& mass) const noexcept {
     if(!positive(bulk_) || !positive(volume) || !std::isfinite(pressure)){return false;}

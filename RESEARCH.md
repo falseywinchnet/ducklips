@@ -266,6 +266,15 @@ continuum limits and fresh storage/flow regressions pass. This local,
 quasisteady constitutive approximation still needs compatible momentum and
 tissue advancement; it is not a new speech or physiological-validity result.
 
+[Coupled continuous-source dynamics](reports/CONTINUOUS_GLOTTAL_DYNAMICS.md)
+now advances gas and four tissue masses with one geometry-dependent kinetic
+energy, compression/contact forces and positive loss. Native free, driven and
+already sealed phases have work/mass checks, an independent analytic linear
+limit and an independent nonlinear momentum-force check. Coarse-grid accuracy
+failures are preserved and require temporal refinement despite conservation.
+Near-ambient compression energy is evaluated directly from effort to avoid
+cancellation. Cap sealing/reopening and speech-tract coupling remain unfinished.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

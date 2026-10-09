@@ -1,0 +1,128 @@
+#include "ducklips/continuous_glottis.hpp"
+#include <algorithm>
+#include <cmath>
+namespace ducklips {
+namespace {
+using Vector=std::array<double,7>;using Matrix=std::array<double,49>;
+constexpr double energy_scale=1e-6,time_scale=1e-3,mass_scale=1e-8,area_scale=1e-6,position_scale=1e-4;
+constexpr double coordinate_scale[]={mass_scale,mass_scale,mass_scale,position_scale,position_scale,position_scale,position_scale};
+template<std::size_t N> bool finite(const std::array<double,N>& a){for(double v:a){if(!std::isfinite(v)){return false;}}return true;}
+Vector multiply(const Matrix& a,const Vector& x){Vector y{};for(std::size_t i=0;i<7;++i){for(std::size_t j=0;j<7;++j){y[i]+=a[7*i+j]*x[j];}}return y;}
+double dot(const Vector& a,const Vector& b){double s=0;for(std::size_t i=0;i<7;++i){s+=a[i]*b[i];}return s;}
+bool solve(Matrix a,Vector b,Vector& x){
+    for(std::size_t j=0;j<7;++j){std::size_t pivot=j;for(std::size_t i=j+1;i<7;++i){if(std::abs(a[7*i+j])>std::abs(a[7*pivot+j])){pivot=i;}}
+        if(!std::isfinite(a[7*pivot+j]) || a[7*pivot+j]==0){return false;}
+        for(std::size_t k=j;k<7;++k){std::swap(a[7*j+k],a[7*pivot+k]);}std::swap(b[j],b[pivot]);
+        for(std::size_t i=j+1;i<7;++i){const double v=a[7*i+j]/a[7*j+j];for(std::size_t k=j+1;k<7;++k){a[7*i+k]-=v*a[7*j+k];}b[i]-=v*b[j];}}
+    for(std::size_t j=7;j-->0;){double v=b[j];for(std::size_t k=j+1;k<7;++k){v-=a[7*j+k]*x[k];}x[j]=v/a[7*j+j];}return finite(x);
+}
+bool inverse(const Matrix& a,const std::array<bool,7>& active,Matrix& result){
+    Matrix reduced=a;for(std::size_t j=0;j<7;++j){if(!active[j]){for(std::size_t k=0;k<7;++k){reduced[7*j+k]=reduced[7*k+j]=0;}reduced[7*j+j]=1;}}
+    Matrix candidate{};for(std::size_t j=0;j<7;++j){if(!active[j]){continue;}Vector b{},x{};b[j]=1;if(!solve(reduced,b,x)){return false;}for(std::size_t i=0;i<7;++i){candidate[7*i+j]=active[i]?x[i]:0;}}
+    for(std::size_t j=0;j<7;++j){for(std::size_t i=0;i<j;++i){candidate[7*i+j]=candidate[7*j+i]=.5*(candidate[7*i+j]+candidate[7*j+i]);}}
+    result=candidate;return true;
+}
+Matrix transform(const std::array<double,25>& a,double width,double multiplier){
+    Matrix result{};for(std::size_t i=0;i<7;++i){const std::size_t u=i<3?i:3+(i-3)/2;const double si=coordinate_scale[i]/time_scale*(i<3?1.:width);
+        for(std::size_t j=0;j<7;++j){const std::size_t v=j<3?j:3+(j-3)/2;const double sj=coordinate_scale[j]/time_scale*(j<3?1.:width);result[7*i+j]=a[5*u+v]*si*sj*multiplier;}}
+    return result;
+}
+}
+std::array<double,4> ContinuousGlottis::coordinates(const Vector& q) const noexcept {
+    return {initial_mass_[0]/mass_scale+q[0]-q[1],initial_mass_[1]/mass_scale+q[1]-q[2],
+        (rest_area_+width_*position_scale*(q[3]+q[4]))/area_scale,(rest_area_+width_*position_scale*(q[5]+q[6]))/area_scale};
+}
+bool ContinuousGlottis::configuration(const std::array<double,4>& z,Configuration& result) const noexcept {
+    if(!finite(z) || z[0]<=0 || z[1]<=0 || (z[2]>0)!=active_[0] || (z[3]>0)!=active_[2]){return false;}
+    Configuration candidate;candidate.z=z;const std::array<double,2> a={z[2]*area_scale,z[3]*area_scale},m={z[0]*mass_scale,z[1]*mass_scale};
+    if(!storage_.recover(a,m,effort_guess_,candidate.gas) || !kinetics_.prepare(a,candidate.gas.effort,candidate.flow)){return false;}
+    FoldContactState contact;if(!contact_.evaluate(a,contact)){return false;}
+    candidate.potential=(candidate.gas.energy+contact.energy)/energy_scale;
+    candidate.potential_gradient={candidate.gas.effort[0]*mass_scale/energy_scale,candidate.gas.effort[1]*mass_scale/energy_scale,
+        (candidate.gas.area_effort[0]+contact.area_effort[0])*area_scale/energy_scale,(candidate.gas.area_effort[1]+contact.area_effort[1])*area_scale/energy_scale};
+    candidate.metric=transform(candidate.flow.inertia,width_,1/energy_scale);
+    for(std::size_t i=0;i<4;++i){candidate.metric[7*(3+i)+3+i]+=mass_[i]*position_scale*position_scale/(time_scale*time_scale*energy_scale);}
+    if(!inverse(candidate.metric,active_,candidate.inverse)){return false;}result=candidate;return true;
+}
+bool ContinuousGlottis::resistance(const Configuration& c,Matrix& result) const noexcept {
+    ContourPressureLoss loss;if(!loss_.prepare(c.flow,loss)){return false;}Matrix candidate=transform(loss.resistance,width_,time_scale/energy_scale);
+    for(std::size_t i=0;i<4;++i){candidate[7*(3+i)+3+i]+=damping_[i]*position_scale*position_scale/(time_scale*energy_scale);}result=candidate;return true;
+}
+double ContinuousGlottis::mechanical(const Vector& q) const noexcept {
+    double e=0;for(std::size_t i=0;i<4;++i){e+=.5*stiffness_[i]*q[3+i]*q[3+i];}
+    for(std::size_t i=0;i<2;++i){const double d=q[3+i]-q[5+i];e+=.5*coupling_[i]*d*d;}return e*position_scale*position_scale/energy_scale;
+}
+bool ContinuousGlottis::prepare(const FoldParameters& f,const AirProperties& air,double tension,const FoldState& initial,const std::array<double,2>& effort,const std::array<double,3>& flow,double outlet_loss) noexcept {
+    for(double v:{f.lower_mass,f.upper_mass,f.lower_stiffness,f.upper_stiffness,f.length,f.asymmetry,tension}){if(!std::isfinite(v) || v<=0){return false;}}
+    for(double v:{f.coupling_stiffness,f.lower_damping_ratio,f.upper_damping_ratio,outlet_loss}){if(!std::isfinite(v) || v<0){return false;}}
+    if(!finite(effort) || !finite(flow) || !std::isfinite(initial.rest_area) || !finite(initial.lower_position) || !finite(initial.upper_position) || !finite(initial.lower_velocity) || !finite(initial.upper_velocity)){return false;}
+    ContinuousGlottis candidate;if(!candidate.storage_.configure(f,air) || !candidate.kinetics_.configure(f,air) || !candidate.loss_.configure(f,air) || !candidate.contact_.configure(f,tension) || !candidate.gas_.configure(air)){return false;}
+    candidate.rest_area_=initial.rest_area;candidate.width_=f.length;candidate.density_=air.density;candidate.bulk_=air.density*air.sound_speed*air.sound_speed;candidate.gamma_=air.heat_capacity_ratio;candidate.outlet_loss_=outlet_loss;candidate.effort_guess_=effort;
+    Vector velocity{};for(std::size_t j=0;j<3;++j){velocity[j]=flow[j]*time_scale/mass_scale;}
+    for(std::size_t side=0;side<2;++side){const double q=tension*(side?f.asymmetry:1.);candidate.coupling_[side]=f.coupling_stiffness*q;
+        candidate.mass_[side]=f.lower_mass/q;candidate.mass_[side+2]=f.upper_mass/q;candidate.stiffness_[side]=f.lower_stiffness*q;candidate.stiffness_[side+2]=f.upper_stiffness*q;
+        candidate.damping_[side]=2*f.lower_damping_ratio*std::sqrt(candidate.mass_[side]*candidate.stiffness_[side]);candidate.damping_[side+2]=2*f.upper_damping_ratio*std::sqrt(candidate.mass_[side+2]*candidate.stiffness_[side+2]);
+        candidate.position_[3+side]=initial.lower_position[side]/position_scale;candidate.position_[5+side]=initial.upper_position[side]/position_scale;
+        velocity[3+side]=initial.lower_velocity[side]*time_scale/position_scale;velocity[5+side]=initial.upper_velocity[side]*time_scale/position_scale;}
+    auto z=candidate.coordinates(candidate.position_);const std::array<double,2> a={z[2]*area_scale,z[3]*area_scale};ContourPressureState gas;if(!candidate.storage_.evaluate(a,effort,gas)){return false;}
+    candidate.initial_mass_=gas.mass;candidate.active_={a[0]>0,true,a[1]>0,true,true,true,true};for(std::size_t j:{0u,2u}){if(!candidate.active_[j] && flow[j]!=0){return false;}}
+    Configuration c;if(!candidate.configuration(candidate.coordinates(candidate.position_),c)){return false;}candidate.momentum_=multiply(c.metric,velocity);ContinuousGlottalState checked;if(!candidate.state(checked)){return false;}*this=candidate;return true;
+}
+bool ContinuousGlottis::state(ContinuousGlottalState& result) const noexcept {
+    Configuration c;if(!configuration(coordinates(position_),c)){return false;}const Vector velocity=multiply(c.inverse,momentum_);ContinuousGlottalState candidate;candidate.folds.rest_area=rest_area_;candidate.mass=c.gas.mass;candidate.effort=c.gas.effort;candidate.area=c.flow.area;
+    for(std::size_t j=0;j<3;++j){candidate.flow[j]=velocity[j]*mass_scale/time_scale;}
+    for(std::size_t j=0;j<2;++j){candidate.folds.lower_position[j]=position_[3+j]*position_scale;candidate.folds.upper_position[j]=position_[5+j]*position_scale;candidate.folds.lower_velocity[j]=velocity[3+j]*position_scale/time_scale;candidate.folds.upper_velocity[j]=velocity[5+j]*position_scale/time_scale;}
+    const Vector canonical=multiply(c.metric,velocity);for(std::size_t j=0;j<7;++j){candidate.momentum[j]=canonical[j]*energy_scale*time_scale/coordinate_scale[j];}
+    candidate.energy=energy_scale*(c.potential+mechanical(position_)+.5*dot(momentum_,velocity));if(!std::isfinite(candidate.energy)){return false;}result=candidate;return true;
+}
+bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_load,double load_slope,const std::array<double,4>& force) noexcept {
+    if(!std::isfinite(dt) || dt<=0 || !std::isfinite(free_load) || !std::isfinite(load_slope) || load_slope<0 || !finite(force)){return false;}
+    Configuration c0;if(!configuration(coordinates(position_),c0)){return false;}double reservoir_mass;GasEnergy reservoir;if(!gas_.mass_at_pressure(1.,reservoir_pressure,reservoir_mass) || !gas_.evaluate(reservoir_mass,1.,reservoir)){return false;}
+    const double step=dt/time_scale;const Vector v0=multiply(c0.inverse,momentum_);Vector change{},residual{},p1{},q1{},speed{},external{};for(std::size_t j=0;j<7;++j){change[j]=step*v0[j];}
+    external[0]=reservoir.mass_effort*mass_scale/energy_scale;external[2]=-free_load*mass_scale/energy_scale;for(std::size_t j=0;j<4;++j){external[3+j]=force[j]*position_scale/energy_scale;}
+    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0;bool converged=false;
+    const auto evaluate=[&](const Vector& trial){
+        if(!finite(trial)){return false;}for(std::size_t j=0;j<7;++j){q1[j]=position_[j]+trial[j];speed[j]=trial[j]/step;}const auto z1=coordinates(q1);std::array<double,4> zm;for(std::size_t k=0;k<4;++k){zm[k]=.5*(c0.z[k]+z1[k]);}
+        if(!configuration(z1,c1) || !configuration(zm,cm) || !resistance(cm,drag)){return false;}
+        Matrix average;for(std::size_t j=0;j<49;++j){average[j]=.5*(c0.inverse[j]+c1.inverse[j]);}
+        for(std::size_t j=0;j<7;++j){if(!active_[j]){average[7*j+j]=1;}}
+        Vector pavg;if(!solve(average,speed,pavg)){return false;}for(std::size_t j=0;j<7;++j){p1[j]=2*pavg[j]-momentum_[j];if(!active_[j]){p1[j]=0;}}
+        // Symmetric discrete kinetic derivative in the four actual state
+        // coordinates. Preserving this dependence retains the cyclic common
+        // transferred-volume coordinate and its throughflow momentum law.
+        std::array<double,4> gradient=cm.potential_gradient,dz;double norm2=0,work=0;
+        for(std::size_t k=0;k<4;++k){double h=2e-5*std::max(1.,std::abs(zm[k]));h=std::min(h,.1*std::abs(zm[k]));if(h<=0){return false;}
+            auto plus=zm,minus=zm;plus[k]+=h;minus[k]-=h;Configuration cp,cn;if(!configuration(plus,cp) || !configuration(minus,cn)){return false;}
+            Matrix derivative;for(std::size_t j=0;j<49;++j){derivative[j]=(cp.inverse[j]-cn.inverse[j])/(2*h);}
+            gradient[k]+=.25*(dot(momentum_,multiply(derivative,momentum_))+dot(p1,multiply(derivative,p1)));dz[k]=z1[k]-c0.z[k];norm2+=dz[k]*dz[k];work+=gradient[k]*dz[k];}
+        Matrix difference;for(std::size_t j=0;j<49;++j){difference[j]=c1.inverse[j]-c0.inverse[j];}
+        const double delta=c1.potential-c0.potential+.25*(dot(momentum_,multiply(difference,momentum_))+dot(p1,multiply(difference,p1)));
+        if(norm2>1e-28){const double correction=(delta-work)/norm2;for(std::size_t k=0;k<4;++k){gradient[k]+=correction*dz[k];}}
+        Vector generalized={gradient[0],gradient[1]-gradient[0],-gradient[1],0,0,0,0};
+        for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;const double x=.5*(position_[3+i]+q1[3+i]),y=.5*(position_[3+other]+q1[3+other]);
+            generalized[3+i]=gradient[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*x+coupling_[i%2]*(x-y))*position_scale*position_scale/energy_scale;}
+        Vector resistance_force=multiply(drag,speed);const double outflow=speed[2]*mass_scale/time_scale;double beta=0;
+        if(active_[2] && outlet_loss_>0){const double r=std::pow(1+(gamma_-1)*cm.gas.effort[1]/bulk_,1/(gamma_-1));beta=outlet_loss_*density_/(2*r*r*cm.flow.area[1]*cm.flow.area[1]);}
+        const double load=load_slope*outflow+beta*outflow*std::abs(outflow);resistance_force[2]+=load*mass_scale/energy_scale;load_loss=load*outflow*dt;
+        norm=0;converged=true;for(std::size_t j=0;j<7;++j){residual[j]=active_[j]?(p1[j]-momentum_[j])/step+generalized[j]+resistance_force[j]-external[j]:trial[j]/step;norm=std::max(norm,std::abs(residual[j]));if(std::abs(residual[j])>2e-9+2e-11*(std::abs(generalized[j])+std::abs(resistance_force[j])+std::abs(external[j]))){converged=false;}}
+        return finite(residual) && std::isfinite(norm);
+    };
+    std::size_t iteration=0;for(;iteration<24;++iteration){if(!evaluate(change)){if(iteration!=0){return false;}change.fill(0);if(!evaluate(change)){return false;}}if(converged){break;}
+        const Vector base=residual;const double old_norm=norm;Matrix jacobian{};
+        for(std::size_t j=0;j<7;++j){if(!active_[j]){jacobian[7*j+j]=1/step;continue;}double h=1e-5*std::max(std::abs(change[j]),1e-5);bool differentiated=false;
+            for(int attempt=0;attempt<12;++attempt){auto plus=change,minus=change;plus[j]+=h;minus[j]-=h;const bool okp=evaluate(plus);const Vector rp=residual;const bool okm=evaluate(minus);const Vector rm=residual;
+                if(okp && okm){for(std::size_t i=0;i<7;++i){jacobian[7*i+j]=(rp[i]-rm[i])/(2*h);}differentiated=true;break;}h*=.5;}
+            if(!differentiated){return false;}}
+        Vector rhs=base,increment{};for(double& v:rhs){v=-v;}if(!solve(jacobian,rhs,increment)){return false;}double fraction=1;bool accepted=false;
+        for(int line=0;line<24;++line){Vector next=change;for(std::size_t j=0;j<7;++j){next[j]+=fraction*increment[j];}if(evaluate(next) && (norm<old_norm || converged)){change=next;accepted=true;break;}fraction*=.5;}if(!accepted){return false;}
+    }
+    if(iteration==24){return false;}ContinuousGlottis next=*this;next.position_=q1;next.momentum_=p1;next.effort_guess_=c1.gas.effort;ContinuousGlottalStep receipt;
+    for(std::size_t j=0;j<3;++j){receipt.flow[j]=speed[j]*mass_scale/time_scale;}
+    receipt.reservoir_work=reservoir.mass_effort*change[0]*mass_scale;receipt.load_work=free_load*change[2]*mass_scale+load_loss;
+    for(std::size_t j=0;j<4;++j){receipt.external_work+=force[j]*change[3+j]*position_scale;receipt.tissue_loss+=dt*damping_[j]*std::pow(speed[3+j]*position_scale/time_scale,2);}
+    receipt.fluid_loss=step*energy_scale*dot(speed,multiply(drag,speed))-receipt.tissue_loss;
+    const double e0=energy_scale*(c0.potential+mechanical(position_)+.5*dot(momentum_,v0));const double e1=energy_scale*(c1.potential+mechanical(q1)+.5*dot(p1,multiply(c1.inverse,p1)));
+    receipt.energy_change=e1-e0;receipt.energy_residual=receipt.energy_change+receipt.tissue_loss+receipt.fluid_loss+receipt.load_work-receipt.reservoir_work-receipt.external_work;receipt.iterations=iteration+1;receipt.maximum_scaled_residual=norm;
+    if(!std::isfinite(receipt.energy_residual)){return false;}next.last=receipt;*this=next;return true;
+}
+}

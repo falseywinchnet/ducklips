@@ -26,10 +26,11 @@ spectrogram do not establish intelligibility or human realism. See the
 explicit [research gates](RESEARCH.md). Earlier engines and their performance
 measurements remain research references; they are not acoustically equivalent.
 
-The developing continuous gas source now has [finite narrow-gap loss](reports/CONTOUR_PRESSURE_LOSS.md)
-from a checked kinetic conductance reference, alongside its continuous storage
-and airflow/inertia components. Coupled momentum and tissue advancement remain
-unfinished; these component results have not produced a new speech recording.
+The developing continuous gas source now has [coupled gas/tissue motion](reports/CONTINUOUS_GLOTTAL_DYNAMICS.md)
+using shared inertia and [finite narrow-gap loss](reports/CONTOUR_PRESSURE_LOSS.md).
+Open and already sealed phases advance with a complete work ledger. Carrying
+motion through sealing/reopening and connecting this source to the speech tract
+remain unfinished; these results have not produced a new speech recording.
 
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
