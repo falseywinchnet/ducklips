@@ -1,0 +1,129 @@
+{
+  "use": "native variable-graph stored-air state with independently established geometric continuation; sealed-wall control, not speech",
+  "bulk_modulus_Pa": 139650.0,
+  "boundary": "two sealed chambers separated by a moving wall; no interchamber passage",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/cavity_region_motion_reference.py"
+  ],
+  "runs": [
+    {
+      "subdivisions": 1,
+      "steps": 3,
+      "maximum_pressure_error_Pa": 1.1368683772161603e-12,
+      "maximum_individual_chamber_mass_error_m3": 0,
+      "final_pressure_by_chamber_Pa": [
+        599.9999999999999,
+        0.0
+      ],
+      "relative_density_range": [
+        0.9943282523927686,
+        1.010126582278481
+      ],
+      "maximum_endpoint_overlap_excluded_m3": 8.800000000000001e-08,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe"
+      ],
+      "input": "out/cavity-region-motion/sealed-wall-1.txt",
+      "input_sha256": "d64a383e5618a673f04f3d9707e3499562ccf420e58904842932de4cbc6e5b36",
+      "output": "out/cavity-region-motion/sealed-wall-1.csv",
+      "output_sha256": "c0d11d6059012cf7311bb0e62a65b32a9a206d952609ba42f66d590bb8c172cd",
+      "log": "out/cavity-region-motion/sealed-wall-1.log",
+      "log_sha256": "9f651819e369a3eedc68346f3c15a132e170f3b5d2e96b75f7d878955660297d",
+      "correspondence": "out/cavity-region-motion/sealed-wall-1-correspondence.json",
+      "correspondence_sha256": "c0e6e965d4ed1dbc1d2297a07e3e60d46a80eb3f29125245b877c6b78e24a8f2"
+    },
+    {
+      "subdivisions": 2,
+      "steps": 6,
+      "maximum_pressure_error_Pa": 1.5916157281026244e-12,
+      "maximum_individual_chamber_mass_error_m3": 0,
+      "final_pressure_by_chamber_Pa": [
+        600.0000000000005,
+        5.115907697472721e-13
+      ],
+      "relative_density_range": [
+        0.9943282523927686,
+        1.010126582278481
+      ],
+      "maximum_endpoint_overlap_excluded_m3": 2.2000000000000002e-08,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe"
+      ],
+      "input": "out/cavity-region-motion/sealed-wall-2.txt",
+      "input_sha256": "37fa107ae45278b5dc2fcec6d419d94f3dd753e32197d84121a9364d35f14938",
+      "output": "out/cavity-region-motion/sealed-wall-2.csv",
+      "output_sha256": "b0c10666e13bc12b08515dc371e86fa7bc7fb4c8eba58d2645471baa2ab8916f",
+      "log": "out/cavity-region-motion/sealed-wall-2.log",
+      "log_sha256": "640d92110d679d794ab71303afb7bb38ffdad19edebecbaaa13def888e25f97d",
+      "correspondence": "out/cavity-region-motion/sealed-wall-2-correspondence.json",
+      "correspondence_sha256": "6ddd0b4be026b5a3073c302d58ec9fd01d42a9799525eecfddfeb8c3ee42c975"
+    },
+    {
+      "subdivisions": 4,
+      "steps": 12,
+      "maximum_pressure_error_Pa": 1.3642420526593924e-12,
+      "maximum_individual_chamber_mass_error_m3": 1.6940658945086007e-21,
+      "final_pressure_by_chamber_Pa": [
+        600.0,
+        -3.126388037344441e-13
+      ],
+      "relative_density_range": [
+        0.9943282523927686,
+        1.010126582278481
+      ],
+      "maximum_endpoint_overlap_excluded_m3": 0,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe"
+      ],
+      "input": "out/cavity-region-motion/sealed-wall-4.txt",
+      "input_sha256": "4d3f3efc6ab6ff80e02eb5b22a8ba8f97e67a98d8ef4d4235074941d1f4bddac",
+      "output": "out/cavity-region-motion/sealed-wall-4.csv",
+      "output_sha256": "49ecbcd7a6348d4c19f7981348ba9f146c2da987bee89022bef0d9a7535106dc",
+      "log": "out/cavity-region-motion/sealed-wall-4.log",
+      "log_sha256": "57b2b0400a79079694f770fa6a38b6c7eb8a386d3a24084a1ac5292ebb3ca851",
+      "correspondence": "out/cavity-region-motion/sealed-wall-4-correspondence.json",
+      "correspondence_sha256": "f9a4f6de00dd95a4109c586c488c88f69a16b737be64370a7ab94a2c7a389bc3"
+    },
+    {
+      "subdivisions": 8,
+      "steps": 24,
+      "maximum_pressure_error_Pa": 1.3642420526593924e-12,
+      "maximum_individual_chamber_mass_error_m3": 1.6940658945086007e-21,
+      "final_pressure_by_chamber_Pa": [
+        600.0000000000001,
+        3.552713678800501e-13
+      ],
+      "relative_density_range": [
+        0.9943282523927686,
+        1.010126582278481
+      ],
+      "maximum_endpoint_overlap_excluded_m3": 0,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_cavity_region_motion_probe"
+      ],
+      "input": "out/cavity-region-motion/sealed-wall-8.txt",
+      "input_sha256": "f2d67162ff76f9c9902dc40f205250e85eb390d76a8da6c609a4afc3f6573dd2",
+      "output": "out/cavity-region-motion/sealed-wall-8.csv",
+      "output_sha256": "4becba0ded04a921f4a2f222d2aad4af8bae971afdfb072e0bacea75e9c39aa3",
+      "log": "out/cavity-region-motion/sealed-wall-8.log",
+      "log_sha256": "7225d279e0be6f832fd3084b2badc7eca8db48dad7ef9013498944bbd594e3b2",
+      "correspondence": "out/cavity-region-motion/sealed-wall-8-correspondence.json",
+      "correspondence_sha256": "d81d7c24ed6b3fcda6131814231a2c7904ae52743a7a61304c70cbaf577bb12c"
+    }
+  ],
+  "hashes": {
+    "include/ducklips/cavity_network.hpp": "f1986d12198f9a4a78e1481daa684d2d131fca45f016f4c4823c3e1b8e091808",
+    "src/cavity_network.cpp": "7835e2919c0d145aee700b0ea517ddb7303268d107456a834b563aa53ee8e0dd",
+    "tests/cavity_network_tests.cpp": "1a5892453a3acefbe44e6846007fefdcf6f23411b478f66adbfa3867e3db2b5d",
+    "tools/cavity_region_motion_probe.cpp": "d8c35786953a7856d6436afaf60bd9bd6a095194a80c0008d6bc8d9daa481cb3",
+    "tools/cavity_region_motion_reference.py": "366f3dae87853ff98d4943761a7a2b8bb5ed7f0f2a230d26305017021ed96ac3",
+    "tools/planar_region_motion_reference.py": "045b5f03910677dea6200b4c96b9552cee5058e8fb42d941b1d4de483c87e35b",
+    "build/ducklips_cavity_region_motion_probe": "9ebee1116147e78e3e5a899bdb718b04215edd4ec885ca178e13e475ccdae969"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

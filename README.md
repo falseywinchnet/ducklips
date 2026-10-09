@@ -42,8 +42,10 @@ contours](reports/PLANAR_MOTION.md) now passes an independent 521-pose audit and
 exposes openings invented by endpoint-metric interpolation. [Opening histories
 between poses](reports/PLANAR_FACE_MOTION.md) now retain within-step contact and
 resolve a false post-closure pressure transfer in a controlled fixture.
-Conservative region-state transfer, physical interval flow and acoustic
-integration remain required for speech.
+[Stored-state continuation](reports/REGION_STATE_CONTINUATION.md) now preserves
+air behind a moving seal through graph reindexing and audits correspondence
+across all 520 saved subintervals. Split/merge events, physical interval flow
+and acoustic integration remain required for speech.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

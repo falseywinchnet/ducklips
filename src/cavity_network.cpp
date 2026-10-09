@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <limits>
 #include <utility>
+#include <type_traits>
 
 namespace ducklips {
 void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> connections) {
@@ -52,6 +53,25 @@ void CavityNetwork::prepare(std::size_t nodes,std::span<const CavityConnection> 
     pressure_.assign(nodes,0);volume_.resize(nodes);compliance_.resize(nodes);flow_.assign(connections.size(),0);
     candidate_.resize(nodes);trial_.resize(nodes);residual_.resize(nodes);gradient_.resize(nodes);delta_.resize(nodes);
     storage_.resize(nodes);rhs_.resize(nodes);roundoff_.resize(nodes);working_flow_.resize(connections.size());linearization_flow_.resize(connections.size());ready_=false;
+}
+bool CavityNetwork::reconfigure(std::span<const CavityConnection> connections,
+                                std::span<const std::size_t> old_node_for_new) {
+    if(!ready_ || old_node_for_new.empty()){return false;}
+    std::vector<bool> used(pressure_.size(),false);
+    std::vector<double> volume(old_node_for_new.size(),0),compliance(old_node_for_new.size(),0),pressure(old_node_for_new.size(),0);
+    for(std::size_t next=0;next<old_node_for_new.size();++next){
+        const std::size_t old=old_node_for_new[next];if(old==cavity_reservoir){continue;}
+        if(old>=pressure_.size() || used[old]){return false;}
+        used[old]=true;volume[next]=volume_[old];compliance[next]=compliance_[old];pressure[next]=pressure_[old];
+    }
+    for(std::size_t old=0;old<pressure_.size();++old){
+        if(!used[old] && (volume_[old]!=0 || compliance_[old]!=0)){return false;}
+    }
+    CavityNetwork rebuilt;
+    try{rebuilt.prepare(old_node_for_new.size(),connections);}catch(const std::invalid_argument&){return false;}
+    if(!rebuilt.reset(volume,compliance,pressure)){return false;}
+    static_assert(std::is_nothrow_move_assignable_v<CavityNetwork>);
+    *this=std::move(rebuilt);return true;
 }
 bool CavityNetwork::reset(std::span<const double> volumes,std::span<const double> compliances,
                           std::span<const double> pressures) noexcept {

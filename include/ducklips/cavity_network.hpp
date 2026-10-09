@@ -32,6 +32,18 @@ public:
     // keeps the direct solve; other graphs use that elimination only as a
     // preconditioner, retaining every passage in the actual pressure equation.
     void prepare(std::size_t nodes,std::span<const CavityConnection> connections);
+    // Rebuild graph indexing while preserving each continuing node's complete
+    // stored state. Each new node names one old node, or cavity_reservoir for
+    // a genuinely new zero-storage node. Nonempty old nodes must occur exactly
+    // once: retain a disappearing node until advance has expelled its air.
+    // This does not infer geometric correspondence or permit split/merge mass
+    // weights. The caller must establish continuation independently.
+    // Reconfiguration allocates (offline research/control operation); ordinary
+    // advance remains allocation-free. Successful reconfiguration clears the
+    // diagnostic port flows. Invalid input returns false without changing any
+    // accepted state; allocation failure may throw, also leaving it unchanged.
+    bool reconfigure(std::span<const CavityConnection> connections,
+                     std::span<const std::size_t> old_node_for_new);
     // Zero compliance is allowed only with zero volume (an absent grid cell).
     bool reset(std::span<const double> volumes,std::span<const double> compliances,
                std::span<const double> pressures) noexcept;

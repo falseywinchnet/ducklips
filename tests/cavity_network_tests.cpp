@@ -240,5 +240,43 @@ int main() {
     check(valid && report.converged && std::abs(transport.flows()[0]-expected_outflow)<1e-12
         && std::abs(transport.pressures()[0]-transport_pressure)<1e-5,
         "nonlinear disappearing-cell outflow matches independent mass and pressure-drop equations",transport.pressures()[0]-transport_pressure);
+    // Moving region IDs can change independently of their stored air. A graph
+    // rebuild must retain V, C and p together; it is not a pressure-only copy.
+    ducklips::CavityNetwork remapped;remapped.prepare(2,connection);
+    valid=remapped.reset(oldv,oldc,oldp);
+    const std::array<std::size_t,3> order{1,ducklips::cavity_reservoir,0};
+    const std::array<ducklips::CavityConnection,2> rebuilt_links{{{2,0},{0,1}}};
+    valid=remapped.reconfigure(rebuilt_links,order)&&valid;
+    check(valid && remapped.pressures()[0]==100 && remapped.pressures()[1]==0 && remapped.pressures()[2]==500,
+          "graph reindexing preserves continuing pressure and initializes new storage empty");
+    const std::array<double,3> mapped_v{oldv[1],0,oldv[0]},mapped_c{oldc[1],0,oldc[0]},mapped_in{};
+    const std::array<ducklips::CavityPassage,2> shut{};
+    report=remapped.advance(mapped_v,mapped_c,shut,mapped_in,.001,air);
+    check(report.converged && remapped.pressures()[0]==100 && remapped.pressures()[2]==500,
+          "reindexing retains volumes and compliance rather than merely pressures");
+    const std::array<std::size_t,2> repeated{0,0},dropped{0,1},bad_index{0,9};
+    const std::array<ducklips::CavityConnection,1> bad_link{{{0,7}}};
+    check(!remapped.reconfigure(connection,repeated) && !remapped.reconfigure(connection,dropped)
+        && !remapped.reconfigure(connection,bad_index) && !remapped.reconfigure(bad_link,order),
+          "duplicated air, deleted nonempty storage and invalid graph indices are rejected");
+    report=remapped.advance(mapped_v,mapped_c,shut,mapped_in,.001,air);
+    check(report.converged && remapped.pressures()[0]==100 && remapped.pressures()[2]==500,
+          "failed reconfiguration leaves original graph and stored state usable");
+    // Keep the old node as an algebraic ghost through its conservative drain,
+    // then allow its truly empty storage slot to be removed.
+    std::array<double,3> drained_v{3e-6,0,0},drained_c{3e-6/bulk,0,0};
+    const std::array<ducklips::CavityPassage,2> drain_ports{{{1e-5,1e6,0,0,0},{0,0,0,0,0}}};
+    report=remapped.advance(drained_v,drained_c,drain_ports,mapped_in,.001,air);
+    const double mass_after=drained_v[0]+drained_c[0]*remapped.pressures()[0];
+    const double accepted_flow=remapped.flows()[0],accepted_pressure=remapped.pressures()[0];
+    check(accepted_flow>0 && !remapped.reconfigure(connection,repeated)
+        && remapped.flows()[0]==accepted_flow && remapped.pressures()[0]==accepted_pressure,
+          "failed reconfiguration preserves the last accepted port flows as well as pressure");
+    const std::array<std::size_t,1> keep{0};valid=report.converged&&remapped.reconfigure({},keep);
+    const std::array<double,1> compact_v{drained_v[0]},compact_c{drained_c[0]},compact_in{};
+    report=remapped.advance(compact_v,compact_c,{},compact_in,.001,air);
+    check(valid && report.converged && std::abs(compact_v[0]+compact_c[0]*remapped.pressures()[0]-oldmass)<1e-18
+        && std::abs(mass_after-oldmass)<1e-18,
+          "a disappeared region is discarded only after its air has left conservatively",mass_after-oldmass);
     return failures?1:0;
 }

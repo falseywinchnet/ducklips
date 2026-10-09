@@ -156,3 +156,6 @@ target_link_libraries(ducklips_planar_regions_probe PRIVATE ducklips)
 add_executable(ducklips_planar_face_motion_tests tests/planar_face_motion_tests.cpp)
 target_link_libraries(ducklips_planar_face_motion_tests PRIVATE ducklips)
 add_test(NAME ducklips_planar_face_motion_tests COMMAND ducklips_planar_face_motion_tests)
+
+add_executable(ducklips_cavity_region_motion_probe tools/cavity_region_motion_probe.cpp)
+target_link_libraries(ducklips_cavity_region_motion_probe PRIVATE ducklips)
