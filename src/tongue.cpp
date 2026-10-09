@@ -1,5 +1,6 @@
 #include "ducklips/tongue.hpp"
 #include "ducklips/physics.hpp"
+#include "ducklips/tongue_surface.hpp"
 #include <algorithm>
 #include <array>
 #include <cmath>
@@ -202,7 +203,7 @@ double MidsagittalTongue::gap_from_area(double area, double arc) noexcept {
 }
 
 TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGesture& body,
-                                    const TongueGesture& tip) noexcept {
+                                    const TongueGesture& tip, const ConservativeTongueSurface* surface) noexcept {
     TongueShape shape{};
     double jaw = std::clamp(posture.jaw, 0.0, 1.0);
     // The jaw carries the tongue down with it.
@@ -210,7 +211,7 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
 
     // Body gesture: the dorsum moves along the wall normal at its place until
     // the gap reaches the target; activation above 1 presses further.
-    if (body.activation > 0.0) {
+    if (body.activation > 0.0 && surface==nullptr) {
         double arc = length - body.place_from_lips;
         Point2 wall = add(midline(arc), scaled(normal(arc), outer_offset(arc)));
         Point2 inward = scaled(normal(arc), -1.0);
@@ -226,6 +227,11 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
     }
 
     Point2 root = blade_root(centre);
+    if (surface!=nullptr) {
+        const TongueMaterialPoint mapped_root=surface->material(root),mapped_centre=surface->material(centre);
+        if (!mapped_root.valid || !mapped_centre.valid) { shape.valid=false;return shape; }
+        root=mapped_root.position;centre=mapped_centre.position;shape.surface=surface;
+    }
     double rest_angle = (-20.0 + 50.0 * std::clamp(posture.blade, -1.0, 1.0)) * pi / 180.0;
     Point2 rest_tip{.x = root.x + blade_length * std::cos(rest_angle), .y = root.y + blade_length * std::sin(rest_angle)};
     Point2 tip_point = rest_tip;
@@ -263,13 +269,26 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
             }
             double excess = span - blade_length;
             Point2 pull = scaled(reach_vector, excess / span);
+            double fraction=1;
+            if (surface) { fraction=surface->admissible_pull(shape.surface_translation,pull);pull=scaled(pull,fraction); }
             centre = add(centre, pull);
-            shape.drag += excess;
+            shape.drag += excess*fraction;
             shape.drag_vector = add(shape.drag_vector, pull);
-            root = blade_root(centre);
+            if (surface!=nullptr) { root=add(root,pull);shape.surface_translation=add(shape.surface_translation,pull); }
+            else { root = blade_root(centre); }
+            if (fraction<1) {
+                const Point2 remaining{tip_point.x-root.x,tip_point.y-root.y};
+                const double distance=norm(remaining);
+                if (distance>blade_length) {
+                    shape.tip_target_error=distance-blade_length;
+                    tip_point=add(root,scaled(remaining,blade_length/distance));
+                }
+                break;
+            }
         }
     }
     shape.body_centre = centre;
+    if (surface) { shape.body_wall_penetration=surface->wall_penetration(shape.surface_translation); }
     shape.blade_root = root;
     shape.tip = tip_point;
     return shape;
@@ -284,7 +303,9 @@ void MidsagittalTongue::gaps(const TongueShape& shape, const TonguePosture& post
         Point2 wall = add(midline(arc), scaled(wall_normal, offset));
         Point2 inward = scaled(wall_normal, -1.0);
         double gap = offset + floor_offset(arc, posture);
-        gap = smooth_minimum(gap, ray_circle(wall, inward, shape.body_centre, body_radius));
+        const double body_gap=shape.surface?shape.surface->ray_gap(wall,inward,shape.surface_translation):ray_circle(wall,inward,shape.body_centre,body_radius);
+        if (std::isnan(body_gap)) { output[index]=body_gap;continue; }
+        gap = smooth_minimum(gap, body_gap);
         gap = smooth_minimum(gap, ray_segment(wall, inward, shape.blade_root, shape.tip));
         gap = smooth_minimum(gap, ray_circle(wall, inward, shape.tip, tip_radius));
         output[index] = std::max(gap, 0.0);

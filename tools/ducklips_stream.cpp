@@ -20,7 +20,9 @@ int main(int argc, char** argv) {
     std::string error{};
     for (int i = 1; i < argc; ++i) {
         std::string flag = argv[i];
-        if (flag == "--canonical-motion") {
+        if (flag == "--conservative-tongue") {
+            options.conservative_tongue=true;
+        } else if (flag == "--canonical-motion") {
             options.canonical_motion=true;
         } else if (flag == "--body" && i + 1 < argc) {
             if (!ducklips::load_body_config(argv[++i], voice, error)) { std::cerr << error << '\n'; return 2; }
@@ -29,10 +31,12 @@ int main(int argc, char** argv) {
             std::string extra{};
             if (!(value >> speed) || (value >> extra) || !std::isfinite(speed) || speed < .25 || speed > 4) { return 2; }
         } else {
-            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] < nudges > stereo.f32\n";
+            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] [--conservative-tongue] < nudges > stereo.f32\n";
             return 2;
         }
     }
+    if (options.conservative_tongue && !options.canonical_motion) { std::cerr << "--conservative-tongue requires --canonical-motion\n";return 2; }
+    std::cerr << "tongue body: " << (options.conservative_tongue?"conservative material map":"rigid circle") << '\n';
     ducklips::NudgeStream stream{};
     stream.prepare(voice, speed,4096,options);
     std::cerr << "acoustic path: " << (options.canonical_motion ? "canonical moving network" : "compact modal") << '\n';
@@ -62,6 +66,7 @@ int main(int argc, char** argv) {
             std::size_t count = static_cast<std::size_t>(std::min<ducklips::SampleCount>(480, end - stream.engine().position()));
             std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
             stream.render(std::span<float>(chunk.data(), count * 2));
+            if (stream.engine().statistics().geometry_failures) { std::cerr << "geometry audit failed: " << stream.engine().statistics().geometry_error << '\n';return 1; }
             render_seconds += std::chrono::duration<double>(std::chrono::steady_clock::now() - start).count();
             if (std::fwrite(chunk.data(), sizeof(float), count * 2, stdout) != count * 2) { return 1; }
         }

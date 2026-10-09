@@ -8,9 +8,11 @@ fixed-width closure itself is impossible. It remains a failure of that
 particular discretization/solve; these results do not isolate locking from
 other solver limitations.
 
-`ConservativeTongueMap` is a new native C++ component. It is not connected to
-`TractModel` or the speech renderer yet. It supplies conservative kinematics,
-not calibrated tissue forces or a human pronunciation result.
+`ConservativeTongueMap` is a native C++ component. This report records its
+isolated validation. The subsequent [speech integration](CONSERVATIVE_TONGUE_SPEECH.md)
+connects it to `TractModel`, including the blade attachment and airway
+intersections. It supplies conservative kinematics, not calibrated tissue
+forces or a human pronunciation result.
 
 ## How conservation is obtained
 
@@ -90,7 +92,7 @@ outputs of the existing empirical gap-to-area law, not validated physical air
 volumes or evidence of improved sound. The three-dimensional airway relation
 identified in the previous report still needs to be resolved.
 
-## Limits and next integration work
+## Limits and integration requirements
 
 A principal stretch of about three is not justified by the conservation
 identity. This map has no calibrated elastic energy, muscle stress, tissue
@@ -98,13 +100,15 @@ inertia or physiological time law. Its contact and conservation success is a
 kinematic existence result. It does not establish that this is the motion a
 human tongue would choose or could sustain under a particular command.
 
-Integration also requires consistent attachment of the blade and tip to the
+Integration requires consistent attachment of the blade and tip to the
 deformed body, geometric treatment of combined gestures, and continuous
 intersection of the mapped surface with airway sections. Connecting only the
 new upper contour while leaving the blade attached to the old translated
 circle would produce a disconnected articulator and is not acceptable.
-No fallback to old-engine audio or claimed new speech sample accompanies this
-component. Performance optimization remains deferred by user instruction.
+This isolated component did not supply a speech sample. The subsequent
+[integration report](CONSERVATIVE_TONGUE_SPEECH.md) records actual speech from
+the connected engine and its remaining reach limitation. Performance
+optimization remains deferred by user instruction.
 
 ## Reproduce and validate
 

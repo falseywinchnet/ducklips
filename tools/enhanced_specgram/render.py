@@ -25,19 +25,19 @@ def main():
     p.add_argument("wav", type=Path)
     p.add_argument("--out", type=Path, required=True, help="Output filename prefix")
     p.add_argument("--start", type=float, default=0.0, help="Start in source seconds")
-    p.add_argument("--duration", type=float, default=1.0, help="Excerpt duration in seconds")
+    p.add_argument("--duration", type=float, help="Explicit excerpt duration; default includes the rest of the WAV")
     p.add_argument("--max-hz", type=float, help="Highest row to include; default original 256 rows")
     p.add_argument("--channel", type=int, help="Zero-based channel; default arithmetic mono mix")
     p.add_argument("--db-range", type=float, default=70.0)
     p.add_argument("--display-reference", type=float, help="Fixed positive amplitude reference for enhanced-family panels")
     a = p.parse_args()
-    if a.start < 0 or a.duration <= 0 or a.db_range <= 0:
+    if a.start < 0 or (a.duration is not None and a.duration <= 0) or a.db_range <= 0:
         p.error("start must be nonnegative; duration and db-range must be positive")
     if a.display_reference is not None and a.display_reference <= 0:
         p.error("display-reference must be positive")
     fs, pcm = wavfile.read(a.wav)
     first = round(a.start * fs)
-    last = min(len(pcm), first + round(a.duration * fs))
+    last = len(pcm) if a.duration is None else min(len(pcm), first + round(a.duration * fs))
     if last <= first:
         p.error("excerpt has no samples")
     x = pcm[first:last]

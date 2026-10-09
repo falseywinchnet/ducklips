@@ -21,6 +21,7 @@ namespace ducklips {
 enum class OutputTap { microphones, lips, glottal_source };
 
 struct SynthesisOptions final {
+    bool conservative_tongue{false}; // material body map; explicit research option
     bool canonical_motion{false}; // experimental full physical moving-state path
     std::size_t canonical_substeps{8};
     SynthesisRate rate{};
@@ -44,6 +45,11 @@ struct SynthesisOptions final {
 };
 
 struct SynthesisStatistics final {
+    std::size_t geometry_failures{};
+    const char* geometry_error{nullptr};
+    double geometry_failure_time{};
+    double maximum_body_wall_penetration{}; // cm; contact validity is separate from solver convergence
+    double maximum_tip_target_error{}; // cm, unattainable tip target under body contact and blade reach
     std::size_t nonfinite_samples{};
     std::size_t clipped_samples{};
     std::size_t blocks{};

@@ -14,13 +14,15 @@ needed. From `/Users/joshuahkuttenkuler/ducklips`:
 ```sh
 /Users/joshuahkuttenkuler/miniforge3/bin/python tools/enhanced_specgram/render.py \
   /absolute/path/to/generated-speech.wav \
-  --start 0 --duration 1 --out out/enhanced_specgram/speech
+  --channel 0 --max-hz 8000 --out out/enhanced_specgram/speech
 ```
 
 Outputs: `speech.png` (the full enhanced field alone, original magma colors), `speech.npz` (linear
 fields and exact axes), `speech.json` (settings, timing, source hash, display
 references). Existing filenames are overwritten if the same output prefix is
-reused; choose a different prefix for each experiment.
+reused; choose a different prefix for each experiment. The default includes
+the entire WAV. Use `--start` and `--duration` only for an explicitly requested
+excerpt; the JSON records its exact sample bounds.
 
 The PNG preserves every computed frequency row and time column. Each row is
 one image pixel high and each column is four pixels wide; there is no subplot
@@ -36,7 +38,7 @@ hop 512 samples, target N=2048, and 256 rows. At 48 kHz it covers 0–2989.741 H
 Use `--max-hz 8000` for wider speech inspection at a suitable sample rate, e.g.
 fricatives and higher formants. That changes the field crop and registration
 context, so record it as an explicit configuration change. Larger crops and long
-clips cost more: start with one-second excerpts.
+clips cost more, but the renderer does not silently shorten them.
 
 Use `--channel 0` or `--channel 1` to inspect individual microphones. By default
 stereo is averaged, which can cancel phase-opposed components. PCM is converted

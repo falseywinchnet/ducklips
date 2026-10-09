@@ -649,6 +649,28 @@ UtterancePlan UtterancePlanner::plan_text(const std::string& text) const {
             position += 1;
             continue;
         }
+        // Keep an explicitly known hyphenated compound as one lexical word.
+        // Unknown compounds retain the ordinary word-boundary behavior.
+        if (letter == '-' && !word.empty()) {
+            std::size_t end = position;
+            std::size_t known_end = position;
+            while (end + 1 < text.size() && text[end] == '-'
+                   && std::isalnum(static_cast<unsigned char>(text[end + 1]))) {
+                end += 1;
+                while (end < text.size()
+                       && (std::isalnum(static_cast<unsigned char>(text[end])) || text[end] == '\'')) {
+                    end += 1;
+                }
+                if (lexicon_.pronounce(word + text.substr(position, end - position)).from_dictionary) {
+                    known_end = end;
+                }
+            }
+            if (known_end > position) {
+                word += text.substr(position, known_end - position);
+                position = known_end;
+                continue;
+            }
+        }
         if (!word.empty()) {
             bool numeric = true;
             for (std::size_t index = 0; index < word.size(); ++index) {

@@ -294,13 +294,28 @@ void TractModel::allocate(TractShape& shape) const {
     shape.sublingual_opening.assign(oral_sections_, 0.0);
 }
 
+TongueShape TractModel::pose(const TonguePosture& posture,const TongueGesture& body,const TongueGesture& tip) noexcept {
+    if (!conservative_body_ || body.activation<=0) { return MidsagittalTongue::pose(posture,body,tip); }
+    const Point2 centre{posture.body_x+posture.offset_x,posture.body_y-.9*std::clamp(posture.jaw,0.0,1.0)+posture.offset_y};
+    if (!body_surface_.configure(centre,body)) {
+        geometry_error_=body_surface_.error();TongueShape failed{};failed.valid=false;return failed;
+    }
+    const TongueShape result=MidsagittalTongue::pose(posture,body,tip,&body_surface_);
+    if (!result.valid) { geometry_error_="blade attachment material mapping failed"; }
+    return result;
+}
+
 void TractModel::write_posture(const TonguePosture& posture, const TongueGesture& body, const TongueGesture& tip,
                                std::span<const double> residual, double lip_area, double lip_protrusion,
                                bool vowel_floor, TractShape& shape) noexcept {
     std::size_t lip_start = oral_sections_ - lip_sections_;
-    tongue_ = MidsagittalTongue::pose(posture, body, tip);
+    tongue_ = pose(posture, body, tip);
+    if (!tongue_.valid) { return; }
     MidsagittalTongue::gaps(tongue_, posture, std::span<const double>(arc_.data(), lip_start),
                             std::span<double>(gap_.data(), lip_start));
+    for (std::size_t i=0;i<lip_start;++i) {
+        if (!std::isfinite(gap_[i])) { geometry_error_="mapped airway intersection failed";return; }
+    }
     // The space under the tongue: a channel about as wide as the arch of the
     // lower teeth (2.2 cm in the reference speaker) between the underside
     // and the floor (a modelling choice).
@@ -410,6 +425,7 @@ TongueGesture tongue_gesture(const ConstrictionSlotState& slot) noexcept {
     double arc = MidsagittalTongue::length - result.place_from_lips;
     result.gap = MidsagittalTongue::gap_from_area(gesture.target_area / square_centimetre, arc);
     result.tip_down = gesture.tip_down;
+    result.width = gesture.width / centimetre;
     return result;
 }
 
@@ -426,6 +442,7 @@ TonguePosture posture_from(const std::array<double, shape_parameter_count>& coef
 }
 
 void TractModel::build(const ArticulatorState& state, TractShape& shape) noexcept {
+    geometry_error_=nullptr;
     std::array<double, shape_parameter_count> coefficients{};
     for (std::size_t parameter = 0; parameter < shape_parameter_count; ++parameter) {
         coefficients[parameter] = state.shape[parameter].value;
@@ -440,7 +457,8 @@ void TractModel::build(const ArticulatorState& state, TractShape& shape) noexcep
     // What the tip demands of the posture alone, and the posture as the body
     // actually is: displaced by its lingering offset. The blade constraint
     // still holds exactly while the tip is down.
-    required_drag_ = MidsagittalTongue::pose(posture, body_gesture, tip_gesture).drag_vector;
+    required_drag_ = pose(posture, body_gesture, tip_gesture).drag_vector;
+    if (geometry_error_) { return; }
     posture.offset_x = state.body_offset_x.value;
     posture.offset_y = state.body_offset_y.value;
     write_posture(posture, body_gesture, tip_gesture, residual, state.lip_area.value, state.lip_protrusion.value,
@@ -451,6 +469,7 @@ void TractModel::build(const ArticulatorState& state, TractShape& shape) noexcep
 }
 
 void TractModel::build_vowel(const VowelShape& vowel, TractShape& shape) noexcept {
+    geometry_error_=nullptr;
     TongueGesture idle{};
     std::span<const double> residual(vowel.coefficients.data() + tongue_parameter_count, anatomy_parameter_count);
     write_posture(posture_from(vowel.coefficients), idle, idle, residual, vowel.lip_area, vowel.lip_protrusion, true, shape);

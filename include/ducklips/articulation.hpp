@@ -2,6 +2,7 @@
 #include "ducklips/acoustic_network.hpp"
 #include "ducklips/articulation_speeds.hpp"
 #include "ducklips/tongue.hpp"
+#include "ducklips/tongue_surface.hpp"
 #include "ducklips/voice.hpp"
 #include <array>
 #include <cstddef>
@@ -147,11 +148,14 @@ public:
     // the space under it (TractShape::sublingual_area, sublingual_opening)
     // and splits the open column in front of the tip. Off by default.
     void set_floor(bool enabled) noexcept;
+    void set_conservative_body(bool enabled) noexcept { conservative_body_=enabled; }
+    [[nodiscard]] const char* geometry_error() const noexcept { return geometry_error_; }
     // The oral sections that can hold space under the tongue (between
     // MidsagittalTongue::floor_back_x and incisors_x).
     void floor_sections(std::size_t& first, std::size_t& count) const noexcept;
 
 private:
+    TongueShape pose(const TonguePosture& posture,const TongueGesture& body,const TongueGesture& tip) noexcept;
     void write_posture(const TonguePosture& posture, const TongueGesture& body, const TongueGesture& tip,
                        std::span<const double> residual, double lip_area, double lip_protrusion, bool vowel_floor,
                        TractShape& shape) noexcept;
@@ -171,6 +175,9 @@ private:
     std::vector<double> residual_basis_{};   // [section * anatomy_parameter_count + m]
     std::vector<double> gap_{};              // scratch gaps, cm
     bool floor_{false};
+    bool conservative_body_{false};
+    const char* geometry_error_{nullptr};
+    ConservativeTongueSurface body_surface_{};
     std::vector<double> lower_gap_{};        // scratch, cm below the tongue
     std::vector<double> open_above_{};       // scratch, 1 where the space below meets the channel above
     TongueShape tongue_{};

@@ -3,6 +3,7 @@
 #include <span>
 
 namespace ducklips {
+class ConservativeTongueSurface;
 
 // Midsagittal geometry of the reference (adult male, 17.5 cm) vocal tract, in
 // centimetres. x points forward, y up; the glottis is at the origin.
@@ -39,9 +40,15 @@ struct TongueGesture final {
     double place_from_lips{}; // cm along the airway from the lip opening
     double gap{};             // cm target gap to the wall; 0 seals
     double tip_down{};        // tip gestures: 0 the tip goes to the place, 1 it stays behind the lower incisors
+    double width{0.9};        // cm, shoulder extent for conservative body gestures
 };
 
 struct TongueShape final {
+    const ConservativeTongueSurface* surface{}; // borrowed until the owner rebuilds its next pose
+    Point2 surface_translation{};
+    double body_wall_penetration{}; // cm, sampled conservative body contour
+    double tip_target_error{}; // cm, unreachable target after body contact and blade reach constraints
+    bool valid{true};
     Point2 body_centre{};
     Point2 blade_root{};
     Point2 tip{};
@@ -68,7 +75,7 @@ public:
 
     // Positions the tongue for a posture and its gestures.
     [[nodiscard]] static TongueShape pose(const TonguePosture& posture, const TongueGesture& body,
-                                          const TongueGesture& tip) noexcept;
+                                          const TongueGesture& tip, const ConservativeTongueSurface* surface=nullptr) noexcept;
     // Writes the gap (cm) at each arc position (cm from the glottis).
     static void gaps(const TongueShape& shape, const TonguePosture& posture, std::span<const double> arcs,
                      std::span<double> output) noexcept;

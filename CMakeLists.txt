@@ -28,6 +28,7 @@ add_library(ducklips STATIC
     src/articulation.cpp
     src/tongue.cpp
     src/tongue_flow.cpp
+    src/tongue_surface.cpp
     src/phonetics.cpp
     src/vowel_library.cpp
     src/cues.cpp
@@ -104,3 +105,12 @@ target_link_libraries(ducklips_tongue_flow_probe PRIVATE ducklips)
 add_executable(ducklips_tongue_flow_tests tests/tongue_flow_tests.cpp)
 target_link_libraries(ducklips_tongue_flow_tests PRIVATE ducklips)
 add_test(NAME ducklips_tongue_flow_tests COMMAND ducklips_tongue_flow_tests)
+
+add_executable(ducklips_tongue_surface_tests tests/tongue_surface_tests.cpp)
+target_link_libraries(ducklips_tongue_surface_tests PRIVATE ducklips)
+add_test(NAME ducklips_tongue_surface_tests COMMAND ducklips_tongue_surface_tests)
+
+add_executable(ducklips_planner_tests tests/planner_tests.cpp)
+target_link_libraries(ducklips_planner_tests PRIVATE ducklips)
+target_compile_definitions(ducklips_planner_tests PRIVATE DUCKLIPS_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+add_test(NAME ducklips_planner_tests COMMAND ducklips_planner_tests)

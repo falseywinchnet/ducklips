@@ -26,6 +26,7 @@ struct Arguments final {
     std::string output{"ducklips.wav"};
     std::string dictionary{};
     std::string probe_path{};
+    bool conservative_tongue{false};
     bool canonical_motion{false};
     std::size_t canonical_substeps{8};
     bool room{false};
@@ -52,7 +53,7 @@ void print_usage() {
                 "                    [--no-pop] [--frication-gain G] [--aspiration-gain G] [--lung-pressure PA]\n"
                 "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
                 "                    [--invariant passive|charge|pressure]\n"
-                "[--canonical-motion] [--canonical-substeps 1..64]\n"
+                "[--canonical-motion] [--conservative-tongue] [--canonical-substeps 1..64]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
 
@@ -60,7 +61,9 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
     for (int index = 1; index < count; ++index) {
         std::string flag = values[index];
         bool has_value = index + 1 < count;
-        if (flag == "--canonical-motion") {
+        if (flag == "--conservative-tongue") {
+            arguments.conservative_tongue=true;
+        } else if (flag == "--canonical-motion") {
             arguments.canonical_motion=true;
         } else if (flag == "--canonical-substeps" && has_value) {
             std::istringstream parsed(values[++index]);std::string extra;
@@ -152,8 +155,11 @@ int main(int argc, char** argv) {
     }
     if (arguments.rate > 0.0) { voice.speaking_rate = arguments.rate; }
     ducklips::SynthesisOptions options{};
+    options.conservative_tongue=arguments.conservative_tongue;
+    if (options.conservative_tongue && !arguments.canonical_motion) { std::fprintf(stderr,"--conservative-tongue requires --canonical-motion\n");return 2; }
     options.canonical_motion=arguments.canonical_motion;
     options.canonical_substeps=arguments.canonical_substeps;
+    std::printf("tongue body: %s\n",options.conservative_tongue?"conservative material map":"rigid circle");
     std::printf("acoustic path: %s\n",options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
     options.radiate_mean_flow = !arguments.no_pop;
     if (arguments.tap == "lips") {
@@ -302,6 +308,10 @@ int main(int argc, char** argv) {
                 statistics.blocks, statistics.most_geometry_steps, statistics.fewest_modes, statistics.most_modes, statistics.warm_modes,
                 statistics.bisected_modes,
                 static_cast<double>(statistics.factorizations) / std::max<double>(1.0, static_cast<double>(statistics.blocks)));
+    if (options.conservative_tongue) {
+        std::printf("geometry solve audit: failures %zu; sampled body/wall overlap %.9g cm\n",statistics.geometry_failures,statistics.maximum_body_wall_penetration);
+        std::printf("maximum constrained tip target error: %.9g cm\n",statistics.maximum_tip_target_error);
+    }
     if (options.canonical_motion) { std::printf("moving cavity maximum mass residual: %.9e m^3/s\n",statistics.maximum_cavity_mass_residual); }
     std::printf("fold cycles %zu, peak %.3f, rms %.4f (before normalization)\n", statistics.pitch_cycles, peak, rms);
     if (arguments.diagnostics && !options.canonical_motion) {
@@ -333,6 +343,9 @@ int main(int argc, char** argv) {
         return 1;
     }
     std::printf("wrote %s\n", arguments.output.c_str());
+    if (synthesizer.statistics().geometry_failures) {
+        std::fprintf(stderr,"geometry audit failed at %.6f s: %s; diagnostic WAV retained\n",synthesizer.statistics().geometry_failure_time,synthesizer.statistics().geometry_error);return 1;
+    }
     if (synthesizer.statistics().nonfinite_samples || synthesizer.statistics().clipped_samples) {
         std::fprintf(stderr,"output audit failed; diagnostic WAV retained\n");return 1;
     }

@@ -49,10 +49,12 @@ def main():
     parser.add_argument('human', type=Path)
     parser.add_argument('generated', type=Path)
     parser.add_argument('--out', type=Path, required=True)
+    parser.add_argument('--human-label', default='Human: valeatory')
+    parser.add_argument('--generated-label', default='DuckLips: reference body')
     parser.add_argument('--png-prefix', type=Path, help='Also export both full-field color PNGs')
     args = parser.parse_args()
-    records = [encode(args.human, 'Human: valeatory', args.png_prefix),
-               encode(args.generated, 'DuckLips: reference body', args.png_prefix)]
+    records = [encode(args.human, args.human_label, args.png_prefix),
+               encode(args.generated, args.generated_label, args.png_prefix)]
     # Exact same magma color map as the field, left to right from floor to peak.
     import matplotlib
     ramp = matplotlib.colormaps['magma'](np.linspace(0, 1, 160), bytes=True)[None, :, :]

@@ -5,19 +5,14 @@ nudges into a body; its moving airway, self-oscillating vocal folds, airflow and
 acoustic radiation produce the sound. Body geometry and tissue properties are
 configuration, not a speaker embedding or a bank of recorded sounds.
 
-**Status: active research, not perfected speech.** The compact modal engine
-passes the local 10× realtime benchmark; the detailed surface engine does not.
-The engines are not acoustically equivalent. The surface model has a mouth
-floor and transverse propagation that the compact engine does not yet retain.
-A new [passive frozen surface reduction](surface/PASSIVE_REDUCTION.md) retains
-the tested detailed port responses in 501 real states. Coupled-fold probes reach
-19.68–19.97×, but the general all-port probe still fails at 8.73–8.80×; moving
-anatomy has not been transferred to this representation.
-Neither numerical stability nor a plausible spectrogram proves intelligibility
-or human realism. [Geometry-clock analysis](reports/GEOMETRY_TRANSPORT.md)
-now gives an exact moving-energy reference; nonuniform state transport and its
-remaining audible clock components are still unresolved. See [current findings](reports/2026-10-09.md) and the explicit
-[research gates](RESEARCH.md).
+**Status: active research, not perfected speech.** Current work connects a
+volume-conserving tongue body to the canonical moving acoustic network and
+fixes physical and pronunciation-planning failures. Performance optimization
+is parked by user instruction. Numerical stability and a plausible enhanced
+spectrogram do not establish intelligibility or human realism. See the
+[current speech integration](reports/CONSERVATIVE_TONGUE_SPEECH.md) and the
+explicit [research gates](RESEARCH.md). Earlier engines and their performance
+measurements remain research references; they are not acoustically equivalent.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and
@@ -37,6 +32,13 @@ deferred by user instruction while the integrated speech path is developed.
 See [CANONICAL_SPEECH.md](reports/CANONICAL_SPEECH.md) for the implementation,
 rejected instability and remaining physical limitations.
 
+Add `--conservative-tongue` to select the new material body deformation and its
+attached blade. Both flags are required. It reports failed geometry solves,
+sampled body/wall overlap, and unmet tip travel separately. A failed geometry
+solve stops rendering; it does not substitute the rigid body. The blade still
+has a fixed length, and some combined gestures cannot reach their targets.
+See [CONSERVATIVE_TONGUE_SPEECH.md](reports/CONSERVATIVE_TONGUE_SPEECH.md).
+
 ## Build
 
 Requires a C++20 compiler and CMake 3.24+. The core has no downloaded dependencies.
@@ -54,12 +56,11 @@ On this machine they are already available in
 ## Speak and inspect
 
 ```sh
-./build/ducklips_say --body bodies/reference.body \
+./build/ducklips_say --canonical-motion --conservative-tongue --body bodies/reference.body \
   --dictionary samples/nato.dict --text 'Alfa. Bravo. Charlie.' --out out/nato.wav
-./build/ducklips_say --voice alto --rate 1.25 \
+./build/ducklips_say --canonical-motion --conservative-tongue --voice alto --rate 1.25 \
   --phonemes 'M AY1 K | S IY0 EH1 R AX0' --out out/phones.wav
-./build/ducklips_analyze out/nato.wav --spectrogram out/nato.png --clicks
-python tools/benchmark.py
+python tools/enhanced_specgram/render.py out/nato.wav --out out/nato-enhanced --max-hz 8000
 ```
 
 Create `out/` before writing there. Stock bodies: `baritone`, `alto`, `child`,
@@ -80,7 +81,7 @@ goes to stderr. `render UNTIL` emits through an absolute score time; subsequent
 commands continue the same body and wave state.
 
 ```sh
-./build/ducklips_stream --body bodies/reference.body --speed 1 \
+./build/ducklips_stream --canonical-motion --conservative-tongue --body bodies/reference.body --speed 1 \
   < examples/diphthongs.nudges > out/diphthongs.f32
 ```
 
@@ -145,7 +146,7 @@ The preserved full double-inverse / registered-aperture pipeline is in
 
 ```sh
 python tools/enhanced_specgram/render.py out/nato.wav \
-  --start 0 --duration 1.5 --max-hz 8000 --channel 0 --out out/nato_field
+  --max-hz 8000 --channel 0 --out out/nato_field
 ```
 
 It saves PNG, NPZ, and a JSON receipt with exact axes, parameters, source hash,

@@ -42,12 +42,14 @@ float finite_sample(double value, SynthesisStatistics& statistics) noexcept {
 
 void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& options) {
     if (options.canonical_substeps<1 || options.canonical_substeps>64) { throw std::invalid_argument("canonical substeps outside [1,64]"); }
+    if (options.conservative_tongue && !options.canonical_motion) { throw std::invalid_argument("conservative tongue requires canonical motion"); }
     voice_ = voice;
     options_ = options;
     air_ = options.air;
     sample_period_ = 1.0 / options.rate.samples_per_second;
     vowels_.build(voice, options.oral_sections, options.nasal_sections, air_);
     model_.prepare(voice, options.oral_sections, options.nasal_sections);
+    model_.set_conservative_body(options.conservative_tongue);
     if (options.diagnostics) {
         diagnostic_model_=model_;diagnostic_model_.set_floor(true);
         diagnostic_model_.allocate(diagnostic_shape_);
@@ -271,6 +273,12 @@ void Synthesizer::begin_block() noexcept {
     // their continuous trajectories in render_samples, not a block hold.
     articulators_.advance_geometry(block_seconds);
     model_.build(articulators_, shape_);
+    if (model_.geometry_error()) {
+        ++statistics_.geometry_failures;statistics_.geometry_error=model_.geometry_error();
+        statistics_.geometry_failure_time=seconds_from_samples(options_.rate,position_);return;
+    }
+    statistics_.maximum_body_wall_penetration=std::max(statistics_.maximum_body_wall_penetration,model_.tongue().body_wall_penetration);
+    statistics_.maximum_tip_target_error=std::max(statistics_.maximum_tip_target_error,model_.tongue().tip_target_error);
     if (options_.diagnostics) {
         probe_.oral_volume=model_.oral_volume();
         probe_.tongue_centre=model_.tongue().body_centre;probe_.tongue_tip=model_.tongue().tip;
@@ -774,8 +782,12 @@ void Synthesizer::render(std::span<float> stereo) noexcept {
     const std::size_t frames = stereo.size() / 2;
     std::size_t frame = 0;
     while (frame < frames) {
-        if (block_remaining_ == 0) {
+        if (block_remaining_ == 0 && !statistics_.geometry_failures) {
             begin_block();
+        }
+        if (statistics_.geometry_failures) {
+            std::fill(stereo.begin()+static_cast<std::ptrdiff_t>(2*frame),stereo.end(),0.0f);
+            position_+=static_cast<SampleCount>(frames-frame);finish_time_=position_;return;
         }
         if (geometry_remaining_ == 0) {
             begin_geometry_step();

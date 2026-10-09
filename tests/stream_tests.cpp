@@ -47,7 +47,7 @@ int main() {
     std::size_t installed = lexicon.load_cmu_file(std::string(DUCKLIPS_SOURCE_DIR) + "/samples/nato.dict");
     ducklips::WordPronunciation papa = lexicon.pronounce("papa");
     ducklips::WordPronunciation quebec = lexicon.pronounce("quebec");
-    check(installed == 29 && papa.phones[1].phone == ducklips::Phone::AX && papa.phones[3].stress == 1
+    check(installed == 30 && papa.phones[1].phone == ducklips::Phone::AX && papa.phones[3].stress == 1
           && quebec.phones[1].phone == ducklips::Phone::EH, "explicit NATO dictionary overrides built-in pronunciations");
     body = ducklips::baritone_voice();
     ducklips::NudgeStream whole{};
@@ -110,6 +110,35 @@ int main() {
     check(canonical_whole.engine().statistics().factorizations==0,"canonical speech never enters the old modal solver");
     check(canonical_whole.submit("1 pitch 140 70",error),"new nudge accepted after canonical rendering begins");
     canonical_whole.render(std::span<float>(a.data(),960));
+    canonical_options.conservative_tongue=true;canonical_options.diagnostics=true;
+    canonical_whole.prepare(body,1,4096,canonical_options);
+    canonical_options.diagnostics=false;canonical_chunks.prepare(body,1,4096,canonical_options);
+    const char* material_lines[]={"0 lungs 600 40","0 glottis .000003 170","0 vowel AA 75",
+        ".03 constrict K 1 120",".14 release body 120",".17 constrict S 1 120",".25 release tip 150"};
+    for (const char* line:material_lines) {
+        check(canonical_whole.submit(line,error) && canonical_chunks.submit(line,error),"conservative material nudge accepted");
+    }
+    constexpr std::size_t material_frames=14400;
+    before=allocations.load();canonical_whole.render(std::span<float>(a.data(),2*material_frames));
+    check(allocations.load()==before,"conservative tongue and diagnostics allocate no render storage");
+    for (std::size_t frame=0;frame<material_frames;) {
+        const std::size_t run=std::min<std::size_t>(17,material_frames-frame);
+        canonical_chunks.render(std::span<float>(b.data()+2*frame,2*run));frame+=run;
+    }
+    check(std::equal(a.begin(),a.begin()+2*material_frames,b.begin()),"conservative tongue output is independent of host chunks and diagnostics");
+    const ducklips::SynthesisStatistics& material_stats=canonical_whole.engine().statistics();
+    check(!material_stats.geometry_failures && !material_stats.nonfinite_samples && !material_stats.clipped_samples,
+          "combined body and tip nudges pass geometry and output audits");
+    check(material_stats.maximum_cavity_mass_residual<1e-12,"conservative tongue retains moving cavity balance");
+    ducklips::Synthesizer invalid_geometry{};invalid_geometry.prepare(body,canonical_options);
+    ducklips::Cue unsupported{};unsupported.kind=ducklips::CueKind::constriction;unsupported.slot=ducklips::ConstrictionSlot::tongue_body;
+    unsupported.gesture.place_from_lips=.10;unsupported.gesture.width=.009;unsupported.value=1;unsupported.angular_rate=120;
+    check(invalid_geometry.enqueue(unsupported),"unsupported geometry cue queued for explicit render audit");
+    invalid_geometry.render(std::span<float>(a.data(),96));
+    check(invalid_geometry.statistics().geometry_failures==1 && invalid_geometry.statistics().geometry_error
+          && invalid_geometry.finished(),"unsupported geometry stops rendering and records the error");
+    bool failed_silence=true;for (std::size_t i=0;i<96;++i) { failed_silence=failed_silence&&a[i]==0; }
+    check(failed_silence,"failed geometry emits no substituted rigid-body audio");
     ducklips::NudgeStream bounded{};
     bounded.prepare(body, 2.0, 4);
     check(bounded.submit("0 diphthong AY .4 75", error) && bounded.submit("0 diphthong AW .4 75", error),

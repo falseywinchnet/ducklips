@@ -1,7 +1,7 @@
 <div id="ducklips-full-enhanced">
   <h3>Full enhanced speech field</h3>
   <div class="viz-controls">
-    <label class="form-label">Recording<select class="form-select" data-recording><option value="0">Human · valeatory · Alfa excerpt</option><option value="1">DuckLips · reference body · Alfa</option></select></label>
+    <label class="form-label">Recording<select class="form-select" data-recording><option value="0">Human reference</option><option value="1">DuckLips synthesis</option></select></label>
     <label class="form-label">Frequency row height<select class="form-select" data-row-height><option value="1" selected>1 screen pixel</option><option value="2">2 screen pixels</option><option value="4">4 screen pixels</option></select></label>
   </div>
   <div class="text-small" data-status aria-live="polite"></div>
@@ -23,6 +23,7 @@
   const root=document.getElementById('ducklips-full-enhanced');
   const data=JSON.parse(document.getElementById('ducklips-full-enhanced-data').textContent);
   const select=root.querySelector('[data-recording]'), scale=root.querySelector('[data-row-height]');
+  data.records.forEach((record,index)=>{select.options[index].textContent=record.label;});
   const canvas=root.querySelector('[data-field]'), extent=root.querySelector('.enhanced-extent');
   const images=data.records.map(record=>{const image=new Image();image.onload=draw;image.src=record.png;return image;});
   root.querySelector('[data-legend]').src=data.legend;
