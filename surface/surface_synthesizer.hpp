@@ -148,6 +148,9 @@ public:
     [[nodiscard]] SampleCount position() const noexcept;
     [[nodiscard]] const VowelLibrary& vowels() const noexcept;
     [[nodiscard]] const SurfaceProbe& probe() const noexcept;
+    // Read-only offline diagnostics; callers may copy a prepared network for
+    // independent frozen-geometry impulse experiments.
+    [[nodiscard]] const SurfaceNetwork& acoustic_network() const noexcept { return network_; }
     [[nodiscard]] double unit_tension_pitch() const noexcept;
     [[nodiscard]] std::size_t piece_count() const noexcept;
     [[nodiscard]] std::size_t link_count() const noexcept;

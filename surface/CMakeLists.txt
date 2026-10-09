@@ -21,3 +21,13 @@ target_compile_options(ducklips_surface_synth PRIVATE -Wall -Wextra -Wpedantic)
 target_link_libraries(ducklips_surface_synth PUBLIC ducklips_surface ducklips)
 add_executable(surface_say surface_say.cpp)
 target_link_libraries(surface_say PRIVATE ducklips_surface_synth)
+
+add_executable(surface_response surface_response.cpp)
+target_link_libraries(surface_response PRIVATE ducklips_surface_synth)
+add_executable(surface_linear_tests surface_linear_tests.cpp)
+target_link_libraries(surface_linear_tests PRIVATE ducklips_surface)
+# The parent project registers these with CTest even when its other tools are
+# excluded from the surface build. Keep the registered test executables built.
+add_dependencies(surface_linear_tests ducklips_tests ducklips_stream_tests)
+enable_testing()
+add_test(NAME surface_linear_tests COMMAND surface_linear_tests)

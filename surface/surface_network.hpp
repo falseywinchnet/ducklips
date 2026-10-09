@@ -129,6 +129,35 @@ struct AirConstants final {
     double heat_loss_factor{0.475};
 };
 
+// Offline, frozen, zero-mean-flow linearization. A directed pressure-wave path
+// has transfer q^delay * (b0+b1*q+b2*q*q)/(1+a1*q+a2*q*q), q=z^-1.
+// Power-normalized paths have the same pressure transfer at fixed admittance.
+struct SurfaceLinearPath final {
+    std::size_t from{};
+    std::size_t to{};
+    std::size_t delay{};
+    double admittance{};
+    std::array<double, 3> numerator{};
+    std::array<double, 3> denominator{1.0, 0.0, 0.0};
+};
+
+struct SurfaceLinearPort final {
+    std::size_t piece{};
+    double admittance{};
+    std::array<double, 3> numerator{}; // reflection filter
+    std::array<double, 3> denominator{1.0, 0.0, 0.0};
+    bool radiation{};
+};
+
+struct SurfaceLinearSnapshot final {
+    double sample_rate{};
+    std::size_t pieces{};
+    std::size_t glottis{};
+    std::size_t allocated_delay_samples{};
+    std::vector<SurfaceLinearPath> paths{}; // reciprocal paths remain adjacent
+    std::vector<SurfaceLinearPort> ports{};
+};
+
 // A single airway tube with the given areas (no branches), open at the lips.
 [[nodiscard]] CavityGeometry single_tube(std::span<const double> station_area, double length, std::size_t ring_pieces);
 
@@ -203,6 +232,9 @@ public:
     void add_flow(std::size_t piece, double flow) noexcept;
     [[nodiscard]] double piece_pressure(std::size_t piece) const noexcept;
     [[nodiscard]] std::size_t first_piece(std::size_t station) const noexcept;
+    // Allocates offline. Rejects moving geometry, nonzero mean-flow kinetic
+    // resistance, and membrane edge tension (not represented by these ports).
+    [[nodiscard]] SurfaceLinearSnapshot linear_snapshot() const;
 
 private:
     struct Station final {

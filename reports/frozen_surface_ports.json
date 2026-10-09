@@ -1,0 +1,330 @@
+{
+  "schema": 1,
+  "platform": "macOS-26.5-arm64-arm-64bit",
+  "processor": "arm64",
+  "numpy_version": "2.3.5",
+  "probe_binary": "build/surface/surface_response",
+  "probe_binary_sha256": "a5233adfd31c3dfe852cce55687b960cb63d7b6933ca94c7b474fcd2e4382a54",
+  "git_head_at_measurement": "078c51e4db128adcc90574ee52556013a6b25ee2",
+  "working_tree_modified": true,
+  "observations": [
+    {
+      "fixture": "tube",
+      "source": "glottis",
+      "snapshot_sha256": "71e04140672eab4e2fab4c4bb8482b7a3d3dd59b207535241c444997dd41c3ce",
+      "response_sha256": "989188b58e373bd9d36735be34e202b1730882fac50a36f520025aa0108ee1f4",
+      "pieces": 52,
+      "active_pressure_unknowns": 52,
+      "allocated_delay_samples": 816,
+      "directed_paths": 102,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.018994207959622145,
+      "impulse_render_seconds": 0.062841458,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 3.9782654310789543,
+      "gather_seconds": 0.03452297699999485,
+      "scatter_seconds": 0.02694691099999,
+      "minimum_scaled_passive_power_margin": 3.761257545673885e-07,
+      "max_linear_residual": 1.3384822263269417e-12,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 3.7768152392904663e-10,
+          "rms_relative_complex_error": 5.987633406756325e-11
+        },
+        {
+          "channel": "pressure_piece_26",
+          "max_relative_complex_error": 3.5050813225451814e-10,
+          "rms_relative_complex_error": 6.975257619327397e-11
+        },
+        {
+          "channel": "pressure_piece_51",
+          "max_relative_complex_error": 8.563445032527399e-11,
+          "rms_relative_complex_error": 2.3072049618301424e-11
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 8.5399866188771e-11,
+          "rms_relative_complex_error": 2.304024589546155e-11
+        }
+      ]
+    },
+    {
+      "fixture": "solid",
+      "source": "glottis",
+      "snapshot_sha256": "f044e3ef82724a6999b5ffa7ecc749bc9ed33788548b8b78148a7aec14161980",
+      "response_sha256": "869a4dd3d7c2132c6018658afd395e2cad22edadebd8eb76e36d074229f4fe81",
+      "pieces": 402,
+      "active_pressure_unknowns": 402,
+      "allocated_delay_samples": 231424,
+      "directed_paths": 3616,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.09506833320483565,
+      "impulse_render_seconds": 0.951589416,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 0.26271834868747634,
+      "gather_seconds": 0.6604083759999827,
+      "scatter_seconds": 0.2903087480000311,
+      "minimum_scaled_passive_power_margin": 6.817388136687845e-09,
+      "max_linear_residual": 5.454093522617348e-13,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 1.2586906484938763e-09,
+          "rms_relative_complex_error": 1.6821903332246596e-10
+        },
+        {
+          "channel": "pressure_piece_201",
+          "max_relative_complex_error": 7.768669226616666e-10,
+          "rms_relative_complex_error": 1.7126665280507457e-10
+        },
+        {
+          "channel": "pressure_piece_205",
+          "max_relative_complex_error": 7.767639067318321e-10,
+          "rms_relative_complex_error": 1.7126791937061917e-10
+        },
+        {
+          "channel": "pressure_piece_401",
+          "max_relative_complex_error": 6.049965871795564e-10,
+          "rms_relative_complex_error": 1.4881306117782752e-10
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 5.731543936098594e-10,
+          "rms_relative_complex_error": 1.420916345712065e-10
+        }
+      ]
+    },
+    {
+      "fixture": "bent",
+      "source": "glottis",
+      "snapshot_sha256": "9659f62ca00bbff0273fb46cd85704aceba3694eb8bb6d9ee93c6504085f3e3b",
+      "response_sha256": "6941b7010e697939e2ae4ce2163b824df5b0fa36c763374145948dae7ff0c5da",
+      "pieces": 402,
+      "active_pressure_unknowns": 402,
+      "allocated_delay_samples": 231424,
+      "directed_paths": 3616,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.09364345809444785,
+      "impulse_render_seconds": 0.9504675,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 0.2630284570487681,
+      "gather_seconds": 0.6521322419999929,
+      "scatter_seconds": 0.2974511110000021,
+      "minimum_scaled_passive_power_margin": 1.5724905064617856e-09,
+      "max_linear_residual": 4.969170737122301e-13,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 5.378367364477935e-10,
+          "rms_relative_complex_error": 7.831132817400402e-11
+        },
+        {
+          "channel": "pressure_piece_201",
+          "max_relative_complex_error": 4.3587023645221873e-10,
+          "rms_relative_complex_error": 8.934133761635926e-11
+        },
+        {
+          "channel": "pressure_piece_205",
+          "max_relative_complex_error": 4.356587654860077e-10,
+          "rms_relative_complex_error": 8.929276352232517e-11
+        },
+        {
+          "channel": "pressure_piece_401",
+          "max_relative_complex_error": 1.3761296633116325e-10,
+          "rms_relative_complex_error": 4.051175037379822e-11
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 1.292636477580189e-10,
+          "rms_relative_complex_error": 3.884883631090693e-11
+        }
+      ]
+    },
+    {
+      "fixture": "floor",
+      "source": "glottis",
+      "snapshot_sha256": "e1364335489cf38fd03a48052a726eebf956595a1b285716fb4ec8a09fddbee2",
+      "response_sha256": "61c0f44b73518304d05c56954909ae6920e116d29eb700f026f08da0a44291d2",
+      "pieces": 411,
+      "active_pressure_unknowns": 411,
+      "allocated_delay_samples": 240640,
+      "directed_paths": 3760,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.10707220807671547,
+      "impulse_render_seconds": 0.982442375,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 0.25446785110424414,
+      "gather_seconds": 0.674503324999992,
+      "scatter_seconds": 0.3070570850000144,
+      "minimum_scaled_passive_power_margin": 1.5724905064617856e-09,
+      "max_linear_residual": 5.502459304431008e-13,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 2.827720209756614e-10,
+          "rms_relative_complex_error": 6.761993988886761e-11
+        },
+        {
+          "channel": "pressure_piece_201",
+          "max_relative_complex_error": 4.928924674074602e-10,
+          "rms_relative_complex_error": 9.497956744751638e-11
+        },
+        {
+          "channel": "pressure_piece_205",
+          "max_relative_complex_error": 4.926257727988794e-10,
+          "rms_relative_complex_error": 9.490500904710245e-11
+        },
+        {
+          "channel": "pressure_piece_409",
+          "max_relative_complex_error": 1.7743731540212255e-10,
+          "rms_relative_complex_error": 4.4166347364311395e-11
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 1.7708266257398463e-10,
+          "rms_relative_complex_error": 4.410067328273499e-11
+        }
+      ]
+    },
+    {
+      "fixture": "body",
+      "source": "glottis",
+      "snapshot_sha256": "9a589beea966e78357ce275d775bfca4109e2bbea8559833fa6e935dfec6bd12",
+      "response_sha256": "0f2b9dd8001ead1f8a97a0914e188ff5465d71fb6f8ddaaba5083f1cebf23af4",
+      "pieces": 563,
+      "active_pressure_unknowns": 563,
+      "allocated_delay_samples": 319232,
+      "directed_paths": 4988,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.13814016664400697,
+      "impulse_render_seconds": 1.235094792,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 0.2024136136103147,
+      "gather_seconds": 0.8210623340000106,
+      "scatter_seconds": 0.4131523850000306,
+      "minimum_scaled_passive_power_margin": 5.3090307284864803e-14,
+      "max_linear_residual": 6.573420192501795e-13,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 1.179992941394974e-09,
+          "rms_relative_complex_error": 2.034092472590108e-10
+        },
+        {
+          "channel": "pressure_piece_257",
+          "max_relative_complex_error": 1.35319308792238e-09,
+          "rms_relative_complex_error": 1.7506558469367416e-10
+        },
+        {
+          "channel": "pressure_piece_261",
+          "max_relative_complex_error": 1.3944121348204473e-09,
+          "rms_relative_complex_error": 1.834638130715646e-10
+        },
+        {
+          "channel": "pressure_piece_558",
+          "max_relative_complex_error": 4.306372764562156e-10,
+          "rms_relative_complex_error": 1.2913007565443167e-10
+        },
+        {
+          "channel": "pressure_piece_559",
+          "max_relative_complex_error": 3.1558670305209924e-06,
+          "rms_relative_complex_error": 8.407347167258592e-07
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 2.989383203992692e-10,
+          "rms_relative_complex_error": 1.070748400323088e-10
+        }
+      ]
+    },
+    {
+      "fixture": "body",
+      "source": "lateral",
+      "snapshot_sha256": "df099853d1c1e3d025e706b6c961136e06c628f75a0358ea23b615a008172125",
+      "response_sha256": "0a3e16c9d214e9de49b1009e00a3d9c2af409caee326f869c51a936ea2d63518",
+      "pieces": 563,
+      "active_pressure_unknowns": 563,
+      "allocated_delay_samples": 319232,
+      "directed_paths": 4988,
+      "laplace_damping_per_second": 40.0,
+      "frequency_count": 202,
+      "frequency_range_hz": [
+        48.0,
+        12000.0
+      ],
+      "frequency_solve_seconds": 0.13432229217141867,
+      "impulse_render_seconds": 1.23671275,
+      "impulse_duration": 0.25,
+      "instrumented_render_speed": 0.20214880132836022,
+      "gather_seconds": 0.8211677789999924,
+      "scatter_seconds": 0.4146588390000348,
+      "minimum_scaled_passive_power_margin": 5.3090307284864803e-14,
+      "max_linear_residual": 5.73680367885512e-13,
+      "channels": [
+        {
+          "channel": "pressure_piece_0",
+          "max_relative_complex_error": 1.2023581661824973e-09,
+          "rms_relative_complex_error": 1.4900803351936634e-10
+        },
+        {
+          "channel": "pressure_piece_257",
+          "max_relative_complex_error": 1.5596806309707976e-09,
+          "rms_relative_complex_error": 1.8926859902470016e-10
+        },
+        {
+          "channel": "pressure_piece_261",
+          "max_relative_complex_error": 1.6516125537920826e-09,
+          "rms_relative_complex_error": 1.5700022396746174e-10
+        },
+        {
+          "channel": "pressure_piece_558",
+          "max_relative_complex_error": 1.846262802531928e-09,
+          "rms_relative_complex_error": 1.7212639335228605e-10
+        },
+        {
+          "channel": "pressure_piece_559",
+          "max_relative_complex_error": 3.7613422320006435e-06,
+          "rms_relative_complex_error": 8.366178845973486e-07
+        },
+        {
+          "channel": "radiated_flow_derivative",
+          "max_relative_complex_error": 1.8466761194885953e-09,
+          "rms_relative_complex_error": 1.7219324392567939e-10
+        }
+      ]
+    }
+  ],
+  "reciprocity_checks": [
+    {
+      "first": "out/port_response/body",
+      "second": "out/port_response/body-lateral",
+      "max_relative_complex_error": 5.051397266927094e-14
+    }
+  ]
+}

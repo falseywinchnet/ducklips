@@ -1464,4 +1464,72 @@ std::size_t SurfaceNetwork::first_piece(std::size_t station) const noexcept {
     return stations_[station].first_piece;
 }
 
+SurfaceLinearSnapshot SurfaceNetwork::linear_snapshot() const {
+    if (pieces_.empty() || glide_left_ != 0) {
+        throw std::logic_error("linear snapshot requires prepared, stationary geometry");
+    }
+    for (std::size_t station = 0; station < stations_.size(); ++station) {
+        if (geometry_area_[station] != station_area_now_[station]
+            || geometry_first_[station] != station_area_now_[station]
+            || opening_area_[station] != opening_now_[station]
+            || opening_first_[station] != opening_now_[station]) {
+            throw std::logic_error("linear snapshot requires settled geometry; reshape with glide=1 for a frozen probe");
+        }
+        if (stations_[station].edge_tension != 0.0) {
+            throw std::logic_error("linear snapshot does not yet include membrane edge tension");
+        }
+    }
+    for (double resistance : boundary_resistance_) {
+        if (resistance != 0.0) {
+            throw std::logic_error("linear snapshot requires zero-mean-flow kinetic resistance; reset before probing");
+        }
+    }
+    SurfaceLinearSnapshot snapshot{};
+    snapshot.sample_rate = sample_rate_;
+    snapshot.pieces = pieces_.size();
+    snapshot.glottis = glottis_;
+    snapshot.allocated_delay_samples = history_.size();
+    snapshot.paths.reserve(links_.size());
+    for (std::size_t index = 0; index < links_.size(); ++index) {
+        const AirLink& link = links_[index];
+        SurfaceLinearPath path{};
+        path.from = link.from;
+        path.to = link.to;
+        path.admittance = link.admittance;
+        if (index < first_cross_) {
+            path.delay = link.whole_delay + 1;
+            const std::array<double, 3>& loss = loss_filter_[index];
+            path.numerator = {link.allpass * loss[0], loss[0] + link.allpass * loss[1], loss[1]};
+            path.denominator = {1.0, link.allpass + loss[2], link.allpass * loss[2]};
+        } else {
+            double delay = cross_delay_[index - first_cross_];
+            path.delay = static_cast<std::size_t>(std::floor(delay));
+            double fraction = delay - static_cast<double>(path.delay);
+            path.numerator = {1.0 - fraction, fraction, 0.0};
+        }
+        snapshot.paths.push_back(path);
+    }
+    for (std::size_t piece = 0; piece < pieces_.size(); ++piece) {
+        if (wall_admittance_[piece] > 0.0) {
+            const std::array<double, 5>& filter = wall_filter_[piece];
+            SurfaceLinearPort port{};
+            port.piece = piece;
+            port.admittance = wall_admittance_[piece];
+            port.numerator = {filter[0], filter[1], filter[2]};
+            port.denominator = {1.0, filter[3], filter[4]};
+            snapshot.ports.push_back(port);
+        }
+    }
+    for (const Opening& opening : openings_) {
+        SurfaceLinearPort port{};
+        port.piece = opening.piece;
+        port.admittance = opening.admittance;
+        port.numerator = {opening.b0, opening.b1, 0.0};
+        port.denominator = {1.0, opening.a1, 0.0};
+        port.radiation = true;
+        snapshot.ports.push_back(port);
+    }
+    return snapshot;
+}
+
 }

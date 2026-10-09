@@ -175,6 +175,11 @@ fidelity-preserving replacement. The optional GUI.Forms adapter requires an
 external checkout passed through `GUI_FORMS_SOURCE`; it was not built in this
 standalone validation. `boundary/` preserves the earlier boundary experiments.
 
+[Frozen port-response probes](surface/FROZEN_PORTS.md) provide an independently
+verified frequency-domain equivalent of the detailed network for developing
+and checking a faster physical representation. It includes transverse and
+floor paths; it does not yet replace the speech renderer.
+
 Third-party enhanced-field source keeps its original license and provenance.
 Human reference audio and segmentation have separate licenses and attribution
 under `samples/`. No new blanket license has been imposed on the supplied code.

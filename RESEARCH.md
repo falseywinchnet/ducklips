@@ -36,6 +36,14 @@ This points to **acoustic states that couple to the sources and radiators** as
 the useful representation, not every path between wall pieces. It does not
 prove that the current tree-modal anatomy is a sufficient replacement.
 
+The [frozen surface port operator](surface/FROZEN_PORTS.md) now eliminates
+the detailed model's delay histories analytically at each frequency and solves
+for its junction pressures. It retains every frozen path/filter and matches
+six time-domain probes to at worst 3.77e-6 relative complex error over the
+tested 48 Hz–12 kHz points. The full body has 563 pressure unknowns versus
+319,232 allocated delay samples, but the operator is frequency-dependent:
+this is a verified reduction reference, not yet a small dynamic renderer.
+
 A reduction must preserve the port responses at glottis, lips, nose, constriction
 jets, and moving sublingual openings. Frozen-shape frequency response, phase,
 loss and resonant residues should agree before moving-body speech is compared.
