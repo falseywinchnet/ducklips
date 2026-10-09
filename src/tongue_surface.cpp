@@ -22,12 +22,13 @@ double roof_slope(double x) noexcept {
 }
 }
 bool ConservativeTongueSurface::configure(Point2 centre,const TongueGesture& gesture) noexcept {
-    error_=nullptr;centre_=centre;
+    error_=nullptr;centre_=centre;attachment_active_=false;command_=0;
     if (!std::isfinite(centre.x) || !std::isfinite(centre.y) || !std::isfinite(gesture.activation)
         || !std::isfinite(gesture.place_from_lips) || !std::isfinite(gesture.gap)
         || !std::isfinite(gesture.width) || gesture.gap<0 || gesture.width<=0) {
         error_="invalid conservative body gesture";return false;
     }
+    if (gesture.activation<=0) { return update_contour(); }
     const double arc=MidsagittalTongue::length-gesture.place_from_lips;
     const Point2 normal=MidsagittalTongue::normal(arc),mid=MidsagittalTongue::midline(arc);
     if (std::abs(normal.x)>1e-12 || normal.y<.999999) { error_="conservative dorsum requires an oral-wall target";return false; }
@@ -64,55 +65,61 @@ bool ConservativeTongueSurface::configure(Point2 centre,const TongueGesture& ges
     const double reach=std::clamp(gesture.activation,0.0,1.0);command_=reach*reach*(3-2*reach);
     // Activation above contact cannot translate tissue through the palate.
     // Contact force is not modeled by this kinematic component.
+    return update_contour();
+}
+bool ConservativeTongueSurface::update_contour() noexcept {
     for (std::size_t i=0;i<contour_count;++i) {
         const double angle=2*pi*static_cast<double>(i)/contour_count;
-        const TongueMaterialPoint point=material({centre.x+radius*std::cos(angle),centre.y+radius*std::sin(angle)});
+        const TongueMaterialPoint point=material({centre_.x+radius*std::cos(angle),centre_.y+radius*std::sin(angle)});
         if (!point.valid) { error_="conservative contour mapping did not converge";return false; }
         contour_[i]=point.position;
     }
     return true;
 }
-TongueMaterialPoint ConservativeTongueSurface::material(Point2 point) const noexcept { return map_.map(point,command_); }
-double ConservativeTongueSurface::wall_penetration(Point2 translation) const noexcept {
+TongueMaterialPoint ConservativeTongueSurface::material(Point2 point) const noexcept {
+    TongueMaterialPoint result{.position=point,.valid=std::isfinite(point.x)&&std::isfinite(point.y)};
+    if (command_!=0) { result=map_.map(point,command_); }
+    if (!result.valid || !attachment_active_) { return result; }
+    TongueMaterialPoint moved=attachment_map_.map(result.position);
+    const std::array<double,4> a=moved.gradient,b=result.gradient;
+    moved.gradient={a[0]*b[0]+a[1]*b[2],a[0]*b[1]+a[1]*b[3],a[2]*b[0]+a[3]*b[2],a[2]*b[1]+a[3]*b[3]};
+    return moved;
+}
+bool ConservativeTongueSurface::move_attachment(Point2 start,Point2 displacement) noexcept {
+    if (attachment_active_) { error_="attachment motion already configured";return false; }
+    double slope=0;
+    const std::array<double,6> knots{2.,4.5,6.,7.2,8.4,9.4};
+    for (std::size_t i=1;i<knots.size();++i) {
+        slope=std::max(slope,std::abs((roof(knots[i])-roof(knots[i-1]))/(knots[i]-knots[i-1])));
+    }
+    const double normal_scale=std::sqrt(1+slope*slope),anchor=centre_.y-radius/2;
+    const double distance=std::hypot(displacement.x,displacement.y);
+    if (!std::isfinite(start.x+start.y+displacement.x+displacement.y+distance)) { error_="invalid attachment motion";return false; }
+    double clearance=missing;
+    constexpr std::size_t intervals=16;
+    for (std::size_t i=0;i<=intervals;++i) {
+        const double fraction=static_cast<double>(i)/intervals;
+        const Point2 p{start.x+fraction*displacement.x,start.y+fraction*displacement.y};
+        clearance=std::min(clearance,std::min({p.x-2,p.y-anchor,(roof(p.x)-p.y)/normal_scale}));
+    }
+    // These signed clearance bounds are 1-Lipschitz. Subtract half the
+    // sample spacing to bound the entire path, not only its sampled points.
+    const double support=clearance-distance/(2*intervals)-1e-8;
+    if (support<=0) { error_="attachment motion has no wall-free anchored support";return false; }
+    if (!attachment_map_.configure(start,displacement,support)) { error_="invalid attachment material field";return false; }
+    attachment_active_=true;return update_contour();
+}
+double ConservativeTongueSurface::wall_penetration() const noexcept {
     double maximum=0;
     for (Point2 point:contour_) {
-        point.x+=translation.x;point.y+=translation.y;
         maximum=std::max(maximum,std::max(-.9-point.x,point.y-roof(point.x)));
     }
     return maximum;
 }
-double ConservativeTongueSurface::admissible_pull(Point2 translation,Point2 pull) const noexcept {
-    double fraction=1;
-    for (Point2 point:contour_) {
-        point.x+=translation.x;point.y+=translation.y;
-        if (point.x<-.9-1e-10 || point.y>roof(point.x)+1e-10) { return 0; }
-        std::array<double,10> events{};std::size_t count=0;
-        if (std::abs(pull.x)>1e-14) {
-            for (double knot:{-.9,2.,4.5,6.,7.2,8.4,9.4}) {
-                const double time=(knot-point.x)/pull.x;
-                if (time>0 && time<fraction) { events[count++]=time; }
-            }
-        }
-        events[count++]=fraction;std::sort(events.begin(),events.begin()+static_cast<std::ptrdiff_t>(count));
-        double low=0;
-        for (std::size_t i=0;i<count;++i) {
-            double high=events[i];const double x=point.x+high*pull.x,y=point.y+high*pull.y;
-            if (x>=-.9 && y<=roof(x)+1e-10) { low=high;continue; }
-            // On each linear roof segment, or the concave bend, admissible
-            // translations form an interval. Visiting every wall knot
-            // prevents a valid endpoint from tunneling through a corner.
-            for (std::size_t iteration=0;iteration<40;++iteration) {
-                const double mid=(low+high)/2,mx=point.x+mid*pull.x,my=point.y+mid*pull.y;
-                if (mx>=-.9 && my<=roof(mx)+1e-10) { low=mid; } else { high=mid; }
-            }
-            fraction=std::min(fraction,low);break;
-        }
-    }
-    return fraction;
-}
-double ConservativeTongueSurface::ray_gap(Point2 wall,Point2 inward,Point2 translation) const noexcept {
-    wall.x-=translation.x;wall.y-=translation.y;
-    const TongueMaterialPoint inverse=map_.map(wall,-command_);
+double ConservativeTongueSurface::ray_gap(Point2 wall,Point2 inward) const noexcept {
+    TongueMaterialPoint inverse{.position=wall,.valid=true};
+    if (attachment_active_) { inverse=attachment_map_.map(wall,true); }
+    if (inverse.valid && command_!=0) { inverse=map_.map(inverse.position,-command_); }
     if (!inverse.valid) { return std::numeric_limits<double>::quiet_NaN(); }
     const double dx=inverse.position.x-centre_.x,dy=inverse.position.y-centre_.y;
     if (dx*dx+dy*dy<=radius*radius+1e-11) { return 0; }

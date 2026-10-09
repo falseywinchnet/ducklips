@@ -279,6 +279,9 @@ void Synthesizer::begin_block() noexcept {
     }
     statistics_.maximum_body_wall_penetration=std::max(statistics_.maximum_body_wall_penetration,model_.tongue().body_wall_penetration);
     statistics_.maximum_tip_target_error=std::max(statistics_.maximum_tip_target_error,model_.tongue().tip_target_error);
+    statistics_.maximum_attachment_motion=std::max(statistics_.maximum_attachment_motion,model_.tongue().attachment_motion);
+    probe_.blade_root=model_.tongue().blade_root;probe_.attachment_motion=model_.tongue().attachment_motion;
+    probe_.tip_target_error=model_.tongue().tip_target_error;probe_.body_wall_penetration=model_.tongue().body_wall_penetration;
     if (options_.diagnostics) {
         probe_.oral_volume=model_.oral_volume();
         probe_.tongue_centre=model_.tongue().body_centre;probe_.tongue_tip=model_.tongue().tip;

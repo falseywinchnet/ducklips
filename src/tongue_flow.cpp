@@ -83,4 +83,58 @@ TongueMaterialPoint ConservativeTongueMap::map(Point2 point,double command,std::
     }
     result.valid=true;return result;
 }
+
+bool TongueMaterialTranslation::configure(Point2 start,Point2 displacement,double radius) noexcept {
+    radius_squared_=0;
+    if (!std::isfinite(start.x) || !std::isfinite(start.y) || !std::isfinite(displacement.x)
+        || !std::isfinite(displacement.y) || !std::isfinite(radius) || radius<=0
+        || !std::isfinite(radius*radius) || radius*radius==0) { return false; }
+    start_=start;displacement_=displacement;radius_squared_=radius*radius;return true;
+}
+TongueMaterialTranslation::Field TongueMaterialTranslation::field(Point2 point,double time) const noexcept {
+    const double x=point.x-start_.x-time*displacement_.x,y=point.y-start_.y-time*displacement_.y;
+    const double q=(x*x+y*y)/radius_squared_;
+    if (q>=1) { return {}; }
+    // psi=(vx*y-vy*x)*(1-r^2/R^2)^4, velocity=(psi_y,-psi_x).
+    // The value and its first three derivatives vanish at the support edge.
+    const double s=1-q,w=s*s*s*s,first=-8*s*s*s/radius_squared_;
+    const double second=48*s*s/(radius_squared_*radius_squared_);
+    const double wx=first*x,wy=first*y,wxx=first+second*x*x,wyy=first+second*y*y,wxy=second*x*y;
+    const double vx=displacement_.x,vy=displacement_.y,linear=vx*y-vy*x;
+    const double a00=vx*wx-vy*wy+linear*wxy;
+    return Field{.velocity={vx*w+linear*wy,vy*w-linear*wx},
+                 .derivative={a00,2*vx*wy+linear*wyy,2*vy*wx-linear*wxx,-a00}};
+}
+TongueMaterialPoint TongueMaterialTranslation::map(Point2 point,bool inverse,std::size_t steps) const noexcept {
+    TongueMaterialPoint result{.position=point};
+    if (radius_squared_<=0 || !steps || !std::isfinite(point.x) || !std::isfinite(point.y)) { return result; }
+    const double h=(inverse?-1.:1.)/static_cast<double>(steps),half=h/2;
+    for (std::size_t step=0;step<steps;++step) {
+        const double time=(inverse?1.:0.)+(static_cast<double>(step)+.5)*h;
+        const Point2 initial=result.position;const Field start=field(initial,time);
+        Point2 next{initial.x+h*start.velocity.x,initial.y+h*start.velocity.y};bool converged=false;
+        for (std::size_t iteration=0;iteration<24;++iteration) {
+            const Field mid=field({(initial.x+next.x)/2,(initial.y+next.y)/2},time);
+            const std::array<double,4>& a=mid.derivative;
+            const double b00=1-half*a[0],b01=-half*a[1],b10=-half*a[2],b11=1-half*a[3],det=b00*b11-b01*b10;
+            if (!std::isfinite(det) || std::abs(det)<1e-12) { return result; }
+            const double rx=next.x-initial.x-h*mid.velocity.x,ry=next.y-initial.y-h*mid.velocity.y;
+            const double dx=(b11*rx-b01*ry)/det,dy=(-b10*rx+b00*ry)/det;
+            next.x-=dx;next.y-=dy;
+            if (!std::isfinite(next.x) || !std::isfinite(next.y)) { return result; }
+            if (std::max(std::abs(dx),std::abs(dy))<1e-12) { converged=true;break; }
+        }
+        if (!converged) { return result; }
+        const Field mid=field({(initial.x+next.x)/2,(initial.y+next.y)/2},time);const std::array<double,4>& a=mid.derivative;
+        const double b00=1-half*a[0],b01=-half*a[1],b10=-half*a[2],b11=1-half*a[3],det=b00*b11-b01*b10;
+        if (!std::isfinite(det) || std::abs(det)<1e-12) { return result; }
+        const std::array<double,4> m{(b11*(1+half*a[0])-b01*half*a[2])/det,(b11*half*a[1]-b01*(1+half*a[3]))/det,
+            (-b10*(1+half*a[0])+b00*half*a[2])/det,(-b10*half*a[1]+b00*(1+half*a[3]))/det};
+        const std::array<double,4> old=result.gradient;
+        result.gradient={m[0]*old[0]+m[1]*old[2],m[0]*old[1]+m[1]*old[3],m[2]*old[0]+m[3]*old[2],m[2]*old[1]+m[3]*old[3]};
+        for (double entry:result.gradient) { if (!std::isfinite(entry)) { return result; } }
+        result.position=next;
+    }
+    result.valid=true;return result;
+}
 }

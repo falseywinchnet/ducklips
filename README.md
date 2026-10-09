@@ -7,10 +7,13 @@ configuration, not a speaker embedding or a bank of recorded sounds.
 
 **Status: active research, not perfected speech.** Current work connects a
 volume-conserving tongue body to the canonical moving acoustic network and
-fixes physical and pronunciation-planning failures. Performance optimization
+fixes physical and pronunciation-planning failures. Local material transport
+now resolves the tested Foxtrot attachment miss while retaining the dorsal
+contact and lower anchor. Performance optimization
 is parked by user instruction. Numerical stability and a plausible enhanced
 spectrogram do not establish intelligibility or human realism. See the
-[current speech integration](reports/CONSERVATIVE_TONGUE_SPEECH.md) and the
+[current attachment model](reports/LOCAL_TONGUE_ATTACHMENT.md), its
+[speech integration](reports/CONSERVATIVE_TONGUE_SPEECH.md), and the
 explicit [research gates](RESEARCH.md). Earlier engines and their performance
 measurements remain research references; they are not acoustically equivalent.
 
@@ -36,8 +39,9 @@ Add `--conservative-tongue` to select the new material body deformation and its
 attached blade. Both flags are required. It reports failed geometry solves,
 sampled body/wall overlap, and unmet tip travel separately. A failed geometry
 solve stops rendering; it does not substitute the rigid body. The blade still
-has a fixed length, and some combined gestures cannot reach their targets.
-See [CONSERVATIVE_TONGUE_SPEECH.md](reports/CONSERVATIVE_TONGUE_SPEECH.md).
+has a fixed length; local body deformation now advances its attachment when
+needed. This is conservative kinematics, not calibrated muscle dynamics.
+See [LOCAL_TONGUE_ATTACHMENT.md](reports/LOCAL_TONGUE_ATTACHMENT.md).
 
 ## Build
 

@@ -203,7 +203,7 @@ double MidsagittalTongue::gap_from_area(double area, double arc) noexcept {
 }
 
 TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGesture& body,
-                                    const TongueGesture& tip, const ConservativeTongueSurface* surface) noexcept {
+                                    const TongueGesture& tip, ConservativeTongueSurface* surface) noexcept {
     TongueShape shape{};
     double jaw = std::clamp(posture.jaw, 0.0, 1.0);
     // The jaw carries the tongue down with it.
@@ -227,6 +227,7 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
     }
 
     Point2 root = blade_root(centre);
+    const Point2 material_root=root,material_centre=centre;
     if (surface!=nullptr) {
         const TongueMaterialPoint mapped_root=surface->material(root),mapped_centre=surface->material(centre);
         if (!mapped_root.valid || !mapped_centre.valid) { shape.valid=false;return shape; }
@@ -269,26 +270,22 @@ TongueShape MidsagittalTongue::pose(const TonguePosture& posture, const TongueGe
             }
             double excess = span - blade_length;
             Point2 pull = scaled(reach_vector, excess / span);
-            double fraction=1;
-            if (surface) { fraction=surface->admissible_pull(shape.surface_translation,pull);pull=scaled(pull,fraction); }
-            centre = add(centre, pull);
-            shape.drag += excess*fraction;
-            shape.drag_vector = add(shape.drag_vector, pull);
-            if (surface!=nullptr) { root=add(root,pull);shape.surface_translation=add(shape.surface_translation,pull); }
-            else { root = blade_root(centre); }
-            if (fraction<1) {
-                const Point2 remaining{tip_point.x-root.x,tip_point.y-root.y};
-                const double distance=norm(remaining);
-                if (distance>blade_length) {
-                    shape.tip_target_error=distance-blade_length;
-                    tip_point=add(root,scaled(remaining,blade_length/distance));
-                }
+            if (surface) {
+                if (!surface->move_attachment(root,pull)) { shape.valid=false;return shape; }
+                const TongueMaterialPoint moved_root=surface->material(material_root),moved_centre=surface->material(material_centre);
+                if (!moved_root.valid || !moved_centre.valid) { shape.valid=false;return shape; }
+                root=moved_root.position;centre=moved_centre.position;shape.attachment_motion=excess;
+                shape.tip_target_error=std::max(std::hypot(tip_point.x-root.x,tip_point.y-root.y)-blade_length,0.0);
                 break;
             }
+            centre = add(centre, pull);
+            shape.drag += excess;
+            shape.drag_vector = add(shape.drag_vector, pull);
+            root = blade_root(centre);
         }
     }
     shape.body_centre = centre;
-    if (surface) { shape.body_wall_penetration=surface->wall_penetration(shape.surface_translation); }
+    if (surface) { shape.body_wall_penetration=surface->wall_penetration(); }
     shape.blade_root = root;
     shape.tip = tip_point;
     return shape;
@@ -303,7 +300,7 @@ void MidsagittalTongue::gaps(const TongueShape& shape, const TonguePosture& post
         Point2 wall = add(midline(arc), scaled(wall_normal, offset));
         Point2 inward = scaled(wall_normal, -1.0);
         double gap = offset + floor_offset(arc, posture);
-        const double body_gap=shape.surface?shape.surface->ray_gap(wall,inward,shape.surface_translation):ray_circle(wall,inward,shape.body_centre,body_radius);
+        const double body_gap=shape.surface?shape.surface->ray_gap(wall,inward):ray_circle(wall,inward,shape.body_centre,body_radius);
         if (std::isnan(body_gap)) { output[index]=body_gap;continue; }
         gap = smooth_minimum(gap, body_gap);
         gap = smooth_minimum(gap, ray_segment(wall, inward, shape.blade_root, shape.tip));

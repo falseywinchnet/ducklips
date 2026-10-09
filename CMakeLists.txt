@@ -114,3 +114,6 @@ add_executable(ducklips_planner_tests tests/planner_tests.cpp)
 target_link_libraries(ducklips_planner_tests PRIVATE ducklips)
 target_compile_definitions(ducklips_planner_tests PRIVATE DUCKLIPS_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
 add_test(NAME ducklips_planner_tests COMMAND ducklips_planner_tests)
+
+add_executable(ducklips_tongue_reach_audit tools/tongue_reach_audit.cpp)
+target_link_libraries(ducklips_tongue_reach_audit PRIVATE ducklips)

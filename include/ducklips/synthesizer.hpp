@@ -50,6 +50,7 @@ struct SynthesisStatistics final {
     double geometry_failure_time{};
     double maximum_body_wall_penetration{}; // cm; contact validity is separate from solver convergence
     double maximum_tip_target_error{}; // cm, unattainable tip target under body contact and blade reach
+    double maximum_attachment_motion{}; // cm, local material displacement of blade attachment
     std::size_t nonfinite_samples{};
     std::size_t clipped_samples{};
     std::size_t blocks{};
@@ -109,6 +110,9 @@ struct SynthesisProbe final {
     double glottal_pressure{};   // Pa, acoustic pressure above the glottis, last sample
     std::size_t modes{};
     std::array<double, 4> lowest_mode_hz{};
+    // Actual geometry used by the acoustic solve; populated at every block.
+    Point2 blade_root{};
+    double attachment_motion{},tip_target_error{},body_wall_penetration{};
     // Geometry attribution, populated only with diagnostics enabled.
     double oral_volume{},floor_volume{},volume_without_body{},volume_without_tip{};
     Point2 tongue_centre{},tongue_tip{};

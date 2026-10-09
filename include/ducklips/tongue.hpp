@@ -45,9 +45,9 @@ struct TongueGesture final {
 
 struct TongueShape final {
     const ConservativeTongueSurface* surface{}; // borrowed until the owner rebuilds its next pose
-    Point2 surface_translation{};
     double body_wall_penetration{}; // cm, sampled conservative body contour
     double tip_target_error{}; // cm, unreachable target after body contact and blade reach constraints
+    double attachment_motion{}; // cm of local body material transport, distinct from rigid drag
     bool valid{true};
     Point2 body_centre{};
     Point2 blade_root{};
@@ -75,7 +75,7 @@ public:
 
     // Positions the tongue for a posture and its gestures.
     [[nodiscard]] static TongueShape pose(const TonguePosture& posture, const TongueGesture& body,
-                                          const TongueGesture& tip, const ConservativeTongueSurface* surface=nullptr) noexcept;
+                                          const TongueGesture& tip, ConservativeTongueSurface* surface=nullptr) noexcept;
     // Writes the gap (cm) at each arc position (cm from the glottis).
     static void gaps(const TongueShape& shape, const TonguePosture& posture, std::span<const double> arcs,
                      std::span<double> output) noexcept;

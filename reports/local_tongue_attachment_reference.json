@@ -1,0 +1,313 @@
+{
+  "status": "attachment reach fixed on tested speech; human pronunciation and muscle dynamics unverified",
+  "previous_commit": "f39e83410cb4150bb3b67e85666d04bcfae30953",
+  "performance": "optimization parked; no throughput benchmark in this experiment",
+  "release_tests": {
+    "passed": 10,
+    "total": 10,
+    "seconds": 43.22
+  },
+  "native_local_map": {
+    "determinant_error": 2.886579864e-15,
+    "inverse_error_cm": 1.404333387e-15,
+    "gradient_difference_error": 6.447824497e-10,
+    "outside_support_motion_cm": 0
+  },
+  "native_combined_surface": {
+    "dense_contour_vertices": 8192,
+    "rays_per_case": 351,
+    "cases": 6,
+    "hit_classification_agrees": true,
+    "largest_gap_difference_cm": 9.349820395e-06
+  },
+  "geometry_replay": {
+    "baseline_samples": 23239,
+    "baseline_missed_steps_above_1e_minus_5_cm": 47,
+    "baseline_maximum_miss_cm": 1.37333269518,
+    "baseline_worst_time_seconds": 4.954,
+    "local_maximum_miss_cm": 1.82076576039e-14,
+    "local_maximum_overlap_cm": 2.50466314355e-13
+  },
+  "actual_probe_replay_match": {
+    "word": "Foxtrot",
+    "steps": 1653,
+    "fields": [
+      "blade_root_x_cm",
+      "blade_root_y_cm",
+      "attachment_motion_cm",
+      "tip_target_error_cm"
+    ],
+    "maximum_printed_value_difference": 0
+  },
+  "audio": {
+    "foxtrot-rigid-blade-baseline": {
+      "frames": 79680,
+      "sample_rate": 48000,
+      "seconds": 1.66,
+      "peak_pcm": 0.6073098182678223,
+      "rms_pcm": 0.01368484526893665,
+      "nonfinite_pcm": 0,
+      "maximum_tip_target_error_cm": 1.36950747,
+      "clipped_samples": 0,
+      "geometry_failures": 0
+    },
+    "foxtrot-local-material": {
+      "frames": 79344,
+      "sample_rate": 48000,
+      "seconds": 1.653,
+      "peak_pcm": 0.46720364689826965,
+      "rms_pcm": 0.013028972863868473,
+      "nonfinite_pcm": 0,
+      "maximum_tip_target_error_cm": 1.82076576e-14,
+      "maximum_attachment_motion_cm": 1.44082269,
+      "sampled_body_wall_overlap_cm": 0,
+      "maximum_cavity_mass_residual_m3_per_s": 5.392626259e-16,
+      "clipped_samples": 0,
+      "geometry_failures": 0
+    }
+  },
+  "artifacts": {
+    "out/foxtrot-rigid-blade-baseline.wav": {
+      "sha256": "26e4f05b7885710cb7c4270a7d72d7d96ec102ba59a96ced4be59f89c4a5294d",
+      "bytes": 637484
+    },
+    "out/foxtrot-rigid-blade-baseline.log": {
+      "sha256": "9b0516e30d9102296cf22751180e00b4bee52db009affaf8621cc5825b0bf42f",
+      "bytes": 2189
+    },
+    "out/foxtrot-local-material.wav": {
+      "sha256": "0cfea6ce8f8d5af355859becaca4bcc879e3eded90af9d3951fdfa0a6252f641",
+      "bytes": 634796
+    },
+    "out/foxtrot-local-material.log": {
+      "sha256": "7ddc7320912ba9ba21d5e289d192f404fe892d592d25681d0a227e87a22b6426",
+      "bytes": 2221
+    },
+    "out/foxtrot-local-material.csv": {
+      "sha256": "14cc0dd341f3d688f2ce407a74223b7767074d2a128b037d90d9d5f7b58c025d",
+      "bytes": 205646
+    },
+    "out/foxtrot-geometry-local.csv": {
+      "sha256": "920be673406625428c4927f8c017958f1e7f88e79bdb5e15c0a51932bf1911f6",
+      "bytes": 277378
+    },
+    "out/tongue_reach_audit.csv": {
+      "sha256": "906dae95fe43b3a2d367aa7cb026739a1907bd60e53046409aefcab0accd3f6b",
+      "bytes": 5410711
+    },
+    "out/tongue_reach_local.csv": {
+      "sha256": "7a68b9d940107185939f08a350e8068fb5f8e6f5626af4dee6e75a9dea1f760f",
+      "bytes": 4618084
+    },
+    "out/foxtrot-local-material-enhanced.html": {
+      "sha256": "c03cb0aea7df194615bd7dd51f8bcbf7eaf19f48cb5d4599e132795cf484bc17",
+      "bytes": 275761
+    },
+    "out/foxtrot-local-material-enhanced.png": {
+      "sha256": "82dc6f2639b7cfd869ee92cb7b823b9098e0a47c7c2c738042e551430433a4f2",
+      "bytes": 174439
+    },
+    "out/foxtrot-local-material-enhanced.npz": {
+      "sha256": "b7a2842daeee6e7ba46f877a5d0fa7346d93f7f63020319fb725ee974e0ec7c0",
+      "bytes": 6738306
+    },
+    "out/foxtrot-local-material-enhanced.json": {
+      "sha256": "399804f72a855056debadb5ade388af7df14ecd77df21a8b19db60188d33d563",
+      "bytes": 997
+    },
+    "out/human-foxtrot-enhanced.png": {
+      "sha256": "4f8e6a3ca1832e0103980c3bfa15db8033309368f14458095f7aef0e28cc2e1b",
+      "bytes": 84733
+    },
+    "out/human-foxtrot-enhanced.npz": {
+      "sha256": "95a9bc43ff5dda93b8aed0ab34b2017c222588a8dbc43acc8859dcbade9f324c",
+      "bytes": 4789100
+    },
+    "out/human-foxtrot-enhanced.json": {
+      "sha256": "d69acc8f28cc8af4698a6dff8986b33997110dac3fc8e90cf56dd8f574bf5770",
+      "bytes": 991
+    },
+    "out/local-attachment-surface-tests.log": {
+      "sha256": "043deeb9ba634ba5213f9e58a41ae359af82320951d6475743b80104128e080a",
+      "bytes": 1747
+    },
+    "out/local-attachment-flow-tests.log": {
+      "sha256": "e2ce1565c7a5783a2a479e7300875a01ad1f2843d33ccd3ae000bc0166c3c075",
+      "bytes": 1232
+    },
+    "tools/tongue_reach_audit.cpp": {
+      "sha256": "0770bb82d46c685d67b07a512692ddb783199d186cdaaa8297b56794d4876700",
+      "bytes": 4092
+    },
+    "out/nato-local-material.wav": {
+      "sha256": "9836e9a7b5b135b2dd030a68d24f483c0aa9d9d4078694bdeb6b18da7aa389b8",
+      "bytes": 8923820
+    },
+    "out/nato-local-material.csv": {
+      "sha256": "31e8ffe3c34b4dd032e94e94b17b3bb7f1afe32bab4e6a642855dc3f7b8acf6b",
+      "bytes": 2958246
+    },
+    "out/nato-local-material.log": {
+      "sha256": "a5fcafd368fc7e32fb351438c49201e8abe81e4ab2cbc13e96db020e3ce39453",
+      "bytes": 1303
+    },
+    "out/nato-local-material-provenance.json": {
+      "sha256": "c8d6cb4e489ddcd3a1a68f5c1f169088be713b2dbd9ea9502f50d5ca2bb90c60",
+      "bytes": 7228
+    },
+    "out/foxtrot-geometry-local-final.csv": {
+      "sha256": "920be673406625428c4927f8c017958f1e7f88e79bdb5e15c0a51932bf1911f6",
+      "bytes": 277378
+    }
+  },
+  "enhanced": {
+    "full_fields": true,
+    "colormap": "magma",
+    "db_range": 70,
+    "row_pixels": 1,
+    "column_pixels": 4,
+    "pixel_equality_to_saved_fields": true,
+    "human_shape": [
+      684,
+      104
+    ],
+    "synthetic_shape": [
+      684,
+      155
+    ],
+    "human_samples": [
+      0,
+      53040
+    ],
+    "synthetic_samples": [
+      0,
+      79344
+    ],
+    "human_display_reference": 0.37113784342106715,
+    "synthetic_display_reference": 0.015974152821882408,
+    "ordinary_companion_panel": false,
+    "browser_preview": "not attempted; local file policy block from prior integration remains authoritative"
+  },
+  "asan_ubsan": [
+    {
+      "scope": "streaming, material flow, combined surface",
+      "passed": 3,
+      "total": 3,
+      "seconds": 260.87
+    },
+    {
+      "scope": "final surface test including active-tip continuity across zero dorsal activation",
+      "passed": 1,
+      "total": 1,
+      "seconds": 0.51
+    }
+  ],
+  "alphabet": {
+    "frames": 1115472,
+    "sample_rate": 48000,
+    "seconds": 23.239,
+    "cues": 2375,
+    "dictionary_guesses": 0,
+    "geometry_failures": 0,
+    "nonfinite_samples": 0,
+    "clipped_samples": 0,
+    "sampled_body_wall_overlap_cm": 2.50466314e-13,
+    "maximum_tip_target_error_cm": 1.82076576e-14,
+    "maximum_attachment_motion_cm": 1.82126845,
+    "maximum_cavity_mass_residual_m3_per_s": 5.585457237e-16,
+    "fold_cycles": 1212,
+    "peak_pcm": 0.5299552083015442,
+    "rms_pcm": 0.012112399796342238,
+    "launch_provenance": {
+      "baseline_commit": "f39e83410cb4150bb3b67e85666d04bcfae30953",
+      "command": [
+        "./build/ducklips_say",
+        "--canonical-motion",
+        "--conservative-tongue",
+        "--body",
+        "bodies/reference.body",
+        "--dictionary",
+        "samples/nato.dict",
+        "--text",
+        "Alfa. Bravo. Charlie. Delta. Echo. Foxtrot. Golf. Hotel. India. Juliett. Kilo. Lima. Mike. November. Oscar. Papa. Quebec. Romeo. Sierra. Tango. Uniform. Victor. Whiskey. X-ray. Yankee. Zulu.",
+        "--chunk",
+        "48",
+        "--out",
+        "/Users/joshuahkuttenkuler/ducklips/out/nato-local-material.wav",
+        "--probe",
+        "/Users/joshuahkuttenkuler/ducklips/out/nato-local-material.csv"
+      ],
+      "source_sha256": {
+        "CMakeLists.txt": "1177cea11fabbb12b357b41dd6818b3dfd6f32a7ac78bfa2880260747eb4e47a",
+        "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+        "include/ducklips/acoustic_network.hpp": "9eed5e78beb792700e7b15121225dcb1114599fca7257f7fd89906a53a9fce2f",
+        "include/ducklips/air_path.hpp": "54c02a1dad42ea477ed6a7c8eb0549b8996fe8dd20c5f65ca041a213049fe3ee",
+        "include/ducklips/articulation.hpp": "82a1671eaed62a46d93ff34b91b5ea7ffb2f1876e1fb29364ea7608ac4bd49a5",
+        "include/ducklips/articulation_speeds.hpp": "b193955fd0ebaceade7dbaf973fb231a1bfb8297af8412964ba38a0eb6130781",
+        "include/ducklips/body_config.hpp": "e6026167c9e45be5527cdc27f80d23adc0bf3aa8782e1149b78659972f3c6c1b",
+        "include/ducklips/canonical_speech.hpp": "6bf94df11e4bb5aa352bf97ec54f90ca830abcc2ff9589dae8277671fc9e1a6e",
+        "include/ducklips/connected_speech.hpp": "a659a80e6ba9c6fadab99f2eaac4740556d118b68ccfb5c7d5d6370e147c8e5c",
+        "include/ducklips/continuous_modes.hpp": "81880825cc159963706de4146ab7bbe16603379a2c1e0058732bb6a7bdde72b7",
+        "include/ducklips/cues.hpp": "4c9e0a80cc730dc28da64fcfdfc1407c5b36557fd27976104ce8c7318a7419c9",
+        "include/ducklips/gui_forms_voice.hpp": "997ba825a4d6fe8d3546686d7631f47b2fb1dc31664d78be43c2f07d521406fc",
+        "include/ducklips/modal.hpp": "cea58d51b9bb921979ad7427180d8c2aae11c8247efa426613b6575db7480f4d",
+        "include/ducklips/modal_transport.hpp": "5d5526c9f64aab6cfbbc573c1e2c287fdced5c1fcedccf982bcb0be636808807",
+        "include/ducklips/motion_segment.hpp": "6aef5724fac1544773b6f864247eaae91d65d26773f483d473463dddefcb96e4",
+        "include/ducklips/moving_mode.hpp": "722bd74f0142eb0c337661177e36ba10b20e670a862c321a7ce5b08c10a964ee",
+        "include/ducklips/moving_tree.hpp": "84bb7058c8691b408106650b6f319c27fc29e45aaab2cf617656ae3fbfd66a8e",
+        "include/ducklips/nudges.hpp": "50a69c9906f36c5770fd687466947d07b5e7cdf3a4516ed38b75b2b0103c2f69",
+        "include/ducklips/phonetics.hpp": "5fc468bdad3ed0f8840e8da898f07943a628b29a59817016a3ae51fed32f4c2b",
+        "include/ducklips/physics.hpp": "c97dad9bb61787b7dda2948285bc4a85c86ce45ebce51c45a2efaa6d221c99ad",
+        "include/ducklips/planner.hpp": "708b4575d6e1db244f75af41fe2065f0d5d1b34e7b668b6fc54d472c863579b8",
+        "include/ducklips/sources.hpp": "49e1e7c5d96be992639b13ab5fabc9ff3d37dfd33bcdf39395b7790b5bdbbfb3",
+        "include/ducklips/synthesizer.hpp": "9fa4e1820722b7a548724371fdcc5a276e813e26873e3ec8476ed6e5e7d504bf",
+        "include/ducklips/tongue.hpp": "5309d172d53dd93d3d1d2c33bbd3ba7960127f453a215bd455f335486278f235",
+        "include/ducklips/tongue_flow.hpp": "836bf3882c39d0592e348bb7faf04de4d45612bcccc0927523e36cbbde37faa9",
+        "include/ducklips/tongue_surface.hpp": "67dbde17023e7658e9a59d65e9f131658ad2206f291d1225b54c5594a7c4dc48",
+        "include/ducklips/tree_operator.hpp": "d06d519a97aba819a6810b41b428579794b79202134bbfee987573fac6155a6b",
+        "include/ducklips/voice.hpp": "4be60640f1b304320ed5a1390370be8e9147b8fbe8ed7a049e7c112db18bf599",
+        "include/ducklips/vowel_library.hpp": "1636d297e82c797df002ee56e17fe0cfcd5021717ae1500b9d5afda9b1216e5b",
+        "include/ducklips/wav.hpp": "c173a71e234e5570595deb6c91cc59f4977000c0da4c0a95aeb7a68118aae650",
+        "samples/nato.dict": "05db9444381785cf1f193f65fbf1a597c7b4ef5dffbe79749c516617b94a6de5",
+        "src/acoustic_network.cpp": "16c2eacb4a8880e315954075736d40500c9c831fcec920fd8f14bbec53526e81",
+        "src/air_path.cpp": "b1f3cc8308ade5f5ba10f03ed40481757252e9bc12c5850eb624c2e862ff29cf",
+        "src/articulation.cpp": "3f2673cf924dd57738c361ef4dce9d16e0a10760d385963b7e7097821838bd38",
+        "src/body_config.cpp": "d236591366f2707b5e221c160c5f55b2b9c6a132d0891e59c9e9ac14549476dc",
+        "src/canonical_speech.cpp": "ef7e82c8b9eb83e69772a4b5e794b1da24b987a9cf47812c1780ff017545e3e4",
+        "src/connected_speech.cpp": "69225ff4ba76951f37fe7d2d5f36cbf3f30b63b4766edd02ca8abe0496ef848e",
+        "src/continuous_modes.cpp": "1313d7e9ce96e13c7cbee6ab51f81d4f3e52f1ef58f4796f2191606499dc8e9c",
+        "src/cues.cpp": "ab593f27d6c3c958f7256f23cea0bae6ebf4b38bd644535388116d98929efd5b",
+        "src/gui_forms_voice.cpp": "82301e8667d7ed4bd3106a764fe8210db51e2271ecb0423644ece6cf06a89204",
+        "src/modal.cpp": "c6c187f0988011ef158faf1285c0bdf180c127033058bd1d89abd8bebbab3e03",
+        "src/modal_transport.cpp": "ab92fb76594ff58b635041181b7877cc6e3e96ebb111121457b3aa8b0ace259b",
+        "src/motion_segment.cpp": "fd7fda3eb378898a036676c2694ad1801f01745e1654729ac0da3ac36c1de8c4",
+        "src/moving_mode.cpp": "13bfb6f9093bae55339aebf23a77911318e2b7e5254aaad9dcab9d31336f5874",
+        "src/moving_tree.cpp": "62d9ff74cd554cb3b06547fc699ffb8a91bffbcf09c1ee28879095c8b8860102",
+        "src/nudges.cpp": "72a492573310c616959fff50f2cc1ce03823597ec80126aa9a618fdb839ecf11",
+        "src/phonetics.cpp": "eb2975fe1510d639b952b8dc9621a5b9b2056ce5b7aa10f14203d2e33520a1f0",
+        "src/physics.cpp": "fe62f185c76f14cde53fdc23fc3a5021a1bf12dec9a3bba7c42eb97b21e976ab",
+        "src/planner.cpp": "4aedb22028237ef16bc262452b1b11d0f00d621ae17e363d93d72f24f1f47ac2",
+        "src/sources.cpp": "66167fbd6dcbd63fe5aacca8f90748046ef26ccdf8ebde8a0c78f256e0b5b4b5",
+        "src/synthesizer.cpp": "d531143131d79c2dd71456bf9f843d2c1fec6b9c2d4d7287053700435e8683ff",
+        "src/tongue.cpp": "a4cf577fc89074d90eff012f185b6cb36f8834bf419fc6fc59a464e292e99c14",
+        "src/tongue_flow.cpp": "f83873621e4270266e572b8bee2b42f127c47edb32e36921740c17b91e119590",
+        "src/tongue_surface.cpp": "8f33d2d322ea103f0e6d2779cf6e044b59c0ef8ce3b212e544d8bc2228c49a06",
+        "src/tree_operator.cpp": "cf78a2d778f7201c6c1f799e80342c97b5722066d8ee431fd5294b920a43ee86",
+        "src/voice.cpp": "df08c24c1e11a853cfd4d12ad544271d93c253e8894f9de243378a74c2e303d3",
+        "src/vowel_library.cpp": "72b9fa7b3a27e51eb189c3e5ecec1c5a1d716d3d0e75748ccd71d98d9412e560",
+        "src/wav.cpp": "ec7d81058fae761156c4a59df17254864025e06ce4417a22fefa77765c2e7e7c",
+        "tools/ducklips_say.cpp": "89b4043b9140385cfcf28c85367ea192cd2c62fc25323e9e061c34f0eff65abb"
+      },
+      "binary_sha256": "524cde07f06115eff972dfaaeb7a1430df1035a4bc9f2b2092014e65b43d4b38",
+      "acoustic_path": "canonical moving network",
+      "body": "conservative dorsal map plus compact local attachment transport",
+      "normalization": false,
+      "role": "speech validation; incidental render time is not a throughput benchmark",
+      "exit_code": 0,
+      ".wav_sha256": "9836e9a7b5b135b2dd030a68d24f483c0aa9d9d4078694bdeb6b18da7aa389b8",
+      ".csv_sha256": "31e8ffe3c34b4dd032e94e94b17b3bb7f1afe32bab4e6a642855dc3f7b8acf6b",
+      ".log_sha256": "a5fcafd368fc7e32fb351438c49201e8abe81e4ab2cbc13e96db020e3ce39453"
+    },
+    "native_source_and_binary_match_final_tree": true
+  }
+}

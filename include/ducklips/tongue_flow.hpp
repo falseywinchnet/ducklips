@@ -37,4 +37,18 @@ private:
     std::size_t count_{};
     double anchor_y_{},height_{},primitive_offset_{},total_integral_{};
 };
+
+// Local material transport: a compact, divergence-free field follows a
+// straight attachment path. Every point outside its swept support is fixed.
+// This is kinematics; it supplies no elastic energy or muscle-force model.
+class TongueMaterialTranslation final {
+public:
+    bool configure(Point2 start,Point2 displacement,double radius) noexcept;
+    [[nodiscard]] TongueMaterialPoint map(Point2 point,bool inverse=false,std::size_t steps=32) const noexcept;
+private:
+    struct Field final { Point2 velocity{};std::array<double,4> derivative{}; };
+    [[nodiscard]] Field field(Point2 point,double time) const noexcept;
+    Point2 start_{},displacement_{};
+    double radius_squared_{};
+};
 }

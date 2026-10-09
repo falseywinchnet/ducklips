@@ -36,8 +36,9 @@ hashes, sampling details, and hashes of the resulting WAVs.
 [NATO's spelling alphabet](https://www.nato.int/en/news-and-events/articles/news/2017/12/21/nato-phonetic-alphabet-codes-and-signals).
 It avoids crude letter-to-sound guesses. It is not a certified pronunciation
 standard and should be checked by listening to each generated word. The
-canonical written forms include **Alfa** and **Juliett**. Render X-ray as
-`Xray` with this small dictionary; the alias avoids splitting at punctuation.
+canonical written forms include **Alfa** and **Juliett**. Both `X-ray` and
+`Xray` have explicit entries; known hyphenated compounds stay together in the
+planner.
 
 The pre-existing personal reference in `surface/out/ref/` stays local and
 ignored. It has not been copied into this distributable reference corpus.

@@ -295,13 +295,13 @@ void TractModel::allocate(TractShape& shape) const {
 }
 
 TongueShape TractModel::pose(const TonguePosture& posture,const TongueGesture& body,const TongueGesture& tip) noexcept {
-    if (!conservative_body_ || body.activation<=0) { return MidsagittalTongue::pose(posture,body,tip); }
+    if (!conservative_body_) { return MidsagittalTongue::pose(posture,body,tip); }
     const Point2 centre{posture.body_x+posture.offset_x,posture.body_y-.9*std::clamp(posture.jaw,0.0,1.0)+posture.offset_y};
     if (!body_surface_.configure(centre,body)) {
         geometry_error_=body_surface_.error();TongueShape failed{};failed.valid=false;return failed;
     }
     const TongueShape result=MidsagittalTongue::pose(posture,body,tip,&body_surface_);
-    if (!result.valid) { geometry_error_="blade attachment material mapping failed"; }
+    if (!result.valid) { geometry_error_=body_surface_.error()?body_surface_.error():"blade attachment material mapping failed"; }
     return result;
 }
 

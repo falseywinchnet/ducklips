@@ -1,5 +1,10 @@
 # Conservative tongue in the speech engine
 
+This report records the initial integration at `f39e834`. The subsequent
+[local attachment model](LOCAL_TONGUE_ATTACHMENT.md) resolves its reported
+Foxtrot reach miss by deforming anterior body material. Its new recordings
+and validation are separate from the historical results below.
+
 The volume-conserving material map is now connected to the canonical speech
 path. It changes the actual airway used by the vocal-fold and acoustic solve,
 including the mapped blade attachment. These recordings use

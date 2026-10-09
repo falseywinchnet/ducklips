@@ -232,7 +232,7 @@ int main(int argc, char** argv) {
         probe = std::fopen(arguments.probe_path.c_str(), "w");
         if (probe != nullptr) {
             std::fprintf(probe, "time,flow_cm3s,glottal_area_cm2,intraoral_pa,lung_pa,intended_hz,measured_hz,"
-                                "tension,narrowest_cm2,modes,m1_hz,m2_hz,m3_hz,m4_hz,energy,transglottal_pa,p0_pa");
+                                "tension,narrowest_cm2,modes,m1_hz,m2_hz,m3_hz,m4_hz,energy,transglottal_pa,p0_pa,blade_root_x_cm,blade_root_y_cm,attachment_motion_cm,tip_target_error_cm,body_wall_penetration_cm");
             if (arguments.diagnostics) {
                 std::fprintf(probe,",oral_volume_m3,floor_volume_m3,volume_without_body_m3,volume_without_tip_m3,tongue_x_cm,tongue_y_cm,tip_x_cm,tip_y_cm,body_activation,tip_activation");
             }
@@ -271,6 +271,8 @@ int main(int argc, char** argv) {
                          state.narrowest_area * 1.0e4, state.modes, state.lowest_mode_hz[0],
                          state.lowest_mode_hz[1], state.lowest_mode_hz[2], state.lowest_mode_hz[3],
                          state.acoustic_energy, state.transglottal, state.glottal_pressure);
+            std::fprintf(probe,",%.12g,%.12g,%.12g,%.12g,%.12g",state.blade_root.x,state.blade_root.y,
+                         state.attachment_motion,state.tip_target_error,state.body_wall_penetration);
             if (arguments.diagnostics) {
                 std::fprintf(probe,",%.12e,%.12e,%.12e,%.12e,%.9f,%.9f,%.9f,%.9f,%.9f,%.9f",
                              state.oral_volume,state.floor_volume,state.volume_without_body,state.volume_without_tip,
@@ -311,6 +313,7 @@ int main(int argc, char** argv) {
     if (options.conservative_tongue) {
         std::printf("geometry solve audit: failures %zu; sampled body/wall overlap %.9g cm\n",statistics.geometry_failures,statistics.maximum_body_wall_penetration);
         std::printf("maximum constrained tip target error: %.9g cm\n",statistics.maximum_tip_target_error);
+        std::printf("maximum local attachment motion: %.9g cm\n",statistics.maximum_attachment_motion);
     }
     if (options.canonical_motion) { std::printf("moving cavity maximum mass residual: %.9e m^3/s\n",statistics.maximum_cavity_mass_residual); }
     std::printf("fold cycles %zu, peak %.3f, rms %.4f (before normalization)\n", statistics.pitch_cycles, peak, rms);
