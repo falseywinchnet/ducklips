@@ -16,6 +16,9 @@ struct ContinuousGlottalState final {
 struct ContinuousGlottalStep final {
     std::array<double,3> flow{};
     double reservoir_work{},load_work{},external_work{},fluid_loss{},tissue_loss{};
+    // load_work = port_work + outlet_loss. The affine load exchanges port
+    // work with an attached tract; only the kinetic exit term is dissipation.
+    double port_work{},outlet_loss{};
     double numerical_loss{},energy_change{},energy_residual{},maximum_scaled_residual{};
     // Estimated endpoint-arithmetic scale, not a relaxed force tolerance.
     double energy_roundoff_scale{};

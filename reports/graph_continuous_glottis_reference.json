@@ -1,0 +1,667 @@
+{
+  "scope": "Open full-span continuous source with fixed-topology linear acoustic graph; 2 ms nonlinear feedback, no speech or physiological claim",
+  "graph_edges": [
+    [
+      0,
+      1
+    ],
+    [
+      1,
+      2
+    ],
+    [
+      2,
+      0
+    ],
+    [
+      2,
+      -1
+    ]
+  ],
+  "source_node": 1,
+  "reservoir_pressure_Pa": 1400.0,
+  "source_initial": [
+    112.18465038080178,
+    -3.138675468892969,
+    3.6868231667933132e-06,
+    4.149026342131548e-06,
+    0.00017466261521028342,
+    0.00017466261521028342,
+    0.00017466261521028342,
+    0.0,
+    0.0
+  ],
+  "graph_initial": [
+    1.2e-09,
+    -1.12e-09,
+    3.2e-10,
+    0.01,
+    -0.02,
+    0.015,
+    0.005
+  ],
+  "source_scale": [
+    1000.0,
+    1000.0,
+    1e-06,
+    1e-06,
+    0.0001,
+    0.0001,
+    0.0001,
+    0.001,
+    0.001
+  ],
+  "graph_scale": [
+    1e-08,
+    1e-08,
+    1e-08,
+    0.1,
+    0.1,
+    0.1,
+    0.1
+  ],
+  "reference": "Separate continuous-field ODE plus charge/momentum graph ODE, Radau; independent full-state graph collocation",
+  "cases": [
+    {
+      "moving_metrics": false,
+      "reference_refinement_scaled_error": 9.665768185840307e-10,
+      "native": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "endpoint_scaled_error": 0.003290470545570745,
+          "maximum_trajectory_scaled_error": 0.06235898043736715,
+          "maximum_port_residual_J": 2.117582368135751e-22,
+          "maximum_source_step_residual_J": 5.941288144784267e-16,
+          "maximum_mass_residual_m3": 1.3230753897785678e-21,
+          "maximum_kinetic_loss_split_residual_J": 8.470329472543003e-22,
+          "outlet_loss_J": 0.00037961616264084875,
+          "full_collocation": {
+            "charge_equivalent_Pa": 2.895132143935597e-12,
+            "momentum_Pa_s": 1.6306400674181987e-16,
+            "average_pressure_Pa": 2.7284841053187847e-12,
+            "average_flow_m3_s": 4.0657581468206416e-19
+          },
+          "final_state_scaled": [
+            0.7143304598264758,
+            -0.2746794139523567,
+            2.6182193219906527,
+            2.367484502988865,
+            0.9343508855342378,
+            0.953709739971317,
+            0.9802897748725589,
+            -0.8551699767035309,
+            -2.346422792879687,
+            -0.10861006589156212,
+            -0.4488768363705242,
+            0.2390072485839219,
+            0.27728168931904956,
+            0.20987317739399985,
+            0.16284513328694977,
+            0.4360670815351488
+          ],
+          "pressure_range_Pa": [
+            -753.2896197726088,
+            1123.49606866337
+          ],
+          "maximum_joint_work_residual_J": 4.983318445395124e-15
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "endpoint_scaled_error": 0.0008501971664935382,
+          "maximum_trajectory_scaled_error": 0.10560996059241229,
+          "maximum_port_residual_J": 1.0587911840678754e-22,
+          "maximum_source_step_residual_J": 1.3191204076593802e-16,
+          "maximum_mass_residual_m3": 1.6378176128549948e-22,
+          "maximum_kinetic_loss_split_residual_J": 4.235164736271502e-22,
+          "outlet_loss_J": 0.00037966042492931497,
+          "full_collocation": {
+            "charge_equivalent_Pa": 6.22970398828999e-12,
+            "momentum_Pa_s": 3.469446951953614e-16,
+            "average_pressure_Pa": 6.252776074688882e-12,
+            "average_flow_m3_s": 9.215718466126788e-19
+          },
+          "final_state_scaled": [
+            0.7153579492637993,
+            -0.27229944675000756,
+            2.618031563837709,
+            2.36735644586245,
+            0.9337766371885321,
+            0.9532837398814784,
+            0.979761900352213,
+            -0.8557591712429367,
+            -2.3479044519100842,
+            -0.1095220851457908,
+            -0.44638037079155174,
+            0.23700874026532096,
+            0.2767570650429643,
+            0.20948318298451904,
+            0.1637597519725167,
+            0.43637286399045166
+          ],
+          "pressure_range_Pa": [
+            -755.2424361985961,
+            1124.8889888788963
+          ],
+          "maximum_joint_work_residual_J": 2.9160701631170127e-15
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "endpoint_scaled_error": 0.00021105976821017558,
+          "maximum_trajectory_scaled_error": 0.0697022821480755,
+          "maximum_port_residual_J": 5.293955920339377e-23,
+          "maximum_source_step_residual_J": 9.812982573059476e-18,
+          "maximum_mass_residual_m3": 8.602678370551488e-23,
+          "maximum_kinetic_loss_split_residual_J": 2.117582368135751e-22,
+          "outlet_loss_J": 0.00037967146048202734,
+          "full_collocation": {
+            "charge_equivalent_Pa": 3.7223127564886245e-12,
+            "momentum_Pa_s": 2.3592239273284576e-16,
+            "average_pressure_Pa": 3.694822225952521e-12,
+            "average_flow_m3_s": 6.098637220230962e-19
+          },
+          "final_state_scaled": [
+            0.7155029332885013,
+            -0.2716603093517242,
+            2.6179845643693906,
+            2.3673246267590757,
+            0.9336650426557329,
+            0.9531755928618278,
+            0.9796610848345131,
+            -0.8559054615830166,
+            -2.348258757374676,
+            -0.10974581368030786,
+            -0.44578303340392783,
+            0.23653893194408934,
+            0.2766185940177046,
+            0.2094106442310458,
+            0.16397076175125128,
+            0.4364315480793608
+          ],
+          "pressure_range_Pa": [
+            -755.9324889621425,
+            1124.9980670596883
+          ],
+          "maximum_joint_work_residual_J": 2.290377089375628e-16
+        },
+        {
+          "steps": 1600,
+          "dt_s": 1.25e-06,
+          "endpoint_scaled_error": 5.2669895277246415e-05,
+          "maximum_trajectory_scaled_error": 0.03729768661567151,
+          "maximum_port_residual_J": 2.6469779601696886e-23,
+          "maximum_source_step_residual_J": 9.381948682025444e-19,
+          "maximum_mass_residual_m3": 3.561426127347061e-21,
+          "maximum_kinetic_loss_split_residual_J": 1.5881867761018131e-22,
+          "outlet_loss_J": 0.0003796742155062119,
+          "full_collocation": {
+            "charge_equivalent_Pa": 1.2304311611726287e-11,
+            "momentum_Pa_s": 6.38378239159465e-16,
+            "average_pressure_Pa": 1.2391865311656147e-11,
+            "average_flow_m3_s": 1.951563910473908e-18
+          },
+          "final_state_scaled": [
+            0.7155393055759344,
+            -0.27150191947879126,
+            2.6179727555095362,
+            2.367316622299804,
+            0.9336370219688666,
+            0.9531484299609914,
+            0.9796357570241795,
+            -0.855941943155774,
+            -2.348346595721403,
+            -0.10980146941061474,
+            -0.44563541251578775,
+            0.23642336546731998,
+            0.27658352745359605,
+            0.20939406204183236,
+            0.1640224105045722,
+            0.43644509039787566
+          ],
+          "pressure_range_Pa": [
+            -755.9918248127013,
+            1125.0386143516637
+          ],
+          "maximum_joint_work_residual_J": 2.680960922013531e-16
+        },
+        {
+          "steps": 3200,
+          "dt_s": 6.25e-07,
+          "endpoint_scaled_error": 1.3161195307254125e-05,
+          "maximum_trajectory_scaled_error": 0.011500366714539328,
+          "maximum_port_residual_J": 1.3234889800848443e-23,
+          "maximum_source_step_residual_J": 9.446534944253585e-19,
+          "maximum_mass_residual_m3": 4.278591718430536e-21,
+          "maximum_kinetic_loss_split_residual_J": 7.940933880509066e-23,
+          "outlet_loss_J": 0.00037967490339563704,
+          "full_collocation": {
+            "charge_equivalent_Pa": 1.3028094647710186e-11,
+            "momentum_Pa_s": 7.771561172376096e-16,
+            "average_pressure_Pa": 1.318767317570746e-11,
+            "average_flow_m3_s": 1.8973538018496328e-18
+          },
+          "final_state_scaled": [
+            0.7155484371528369,
+            -0.2714624107788213,
+            2.6179697567461124,
+            2.367314561552767,
+            0.9336299775534805,
+            0.9531416003690119,
+            0.9796293865583502,
+            -0.8559510731439858,
+            -2.34836855087765,
+            -0.10981536781380555,
+            -0.4455986193406676,
+            0.23639459295932455,
+            0.27657473650641295,
+            0.2093900046647048,
+            0.16403525882888487,
+            0.4364483920479992
+          ],
+          "pressure_range_Pa": [
+            -756.0649459995798,
+            1125.042243757713
+          ],
+          "maximum_joint_work_residual_J": 5.211488792594698e-16
+        },
+        {
+          "steps": 6400,
+          "dt_s": 3.125e-07,
+          "endpoint_scaled_error": 3.2891370858600943e-06,
+          "maximum_trajectory_scaled_error": 0.0029319134458306584,
+          "maximum_port_residual_J": 6.617444900424222e-24,
+          "maximum_source_step_residual_J": 5.510769885056876e-18,
+          "maximum_mass_residual_m3": 4.49283149708177e-21,
+          "maximum_kinetic_loss_split_residual_J": 3.970466940254533e-23,
+          "outlet_loss_J": 0.0003796750752806553,
+          "full_collocation": {
+            "charge_equivalent_Pa": 2.848603234479489e-11,
+            "momentum_Pa_s": 1.6132928326584306e-15,
+            "average_pressure_Pa": 2.864908310584724e-11,
+            "average_flow_m3_s": 4.472333961502706e-18
+          },
+          "final_state_scaled": [
+            0.7155507229107562,
+            -0.2714525387205999,
+            2.6179690062547016,
+            2.3673140430028456,
+            0.9336282144735398,
+            0.9531398909501156,
+            0.9796277918563775,
+            -0.8559533528572331,
+            -2.34837403272018,
+            -0.1098188412287572,
+            -0.44558942771893223,
+            0.236387407492567,
+            0.27657253726438585,
+            0.2093889958716382,
+            0.16403846686397244,
+            0.4364492123117739
+          ],
+          "pressure_range_Pa": [
+            -756.0734548317804,
+            1125.046383499616
+          ],
+          "maximum_joint_work_residual_J": 9.262610210086786e-16
+        }
+      ],
+      "trajectory_refinement_ratios": [
+        0.5904649531878287,
+        1.515157859079198,
+        1.8688097968732578,
+        3.2431736779765417,
+        3.9224782474030673
+      ],
+      "endpoint_refinement_ratios": [
+        3.8702440742558673,
+        4.0282294143661845,
+        4.007218299926147,
+        4.001908189008947,
+        4.001412821567616
+      ],
+      "removing_feedback_source_endpoint_scaled_difference": 2.3483758859306008,
+      "reference_final_state_scaled": [
+        0.7155514851424257,
+        -0.271449249583514,
+        2.617968747681315,
+        2.3673138656784283,
+        0.9336276235778107,
+        0.9531393181898341,
+        0.9796272576551011,
+        -0.8559541243287814,
+        -2.348375885930644,
+        -0.10981999996374683,
+        -0.4455863658249535,
+        0.23638501250158503,
+        0.27657180426155725,
+        0.20938865941618348,
+        0.16403953632226065,
+        0.4364494843501048
+      ]
+    },
+    {
+      "moving_metrics": true,
+      "reference_refinement_scaled_error": 7.179783434452247e-10,
+      "native": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "endpoint_scaled_error": 0.003221422373592353,
+          "maximum_trajectory_scaled_error": 0.05834214020487255,
+          "maximum_port_residual_J": 4.235164736271502e-22,
+          "maximum_source_step_residual_J": 6.537730629758119e-16,
+          "maximum_mass_residual_m3": 1.0827794218319132e-21,
+          "maximum_kinetic_loss_split_residual_J": 8.470329472543003e-22,
+          "outlet_loss_J": 0.0003807092081641894,
+          "full_collocation": {
+            "charge_equivalent_Pa": 2.895132143935597e-12,
+            "momentum_Pa_s": 1.97758476261356e-16,
+            "average_pressure_Pa": 3.240074875066057e-12,
+            "average_flow_m3_s": 3.7947076036992655e-19
+          },
+          "final_state_scaled": [
+            0.4794958706099149,
+            -0.09815998946638521,
+            2.732576325692238,
+            2.7434926499684686,
+            1.1084793578846242,
+            1.1327522374332362,
+            1.1665148010210786,
+            -1.0820399758108017,
+            -3.0110245320030957,
+            -0.26340078745307177,
+            -0.14785606091778059,
+            0.038467301486834714,
+            0.23834347078440463,
+            0.2690566214718977,
+            0.14259990774369852,
+            0.6492396360686133
+          ],
+          "pressure_range_Pa": [
+            -684.9183946912232,
+            1025.6696166107074
+          ]
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "endpoint_scaled_error": 0.0007512186485123182,
+          "maximum_trajectory_scaled_error": 0.09936396395397304,
+          "maximum_port_residual_J": 1.0587911840678754e-22,
+          "maximum_source_step_residual_J": 8.870065496175989e-17,
+          "maximum_mass_residual_m3": 1.3689839137752608e-22,
+          "maximum_kinetic_loss_split_residual_J": 4.235164736271502e-22,
+          "outlet_loss_J": 0.00038075006465331234,
+          "full_collocation": {
+            "charge_equivalent_Pa": 4.6270415514684986e-12,
+            "momentum_Pa_s": 3.5388358909926865e-16,
+            "average_pressure_Pa": 4.860112312599085e-12,
+            "average_flow_m3_s": 7.589415207398531e-19
+          },
+          "final_state_scaled": [
+            0.4808166605736551,
+            -0.0973374231066243,
+            2.732440059232142,
+            2.7434981971267933,
+            1.1077467167623773,
+            1.1321541318882284,
+            1.1658087001545139,
+            -1.0825196509256267,
+            -3.0116452901072597,
+            -0.2633684200026702,
+            -0.14635262563822482,
+            0.03599709776175468,
+            0.2371216758499189,
+            0.26983112797110176,
+            0.14304719617898143,
+            0.6489268029024327
+          ],
+          "pressure_range_Pa": [
+            -683.974583855174,
+            1027.299046645497
+          ]
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "endpoint_scaled_error": 0.00018440191364325204,
+          "maximum_trajectory_scaled_error": 0.06520358846478559,
+          "maximum_port_residual_J": 5.293955920339377e-23,
+          "maximum_source_step_residual_J": 8.581714305106944e-18,
+          "maximum_mass_residual_m3": 4.1359030627651384e-23,
+          "maximum_kinetic_loss_split_residual_J": 2.117582368135751e-22,
+          "outlet_loss_J": 0.0003807602285974891,
+          "full_collocation": {
+            "charge_equivalent_Pa": 6.307252170716836e-12,
+            "momentum_Pa_s": 4.579669976578771e-16,
+            "average_pressure_Pa": 6.80699940858176e-12,
+            "average_flow_m3_s": 1.1384122811097797e-18
+          },
+          "final_state_scaled": [
+            0.4810405091075402,
+            -0.09710878691214611,
+            2.7324059777414003,
+            2.743500159150724,
+            1.1075981970273965,
+            1.132007946232096,
+            1.165668872810835,
+            -1.0826389899755415,
+            -3.011793072524009,
+            -0.2633563964510602,
+            -0.14601631248919875,
+            0.03543028102688561,
+            0.23681656563715486,
+            0.2700324774701128,
+            0.14315095689273435,
+            0.6488421755000671
+          ],
+          "pressure_range_Pa": [
+            -684.6267775149048,
+            1027.5370269652956
+          ]
+        },
+        {
+          "steps": 1600,
+          "dt_s": 1.25e-06,
+          "endpoint_scaled_error": 4.58872978885555e-05,
+          "maximum_trajectory_scaled_error": 0.03481872927527227,
+          "maximum_port_residual_J": 2.6469779601696886e-23,
+          "maximum_source_step_residual_J": 8.542327273059619e-19,
+          "maximum_mass_residual_m3": 1.885971796620903e-22,
+          "maximum_kinetic_loss_split_residual_J": 1.0587911840678754e-22,
+          "outlet_loss_J": 0.0003807627648936641,
+          "full_collocation": {
+            "charge_equivalent_Pa": 9.615974620928947e-12,
+            "momentum_Pa_s": 6.106226635438361e-16,
+            "average_pressure_Pa": 1.1254996934439987e-11,
+            "average_flow_m3_s": 1.4365678785432934e-18
+          },
+          "final_state_scaled": [
+            0.48109606854642983,
+            -0.09705364263092765,
+            2.7323974132439584,
+            2.7435006358492924,
+            1.107561265244673,
+            1.1319715950241487,
+            1.1656341134509018,
+            -1.0826687677614912,
+            -3.011829813157753,
+            -0.26335314676171967,
+            -0.14593472592786685,
+            0.035291766411130916,
+            0.2367403277038427,
+            0.2700832741290801,
+            0.1431763981670755,
+            0.6488206110136558
+          ],
+          "pressure_range_Pa": [
+            -684.6711141292141,
+            1027.5171451951674
+          ]
+        },
+        {
+          "steps": 3200,
+          "dt_s": 6.25e-07,
+          "endpoint_scaled_error": 1.1458807031655693e-05,
+          "maximum_trajectory_scaled_error": 0.01076305275104708,
+          "maximum_port_residual_J": 1.3234889800848443e-23,
+          "maximum_source_step_residual_J": 1.083431901899095e-17,
+          "maximum_mass_residual_m3": 2.870316725559006e-22,
+          "maximum_kinetic_loss_split_residual_J": 7.940933880509066e-23,
+          "outlet_loss_J": 0.0003807633981467265,
+          "full_collocation": {
+            "charge_equivalent_Pa": 1.6440214674491425e-11,
+            "momentum_Pa_s": 1.2073675392798577e-15,
+            "average_pressure_Pa": 1.8530954548623413e-11,
+            "average_flow_m3_s": 2.8189256484623115e-18
+          },
+          "final_state_scaled": [
+            0.4811099593594903,
+            -0.09703998539075963,
+            2.7323952335699953,
+            2.7435007036829964,
+            1.1075520168156505,
+            1.131962492198076,
+            1.1656254089896607,
+            -1.0826762235763248,
+            -3.0118390325615527,
+            -0.26335232179469653,
+            -0.14591448881059713,
+            0.035257337920274016,
+            0.23672127436049992,
+            0.27009599163450265,
+            0.1431827340050012,
+            0.6488151823982624
+          ],
+          "pressure_range_Pa": [
+            -684.654554635408,
+            1027.5519515302703
+          ]
+        },
+        {
+          "steps": 6400,
+          "dt_s": 3.125e-07,
+          "endpoint_scaled_error": 2.864353172531142e-06,
+          "maximum_trajectory_scaled_error": 0.0027438309394662297,
+          "maximum_port_residual_J": 1.3234889800848443e-23,
+          "maximum_source_step_residual_J": 1.7679708426455185e-17,
+          "maximum_mass_residual_m3": 4.8605132793615906e-21,
+          "maximum_kinetic_loss_split_residual_J": 3.970466940254533e-23,
+          "outlet_loss_J": 0.0003807635563554423,
+          "full_collocation": {
+            "charge_equivalent_Pa": 3.432799542095065e-11,
+            "momentum_Pa_s": 1.8908485888147197e-15,
+            "average_pressure_Pa": 3.979039320256561e-11,
+            "average_flow_m3_s": 4.5672016515951874e-18
+          },
+          "final_state_scaled": [
+            0.48111343319478456,
+            -0.09703657882037979,
+            2.7323946874985605,
+            2.7435007169214036,
+            1.1075497036783735,
+            1.1319602154355477,
+            1.165623231779186,
+            -1.0826780853584088,
+            -3.0118413343915216,
+            -0.26335211463033525,
+            -0.1459094392164188,
+            0.03524874346641489,
+            0.2367165114540715,
+            0.27009917201954076,
+            0.14318431652638997,
+            0.6488138227897418
+          ],
+          "pressure_range_Pa": [
+            -684.6646754765852,
+            1027.560328927503
+          ]
+        }
+      ],
+      "trajectory_refinement_ratios": [
+        0.5871559253805289,
+        1.5239033049175874,
+        1.8726584749631339,
+        3.235023564470121,
+        3.922636994953074
+      ],
+      "endpoint_refinement_ratios": [
+        4.2882619860035724,
+        4.073811565565649,
+        4.0185829658373216,
+        4.0045440822756575,
+        4.0004867910649065
+      ],
+      "removing_feedback_source_endpoint_scaled_difference": 3.011842130443171,
+      "reference_final_state_scaled": [
+        0.4811145892633137,
+        -0.09703544542140152,
+        2.7323944969951492,
+        2.7435007181875615,
+        1.1075489302114983,
+        1.131959454369013,
+        1.1656225042491615,
+        -1.0826787191524871,
+        -3.0118421304434495,
+        -0.2633520465535619,
+        -0.14590775847399104,
+        0.03524587911324236,
+        0.23671492396801366,
+        0.2701002317273106,
+        0.14318484430467068,
+        0.6488133687862461
+      ]
+    }
+  ],
+  "hashes": {
+    "tools/graph_continuous_glottis_reference.py": "6a09b5e01297965cc4f1da84bb316aecc80a27c087ebacec6e36c946342c12ee",
+    "build/ducklips_graph_continuous_glottis_probe": "05cf415d99512af40e845f0169359cb0fcc91dd350cc3ff5c56ef9745dce0141",
+    "tools/graph_continuous_glottis_probe.cpp": "5f033096d0f1c6e4a4aeabd360b9f2c6dfcdd242af6dccf4ee8cefbc94f2d057",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "src/graph_continuous_glottis.cpp": "e75bce06d333a3c3e346e269b24cede6a6495916defd724e051f0e9e22115725",
+    "include/ducklips/graph_continuous_glottis.hpp": "5b8681c96765fc29528418463ce46bc6d9bc1e643433d65d28a188f6614685f7",
+    "src/continuous_glottis.cpp": "f86fb2d9dd89bb29317bfccdc22814b4009822ea58b6358c920624afcf552c84",
+    "include/ducklips/continuous_glottis.hpp": "c30c1786d2a792e56f2e666011a42a317e87f62c9a0496dbb1a7872ada312279",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "out/graph-continuous-glottis/fixed-3200.input": "4880917d5be206581dbea44c7577ac709cd86f9d9315ffd2dfa2753ba2d91a73",
+    "out/graph-continuous-glottis/fixed-200.input": "b2cd53633224c94731f346d0bc23b0614a86a5b00a60ba0c69bfce0b4de05b44",
+    "out/graph-continuous-glottis/fixed-800.input": "7a3615b6839fc9b2e40b7b2ae96ce07e69a533617ecbde4b332ced5887966e67",
+    "out/graph-continuous-glottis/fixed-6400.input": "a284e4d3de279cda94e0a435ee929ccf2c211ab0009be06a23d011c824596f47",
+    "out/graph-continuous-glottis/fixed-1600.input": "2b5f26a439c57be68b4d84fd3bb5b5c790871f7d0a3133ca2e939e0ba7b0e902",
+    "out/graph-continuous-glottis/fixed-400.input": "0114320565b566972917fe0bc588aefa008928163c92b2638af0519fbb084d92",
+    "out/graph-continuous-glottis/fixed-800.txt": "201e7ead84e36e15e2d26108c17da2bd06304af9ca35f1941f2bfb36abb84902",
+    "out/graph-continuous-glottis/fixed-1600.txt": "de709468a450b01fa340db7b6cafee0b481c8b1d7d38de02d68eb3d781844e6b",
+    "out/graph-continuous-glottis/fixed-3200.txt": "016fe547231c4f56a302a5f94d969892ed5afc62635b5bd07839e1bac020a42c",
+    "out/graph-continuous-glottis/fixed-6400.txt": "0e6f90fb23a0d9cd853210e834c60aac945cdbaa6a25b0e8c3bb0034803bd5b5",
+    "out/graph-continuous-glottis/fixed-200.txt": "2067fe99071a124115717b6b9e0f37b3ac6c5d4a41cae0db4e6d35089baff31e",
+    "out/graph-continuous-glottis/fixed-400.txt": "9dc4655eeff7b244957a85026dfdf15f1c4fb7ee8c22734f2c0bc2c965612ee1",
+    "out/graph-continuous-glottis/fixed-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/fixed-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/fixed-6400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/fixed-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/fixed-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/fixed-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-6400.input": "83906855326b1dc47a629e2f42eda8296f6210fb2e6f6b6c4ed3ec0b125831bc",
+    "out/graph-continuous-glottis/moving-1600.input": "d442bb60d393cdb129c551ab65570099c4151e877fdfd5aaf72f7141d5e47a4e",
+    "out/graph-continuous-glottis/moving-400.input": "5ed25fc0ae2f2923e7f7c65c79d2bdcc599404a5c16024b28884aca160a583e0",
+    "out/graph-continuous-glottis/moving-3200.input": "99aa9a2b6550822428c80d6043e5e8e7c99a491523c21593d11e9e05dd5a8cf7",
+    "out/graph-continuous-glottis/moving-200.input": "90e60cec5b108cf95f46caa09b1cf8f2df32f255453deb27bbba20d09bf36cf0",
+    "out/graph-continuous-glottis/moving-800.input": "155948775b25178c2f03e9fc1a89e5311b6e579db6da9874e3fe54a0b0f4a362",
+    "out/graph-continuous-glottis/moving-400.txt": "47c5ecb2589b93cf70e47d7f7a606aa737e7656358ab8a30eb61abdca7834742",
+    "out/graph-continuous-glottis/moving-6400.txt": "bdf406f3c066b8f28ef08d0bdca7cf1d0673bc8a51ea96ec0ab494131858759a",
+    "out/graph-continuous-glottis/moving-200.txt": "38cec1d5b8487975a8c0b6264e4c2c0c03faa70f8a31fd6062ac0a6bd87bc5a5",
+    "out/graph-continuous-glottis/moving-3200.txt": "ce227768a464f106586b30186bd5aa16824af42f029232c800eba41057875ac5",
+    "out/graph-continuous-glottis/moving-1600.txt": "976882819ab175535cb1f154d41c70680e051df9a2887d2c7c8fa6bf533a151a",
+    "out/graph-continuous-glottis/moving-800.txt": "0003aac524c60e4ad6f45a5c7c06182811b11c423ed1f1bb62336d416c369611",
+    "out/graph-continuous-glottis/moving-6400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/moving-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/graph-continuous-glottis/continuous-False.npz": "e031d9bb9e21c98916b6405b949ffa00b41fcdc867bbd49768e334f619f91064",
+    "out/graph-continuous-glottis/continuous-True.npz": "029b16062174cc6de2f4675b4824e1d5bec9107ae7b1a9ff20ad883b85d1689c"
+  }
+}

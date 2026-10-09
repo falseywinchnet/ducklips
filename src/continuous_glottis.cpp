@@ -91,7 +91,7 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;rhs[3+i]-=g[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*position_[3+i]+coupling_[i%2]*(position_[3+i]-position_[3+other]))*position_scale*position_scale/energy_scale;}
         const Vector acceleration=multiply(c0.inverse,rhs);for(std::size_t j=0;j<7;++j){change[j]+=.5*step*step*acceleration[j];}
     }
-    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0,roundoff_scale=0;bool converged=false,roundoff_limited=false;
+    Configuration c1,cm;Matrix drag{};double norm=0,load_loss=0,exit_loss=0,roundoff_scale=0;bool converged=false,roundoff_limited=false;
     const auto evaluate=[&](const Vector& trial){
         if(!finite(trial)){return false;}for(std::size_t j=0;j<7;++j){q1[j]=position_[j]+trial[j];speed[j]=trial[j]/step;}
         // Eliminate a closed coordinate exactly. Newton still solves its
@@ -131,13 +131,19 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         for(std::size_t i=0;i<7;++i){for(std::size_t j=0;j<7;++j){const double inverse_scale=std::abs(c0.inverse[7*i+j])+std::abs(c1.inverse[7*i+j]);arithmetic_scale+=inverse_scale*(dissipative?.5*std::abs(momentum_[i]*momentum_[j]):.25*(std::abs(momentum_[i]*momentum_[j])+std::abs(p1[i]*p1[j])));}}
         const double energy_roundoff=64*std::numeric_limits<double>::epsilon()*arithmetic_scale;
         roundoff_scale=energy_roundoff;roundoff_limited=std::abs(delta-work)<=energy_roundoff;
-        if(norm2>1e-28 && !roundoff_limited){const double correction=(delta-work)/norm2;for(std::size_t k=0;k<4;++k){gradient[k]+=correction*dz[k];}}
+        // Remove only the resolved excess above the arithmetic uncertainty.
+        // A hard on/off correction jumps by energy_roundoff/|dz| at the
+        // threshold and can leave Newton with no continuous residual to solve.
+        // Soft thresholding leaves at most energy_roundoff uncorrected while
+        // keeping this force continuous; the actual energy error is reported.
+        if(norm2>1e-28 && !roundoff_limited){const double correction=std::copysign(std::abs(delta-work)-energy_roundoff,delta-work)/norm2;for(std::size_t k=0;k<4;++k){gradient[k]+=correction*dz[k];}}
         Vector generalized={gradient[0],gradient[1]-gradient[0],-gradient[1],0,0,0,0};
         for(std::size_t i=0;i<4;++i){const std::size_t other=i<2?i+2:i-2;const double x=.5*(position_[3+i]+q1[3+i]),y=.5*(position_[3+other]+q1[3+other]);
             generalized[3+i]=gradient[2+i/2]*width_*position_scale/area_scale+(stiffness_[i]*x+coupling_[i%2]*(x-y))*position_scale*position_scale/energy_scale;}
         Vector resistance_force=multiply(drag,speed);const double outflow=speed[2]*mass_scale/time_scale;double beta=0;
         if(loss_configuration.active[2] && outlet_loss_>0){const double r=std::pow(1+(gamma_-1)*loss_configuration.gas.effort[1]/bulk_,1/(gamma_-1));beta=outlet_loss_*density_/(2*r*r*loss_configuration.flow.area[1]*loss_configuration.flow.area[1]);}
         const double load=load_slope*outflow+beta*outflow*std::abs(outflow);resistance_force[2]+=load*mass_scale/energy_scale;load_loss=load*outflow*dt;
+        exit_loss=beta*outflow*outflow*std::abs(outflow)*dt;
         norm=0;converged=true;for(std::size_t j=0;j<7;++j){residual[j]=(dissipative?c1.active[j]:active_[j])?(p1[j]-momentum_[j])/step+generalized[j]+resistance_force[j]-external[j]:trial[j]/step;norm=std::max(norm,std::abs(residual[j]));if(std::abs(residual[j])>2e-9+2e-11*(std::abs(generalized[j])+std::abs(resistance_force[j])+std::abs(external[j]))){converged=false;}}
         return finite(residual) && std::isfinite(norm);
     };
@@ -165,6 +171,7 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
     ContinuousGlottalStep receipt;
     for(std::size_t j=0;j<3;++j){receipt.flow[j]=speed[j]*mass_scale/time_scale;}
     receipt.reservoir_work=reservoir.mass_effort*change[0]*mass_scale;receipt.load_work=free_load*change[2]*mass_scale+load_loss;
+    receipt.port_work=(free_load+load_slope*receipt.flow[2])*receipt.flow[2]*dt;receipt.outlet_loss=exit_loss;
     for(std::size_t j=0;j<4;++j){receipt.external_work+=force[j]*change[3+j]*position_scale;receipt.tissue_loss+=dt*damping_[j]*std::pow(speed[3+j]*position_scale/time_scale,2);}
     receipt.fluid_loss=step*energy_scale*dot(speed,multiply(drag,speed))-receipt.tissue_loss;
     const double e0=energy_scale*(c0.potential+mechanical(position_)+.5*dot(momentum_,v0));const double e1=energy_scale*(c1.potential+mechanical(q1)+.5*dot(p1,multiply(c1.inverse,p1)));

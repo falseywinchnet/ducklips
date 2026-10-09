@@ -1,0 +1,169 @@
+{
+  "scope": "Local Jacobian at a nonstationary initial state: timescale diagnostic, not equilibrium stability or measured human frequencies",
+  "initial_scaled": [
+    0.11218465038080179,
+    -0.003138675468892969,
+    3.6868231667933133,
+    4.149026342131548,
+    1.7466261521028341,
+    1.7466261521028341,
+    1.7466261521028341,
+    0.0,
+    0.0,
+    0.12,
+    -0.112,
+    0.032,
+    0.09999999999999999,
+    -0.19999999999999998,
+    0.15,
+    0.049999999999999996
+  ],
+  "reference_quadrature": 48,
+  "refinements": [
+    {
+      "difference_step": 0.001,
+      "modes": [
+        {
+          "real_s": -37339.32707578479,
+          "frequency_Hz": 144193.38701638347
+        },
+        {
+          "real_s": -37339.32707578479,
+          "frequency_Hz": -144193.38701638347
+        },
+        {
+          "real_s": -22116.622409447016,
+          "frequency_Hz": 63975.12390381092
+        },
+        {
+          "real_s": -22116.622409447016,
+          "frequency_Hz": -63975.12390381092
+        },
+        {
+          "real_s": -106.75902866746445,
+          "frequency_Hz": 4935.5572281984205
+        },
+        {
+          "real_s": -106.75902866746445,
+          "frequency_Hz": -4935.5572281984205
+        },
+        {
+          "real_s": -340.314329840099,
+          "frequency_Hz": 3501.7235632145566
+        },
+        {
+          "real_s": -340.314329840099,
+          "frequency_Hz": -3501.7235632145566
+        },
+        {
+          "real_s": -1284.7470193248998,
+          "frequency_Hz": 1308.4419443105055
+        },
+        {
+          "real_s": -1284.7470193248998,
+          "frequency_Hz": -1308.4419443105055
+        },
+        {
+          "real_s": -31.575641330372086,
+          "frequency_Hz": 343.05521865165036
+        },
+        {
+          "real_s": -31.575641330372086,
+          "frequency_Hz": -343.05521865165036
+        },
+        {
+          "real_s": -67.39928919900268,
+          "frequency_Hz": 147.0107612465593
+        },
+        {
+          "real_s": -67.39928919900268,
+          "frequency_Hz": -147.0107612465593
+        },
+        {
+          "real_s": -12932.791737107533,
+          "frequency_Hz": 0.0
+        },
+        {
+          "real_s": 6.432128303844075e-14,
+          "frequency_Hz": 0.0
+        }
+      ]
+    },
+    {
+      "difference_step": 0.0005,
+      "modes": [
+        {
+          "real_s": -37339.32707574175,
+          "frequency_Hz": 144193.38701601478
+        },
+        {
+          "real_s": -37339.32707574175,
+          "frequency_Hz": -144193.38701601478
+        },
+        {
+          "real_s": -22116.622409366617,
+          "frequency_Hz": 63975.123903379674
+        },
+        {
+          "real_s": -22116.622409366617,
+          "frequency_Hz": -63975.123903379674
+        },
+        {
+          "real_s": -106.75902862732441,
+          "frequency_Hz": 4935.557228182755
+        },
+        {
+          "real_s": -106.75902862732441,
+          "frequency_Hz": -4935.557228182755
+        },
+        {
+          "real_s": -340.31432959149345,
+          "frequency_Hz": 3501.7235631355084
+        },
+        {
+          "real_s": -340.31432959149345,
+          "frequency_Hz": -3501.7235631355084
+        },
+        {
+          "real_s": -1284.7470133044228,
+          "frequency_Hz": 1308.4419426481768
+        },
+        {
+          "real_s": -1284.7470133044228,
+          "frequency_Hz": -1308.4419426481768
+        },
+        {
+          "real_s": -31.575665552371955,
+          "frequency_Hz": 343.055203921136
+        },
+        {
+          "real_s": -31.575665552371955,
+          "frequency_Hz": -343.055203921136
+        },
+        {
+          "real_s": -67.39928282668552,
+          "frequency_Hz": 147.01077361159287
+        },
+        {
+          "real_s": -67.39928282668552,
+          "frequency_Hz": -147.01077361159287
+        },
+        {
+          "real_s": -12932.791714233805,
+          "frequency_Hz": 0.0
+        },
+        {
+          "real_s": 4.847748939997789e-13,
+          "frequency_Hz": 0.0
+        }
+      ]
+    }
+  ],
+  "fastest_frequency_refinement_Hz": 4.3124600779265165e-07,
+  "hashes": {
+    "tools/continuous_tract_timescales.py": "8cfdb2bda7cab953b1edfe7910a0df9091648f3f8d50b3f66d8166bc1ef5c227",
+    "tools/graph_continuous_glottis_reference.py": "6a09b5e01297965cc4f1da84bb316aecc80a27c087ebacec6e36c946342c12ee",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/contour_pressure_loss_reference.py": "a448047654093e29639533ed7e4c5f16b6c14ed91d51417afd0a90c798de9c30"
+  }
+}

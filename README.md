@@ -43,6 +43,14 @@ A source experiment now completes repeated pressure-driven contact cycles,
 with step refinement and a full work ledger. These remain mechanics results,
 with speech integration unfinished.
 
+The continuous source now has an [implicit acoustic-tract connection](reports/CONTINUOUS_TRACT_COUPLING.md):
+its flow drives the graph and the graph's pressure acts back on its gas and
+tissue during the same step. Independent fixed/moving-tract equations check
+the open-source trajectory under refinement. This exposed and repaired a
+discontinuous roundoff safeguard. Fast internal pressure modes also explain
+why coarse conservative steps can be inaccurate. Whole-utterance integration
+and accurate contact motion under tract feedback remain in progress.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

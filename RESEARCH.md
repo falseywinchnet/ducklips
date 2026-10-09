@@ -296,6 +296,17 @@ failure. A driver selecting dissipative steps only for actual port-constraint
 changes now completes repeated pressure-driven closure/reopening controls.
 Longer settling, actuator work and speech coupling remain required.
 
+[Continuous-source tract feedback](reports/CONTINUOUS_TRACT_COUPLING.md) now
+connects the current shared-inertia source to the general acoustic graph via
+an implicit affine port relation. Separate receipts identify work transferred
+to the graph and kinetic exit loss. Independent open-domain coupled equations
+show second-order convergence with fixed and moving metrics; conservative
+coarse steps fail to resolve modeled internal pressure modes near 64/144 kHz.
+The finer startup exposed a discontinuity in the roundoff correction; removing
+only the resolved excess repairs it without relaxing the force tolerance.
+Pressure-driven contact in a frozen tube is still sensitive to temporal
+resolution. This integration reference is not yet the articulated speech path.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the
