@@ -15,6 +15,7 @@ add_library(ducklips STATIC
     src/tree_operator.cpp
     src/acoustic_network.cpp
     src/modal.cpp
+    src/moving_mode.cpp
     src/sources.cpp
     src/air_path.cpp
     src/voice.cpp
@@ -67,3 +68,7 @@ target_link_libraries(ducklips_stream_tests PRIVATE ducklips)
 add_test(NAME ducklips_stream_tests COMMAND ducklips_stream_tests)
 
 target_compile_definitions(ducklips_stream_tests PRIVATE DUCKLIPS_SOURCE_DIR="${CMAKE_CURRENT_SOURCE_DIR}")
+
+add_executable(ducklips_moving_mode_tests tests/moving_mode_tests.cpp)
+target_link_libraries(ducklips_moving_mode_tests PRIVATE ducklips)
+add_test(NAME ducklips_moving_mode_tests COMMAND ducklips_moving_mode_tests)

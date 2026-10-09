@@ -149,6 +149,12 @@ void Synthesizer::reset() noexcept {
     geometry_steps_ = 1;
     geometry_step_index_ = 0;
     geometry_ready_ = false;
+    geometry_lip_metric_jump_ = 0.0;
+    geometry_lip_projection_jump_ = 0.0;
+    geometry_pressure_jump_ = 0.0;
+    geometry_lip_slope_jump_ = 0.0;
+    geometry_energy_ratio_ = 0.0;
+    geometry_parameter_change_ = 0.0;
     transglottal_ = 0.0;
     glottal_pressure_ = 0.0;
     glottal_flow_ = 0.0;
@@ -430,10 +436,58 @@ void Synthesizer::begin_geometry_step() noexcept {
             statistics_.worst_orthogonality_time = seconds_from_samples(options_.rate, position_);
         }
     }
+    const bool trace_geometry = options_.trace_samples > 0 && bases_[current_].mode_count > 0;
+    double previous_pressure = 0.0, previous_lips = 0.0, expected_lips = 0.0;
+    double previous_slope = 0.0, previous_energy = 0.0;
+    if (trace_geometry) {
+        const AcousticNetwork& old_network = networks_[current_];
+        const std::size_t lip_node = old_network.oral_sections()-1;
+        previous_energy = resonator_.energy();
+        geometry_parameter_change_ = 0.0;
+        for (std::size_t node=0;node<network.node_count();++node) {
+            geometry_parameter_change_ = std::max(geometry_parameter_change_,
+                std::abs(network.nodes[node].compliance/old_network.nodes[node].compliance-1));
+        }
+        for (std::size_t branch=0;branch<network.branch_count();++branch) {
+            double a=old_network.branches[branch].conductance,b=network.branches[branch].conductance;
+            if (a+b>0) { geometry_parameter_change_ = std::max(geometry_parameter_change_,std::abs(a-b)/(a+b)); }
+        }
+        double lip_pressure = 0.0;
+        for (std::size_t mode=0;mode<bases_[current_].mode_count;++mode) {
+            const double amplitude = resonator_.state[mode].real();
+            previous_pressure += bases_[current_].pressure(mode,0)*amplitude;
+            lip_pressure += bases_[current_].pressure(mode,lip_node)*amplitude;
+            previous_slope += resonator_.lip_output[mode]*(-bases_[current_].damping[mode]*amplitude
+                -bases_[current_].angular_frequency[mode]*resonator_.state[mode].imag());
+        }
+        previous_lips = lip_pressure*old_network.branches[old_network.lip_branch()].conductance;
+        double ratio = 1.0;
+        if (options_.invariant == ReprojectionInvariant::passive) {
+            ratio = std::min(old_network.nodes[lip_node].compliance,network.nodes[lip_node].compliance)
+                    /network.nodes[lip_node].compliance;
+        } else if (options_.invariant == ReprojectionInvariant::charge_momentum) {
+            ratio = old_network.nodes[lip_node].compliance/network.nodes[lip_node].compliance;
+        }
+        expected_lips = ratio*lip_pressure*network.branches[network.lip_branch()].conductance;
+    }
     if (bases_[current_].mode_count > 0) {
         resonator_.reproject(networks_[current_], bases_[current_], network, bases_[next], options_.invariant);
     }
     resonator_.configure(network, bases_[next], sample_period_, aspiration_branch_, frication_branch_);
+    if (trace_geometry) {
+        double pressure=0.0,lips=0.0,slope=0.0;
+        for (std::size_t mode=0;mode<bases_[next].mode_count;++mode) {
+            pressure += resonator_.glottal_weight[mode]*resonator_.state[mode].real();
+            lips += resonator_.lip_output[mode]*resonator_.state[mode].real();
+            slope += resonator_.lip_output[mode]*(-bases_[next].damping[mode]*resonator_.state[mode].real()
+                -bases_[next].angular_frequency[mode]*resonator_.state[mode].imag());
+        }
+        geometry_pressure_jump_ = pressure-previous_pressure;
+        geometry_lip_slope_jump_ = slope-previous_slope;
+        geometry_energy_ratio_ = previous_energy>0 ? resonator_.energy()/previous_energy : 1.0;
+        geometry_lip_metric_jump_ = expected_lips-previous_lips;
+        geometry_lip_projection_jump_ = lips-expected_lips;
+    }
     current_ = next;
 
     // Split the block's samples as evenly as possible among its steps.
@@ -595,8 +649,19 @@ void Synthesizer::render_samples(std::span<float> stereo) noexcept {
             trace_.push_back(TraceSample{.lips = lips, .nostrils = nostrils, .throat = throat,
                                          .glottal_pressure = next_pressure, .energy = resonator_.energy(),
                                          .modes = modes, .glottal_area = area, .glottal_flow = flow,
-                                         .tension = tension_});
+                                         .tension = tension_, .geometry_lip_metric_jump = geometry_lip_metric_jump_,
+                                         .geometry_lip_projection_jump = geometry_lip_projection_jump_,
+                                         .geometry_pressure_jump = geometry_pressure_jump_,
+                                         .geometry_lip_slope_jump = geometry_lip_slope_jump_,
+                                         .geometry_energy_ratio = geometry_energy_ratio_,
+                                         .geometry_parameter_change = geometry_parameter_change_});
         }
+        geometry_lip_metric_jump_ = 0.0;
+        geometry_lip_projection_jump_ = 0.0;
+        geometry_pressure_jump_ = 0.0;
+        geometry_lip_slope_jump_ = 0.0;
+        geometry_energy_ratio_ = 0.0;
+        geometry_parameter_change_ = 0.0;
         double gain = output_gain_;
         double left = microphone[0];
         double right = microphone[1];

@@ -14,7 +14,9 @@ the tested detailed port responses in 501 real states. Coupled-fold probes reach
 19.68–19.97×, but the general all-port probe still fails at 8.73–8.80×; moving
 anatomy has not been transferred to this representation.
 Neither numerical stability nor a plausible spectrogram proves intelligibility
-or human realism. See [current findings](reports/2026-10-09.md) and the explicit
+or human realism. [Geometry-clock analysis](reports/GEOMETRY_TRANSPORT.md)
+now gives an exact moving-energy reference; nonuniform state transport and its
+remaining audible clock components are still unresolved. See [current findings](reports/2026-10-09.md) and the explicit
 [research gates](RESEARCH.md).
 
 This repository preserves the supplied research snapshot as its first commit.

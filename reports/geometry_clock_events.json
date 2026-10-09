@@ -1,0 +1,294 @@
+{
+  "schema": 1,
+  "baseline_commit": "e0eb923192d2d2f51d9197779b27888b40cc3365",
+  "trace_does_not_change_pcm": true,
+  "cases": [
+    {
+      "invariant": "passive",
+      "trace_sha256": "8bbc3a8d0567949b4a2938cc344027a4e08fd7ec667f615820928c859266938a",
+      "max_event_energy_ratio": 1.0,
+      "min_event_energy_ratio": 0.9767221939,
+      "windows": [
+        {
+          "seconds": [
+            0.16,
+            0.28
+          ],
+          "events": 120,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 4.291369116470882e-07,
+              "maximum_absolute": 9.071917277e-07
+            },
+            "geometry_pressure_jump": {
+              "rms": 7.238050282725231e-06,
+              "maximum_absolute": 1.523406315e-05
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 0.12565436243523542,
+              "maximum_absolute": 0.2568466434
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9999541053180628,
+              "maximum_absolute": 0.9999994415
+            },
+            "geometry_parameter_change": {
+              "rms": 0.0013437469509721925,
+              "maximum_absolute": 0.004519789103
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.48,
+            0.58
+          ],
+          "events": 100,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 3.228651545523436e-06,
+              "maximum_absolute": 9.037459313e-06
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.00014866273484127974,
+              "maximum_absolute": 0.000371350749
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 23.516680979374655,
+              "maximum_absolute": 119.2927374
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9988546104228636,
+              "maximum_absolute": 0.9999860539
+            },
+            "geometry_parameter_change": {
+              "rms": 0.01726718555691163,
+              "maximum_absolute": 0.02234556487
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.6,
+            0.75
+          ],
+          "events": 157,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 0.0006713075327125378,
+              "maximum_absolute": 0.006901379901
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.011663609036976696,
+              "maximum_absolute": 0.1426324441
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 1864.1982181798787,
+              "maximum_absolute": 12437.00084
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9995627232194639,
+              "maximum_absolute": 0.9999999705
+            },
+            "geometry_parameter_change": {
+              "rms": 0.04677009346945987,
+              "maximum_absolute": 0.1739884735
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.8,
+            0.9
+          ],
+          "events": 131,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.001000606438780975,
+              "maximum_absolute": 0.005745536302
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 0.0005672843418256278,
+              "maximum_absolute": 0.00280327077
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.01196164436214917,
+              "maximum_absolute": 0.03558710936
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 285.0141670018654,
+              "maximum_absolute": 1698.442988
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9950697356153292,
+              "maximum_absolute": 0.9995466956
+            },
+            "geometry_parameter_change": {
+              "rms": 0.12851899951953352,
+              "maximum_absolute": 1.0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "invariant": "pressure_flow",
+      "trace_sha256": "960093d7dd4f587b02d720d776a1b19e0c3f7e4443739b3fefeaadd93b7b12e6",
+      "max_event_energy_ratio": 1.010135645,
+      "min_event_energy_ratio": 0.9768808931,
+      "windows": [
+        {
+          "seconds": [
+            0.16,
+            0.28
+          ],
+          "events": 120,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 4.291369116470882e-07,
+              "maximum_absolute": 9.071917277e-07
+            },
+            "geometry_pressure_jump": {
+              "rms": 7.238050282725231e-06,
+              "maximum_absolute": 1.523406315e-05
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 0.12565436243523542,
+              "maximum_absolute": 0.2568466434
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9999541053180628,
+              "maximum_absolute": 0.9999994415
+            },
+            "geometry_parameter_change": {
+              "rms": 0.0013437469509721925,
+              "maximum_absolute": 0.004519789103
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.48,
+            0.58
+          ],
+          "events": 100,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 2.936055788359855e-06,
+              "maximum_absolute": 8.485457824e-06
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.00014316347386863525,
+              "maximum_absolute": 0.0003548956112
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 2.4028189258240102,
+              "maximum_absolute": 5.764010906
+            },
+            "geometry_energy_ratio": {
+              "rms": 1.0011597657325095,
+              "maximum_absolute": 1.001668358
+            },
+            "geometry_parameter_change": {
+              "rms": 0.01726718555691163,
+              "maximum_absolute": 0.02234556487
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.6,
+            0.75
+          ],
+          "events": 157,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0,
+              "maximum_absolute": 0.0
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 0.0004403432277715502,
+              "maximum_absolute": 0.004001081913
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.011391468585876417,
+              "maximum_absolute": 0.1420747422
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 365.1585432327384,
+              "maximum_absolute": 4551.727051
+            },
+            "geometry_energy_ratio": {
+              "rms": 1.0001447056413908,
+              "maximum_absolute": 1.003686682
+            },
+            "geometry_parameter_change": {
+              "rms": 0.04677009346945987,
+              "maximum_absolute": 0.1739884735
+            }
+          }
+        },
+        {
+          "seconds": [
+            0.8,
+            0.9
+          ],
+          "events": 131,
+          "metrics": {
+            "geometry_lip_metric_jump": {
+              "rms": 0.0007951732546612436,
+              "maximum_absolute": 0.003229948968
+            },
+            "geometry_lip_projection_jump": {
+              "rms": 4.0575177208219944e-05,
+              "maximum_absolute": 0.0001364285066
+            },
+            "geometry_pressure_jump": {
+              "rms": 0.001977772478957218,
+              "maximum_absolute": 0.007084064511
+            },
+            "geometry_lip_slope_jump": {
+              "rms": 27.375788291185522,
+              "maximum_absolute": 107.615917
+            },
+            "geometry_energy_ratio": {
+              "rms": 0.9984921729682018,
+              "maximum_absolute": 1.010135645
+            },
+            "geometry_parameter_change": {
+              "rms": 0.12851899951953352,
+              "maximum_absolute": 1.0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "verification": {
+    "git_head": "e0eb923192d2d2f51d9197779b27888b40cc3365",
+    "uncommitted_changes_at_measurement": true,
+    "binary_sha256": "456845284109ac3d9b27291fad11c5d376394e66a1d17cf8f5623749ed9b367d",
+    "instrument_source_sha256": "56a44fcd41d6f935bbc0a13256c44678df4dff3c0d09c10e20fea7aacfeaa90f",
+    "fresh_trace_and_wav_bytes_match_recorded_cases": true
+  }
+}

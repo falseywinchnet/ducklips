@@ -101,3 +101,14 @@ passes the simultaneous-source speed gate, followed by energy-consistent state
 transport through moving anatomy and the flexible-blade/tongue-root experiments
 on matched speech. Realism and the full detailed-physics speed gate remain
 unsatisfied.
+
+## Moving-energy reference
+
+[Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the
+remaining clock lines in state transfer. Merely choosing the cleaner pressure/
+flow mapping does not establish correct work accounting. An exact uniform-area
+reference proves that the default lower-energy mapping loses 75% of acoustic
+energy during a fourfold area change, even at audio-rate subdivision. A new
+2×2 propagator reproduces continuous canonical metric transport in that
+restricted case and supplies a required limit for the nonuniform moving engine.
+The default renderer has not been replaced by this reference kernel.

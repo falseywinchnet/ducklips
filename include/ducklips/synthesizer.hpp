@@ -68,6 +68,14 @@ struct TraceSample final {
     double glottal_area{};  // m^2
     double glottal_flow{};  // m^3/s
     double tension{};
+    // Geometry-event impulses, zero on samples without an event. Lip values
+    // are radiation-flow derivatives (m^3/s^2), pressure values are Pa.
+    double geometry_lip_metric_jump{};
+    double geometry_lip_projection_jump{};
+    double geometry_pressure_jump{};
+    double geometry_lip_slope_jump{};
+    double geometry_energy_ratio{};
+    double geometry_parameter_change{};
 };
 
 // Values from the most recent control block, for diagnostics.
@@ -209,6 +217,12 @@ private:
     SynthesisStatistics statistics_{};
     SynthesisProbe probe_{};
     std::vector<TraceSample> trace_{};
+    double geometry_lip_metric_jump_{};
+    double geometry_lip_projection_jump_{};
+    double geometry_pressure_jump_{};
+    double geometry_lip_slope_jump_{};
+    double geometry_energy_ratio_{};
+    double geometry_parameter_change_{};
     SampleCount trace_begin_{-1};
 };
 

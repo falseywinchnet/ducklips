@@ -1,0 +1,481 @@
+{
+  "schema": 1,
+  "model": "Lossless uniform-area tube mode; exponential area motion; no source",
+  "scope": "Analytic transport reference only; excludes nonuniform motion, losses, closures and speech",
+  "cases": [
+    {
+      "area_ratio": 1.0,
+      "frequency_hz": 1234.0,
+      "duration_seconds": 0.1,
+      "sample_rate": 48000,
+      "log_area_rate_per_second": 0.0,
+      "initial_energy": 0.29,
+      "exact_final_energy": 0.2899999999999999,
+      "integrated_wall_work": 0.0,
+      "energy_minus_initial_minus_work": -5.551115123125783e-17,
+      "matrix_exponential_absolute_error": 2.3503421431314564e-13,
+      "stepped_transports": [
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 6.284116266723965e-14,
+          "final_energy": 0.289999999999973,
+          "final_energy_ratio": 0.999999999999907
+        }
+      ]
+    },
+    {
+      "area_ratio": 4.0,
+      "frequency_hz": 1234.0,
+      "duration_seconds": 0.1,
+      "sample_rate": 48000,
+      "log_area_rate_per_second": 13.862943611198904,
+      "initial_energy": 0.29,
+      "exact_final_energy": 0.2899599136710401,
+      "integrated_wall_work": -4.0086328959721376e-05,
+      "energy_minus_initial_minus_work": -1.3271312217580378e-16,
+      "matrix_exponential_absolute_error": 3.0142555118573e-13,
+      "stepped_transports": [
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.052973449119459226,
+          "final_energy": 0.270495468890548,
+          "final_energy_ratio": 0.9327429961743035
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.29367853202033545,
+          "final_energy": 0.0724999999999931,
+          "final_energy_ratio": 0.2499999999999762
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.060736339681501286,
+          "final_energy": 0.3121018368999763,
+          "final_energy_ratio": 1.0762132306895735
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.05234058064798428,
+          "final_energy": 0.2898540993901575,
+          "final_energy_ratio": 0.9994968944488191
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.3097980921374773,
+          "final_energy": 0.07249999999999325,
+          "final_energy_ratio": 0.24999999999997674
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.047295139343145554,
+          "final_energy": 0.2919610735257242,
+          "final_energy_ratio": 1.0067623225024973
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.004855490945201124,
+          "final_energy": 0.28763507270380895,
+          "final_energy_ratio": 0.9918450782889965
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.31179602934345746,
+          "final_energy": 0.07249999999999385,
+          "final_energy_ratio": 0.2499999999999788
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.005060875102117047,
+          "final_energy": 0.29238439163563973,
+          "final_energy_ratio": 1.0082220401228956
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.0037804957371669395,
+          "final_energy": 0.28866040026259304,
+          "final_energy_ratio": 0.9953806905606657
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.3127936635984535,
+          "final_energy": 0.07249999999999102,
+          "final_energy_ratio": 0.24999999999996902
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0036423533335274696,
+          "final_energy": 0.29135034067928445,
+          "final_energy_ratio": 1.0046563471699463
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.0007386594480981114,
+          "final_energy": 0.28959495129499685,
+          "final_energy_ratio": 0.9986032803275754
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.31345826575585994,
+          "final_energy": 0.0724999999999909,
+          "final_energy_ratio": 0.24999999999996866
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0013572027702136154,
+          "final_energy": 0.2904056274988962,
+          "final_energy_ratio": 1.0013987155134352
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.00010160304979824014,
+          "final_energy": 0.28991144506718775,
+          "final_energy_ratio": 0.9996946381627164
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.3137489080657396,
+          "final_energy": 0.07250000000000946,
+          "final_energy_ratio": 0.25000000000003264
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0012635141130853368,
+          "final_energy": 0.2900888783060722,
+          "final_energy_ratio": 1.0003064769174905
+        }
+      ]
+    },
+    {
+      "area_ratio": 0.25,
+      "frequency_hz": 1234.0,
+      "duration_seconds": 0.1,
+      "sample_rate": 48000,
+      "log_area_rate_per_second": -13.862943611198904,
+      "initial_energy": 0.29,
+      "exact_final_energy": 0.29004040690189925,
+      "integrated_wall_work": 4.040690189904676e-05,
+      "energy_minus_initial_minus_work": 2.23562487966511e-16,
+      "matrix_exponential_absolute_error": 2.7422508708241367e-13,
+      "stepped_transports": [
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.06100028405477789,
+          "final_energy": 0.3121018368999763,
+          "final_energy_ratio": 1.0762132306895735
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.2933092544643691,
+          "final_energy": 0.0724999999999931,
+          "final_energy_ratio": 0.2499999999999762
+        },
+        {
+          "block_samples": 480,
+          "control_hz": 100.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.05262055979001648,
+          "final_energy": 0.270495468890548,
+          "final_energy_ratio": 0.9327429961743035
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.047788533994199994,
+          "final_energy": 0.2919610735257242,
+          "final_energy_ratio": 1.0067623225024973
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.30942596060014405,
+          "final_energy": 0.07249999999999325,
+          "final_energy_ratio": 0.24999999999997674
+        },
+        {
+          "block_samples": 96,
+          "control_hz": 500.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.05169924728803313,
+          "final_energy": 0.2898540993901575,
+          "final_energy_ratio": 0.9994968944488191
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.004916414777564338,
+          "final_energy": 0.29238439163563973,
+          "final_energy_ratio": 1.0082220401228956
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.31142362273298296,
+          "final_energy": 0.07249999999999385,
+          "final_energy_ratio": 0.2499999999999788
+        },
+        {
+          "block_samples": 48,
+          "control_hz": 1000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.005002202461554958,
+          "final_energy": 0.28763507270380895,
+          "final_energy_ratio": 0.9918450782889965
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.003111455886656692,
+          "final_energy": 0.29135034067928445,
+          "final_energy_ratio": 1.0046563471699463
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.3124211397236901,
+          "final_energy": 0.07249999999999102,
+          "final_energy_ratio": 0.24999999999996902
+        },
+        {
+          "block_samples": 24,
+          "control_hz": 2000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0043796566316767925,
+          "final_energy": 0.28866040026259304,
+          "final_energy_ratio": 0.9953806905606657
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.0007966225887902923,
+          "final_energy": 0.2904056274988962,
+          "final_energy_ratio": 1.0013987155134352
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.31308566909290353,
+          "final_energy": 0.0724999999999909,
+          "final_energy_ratio": 0.24999999999996866
+        },
+        {
+          "block_samples": 8,
+          "control_hz": 6000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0012304626150620964,
+          "final_energy": 0.28959495129499685,
+          "final_energy_ratio": 0.9986032803275754
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "charge_momentum",
+          "relative_state_rms_error": 0.00010298246410303106,
+          "final_energy": 0.2900888783060722,
+          "final_energy_ratio": 1.0003064769174905
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "passive",
+          "relative_state_rms_error": 0.3133762795117488,
+          "final_energy": 0.07250000000000946,
+          "final_energy_ratio": 0.25000000000003264
+        },
+        {
+          "block_samples": 1,
+          "control_hz": 48000.0,
+          "rule": "pressure_flow",
+          "relative_state_rms_error": 0.0012629099234652951,
+          "final_energy": 0.28991144506718775,
+          "final_energy_ratio": 0.9996946381627164
+        }
+      ]
+    }
+  ]
+}

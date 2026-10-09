@@ -77,6 +77,9 @@ private:
 //                    its two invariants (pressure or charge, flow or momentum)
 //                    gives the lower energy, so by Bessel's inequality in the
 //                    new metrics the projected energy never exceeds the old.
+//                    This is a numerical energy bound, not a moving-wall work
+//                    law: uniform area motion exposes artificial attenuation
+//                    that does not vanish with smaller geometry steps.
 //   charge_momentum: node charge C p and branch momentum M u (adiabatic walls).
 //                    No energy bound: a fixed charge in a vanishing volume
 //                    has unbounded pressure (HYPOTHESIS for exact closures;
