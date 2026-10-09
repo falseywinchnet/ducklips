@@ -125,6 +125,7 @@ public:
     [[nodiscard]] std::size_t nasal_sections() const noexcept;
     [[nodiscard]] std::size_t port_section() const noexcept;
     [[nodiscard]] std::size_t epilarynx_sections() const noexcept;
+    [[nodiscard]] std::size_t lip_sections() const noexcept;
     [[nodiscard]] double length_scale() const noexcept; // voice length / reference length
     [[nodiscard]] double area_scale() const noexcept;   // length_scale^2
     // d ln(area_i) / d(posture parameter) for every oral section at a vowel

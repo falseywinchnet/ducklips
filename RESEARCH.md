@@ -138,6 +138,15 @@ the existing lip and epilarynx segments. Final lip section geometry, complete
 closure transport, dynamic fold coupling and radiation remain integration
 gates; the new dense reference has not rendered speech.
 
+[Open-lip coupling](reports/PLANAR_LIP_COUPLING.md) now replaces the overlapping
+end segments with explicit core seams and the native articulator's assembled
+lip tube. Three separate Foxtrot intervals exercise tongue closure, release
+and unequal lip narrowing, with independent geometry/state checks. The short
+lip sections expose fast undamped modes: coarse stepping is insufficient even
+when the linear solve is accurate. Temporal refinement, actual losses and
+closure-state transport are distinct requirements; successful small-step
+controls do not establish speech quality or efficient rendering.
+
 ## Moving-energy reference
 
 [Geometry transport investigation](reports/GEOMETRY_TRANSPORT.md) isolates the

@@ -3,6 +3,8 @@
 #include "ducklips/planar_airspace.hpp"
 #include "ducklips/tongue_surface.hpp"
 #include "ducklips/physics.hpp"
+#include "ducklips/body_config.hpp"
+#include "ducklips/synthesizer.hpp"
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
@@ -19,18 +21,35 @@ void numbers(std::ostream& out,std::span<const double> p){out<<'[';for(std::size
 }
 
 int main(int argc,char** argv){
-    if(argc!=6 && argc!=7 && argc!=8){std::fprintf(stderr,"usage: ducklips_airspace_geometry_probe GEOMETRY.csv START END CONTOUR_VERTICES OUTPUT.csv [LAST_POSE.json | --frames DIRECTORY]\n");return 2;}
-    const bool frames=argc==8;
-    if(frames && std::string(argv[6])!="--frames"){return 2;}
-    if(frames){std::filesystem::create_directories(argv[7]);}
+    if(argc<6){std::fprintf(stderr,"usage: ducklips_airspace_geometry_probe GEOMETRY.csv START END CONTOUR_VERTICES OUTPUT.csv [LAST_POSE.json | --frames DIRECTORY] [--core BODY]\n");return 2;}
+    bool frames=false;std::string destination,core_body;
+    for(int i=6;i<argc;++i){
+        const std::string arg=argv[i];
+        if(arg=="--frames" && destination.empty() && i+1<argc){frames=true;destination=argv[++i];}
+        else if(arg=="--core" && core_body.empty() && i+1<argc){core_body=argv[++i];}
+        else if(!arg.starts_with("--") && destination.empty()){destination=arg;}
+        else{return 2;}
+    }
+    if(frames){std::filesystem::create_directories(destination);}
+    double arc_start=0,arc_end=ducklips::MidsagittalTongue::length,scale=1;
+    std::size_t oral_sections=0,epilarynx_sections=0,lip_sections=0;
+    if(!core_body.empty()){
+        ducklips::VoiceProfile voice=ducklips::baritone_voice();std::string error;
+        if(!ducklips::load_body_config(core_body,voice,error)){std::fprintf(stderr,"%s\n",error.c_str());return 2;}
+        const ducklips::SynthesisOptions options;ducklips::TractModel model;
+        model.prepare(voice,options.oral_sections,options.nasal_sections);
+        oral_sections=model.oral_sections();epilarynx_sections=model.epilarynx_sections();lip_sections=model.lip_sections();scale=model.length_scale();
+        arc_start=ducklips::MidsagittalTongue::length*double(epilarynx_sections)/double(oral_sections);
+        arc_end=ducklips::MidsagittalTongue::length*double(oral_sections-lip_sections)/double(oral_sections);
+    }
     double start=0,end=0;std::size_t vertices=0;
     try{start=std::stod(argv[2]);end=std::stod(argv[3]);vertices=std::stoul(argv[4]);}catch(...){return 2;}
     if(!std::isfinite(start) || !std::isfinite(end) || start<0 || end<start || vertices<32 || vertices>1024){return 2;}
     std::ifstream input(argv[1]);std::ofstream output(argv[5]);if(!input || !output){return 2;}
     constexpr std::size_t nx=64,ny=64;
     std::array<double,nx+1> xs{};std::array<double,ny+1> ys{};
-    for(std::size_t i=0;i<=nx;++i){xs[i]=-.01+.11*double(i)/nx;}
-    for(std::size_t i=0;i<=ny;++i){ys[i]=.105*double(i)/ny;}
+    for(std::size_t i=0;i<=nx;++i){xs[i]=(-.01+.11*double(i)/nx)*scale;}
+    for(std::size_t i=0;i<=ny;++i){ys[i]=.105*double(i)/ny*scale;}
     ducklips::PlanarAirspace cells;cells.prepare(xs,ys,2*vertices+600);
     std::vector<ducklips::Point2> body(vertices),pad(vertices),domain;domain.reserve(600);
     std::array<ducklips::Point2,4> blade{};
@@ -39,6 +58,11 @@ int main(int argc,char** argv){
     for(double arc:{4.,6.5,7.,7.+ducklips::pi,7.+ducklips::pi+.5,7.+ducklips::pi+2.5,
                     7.+ducklips::pi+4.,7.+ducklips::pi+5.2,7.+ducklips::pi+6.,7.+ducklips::pi+6.4}){arcs.push_back(arc);}
     std::sort(arcs.begin(),arcs.end());arcs.erase(std::unique(arcs.begin(),arcs.end()),arcs.end());
+    if(!core_body.empty()){
+        std::erase_if(arcs,[&](double arc){return arc<arc_start || arc>arc_end;});
+        arcs.push_back(arc_start);arcs.push_back(arc_end);
+        std::sort(arcs.begin(),arcs.end());arcs.erase(std::unique(arcs.begin(),arcs.end()),arcs.end());
+    }
     std::string line;std::getline(input,line);
     output<<std::setprecision(17)<<"time,air_volume_m3,body_polygon_area_m2,maximum_pose_error_cm,maximum_cell_volume_m3,open_vertical_faces,open_horizontal_faces\n";
     std::size_t rows=0;
@@ -85,14 +109,23 @@ int main(int argc,char** argv){
             // replacing it with a diagonal across one wall sample interval.
             if(arc==7.+ducklips::pi+6.){domain.push_back({.08,.01*(9-1-1.4*std::clamp(posture.jaw,0.,1.))});}
         }
-        if(!cells.build(domain,solids,.022)){return 1;}
+        if(scale!=1){
+            for(auto* contour:{&domain,&body,&pad}){for(auto& point:*contour){point.x*=scale;point.y*=scale;}}
+            for(auto& point:blade){point.x*=scale;point.y*=scale;}
+        }
+        if(!cells.build(domain,solids,.022*scale)){return 1;}
         double area=0;for(std::size_t i=0;i<vertices;++i){const auto a=body[i],b=body[(i+1)%vertices];area+=a.x*b.y-a.y*b.x;}
         std::size_t vertical=0,horizontal=0;for(double v:cells.vertical_face){vertical+=v>0;}for(double v:cells.horizontal_face){horizontal+=v>0;}
         output<<time<<','<<std::accumulate(cells.volume.begin(),cells.volume.end(),0.)<<','<<std::abs(area)/2<<','<<error<<','<<*std::max_element(cells.volume.begin(),cells.volume.end())<<','<<vertical<<','<<horizontal<<'\n';++rows;
-        if(argc>=7){
+        if(!destination.empty()){
             std::ostringstream name;
-            if(frames){name<<argv[7]<<"/pose-"<<std::fixed<<std::setprecision(3)<<time<<".json";}else{name<<argv[6];}
-            std::ofstream snapshot(name.str());if(!snapshot){return 2;}snapshot<<std::setprecision(17)<<"{\"time\":"<<time<<",\"depth\":0.022,\"domain\":";points(snapshot,domain);
+            if(frames){name<<destination<<"/pose-"<<std::fixed<<std::setprecision(3)<<time<<".json";}else{name<<destination;}
+            std::ofstream snapshot(name.str());if(!snapshot){return 2;}snapshot<<std::setprecision(17)<<"{\"time\":"<<time<<",\"depth\":"<<.022*scale<<",\"domain\":";points(snapshot,domain);
+            if(!core_body.empty()){
+                snapshot<<",\"partition\":{\"oral_sections\":"<<oral_sections<<",\"epilarynx_sections\":"<<epilarynx_sections
+                        <<",\"lip_sections\":"<<lip_sections<<",\"length_scale\":"<<scale
+                        <<",\"reference_core_arc_cm\":["<<arc_start<<','<<arc_end<<"]}";
+            }
             // These are the end caps of the reconstructed tongue/floor domain.
             // Lip shaping and the time-varying fold aperture are separate body
             // controls, so neither cap is itself a complete anatomical port.

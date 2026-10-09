@@ -75,8 +75,14 @@ not the complete anatomical opening.
 The [general-graph acoustic reference](reports/MOVING_GRAPH.md) now retains
 branch momentum through cycles, allowing multiple mouth regions to share one
 outlet volume. Independent discrete and continuous controls check this
-coupling. Actual lip integration still needs explicit geometric replacement
-seams and closed-lip state transport; no new speech has been rendered with it.
+coupling; no new speech has been rendered with it.
+
+The [articulated-lip reference](reports/PLANAR_LIP_COUPLING.md) now implements
+those replacement seams and connects the final lip section areas and lengths
+from the native articulator replay. Both front-mouth regions share the same
+lip tube; its narrowing changes storage and drives airflow. The tested open-lip
+intervals conserve stored air and retain the tongue seal. Closed-lip transport,
+laryngeal coupling and radiation are still required for this to render speech.
 
 This repository preserves the supplied research snapshot as its first commit.
 [DESIGN.md](DESIGN.md), [FINDINGS.md](FINDINGS.md), and

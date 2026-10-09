@@ -1,0 +1,2739 @@
+{
+  "use": "trimmed planar core with native assembled open-lip sections; inviscid ideal outlet, no new speech",
+  "command": [
+    "/Users/joshuahkuttenkuler/miniforge3/bin/python",
+    "/Users/joshuahkuttenkuler/ducklips/tools/planar_lip_reference.py"
+  ],
+  "partition": {
+    "poses": 66,
+    "maximum_domain_symmetric_difference_m2": 0.0,
+    "volumes": [
+      {
+        "time": 5.02,
+        "core_volume_m3": 5.814932030127963e-05,
+        "removed_volume_m3": 1.0340473236544243e-05
+      },
+      {
+        "time": 5.021,
+        "core_volume_m3": 5.816504852204331e-05,
+        "removed_volume_m3": 1.0340473235724898e-05
+      },
+      {
+        "time": 5.022,
+        "core_volume_m3": 5.8181882935653834e-05,
+        "removed_volume_m3": 1.0340473234945398e-05
+      },
+      {
+        "time": 5.023,
+        "core_volume_m3": 5.820048088445703e-05,
+        "removed_volume_m3": 1.0340473234199778e-05
+      },
+      {
+        "time": 5.024,
+        "core_volume_m3": 5.8220877261669796e-05,
+        "removed_volume_m3": 1.0340473233491713e-05
+      },
+      {
+        "time": 5.025,
+        "core_volume_m3": 5.824272992793311e-05,
+        "removed_volume_m3": 1.0340473232812799e-05
+      },
+      {
+        "time": 5.026,
+        "core_volume_m3": 5.8265515918002776e-05,
+        "removed_volume_m3": 1.0340473232167916e-05
+      },
+      {
+        "time": 5.027,
+        "core_volume_m3": 5.828866952867846e-05,
+        "removed_volume_m3": 1.0340473231549873e-05
+      },
+      {
+        "time": 5.028,
+        "core_volume_m3": 5.831166640724255e-05,
+        "removed_volume_m3": 1.0340473230963496e-05
+      },
+      {
+        "time": 5.029,
+        "core_volume_m3": 5.833406664561056e-05,
+        "removed_volume_m3": 1.0340473230401676e-05
+      },
+      {
+        "time": 5.03,
+        "core_volume_m3": 5.8355530068953926e-05,
+        "removed_volume_m3": 1.0340473229866771e-05
+      },
+      {
+        "time": 5.031,
+        "core_volume_m3": 5.837581456889093e-05,
+        "removed_volume_m3": 1.0340473229356457e-05
+      },
+      {
+        "time": 5.032,
+        "core_volume_m3": 5.8395917512509354e-05,
+        "removed_volume_m3": 1.0340473228870735e-05
+      },
+      {
+        "time": 5.033,
+        "core_volume_m3": 5.841657828054826e-05,
+        "removed_volume_m3": 1.034047322840606e-05
+      },
+      {
+        "time": 5.034,
+        "core_volume_m3": 5.8436555133638996e-05,
+        "removed_volume_m3": 1.0340473227963644e-05
+      },
+      {
+        "time": 5.035,
+        "core_volume_m3": 5.845516590533295e-05,
+        "removed_volume_m3": 1.0340473227542316e-05
+      },
+      {
+        "time": 5.036,
+        "core_volume_m3": 5.8472230864534634e-05,
+        "removed_volume_m3": 1.0340473227138478e-05
+      },
+      {
+        "time": 5.037,
+        "core_volume_m3": 5.8487787859328305e-05,
+        "removed_volume_m3": 1.0340473226754596e-05
+      },
+      {
+        "time": 5.038,
+        "core_volume_m3": 5.8501908155307704e-05,
+        "removed_volume_m3": 1.0340473226388244e-05
+      },
+      {
+        "time": 5.039,
+        "core_volume_m3": 5.851468160931555e-05,
+        "removed_volume_m3": 1.0340473226037084e-05
+      },
+      {
+        "time": 5.04,
+        "core_volume_m3": 5.8526207147163275e-05,
+        "removed_volume_m3": 1.0340473225704702e-05
+      },
+      {
+        "time": 5.041,
+        "core_volume_m3": 5.8536586592893864e-05,
+        "removed_volume_m3": 1.034047322538514e-05
+      },
+      {
+        "time": 5.042,
+        "core_volume_m3": 5.8545920613625097e-05,
+        "removed_volume_m3": 1.0340473225080805e-05
+      },
+      {
+        "time": 5.043,
+        "core_volume_m3": 5.855427727069163e-05,
+        "removed_volume_m3": 1.0340473224792915e-05
+      },
+      {
+        "time": 5.044,
+        "core_volume_m3": 5.856165725395556e-05,
+        "removed_volume_m3": 1.0340473224515495e-05
+      },
+      {
+        "time": 5.045,
+        "core_volume_m3": 5.856832580438698e-05,
+        "removed_volume_m3": 1.034047322425095e-05
+      },
+      {
+        "time": 5.046,
+        "core_volume_m3": 5.857434392127466e-05,
+        "removed_volume_m3": 1.0340473224001698e-05
+      },
+      {
+        "time": 5.047,
+        "core_volume_m3": 5.857977042045914e-05,
+        "removed_volume_m3": 1.0340473223760538e-05
+      },
+      {
+        "time": 5.048,
+        "core_volume_m3": 5.858466095941798e-05,
+        "removed_volume_m3": 1.0340473223532327e-05
+      },
+      {
+        "time": 5.049,
+        "core_volume_m3": 5.858906747843559e-05,
+        "removed_volume_m3": 1.0340473223314619e-05
+      },
+      {
+        "time": 5.05,
+        "core_volume_m3": 5.8593037894435914e-05,
+        "removed_volume_m3": 1.0340473223107489e-05
+      },
+      {
+        "time": 5.051,
+        "core_volume_m3": 5.8596616134244196e-05,
+        "removed_volume_m3": 1.0340473222907291e-05
+      },
+      {
+        "time": 5.052,
+        "core_volume_m3": 5.8599842150103084e-05,
+        "removed_volume_m3": 1.0340473222717684e-05
+      },
+      {
+        "time": 5.053,
+        "core_volume_m3": 5.860275213744757e-05,
+        "removed_volume_m3": 1.0340473222536243e-05
+      },
+      {
+        "time": 5.054,
+        "core_volume_m3": 5.8605378201840477e-05,
+        "removed_volume_m3": 1.03404732223654e-05
+      },
+      {
+        "time": 5.055,
+        "core_volume_m3": 5.860774541233669e-05,
+        "removed_volume_m3": 1.0340473222200344e-05
+      },
+      {
+        "time": 5.056,
+        "core_volume_m3": 5.860988918824539e-05,
+        "removed_volume_m3": 1.0340473222043493e-05
+      },
+      {
+        "time": 5.057,
+        "core_volume_m3": 5.861186355902115e-05,
+        "removed_volume_m3": 1.034047322189487e-05
+      },
+      {
+        "time": 5.058,
+        "core_volume_m3": 5.8613731636962206e-05,
+        "removed_volume_m3": 1.0340473221750867e-05
+      },
+      {
+        "time": 5.059,
+        "core_volume_m3": 5.8625294428380746e-05,
+        "removed_volume_m3": 1.0340473221615112e-05
+      },
+      {
+        "time": 5.06,
+        "core_volume_m3": 5.865665499996917e-05,
+        "removed_volume_m3": 1.034047322148519e-05
+      },
+      {
+        "time": 5.061,
+        "core_volume_m3": 5.870618293132865e-05,
+        "removed_volume_m3": 1.0340473221362316e-05
+      },
+      {
+        "time": 5.062,
+        "core_volume_m3": 5.8768134983832946e-05,
+        "removed_volume_m3": 1.034047322124529e-05
+      },
+      {
+        "time": 5.063,
+        "core_volume_m3": 5.88393688389408e-05,
+        "removed_volume_m3": 1.0340473221130541e-05
+      },
+      {
+        "time": 5.064,
+        "core_volume_m3": 5.891909466795657e-05,
+        "removed_volume_m3": 1.0340473221024059e-05
+      },
+      {
+        "time": 5.065,
+        "core_volume_m3": 5.9002028010500266e-05,
+        "removed_volume_m3": 1.034047322092104e-05
+      },
+      {
+        "time": 5.066,
+        "core_volume_m3": 5.9085486694919935e-05,
+        "removed_volume_m3": 1.0340473220823915e-05
+      },
+      {
+        "time": 5.067,
+        "core_volume_m3": 5.9167258679773034e-05,
+        "removed_volume_m3": 1.034047322073026e-05
+      },
+      {
+        "time": 5.068,
+        "core_volume_m3": 5.9245580692155174e-05,
+        "removed_volume_m3": 1.0340473220640122e-05
+      },
+      {
+        "time": 5.069,
+        "core_volume_m3": 5.931914336419701e-05,
+        "removed_volume_m3": 1.0340473220557059e-05
+      },
+      {
+        "time": 5.07,
+        "core_volume_m3": 5.939395291345875e-05,
+        "removed_volume_m3": 1.03404732204751e-05
+      },
+      {
+        "time": 5.071,
+        "core_volume_m3": 5.946334756332487e-05,
+        "removed_volume_m3": 1.0340473220399057e-05
+      },
+      {
+        "time": 5.072,
+        "core_volume_m3": 5.9526125055277845e-05,
+        "removed_volume_m3": 1.034047322032531e-05
+      },
+      {
+        "time": 5.073,
+        "core_volume_m3": 5.958239276928911e-05,
+        "removed_volume_m3": 1.0340473220253889e-05
+      },
+      {
+        "time": 5.074,
+        "core_volume_m3": 5.9632409149294436e-05,
+        "removed_volume_m3": 1.0340473220187177e-05
+      },
+      {
+        "time": 5.075,
+        "core_volume_m3": 5.9675953235649174e-05,
+        "removed_volume_m3": 1.0340473220122795e-05
+      },
+      {
+        "time": 5.076,
+        "core_volume_m3": 5.9713499894536683e-05,
+        "removed_volume_m3": 1.0340473220063137e-05
+      },
+      {
+        "time": 5.077,
+        "core_volume_m3": 5.974581114331132e-05,
+        "removed_volume_m3": 1.0340473220003391e-05
+      },
+      {
+        "time": 5.078,
+        "core_volume_m3": 5.977358096884492e-05,
+        "removed_volume_m3": 1.0340473219948395e-05
+      },
+      {
+        "time": 5.079,
+        "core_volume_m3": 5.97974307484654e-05,
+        "removed_volume_m3": 1.034047321989573e-05
+      },
+      {
+        "time": 5.08,
+        "core_volume_m3": 5.981790734647939e-05,
+        "removed_volume_m3": 1.0340473219845416e-05
+      },
+      {
+        "time": 5.081,
+        "core_volume_m3": 5.98354861022494e-05,
+        "removed_volume_m3": 1.0340473219796227e-05
+      },
+      {
+        "time": 5.082,
+        "core_volume_m3": 5.9850577098321595e-05,
+        "removed_volume_m3": 1.0340473219751795e-05
+      },
+      {
+        "time": 5.083,
+        "core_volume_m3": 5.986353664949307e-05,
+        "removed_volume_m3": 1.0340473219707295e-05
+      },
+      {
+        "time": 5.084,
+        "core_volume_m3": 5.987466779985217e-05,
+        "removed_volume_m3": 1.0340473219666353e-05
+      },
+      {
+        "time": 5.085,
+        "core_volume_m3": 5.988423075198353e-05,
+        "removed_volume_m3": 1.0340473219626556e-05
+      }
+    ],
+    "hashes": {
+      "out/articulated-lip/poses/pose-5.020.json": "aa65a728ce5527faab6b2f15bbd58b6b6e33403c1ef72908a8e461539c3f4557",
+      "out/planar-boundary/poses/pose-5.020.json": "2b0807df641defc9c4ed178d17003fcde03ff7e7eac1ef3a38599cb624db3421",
+      "out/articulated-lip/poses/pose-5.021.json": "56f7f66db95def8aab9427f4af6004290a2d767b235a3dd311a4f5b7b034b7d5",
+      "out/planar-boundary/poses/pose-5.021.json": "9c716ac62e2a5f814c77af3bb9fe5ad4a8a3ab541d263ca80fe18cb7c5b8d91f",
+      "out/articulated-lip/poses/pose-5.022.json": "3240118fcd0959132e702f6eb522271828b4915fb588756e10d6267e908445ec",
+      "out/planar-boundary/poses/pose-5.022.json": "e548b4ecead42144632f8dc4d0f0fdcbe4d26e58d70157fa87783b57336cc2ab",
+      "out/articulated-lip/poses/pose-5.023.json": "0a4a4e087992c664d9a1daa25ec5ee114800bfcb45e643220f26e42b02ae94da",
+      "out/planar-boundary/poses/pose-5.023.json": "57da6d72c3b6ca6bedcae413dc21c766e542091d005da858e63f9b23e4c4e65b",
+      "out/articulated-lip/poses/pose-5.024.json": "060db74cf8db99183d723c0a21190cf244adbe185d79d51497c603e4a1f9e018",
+      "out/planar-boundary/poses/pose-5.024.json": "6fc89ed25754401d0673ed92a9af1a998221548968c3235e98e78c02ea9da6b4",
+      "out/articulated-lip/poses/pose-5.025.json": "cdea95f0a1196649a043bc6224c42b922da6bd9666b336963c2b2b91b2960339",
+      "out/planar-boundary/poses/pose-5.025.json": "20bda7c0e5f04d53ca459a6459828a004c053813c261b1eecc94595f682ed2e4",
+      "out/articulated-lip/poses/pose-5.026.json": "456d57b1b236e97e95f5ccd09c0758ba407a1e4b4822313ff57cdd1714813b3b",
+      "out/planar-boundary/poses/pose-5.026.json": "27540f6f9377b241e8bf6e602f0cb894526d4248f0e687d15e2634c071bc78de",
+      "out/articulated-lip/poses/pose-5.027.json": "259db93b11984559cb1e3b4788d68434761bb11b0c72ffaf9fefa3cbbd13a475",
+      "out/planar-boundary/poses/pose-5.027.json": "a8aa643d776d4132664ad621c80c9830923d45c6deb60a5333c159f47525d31c",
+      "out/articulated-lip/poses/pose-5.028.json": "3552a609a11c818c07582e308adb8a0c7e00cf6818c6c86f127251660ca87c60",
+      "out/planar-boundary/poses/pose-5.028.json": "78c65a6fcbc84a956a422bc5d9d27c76ac0b7e0511e7da4a54ea687b31170dc7",
+      "out/articulated-lip/poses/pose-5.029.json": "1cd6d319fa493f2abbac70c84adcc6ad68b052b3ddf651a462fe946e9ac4527c",
+      "out/planar-boundary/poses/pose-5.029.json": "7d2cc71ebd4a0d2f6a2a85223abb5a052360d477197a2709c50c75d5f49d7db8",
+      "out/articulated-lip/poses/pose-5.030.json": "1fbbb11e53cdd49bdee371bbf2d8468361941b52cd93dcac1b510fdbc205f16d",
+      "out/planar-boundary/poses/pose-5.030.json": "b0867af3cc846209ef307d054bec2eacffcdcb6eb6b073087476f8d24166fabc",
+      "out/articulated-lip/poses/pose-5.031.json": "e64873a1f910d0472314ab267bedee3b728835e93496430deadfc18cd25e8879",
+      "out/planar-boundary/poses/pose-5.031.json": "fb5f64dd9e1dff7872b289b82104cf33c55d3dbb3653c7b34d5bde247c1a33b0",
+      "out/articulated-lip/poses/pose-5.032.json": "be6d102629b464f2e8409854a0e9679be8faf1136d8f4e9852e9a3256f3c2f36",
+      "out/planar-boundary/poses/pose-5.032.json": "b83ca9a82a6605c98b320a66528d71fbed9c53bd3e03d11fbad1c34c93ae493c",
+      "out/articulated-lip/poses/pose-5.033.json": "32f1d40aba64f728ad4a89d3e1b6b29ebf70f0fc6bdb5c949691a5c1e767ccae",
+      "out/planar-boundary/poses/pose-5.033.json": "f11c878e1dc737da52077af26693c236361b0a75efffc0059f0e133442643874",
+      "out/articulated-lip/poses/pose-5.034.json": "8bf344bd2a3964f0b78e57086dcfed0912fa1094ac4e5f9877a521014c820934",
+      "out/planar-boundary/poses/pose-5.034.json": "5742d677ed9e1cc89b15048c95d59808a32b98338971f4ae3db036cf7baf39d4",
+      "out/articulated-lip/poses/pose-5.035.json": "b520f39b275e2cda3e521fd906f09cdb4317f680097428be944bc5f97bcb9996",
+      "out/planar-boundary/poses/pose-5.035.json": "453b9f0633a6baf0a11e3ab780ad9b6980179cef9110124c282ba46dbf78974e",
+      "out/articulated-lip/poses/pose-5.036.json": "4b442dadb2796af1e7a0af72caf9f62078a620ce9419b2e2980d01fb21883e90",
+      "out/planar-boundary/poses/pose-5.036.json": "59b7e3641dc45788bfa3475daad5b5327b058c505d453d584d99cb3f4bd1e3c3",
+      "out/articulated-lip/poses/pose-5.037.json": "bc5396eb23fb10f36da71e879856d63e9598bb024e80ac385cf7abbfe02cd1b2",
+      "out/planar-boundary/poses/pose-5.037.json": "f76dfe274555b3f272326eb5e374d6d1e01516f71c77779beaf8744b1d1f3808",
+      "out/articulated-lip/poses/pose-5.038.json": "eb46d2dc49697acd6b75725689a6aadc268a9da6861cfc1d79111d7cfcbc4a80",
+      "out/planar-boundary/poses/pose-5.038.json": "e952f113335898c314070f61690694ad2cf83c2469829bbf7f01f2ca1d40c5bc",
+      "out/articulated-lip/poses/pose-5.039.json": "706428bb1f2f88b6eb05f085588101feacd431fa9d2171551b1e3df49531c64b",
+      "out/planar-boundary/poses/pose-5.039.json": "165e2324753df17811d521e256bb21fae6e9d7f935c6d283693876a3fd855dca",
+      "out/articulated-lip/poses/pose-5.040.json": "1890d98994a717d7d18c3a42ee88f57abd63bce8c385b4d6cbf4cc91ddf34cf5",
+      "out/planar-boundary/poses/pose-5.040.json": "758410690cfd86884e12ce4f29e8047af0089b479b6c8e6938f05085b15ddcae",
+      "out/articulated-lip/poses/pose-5.041.json": "10488ba72122d11aebdb43e55f2cc61ff70c93c67f734a8ee0e87f600cdabf93",
+      "out/planar-boundary/poses/pose-5.041.json": "a216dcda3993c146357410c4449e179a2ef7f32c9f247a4fdec6b3addab9239d",
+      "out/articulated-lip/poses/pose-5.042.json": "99f306e250434caea0155c20a0863e365c671469cb545de92e722f64033509a7",
+      "out/planar-boundary/poses/pose-5.042.json": "eecb0884c50cbbbd58833329fb8ca605bb15d3907d66e5e3c367d68fcac71cb3",
+      "out/articulated-lip/poses/pose-5.043.json": "5ccad02933830b1a75ccee7341a69f966d01217d17f697474726777b5a0af1b9",
+      "out/planar-boundary/poses/pose-5.043.json": "d74157eb0503d4f65cd65b824bcc4b86355f8c9974a12a1c0b959f975d033165",
+      "out/articulated-lip/poses/pose-5.044.json": "32d087c8a7060acebf4fd75dbbc881c719db021ff9aa1cc19cd3559a5561a848",
+      "out/planar-boundary/poses/pose-5.044.json": "c53bca35951d392da84581015b3ce2f0b09a81fdfdb19f1c53bcee0090e018a2",
+      "out/articulated-lip/poses/pose-5.045.json": "2ba8ac681e134bf7c560508bcc34407c26c7fba29a2b71219d1368f6d5fcbf8a",
+      "out/planar-boundary/poses/pose-5.045.json": "6273221adce6f8e7285330c6d19fddfcdc38b1094d65fb426b8ecc55f3982cb8",
+      "out/articulated-lip/poses/pose-5.046.json": "f880ebf600af18262e8ac04c08ca521035543112f4379234a84e8a0b8224d364",
+      "out/planar-boundary/poses/pose-5.046.json": "57ae6ddaf8b4b27877eb6854c61ee59c075ca9945169a473cd3d20884e25628a",
+      "out/articulated-lip/poses/pose-5.047.json": "62af6df6190ac5fef7ef77678d709938cc56fe1650d20d62ff826e9c2caefb82",
+      "out/planar-boundary/poses/pose-5.047.json": "08924328d34966e1c5e1bf5ac9b58e8f395cf8e1f1e5aeb2180107e7f807bad9",
+      "out/articulated-lip/poses/pose-5.048.json": "4ed13820dcbd94f78842ab279854907b2b5c536e55d9e9118728ebef41f63625",
+      "out/planar-boundary/poses/pose-5.048.json": "7366362f33e8195c715122b2eff7c8ee7675f8b48f7cc585bed228c4aa679723",
+      "out/articulated-lip/poses/pose-5.049.json": "695e6f336b07c86c31d67d47417f9f8273f20335d5dd3be780674cd5e40bcae1",
+      "out/planar-boundary/poses/pose-5.049.json": "fe248e1fa454a64249dfb1e248f7da83cf888bc2d679883492b624dfaf817f00",
+      "out/articulated-lip/poses/pose-5.050.json": "d314270a8f820e5b76bf1808182ee7b10cf80528525d219234b00ec7d0d8acbe",
+      "out/planar-boundary/poses/pose-5.050.json": "fca7eb0c374d3c82c6cc9349e8935d1f02be1c80f5bd7f554f7f01ec49f774ab",
+      "out/articulated-lip/poses/pose-5.051.json": "802f631a47c5062adfabd2c43fadccf346e2c6d5d7b72b1e5389b02dd388d9a9",
+      "out/planar-boundary/poses/pose-5.051.json": "fa8c85192888c2e5df7ecf628895a1c7a3d7d5c4f9bb3797658eff2ff44f9a52",
+      "out/articulated-lip/poses/pose-5.052.json": "c7f4b67b1681bf9294e91f3780092fdd7faa8239c39219e72de93397b3a322ad",
+      "out/planar-boundary/poses/pose-5.052.json": "3699c67a4a9c7fd1293aa63b1bdf6ace5adc0badef0a3f9a71e3702851ecad70",
+      "out/articulated-lip/poses/pose-5.053.json": "8b0f97280aba41a333a3ec543c23356e6bcb9340e8032d200cf332635f4daac3",
+      "out/planar-boundary/poses/pose-5.053.json": "9d99cb31fe2a02405db7d0aaca6e29c6951626e0f6688e2e4f8cc5f6b0a50a12",
+      "out/articulated-lip/poses/pose-5.054.json": "1468db85d657bcefe12ea972895de891ad51baa9b2dd0ba2ec068b4f0c941178",
+      "out/planar-boundary/poses/pose-5.054.json": "80436c18deb6ad2d0953c65d5c59a564a422bd59c8461418c6a9371f1ca70489",
+      "out/articulated-lip/poses/pose-5.055.json": "c7a9654ab44c69db8e744937a7cbc50914e054aa814834b6d11abb48c77444d8",
+      "out/planar-boundary/poses/pose-5.055.json": "fa7dec851f50312f3b6589174fcb624d32012e4be2de77103791cc2d62b82fb1",
+      "out/articulated-lip/poses/pose-5.056.json": "1f8b53c8c37b24782cd4fe19c9878f4a5b8b9eaf7a931b4d7ceaf707c57e95b2",
+      "out/planar-boundary/poses/pose-5.056.json": "6d98bb97f69c18df0f304414a28c0f1b052e7acf86bcae9c6eb7558734d9af47",
+      "out/articulated-lip/poses/pose-5.057.json": "1f271dd4109a877cff7e34e9d19add5b7312cc91a8fc289f08903b88ab2f8c9a",
+      "out/planar-boundary/poses/pose-5.057.json": "6e517fb84aa62ea3a98c1f42c45bd5a000b40c8bf71cf3e88317682f560d887d",
+      "out/articulated-lip/poses/pose-5.058.json": "3ae8449af6b848105073f97b0f5a213872bcb3cc50fe98ebd898481a97e34a82",
+      "out/planar-boundary/poses/pose-5.058.json": "d3974dba5e3c4de9b7986785b428efa2fbf7b05cc4b586d60dd3c67f7716cf09",
+      "out/articulated-lip/poses/pose-5.059.json": "0ff876ed674d601d4f3db03caf5aef8e84cb9d4f0156905f35ec5059d5578392",
+      "out/planar-boundary/poses/pose-5.059.json": "331ca1e79269dcfc7ffa4b50a49c856c351b6b6ec50c82abb82a66aff89e53de",
+      "out/articulated-lip/poses/pose-5.060.json": "4fd9d3fb5863340c2afe7bad4ca13fee8523c333f4db1831786b87d548a242dc",
+      "out/planar-boundary/poses/pose-5.060.json": "d50186c19996b09e46bac73f5a30f2c6bc0d66cb614e7bcaabb46bf515669d95",
+      "out/articulated-lip/poses/pose-5.061.json": "b16934735009bc5a7a5f324d3b9b4bfe851b76718d57f92c4b105a8af44f3fc1",
+      "out/planar-boundary/poses/pose-5.061.json": "7409e161a1f0b0e3e0dadabc5bcca8ab78b13435c19f9ada71a321810f18de90",
+      "out/articulated-lip/poses/pose-5.062.json": "41871f4d0dd27c784a76615fa445d8ebb0caad532c539544621814f6880e4745",
+      "out/planar-boundary/poses/pose-5.062.json": "84bff3cd353072dca169eb9a7eba6d7d530875ff23ec0e56bc4db37e7ef715b5",
+      "out/articulated-lip/poses/pose-5.063.json": "a5711e1cc37840132f3398d452835197c2be0e12e02b30bbde39fe15fecedb2e",
+      "out/planar-boundary/poses/pose-5.063.json": "dffafa1cf007c019dc61ea95ee368f4f1cb0c849a737423f4d206b0c28a13cce",
+      "out/articulated-lip/poses/pose-5.064.json": "af773b429e2b2382cc405df056bbad4629f357f221a31386ad7b532221a7ccd6",
+      "out/planar-boundary/poses/pose-5.064.json": "32bb871b1f3363dfcc07571897a663eb221d7643cf8ec4c099168f4df7e986d3",
+      "out/articulated-lip/poses/pose-5.065.json": "211ee1b5cbb48a0a78e23440db890d51b6e79dcd037c059650c3c9b42458ffc3",
+      "out/planar-boundary/poses/pose-5.065.json": "c4a646798c308cdf8e7c22dd1788bbe5cdf015312ccf4de6fcbc6bab145ef36d",
+      "out/articulated-lip/poses/pose-5.066.json": "ee04d6f2d04233ab895732236741cea48acb7274a3be1f5c41093b744397c7b3",
+      "out/planar-boundary/poses/pose-5.066.json": "9f106e292a25329adcf5c3fa21250fa8dd378d09750112409c2aedd82073f22f",
+      "out/articulated-lip/poses/pose-5.067.json": "dce4c0e9c42566e466e45b8789ab731ac6fe5936d21c40c6a56651e4be8a4451",
+      "out/planar-boundary/poses/pose-5.067.json": "c236048cb3d34b61d13d31710aaa9b15808e09b10c55aac8ca6d04baa1847491",
+      "out/articulated-lip/poses/pose-5.068.json": "c96974f55f099e0f87c1f0c1165977ba4025780335fc2209e5778f04cc7da3b8",
+      "out/planar-boundary/poses/pose-5.068.json": "70a3e2997ce4063ccc5f189e1de2ef7dfb121439f11fee3b0ff79cbd1d289668",
+      "out/articulated-lip/poses/pose-5.069.json": "5af466b01275ba04522825b50781db53c4f32331e61d9d7df0887b36257ecfe2",
+      "out/planar-boundary/poses/pose-5.069.json": "e92fe97a16b73894ca78d58bc1dcc169f697df838548aea853f247ca93c6c0bf",
+      "out/articulated-lip/poses/pose-5.070.json": "fe8c40eef704b99f5d778e4117cfa276b294b55140cfceb2f800796829c6e54e",
+      "out/planar-boundary/poses/pose-5.070.json": "5c88f331a34ab593e29d4da07cfda616a0331d2a6b5499b871a4e3cc5639e082",
+      "out/articulated-lip/poses/pose-5.071.json": "797c00bb70a732277de2d46fb87237b26c8002394c76e72d372b1e335c43f4c6",
+      "out/planar-boundary/poses/pose-5.071.json": "b3fd0e0e3fbab6881a3e8e5ad8fb695fa46dce354d3ab20d48d452701f11977f",
+      "out/articulated-lip/poses/pose-5.072.json": "c196c3aeff73f4fca55c78d7ce144eeb067861a9383bb3c12675e3fa24a57cf2",
+      "out/planar-boundary/poses/pose-5.072.json": "39411f4c4b2fbf6c033685a9b0245c787e6363a7dcdda0ad60b2e3e029648223",
+      "out/articulated-lip/poses/pose-5.073.json": "670f2f11f89d28cbb2c5e18aa62eae1ed7414fdf14aa613561a56c1611f5ba49",
+      "out/planar-boundary/poses/pose-5.073.json": "79fc704ea34d230be856936e5392457dfecb740c0bfa9b9a15e8af3c647adf64",
+      "out/articulated-lip/poses/pose-5.074.json": "bf5b44221e90336e7b75c49cac5ed872166f1817ce1a66b2f7a6df3a0722fa3c",
+      "out/planar-boundary/poses/pose-5.074.json": "ff1c9ad8704d635643ce3d744a43a6477026b8577fa9fc21a06bca74923e40e6",
+      "out/articulated-lip/poses/pose-5.075.json": "494f39cb3d707abfacfe8a2ad08d791e4b005fed075bf8c97ed35652b1936e35",
+      "out/planar-boundary/poses/pose-5.075.json": "1947a938a9a0d42e20c168b6d53217cf1d1bf70c70cb996f957642d870c117cf",
+      "out/articulated-lip/poses/pose-5.076.json": "a22a5a4f48a7fc7c730c057378c9f68665de339fe24748c82a473032084fc4aa",
+      "out/planar-boundary/poses/pose-5.076.json": "28e71636a5ce3b96c7279f58e1f16cbdbcffc2bd1894b6c0936c80596dff554c",
+      "out/articulated-lip/poses/pose-5.077.json": "14a3affd03191728f3618b4e7d85b78002d32397ecbcb18c3f29981a842303c1",
+      "out/planar-boundary/poses/pose-5.077.json": "4ea189aefa8056f7e87dfa8106e3b54d6ba1a8854f44e0a52e0a11cfaf005da6",
+      "out/articulated-lip/poses/pose-5.078.json": "30b047a7c8ec97f360a7c14008158c0f93c46aa9b380cfc5aa3daee1a05890b1",
+      "out/planar-boundary/poses/pose-5.078.json": "3bbd262d810c4490734ffcda657c60f9e8d86ca6145eb3df9a80c0f87ce0125b",
+      "out/articulated-lip/poses/pose-5.079.json": "130a95514ebe3b84159dcb231c53bcc36b946844cf40f53574488ad9c0a872ef",
+      "out/planar-boundary/poses/pose-5.079.json": "79418da9bf9f0c68cb4a65edb7980e25c549b680f20e567080d793710da3ce0f",
+      "out/articulated-lip/poses/pose-5.080.json": "1da72643f40041ec3560d044d3d00b9c9522bb69a1439af016578c363740eb38",
+      "out/planar-boundary/poses/pose-5.080.json": "e78b1ea3dab005f6f6fade8d95cecf2b5374468312d773e39a4bc0b4ba84a85a",
+      "out/articulated-lip/poses/pose-5.081.json": "52347d5b0cbe95e32211d83e76e4f2411a91ba366239e10daa2b2d0f62888410",
+      "out/planar-boundary/poses/pose-5.081.json": "b0954f3b4c50afe82de6a5102ab605a8d3e82293b568ba25e97a50cef321e0be",
+      "out/articulated-lip/poses/pose-5.082.json": "0d0b4a814d05d7a02a413f32597387ec392de6ba01c9d5e99b21bddbcf782916",
+      "out/planar-boundary/poses/pose-5.082.json": "b9e5ed77c2522a6f644d368f87ec8454248dca6cf1dd720749ef78fab770121a",
+      "out/articulated-lip/poses/pose-5.083.json": "dcef1110642c47efdd4ac3e351a26b0688e8f6ff9c0344d8db94335077505b18",
+      "out/planar-boundary/poses/pose-5.083.json": "4e3c7d36e938899c6269ca4899018d61e90a3f94ec2b9e334cf38cc540962f13",
+      "out/articulated-lip/poses/pose-5.084.json": "67b94ea7dd955c89dc0620dda65f165f4b7aea6c87068fbc0d14a1cdd2804061",
+      "out/planar-boundary/poses/pose-5.084.json": "a9573ac84d54f451dfe2599a2db0b0b7bd797afcd3f9ab5162e58ca5a9b5a9e5",
+      "out/articulated-lip/poses/pose-5.085.json": "2f9824e7680bf757b2fd5aa2a99b2a9772d3199bce2f56af8aa33286293920c0",
+      "out/planar-boundary/poses/pose-5.085.json": "7aa762ac5d91d8c3a47d0d0dfd2151cc99cf32c12520478367bd73f0f8bd954f"
+    }
+  },
+  "runs": [
+    {
+      "name": "closure",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-16.txt",
+      "output": "out/articulated-lip/closure-16.json",
+      "log": "out/articulated-lip/closure-16.log",
+      "input_sha256": "e93cec695a9d6869bf449f510c1c200ac1d08d2088bbea125b400cb6a1218b13",
+      "output_sha256": "e86388630875c0fd75bc85c01ed1fd531e99476b4959c4401f89d3009409bf53",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_m3": 1.2874900798265365e-19,
+        "internal_port_area_m2": 4.336808689942018e-18,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "oracle_pressure_Pa": 1.988659903418011e-09,
+        "oracle_momentum_Pa_s": 8.654101740779296e-14,
+        "average_flow_m3_s": 2.6835738068975738e-15,
+        "local_mass_m3": 5.1889039825451426e-21,
+        "global_mass_m3": 1.4907779871675686e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 6.938893903907228e-17
+      },
+      "geometry_snapshots": 52,
+      "intermediate_witness_checks": 255,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9987162273927235,
+        1.0061379458718054
+      ],
+      "final_pressure_Pa": [
+        855.5189530680283,
+        857.1641409976235,
+        170.15071005934703,
+        51.29798600696149,
+        44.22866026995063,
+        37.27611709056006,
+        28.681772494304344,
+        17.978146988006436,
+        6.335210111266876
+      ],
+      "net_ambient_outflow_m3": -1.1912004445186981e-07,
+      "lip_volume_change_m3": 9.410536043995277e-18,
+      "audit": "out/articulated-lip/closure-16-audit.json",
+      "audit_sha256": "8e7843ca2ae56e6df6e01b2f5bdc9605339e84b5bb4108100a0640ac4f92d6c6"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-32.txt",
+      "output": "out/articulated-lip/closure-32.json",
+      "log": "out/articulated-lip/closure-32.log",
+      "input_sha256": "6baefa1ec7db3b5a1835397db0bcf586ba818af040ab46ef882dc4dd4570d964",
+      "output_sha256": "36073f7ae7af4649bd11c16cee6f5bef815def89a08cf5ff1d640ddfac89b9a5",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_m3": 2.0328790734103208e-19,
+        "internal_port_area_m2": 4.336808689942018e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 2.0975079451091005e-09,
+        "oracle_momentum_Pa_s": 7.231824663308899e-14,
+        "average_flow_m3_s": 2.350851271342645e-15,
+        "local_mass_m3": 5.499581388392696e-21,
+        "global_mass_m3": 1.4907779871675686e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 7.632783294297951e-17
+      },
+      "geometry_snapshots": 100,
+      "intermediate_witness_checks": 495,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.998536667504472,
+        1.0061358787083785
+      ],
+      "final_pressure_Pa": [
+        855.6220346763607,
+        856.8754616250638,
+        171.93892575593196,
+        56.25465172287609,
+        33.33454560594267,
+        32.96937455186084,
+        25.876532694935126,
+        17.599368949474215,
+        6.595575568266585
+      ],
+      "net_ambient_outflow_m3": -1.1915748125419285e-07,
+      "lip_volume_change_m3": 9.410536043995277e-18,
+      "audit": "out/articulated-lip/closure-32-audit.json",
+      "audit_sha256": "0d47e6856c6475079b5c7d5a4d2569bf2967eb3cb91b8814d348bf712d7e7029"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-64.txt",
+      "output": "out/articulated-lip/closure-64.json",
+      "log": "out/articulated-lip/closure-64.log",
+      "input_sha256": "1b4dda495f13064da44da5d7b6fd627ae3be1650d0d033afdb06cfd3837538d4",
+      "output_sha256": "5725b057d56f6e1858f97377da091804e0d2d6429e6e83c3711c01d3e11a4891",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_m3": 2.1006417091906648e-19,
+        "internal_port_area_m2": 4.9873299934333204e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 1.5049916868292712e-09,
+        "oracle_momentum_Pa_s": 6.999956170261612e-14,
+        "average_flow_m3_s": 1.6173501204757787e-15,
+        "local_mass_m3": 5.977827491767593e-21,
+        "global_mass_m3": 1.4907779871675686e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 1.6653345369377348e-16
+      },
+      "geometry_snapshots": 196,
+      "intermediate_witness_checks": 975,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9985392689533199,
+        1.0061357236192285
+      ],
+      "final_pressure_Pa": [
+        855.6297725387884,
+        856.853803425275,
+        172.79500772469086,
+        50.71890264100911,
+        55.03869060058423,
+        38.836567093914596,
+        29.34517180297563,
+        17.83241412913509,
+        6.0317226148719705
+      ],
+      "net_ambient_outflow_m3": -1.1923187491006645e-07,
+      "lip_volume_change_m3": 9.410536043995277e-18,
+      "audit": "out/articulated-lip/closure-64-audit.json",
+      "audit_sha256": "57c38576b550bc11a12c6f999cafbc2b0cd337a312e16b9a12899add2da7f4cf"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-128.txt",
+      "output": "out/articulated-lip/closure-128.json",
+      "log": "out/articulated-lip/closure-128.log",
+      "input_sha256": "5104d6c1ada8b7ea402932d54d7a6e3f9d8c0408bdccdb43442add10fee8c347",
+      "output_sha256": "83770d576f021332e1915f1e1a9c48fbcfd1e5be5432aac52a7a970f4d4edbe7",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_m3": 2.303929616531697e-19,
+        "internal_port_area_m2": 4.9873299934333204e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 1.1644090136542218e-09,
+        "oracle_momentum_Pa_s": 6.694644838489694e-14,
+        "average_flow_m3_s": 9.15303802802997e-16,
+        "local_mass_m3": 6.622808649708745e-21,
+        "global_mass_m3": 1.4907779871675686e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 1.6653345369377348e-16
+      },
+      "geometry_snapshots": 388,
+      "intermediate_witness_checks": 1935,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9985394590762311,
+        1.0061357106750053
+      ],
+      "final_pressure_Pa": [
+        855.63042049124,
+        856.8519957644878,
+        172.79354061092283,
+        51.244471135547215,
+        59.486231905169014,
+        34.88883987983926,
+        27.77119740705596,
+        18.511383193312206,
+        6.451308959588035
+      ],
+      "net_ambient_outflow_m3": -1.1921774724231552e-07,
+      "lip_volume_change_m3": 9.410536043995277e-18,
+      "audit": "out/articulated-lip/closure-128-audit.json",
+      "audit_sha256": "88d1e5d57254d679f1eefdc6857cbe792c77888c30618adaaa8b790ecf60c623"
+    },
+    {
+      "name": "release",
+      "subdivisions": 16,
+      "steps": 17,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-16.txt",
+      "output": "out/articulated-lip/release-16.json",
+      "log": "out/articulated-lip/release-16.log",
+      "input_sha256": "a28c4585a4cf89224053501b401fc71e646c6aae5889f5cd22bebab593012ed5",
+      "output_sha256": "0c8055b9b73cfc0a360a496f0c1f64f7409d5275847d9f0e442cb9513afbf829",
+      "log_sha256": "c8d673e9dfab798887411fd0e1dd0508150e1af07090c298049f6ac59dae5754",
+      "maxima": {
+        "volume_m3": 2.168404344971009e-19,
+        "internal_port_area_m2": 4.553649124439119e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 3.2084699341794476e-09,
+        "oracle_momentum_Pa_s": 1.163513729807164e-13,
+        "average_flow_m3_s": 1.1684446812876281e-15,
+        "local_mass_m3": 6.138093735449742e-21,
+        "global_mass_m3": 1.0842021724855044e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 9.020562075079397e-17
+      },
+      "geometry_snapshots": 52,
+      "intermediate_witness_checks": 255,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9937903481508895,
+        1.0134045399540481
+      ],
+      "final_pressure_Pa": [
+        1866.7318510536516,
+        1871.9440045828194,
+        515.1720395037156,
+        172.62731607768174,
+        255.2042400357078,
+        129.8701585078157,
+        99.4181069651487,
+        63.076206470459915,
+        22.177018335830844
+      ],
+      "net_ambient_outflow_m3": -5.32291824987744e-07,
+      "lip_volume_change_m3": -4.456935018254275e-09,
+      "audit": "out/articulated-lip/release-16-audit.json",
+      "audit_sha256": "e3d19bf82bc5acd29dc4d75239876a15795b8795e2966f9ad6967d2bace02c43"
+    },
+    {
+      "name": "release",
+      "subdivisions": 32,
+      "steps": 33,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-32.txt",
+      "output": "out/articulated-lip/release-32.json",
+      "log": "out/articulated-lip/release-32.log",
+      "input_sha256": "3f09fdd1d4abf30fb497e44cfc42f5e83f9a38259cb8a630bd12f05b856126f2",
+      "output_sha256": "c278550312f0cedbb6ebf7d06986d08f91d2d1d7232ce8e1295ac1ae1442d095",
+      "log_sha256": "e770da5e4407bd8d66024f4351c0746dae5ddc92949173a224a41b7fbd26d6f7",
+      "maxima": {
+        "volume_m3": 2.168404344971009e-19,
+        "internal_port_area_m2": 5.204170427930421e-18,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "oracle_pressure_Pa": 2.2936319510336034e-09,
+        "oracle_momentum_Pa_s": 1.1890488593735427e-13,
+        "average_flow_m3_s": 1.3976145273649626e-15,
+        "local_mass_m3": 6.368360138469191e-21,
+        "global_mass_m3": 1.0842021724855044e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 1.1102230246251565e-16
+      },
+      "geometry_snapshots": 100,
+      "intermediate_witness_checks": 495,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9935098947306704,
+        1.0133949358997558
+      ],
+      "final_pressure_Pa": [
+        1867.0142140963524,
+        1870.6027984009008,
+        523.5309956905745,
+        264.5020222646682,
+        -109.25066785050599,
+        29.29078619062556,
+        4.44170515866173,
+        -5.8481762903711045,
+        -3.438598542168613
+      ],
+      "net_ambient_outflow_m3": -5.295471550779209e-07,
+      "lip_volume_change_m3": -4.456935018254275e-09,
+      "audit": "out/articulated-lip/release-32-audit.json",
+      "audit_sha256": "be8ad24d6ad0eeba563b6723bd4f16d367aa75e23b57fb160434ba62146f885e"
+    },
+    {
+      "name": "release",
+      "subdivisions": 64,
+      "steps": 65,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-64.txt",
+      "output": "out/articulated-lip/release-64.json",
+      "log": "out/articulated-lip/release-64.log",
+      "input_sha256": "c6a6240252358bfd10f44c859e54abd5e3424e3844c9931bb6476d83feb3a4d2",
+      "output_sha256": "91969361c4ea640b700e439b8fd7cecd2d13251a783cc72ba1b2080eb203399f",
+      "log_sha256": "20dd5fac7cde36280ce55d9387344a3320892a2f698ba17649b129e91eae1242",
+      "maxima": {
+        "volume_m3": 2.168404344971009e-19,
+        "internal_port_area_m2": 5.421010862427522e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 1.868841081886785e-09,
+        "oracle_momentum_Pa_s": 5.473399511402022e-14,
+        "average_flow_m3_s": 1.4698766021611215e-15,
+        "local_mass_m3": 6.239423360487488e-21,
+        "global_mass_m3": 1.0842021724855044e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 1.1102230246251565e-16
+      },
+      "geometry_snapshots": 196,
+      "intermediate_witness_checks": 975,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9935005413067006,
+        1.013394087344846
+      ],
+      "final_pressure_Pa": [
+        1867.0541755352142,
+        1870.4842977077315,
+        528.1041874670283,
+        252.66613910970028,
+        -114.45340911117358,
+        63.330998571690465,
+        42.97178289162793,
+        27.538445825923496,
+        10.42476877144924
+      ],
+      "net_ambient_outflow_m3": -5.304770817149593e-07,
+      "lip_volume_change_m3": -4.456935018254275e-09,
+      "audit": "out/articulated-lip/release-64-audit.json",
+      "audit_sha256": "5ef4231b21f26d2a2f9756794ccd23ef930a28cce25fbe7beeeeed00c9c7bca2"
+    },
+    {
+      "name": "release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-128.txt",
+      "output": "out/articulated-lip/release-128.json",
+      "log": "out/articulated-lip/release-128.log",
+      "input_sha256": "e803c87de926c6ce06b8a4ccd801a0cd6a06a84b65d3c2e2f926a05cd821e2b6",
+      "output_sha256": "52c76dbe6c8d9bebf88d1b11863617ec6811bc9316b566759b7b3bcdc8d687ec",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "maxima": {
+        "volume_m3": 2.168404344971009e-19,
+        "internal_port_area_m2": 5.204170427930421e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 1.1332872418279294e-09,
+        "oracle_momentum_Pa_s": 5.140332604014475e-14,
+        "average_flow_m3_s": 1.5543088463434301e-15,
+        "local_mass_m3": 5.864443971123874e-21,
+        "global_mass_m3": 1.2197274440461925e-19,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 1.6653345369377348e-16
+      },
+      "geometry_snapshots": 388,
+      "intermediate_witness_checks": 1935,
+      "continuously_open_port_witnesses": [],
+      "relative_density_range": [
+        0.9934465973267392,
+        1.0133940243513424
+      ],
+      "final_pressure_Pa": [
+        1867.0572617628436,
+        1870.4755006649787,
+        528.4347909488692,
+        251.33948568160775,
+        -115.24778272031926,
+        68.21977794184453,
+        49.392055395198575,
+        28.568526682419833,
+        8.69913552758513
+      ],
+      "net_ambient_outflow_m3": -5.305430924320038e-07,
+      "lip_volume_change_m3": -4.456935018254275e-09,
+      "audit": "out/articulated-lip/release-128-audit.json",
+      "audit_sha256": "3af292c76d7f20a21abdd0deb5657951fcc9b1a65d5d871f8ef04e85dd055c6c"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 16,
+      "steps": 16,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-16.txt",
+      "output": "out/articulated-lip/lip-narrowing-16.json",
+      "log": "out/articulated-lip/lip-narrowing-16.log",
+      "input_sha256": "3983393e5d193668f68eb3955aa7bf909aadb256f7ae2465c5debf8c1eb096a6",
+      "output_sha256": "500e06d3ac0310b09d453282c51dcfeb677e9ba67bf5e206e87e3095768d98ef",
+      "log_sha256": "19e51e3f38645968d23d97479bb654d462360cfc41b34aa4e5e85a884dc5b6d7",
+      "maxima": {
+        "volume_m3": 1.6263032587282567e-19,
+        "internal_port_area_m2": 3.686287386450715e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 1.228727342095226e-09,
+        "oracle_momentum_Pa_s": 7.399462986779071e-14,
+        "average_flow_m3_s": 1.2232239960524582e-15,
+        "local_mass_m3": 5.959009132832011e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 5.898059818321144e-17
+      },
+      "geometry_snapshots": 49,
+      "intermediate_witness_checks": 240,
+      "continuously_open_port_witnesses": [
+        {
+          "pair": [
+            0,
+            1
+          ],
+          "minimum_certified_open_area_m2": 0.0011374664762406406
+        },
+        {
+          "pair": [
+            1,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.0001335995756787907
+        },
+        {
+          "pair": [
+            2,
+            3
+          ],
+          "minimum_certified_open_area_m2": 0.000527999999805036
+        },
+        {
+          "pair": [
+            3,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.00027742316139467
+        },
+        {
+          "pair": [
+            1,
+            2
+          ],
+          "minimum_certified_open_area_m2": 0.00035747155709615685
+        }
+      ],
+      "relative_density_range": [
+        0.995686213980707,
+        1.00435479184171
+      ],
+      "final_pressure_Pa": [
+        -431.80623565887856,
+        -593.6935708482291,
+        -397.52722146963373,
+        -119.23660511676583,
+        -181.4103980748211,
+        -87.03149431379846,
+        -76.24308315655557,
+        -99.21405130754451,
+        -50.20549403546553
+      ],
+      "net_ambient_outflow_m3": 4.67133063027186e-07,
+      "lip_volume_change_m3": -1.033793248491663e-07,
+      "audit": "out/articulated-lip/lip-narrowing-16-audit.json",
+      "audit_sha256": "12e428df7cae61d9f9869d873fca3f6a21b79d68177d487fbe63ebc342377993"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 32,
+      "steps": 32,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-32.txt",
+      "output": "out/articulated-lip/lip-narrowing-32.json",
+      "log": "out/articulated-lip/lip-narrowing-32.log",
+      "input_sha256": "66633f8e9736aba231aaca107e1c5c70441a2371eb79fa06cd78b17bb2024385",
+      "output_sha256": "27cd5e014755678ee3795bdc31c5d83430f6dbeeac8e319b15f5125f45660ef3",
+      "log_sha256": "b7590bc5bc27ccb70324a728e807e6c8486ac531a7366cb831f2bfbdd0392197",
+      "maxima": {
+        "volume_m3": 1.6263032587282567e-19,
+        "internal_port_area_m2": 3.903127820947816e-18,
+        "cap_area_m2": 3.2526065174565133e-19,
+        "oracle_pressure_Pa": 7.765095233480679e-10,
+        "oracle_momentum_Pa_s": 6.258014939586332e-14,
+        "average_flow_m3_s": 1.2531750810673703e-15,
+        "local_mass_m3": 5.072271516175166e-21,
+        "global_mass_m3": 5.421010862427522e-20,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 5.898059818321144e-17
+      },
+      "geometry_snapshots": 97,
+      "intermediate_witness_checks": 480,
+      "continuously_open_port_witnesses": [
+        {
+          "pair": [
+            0,
+            1
+          ],
+          "minimum_certified_open_area_m2": 0.0011374664762406406
+        },
+        {
+          "pair": [
+            1,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.0001335995756787907
+        },
+        {
+          "pair": [
+            2,
+            3
+          ],
+          "minimum_certified_open_area_m2": 0.000527999999805036
+        },
+        {
+          "pair": [
+            3,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.00027742316139467
+        },
+        {
+          "pair": [
+            1,
+            2
+          ],
+          "minimum_certified_open_area_m2": 0.00035747155709615685
+        }
+      ],
+      "relative_density_range": [
+        0.995564231151209,
+        1.0043562244807456
+      ],
+      "final_pressure_Pa": [
+        -432.8736453131406,
+        -591.0157513115678,
+        -399.18934752256314,
+        -126.62296795114008,
+        -162.19036010244045,
+        -77.99106989662246,
+        -36.359403038672916,
+        -18.44231969485796,
+        10.133075709684226
+      ],
+      "net_ambient_outflow_m3": 4.659629812100941e-07,
+      "lip_volume_change_m3": -1.033793248491663e-07,
+      "audit": "out/articulated-lip/lip-narrowing-32-audit.json",
+      "audit_sha256": "d35d7046607e3c9975f8647cd4bf3cda1ddae3d656a69db600f8551a998fe60f"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-64.txt",
+      "output": "out/articulated-lip/lip-narrowing-64.json",
+      "log": "out/articulated-lip/lip-narrowing-64.log",
+      "input_sha256": "25435f7b8d27f865163358f51175b9081491989656557400742650826b61f45c",
+      "output_sha256": "fce5ed48e7474438ade6ef0627aa0bc080b6a9ee42f563b88f3aecbc0375e9d2",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "maxima": {
+        "volume_m3": 2.1006417091906648e-19,
+        "internal_port_area_m2": 4.336808689942018e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 5.973959105176618e-10,
+        "oracle_momentum_Pa_s": 4.732846059507523e-14,
+        "average_flow_m3_s": 7.464189856476455e-16,
+        "local_mass_m3": 5.738979089892906e-21,
+        "global_mass_m3": 5.421010862427522e-20,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 9.367506770274758e-17
+      },
+      "geometry_snapshots": 193,
+      "intermediate_witness_checks": 960,
+      "continuously_open_port_witnesses": [
+        {
+          "pair": [
+            0,
+            1
+          ],
+          "minimum_certified_open_area_m2": 0.0011374664762406406
+        },
+        {
+          "pair": [
+            1,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.0001335995756787907
+        },
+        {
+          "pair": [
+            2,
+            3
+          ],
+          "minimum_certified_open_area_m2": 0.000527999999805036
+        },
+        {
+          "pair": [
+            3,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.00027742316139467
+        },
+        {
+          "pair": [
+            1,
+            2
+          ],
+          "minimum_certified_open_area_m2": 0.00035747155709615685
+        }
+      ],
+      "relative_density_range": [
+        0.9955623240134327,
+        1.0043563238954174
+      ],
+      "final_pressure_Pa": [
+        -432.9473595548341,
+        -590.943135174738,
+        -398.88575675698803,
+        -133.94463276730832,
+        -157.85699913248095,
+        -43.30179221051995,
+        -34.42673970064288,
+        -10.182308886849185,
+        15.87627417158972
+      ],
+      "net_ambient_outflow_m3": 4.6572012205483123e-07,
+      "lip_volume_change_m3": -1.033793248491663e-07,
+      "audit": "out/articulated-lip/lip-narrowing-64-audit.json",
+      "audit_sha256": "87a60b10c20495784b226ee4554346439135600662eb8f44d53f271c75676809"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 128,
+      "steps": 128,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-128.txt",
+      "output": "out/articulated-lip/lip-narrowing-128.json",
+      "log": "out/articulated-lip/lip-narrowing-128.log",
+      "input_sha256": "1e9a8b2de55bc09df7ef963663b853b28bf91c1c3df34e2f3f6702308f3f9796",
+      "output_sha256": "36d4b4d5660fd0eb770eb10d3d150dab94b4ff1a798df36ae13905c30005e867",
+      "log_sha256": "6e1c70282283efb9cb8ceebc0972d247e12f78480e922a44e6c8e68ae24883b6",
+      "maxima": {
+        "volume_m3": 2.1006417091906648e-19,
+        "internal_port_area_m2": 4.336808689942018e-18,
+        "cap_area_m2": 3.7947076036992655e-19,
+        "oracle_pressure_Pa": 6.708091859763954e-10,
+        "oracle_momentum_Pa_s": 3.0019389751778647e-14,
+        "average_flow_m3_s": 4.445228907190568e-16,
+        "local_mass_m3": 6.144711180350166e-21,
+        "global_mass_m3": 4.0657581468206416e-20,
+        "closed_neck_flow_m3_s": 0.0,
+        "metric_conductance": 9.367506770274758e-17
+      },
+      "geometry_snapshots": 385,
+      "intermediate_witness_checks": 1920,
+      "continuously_open_port_witnesses": [
+        {
+          "pair": [
+            0,
+            1
+          ],
+          "minimum_certified_open_area_m2": 0.0011374664762406406
+        },
+        {
+          "pair": [
+            1,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.0001335995756787907
+        },
+        {
+          "pair": [
+            2,
+            3
+          ],
+          "minimum_certified_open_area_m2": 0.000527999999805036
+        },
+        {
+          "pair": [
+            3,
+            4
+          ],
+          "minimum_certified_open_area_m2": 0.00027742316139467
+        },
+        {
+          "pair": [
+            1,
+            2
+          ],
+          "minimum_certified_open_area_m2": 0.00035747155709615685
+        }
+      ],
+      "relative_density_range": [
+        0.9955622369102615,
+        1.0043585417137906
+      ],
+      "final_pressure_Pa": [
+        -432.95194688057137,
+        -590.942137376823,
+        -398.8705277205477,
+        -134.73554231417552,
+        -157.86103190939346,
+        -33.943961483559654,
+        -19.715025908694326,
+        -38.129106483383644,
+        -39.771558132833235
+      ],
+      "net_ambient_outflow_m3": 4.6598323606997533e-07,
+      "lip_volume_change_m3": -1.033793248491663e-07,
+      "audit": "out/articulated-lip/lip-narrowing-128-audit.json",
+      "audit_sha256": "086af75a21f2e648a5d01388cdabb8e9fe04f5db4c5eafc2707cb6cd22f481ab"
+    }
+  ],
+  "controls": [
+    {
+      "name": "symmetry-0-0",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.00044,
+          0.004,
+          0.00044,
+          0.004
+        ],
+        [
+          0.00044,
+          0.004,
+          0.00044,
+          0.004
+        ]
+      ],
+      "attachments": [
+        [
+          1,
+          0,
+          0.02
+        ]
+      ],
+      "input": "out/articulated-lip/symmetry-0-0-64.txt",
+      "output": "out/articulated-lip/symmetry-0-0-64.json",
+      "log": "out/articulated-lip/symmetry-0-0-64.log",
+      "input_sha256": "a4a540971d3e0fcc87f3453512c148a9154bc5e5bdea34608f6f483c0388f064",
+      "output_sha256": "1f1c01d5e804e096c1ad13a7fab503bbee3a94019b1beee6fff7eb473ec895a3",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "maximum_relative_energy_error": 8.881784197001252e-16
+    },
+    {
+      "name": "symmetry-0-1",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.00044,
+          0.004,
+          0.00044,
+          0.004
+        ],
+        [
+          0.00044,
+          0.004,
+          0.00044,
+          0.004
+        ]
+      ],
+      "attachments": [
+        [
+          1,
+          0,
+          0.02
+        ],
+        [
+          1,
+          1,
+          0.02
+        ]
+      ],
+      "input": "out/articulated-lip/symmetry-0-1-64.txt",
+      "output": "out/articulated-lip/symmetry-0-1-64.json",
+      "log": "out/articulated-lip/symmetry-0-1-64.log",
+      "input_sha256": "1637e9448d264db47e69f6f1c8b30aa192cf6857db0f4eaa7007dca7fb71dbdd",
+      "output_sha256": "2be0f3f1e74a327c4aefb7c8986f8b7d56e8c650ec64f7c9133ded2aaf0ee814",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "maximum_relative_energy_error": 8.881784197001252e-16,
+      "split_unsplit_maximum_pressure_difference_Pa": 2.842170943040401e-14
+    },
+    {
+      "name": "symmetry-1-0",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.00044,
+          0.004,
+          0.0003,
+          0.006
+        ],
+        [
+          0.00044,
+          0.004,
+          0.0003,
+          0.006
+        ]
+      ],
+      "attachments": [
+        [
+          1,
+          0,
+          0.02
+        ]
+      ],
+      "input": "out/articulated-lip/symmetry-1-0-64.txt",
+      "output": "out/articulated-lip/symmetry-1-0-64.json",
+      "log": "out/articulated-lip/symmetry-1-0-64.log",
+      "input_sha256": "1e0cabd73c7a4d6286bcf46f9ba0731c941b8803a7f42356829436db7b2a3dea",
+      "output_sha256": "cc5209114ff4a31de959cbdf1afde860d48945e610e59df44e29097306b9bc9c",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753"
+    },
+    {
+      "name": "symmetry-1-1",
+      "subdivisions": 64,
+      "steps": 64,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.00044,
+          0.004,
+          0.0003,
+          0.006
+        ],
+        [
+          0.00044,
+          0.004,
+          0.0003,
+          0.006
+        ]
+      ],
+      "attachments": [
+        [
+          1,
+          0,
+          0.02
+        ],
+        [
+          1,
+          1,
+          0.02
+        ]
+      ],
+      "input": "out/articulated-lip/symmetry-1-1-64.txt",
+      "output": "out/articulated-lip/symmetry-1-1-64.json",
+      "log": "out/articulated-lip/symmetry-1-1-64.log",
+      "input_sha256": "c013807db2510a912fdf26debc57b9393602658826886c78469043a4af35f101",
+      "output_sha256": "2d9f10eafdbabb7f789d2cd2eb7665ca50d51b0ca4f9baa2e9188825e4686713",
+      "log_sha256": "65f4edc3428e0aef961551b17186662d9212104ec318e74a0736782b9c596753",
+      "split_unsplit_maximum_pressure_difference_Pa": 1.8189894035458565e-12
+    },
+    {
+      "name": "closed-lip-rejection",
+      "input": "out/articulated-lip/closed-lip.txt",
+      "input_sha256": "2f9464becb5a6e8a515e4a807881dda78fa23505f6aa00c6ee655c54a12b172f",
+      "log": "out/articulated-lip/closed-lip.log",
+      "log_sha256": "06176a3284d088f801f6b4c2d5809335c8cc27209860256533c850dce8730cfb",
+      "exit_code": 2
+    }
+  ],
+  "refinement": [
+    {
+      "name": "closure",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 10.894114664007958
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 21.70414499464156
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 4.447541304584782
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 0.5366563054416673
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 0.04151720076397325
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 0.0028535083482994494
+        }
+      ]
+    },
+    {
+      "name": "release",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 364.4549078862138
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 38.530077732966205
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 6.420272503570644
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 2.133690521870113
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 0.122528162839048
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 0.007388233243824871
+        }
+      ]
+    },
+    {
+      "name": "lip-narrowing",
+      "comparisons": [
+        {
+          "subdivisions": 32,
+          "maximum_endpoint_difference_Pa": 80.77173161268655
+        },
+        {
+          "subdivisions": 64,
+          "maximum_endpoint_difference_Pa": 34.689277686102514
+        },
+        {
+          "subdivisions": 128,
+          "maximum_endpoint_difference_Pa": 55.647832304422955
+        },
+        {
+          "subdivisions": 256,
+          "maximum_endpoint_difference_Pa": 30.064086360105826
+        },
+        {
+          "subdivisions": 512,
+          "maximum_endpoint_difference_Pa": 2.063100790446442
+        },
+        {
+          "subdivisions": 1024,
+          "maximum_endpoint_difference_Pa": 0.10344568872506699
+        },
+        {
+          "subdivisions": 2048,
+          "maximum_endpoint_difference_Pa": 0.00656304008935038
+        }
+      ]
+    }
+  ],
+  "fine_native_runs": [
+    {
+      "name": "closure",
+      "subdivisions": 256,
+      "steps": 257,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-256.txt",
+      "output": "out/articulated-lip/closure-256.json",
+      "log": "out/articulated-lip/closure-256.log",
+      "input_sha256": "6014151e52e52b7e3afbbd9474fd7bb9a78cb2ec3a39f4c1ec3312010f8fe5cf",
+      "output_sha256": "f3d83c98c37cc8dbb4fc4d37adcd20f47d0ef651261d931b7d44d92257dbe462",
+      "log_sha256": "9a9aeb488ed2a75b67f30f14cfc97ebc21042958f58bd25d1c1bf7b17d819f68",
+      "final_pressure_Pa": [
+        855.6304949950875,
+        856.851787315584,
+        172.7939666856364,
+        51.2295345428597,
+        59.65866522441135,
+        35.42549618528093,
+        27.281442056847663,
+        18.01173053145115,
+        6.595312830032969
+      ],
+      "maximum_endpoint_difference_Pa": 0.5366563054416673,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 512,
+      "steps": 513,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-512.txt",
+      "output": "out/articulated-lip/closure-512.json",
+      "log": "out/articulated-lip/closure-512.log",
+      "input_sha256": "7188ee0c98f392e0748d4269e32bc30f4eaca567d50f4fed638c1879a4b1895b",
+      "output_sha256": "f48dfc50626c2525ded78884197023c9e2343241aa3b9fab3c018107bb66c57c",
+      "log_sha256": "05afdd9e82208a2319956addd3cd836deebb139da0e77e2ebb4fe40bd81137ad",
+      "final_pressure_Pa": [
+        855.6305111094357,
+        856.8517419714028,
+        172.79399261116623,
+        51.22895317099306,
+        59.66851565406594,
+        35.450716770460986,
+        27.263222493393126,
+        17.99283016018458,
+        6.553795629268996
+      ],
+      "maximum_endpoint_difference_Pa": 0.04151720076397325,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "closure",
+      "subdivisions": 1024,
+      "steps": 1025,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ],
+        [
+          0.0005999999999643884,
+          0.002734375000094712,
+          0.0005999999999664546,
+          0.0027343750000892162
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.004496020314865137
+        ],
+        [
+          217,
+          4,
+          0.004496020314865137
+        ]
+      ],
+      "input": "out/articulated-lip/closure-1024.txt",
+      "output": "out/articulated-lip/closure-1024.json",
+      "log": "out/articulated-lip/closure-1024.log",
+      "input_sha256": "8471e58ed6d5d637bd362db41e51bf6a26f6ecffbd64ee292556f082d2b472a9",
+      "output_sha256": "1d12eb7ba2c7484c786c161e45336f5525553fa13d871e3f1bae23cb0e4bd1e5",
+      "log_sha256": "d9e7c7d668bf2fd0f1da93d07e53273d9769075c61b4ccdbaacc6fc277e2b719",
+      "final_pressure_Pa": [
+        855.6305148775223,
+        856.851731444446,
+        172.7939941511065,
+        51.228949004897146,
+        59.66872277972959,
+        35.452200433279636,
+        27.26226688825583,
+        17.991686863512214,
+        6.550942120920697
+      ],
+      "maximum_endpoint_difference_Pa": 0.0028535083482994494,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "release",
+      "subdivisions": 256,
+      "steps": 257,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-256.txt",
+      "output": "out/articulated-lip/release-256.json",
+      "log": "out/articulated-lip/release-256.log",
+      "input_sha256": "7d9f28eb946af7799696b1276a1b61e00a6e4dfd73d5cf1c3348460561ed548c",
+      "output_sha256": "c4d8c29e4da7c04037f0264b64623aa0a4643234b7a5a81acee103174349cde0",
+      "log_sha256": "9a9aeb488ed2a75b67f30f14cfc97ebc21042958f58bd25d1c1bf7b17d819f68",
+      "final_pressure_Pa": [
+        1867.0575665873157,
+        1870.474600991354,
+        528.4424519691836,
+        251.27483360505434,
+        -115.26287648715497,
+        68.78129741689756,
+        47.987483095272786,
+        29.98203514302725,
+        10.832826049455242
+      ],
+      "maximum_endpoint_difference_Pa": 2.133690521870113,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "release",
+      "subdivisions": 512,
+      "steps": 513,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-512.txt",
+      "output": "out/articulated-lip/release-512.json",
+      "log": "out/articulated-lip/release-512.log",
+      "input_sha256": "d8504e7e749b8822626356bdf361cd33eba45c226c448b1228e966a97b491aee",
+      "output_sha256": "ab7f442509364f554b6b09c528b8395379052c079b6ce4634fab5cf9fb8dc630",
+      "log_sha256": "05afdd9e82208a2319956addd3cd836deebb139da0e77e2ebb4fe40bd81137ad",
+      "final_pressure_Pa": [
+        1867.057618245213,
+        1870.4743869615454,
+        528.4397472901558,
+        251.27268385995322,
+        -115.26194277351532,
+        68.80335690697086,
+        47.917660091685526,
+        30.0679981331996,
+        10.95535421229429
+      ],
+      "maximum_endpoint_difference_Pa": 0.122528162839048,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "release",
+      "subdivisions": 1024,
+      "steps": 1025,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005999792577942684,
+          0.0027343750000148473,
+          0.0005999465922820319,
+          0.002734375000013986
+        ],
+        [
+          0.0005998732232270284,
+          0.0027343750000148473,
+          0.00059967357092153,
+          0.002734375000013986
+        ],
+        [
+          0.0005996297289509704,
+          0.0027343750000148473,
+          0.0005990466136918818,
+          0.002734375000013986
+        ],
+        [
+          0.0005994827823286097,
+          0.0027343750000148473,
+          0.0005986682505995214,
+          0.002734375000013986
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/release-1024.txt",
+      "output": "out/articulated-lip/release-1024.json",
+      "log": "out/articulated-lip/release-1024.log",
+      "input_sha256": "99782e22d58c5c2f40e67d8deef3a11de55e74d92a3f9428300745989981980a",
+      "output_sha256": "efb61be9dfa83bc89a0ae300212299eff06f90e6c6de5e393158920e1bfbdd31",
+      "log_sha256": "d9e7c7d668bf2fd0f1da93d07e53273d9769075c61b4ccdbaacc6fc277e2b719",
+      "final_pressure_Pa": [
+        1867.0576276450518,
+        1870.4743555874284,
+        528.4387625299753,
+        251.27294316869543,
+        -115.26147276634815,
+        68.80448130902123,
+        47.91356956481597,
+        30.07329261427369,
+        10.962742445538115
+      ],
+      "maximum_endpoint_difference_Pa": 0.007388233243824871,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 256,
+      "steps": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-256.txt",
+      "output": "out/articulated-lip/lip-narrowing-256.json",
+      "log": "out/articulated-lip/lip-narrowing-256.log",
+      "input_sha256": "957c389843b8d99f8b2b6504807ed070961470920fac8042085064c945325283",
+      "output_sha256": "f902a01a6d413040fa8b15f4a5d6747fbff2122c24161fb5a253636414357b67",
+      "log_sha256": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4",
+      "final_pressure_Pa": [
+        -432.9522372613328,
+        -590.9418406691731,
+        -398.86856777710966,
+        -134.983946526315,
+        -158.1688129058141,
+        -25.209273142268568,
+        -27.177199486556603,
+        -50.268885984161315,
+        -9.707471772727407
+      ],
+      "maximum_endpoint_difference_Pa": 30.064086360105826,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 512,
+      "steps": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-512.txt",
+      "output": "out/articulated-lip/lip-narrowing-512.json",
+      "log": "out/articulated-lip/lip-narrowing-512.log",
+      "input_sha256": "63dd5615c253603ccb0ab8e115d7bfe1fcc9e973c0cb1143f48330d3ec0b1f35",
+      "output_sha256": "ef0353d0c34797fd0454c61196243c07647ead1025338403681701753dbab5eb",
+      "log_sha256": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900",
+      "final_pressure_Pa": [
+        -432.95225611982966,
+        -590.9418187544143,
+        -398.8684295340797,
+        -135.00635135420683,
+        -158.19859025825727,
+        -24.20141057867435,
+        -28.61127246473986,
+        -50.234329505604954,
+        -7.644370982280965
+      ],
+      "maximum_endpoint_difference_Pa": 2.063100790446442,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 1024,
+      "steps": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-1024.txt",
+      "output": "out/articulated-lip/lip-narrowing-1024.json",
+      "log": "out/articulated-lip/lip-narrowing-1024.log",
+      "input_sha256": "a93fa900321fc7f855d2c22a1c0aafb38951c5270a4c950de22bcaa022303abc",
+      "output_sha256": "707bb391bd7c939bc8219aafc415137e0f76b7a454006d25f2f0f4d4dd1c4204",
+      "log_sha256": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58",
+      "final_pressure_Pa": [
+        -432.9522574764757,
+        -590.9418173531396,
+        -398.86842050116275,
+        -135.0078210477741,
+        -158.20055768804636,
+        -24.133280501348477,
+        -28.714718153464926,
+        -50.20758355457077,
+        -7.54892054295164
+      ],
+      "maximum_endpoint_difference_Pa": 0.10344568872506699,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    },
+    {
+      "name": "lip-narrowing",
+      "subdivisions": 2048,
+      "steps": 2048,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-tube"
+      ],
+      "sections": [
+        [
+          0.0005873117158596402,
+          0.002734375000003986,
+          0.0005865540340403716,
+          0.0027343750000037546
+        ],
+        [
+          0.0005224489381400417,
+          0.002734375000003986,
+          0.0005178179707848538,
+          0.0027343750000037546
+        ],
+        [
+          0.0003735001989236483,
+          0.002734375000003986,
+          0.0003599747466653987,
+          0.0027343750000037546
+        ],
+        [
+          0.00028361096420787544,
+          0.002734375000003986,
+          0.0002647177696959449,
+          0.0027343750000037546
+        ]
+      ],
+      "attachments": [
+        [
+          217,
+          3,
+          0.006305071849878871
+        ],
+        [
+          217,
+          4,
+          0.006305071849878871
+        ]
+      ],
+      "input": "out/articulated-lip/lip-narrowing-2048.txt",
+      "output": "out/articulated-lip/lip-narrowing-2048.json",
+      "log": "out/articulated-lip/lip-narrowing-2048.log",
+      "input_sha256": "bc1b62e8bb7bfa9766b7b8e2f75c597d13a6c10267a5aaf944e345c41d65aaa5",
+      "output_sha256": "db54683fc480f8adfe79aa84f866adc709d6c3e8f55a1b73ac4f1ca213df648a",
+      "log_sha256": "68f2b3dc8f3782c31d5c3a52c6c7f58c6c1c2ea86e6a615bcee98c9ced404af1",
+      "final_pressure_Pa": [
+        -432.95225760574317,
+        -590.9418172666913,
+        -398.86841987916995,
+        -135.00791365249347,
+        -158.2006818041045,
+        -24.12897660574404,
+        -28.721281193554276,
+        -50.20579256708698,
+        -7.543066036280064
+      ],
+      "maximum_endpoint_difference_Pa": 0.00656304008935038,
+      "validation": "native-only temporal refinement; full independent geometry/state audit at 16..128 subdivisions"
+    }
+  ],
+  "unchanged_tree_controls": [
+    {
+      "name": "original-closure",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/articulated-lip/original-closure-128.txt",
+      "output": "out/articulated-lip/original-closure-128.json",
+      "log": "out/articulated-lip/original-closure-128.log",
+      "input_sha256": "4388ae69f6b20063ae61f11f93f80a3c55b088f22d7a89d56a3dc2b8557c0f4f",
+      "output_sha256": "3784ebed5f1c6b481130e1cffd8b8bde1ea172e698ad524ec3fc492e5e3cbccc",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "previous_output": "out/planar-inertive-motion/closure-128.json",
+      "previous_output_sha256": "07ebc358264223234a3709b249dd17193d4ec758fbc3e2d955bf685610904426",
+      "maximum_state_difference": 0.0
+    },
+    {
+      "name": "original-release",
+      "subdivisions": 128,
+      "steps": 129,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe"
+      ],
+      "input": "out/articulated-lip/original-release-128.txt",
+      "output": "out/articulated-lip/original-release-128.json",
+      "log": "out/articulated-lip/original-release-128.log",
+      "input_sha256": "3eb9f103c8f15746f9150e7a3d94aad315ad8401db90b2de214b3a7418ed3897",
+      "output_sha256": "c90a6877e74c2d9ae0250919ef657059c16759283e4c532133c8c23b4a593157",
+      "log_sha256": "abf6caa4073ff220eae3c90b6ef7c8a6924471fb1f64ab1595e94ac00462f628",
+      "previous_output": "out/planar-inertive-motion/release-128.json",
+      "previous_output_sha256": "6d93f6a3b77c01b10bafc86649494511afca6aa072dce34164c0de18e9bdccc5",
+      "maximum_state_difference": 0.0
+    }
+  ],
+  "geometry_controls": {
+    "commands": [
+      [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+        "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+        "5.031",
+        "5.032",
+        "512",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/legacy.csv",
+        "--frames",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/legacy"
+      ],
+      [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+        "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+        "5.031",
+        "5.032",
+        "512",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/core.csv",
+        "--frames",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/core",
+        "--core",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body"
+      ],
+      [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_airspace_geometry_probe",
+        "/Users/joshuahkuttenkuler/ducklips/out/nato-airspace-geometry.csv",
+        "5.031",
+        "5.031",
+        "512",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/scaled.csv",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/scaled.json",
+        "--core",
+        "/Users/joshuahkuttenkuler/ducklips/out/articulated-lip/geometry-checks/scaled.body"
+      ]
+    ],
+    "length_scale": 1.1,
+    "maximum_scaling_errors": {
+      "domain": 0.0,
+      "solids": 0.0,
+      "x_edges": 0.0,
+      "y_edges": 0.0,
+      "volume": 1.0852609636695723e-21,
+      "vertical_face": 6.742382260144231e-19,
+      "horizontal_face": 3.1577388273640317e-18
+    },
+    "hashes": {
+      "build/ducklips_airspace_geometry_probe": "723ebbd6ae7dd5f63b428c718cfcacb6063ceebc62bda99b3419044f172e2b50",
+      "out/nato-airspace-geometry.csv": "f7c69147401ec4526c19135d7b45cceac020921f0939c98b10e90c13bcdf04d9",
+      "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+      "out/articulated-lip/geometry-checks/legacy.csv": "cb29d191a57b467eb402129e860a00b5c112b8d74f56fd746b6edccfa7fff718",
+      "out/articulated-lip/geometry-checks/core.log": "aedd40393d58e594c4b4f73787460adaa6fde22efe0c213fd18a992a64abead8",
+      "out/articulated-lip/geometry-checks/core.csv": "45e1757d2849b9c83d58f05185629225bdc33c46723e5f17119c184ab7a5de30",
+      "out/articulated-lip/geometry-checks/legacy.log": "aedd40393d58e594c4b4f73787460adaa6fde22efe0c213fd18a992a64abead8",
+      "out/articulated-lip/geometry-checks/scaled.json": "a245b8c2136c438860118fc48c0e888ad692c67142af9932c17278396d0e4c4c",
+      "out/articulated-lip/geometry-checks/scaled.csv": "55b7cc8cbe6596116c3dac3c0f610bb0e416a711c7a10b10b0ebee3aa8a50429",
+      "out/articulated-lip/geometry-checks/scaled.log": "0a6094156078a3889982a6e4fdf9ed35391e4ec3f89774431a367e3368f2bba9",
+      "out/articulated-lip/geometry-checks/scaled.body": "b4dde7cdd59ed20f7359bad2ff10917806b5e36a463e5df0d4b9c11a889db549",
+      "out/articulated-lip/geometry-checks/core/pose-5.031.json": "e64873a1f910d0472314ab267bedee3b728835e93496430deadfc18cd25e8879",
+      "out/articulated-lip/geometry-checks/core/pose-5.032.json": "be6d102629b464f2e8409854a0e9679be8faf1136d8f4e9852e9a3256f3c2f36",
+      "out/articulated-lip/geometry-checks/legacy/pose-5.031.json": "1364a7f4e4603b674f4bb7cd657409269cc4c9dbe1639b3dc37867af9cd24588",
+      "out/articulated-lip/geometry-checks/legacy/pose-5.032.json": "5cb4969a1dc5cb70e4805cd90266313839e6fe41af1f3d208b82595c0473ebaa"
+    }
+  },
+  "cap_clearance_m": {
+    "closure": {
+      "supraglottal_entry": 0.014743454964380853,
+      "mouth_end": 0.005549091022000006
+    },
+    "release": {
+      "supraglottal_entry": 0.014743455098205705,
+      "mouth_end": 0.009624670912600011
+    },
+    "lip-narrowing": {
+      "supraglottal_entry": 0.014743455124251886,
+      "mouth_end": 0.02818903292541799
+    }
+  },
+  "input_poses": {
+    "out/articulated-lip/poses/pose-5.031.json": "e64873a1f910d0472314ab267bedee3b728835e93496430deadfc18cd25e8879",
+    "out/articulated-lip/poses/pose-5.032.json": "be6d102629b464f2e8409854a0e9679be8faf1136d8f4e9852e9a3256f3c2f36",
+    "out/articulated-lip/poses/pose-5.062.json": "41871f4d0dd27c784a76615fa445d8ebb0caad532c539544621814f6880e4745",
+    "out/articulated-lip/poses/pose-5.063.json": "a5711e1cc37840132f3398d452835197c2be0e12e02b30bbde39fe15fecedb2e",
+    "out/articulated-lip/poses/pose-5.084.json": "67b94ea7dd955c89dc0620dda65f165f4b7aea6c87068fbc0d14a1cdd2804061",
+    "out/articulated-lip/poses/pose-5.085.json": "2f9824e7680bf757b2fd5aa2a99b2a9772d3199bce2f56af8aa33286293920c0"
+  },
+  "hashes": {
+    "tools/planar_lip_reference.py": "78bb49ffd9f5d39a22491c0842a749d1bf82bf213cf7d03c98dd42d677168711",
+    "tools/planar_inertive_motion_probe.cpp": "df6618689b21445e3ffdce19ff203c6571b8b36a0e305b47ce7898e2a0781823",
+    "tools/airspace_geometry_probe.cpp": "8b24f26b194d2390e8a980022ad10dab9f4aa5e583672352d2996da2c2a78bb5",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "tools/planar_regions_reference.py": "613b9240dd24fcd54d51d3fa4da8cf799f7d531280d749c4943c71f2e0034ddc",
+    "tools/planar_region_motion_reference.py": "36a171e5faa388cbbd3a58fd7482e3161be8428fd4903c4a98e33f577928b2f7",
+    "tools/planar_boundary_reference.py": "73accfa3f3dc2c666048212636b0b24c1dac387cf01ec3820eac18acff72dcaa",
+    "tools/planar_pressure_motion_reference.py": "3e0ef308b005136eb3b50d4680e7b1da7533102a9c4bd56deed2e0e0d130fa2c",
+    "tools/planar_contact_partition_reference.py": "c63dc45f075ad498991995090a11fa798e5b970aaf4e7e437f704fe51d621631",
+    "tools/planar_open_boundary_reference.py": "3a14e27ff92c3e3d9f5510ade68557e36865607d8b47e8cb408849e4e21cf5d5",
+    "src/planar_airspace.cpp": "f19a73ddd492d7b8d15c9ce35e649c87bec85be84fce400b506446aa9634a337",
+    "src/planar_face_motion.cpp": "5d362125fbfa598247d24daf2b454308075eca94cafabac0f3231a078831a320",
+    "src/moving_graph.cpp": "461ec4f9366bbb4045e47485233b3b29c296d64f9d04839f632beefe16207296",
+    "include/ducklips/moving_graph.hpp": "0a29b09b4183373950ffcae3d6d1b5eebcd11b61b5b369b3b2959dc393b1a82e",
+    "src/articulation.cpp": "c471fe86d0627450e64c134dfdb7143a7d207ede94b535fa2370a1f2d037261f",
+    "include/ducklips/articulation.hpp": "aa8b98efce2f02e76037053cb7907cecf4730edc69ce84610699d5752af603a2",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "out/nato-spatial-airway.csv": "85f3269d93397fe7c1b20089ffffb502038524f96bd2274411a01562a0402f7e",
+    "reports/contact_partition_reference.json": "6e56044140f100a4b6b3b1e1ca2075142195fdf8f6390773cece271e953f1275",
+    "build/ducklips_planar_inertive_motion_probe": "ed2dd4d27bb2ed89d4abf55491873dc5f74eb242b3f0ae0b2af931c72fce70b6"
+  },
+  "versions": {
+    "numpy": "2.3.5",
+    "shapely": "2.1.2",
+    "geos": "3.13.1"
+  }
+}

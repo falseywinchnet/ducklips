@@ -521,6 +521,10 @@ std::size_t TractModel::epilarynx_sections() const noexcept {
     return epilarynx_sections_;
 }
 
+std::size_t TractModel::lip_sections() const noexcept {
+    return lip_sections_;
+}
+
 double TractModel::length_scale() const noexcept {
     return length_scale_;
 }
