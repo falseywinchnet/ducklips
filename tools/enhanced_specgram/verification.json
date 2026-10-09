@@ -1,0 +1,23 @@
+{
+  "verified_date": "2026-10-09",
+  "algorithm_sha256": {
+    "uncertainty_fusion.py": "bdef2375d0982ece4e874d6d985fec4b2f9ca24ef7e00a6865e68b5415f99c8b",
+    "fourier_unrolled_densified.py": "5c18b53f13f7458759d39a5617c149e5434f8a6ecd2606c510dd33296c368038",
+    "circles.py": "a80e61df6435dd731627115030e7bab4812af2a81c196111ca4cf3a22f06dd6c",
+    "LICENSE": "a03d30bb4f88439a5403d76cf44ef66a818d85327312cf20f9bf42f95b970cf5"
+  },
+  "comparison": "New visual renderer versus preserved Cleanup2 build/true-superresolution/probe.npz",
+  "maximum_absolute_errors": {
+    "enhanced": 0.0,
+    "multiscale": 0.0,
+    "registered_subhop": 0.0,
+    "literal": 0.0
+  },
+  "shape": [
+    256,
+    94
+  ],
+  "example_png": "/Users/joshuahkuttenkuler/ducklips/out/enhanced_specgram/reference-check.png",
+  "renderer_report": "/Users/joshuahkuttenkuler/ducklips/out/enhanced_specgram/reference-check.json",
+  "result": "PASS: recovered algorithm hashes and all four reference fields agree"
+}
