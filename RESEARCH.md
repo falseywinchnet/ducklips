@@ -1,6 +1,15 @@
 # Research contract and next physical questions
 
-Current coupling gate: the [coupled accuracy controller](reports/COUPLED_TIME_ACCURACY.md)
+Current coupling gate: [bounded source contact](reports/COUPLED_SOURCE_CONTACT.md)
+now passes free closing/reopening and exact-zero opening controls with the
+joint passive system. A converged final Newton correction is no longer
+discarded at the iteration limit. The fixed-tube source and every tract memory
+continue across a saved-state boundary, and the longer pressure-driven run has
+reached a contact cycle. Finish its sustained-motion and refinement checks,
+then carry this same source into voiced articulated output. No new listening
+result is established by these controls.
+
+The [coupled accuracy controller](reports/COUPLED_TIME_ACCURACY.md)
 now checks source and tract motion together. Tighter tolerances reduce the
 largest sampled source-pressure error against an independent fixed-geometry
 ODE from 3.83 to 1.32 to 0.55 Pa, although endpoint errors are not monotone.

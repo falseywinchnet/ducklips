@@ -1,0 +1,91 @@
+{
+  "scope": "Current coupled-source contact controls, zero-cap regression checks, physical continuation and an explicitly bounded pressure-driven prefix. The longer continued run and finer cycles are not claimed complete. No speech rendering.",
+  "build": {
+    "commit": "584531a21ad7b0c10a38e84d2aed2326ab0deea3",
+    "binary_sha256": "7f07c9d8bde8e0a27db764662494249f7648f976c98c9318af59c48106bebb00",
+    "source_hashes": {
+      "src/continuous_glottis.cpp": "18ff2587f757c002e9535d2346bf59e67b4310b55eb3a0e1c93b0a7c2596311a",
+      "src/graph_joint_relaxation.cpp": "9559cbd4eacffcca1d1fb628cb9d6a7d7d2944c9b46358a711f47c619961eece",
+      "src/joint_accuracy.cpp": "98b5b6671785c03a8b6c548e9cbc2a42c4d7b1fa1bd0f6e821ece337c6687613",
+      "include/ducklips/graph_continuous_glottis.hpp": "8aaf71224c88c2f6a763f70622a169cfd03175461cf9508bb9adedd3d87540c3",
+      "include/ducklips/joint_accuracy.hpp": "4e7c7a08879d5ad3280e02ffcdd225dce74ee8ab6a3c803e677bd84decfc23a2",
+      "tools/joint_contact_probe.cpp": "4bac7ad239c9ca5a2f94c86614a9744ee3da96655fd7cbeed7abf622265e32df",
+      "CMakeLists.txt": "991d992e262b6ea3dfc20d060761078a8a382668840507d9ad2f6352800c627b"
+    }
+  },
+  "free_controls": [
+    {
+      "name": "lower",
+      "time": 0.002,
+      "closures": 1,
+      "reopenings": 1,
+      "substeps": 2828,
+      "rejected": 1065,
+      "work_residual": 1.181508682152594e-17,
+      "mass_residual": 9.155855405196325e-22,
+      "physical_loss": 4.756720481626064e-07,
+      "numerical_loss": 2.520132535273406e-11
+    },
+    {
+      "name": "upper",
+      "time": 0.002,
+      "closures": 1,
+      "reopenings": 1,
+      "substeps": 2302,
+      "rejected": 802,
+      "work_residual": 9.564396658367158e-19,
+      "mass_residual": 4.4579865137779735e-22,
+      "physical_loss": 2.6483534795086764e-07,
+      "numerical_loss": 1.9670110040359433e-12
+    }
+  ],
+  "release_checks": 5,
+  "sanitizer_checks": 5,
+  "continuation": {
+    "graph_and_loss_states_identical": true,
+    "maximum_scaled_source_difference": 2.168404344971009e-15,
+    "gas_mass_difference_m3": 0.0,
+    "energy_difference_J": 5.421010862427522e-20
+  },
+  "pressure_driven_prefix": {
+    "onset_s": 0.005,
+    "continued_through_s": 0.0019099999999999998,
+    "absolute_end_s": 0.0069099999999999995,
+    "closures": 2,
+    "reopenings": 1,
+    "whole_requested_continuation_complete": false
+  },
+  "actual_moving_continuation_unchanged": true,
+  "hashes": {
+    "out/joint-contact-v2/build.json": "a2ba836ab607e36603c7f2398778f7e6a3d96df1d56d14c17193a5238bc0a8cb",
+    "out/joint-contact-v2/probe": "7f07c9d8bde8e0a27db764662494249f7648f976c98c9318af59c48106bebb00",
+    "src/continuous_glottis.cpp": "18ff2587f757c002e9535d2346bf59e67b4310b55eb3a0e1c93b0a7c2596311a",
+    "src/graph_joint_relaxation.cpp": "9559cbd4eacffcca1d1fb628cb9d6a7d7d2944c9b46358a711f47c619961eece",
+    "src/joint_accuracy.cpp": "98b5b6671785c03a8b6c548e9cbc2a42c4d7b1fa1bd0f6e821ece337c6687613",
+    "include/ducklips/graph_continuous_glottis.hpp": "8aaf71224c88c2f6a763f70622a169cfd03175461cf9508bb9adedd3d87540c3",
+    "include/ducklips/joint_accuracy.hpp": "4e7c7a08879d5ad3280e02ffcdd225dce74ee8ab6a3c803e677bd84decfc23a2",
+    "tools/joint_contact_probe.cpp": "4bac7ad239c9ca5a2f94c86614a9744ee3da96655fd7cbeed7abf622265e32df",
+    "CMakeLists.txt": "991d992e262b6ea3dfc20d060761078a8a382668840507d9ad2f6352800c627b",
+    "out/joint-contact-v2/lower.jsonl": "def36fced6983e7764c65d1f8e35e6502eb77616cb48da811e3ff242c31e6ed3",
+    "out/joint-contact-v2/lower.log": "da190117204d7c5b07ed80cebc9c04653c9137ce78099414bb2a3c21e79ad111",
+    "out/joint-contact-v2/upper.jsonl": "3db730e21ec45148d69cae0b1dff7329774a756d16707df8770861af954bbbb2",
+    "out/joint-contact-v2/upper.log": "a199eb4202da346559edc25ac4be6c1a473a1d971f26326a0dd017e4d73e703f",
+    ".build/contact-final-ctest.log": "f653fc2a07f61334d7531a2e1aa5dc2dd09ebb840dfe59c07f4f276c695e2256",
+    "out/joint-contact-v2/asan-ctest.log": "e518d9faf3d661d315d30dcfee0af669530a52d2405a8d93446a780234d27044",
+    "out/joint-contact-v2/phonation-start.jsonl": "aa351f4c611f4b3c730785ef9fbd25beb96bc76dd138c83624f554bcab61faec",
+    "out/joint-contact-v2/phonation-start.log": "ec4cae21366f3c7ceb6eae19bdda494748151a252821a1b96845a3fe6fe28925",
+    "out/joint-contact-v2/phonation-restarted-initial.json": "59fc81fb8823af363980a68916d31a167bd9f789d4cdef47f4557130bbd7bdbb",
+    "out/joint-contact-v2/phonation-observed-prefix.jsonl": "c9e9a459c7214f5d2919f94a3aa402f77fa8ee4d4a1f86e89a4a62ba110ba47f",
+    "out/joint-contact-v2/actual-closing-continuation.json": "195f162ec5879a3b33fbd67654aa61ffa9f2b98bf6b05792ee40a258ef2251f9",
+    "out/joint-accuracy-moving-current/tol-0.0001/closing-1-64.json": "e8b303f227a129076fefb76493fd93b10b99e79f9234abe774b9152357bdd118",
+    "out/joint-contact-v2/actual-closing-continuation.log": "fb5a4700bf3b9b2b629a98bdb357b6f02423c659ae2826bf7dacfa451340de21",
+    "out/joint-accuracy-moving-current/tol-0.0001/closing-1-64.txt": "7371a7eff83ddd77c51ca319ec3ac4252383e1367ea91f4db29c4ca97ebc94e1",
+    "out/joint-contact-v2/phonation-continued.input": "b7bc884979bd9b6c8ed40aa59eb8eb3d542ed8eb1ea6a5a3060cf96e7586d95f",
+    "tools/joint_contact_validation.py": "d18294f000c43fc1394357d596279b5a76c7734fa1d4b6151ae674a8558a99d5",
+    "tools/planar_inertive_motion_probe.cpp": "1611ecee6ff01c5dbc9fc661a230d3ac40faecd572c1834a54b856c1079404dd",
+    "tools/planar_continuous_reference.py": "2ae98a4e509a7a1eba39965add2d6fb54d515c82e45a4be1959ec39a96d46aea",
+    "README.md": "f58ef605aa77ab0bcec9b6c560d81c69134f722c8674ebbaacaadaeffe39838b",
+    "RESEARCH.md": "5e65f41058f95ef335a6c9e4a21a762c54a7962e0876567e4bbeee4da36077ac",
+    "reports/COUPLED_SOURCE_CONTACT.md": "707cf7f410d66325a472cfa7aea3ad9971b2b8e8a44e1ef7e159071b30c934bf"
+  }
+}

@@ -145,6 +145,13 @@ checks. Finer moving refinements from the preserved earlier executable are
 recorded separately as exploratory evidence. Utterance integration remains unfinished.
 This has not produced a new speech sample.
 
+A [bounded source-contact policy](reports/COUPLED_SOURCE_CONTACT.md) now carries
+the coupled system through lower and upper closing/reopening controls and
+exact-zero opening starts. It also fixes rejection of a converged final Newton
+correction. Physical-state continuation preserves the source, graph and all
+loss memories; a longer pressure-driven run has reached its first contact
+cycle. Sustained motion and actual utterance rendering remain unfinished.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures
