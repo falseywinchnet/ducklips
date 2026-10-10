@@ -222,3 +222,70 @@ in a Worker feeding scheduled Web Audio buffers, adding about 0.2 seconds of
 playback buffering. Block-size parity tests cover the two paths. The host must
 remain awake with the server running. The enhanced renderer uses
 ~/miniforge3/bin/python unless DUCKLIPS_PYTHON is set.
+
+## Connected speech tubes (version 4)
+
+The accepted nine-section below-mouth configuration remains intact as the source
+stage and remains separately selectable. The default **Open** arrangement connects
+it to a four-section mouth and a three-section teeth/lips tube. Two shorter tubes
+branch from mouth sections 1 and 3: a sinus pocket and an under-tongue pocket.
+Both pockets terminate closed in this experiment. The only driven reservoir is
+the below-mouth inlet; the sampled open end is at the lips.
+
+Each stage is its own periodic 2D material sheet. Its complete nominal modes are
+computed on support/material edits. The network uses these stage responses and
+couples their pressure and material velocities in both directions; it does not
+cascade rendered audio through filters. A side connection is distributed around
+its section's ring in this first model, preserving the rotational symmetry used
+by the existing engine. This is an experimental tract topology, not anatomical
+sinus/nasal airflow or a calibrated oral cavity.
+
+Every inter-tube link has separate two-way air and solid histories. Its acoustic
+admittance uses the smaller instantaneous opening. Air propagation uses the
+existing three-tap attenuation FIR and a causal fractional delay based on the
+adjacent half-cell lengths. Tissue propagation uses the endpoint material FIRs,
+masses and elasticity. The link enters each endpoint's existing collocated
+pressure/velocity junction. Incoming waves for **all** tubes are read before any
+tube advances, and outgoing waves are committed afterward. Thus child evaluation
+order cannot create a one-way connection or zero-delay loop. Normalized link
+histories preserve wave-power scaling as the junction's aperture/impedance moves.
+This does not prove global passivity under time-varying geometry and elasticity;
+the existing active material changes can exchange energy with the system.
+
+All stages receive the single 1–4 system elasticity multiplier and independent
+seeded, bounded material variation. Tube-level source controls inside a version 4
+file are overridden by the system controls: downstream tubes never gain a second
+reservoir. Local section elasticity is retained. Saving exports all tubes,
+connections, and controls. Older single-tube JSON still loads. The new editor uses
+a separate local-storage key and does not overwrite the accepted below-mouth save.
+
+Three inspectable starting arrangements:
+
+| Arrangement | Mouth | Teeth/lips | Total computed modes |
+| --- | --- | --- | ---: |
+| Open | Four sections, wider tongue/body openings | Soft vestibule, firm teeth gap, elastic lips | 832 |
+| Balanced | Four sections, narrower front opening | Firm teeth gap, elastic lips | 800 |
+| Rounded | Three sections; long, heavy, weakly supported soft front chamber | Firm teeth gap, longer/narrower elastic lips | 768 |
+
+The names describe geometry, not validated vowels. A mode preview is the selected
+stage's nominal sheet mode, not an eigenmode of the entire coupled air/tissue
+network. At the current ring-symmetric drive, the angularly asymmetric modes have
+zero excitation; they remain computed and available in the full-sheet diagnostic.
+
+### Compiled sample kernel
+
+The connected JS engine crossed below the 10× core target. `native/core.c` carries
+out the same sample operations with double precision in contiguous WebAssembly
+memory, using the same histories, receptance coefficients, contact rule and
+junctions. Control-rate material variation and geometry compilation remain in JS.
+There is no new source waveform, reduced mode count, downsampled physics rate, or
+output filter. Native/reference tests include exact PCM equality through changing
+elasticity, closure/contact, fractional transport, support edits and network
+feedback. The full asymmetric diagnostic retains the JS path.
+
+`native/build.sh` regenerates `core-wasm.mjs`; the generated module is committed,
+so serving and rendering require no compiler. Its embedded byte array also runs
+inside AudioWorkletGlobalScope, where `atob` is unavailable. The current build uses
+Homebrew Clang and the existing Rust wasm linker; environment overrides are
+`DUCKLIPS_CLANG` and `DUCKLIPS_WASM_LD`. No fast-math or fused floating-point
+reassociation is enabled.

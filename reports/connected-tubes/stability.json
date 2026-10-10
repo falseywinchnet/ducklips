@@ -1,0 +1,44 @@
+[
+  {
+    "name": "open",
+    "elasticity": 1,
+    "seconds": 20,
+    "realtime": 11.207959035322178,
+    "fault": null
+  },
+  {
+    "name": "open",
+    "elasticity": 4,
+    "seconds": 20,
+    "realtime": 10.56523803185195,
+    "fault": null
+  },
+  {
+    "name": "balanced",
+    "elasticity": 1,
+    "seconds": 20,
+    "realtime": 11.517795121021555,
+    "fault": null
+  },
+  {
+    "name": "balanced",
+    "elasticity": 4,
+    "seconds": 20,
+    "realtime": 10.816412935098802,
+    "fault": null
+  },
+  {
+    "name": "rounded",
+    "elasticity": 1,
+    "seconds": 20,
+    "realtime": 12.064237545667295,
+    "fault": null
+  },
+  {
+    "name": "rounded",
+    "elasticity": 4,
+    "seconds": 20,
+    "realtime": 11.461647838324529,
+    "fault": null
+  }
+]

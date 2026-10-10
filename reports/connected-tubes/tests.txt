@@ -1,0 +1,43 @@
+✔ worklet and LAN buffer sizes produce identical PCM and raw captures (154.418084ms)
+✔ LAN raw capture retains engine output while monitor is muted (66.756792ms)
+✔ saved six-section reference matches the preserved user file exactly (1.29475ms)
+✔ below-mouth geometry preserves diameter and material constraints in a connected 480-mode sheet (20.007625ms)
+✔ independent slow material states are bounded, seeded, and continuous through bubble resets (19.590625ms)
+✔ varying cached response agrees with independent complete eigenanalysis at both elasticity limits (42.918083ms)
+✔ packed air histories reproduce the original transport through reconfiguration and fractional delays (155.089458ms)
+✔ unchanged and pressure-only edits preserve the evolving material state and wave histories (33.824792ms)
+✔ whole-body elasticity covers 1 through 4, with doubled dry frequencies and finite running output (399.822667ms)
+✔ expanded varying sheet retains rotational equivalence (226.774625ms)
+✔ changing section count resets audio interpolation and retains the requested running state (12.123375ms)
+✔ material variation cannot excite exact rest, and output releases when reservoir pressure stops (283.011167ms)
+✔ volume blocks add their actual enclosed volume (5.282083ms)
+✔ symmetric eigendecomposition returns orthonormal eigenpairs (0.22925ms)
+✔ 384 modes are sorted and satisfy the complete periodic sheet equation (18.375625ms)
+✔ whole-body mass and elasticity scale the frequencies physically (6.015042ms)
+✔ moving one ring support and adding volume change global sheet modes (9.563958ms)
+✔ cached receptance agrees with explicit sums of all 384 modes (5.6095ms)
+✔ rotational compression matches all eight sectors, including contact (261.816708ms)
+✔ circumferential modes really move and couple to air in the full sheet (22.470208ms)
+✔ without reservoir pressure, exact rest remains silent (23.189708ms)
+✔ support recompilation preserves displacement and velocity (7.397292ms)
+✔ same design replays deterministically and produces finite pressure-driven output (74.986375ms)
+✔ legacy two-wall designs migrate to one ring support without mutating input (0.179292ms)
+✔ invalid imported physical parameters are rejected (0.083875ms)
+✔ removing pressure permits ringdown in the same sheet (135.614583ms)
+✔ reconfiguring unchanged geometry preserves every traveling-wave history (15.037375ms)
+✔ compiled sample kernel is identical to JS through variation, contact, edits and fractional transport (351.5555ms)
+✔ network kernel and JS agree sample for sample, including feedback and state-preserving edits (327.979959ms)
+✔ connections convey downstream geometry changes back into the original source sheet (572.303334ms)
+✔ junction update is independent of child evaluation order (104.659ms)
+✔ all arrangements retain the accepted source and sorted complete child modes (13.990583ms)
+✔ unforced network stays at exact rest; pressure-off network releases (738.537208ms)
+✔ invalid network terminations and missing branch connections are rejected (1.397708ms)
+✔ network audio is buffer-size independent for LAN and worklet, and topology resets cleanly (82.1815ms)
+ℹ tests 35
+ℹ suites 0
+ℹ pass 35
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2264.302834

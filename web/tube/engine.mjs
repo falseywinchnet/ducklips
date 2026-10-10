@@ -1,3 +1,4 @@
+import {NativeCore} from './native-core.mjs';
 // Connected periodic sheet + pressure and tissue transport. No voice source.
 import {ElasticityVariation} from './variation.mjs';
 import {belowMouthDesign} from './presets.mjs';
@@ -12,7 +13,7 @@ export const MATERIALS={
 export const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 export const initialDesign=belowMouthDesign;
 export function validateDesign(d){
- if(!d||![1,2,3].includes(d.version)||!Array.isArray(d.bands)||(d.bands.length<4||d.bands.length>12)||!Array.isArray(d.blocks)||d.blocks.length>128)throw Error('Expected a tube with four to twelve sections.');
+ if(!d||![1,2,3].includes(d.version)||!Array.isArray(d.bands)||(d.bands.length<1||d.bands.length>12)||!Array.isArray(d.blocks)||d.blocks.length>128)throw Error('Expected a tube with one to twelve sections.');
  const finite=(v,a,b)=>Number.isFinite(v)&&v>=a&&v<=b;
  if(!finite(d.elasticityScale??1,1,4)||!finite(d.elasticityVariation??0,0,.1)||!Number.isInteger(d.noiseSeed??73021))throw Error('Invalid elasticity variation.');
  if(!finite(d.pressure,0,1600)||!finite(d.wander,0,.1))throw Error('Invalid pressure.');
@@ -135,12 +136,12 @@ class LinkBank {
 }
 
 export class TubeEngine {
- constructor(compiled,rate=24000,{symmetry=true,compactAir=true}={}){
-  this.n=compiled.n;const N=this.n;this.rate=rate;this.tick=0;this.random=0x513fe2;this.wander=0;this.drive=0;this.fault=null;this.contactCount=0;
+ constructor(compiled,rate=24000,{symmetry=true,compactAir=true,native=true}={}){
+  this.ports=[];this.inletMode='reservoir';this.outletMode='open';this.n=compiled.n;const N=this.n;this.rate=rate;this.tick=0;this.random=0x513fe2;this.wander=0;this.drive=0;this.fault=null;this.contactCount=0;
   // Ring controls and uniform inlet preserve rotation symmetry exactly. This
   // quotient stores one of eight identical sectors. The full-sheet path is
   // used for nonuniform loads/initial states and checked against the quotient.
-  this.compactAir=compactAir;this.symmetry=symmetry;this.sectors=symmetry?1:C;this.size=N*this.sectors;
+  this.useNative=native&&symmetry;this.compactAir=compactAir;this.symmetry=symmetry;this.sectors=symmetry?1:C;this.size=N*this.sectors;
   for(const key of ['pressure','sum','admit','displacement','velocity','force','solidIncoming','solidAdmit','radii','dv'])this[key]=new Float64Array(this.size);
   this.areas=new Float64Array(N);this.air=[];this.solid=[];this.previousOutlet=0;this.configure(compiled);
  }
@@ -184,6 +185,7 @@ export class TubeEngine {
   if(!c.elasticityVariation)this.variation.factors.fill(1);
   this.controlPeriod=Math.round(this.rate/200);this.controlPhase=0;this.controlMix=0;this.variable=c.elasticityVariation>0;this.viscous=Float64Array.from(sheet.viscous);
   for(const ch of this.channels)ch.variable=this.variable?new VariableReceptance(sheet,ch,this.rate,ch.kernel):null;
+  this.native=this.useNative?new NativeCore(this):null;
  }
  // A diagnostic initial displacement can excite any of the computed sheet
  // modes; no modal waveform is ever imposed on the running pressure source.
@@ -250,6 +252,7 @@ export class TubeEngine {
   if(this.variable)this.advanceVariation();
   if(this.tick%96===0){this.random^=this.random<<13;this.random^=this.random>>>17;this.random^=this.random<<5;this.wander+=.018*((this.random>>>0)/2147483648-1)-.008*this.wander;}
   this.drive+=(this.pressureTarget*(1+c.wander*this.wander)-this.drive)*h/.035;
+  if(this.native){const contacts=this.native.step(h);if(contacts<0){this.fault='Sheet motion exceeded the model domain. Stop and adjust support or pressure.';return 0;}this.contactCount+=contacts;}else{
   this.sum.fill(0);this.admit.fill(0);this.areas.fill(0);
   for(let t=0;t<this.sectors;t++)for(let i=0;i<N;i++){
    const r=Math.max(.000025,c.r[i]+this.displacement[t*N+i]);this.radii[t*N+i]=r;this.areas[i]+=Math.PI*r*r/this.sectors;
@@ -257,10 +260,12 @@ export class TubeEngine {
   this.airBank.receiveAir(this.sum,this.admit,this.radii,this.areas,this.symmetry);
   for(let t=0;t<this.sectors;t++){
    const first=t*N,last=first+N-1,yi=c.area[0]/(C*RHO*SOUND),yo=this.areas[N-1]/(C*RHO*SOUND);
-   this.admit[first]+=yi;this.sum[first]+=yi*this.drive/2;this.admit[last]+=yo;
+   if(this.inletMode==='reservoir'){this.admit[first]+=yi;this.sum[first]+=yi*this.drive/2;}
+   if(this.outletMode==='open')this.admit[last]+=yo;
   }
   this.solidIncoming.fill(0);
   this.solidBank.receiveSolid(this.solidIncoming);
+  for(const port of this.ports){const i=port.index;this.admit[i]+=port.airY;this.sum[i]+=port.airY*port.airIn;this.solidAdmit[i]+=port.solidZ;this.solidIncoming[i]+=port.solidZ*port.solidIn;}
   this.advanceSheet();
 
   for(let t=0;t<this.sectors;t++)for(let i=0;i<N;i++){
@@ -278,6 +283,8 @@ export class TubeEngine {
   }
   this.airBank.send(this.pressure,true);
   this.solidBank.send(this.force,false);
+  for(const port of this.ports){const i=port.index;port.airOut=this.pressure[i]-port.airIn;port.solidOut=this.force[i]-port.solidIn;this.solidAdmit[i]-=port.solidZ;}
+  }
   let outlet=0;for(let t=0;t<this.sectors;t++)outlet+=this.pressure[t*N+N-1]/this.sectors;
   const output=(outlet-this.previousOutlet)*this.rate/48000/10;this.previousOutlet=outlet;
   if(!Number.isFinite(output)||Math.abs(output)>20){this.fault='Pressure exceeded the model domain. Stop and adjust the tube.';return 0;}return output;
