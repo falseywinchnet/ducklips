@@ -1,0 +1,95 @@
+{
+  "scope": "Completed 50 ms actual-mouth diagnostic and local decay agreement; no sustained speech claim.",
+  "segments": 50,
+  "unique_observations": 5001,
+  "sample_rate_hz": 48000,
+  "audio_samples": 2400,
+  "maximum_work_residual_J": 4.062505540303185e-16,
+  "maximum_air_residual_m3": 3.027481041944081e-20,
+  "source_closures": 0,
+  "source_reopenings": 0,
+  "enhanced_pixels_exact": true,
+  "enhanced_shape": [
+    684,
+    204,
+    4
+  ],
+  "native_decay_fits": [
+    {
+      "first_time_s": 0.015,
+      "last_time_s": 0.05000000000000004,
+      "growth_s": -25.641454749560676,
+      "frequency_Hz": 319.93230038824714,
+      "secondary_growth_s": -58.07390747633543,
+      "secondary_frequency_Hz": 153.45566588195908,
+      "RMS_area_residual_m2": 6.8961916444835615e-09,
+      "fitted_mean_area_m2": [
+        3.674551688051051e-06,
+        4.157308513536965e-06
+      ]
+    },
+    {
+      "first_time_s": 0.02,
+      "last_time_s": 0.05000000000000004,
+      "growth_s": -25.9679444127966,
+      "frequency_Hz": 319.8748388125904,
+      "secondary_growth_s": -62.62344319217074,
+      "secondary_frequency_Hz": 154.2222914700514,
+      "RMS_area_residual_m2": 3.854198186074474e-09,
+      "fitted_mean_area_m2": [
+        3.67561874006647e-06,
+        4.156527313866666e-06
+      ]
+    },
+    {
+      "first_time_s": 0.025,
+      "last_time_s": 0.05000000000000004,
+      "growth_s": -25.811733345663058,
+      "frequency_Hz": 319.80463453512755,
+      "secondary_growth_s": -55.00678888024173,
+      "secondary_frequency_Hz": 154.60243390862837,
+      "RMS_area_residual_m2": 2.699058041938197e-09,
+      "fitted_mean_area_m2": [
+        3.6763811037936112e-06,
+        4.15560073368948e-06
+      ]
+    },
+    {
+      "first_time_s": 0.03,
+      "last_time_s": 0.05000000000000004,
+      "growth_s": -25.679023814425918,
+      "frequency_Hz": 319.74194676978993,
+      "secondary_growth_s": -59.8673951754306,
+      "secondary_frequency_Hz": 155.3905194097098,
+      "RMS_area_residual_m2": 2.203965910219389e-09,
+      "fitted_mean_area_m2": [
+        3.67704962126479e-06,
+        4.154925547906139e-06
+      ]
+    }
+  ],
+  "independent_local_mode": {
+    "pole": [
+      -25.72530054687509,
+      2007.7998087747667
+    ],
+    "growth_s": -25.72530054687509,
+    "frequency_Hz": 319.55126430546636,
+    "secular_residual": 7.549516567451064e-15
+  },
+  "hashes": {
+    "tools/actual_coupled_audio_validation.py": "049a9a668707b063588ace840165f6df77ed3a657606e659327988c419262f41",
+    "out/actual-coupled-phonation-50ms/run.json": "f15538273cb4fce348ed370b2bc0b9f9882459dce4cc3deb4f1df8a745b853e4",
+    "out/actual-coupled-phonation-v2/run.json": "369222e2339fd990213a280e928a0187c197c22b7dc5a0478951c6ac9c0b4861",
+    "reports/loaded_source_onset.json": "f3c186a5242e05de482b7d85bb95800c304e0e5bc9fc72c548e53e35544fd405",
+    "tools/actual_coupled_phonation.py": "198bc59617fca3b42d3a9b450f56a842c15a036f7253d24ed4ea2ce046ff1a00",
+    "tools/enhanced_specgram/render.py": "ca3d24155c7dfb26d08b57cb2cdf4d0e97765c1e4bba3678a08b6031ebf0f58f",
+    "tools/enhanced_specgram/README.md": "ac72f831a81238f6a73ed06b7726bc367d6739f38cb24eddd4b4b5e7f2c8b8df",
+    "out/actual-coupled-phonation-50ms/radiation.json": "cf6b49b0648fd8cd0d67641590832a86ab7e8a103c6d20d8d10263328855019b",
+    "out/actual-coupled-phonation-50ms/radiation.npz": "5a994a7bee887f0c64fcf777869a5a6b74a09ec6a6f0bcd4caa1a9a503a01527",
+    "out/actual-coupled-phonation-50ms/radiation.wav": "3a9b074a419d73db87e2bfd911f3ffc9886ecce311c92b494eb57894971f8d43",
+    "out/actual-coupled-phonation-50ms/enhanced.json": "a9a28ca013e718f1956acc1659b9ead4db575290e8df8cf610a422d3739ba78c",
+    "out/actual-coupled-phonation-50ms/enhanced.npz": "19af8efbaee3af5772a17b663d24e4bac1ae5e64fb4d74a425d7b45a5af1b37c",
+    "out/actual-coupled-phonation-50ms/enhanced.png": "a2f9abb15d5592babed23b02b281f0b711a078321a289badd831e369104e0f48"
+  }
+}

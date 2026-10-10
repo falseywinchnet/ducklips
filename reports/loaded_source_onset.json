@@ -1,0 +1,928 @@
+{
+  "scope": "Independent smooth symmetric source equations and frozen passive airway impedance; refinement at 1400 Pa and a declared pressure scan. Local modes found from declared seeds, not an exhaustive stability proof or contact trajectory.",
+  "source_parameters": {
+    "lower_mass": 0.000125,
+    "upper_mass": 2.5e-05,
+    "lower_stiffness": 80.0,
+    "upper_stiffness": 8.0,
+    "coupling_stiffness": 25.0,
+    "lower_damping_ratio": 0.1,
+    "upper_damping_ratio": 0.6,
+    "length": 0.014,
+    "lower_thickness": 0.0025,
+    "upper_thickness": 0.0005,
+    "asymmetry": 1.0
+  },
+  "tension": 1.0,
+  "rest_area_m2": 3e-06,
+  "cases": [
+    {
+      "name": "actual-mouth",
+      "source_outlet_inertance": 25.399246983345304,
+      "impedance_checks": [
+        {
+          "frequency_Hz": 20.0,
+          "real_impedance": 12413.477371725388,
+          "imaginary_impedance": 86620.96864540268,
+          "explicit_unknowns": 1158,
+          "relative_discrepancy": 6.224600147173162e-15,
+          "full_equation_residual": 1.1368683772492475e-13
+        },
+        {
+          "frequency_Hz": 150.0,
+          "real_impedance": 26611.62936794951,
+          "imaginary_impedance": 636082.1130868118,
+          "explicit_unknowns": 1158,
+          "relative_discrepancy": 5.120177115727416e-15,
+          "full_equation_residual": 1.1368683856864898e-13
+        },
+        {
+          "frequency_Hz": 320.0,
+          "real_impedance": 41501.641805589126,
+          "imaginary_impedance": 1500360.1380376697,
+          "explicit_unknowns": 1158,
+          "relative_discrepancy": 3.112700485032007e-15,
+          "full_equation_residual": 7.209138351053207e-14
+        },
+        {
+          "frequency_Hz": 1000.0,
+          "real_impedance": 75409.23281530521,
+          "imaginary_impedance": 2583186.6539815627,
+          "explicit_unknowns": 1158,
+          "relative_discrepancy": 3.6475154092025494e-16,
+          "full_equation_residual": 1.1368683772161603e-13
+        },
+        {
+          "frequency_Hz": 8000.0,
+          "real_impedance": 1016218.4887429101,
+          "imaginary_impedance": 13874153.809373844,
+          "explicit_unknowns": 1158,
+          "relative_discrepancy": 1.4926960861785253e-15,
+          "full_equation_residual": 6.904189802815216e-13
+        }
+      ],
+      "records": [
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 32,
+          "derivative_step": 0.001,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.109525599429017,
+            -0.0012414635343376025,
+            3.6809851541855845,
+            4.1513474976239015,
+            1.7456922293939001,
+            1.7456922293939001,
+            1.7456922293939001,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 1.5916157281026244e-15,
+          "equilibrium_rhs_residual": 1.1185363746335497e-10,
+          "constant_load_pressure_Pa": 1.8246678898871793,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 18.265938393544623,
+              "frequency_Hz": 149.15568545038948
+            },
+            {
+              "growth_s": -512.5325674518692,
+              "frequency_Hz": 338.1532049030854
+            },
+            {
+              "growth_s": -20412.279734588625,
+              "frequency_Hz": 61158.20579465856
+            },
+            {
+              "growth_s": -25109.11916750796,
+              "frequency_Hz": 135158.80157248524
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                -25.725260675854795,
+                2007.7999465088872
+              ],
+              "growth_s": -25.725260675854795,
+              "frequency_Hz": 319.55128622653245,
+              "secular_residual": 1.1432179056470132e-14
+            },
+            {
+              "pole": [
+                -63.32567715632998,
+                972.2163607529717
+              ],
+              "growth_s": -63.32567715632998,
+              "frequency_Hz": 154.7330395686488,
+              "secular_residual": 6.5554310808681484e-15
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.0005,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.10952559942901649,
+            -0.001241463534338069,
+            3.68098515418558,
+            4.151347497623899,
+            1.7456922293938988,
+            1.7456922293938988,
+            1.7456922293938988,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.8990143619012086e-15,
+          "equilibrium_rhs_residual": 1.4495071809506044e-10,
+          "constant_load_pressure_Pa": 1.824667889887178,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 18.265962497486605,
+              "frequency_Hz": 149.15569699649828
+            },
+            {
+              "growth_s": -512.5325979517188,
+              "frequency_Hz": 338.1531881398225
+            },
+            {
+              "growth_s": -20412.2797344925,
+              "frequency_Hz": 61158.20579442775
+            },
+            {
+              "growth_s": -25109.119167502482,
+              "frequency_Hz": 135158.80157216633
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                -25.725292575523028,
+                2007.7998363013362
+              ],
+              "growth_s": -25.725292575523028,
+              "frequency_Hz": 319.55126868645596,
+              "secular_residual": 9.154178633137913e-15
+            },
+            {
+              "pole": [
+                -63.32566785342048,
+                972.2164513657391
+              ],
+              "growth_s": -63.32566785342048,
+              "frequency_Hz": 154.73305399011863,
+              "secular_residual": 1.5190755356233132e-14
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.10952559942901649,
+            -0.001241463534338069,
+            3.68098515418558,
+            4.151347497623899,
+            1.7456922293938988,
+            1.7456922293938988,
+            1.7456922293938988,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.8990143619012086e-15,
+          "equilibrium_rhs_residual": 1.4495071809506044e-10,
+          "constant_load_pressure_Pa": 1.824667889887178,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 18.2659685176969,
+              "frequency_Hz": 149.1556998800445
+            },
+            {
+              "growth_s": -512.5326055686621,
+              "frequency_Hz": 338.15318395254246
+            },
+            {
+              "growth_s": -20412.279734479256,
+              "frequency_Hz": 61158.205794353
+            },
+            {
+              "growth_s": -25109.11916742458,
+              "frequency_Hz": 135158.80157236417
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                -25.72530054687509,
+                2007.7998087747667
+              ],
+              "growth_s": -25.72530054687509,
+              "frequency_Hz": 319.55126430546636,
+              "secular_residual": 7.549516567451064e-15
+            },
+            {
+              "pole": [
+                -63.32566552756892,
+                972.2164739953149
+              ],
+              "growth_s": -63.32566552756892,
+              "frequency_Hz": 154.7330575917275,
+              "secular_residual": 7.549516567451064e-15
+            }
+          ]
+        }
+      ],
+      "pressure_scan": [
+        {
+          "pressure_Pa": 700.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.11841148942120569,
+            -0.0022473945881377046,
+            3.7310711710095705,
+            4.230054434521863,
+            1.1868502164085168,
+            1.1868502164085168,
+            1.1868502164085168,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 5.684341886080802e-16,
+          "equilibrium_rhs_residual": 4.0330405681743287e-11,
+          "constant_load_pressure_Pa": 1.24054369007426,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": -10.490976629456672,
+              "frequency_Hz": 146.5730147038386
+            },
+            {
+              "growth_s": -452.17072138268054,
+              "frequency_Hz": 268.7280699662627
+            },
+            {
+              "growth_s": -13911.822436152404,
+              "frequency_Hz": 61367.02038380284
+            },
+            {
+              "growth_s": -17021.828476546005,
+              "frequency_Hz": 134827.0941489071
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                -172.8258340598239,
+                1620.7716867666675
+              ],
+              "growth_s": -172.8258340598239,
+              "frequency_Hz": 257.9538255723042,
+              "secular_residual": 1.812409476345361e-14
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1050.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.1149082980934203,
+            -0.0017546954162288636,
+            3.7118756708763816,
+            4.200583535754296,
+            1.498399989255722,
+            1.498399989255722,
+            1.498399989255722,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 8.880428944285645e-16,
+          "equilibrium_rhs_residual": 1.177227204607334e-10,
+          "constant_load_pressure_Pa": 1.566188071737867,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 7.650731321584832,
+              "frequency_Hz": 148.2346304897187
+            },
+            {
+              "growth_s": -486.92427390099544,
+              "frequency_Hz": 304.81162829156256
+            },
+            {
+              "growth_s": -17427.8151167491,
+              "frequency_Hz": 61256.56396699777
+            },
+            {
+              "growth_s": -21386.86706591381,
+              "frequency_Hz": 134973.73769550017
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                -97.43503898663157,
+                1820.3772902599535
+              ],
+              "growth_s": -97.43503898663157,
+              "frequency_Hz": 289.72204403710157,
+              "secular_residual": 5.10702591327572e-15
+            },
+            {
+              "pole": [
+                -44.557305426352166,
+                966.001722370775
+              ],
+              "growth_s": -44.557305426352166,
+              "frequency_Hz": 153.74394915059358,
+              "secular_residual": 1.4242377703205318e-14
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1750.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.1040602561749428,
+            -0.0007713852288964712,
+            3.6493292470666314,
+            4.1005267417086335,
+            1.9540663955987692,
+            1.9540663955987692,
+            1.9540663955987692,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 1.1934897514720433e-15,
+          "equilibrium_rhs_residual": 4.657749741454609e-10,
+          "constant_load_pressure_Pa": 2.042468968309833,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 25.16539427161351,
+              "frequency_Hz": 149.7312389567827
+            },
+            {
+              "growth_s": -533.2639897916642,
+              "frequency_Hz": 369.38087733767026
+            },
+            {
+              "growth_s": -23057.447174827583,
+              "frequency_Hz": 61060.721576467826
+            },
+            {
+              "growth_s": -28415.267432030065,
+              "frequency_Hz": 135347.75665058364
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                43.01432506000378,
+                2180.488021794558
+              ],
+              "growth_s": 43.01432506000378,
+              "frequency_Hz": 347.0354470212723,
+              "secular_residual": 1.454392162258955e-14
+            },
+            {
+              "pole": [
+                -80.46903810834377,
+                973.6441010612708
+              ],
+              "growth_s": -80.46903810834377,
+              "frequency_Hz": 154.96027149616614,
+              "secular_residual": 1.7186252421197423e-13
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 2000.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 10452.40311644567,
+          "equilibrium_scaled": [
+            0.10037340383725954,
+            -0.0004669604816522269,
+            3.6279026705210935,
+            4.066037237377565,
+            2.086364489530476,
+            2.086364489530476,
+            2.086364489530476,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 1.600770297566223e-15,
+          "equilibrium_rhs_residual": 1.0462741784067475e-10,
+          "constant_load_pressure_Pa": 2.1807522692409926,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 28.753285012540946,
+              "frequency_Hz": 150.0194770609172
+            },
+            {
+              "growth_s": -546.1759518569116,
+              "frequency_Hz": 390.6213445021214
+            },
+            {
+              "growth_s": -24795.531342216545,
+              "frequency_Hz": 60989.94451960447
+            },
+            {
+              "growth_s": -30588.577362710996,
+              "frequency_Hz": 135479.68710902787
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                90.81697383303874,
+                2294.0986474184356
+              ],
+              "growth_s": 90.81697383303874,
+              "frequency_Hz": 365.1171396770752,
+              "secular_residual": 2.967415332400633e-15
+            },
+            {
+              "pole": [
+                -91.6661055908977,
+                973.3172217153765
+              ],
+              "growth_s": -91.6661055908977,
+              "frequency_Hz": 154.90824703247242,
+              "secular_residual": 1.974973571230017e-14
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "fixed-tube",
+      "source_outlet_inertance": 62.34374999999999,
+      "impedance_checks": [
+        {
+          "frequency_Hz": 20.0,
+          "real_impedance": 10506.688506848997,
+          "imaginary_impedance": 130589.2018426425,
+          "explicit_unknowns": 401,
+          "relative_discrepancy": 5.615823497100638e-16,
+          "full_equation_residual": 5.684342055487388e-14
+        },
+        {
+          "frequency_Hz": 150.0,
+          "real_impedance": 33031.94350846917,
+          "imaginary_impedance": 1026051.4139917202,
+          "explicit_unknowns": 401,
+          "relative_discrepancy": 3.4489504103452585e-16,
+          "full_equation_residual": 1.1368770508004532e-13
+        },
+        {
+          "frequency_Hz": 320.0,
+          "real_impedance": 139319.21781277418,
+          "imaginary_impedance": 3373280.8099033185,
+          "explicit_unknowns": 401,
+          "relative_discrepancy": 3.1790475618971855e-15,
+          "full_equation_residual": 1.2069992131230457e-13
+        },
+        {
+          "frequency_Hz": 1000.0,
+          "real_impedance": 62240.30578337003,
+          "imaginary_impedance": -106253.05304158699,
+          "explicit_unknowns": 401,
+          "relative_discrepancy": 3.663544733856803e-14,
+          "full_equation_residual": 1.1409891979989629e-13
+        },
+        {
+          "frequency_Hz": 8000.0,
+          "real_impedance": 1868.4841631950346,
+          "imaginary_impedance": -715205.8040812539,
+          "explicit_unknowns": 401,
+          "relative_discrepancy": 6.511047675048277e-16,
+          "full_equation_residual": 3.3402810539067245e-15
+        }
+      ],
+      "records": [
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 32,
+          "derivative_step": 0.001,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.11113714769180566,
+            -0.002391226638025504,
+            3.6845237117387253,
+            4.149941631127342,
+            1.7462589144345115,
+            1.7462589144345115,
+            1.7462589144345115,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 1.2334968116367584e-15,
+          "equilibrium_rhs_residual": 1.0365219793584401e-10,
+          "constant_load_pressure_Pa": 0.7193904595081734,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 14.099400803738186,
+              "frequency_Hz": 149.44477845216335
+            },
+            {
+              "growth_s": -486.76505543925975,
+              "frequency_Hz": 338.2155130841704
+            },
+            {
+              "growth_s": -15723.000106894768,
+              "frequency_Hz": 127296.36804895896
+            },
+            {
+              "growth_s": -17905.371155332898,
+              "frequency_Hz": 57746.48404307984
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                297.5978429083803,
+                1770.8932183727106
+              ],
+              "growth_s": 297.5978429083803,
+              "frequency_Hz": 281.8464093919321,
+              "secular_residual": 7.862841185870467e-15
+            },
+            {
+              "pole": [
+                -129.75607832546186,
+                967.1248194474122
+              ],
+              "growth_s": -129.75607832546186,
+              "frequency_Hz": 153.92269560191244,
+              "secular_residual": 6.8833827526759706e-15
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.0005,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.11113714769180276,
+            -0.0023912266380229944,
+            3.6845237117387253,
+            4.149941631127342,
+            1.746258914434512,
+            1.746258914434512,
+            1.746258914434512,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.3874235921539368e-15,
+          "equilibrium_rhs_residual": 1.5016077270502137e-10,
+          "constant_load_pressure_Pa": 0.7193904595081736,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 14.099425682825698,
+              "frequency_Hz": 149.44479045604544
+            },
+            {
+              "growth_s": -486.7650878603823,
+              "frequency_Hz": 338.21549499224136
+            },
+            {
+              "growth_s": -15723.000106752028,
+              "frequency_Hz": 127296.3680483788
+            },
+            {
+              "growth_s": -17905.371155377168,
+              "frequency_Hz": 57746.484043007506
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                297.59783331861235,
+                1770.8931320801375
+              ],
+              "growth_s": 297.59783331861235,
+              "frequency_Hz": 281.8463956580426,
+              "secular_residual": 7.327471962526033e-15
+            },
+            {
+              "pole": [
+                -129.75609102162974,
+                967.1249101105025
+              ],
+              "growth_s": -129.75609102162974,
+              "frequency_Hz": 153.92271003139143,
+              "secular_residual": 1.6215921631528826e-15
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1400.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.11113714769180276,
+            -0.0023912266380229944,
+            3.6845237117387253,
+            4.149941631127342,
+            1.746258914434512,
+            1.746258914434512,
+            1.746258914434512,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.3874235921539368e-15,
+          "equilibrium_rhs_residual": 1.5016077270502137e-10,
+          "constant_load_pressure_Pa": 0.7193904595081736,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 14.09943190828022,
+              "frequency_Hz": 149.44479345979417
+            },
+            {
+              "growth_s": -486.7650959686123,
+              "frequency_Hz": 338.21549046809497
+            },
+            {
+              "growth_s": -15723.000106818447,
+              "frequency_Hz": 127296.36804875621
+            },
+            {
+              "growth_s": -17905.371155369816,
+              "frequency_Hz": 57746.48404296671
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                297.59783093066795,
+                1770.8931104962119
+              ],
+              "growth_s": 297.59783093066795,
+              "frequency_Hz": 281.84639222285415,
+              "secular_residual": 2.4424906541753444e-15
+            },
+            {
+              "pole": [
+                -129.75609420128615,
+                967.1249327954238
+              ],
+              "growth_s": -129.75609420128615,
+              "frequency_Hz": 153.92271364180877,
+              "secular_residual": 3.851060918688829e-15
+            }
+          ]
+        }
+      ],
+      "pressure_scan": [
+        {
+          "pressure_Pa": 700.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.119118533026095,
+            -0.0030112978826136953,
+            3.7311364290496245,
+            4.225232061311036,
+            1.1861394945030248,
+            1.1861394945030248,
+            1.1861394945030248,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.99592165312057e-16,
+          "equilibrium_rhs_residual": 5.149303206053446e-11,
+          "constant_load_pressure_Pa": 0.488643138161242,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": -11.457378231849532,
+              "frequency_Hz": 146.80301689142374
+            },
+            {
+              "growth_s": -436.2636684471526,
+              "frequency_Hz": 268.9692964824746
+            },
+            {
+              "growth_s": -10709.120695173016,
+              "frequency_Hz": 126911.56653665451
+            },
+            {
+              "growth_s": -12182.933924351382,
+              "frequency_Hz": 57895.87072509495
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                24.188126337306564,
+                1504.6247420519744
+              ],
+              "growth_s": 24.188126337306564,
+              "frequency_Hz": 239.4684651959397,
+              "secular_residual": 1.5543122344752192e-15
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1050.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.11609623569438783,
+            -0.0027332009850919263,
+            3.7137334502209693,
+            4.197424375432246,
+            1.498179183747722,
+            1.498179183747722,
+            1.498179183747722,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 5.220433460517704e-16,
+          "equilibrium_rhs_residual": 4.4920511754753534e-11,
+          "constant_load_pressure_Pa": 0.6171913010796961,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 4.941586205397457,
+              "frequency_Hz": 148.51594012379056
+            },
+            {
+              "growth_s": -465.6264717973646,
+              "frequency_Hz": 304.96538522129117
+            },
+            {
+              "growth_s": -13391.309111723993,
+              "frequency_Hz": 127076.15421671004
+            },
+            {
+              "growth_s": -15269.165989718305,
+              "frequency_Hz": 57808.9353854148
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                177.44329066387573,
+                1646.7988462005308
+              ],
+              "growth_s": 177.44329066387573,
+              "frequency_Hz": 262.09617665084437,
+              "secular_residual": 3.1731681375076754e-15
+            },
+            {
+              "pole": [
+                -94.44167956645636,
+                973.0224119502614
+              ],
+              "growth_s": -94.44167956645636,
+              "frequency_Hz": 154.8613266010826,
+              "secular_residual": 1.9872992140790302e-14
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 1750.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.10604370976892029,
+            -0.0020651130935900684,
+            3.6543798996419996,
+            4.100763778775203,
+            1.9555729586109996,
+            1.9555729586109996,
+            1.9555729586109996,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 7.958078640513122e-16,
+          "equilibrium_rhs_residual": 1.0391332239123585e-10,
+          "constant_load_pressure_Pa": 0.8056196693790357,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 19.765652101139878,
+              "frequency_Hz": 150.00925310612857
+            },
+            {
+              "growth_s": -503.64082219803726,
+              "frequency_Hz": 369.34670738012716
+            },
+            {
+              "growth_s": -17821.976537029368,
+              "frequency_Hz": 127523.37391839566
+            },
+            {
+              "growth_s": -20251.99860114485,
+              "frequency_Hz": 57686.016527788415
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                393.53846130101914,
+                1876.4577673340589
+              ],
+              "growth_s": 393.53846130101914,
+              "frequency_Hz": 298.6475291743971,
+              "secular_residual": 5.995204332975845e-15
+            },
+            {
+              "pole": [
+                -158.1766109996089,
+                958.6273019298565
+              ],
+              "growth_s": -158.1766109996089,
+              "frequency_Hz": 152.57027368498348,
+              "secular_residual": 9.513742397611762e-15
+            }
+          ]
+        },
+        {
+          "pressure_Pa": 2000.0,
+          "quadrature_order": 48,
+          "derivative_step": 0.00025,
+          "dc_load_Pa_s_m3": 4119.609374999998,
+          "equilibrium_scaled": [
+            0.10259627391919114,
+            -0.001851695228034075,
+            3.6339362440250143,
+            4.067359032944012,
+            2.088595093674086,
+            2.088595093674086,
+            2.088595093674086,
+            0.0,
+            0.0
+          ],
+          "equilibrium_residual": 2.360308129500943e-15,
+          "equilibrium_rhs_residual": 1.2209255828565801e-10,
+          "constant_load_pressure_Pa": 0.8604195928478765,
+          "instantaneous_resistance_modes": [
+            {
+              "growth_s": 22.577987264188014,
+              "frequency_Hz": 150.28425146723126
+            },
+            {
+              "growth_s": -514.073648846191,
+              "frequency_Hz": 390.51511104199983
+            },
+            {
+              "growth_s": -19213.70787983427,
+              "frequency_Hz": 127681.89266327009
+            },
+            {
+              "growth_s": -21798.089068491387,
+              "frequency_Hz": 57640.61566353419
+            }
+          ],
+          "modes": [
+            {
+              "pole": [
+                450.7281455657228,
+                1942.8648795028478
+              ],
+              "growth_s": 450.7281455657228,
+              "frequency_Hz": 309.21654933251784,
+              "secular_residual": 4.440892098500626e-16
+            },
+            {
+              "pole": [
+                -175.8330822474637,
+                952.2924234499607
+              ],
+              "growth_s": -175.8330822474637,
+              "frequency_Hz": 151.5620464610216,
+              "secular_residual": 4.549085025903108e-15
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hashes": {
+    "tools/loaded_source_onset.py": "0b42c350763f47d248c04d1608c836340d8b3ef4567ea0e875e198f9270e9a74",
+    "out/actual-coupled-phonation-v2/final-hold-017-100.json": "3a85ca25c7cf59a4b70353ffbc809d4d5077a2350be7184b99a85070b6228a17",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/continuous_outlet_column_reference.py": "ff9ffb4108d22f86b08510db0228c68261614c9d9cf4bdfc119d096d32e9b64e",
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "tools/planar_source_reference.py": "f4a3d967301ac9980e42fc68385d413fdc6398a821fdc8a1c6358be5c51dae97",
+    "tools/joint_contact_probe.cpp": "4bac7ad239c9ca5a2f94c86614a9744ee3da96655fd7cbeed7abf622265e32df",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "include/ducklips/sources.hpp": "fe89057806121ba08016cf51c660788bcb3cf8c12fbc6f7d1b24936a25dcb4d9",
+    "src/voice.cpp": "df08c24c1e11a853cfd4d12ad544271d93c253e8894f9de243378a74c2e303d3",
+    "src/body_config.cpp": "d236591366f2707b5e221c160c5f55b2b9c6a132d0891e59c9e9ac14549476dc"
+  }
+}

@@ -152,6 +152,14 @@ correction. Physical-state continuation preserves the source, graph and all
 loss memories; a longer pressure-driven run has reached its first contact
 cycle. Sustained motion and actual utterance rendering remain unfinished.
 
+The source now completes a [50 ms actual-mouth trajectory and radiation export](reports/LOADED_SOURCE_ONSET.md).
+An open-lip outlet geometry failure is fixed, and the source/airway state
+continues through actual body and lip motion. At 1400 Pa the actual-mouth
+oscillation decays; an independent pressure-feedback calculation agrees with
+its measured frequency and decay, while explaining the fixed tube's growing
+mode at the same pressure. A higher-pressure native control is in progress.
+This is a short physical-onset diagnostic, not a new NATO listening result.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

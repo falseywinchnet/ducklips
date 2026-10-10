@@ -46,6 +46,14 @@ to floating point without per-clip loudness normalization. The input is not
 resampled: window durations and frequency spacing depend on its actual rate.
 Use the same sample rate and parameters for controlled comparisons.
 
+`--hop` explicitly changes the spacing of computed time centers, while keeping
+the apertures and frequency rows unchanged. For short source-motion diagnostics,
+`--hop 48` at 48 kHz gives 1 ms center spacing. These are new field observations,
+not an interpolated larger image; the JSON and NPZ retain the chosen spacing.
+Denser centers do not shorten the 21.3–85.3 ms windows or establish finer
+physical resolving power. A 50 ms diagnostic therefore still has substantial
+window-padding effects and is unsuitable for claims of steady harmonic quality.
+
 ## What to call directly
 
 The self-contained algorithm files are `oracle/uncertainty_fusion.py`,

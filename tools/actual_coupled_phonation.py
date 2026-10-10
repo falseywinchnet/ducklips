@@ -40,6 +40,7 @@ def main():
     parser.add_argument('--binary', type=Path, default=ROOT / 'build/ducklips_planar_inertive_motion_probe')
     parser.add_argument('--hold-segments', type=int, default=18)
     parser.add_argument('--reservoir', type=float, default=1400.)
+    parser.add_argument('--continue-from', type=Path, help='completed run.json; hold its final mouth without resetting state')
     args = parser.parse_args()
     out = args.output.resolve()
     if args.hold_segments < 0 or not np.isfinite(args.reservoir):
@@ -48,7 +49,27 @@ def main():
         raise ValueError('run already exists; preserve its state and provenance')
     out.mkdir(parents=True, exist_ok=True)
     binary = out / 'probe'
-    shutil.copy2(args.binary.resolve(), binary)
+    seed = None
+    if args.continue_from:
+        seed_path = args.continue_from.resolve()
+        seed = json.loads(seed_path.read_text())
+        if seed['status'] != 'complete' or not seed['segments'] or seed['reservoir_Pa'] != args.reservoir:
+            raise ValueError('continuation requires a completed run at the same lung pressure')
+        source_binary = seed_path.parent / 'probe'
+        if sha(source_binary) != seed['binary_sha256']:
+            raise ValueError('seed executable changed')
+        for name in ['bodies/reference.body', 'out/lip-profile/nato.csv', 'out/nato-spatial-airway.csv']:
+            if sha(ROOT / name) != seed['source_hashes'][name]:
+                raise ValueError(f'continuation changes body or articulation: {name}')
+        (out / 'poses').mkdir(exist_ok=True)
+        for t in [1.500, 1.501]:
+            pose_path = seed_path.parent / f'poses/pose-{t:.3f}.json'
+            if sha(pose_path) != seed['source_hashes'][str(pose_path.relative_to(ROOT))]:
+                raise ValueError('seed pose changed')
+            shutil.copy2(pose_path, out / 'poses' / pose_path.name)
+        shutil.copy2(source_binary, binary)
+    else:
+        shutil.copy2(args.binary.resolve(), binary)
     pose_paths = [out / f'poses/pose-{t:.3f}.json' for t in [1.500, 1.501]]
     poses = [load_pose(p) for p in pose_paths]
     lips_path = ROOT / 'out/lip-profile/nato.csv'
@@ -69,12 +90,21 @@ def main():
                   binary_sha256=sha(binary), reservoir_Pa=args.reservoir,
                   base_commit=subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
                   source_hashes={str(p.relative_to(ROOT)): sha(p) for p in paths},
-                  status='running', completed_duration_s=0., segments=[])
+                  source_hashes_scope='Runtime files and inputs; continued executable provenance is inherited through seed_run.',
+                  status='running', completed_duration_s=seed['completed_duration_s'] if seed else 0., segments=[])
+    if seed:
+        report['seed_run'] = dict(path=str(seed_path), sha256=sha(seed_path))
     save(out / 'run.json', report)
     previous = None
+    if seed:
+        receipt = seed['segments'][-1]
+        for name, expected in receipt['files'].items():
+            if sha(ROOT / name) != expected:raise ValueError(f'seed endpoint changed: {name}')
+        endpoint = next(ROOT / name for name in receipt['files'] if name.endswith('.json'))
+        previous = json.loads(endpoint.read_text())['steps'][-1]
     # Coordinates/profiles come from the existing articulatory gesture trace;
     # only the first/last holds are added. No recorded speech drives acoustics.
-    intervals = [(0, 0, 'initial-hold'), (0, 1, 'body-motion')]
+    intervals = [] if seed else [(0, 0, 'initial-hold'), (0, 1, 'body-motion')]
     intervals += [(1, 1, f'final-hold-{i:03d}') for i in range(args.hold_segments)]
     try:
         for a, b, name in intervals:
