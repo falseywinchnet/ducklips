@@ -1,0 +1,25 @@
+{
+  "base_engine": "round 018 source-pressure experiment; not the older engine",
+  "source_snapshot": "out/visual-round-018/source-snapshot",
+  "instrumented_tree": "out/source-stage-study",
+  "hashes": {
+    "out/source-stage-study/source_stage_listening": "caa39006eb2db1b4d1ac777fe75525e787fcd6f34b718a33b88230ae90413b46",
+    "out/source-stage-study/libducklips-base.a": "d440a198cd99a2b06ec6739c832632f961193631fd35c6a87e444fd028cf29a2",
+    "out/source-stage-study/synthesizer.o": "cf8cf66dc79e6a769e6d258416cf513d5b6b5719e3a9ee9edcf5ebff097b38d7",
+    "out/source-stage-study/nudges.o": "66612f3ad61b0a1a3ecb88357b58a0069444ec29e68e248091fca212fdeb8d9b",
+    "tools/source_stage_listening.cpp": "87a0805267b33d8a4cb0a43a11aaae80232aa1e97131f51e914c9bf0854818eb",
+    "tools/package_source_stages.py": "fe9791a67cadd27845c09a740cccc5928448209fa0c6d9c3be8041af64ff003b",
+    "reports/source_stage_instrumentation.patch": "2b8a428e3df700fa219e830936ce5239ded4c475dee103e9fcfa9947b6ace40b",
+    "out/visual-round-018/body.body": "47dc542166fb81ea47595eccc75dc6fbfa551bdc716819e92eae669d01d0b2f9"
+  },
+  "validation": {
+    "nonfinite_clipping_geometry_airflow_checks": "passed",
+    "full_output_reconstruction_error": {
+      "neutral": 0,
+      "ah": 0,
+      "closures": 0
+    }
+  },
+  "enhanced_status": "rendering asynchronously; inspect complete fields before changing model",
+  "audio_directory": "out/source-stage-listening"
+}

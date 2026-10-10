@@ -1,0 +1,52 @@
+--- a/include/ducklips/synthesizer.hpp
++++ b/include/ducklips/synthesizer.hpp
+@@ -23,6 +23,8 @@
+ enum class OutputTap { microphones, lips, glottal_source };
+ 
+ struct SynthesisOptions final {
++    bool diagnostic_steady_source{false};
++    Phone diagnostic_initial_vowel{Phone::AX};
+     bool local_flow{false}; // bounded local exchanges; unified mean/acoustic air state
+     std::size_t local_substeps{4};
+     bool conservative_tongue{false}; // material body map; explicit research option
+@@ -107,6 +109,7 @@
+     // Local source diagnostics, sampled after the fold and airway advances.
+     double lower_fold_area{},upper_fold_area{},rest_fold_area{},lung_pressure{};
+     double glottal_endpoint_flow{};
++    std::array<double,3> oral_stage_derivative{};
+ };
+ 
+ // Values from the most recent control block, for diagnostics.
+--- a/src/synthesizer.cpp
++++ b/src/synthesizer.cpp
+@@ -166,7 +166,7 @@
+ void Synthesizer::reset() noexcept {
+     articulators_ = ArticulatorState{};
+     articulators_.apply_speeds(voice_.speeds);
+-    articulators_.place_vowel(vowels_.shape(Phone::AX));
++    articulators_.place_vowel(vowels_.shape(options_.diagnostic_initial_vowel));
+     articulators_.glottal_rest_area.place(voice_.abducted_area);
+     articulators_.lung_pressure.place(0.0);
+     articulators_.pitch.place(voice_.base_pitch);
+@@ -635,6 +635,9 @@
+         lung_pressure_=articulators_.lung_pressure.value*effort*shimmer_multiplier_;
+         rest_area_=std::max(articulators_.glottal_rest_area.value*std::clamp(1-1.5*(effort-1),.4,1.6),-2e-6);
+         tension_=std::clamp(std::max(articulators_.pitch.value,30.)/unit_pitch_*pitch_correction_*pitch_multiplier_,.3,6.);
++        if(options_.diagnostic_steady_source){
++            lung_pressure_=voice_.lung_pressure;rest_area_=voice_.adducted_area;tension_=1.;
++        }
+         output_gain_=std::max(articulators_.loudness.value,0.);
+         double aspiration=0;
+         if(glottal_area_>1e-10){
+@@ -675,7 +678,10 @@
+                 .nasal_mean_flow=local_.flow(layout.nostril_branch()),.constriction_flow=local_.flow(branch),
+                 .lower_fold_area=glottis_.lower_area(),.upper_fold_area=glottis_.upper_area(),
+                 .rest_fold_area=rest_area_,.lung_pressure=lung_pressure_,
+-                .glottal_endpoint_flow=local_.glottal_endpoint_flow()});
++                .glottal_endpoint_flow=local_.glottal_endpoint_flow(),
++                .oral_stage_derivative={local_.flow_derivative(layout.oral_branch(5),sample_period_),
++                    local_.flow_derivative(layout.oral_branch(11),sample_period_),
++                    local_.flow_derivative(layout.oral_branch(17),sample_period_)}});
+         }
+         if(options_.tap!=OutputTap::microphones){
+             const double derivative=options_.tap==OutputTap::lips?lips:(glottal_flow_-tap_previous_flow_)/sample_period_;
