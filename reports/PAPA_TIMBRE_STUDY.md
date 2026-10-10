@@ -81,7 +81,10 @@ lower harmonic structure and descending pitch remain. Narrow resonances are
 still visible. This is stronger causal evidence for the contact mechanism
 than simply finding a source trace corner: modifying that mechanism changes
 the targeted visual feature, while removing generated pressure noise did not.
-The recording has not received a human naturalness verdict.
+The user subsequently reported: “it sounds softer but it still has that tinny
+quality like a transistor hum.” Softening is audible; the target timbre defect
+persists. This overrides any inference that the upper-field reduction alone
+resolved the perceived problem.
 
 ## What this establishes, and the next physical question
 
@@ -135,3 +138,93 @@ fully present in each frozen `body.body`.
 trace plots. `out/visual-round-012/contact-detail.png` overlays the contact
 experiment at the same absolute sample times, with no phase alignment. These
 plots do not replace the complete enhanced field of each fresh recording.
+
+## Continuation: hum within the voiced vowels
+
+The user clarified that the transistor-like quality is part of the voiced
+sounds, not a separate sound between or after them. The audible softening of
+012 therefore does not establish that contact-edge smoothing addresses this
+remaining defect. The investigation continues from that body as a controlled
+reference, without promoting it to the default.
+
+**013 — lip observation.** Freshly generated from the unchanged 012 body at
+its original common gain. The physical trace is byte-identical to 012. The
+complete enhanced field retains the same voiced harmonic pattern and narrow
+bands. The nasal trace is effectively zero; the scaled throat derivative RMS
+is about 0.86% of the lip derivative before distance/delay propagation. This
+makes microphone mixing or a separate nose/throat source an unlikely main
+origin of the observed pattern. It is not an auditory equivalence claim.
+
+**014 — rejected boundary-loss control.** An isolated source tree at
+`out/papa-loss-engine-study` starts from commit 1dc517c and adds the six-state
+thermal/viscous relaxation terms previously tried in failed round 002. The
+reason for this repeat is the newly intelligible, correctly sealed baseline;
+the old failed speech could not establish the effect on this voiced-timbre
+problem. The main local engine and body are unchanged. Complete patch, build,
+frozen sources and recording are retained locally.
+
+The full enhanced field shows a conspicuous closure stripe at 0.807 s and
+little change in the main voiced pattern. At that instant lip flow drops from
+29.5 to 0.055 cm³/s in one sample while the represented lip aperture remains
+about 0.011 cm². The implementation linearly interpolates divergent boundary
+loss coefficients across geometry blocks; its treatment of near-closing
+geometry and stored loss state needs examination. This is a hypothesis about
+the new transient, not a proven diagnosis of the original hum.
+
+The original playback gain would have clipped this new transient and was
+rejected. The complete waveform was instead given one fixed gain
+334.762270875, and its enhanced color reference was scaled by the same gain
+ratio relative to 012. This preserves the physical amplitude comparison;
+the listening files themselves do not have the same gain. The full source
+hash and exact gain are in the round receipt. No click was cut or filtered.
+The local-engine integrity suite passed, yet the speech change was rejected.
+It also rendered at about 4.2× realtime, below the required 10× threshold.
+This experiment is not merged into the working engine.
+
+**015 — distributed fold geometry.** Return to the unchanged local airway and
+the 012 body, adding only `folds.strips=16`. This exposes an existing physical
+representation through body configuration: a bowed longitudinal vibration
+shape with a posterior opening, instead of one rectangular aperture closing
+along its full length together. The same moving lower/upper layers drive all
+sampled strips; there are no added oscillators or scripted voice cycles.
+Its shape and posterior opening distribution are model assumptions, not a
+measured fit to a person. Its adduction coordinate treatment also remains a
+reduced model rather than a complete three-dimensional tissue description.
+
+The source trace changes over the whole pulse: a small posterior airflow
+persists instead of a long exactly shut interval. The inspected complete enhanced field retains both voiced regions and the
+descending harmonic family. Relative lower harmonic strengths and upper
+texture change, but similar narrow resonances remain; this is not a visual
+demonstration that the transistor-like quality has disappeared. This diagnostic
+render takes 0.156 s for 1.51 s of audio (about 9.7× realtime), slightly below
+the performance requirement. Performance work remains parked while timbre is
+assessed; this is not a performance-qualified replacement. Default bodies
+retain the existing one-strip geometry.
+
+**016 — fresh voiced-level-matched audition.** Re-render the exact 015 physical
+configuration, then apply one constant gain to the entire recording, chosen
+to match 012's stereo RMS over voiced windows 0.72–0.79 and 0.95–1.15 s.
+The declared gain is 1203.4128531012666; the color reference scales in the same
+proportion to 0.24285731813851033, preserving physical-level comparisons with
+the previous fields. This is RMS level matching, not a perceptual loudness
+model. Its purpose is to keep a lower vowel level from confounding a timbre
+comparison. The 015 physical run is freshly repeated, not reused as an old
+audio deliverable. The final round receipt verifies byte-identical native audio and physical
+traces, the exact waveform-to-full-field hash, and a PCM voiced RMS ratio
+of 1.00000036 to 012. The complete 684 × 567 field was inspected: both vowel
+regions remain, along with residual narrow resonances. Its appearance agrees
+with 015 at the common physical scale. The diagnostic render was about 9.9×
+realtime with full sample-rate traces and probes enabled.
+
+The user's description of 012 as softer alone does not distinguish loudness
+from timbre: the earlier common physical gain preserved actual level changes.
+No naturalness acceptance is inferred for 015 or 016 from visual changes.
+
+
+The retained repository change is only the transactional `folds.strips` body
+configuration input, its documented geometry semantics and parser tests. The
+existing fold/airway equations and all default bodies remain unchanged. The
+updated stream test executable passes with zero failures, including invalid
+integer rejection and existing chunk-invariance checks. The failed loss copy
+remains isolated and is not a candidate default. A CTest regex invocation
+selected no tests; validation used the actual test executable directly.

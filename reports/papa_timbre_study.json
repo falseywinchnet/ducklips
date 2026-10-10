@@ -101,7 +101,7 @@
         "result": "Full 684 x 567 field inspected at original magma scale. Much of the dense upper-frequency texture is reduced, especially the region above the main lower vowel bands; both voiced regions, lower harmonic structure and descending pitch remain. Narrow resonance ridges persist. Together with the rounded source-derivative trace and the near-unchanged no-turbulence field, this supports a contact-related contribution to the upper texture, not a proven cure of perceived mechanical timbre.",
         "next_investigation": "Relate near-seal airflow to actual distributed fold contact geometry and consistent force/flow area. Keep the accepted default unchanged; do not treat the diagnostic 10x area scale as measured anatomy.",
         "human_acceptance": false,
-        "human_acceptance_status": "not yet assessed; round 009 alone accepted for intelligibility"
+        "human_acceptance_status": "User reports softer, but tinny transistor-like hum persists; naturalness not accepted"
       },
       "enhanced_sha256": "09560525066d373dac57b4b9a4ce63507dbe7cba3041531c5e265459868009de",
       "enhanced_source_matches_audio": true,
@@ -109,7 +109,9 @@
         684,
         567
       ],
-      "complete_duration_seconds": 1.51
+      "complete_duration_seconds": 1.51,
+      "user_feedback": "it sounds softer but it still has that tinny quality like a transistor hum",
+      "user_hum_localization": "Part of the voiced sounds"
     }
   ],
   "verification": {
@@ -117,7 +119,174 @@
     "all_three_full_fields_visually_inspected": true,
     "all_three_same_declared_gain": true,
     "accepted_engine_and_body_unchanged": true,
-    "human_naturalness_improvement": "not established",
+    "human_naturalness_improvement": "User confirms softer; target tinny hum persists",
     "scope": "controlled study, not accepted default replacement"
+  },
+  "continuation": {
+    "user_feedback": "it sounds softer but it still has that tinny quality like a transistor hum",
+    "localization": "Part of the voiced sounds",
+    "comparison_baseline_round": 12,
+    "rounds": [
+      {
+        "round": 13,
+        "directory": "out/visual-round-013",
+        "audio_sha256": "b6c125cb99c95dc3462c9110fda7d0ae908413f69fe6dc175f1f2863af71a745",
+        "enhanced_sha256": "1a22fe8e02691ebe45699adef355a73af9befbeebd890f7640147d5db6ee3caa",
+        "binary_sha256": "e2bdb131bd0013e3445c397d3a8a299c186b9e5d159505bcfc7aa85b36ede694",
+        "body_sha256": "47dc542166fb81ea47595eccc75dc6fbfa551bdc716819e92eae669d01d0b2f9",
+        "playback": {
+          "fixed_gain": 882.4414167632915,
+          "gain_selection": "declared",
+          "tap": "lips",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one fixed gain over the full recording; no cuts or filters"
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Full native enhanced field retains the same voiced harmonic pattern and narrow bands as 012, at the lip observation point with byte-identical physical trace. Microphone mixing is not their origin.",
+          "next_experiment": "Test existing geometry-derived thermal and viscous relaxation losses in an isolated current-engine copy, with the round 012 body unchanged."
+        },
+        "verified_full_field_shape": [
+          684,
+          567
+        ],
+        "verified_source_hash": true
+      },
+      {
+        "round": 14,
+        "directory": "out/visual-round-014",
+        "audio_sha256": "0375b105ec644ae9e9359300e916a5fcea3ee24db86e11fb7ff0d31f6a022c4d",
+        "enhanced_sha256": "3d51ddb18be475e0bdd9fcf0d2ea3bfc3457ab8294726a116161a371e543e845",
+        "binary_sha256": "ce1091507edf5562f9c289c23e9c71c5a98cfd486a2cd9c41b005fd2622c01d6",
+        "body_sha256": "47dc542166fb81ea47595eccc75dc6fbfa551bdc716819e92eae669d01d0b2f9",
+        "playback": {
+          "fixed_gain": 334.7622708746228,
+          "gain_selection": "lowered to prevent experimental closure transient clipping; no waveform cuts or filtering",
+          "tap": "microphones",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one constant gain for entire recording"
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Complete enhanced field has nearly the same voiced harmonic pattern as 012 plus a bright full-height closure stripe at 0.807 s. The lip flow falls from about 29.5 to 0.055 cm3/s in one sample while the mouth aperture is still 0.011 cm2. Rejected as a speech change.",
+          "candidate": false,
+          "next_experiment": "Return to unchanged local airway and test existing distributed fold geometry through the body configuration."
+        },
+        "verified_full_field_shape": [
+          684,
+          567
+        ],
+        "verified_source_hash": true,
+        "assessment": {
+          "rejected": true,
+          "speech_render_realtime_multiple": 4.217877094972067,
+          "reason": "Introduces closure transient without clear removal of target voiced pattern; also below 10x real-time. Diagnostic only, not merged.",
+          "integrity_tests": "isolated ducklips_local_speech_tests passed; not a quality result"
+        },
+        "display_comparison": {
+          "baseline_round": 12,
+          "baseline_gain": 882.4414167632915,
+          "baseline_reference": 0.17808298734486477,
+          "actual_reference": 0.06755741980738769,
+          "rule": "display reference scaled in proportion to playback gain to preserve the baseline physical level scale; listening copies have different gains"
+        },
+        "initial_playback_gain_rejected": {
+          "requested": 882.4414167632915,
+          "reason": "Declared playback gain would clip; choose a lower common gain",
+          "peak_at_requested_gain": 2.108819287090543
+        }
+      },
+      {
+        "round": 15,
+        "directory": "out/visual-round-015",
+        "audio_sha256": "1394e16a2550c088b006790befe402e40219bd1c8121226a12673f12a8ff18cc",
+        "enhanced_sha256": "3a80d41e796c6c51bb17ace2a789c5498a5495385964a2b9f7b2a08fa6e21ee5",
+        "binary_sha256": "f6a5d56ec0cad92885bff8d435a08c3d4078dec6fca4ef7665f81d9c4b925773",
+        "body_sha256": "b4bde772b5b9165c8e7c7285ad3cf012055f916f090f8bd1dedb2802723d7cdd",
+        "playback": {
+          "fixed_gain": 882.4414167632915,
+          "gain_selection": "declared",
+          "tap": "microphones",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one fixed gain over the full recording; no cuts or filters"
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Full field retains both voiced regions and the descending harmonic family. The relative lower harmonic strengths and upper texture change, but several similar narrow resonances remain. Not a demonstrated cure for perceived transistor hum. Supplemental source trace shows posterior airflow and a changed entire pulse shape.",
+          "next_experiment": "Fresh repeat of the same physical run at a declared voiced-RMS-matched playback gain, compared with the last user-heard round 012. Adjust the display reference proportionally so physical image level remains comparable.",
+          "human_acceptance_status": "not yet listened to by user"
+        },
+        "verified_full_field_shape": [
+          684,
+          567
+        ],
+        "verified_source_hash": true
+      },
+      {
+        "round": 16,
+        "directory": "out/visual-round-016",
+        "audio_sha256": "25acbb415b17aca8c661b06a3fb14f4bc8dcf31d6745048694aec0c7bfe541dc",
+        "enhanced_sha256": "7f21f833419257ddd8aa61fb66970ff58b77c12f3ebb8dfcb1141a5f2f685c91",
+        "binary_sha256": "f6a5d56ec0cad92885bff8d435a08c3d4078dec6fca4ef7665f81d9c4b925773",
+        "body_sha256": "b4bde772b5b9165c8e7c7285ad3cf012055f916f090f8bd1dedb2802723d7cdd",
+        "playback": {
+          "fixed_gain": 1203.4128531012666,
+          "gain_selection": "declared",
+          "tap": "microphones",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one fixed gain over the full recording; no cuts or filters"
+        },
+        "level_match": {
+          "reference_round": 12,
+          "physical_candidate_round": 15,
+          "window_seconds": [
+            [
+              0.72,
+              0.79
+            ],
+            [
+              0.95,
+              1.15
+            ]
+          ],
+          "method": "single constant gain to match stereo RMS across both voiced windows; no compression/filter/cuts",
+          "reference_raw_rms": 0.00026541406918783645,
+          "candidate_raw_rms": 0.00019462345498425204,
+          "gain": 1203.4128531012666,
+          "display_reference": 0.24285731813851033,
+          "reference_audio_sha256": "7669ab08f93c8448141e46e4ac2e3aa19daa85fffdd0600fc8ffe0757621fe10",
+          "fresh_native_audio_matches_round_015": true,
+          "fresh_physical_trace_matches_round_015": true,
+          "pcm_voiced_rms_ratio": 1.0000003591342257
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Complete 684 x 567 field inspected at original magma colors and proportionally scaled reference. Both vowel regions and lower harmonic structure remain; several narrow resonances persist. Appearance agrees with round 015 at a common physical scale, after the new voiced-level-matched rendering. No claimed auditory cure of the transistor-like character.",
+          "human_acceptance_status": "pending user listening; diagnostic candidate only"
+        },
+        "verified_full_field_shape": [
+          684,
+          567
+        ],
+        "verified_source_hash": true
+      }
+    ],
+    "validation": {
+      "main_body_config_and_stream_tests": "passed; 0 failures",
+      "rejected_loss_experiment_local_tests": "passed; not a quality result",
+      "main_changes": "Expose existing folds.strips through transactional body parser; no changes to acoustic or fold equations",
+      "default_bodies_changed": false,
+      "last_deliverable_round": 16,
+      "round_16_status": "fresh render and matching complete enhanced field verified and visually inspected",
+      "all_four_continuation_fields_complete_and_inspected": true,
+      "round_015_diagnostic_render_realtime_multiple": 9.679487179487179,
+      "round_016_diagnostic_render_realtime_multiple": 9.869281045751634,
+      "timing_scope": "render with sample-rate physical trace and probes enabled; not a production timing qualification",
+      "naturalness": "not established"
+    }
   }
 }

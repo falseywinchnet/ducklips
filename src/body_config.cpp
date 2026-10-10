@@ -84,6 +84,13 @@ bool read_body_config(std::istream& input, VoiceProfile& output, std::string& er
         } else if (key == "name") {
             if (value.size() > 80) { reason = "name exceeds 80 characters"; }
             else { candidate.name = value; }
+        } else if (key == "folds.strips") {
+            std::istringstream parser(value);
+            std::size_t strips = 0;
+            std::string extra{};
+            if (!(parser >> strips) || (parser >> extra) || strips < 1 || strips > maximum_fold_strips) {
+                reason = "folds.strips must be an integer in [1," + std::to_string(maximum_fold_strips) + "]";
+            } else { candidate.folds.strips = strips; }
         } else if (key == "phonation" || key == "audible_breath" || key == "side_cavities") {
             if (value != "true" && value != "false") { reason = "expected true or false for " + key; }
             else if (key == "phonation") { candidate.phonation = value == "true"; }

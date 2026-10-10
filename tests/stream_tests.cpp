@@ -31,16 +31,19 @@ void operator delete[](void* pointer) noexcept { std::free(pointer); }
 int main() {
     ducklips::VoiceProfile body = ducklips::baritone_voice();
     std::string error{};
-    std::istringstream good("preset=alto\nname=example\ntract_length=.15\nfolds.lower_mass=.00007\nspeaking_rate=1.2\n");
+    std::istringstream good("preset=alto\nname=example\ntract_length=.15\nfolds.lower_mass=.00007\nfolds.strips=16\nspeaking_rate=1.2\n");
     check(ducklips::read_body_config(good, body, error) && body.name == "example" && body.tract_length == .15
-          && body.folds.lower_mass == .00007 && body.base_pitch == ducklips::alto_voice().base_pitch,
+          && body.folds.lower_mass == .00007 && body.folds.strips == 16
+          && body.base_pitch == ducklips::alto_voice().base_pitch,
           "body preset and anatomy overrides are applied");
     const char* bad_cases[] = {"tract_length=.18\nunknown=1", "base_pitch=nan", "lung_pressure=inf",
         "tract_length=-1", "base_pitch=100garbage", "base_pitch=110\nbase_pitch=120", "name=test\npreset=alto",
-        "audible_breath=yes", "adducted_area=.00008\nabducted_area=.00001"};
+        "audible_breath=yes", "adducted_area=.00008\nabducted_area=.00001",
+        "folds.strips=0", "folds.strips=65", "folds.strips=1.5", "folds.strips=-1"};
     for (const char* text : bad_cases) {
         std::istringstream bad(text);
-        check(!ducklips::read_body_config(bad, body, error) && body.name == "example" && body.tract_length == .15,
+        check(!ducklips::read_body_config(bad, body, error) && body.name == "example" && body.tract_length == .15
+              && body.folds.strips == 16,
               "invalid body input fails transactionally");
     }
     ducklips::Lexicon lexicon{};

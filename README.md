@@ -479,6 +479,12 @@ not asserted anatomical population limits. A body file is not evidence of a
 successful individual-speaker match. [body_config.cpp](src/body_config.cpp)
 contains the supported fields and ranges.
 
+`folds.strips` accepts integers 1–64. The existing one-strip model is a uniform
+rectangular opening; values above one sample a bowed longitudinal vibration
+shape with a posterior opening. This changes the represented fold geometry,
+not just numerical resolution. It is an experimental body control; the default
+remains one strip.
+
 ```sh
 python tools/fetch_samples.py --prepare
 ```
