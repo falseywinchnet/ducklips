@@ -1,6 +1,8 @@
 #pragma once
 #include "ducklips/acoustic_network.hpp"
 #include "ducklips/air_path.hpp"
+#include "ducklips/somatic_control.hpp"
+#include "ducklips/tissue_source.hpp"
 #include "ducklips/articulation.hpp"
 #include "ducklips/cues.hpp"
 #include "ducklips/modal.hpp"
@@ -23,6 +25,8 @@ namespace ducklips {
 enum class OutputTap { microphones, lips, glottal_source };
 
 struct SynthesisOptions final {
+    bool living_control{false}; // shared physical-coordinate regulation + elastic-volume source
+    SomaticControl::Settings somatic{};
     bool local_flow{false}; // bounded local exchanges; unified mean/acoustic air state
     std::size_t local_substeps{4};
     bool conservative_tongue{false}; // material body map; explicit research option
@@ -50,6 +54,7 @@ struct SynthesisOptions final {
 };
 
 struct SynthesisStatistics final {
+    double somatic_seconds{},tissue_seconds{},airway_seconds{};
     double geometry_seconds{}; // measured control-rate body construction, separate from audio updates
     std::size_t airflow_failures{};
     double airflow_failure_time{};
@@ -159,6 +164,7 @@ public:
     [[nodiscard]] const SynthesisProbe& probe() const noexcept;
     [[nodiscard]] const VowelLibrary& vowels() const noexcept;
     [[nodiscard]] const VoiceProfile& voice() const noexcept;
+    [[nodiscard]] const SomaticControl& somatic_control() const noexcept{return somatic_;}
     [[nodiscard]] const SynthesisOptions& options() const noexcept;
     [[nodiscard]] double unit_tension_pitch() const noexcept; // Hz at Q = 1, measured at prepare
     [[nodiscard]] const std::vector<TraceSample>& trace() const noexcept;
@@ -194,6 +200,8 @@ private:
     LocalSpeech local_{};
     bool canonical_ready_{false};
     TwoMassGlottis glottis_{};
+    TissueSource tissue_{};
+    SomaticControl somatic_{};
     IntraoralPressure intraoral_{};
     MeanAirway mean_airway_{};
     TurbulenceNoise aspiration_noise_{};

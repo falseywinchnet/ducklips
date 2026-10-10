@@ -43,6 +43,8 @@ int main(){
     std::cout<<"stochastic stress relaxation, analytic held-strain limit, motor twitch release and delayed posture correction passed\n";
     ducklips::TissueSource source;source.reset();
     constexpr double dt=1./96000.;
+    require(source.advance(0,600,dt)<0,"reversed pressure must produce reversed finite quasi-steady flow");
+    source.reset();
     for(int i=0;i<9600;++i){
         require(source.advance(0,0,dt)==0,"zero breath must not create flow");
         require(source.kinetic_energy()==0 && source.elastic_energy()==0,"resting tissue must stay at rest without pressure");

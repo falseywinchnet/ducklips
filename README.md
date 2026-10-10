@@ -5,6 +5,14 @@ nudges into a body; its moving airway, self-oscillating vocal folds, airflow and
 acoustic radiation produce the sound. Body geometry and tissue properties are
 configuration, not a speaker embedding or a bank of recorded sounds.
 
+The current [continual holding experiment](reports/SOMATIC_CONTROL.md) adds
+relaxing stress, overlapping irregular motor twitches and delayed correction
+to 29 moving controls. `ducklips_say --living-control` explicitly selects this
+mechanism with the elastic-volume tissue source and local airflow. A fresh
+sustained-vowel diagnostic completes, but human timbre is unaccepted and the
+full path currently runs about 5.5x realtime. Earlier Papa/alphabet listening
+results do not score this source or control mechanism.
+
 **Local engine listening failed, 2026-10-10:** `ducklips_say --local-flow --conservative-tongue`
 and `ducklips_stream --local-flow --conservative-tongue` now run a new local
 air-exchange core. It carries breath pressure and sound in one state, with

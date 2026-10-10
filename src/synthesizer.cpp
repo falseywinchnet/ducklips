@@ -61,6 +61,10 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
     if (options.local_flow && (options.canonical_motion || options.spatial_pressure)) { throw std::invalid_argument("local flow is a distinct engine path"); }
     if (options.conservative_tongue && !options.canonical_motion && !options.local_flow) { throw std::invalid_argument("conservative tongue requires canonical or local motion"); }
     if (options.spatial_pressure && !options.canonical_motion) { throw std::invalid_argument("spatial pressure requires canonical motion"); }
+    if(options.living_control && (!options.local_flow || options.rate.samples_per_second!=48000 || options.control_block!=48)){
+        throw std::invalid_argument("living control currently requires local flow, 48 kHz and 48-sample control blocks");
+    }
+    if(options.living_control){SomaticControl::validate(options.somatic);}
     voice_ = voice;
     options_ = options;
     air_ = options.air;
@@ -108,7 +112,7 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
     // Two one-pole stages at 20 Hz separate the mean glottal flow from its
     // acoustic fluctuation; at 100 Hz the residual ripple is below 4 %.
     mean_coefficient_ = 1.0 - std::exp(-2.0 * pi * 20.0 / options.rate.samples_per_second);
-    unit_pitch_ = calibrate_folds();
+    unit_pitch_ = options_.living_control?voice_.base_pitch:calibrate_folds();
     trace_.clear();
     trace_.reserve(options.trace_samples);
     trace_begin_ = -1;
@@ -177,6 +181,10 @@ void Synthesizer::reset() noexcept {
         articulators_.slot[slot].activation.place(0.0);
     }
     glottis_.reset(voice_.folds);
+    if(options_.living_control){
+        TissueMaterial material;material.rest_gap=.0003;material.relaxation_seed=voice_.seed;
+        tissue_.reset(material);somatic_.reset(articulators_,voice_.seed,options_.somatic);
+    }
     intraoral_.reset();
     if(options_.spatial_pressure){mean_airway_.reset();}
     resonator_.clear();
@@ -255,9 +263,12 @@ void Synthesizer::apply_cue(const Cue& cue) noexcept {
             articulators_.target_vowel(cue.vowel, cue.angular_rate);
         }
         return;
-    case CueKind::constriction:
+    case CueKind::constriction: {
+        const bool idle=articulators_.slot[slot].activation.value<.05;
         articulators_.slot[slot].begin(cue.gesture, cue.value, cue.angular_rate);
+        if(options_.living_control && idle){somatic_.relocate_idle_gesture(articulators_,slot);}
         return;
+    }
     case CueKind::release:
         tracker = &articulators_.slot[slot].activation;
         break;
@@ -301,7 +312,8 @@ void Synthesizer::begin_block() noexcept {
     const double block_seconds = static_cast<double>(options_.control_block) * sample_period_;
     // Geometry solves remain at control rate; physiological forces follow
     // their continuous trajectories in render_samples, not a block hold.
-    articulators_.advance_geometry(block_seconds);
+    if(options_.living_control){const auto timer=std::chrono::steady_clock::now();somatic_.advance(articulators_,block_seconds,local_.pressure(),local_.glottal_flow());statistics_.somatic_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-timer).count();}
+    else{articulators_.advance_geometry(block_seconds);}
     const std::chrono::steady_clock::time_point geometry_begin=std::chrono::steady_clock::now();
     if(options_.local_flow){model_.build(geometry_tangent(articulators_),local_tangent_shape_);}
     model_.build(articulators_, shape_);
@@ -427,7 +439,7 @@ void Synthesizer::begin_block() noexcept {
     // Larynx: breathing pressure with shimmer; tension from intended pitch,
     // the pitch controller's correction, jitter and tremor.
     double shimmer = shimmer_noise_.next();
-    shimmer_multiplier_ = 1.0 + voice_.shimmer * shimmer;
+    shimmer_multiplier_ = options_.living_control?1:1.0 + voice_.shimmer * shimmer;
     double effort = std::clamp(articulators_.effort.value, 0.3, 2.0);
     lung_pressure_ = articulators_.lung_pressure.value * effort * shimmer_multiplier_;
     // Effort above 1 presses the folds together; below 1 lets them part.
@@ -441,7 +453,7 @@ void Synthesizer::begin_block() noexcept {
     double wander = voice_.jitter * jitter_noise_.next() + voice_.tremor_depth * std::sin(tremor_phase_);
     double intended = std::max(articulators_.pitch.value, 30.0);
     double feedforward = intended / unit_pitch_;
-    pitch_multiplier_ = 1.0 + wander;
+    pitch_multiplier_ = options_.living_control?1:1.0 + wander;
     tension_ = std::clamp(feedforward * pitch_correction_ * pitch_multiplier_, 0.3, 6.0);
 
     // Probe of the block that just finished.
@@ -630,7 +642,8 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
     const double block_length=double(options_.control_block);
     for(std::size_t frame=0;frame<stereo.size()/2;++frame){
         const double fraction=(block_length-double(block_remaining_-frame))/block_length;
-        articulators_.advance_physiology(sample_period_);
+        if(options_.living_control){somatic_.physiology(articulators_,fraction);articulators_.loudness.advance(sample_period_);}
+        else{articulators_.advance_physiology(sample_period_);}
         const double effort=std::clamp(articulators_.effort.value,.3,2.);
         lung_pressure_=articulators_.lung_pressure.value*effort*shimmer_multiplier_;
         rest_area_=std::max(articulators_.glottal_rest_area.value*std::clamp(1-1.5*(effort-1),.4,1.6),-2e-6);
@@ -643,11 +656,30 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
         }
         double area=std::max(rest_area_,0.);
         if(voice_.phonation){
-            glottis_.advance(lung_pressure_-local_.pressure(),rest_area_,tension_,sample_period_,options_.glottis_substeps,aspiration,
-                            local_.glottal_flow(),air_.density);
-            area=std::max(glottis_.minimum_area(),0.);
+            if(options_.living_control){
+                try{
+                    const auto tissue_timer=std::chrono::steady_clock::now();
+                    const double opening=(rest_area_-voice_.adducted_area)/std::max(voice_.abducted_area-voice_.adducted_area,1e-8);
+                    tissue_.set_adduction(.0003*std::clamp(opening,-.5,4.));
+                    const double intended_ratio=std::clamp(articulators_.pitch.value/voice_.base_pitch,.6,1.8);
+                    tissue_.set_tension_scale(intended_ratio*intended_ratio);
+                    for(std::size_t substep=0;substep<options_.glottis_substeps;++substep){
+                        tissue_.advance(lung_pressure_,local_.pressure(),sample_period_/double(options_.glottis_substeps));
+                    }
+                    area=std::max(tissue_.minimum_area(),0.);
+                    statistics_.tissue_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-tissue_timer).count();
+                }catch(...){
+                    ++statistics_.airflow_failures;statistics_.airflow_failure_time=double(position_)*sample_period_;
+                    std::fill(stereo.begin()+static_cast<std::ptrdiff_t>(2*frame),stereo.end(),0.f);
+                    position_+=static_cast<SampleCount>(stereo.size()/2-frame);return;
+                }
+            }else{
+                glottis_.advance(lung_pressure_-local_.pressure(),rest_area_,tension_,sample_period_,options_.glottis_substeps,aspiration,
+                                local_.glottal_flow(),air_.density);
+                area=std::max(glottis_.minimum_area(),0.);
+            }
         }
-        glottal_area_=area;track_pitch(area);
+        glottal_area_=area;if(!options_.living_control){track_pitch(area);}
         const std::size_t constriction=model_.narrowest_section();
         const std::size_t branch=constriction+1<layout.oral_sections()?layout.oral_branch(constriction):layout.lip_branch();
         const double local_area=branch==layout.lip_branch()
@@ -657,8 +689,10 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
         const double jet=local_area>1e-12?std::abs(local_.flow(branch))/local_area:0.;
         const double frication=frication_scale_*turbulence_pressure(jet,2*std::sqrt(local_area/pi),air_)
             *std::sqrt(local_area/(.1*square_centimetre))*frication_noise_.next();
+        const auto airway_timer=std::chrono::steady_clock::now();
         local_.advance(networks_[1-current_],layout,fraction,1/block_length,sample_period_,options_.local_substeps,
                        area,lung_pressure_,aspiration_branch_,frication_branch_,branch,aspiration,frication);
+        statistics_.airway_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-airway_timer).count();
         const double lips=local_.flow_derivative(layout.lip_branch(),sample_period_);
         const double nose=local_.flow_derivative(layout.nostril_branch(),sample_period_);
         double throat=0;
@@ -673,7 +707,7 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
                 .frication_pressure=frication,.frication_branch=frication_branch_,.constriction_area=local_area,
                 .cavity_pressure=local_.pressure(),.oral_mean_flow=local_.flow(layout.lip_branch()),
                 .nasal_mean_flow=local_.flow(layout.nostril_branch()),.constriction_flow=local_.flow(branch),
-                .lower_fold_area=glottis_.lower_area(),.upper_fold_area=glottis_.upper_area(),
+                .lower_fold_area=options_.living_control?tissue_.area().front():glottis_.lower_area(),.upper_fold_area=options_.living_control?tissue_.area().back():glottis_.upper_area(),
                 .rest_fold_area=rest_area_,.lung_pressure=lung_pressure_,
                 .glottal_endpoint_flow=local_.glottal_endpoint_flow()});
         }

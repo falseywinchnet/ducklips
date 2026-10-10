@@ -53,6 +53,7 @@ add_library(ducklips STATIC
     src/air_path.cpp
     src/voice.cpp
     src/body_config.cpp
+    src/somatic_control.cpp
     src/articulation.cpp
     src/lip_profile.cpp
     src/lip_viscous.cpp
@@ -81,10 +82,11 @@ add_executable(ducklips_tests tests/ducklips_tests.cpp)
 target_link_libraries(ducklips_tests PRIVATE ducklips)
 
 enable_testing()
-# Experimental deforming-tissue source. It is not selected by the speech
-# engine until its physical and perceptual behavior has been established.
+# Experimental deforming-tissue source, explicitly selected by living_control.
+# Physical coupling and perceptual quality remain under investigation.
 add_library(ducklips_tissue_source STATIC src/tissue_source.cpp)
 target_include_directories(ducklips_tissue_source PUBLIC include)
+target_link_libraries(ducklips PUBLIC ducklips_tissue_source)
 target_compile_options(ducklips_tissue_source PRIVATE -Wall -Wextra -Wpedantic)
 add_executable(ducklips_tissue_source_study tools/render_tissue_source.cpp src/wav.cpp)
 target_link_libraries(ducklips_tissue_source_study PRIVATE ducklips_tissue_source)
@@ -93,6 +95,11 @@ target_link_libraries(ducklips_motor_source_study PRIVATE ducklips_tissue_source
 add_executable(ducklips_tissue_source_tests tests/tissue_source_tests.cpp)
 target_link_libraries(ducklips_tissue_source_tests PRIVATE ducklips_tissue_source)
 add_test(NAME ducklips_tissue_source COMMAND ducklips_tissue_source_tests)
+add_executable(ducklips_somatic_control_tests tests/somatic_control_tests.cpp)
+target_link_libraries(ducklips_somatic_control_tests PRIVATE ducklips)
+add_test(NAME ducklips_somatic_control COMMAND ducklips_somatic_control_tests)
+add_executable(ducklips_somatic_study tools/render_somatic_study.cpp)
+target_link_libraries(ducklips_somatic_study PRIVATE ducklips)
 add_executable(ducklips_local_speech_tests tests/local_speech_tests.cpp)
 target_link_libraries(ducklips_local_speech_tests PRIVATE ducklips)
 add_test(NAME ducklips_local_speech COMMAND ducklips_local_speech_tests)

@@ -1,0 +1,107 @@
+{
+  "latest_round": 3,
+  "entry_point": "ducklips_say --living-control",
+  "source": "elastic-volume TissueSource",
+  "mechanism": "SomaticControl, 29 reduced coordinates",
+  "human_quality_accepted": false,
+  "tests": {
+    "command": "ctest --test-dir build --output-on-failure -R '^(ducklips_somatic_control|ducklips_tissue_source|ducklips_tests|ducklips_local_speech)$'",
+    "passed": 4,
+    "failed": 0
+  },
+  "rounds": {
+    "1": {
+      "audio_sha256": "25fa064211808406da231fb4b7506cc9a9062222eed4fc49aa6a55a53d9b5026",
+      "raw_sha256": "172adb18cd4b22e7f8146b2f8a36cda3c3442f20d3a33d38768ca947e7e1e110",
+      "executable_sha256": "0921d8422f90e5c623228a8ca232c5da69b2801ca4990e6220ba8245139c56a0",
+      "audio_seconds": 1.2,
+      "render_seconds": 0.21726664300000015,
+      "realtime_factor": 5.523167217159972,
+      "geometry_seconds": 0.02081963200000005,
+      "trace_frames": 57600,
+      "gain": 258.42372850732403,
+      "processing": "one constant playback gain; no EQ, fade, crop or added output noise",
+      "status": "integrated mechanism diagnostic; human naturalness unaccepted",
+      "full_render_completed": true,
+      "enhanced_inspected": true,
+      "visual_finding": "Full 684-by-451 native-cell magma field inspected. Broad texture dominates sustained sound, with limited low harmonic organization. Pressure release decays without an audio fade. Neutral coordinates lack tonic holding. Not accepted as human voice.",
+      "directory": "out/somatic-round-001",
+      "enhanced_shape": [
+        684,
+        451
+      ],
+      "sources": {
+        "include/ducklips/somatic_control.hpp": "2f145c47d964144fbbf91528ad232673b86af70b0a18a72f255d1993ea384a67",
+        "include/ducklips/tissue_source.hpp": "ffbfd754341665eebb66ee9b2440063348a93f0a6d36277eccf9850f251dbb96",
+        "src/somatic_control.cpp": "88ff17d7fa9dfed1984e4b4d2c38436200872de15e79043cfb84c9ec020ad588",
+        "src/synthesizer.cpp": "43ab62e074bae9936738048605154befe92de5942cd8f2543aac1131956f030d",
+        "src/tissue_source.cpp": "1d8a88700a31b0e6043f6f1d9bf9068071d2df1add570dac785fcf17bbb2873c",
+        "tools/render_somatic_study.cpp": "43c943b8527f1d10adf3f30ac096daa75fe66f7303e608645c9db1578174aeb1"
+      }
+    },
+    "2": {
+      "audio_sha256": "12401d30dacfff491a80adf308ada05b96f43e6e71737b0b5410f64caafe948a",
+      "raw_sha256": "e41fcced972c740a3161a84b85bbfb36f81c70130d11b4c62ff7c7af196b0aa2",
+      "executable_sha256": "4b94fad78e2f3d7151673959ce3ffa6ebb549705cb037cefeb1abf88d6edb728",
+      "audio_seconds": 1.2,
+      "render_seconds": 0.0207207529999994,
+      "realtime_factor": 57.91295325995318,
+      "somatic_seconds": 0.0003966289999999999,
+      "tissue_seconds": 0.00545554700000002,
+      "airway_seconds": 0.005166074000000136,
+      "geometry_seconds": 0.009019577999999999,
+      "trace_frames": 3552,
+      "gain": 315.98259903736243,
+      "processing": "one constant playback gain; no EQ, fade, crop or added output noise",
+      "status": "failed geometry; perceptual result rejected",
+      "full_render_completed": false,
+      "enhanced_inspected": true,
+      "visual_finding": "Full 684-by-451 native-cell magma field inspected. Early geometry failure leaves only onset activity and failure silence. Rejected integration round; 57.9x timing is invalid for full synthesis.",
+      "directory": "out/somatic-round-002",
+      "enhanced_shape": [
+        684,
+        451
+      ],
+      "sources": {
+        "include/ducklips/somatic_control.hpp": "c3ee1afb38e1f469a824a6f5162804326fdd5146ac4d20ed99ee34375c47c21c",
+        "include/ducklips/tissue_source.hpp": "f500d135a850cad84d734d14fb48efab9424efeed793a588826524f6e3647e71",
+        "src/somatic_control.cpp": "61c33e7111fe09e5b724175f97c20ef048adb0c0e228d82aacf747b3e3879cb5",
+        "src/synthesizer.cpp": "e899e16121169ca3da5627b11012f78b6e6b8b13a3f30946e30e7dbf451f10a9",
+        "src/tissue_source.cpp": "ddabb1101c156cef3e8ea4966805cb391c4f1e62d43e5d97ffb5deb102d87479",
+        "tools/render_somatic_study.cpp": "7706e538e186f41e9858f33aef3d63be4a1f60c7b29a6aa039db012d2498afeb"
+      }
+    },
+    "3": {
+      "audio_sha256": "144a37bc487382ecc5fa780c49ac313701ec4d33e68f7103608a64ed05e0a4e6",
+      "raw_sha256": "ca3dcce213ccffa332a47ddcf3aeeadf7d36056fc6b076f02c8b48ed66695ff8",
+      "executable_sha256": "ccc0ffb19542151bba567b460c0a82b3b93f965c1a42808353ba1a24cda3735f",
+      "audio_seconds": 1.2,
+      "render_seconds": 0.21836906100000023,
+      "realtime_factor": 5.495283967906052,
+      "somatic_seconds": 0.006257633999999992,
+      "tissue_seconds": 0.09384434399999814,
+      "airway_seconds": 0.08730545199998066,
+      "geometry_seconds": 0.020053367999999915,
+      "trace_frames": 57600,
+      "gain": 251.2115824419773,
+      "processing": "one constant playback gain; no EQ, fade, crop or added output noise",
+      "status": "integrated mechanism diagnostic; human naturalness unaccepted",
+      "full_render_completed": true,
+      "enhanced_inspected": true,
+      "visual_finding": "Full 684-by-451 native-cell magma field inspected. Sustained field remains extensively broadband; added opposing tone does not recover the clear harmonic structure of the human reference. Narrow late vertical transients occur after pressure release, alongside small continuing body corrections. Cause of these transients is not isolated. No crop, resampling, grayscale or ordinary STFT companion. Human naturalness unaccepted.",
+      "directory": "out/somatic-round-003",
+      "enhanced_shape": [
+        684,
+        451
+      ],
+      "sources": {
+        "include/ducklips/somatic_control.hpp": "139a1d50677c8a6615a42377cfbd44d830b52af937229bdb7f78ccb6b504737c",
+        "include/ducklips/tissue_source.hpp": "f500d135a850cad84d734d14fb48efab9424efeed793a588826524f6e3647e71",
+        "src/somatic_control.cpp": "31e941723508c1d56732823f9aa1a536819962904684417a154b71e4c9341057",
+        "src/synthesizer.cpp": "95e05a6b0decafb747c98b5f76493e3f95fb7f0b9c8f211e73089c0e13056dad",
+        "src/tissue_source.cpp": "ddabb1101c156cef3e8ea4966805cb391c4f1e62d43e5d97ffb5deb102d87479",
+        "tools/render_somatic_study.cpp": "7706e538e186f41e9858f33aef3d63be4a1f60c7b29a6aa039db012d2498afeb"
+      }
+    }
+  }
+}

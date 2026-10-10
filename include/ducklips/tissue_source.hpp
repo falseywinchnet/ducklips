@@ -54,6 +54,7 @@ public:
     // Quasi-steady slit airflow and distributed surface pressure. The flow
     // approximation is explicit and provisional; tissue motion is dynamic.
     double advance(double lung_pressure,double outlet_pressure,double dt);
+    void set_tension_scale(double value) noexcept{tension_scale_=value;}
     [[nodiscard]] const Field& surface() const noexcept{return cover_;}
     [[nodiscard]] const Field& body() const noexcept{return body_;}
     [[nodiscard]] const Field& gap() const noexcept{return gap_;}
@@ -74,6 +75,7 @@ private:
     std::array<double,modes> displacement_{},velocity_{},equilibrium_{},force_{};
     std::array<double,nz> area_{},resistance_{};
     double dx_{},dz_{},flow_{},minimum_area_{},reference_gap_{};
-    double holding_force_{},holding_work_{};
+    double holding_force_{},holding_work_{},tension_scale_{1};
+    std::array<double,modes*modes> geometric_stiffness_{};
 };
 }

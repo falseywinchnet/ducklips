@@ -28,6 +28,7 @@ struct Arguments final {
     std::string probe_path{};
     bool conservative_tongue{false};
     bool local_flow{false};
+    bool living_control{false};
     std::size_t local_substeps{1};
     std::size_t local_sections{24};
     double full_scale_pressure{2.};
@@ -60,7 +61,7 @@ void print_usage() {
                 "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
                 "                    [--until SECONDS] (render a prefix of the complete plan)\n"
                 "                    [--invariant passive|charge|pressure]\n"
-                "[--local-flow] [--local-substeps 1..16] [--local-sections 24..128] [--full-scale-pa PA]\n"
+                "[--living-control] [--local-flow] [--local-substeps 1..16] [--local-sections 24..128] [--full-scale-pa PA]\n"
                 "[--canonical-motion] [--conservative-tongue] [--spatial-pressure] [--canonical-substeps 1..64]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
@@ -69,7 +70,9 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
     for (int index = 1; index < count; ++index) {
         std::string flag = values[index];
         bool has_value = index + 1 < count;
-        if (flag == "--conservative-tongue") {
+        if(flag=="--living-control"){
+            arguments.living_control=true;arguments.local_flow=true;arguments.conservative_tongue=true;
+        } else if (flag == "--conservative-tongue") {
             arguments.conservative_tongue=true;
         } else if (flag == "--local-flow") {
             arguments.local_flow=true;
@@ -181,7 +184,8 @@ int main(int argc, char** argv) {
     if (arguments.rate > 0.0) { voice.speaking_rate = arguments.rate; }
     ducklips::SynthesisOptions options{};
     options.conservative_tongue=arguments.conservative_tongue;
-    options.local_flow=arguments.local_flow;options.local_substeps=arguments.local_substeps;
+    options.local_flow=arguments.local_flow;
+    options.living_control=arguments.living_control;options.local_substeps=arguments.local_substeps;
     if(options.local_flow){options.oral_sections=arguments.local_sections;options.nasal_sections=std::max<std::size_t>(6,3*arguments.local_sections/8);}
     if(options.local_flow && (arguments.canonical_motion || arguments.spatial_pressure)){std::fprintf(stderr,"--local-flow selects a distinct engine\n");return 2;}
     if (options.conservative_tongue && !arguments.canonical_motion && !arguments.local_flow) { std::fprintf(stderr,"--conservative-tongue requires --local-flow or --canonical-motion\n");return 2; }
@@ -190,6 +194,7 @@ int main(int argc, char** argv) {
     if(options.spatial_pressure && !options.canonical_motion){std::fprintf(stderr,"--spatial-pressure requires --canonical-motion\n");return 2;}
     options.canonical_substeps=arguments.canonical_substeps;
     std::printf("tongue body: %s\n",options.conservative_tongue?"conservative material map":"rigid circle");
+    if(options.living_control){std::printf("source: elastic-volume TissueSource; 29-coordinate somatic control; legacy jitter/shimmer disabled\n");}
     std::printf("acoustic path: %s\n",options.local_flow ? "local air exchanges (fixed work, no global solver)" : options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
     std::printf("mean airflow: %s\n",options.local_flow?"unified breath and acoustic storage":options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity");
     options.radiate_mean_flow = !arguments.no_pop;
