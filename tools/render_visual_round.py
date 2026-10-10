@@ -26,11 +26,17 @@ def main():
     p.add_argument('--body', type=Path, default=ROOT/'bodies/reference.body')
     p.add_argument('--dictionary', type=Path, default=ROOT/'samples/nato.dict')
     p.add_argument('--rate', type=float, default=1)
+    p.add_argument('--tap', choices=['microphones', 'lips', 'source'], default='microphones',
+                   help='Observe the same engine at a diagnostic output; does not disconnect feedback')
+    p.add_argument('--playback-gain', type=float,
+                   help='Use a declared common gain for controlled comparisons instead of peak normalization')
     p.add_argument('--hop', type=int, default=128)
     p.add_argument('--display-reference', type=float, default=.17808298734486477)
     p.add_argument('--reference-field', type=Path, help='Full enhanced human reference NPZ')
     p.add_argument('--viewer', type=Path, help='Comparison view; requires --reference-field')
     args = p.parse_args()
+    if args.playback_gain is not None and (not np.isfinite(args.playback_gain) or args.playback_gain <= 0):
+        p.error('--playback-gain must be finite and positive')
     if args.viewer and not args.reference_field:
         p.error('--viewer requires --reference-field')
     out = args.out.resolve()
@@ -61,16 +67,19 @@ def main():
     try:
         run([str(out/'ducklips_say'), '--local-flow', '--conservative-tongue',
              '--body', str(out/'body.body'), '--dictionary', str(out/'nato.dict'),
-             '--text', args.text, '--rate', str(args.rate), '--full-scale-pa', '128',
+             '--text', args.text, '--rate', str(args.rate), '--tap', args.tap, '--full-scale-pa', '128',
              '--trace', '0', str(out/'trace.csv'), '--probe', str(out/'probe.csv'),
              '--report', '--out', str(out/'speech-raw.wav')], 'speech.log')
         fs, raw = wavfile.read(out/'speech-raw.wav')
         peak = float(np.max(abs(raw)))
         if not np.isfinite(raw).all() or not 0 < peak < 1:
             raise ValueError('Native speech is invalid, silent or clipped')
-        gain = .8/peak
+        gain = args.playback_gain if args.playback_gain is not None else .8/peak
+        if peak*gain > 1:
+            raise ValueError('Declared playback gain would clip; choose a lower common gain')
         wavfile.write(out/'speech.wav', fs, np.rint(raw*gain*32767).astype(np.int16))
-        record['playback'] = dict(fixed_gain=gain, frames=len(raw), sample_rate=fs,
+        record['playback'] = dict(fixed_gain=gain, gain_selection='declared' if args.playback_gain is not None else 'peak 0.8',
+                                  tap=args.tap, frames=len(raw), sample_rate=fs,
                                   processing='one fixed gain over the full recording; no cuts or filters')
         record['status'] = 'audio rendered; enhanced field pending'
         run([sys.executable, str(ROOT/'tools/enhanced_specgram/render.py'), str(out/'speech.wav'),

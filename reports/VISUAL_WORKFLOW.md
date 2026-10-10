@@ -69,7 +69,8 @@ lengths retain their real time axes, rather than being time-warped to match.
 
 Focused local speech tests and their AddressSanitizer build passed for the
 retained motion changes. That is an implementation integrity result only.
-No round has received listening acceptance; no word is counted as working.
+At that point, rounds 001–003 had no listening acceptance and no word was
+counted as working. Subsequent round 009 received the limited acceptance below.
 
 ## Papa continuation after rejection of rounds 001–003
 
@@ -101,8 +102,10 @@ depictions locally, without presenting a comparison viewer to the user.
   Used the existing speaking-rate input at 0.8, rather than editing/cutting the
   audio. Its inspected full field has two harmonic vowel regions separated
   by closure, with the unrelated earlier transient absent. Synthetic timbre
-  and narrow upper-frequency ridges remain. This is the current Papa candidate;
-  human listening acceptance remains pending. Exact hashes and observations
+  and narrow upper-frequency ridges remain. The user subsequently confirmed
+  “sounds like papa,” with “a mechanical sound” and “a bit of fax machine
+  accent.” Count one intelligible word; naturalness remains unaccepted.
+  Exact hashes and observations
   are recorded in `papa_visual_rounds.json`.
 
 The local engine still uses fixed local air exchanges. It has not been replaced
@@ -117,3 +120,15 @@ Whisper base.en returned “Saha” (004), “Ahh”/“Ah” (005/006), “the 
 “Papa” for 009 and for the human control. The recognizers were given neither
 the intended word nor a NATO vocabulary prompt. The disagreement remains
 recorded; no human listening approval is inferred from either result.
+
+## Timbre study after intelligibility acceptance
+
+The accepted baseline is round 009, not an earlier engine. Study source, airway
+and radiation contributions while preserving its exact frozen provenance.
+Diagnostic taps keep the physical source/airway feedback connected. Fresh
+rounds use the baseline playback gain when it does not clip, so independently
+normalizing each output cannot disguise changes in level. Images remain
+internal analysis; do not infer a naturalness improvement from them alone.
+
+See [the controlled Papa timbre study](PAPA_TIMBRE_STUDY.md) for the source,
+jet-pressure and near-seal observations after that acceptance.

@@ -1,0 +1,123 @@
+{
+  "baseline": "out/visual-round-009",
+  "baseline_audio_sha256": "029323121e3e1980ec3e7fa24d6e4741a96a6eaf0a532c4f2b70cdc6938dab84",
+  "seal_scale_estimate": {
+    "window_seconds": [
+      0.95,
+      1.15
+    ],
+    "contact_softness_m2": 3e-08,
+    "observed_area_window_m2": [
+      3e-08,
+      1.5e-07
+    ],
+    "slope": "numpy.gradient(trace area)*48000; closing samples only",
+    "count": 40,
+    "microseconds_p10_p50_p90": [
+      7.985729896766682,
+      9.73762739172942,
+      13.418625947910465
+    ],
+    "audio_step_microseconds": 20.833333333333332,
+    "caution": "Local area/speed estimate, not a physical measured seal duration or evidence of aliasing"
+  },
+  "diagnostics": [
+    {
+      "round": 10,
+      "directory": "out/visual-round-010",
+      "all_cpp_hpp_sources_match_baseline": true,
+      "executable_matches_baseline": true,
+      "physical_trace_matches_baseline": true,
+      "playback": {
+        "fixed_gain": 882.4414167632915,
+        "gain_selection": "declared",
+        "tap": "source",
+        "frames": 72480,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "speech_sha256": "73eb62594b8d42df6c542379d2de83dbccb19b5c8dd91f4390eef18e811bdea9",
+      "body_sha256": "ab764ac4c388c4e6495f8e62fe05ae44a31384f1cc3be0910c31d6c1adb4d957",
+      "inspection": {
+        "full_field": "enhanced-cells.png",
+        "result": "The broad harmonic comb, descending second-vowel pitch, and substantial upper texture are already visible at the coupled glottal source. Narrow internal ridges continue through the lip-closed interval but are absent at the baseline microphone there. The source has airway feedback, so this does not assign all ridges to fold mechanics.",
+        "next_experiment": "Disable only stochastic aspiration and frication pressure sources, retaining jitter/shimmer, timing and anatomy. Inspect the complete fresh microphone field for persistence of deterministic upper ridges."
+      },
+      "enhanced_sha256": "e0b98997d0c5a6faf43717a9aba352358ed0fe32341a5e324d8dc56153d3aa4d",
+      "enhanced_source_matches_audio": true,
+      "full_field_shape": [
+        684,
+        567
+      ],
+      "complete_duration_seconds": 1.51
+    },
+    {
+      "round": 11,
+      "directory": "out/visual-round-011",
+      "all_cpp_hpp_sources_match_baseline": true,
+      "executable_matches_baseline": true,
+      "physical_trace_matches_baseline": false,
+      "playback": {
+        "fixed_gain": 882.4414167632915,
+        "gain_selection": "declared",
+        "tap": "microphones",
+        "frames": 72480,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "speech_sha256": "6b46a1d314d789c1d9b4fa46f0072b2f5d16d5ef2f8dd35405dc353198c8f996",
+      "body_sha256": "0e45b98447a52b07a3e99c22fe625e76976f36373cf2e761137d9f71f5eda371",
+      "inspection": {
+        "full_field": "enhanced-cells.png",
+        "result": "Two vowels, descending harmonic comb, near-horizontal upper bands and ringing remain visibly similar to baseline at the same gain and color scale. Removing stochastic aspiration/frication pressures did not remove the targeted visual pattern. This does not establish perceptual equivalence or eliminate all randomness: jitter and shimmer remain.",
+        "next_experiment": "Change only the baseline contact_softness from 3e-8 to 3e-7 m2, retaining baseline turbulence. Test sensitivity to near-seal aperture rounding without filtering output or promoting the setting."
+      },
+      "enhanced_sha256": "fafa04bb7d2a91ced8077c0124ed95e2c756c7411ecec64fac99a7c7e9427338",
+      "enhanced_source_matches_audio": true,
+      "full_field_shape": [
+        684,
+        567
+      ],
+      "complete_duration_seconds": 1.51
+    },
+    {
+      "round": 12,
+      "directory": "out/visual-round-012",
+      "all_cpp_hpp_sources_match_baseline": true,
+      "executable_matches_baseline": true,
+      "physical_trace_matches_baseline": false,
+      "playback": {
+        "fixed_gain": 882.4414167632915,
+        "gain_selection": "declared",
+        "tap": "microphones",
+        "frames": 72480,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "speech_sha256": "7669ab08f93c8448141e46e4ac2e3aa19daa85fffdd0600fc8ffe0757621fe10",
+      "body_sha256": "47dc542166fb81ea47595eccc75dc6fbfa551bdc716819e92eae669d01d0b2f9",
+      "inspection": {
+        "full_field": "enhanced-cells.png",
+        "result": "Full 684 x 567 field inspected at original magma scale. Much of the dense upper-frequency texture is reduced, especially the region above the main lower vowel bands; both voiced regions, lower harmonic structure and descending pitch remain. Narrow resonance ridges persist. Together with the rounded source-derivative trace and the near-unchanged no-turbulence field, this supports a contact-related contribution to the upper texture, not a proven cure of perceived mechanical timbre.",
+        "next_investigation": "Relate near-seal airflow to actual distributed fold contact geometry and consistent force/flow area. Keep the accepted default unchanged; do not treat the diagnostic 10x area scale as measured anatomy.",
+        "human_acceptance": false,
+        "human_acceptance_status": "not yet assessed; round 009 alone accepted for intelligibility"
+      },
+      "enhanced_sha256": "09560525066d373dac57b4b9a4ce63507dbe7cba3041531c5e265459868009de",
+      "enhanced_source_matches_audio": true,
+      "full_field_shape": [
+        684,
+        567
+      ],
+      "complete_duration_seconds": 1.51
+    }
+  ],
+  "verification": {
+    "all_three_fresh_rounds_complete": true,
+    "all_three_full_fields_visually_inspected": true,
+    "all_three_same_declared_gain": true,
+    "accepted_engine_and_body_unchanged": true,
+    "human_naturalness_improvement": "not established",
+    "scope": "controlled study, not accepted default replacement"
+  }
+}

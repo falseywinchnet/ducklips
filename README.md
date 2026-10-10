@@ -12,7 +12,7 @@ fixed forward/backward exchanges instead of a global acoustic solve,
 eigenbasis or adaptive timestep. Fresh Papa, November, Foxtrot and full-alphabet
 recordings have been rendered. The user rejected all four: Papa lost its first sound, November
 was clicks plus “ember,” and Foxtrot and the alphabet were noise/clicks. No word
-is approved for this engine. Complex-consonant transients and the cost of constructing the
+was approved in that rejected batch. Complex-consonant transients and the cost of constructing the
 deformed tongue remain unresolved; the full alphabet does not meet 10× realtime.
 The old coupled solver is retained as an offline reference and its unfinished
 Papa run was stopped. See [the recovery implementation, tests and recordings](reports/ENGINE_RECOVERY.md).
@@ -20,15 +20,18 @@ The unflagged CLI remains the older modal path; select `--local-flow` explicitly
 for this experimental engine. Earlier listening results below do not score it.
 The [failure investigation](reports/LOCAL_SPEECH_FAILURE.md) isolates
 geometry-driven noise and adds missing glottal air inertia. The source correction
-passes isolated physical checks; it has not recovered intelligible speech.
+passes isolated physical checks; that investigation alone had not recovered
+intelligible speech.
 
 The subsequent [Papa visual rounds](reports/VISUAL_WORKFLOW.md) repair a missed
 mouth-plane seal and couple fold force to the actual inertive airflow. The
 latest fresh Papa take is round 009 at speaking rate 0.8, with two voiced
-regions and no separate preparatory closing thump. This remains a listening
-candidate, not a user-approved word or a recovered alphabet. Every round has
+regions and no separate preparatory closing thump. The user confirmed it
+sounds like Papa, with a mechanical sound and a fax-machine accent. That is
+one intelligible word, not natural speech or a recovered alphabet. Every round has
 a complete matching enhanced depiction and frozen synthesis provenance;
-the images are internal working evidence. See [the round records](reports/papa_visual_rounds.json).
+the images are internal working evidence. See [the round records](reports/papa_visual_rounds.json)
+and the [controlled timbre study](reports/PAPA_TIMBRE_STUDY.md).
 
 **Status: active research, not perfected speech.** Current work connects a
 volume-conserving tongue body to the canonical moving acoustic network and

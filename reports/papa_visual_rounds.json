@@ -1,7 +1,7 @@
 {
   "candidate_round": 9,
-  "human_acceptance": false,
-  "working_word_count": 0,
+  "human_acceptance": true,
+  "working_word_count": 1,
   "rounds": [
     {
       "round": 4,
@@ -132,7 +132,8 @@
       "inspection": {
         "field": "enhanced-cells.png",
         "result": "Two complete harmonic vowel regions with intervening closure; the separate early preparation transient is absent. First vowel is longer than 008. Synthetic timbre and narrow high-frequency ridges remain.",
-        "human_acceptance": false
+        "human_acceptance": true,
+        "acceptance_scope": "Papa intelligibility only; user reports mechanical sound and fax machine accent, not naturalness"
       },
       "playback": {
         "fixed_gain": 882.4414167632915,
@@ -152,5 +153,7 @@
         }
       ]
     }
-  ]
+  ],
+  "acceptance_scope": "Papa intelligibility only; user reports mechanical sound and fax machine accent, not naturalness",
+  "user_feedback": "sounds like papa. but it does have a mechanical sound to it, with a bit of fax machine accent. lets study it."
 }
