@@ -1,5 +1,5 @@
 {
-  "current_source_round": 7,
+  "current_source_round": 10,
   "default_speech_engine_changed": false,
   "body_compiler": {
     "config": {
@@ -22,30 +22,30 @@
       "retained_modes": 16
     },
     "config_sha256": "2f39009488d5edb34af7c6d2b07f83424d19fe62906e400ad6838776c0749b12",
-    "compiler_sha256": "be35d5c3c21c08270d9eb601f74c202c05ac049b6127fa849d9b83c48d809f89",
+    "compiler_sha256": "17b1767cdfaf3c8ccbb8b76e15e2b34d8c7dd0630317505337921611998acdbf",
     "free_degrees": 735,
     "retained_modes": 16,
     "frequencies_hz": [
-      101.45218515476813,
-      131.01960523072094,
-      141.79641906631076,
+      101.45218515476807,
+      131.01960523072108,
+      141.79641906631085,
       144.99033524213573,
-      167.83863556258964,
-      183.19311258899907,
-      184.87883399209332,
-      193.9268618127332,
-      202.66919367955572,
-      214.87596888129605,
-      217.54429937680365,
-      219.26535569862472,
-      220.1464612811252,
-      220.90145652943514,
-      225.68074342059265,
-      225.91686903498933
+      167.83863556258945,
+      183.1931125889989,
+      184.8788339920934,
+      193.92686181273342,
+      202.66919367955546,
+      214.8759688812957,
+      217.54429937680354,
+      219.26535569862475,
+      220.1464612811253,
+      220.9014565294354,
+      225.68074342059273,
+      225.9168690349891
     ],
-    "relative_eigen_residual": 1.5020584833513955e-13,
-    "mass_orthogonality_error": 4.107825191113079e-15,
-    "posture_surface_relative_error": 0.08396259496655645,
+    "relative_eigen_residual": 1.5197792996729345e-13,
+    "mass_orthogonality_error": 2.6645352591003757e-15,
+    "posture_surface_relative_error": 0.08396259496655727,
     "method": "linear isotropic volume elasticity; nearly incompressible selective bulk integration; initial longitudinal stress; projected shear viscosity",
     "limits": [
       "linear strain about reference posture",
@@ -54,41 +54,56 @@
     ]
   },
   "latest": {
-    "status": "sustained physical-source candidate; naturalness unaccepted",
+    "status": "rejected source gesture: abnormal renewed oscillation during active opening; naturalness unaccepted",
     "sample_rate": 48000,
-    "frames": 48000,
+    "frames": 67200,
     "gain": 315.98259903736243,
     "processing": "one constant gain, no EQ, noise, cuts, or fades",
-    "raw_sha256": "043bee13a568b0fb8e3b22e0e1edb4fe1082467ae681dc960b9461ee17134b39",
-    "playback_sha256": "71eac58d7c263203ec25e570b1247d14c71af67d7d1e94c49f2c57bd42ea0ee5",
+    "raw_sha256": "625ddbc8a10bf90ba5b6e96693416f1a3caa2443815e74eff3575c665157ec54",
+    "playback_sha256": "f9410ab057a274d2ae84f53cd5cc9b97a97119f785c1dc578e2172451abe207d",
     "sources": {
-      "include/ducklips/tissue_source.hpp": "e824bf162ec3d735f57a5ab3d53efadb361f854bb41cef6617cae4a1150f5c25",
-      "src/tissue_source.cpp": "6ae10060a0f014935d023a3add227c010eeff1a446a08d003f0e4e3019e978ff",
-      "tools/render_tissue_source.cpp": "1455fd0b0687e44b11ce5a6bc83adc4457d471dbf7f56ddaf5abd56512ac635b",
-      "tools/package_tissue_round.py": "6a22266d79c8a8bf36ab5037568f2e651a668193bf61240188d00927a6e114a5",
-      "include/ducklips/tissue_body_data.hpp": "fe74cb3b36acf79b3eff79908f317591bf0e92560dbbbc6af819ca75d4def97b",
+      "include/ducklips/tissue_source.hpp": "d3dc95acdf871b52a97dfb391cc7c417a60a1f77b478037865883f0602173384",
+      "include/ducklips/tissue_relaxation.hpp": "defdf80010ab52e3b2ba67f990de5baf8a1e13e962a308d3cbccc205bfd19886",
+      "include/ducklips/motor_hold.hpp": "a1d60be399e0dec23534155a0b66e2a62e2ff0ba3806be5e54662f588fd0cb93",
+      "tools/render_motor_source.cpp": "10b7fce7d938dac11e18bffe2cdb389c89c1d6778ec48d8b8c63ca0e3dd8a1e1",
+      "src/tissue_source.cpp": "c8e0f41be42d241d327a8ff567430b350801f311cd9f5aa2f5eb4ce00cd84cf3",
+      "tools/render_tissue_source.cpp": "65bda9eaf4f3ae51933b2298324969b45435adb8d18b3be423cec7519f7170e8",
+      "tools/package_tissue_round.py": "244a7ec23b49349697bc62475cd79b33c3ee0d0f7a3d33591d22d0b303eb53cc",
+      "include/ducklips/tissue_body_data.hpp": "60dcbf31632919eb4c1fb66843b3d52e252b4efc292db3ec3bcf23582ff024d0",
       "data/tissue_body.json": "2f39009488d5edb34af7c6d2b07f83424d19fe62906e400ad6838776c0749b12",
-      "tools/compile_tissue_body.py": "be35d5c3c21c08270d9eb601f74c202c05ac049b6127fa849d9b83c48d809f89"
+      "tools/compile_tissue_body.py": "17b1767cdfaf3c8ccbb8b76e15e2b34d8c7dd0630317505337921611998acdbf"
     },
     "enhanced_inspected": true,
     "setup": {
-      "adducted": false,
-      "apposed": true,
-      "central_rest_gap_m": 0,
-      "initialization_seconds": 0,
-      "initial_kinetic_j": 0,
-      "cover_shear_pa": 878,
-      "cover_viscosity_pa_s": 0.52
+      "renderer": "ducklips_motor_source_study",
+      "motor_seed": 17,
+      "passive_gap_m": 0.0003,
+      "sensed_gap_target_m": 0.00025,
+      "sensor_filter_s": 0.02,
+      "feedback_delay_s": 0.03,
+      "fast_twitch_s": 0.015,
+      "slow_twitch_s": 0.035,
+      "motor_units": 64,
+      "interval_cv": 0.2,
+      "relaxation_fraction": 0.1,
+      "relaxation_seconds": 0.1,
+      "relaxation_log_rate_sd": 0.6,
+      "respiratory_compliance_m3_pa": 1e-06,
+      "initial_recoil_volume_m3": 0.0006,
+      "motor_release_s": 1.0,
+      "release_gap_target_m": 0.0012,
+      "antagonistic_pools": true,
+      "scope": "Prototype posture control; no anatomical nerve-loop validation or accepted timbre"
     },
     "timing": {
-      "source_computation_seconds": 0.07084165799997487,
-      "audio_seconds": 1,
-      "realtime_factor": 14.115988081481023,
-      "scope": "source only; excludes diagnostic file writes and posture initialization"
+      "source_computation_seconds": 0.10930149899997285,
+      "audio_seconds": 1.4,
+      "realtime_factor": 12.808607501351355,
+      "scope": "source, relaxation, motor controller and finite breath; excludes diagnostic writes"
     },
+    "executable_sha256": "2ac271cad257cbf792f84dd06c1cd8d66ae228bb0f053802ce1c1ace5fbc613a",
     "enhanced_complete": true,
-    "visual_finding": "Complete enhanced field inspected at native cells: growing onset, sustained harmonics, zero-flow closure intervals and release. No naturalness acceptance.",
-    "executable_sha256": "6bee40a8ee8646779df4b503c20c754ec9b52ed19a7f28c319640956b3d81e05"
+    "visual_finding": "Full native-cell magma field inspected. Irregular coordinated harmonic bends occur during maintained posture. Strong harmonic/broadband structure returns after the opening command; active opening failed to end voicing. No crop, resize, companion STFT or output fade."
   },
   "rounds": {
     "1": "Rejected: broadband vertical structure throughout active phonation, irregular cycles, large discrete airflow jumps.",
@@ -97,13 +112,27 @@
     "4": "Adducted posture settles to constant airflow; full enhanced field confirms no sustained voice. Rejected.",
     "5": "Rotation changes the transient but still decays to static flow. Full enhanced field inspected; rejected.",
     "6": "Elastic volume under excessive carried-over adduction produces a near-closed static leak. Full enhanced field inspected; rejected.",
-    "7": "Complete enhanced field inspected at native cells: growing onset, sustained harmonics, zero-flow closure intervals and release. No naturalness acceptance."
+    "7": "User rejected as too sustained and nonhuman; sustained oscillation is not a voice-quality success.",
+    "8": "Full native-cell field remains nearly stationary after onset. Stochastic stress relaxation alone is insufficient; do not claim improved timbre.",
+    "9": "Full native-cell enhanced field has coordinated harmonic bends and textured bands during holding, unlike round008. Unwanted renewed broad upper structure and source oscillation after adductor release. Rejected as a complete source gesture; no timbre acceptance.",
+    "10": "Full native-cell magma field inspected. Irregular coordinated harmonic bends occur during maintained posture. Strong harmonic/broadband structure returns after the opening command; active opening failed to end voicing. No crop, resize, companion STFT or output fade."
   },
-  "tests": "zero-input rest, pressure-driven motion, unforced recoil and dissipation passed\nenergy initial=7.39164e-06 maximum=7.39164e-06 final=3.79235e-17\nconstant-pressure opening cycles=32 flow range=0 to 0.000231851\n",
+  "tests": "Start testing: Oct 10 08:45 EDT\n----------------------------------------------------------\n1/64 Testing: ducklips_tissue_source\n1/64 Test: ducklips_tissue_source\nCommand: \"/Users/joshuahkuttenkuler/ducklips/build/ducklips_tissue_source_tests\"\nDirectory: /Users/joshuahkuttenkuler/ducklips/build\n\"ducklips_tissue_source\" start time: Oct 10 08:45 EDT\nOutput:\n----------------------------------------------------------\nstochastic stress relaxation, analytic held-strain limit, motor twitch release and delayed posture correction passed\nzero-input rest, pressure-driven motion, unforced recoil and dissipation passed\nenergy initial=2.84658e-06 maximum=2.84658e-06 final=1.49133e-13\nconstant-pressure opening cycles=31 flow range=0 to 0.000240359\n<end of output>\nTest time =   0.39 sec\n----------------------------------------------------------\nTest Passed.\n\"ducklips_tissue_source\" end time: Oct 10 08:45 EDT\n\"ducklips_tissue_source\" time elapsed: 00:00:00\n----------------------------------------------------------\n\nEnd testing: Oct 10 08:45 EDT\n",
   "known_limits": [
     "No accepted human timbre result",
-    "Linear elastic body and finite spatial basis",
-    "Quasi-steady flow, no displaced air volume or two-way acoustic coupling",
-    "No turbulence or physiological variability model"
-  ]
+    "Active opening still produces renewed oscillation",
+    "Fixed attachment framework and assumed generalized muscle-force mapping",
+    "Prototype controller gains, motor-unit count, delay and stochastic material rate statistics are not identified from a human",
+    "Linear elastic body with finite basis; fixed longitudinal prestress",
+    "Quasi-steady flow without displaced air volume or two-way acoustic coupling",
+    "No turbulence model; simplified passive respiratory supply"
+  ],
+  "user_feedback": {
+    "round007": "Rejected by user: too sustained, mechanical and nonhuman",
+    "required_mechanisms": [
+      "stochastic tissue relaxation",
+      "irregular motor-unit firing and overlapping twitches",
+      "continual adaptation to maintain posture"
+    ]
+  }
 }

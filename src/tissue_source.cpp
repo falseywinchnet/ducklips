@@ -19,6 +19,7 @@ double exposed_fraction(double gap,double u,double v) noexcept {
 }
 void TissueSource::reset(const TissueMaterial& material){
     material_=material;
+    relaxation_.reset(material.relaxation_fraction,material.relaxation_seconds,material.relaxation_log_rate_sd,material.relaxation_seed);
     // The mode basis belongs to one exact configured body. Never silently
     // interpret a different material using these reference-body modes.
     if(material.length!=compiled_tissue::length || material.height!=compiled_tissue::height
@@ -36,7 +37,7 @@ void TissueSource::reset(const TissueMaterial& material){
     }
     dx_=material.length/(nx-1);dz_=material.height/(nz-1);reference_gap_=material.rest_gap;
     displacement_.fill(0);velocity_.fill(0);equilibrium_.fill(0);force_.fill(0);
-    pressure_.fill(0);contact_.fill(0);flow_=0;
+    pressure_.fill(0);contact_.fill(0);flow_=0;holding_force_=holding_work_=0;
     for(std::size_t z=0;z<nz;++z){
         for(std::size_t x=0;x<nx;++x){
             const double along=double(x)/(nx-1);
@@ -45,6 +46,12 @@ void TissueSource::reset(const TissueMaterial& material){
         }
     }
     geometry();
+}
+
+double TissueSource::posture_stiffness() noexcept{
+    double result=0;
+    for(std::size_t i=0;i<modes;++i){result+=compiled_tissue::posture[i]*compiled_tissue::stiffness[i]*compiled_tissue::posture[i];}
+    return result;
 }
 
 void TissueSource::set_adduction(double central_rest_gap){
@@ -150,14 +157,21 @@ double TissueSource::advance(double lung,double outlet,double dt){
         for(std::size_t mode=0;mode<modes;++mode){force_[mode]+=compiled_tissue::surface_basis[i*modes+mode]*force;}
     }
     std::array<double,modes> acceleration{};
+    const auto relieved=relaxation_.relieved_force();
+    const double holding_shift=-holding_force_/posture_stiffness();
     for(std::size_t mode=0;mode<modes;++mode){
         double damping=0;
         for(std::size_t other=0;other<modes;++other){damping+=compiled_tissue::damping[mode*modes+other]*velocity_[other];}
-        acceleration[mode]=force_[mode]-compiled_tissue::stiffness[mode]*(displacement_[mode]-equilibrium_[mode])-damping;
+        force_[mode]+=holding_shift*compiled_tissue::stiffness[mode]*compiled_tissue::posture[mode];
+        acceleration[mode]=force_[mode]-compiled_tissue::stiffness[mode]*(displacement_[mode]-equilibrium_[mode])-damping+relieved[mode];
     }
     for(std::size_t mode=0;mode<modes;++mode){
         velocity_[mode]+=dt*acceleration[mode];displacement_[mode]+=dt*velocity_[mode];
+        holding_work_+=2*holding_shift*compiled_tissue::stiffness[mode]*compiled_tissue::posture[mode]*velocity_[mode]*dt;
     }
+    TissueRelaxation::Coordinates offset{};
+    for(std::size_t mode=0;mode<modes;++mode){offset[mode]=displacement_[mode]-equilibrium_[mode];}
+    relaxation_.advance(offset,dt);
     geometry();
     return flow_;
 }
@@ -170,7 +184,9 @@ double TissueSource::kinetic_energy() const noexcept{
 }
 
 double TissueSource::elastic_energy() const noexcept{
-    double energy=0;
+    TissueRelaxation::Coordinates deformation{};
+    for(std::size_t mode=0;mode<modes;++mode){deformation[mode]=displacement_[mode]-equilibrium_[mode];}
+    double energy=relaxation_.energy_correction(deformation);
     for(std::size_t mode=0;mode<modes;++mode){
         const double offset=displacement_[mode]-equilibrium_[mode];
         energy+=compiled_tissue::stiffness[mode]*offset*offset;

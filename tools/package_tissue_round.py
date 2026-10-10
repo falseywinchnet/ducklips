@@ -25,10 +25,10 @@ if (root/'timing.json').exists():record['timing']=json.loads((root/'timing.json'
 snapshot=root/'snapshot';snapshot.mkdir(exist_ok=True)
 executable=root/'render'
 if not executable.exists():
-    candidate=ROOT/'build/ducklips_tissue_source_study'
+    candidate=ROOT/'build'/record.get('setup',{}).get('renderer','ducklips_tissue_source_study')
     if candidate.exists():shutil.copy2(candidate,executable)
 if executable.exists():record['executable_sha256']=hashlib.sha256(executable.read_bytes()).hexdigest()
-for path in ['include/ducklips/tissue_source.hpp','src/tissue_source.cpp','tools/render_tissue_source.cpp','tools/package_tissue_round.py',
+for path in ['include/ducklips/tissue_source.hpp','include/ducklips/tissue_relaxation.hpp','include/ducklips/motor_hold.hpp','tools/render_motor_source.cpp','src/tissue_source.cpp','tools/render_tissue_source.cpp','tools/package_tissue_round.py',
              'include/ducklips/tissue_body_data.hpp','data/tissue_body.json','tools/compile_tissue_body.py']:
     data=(ROOT/path).read_bytes();(snapshot/Path(path).name).write_bytes(data)
     record['sources'][path]=hashlib.sha256(data).hexdigest()
@@ -43,6 +43,13 @@ ax[3].plot(a['time'],audio[:,0]*128);ax[3].set_ylabel('source audification, Pa')
 fig.suptitle(root.name+': complete pressure-driven tissue experiment');fig.tight_layout();fig.savefig(root/'trace-full.png',dpi=110)
 for axis in ax:axis.set_xlim(.5,.54)
 fig.suptitle(root.name+': supplementary cycle detail');fig.savefig(root/'trace-detail.png',dpi=110)
+if 'muscle_force' in a.dtype.names:
+    mf,mx=plt.subplots(4,1,figsize=(13,10),sharex=True)
+    mx[0].plot(a['time'],a['neural_drive']);mx[0].set_ylabel('neural drive')
+    mx[1].plot(a['time'],a['muscle_force']*1000);mx[1].set_ylabel('closing force, mN')
+    mx[2].plot(a['time'],a['sensed_gap']*1000);mx[2].axhline(.25,color='gray',linestyle='--');mx[2].set_ylabel('sensed gap, mm')
+    mx[3].plot(a['time'],a['muscle_work']*1000);mx[3].set_ylabel('muscle work, mJ');mx[3].set_xlabel('s')
+    mf.suptitle('Active posture: delayed sensing, neural drive, overlapping twitches');mf.tight_layout();mf.savefig(root/'motor-hold.png',dpi=110)
 s=np.genfromtxt(root/'surface.csv',delimiter=',',names=True)
 times=np.unique(s['time']);target=np.linspace(.5,.516,8)
 fig,ax=plt.subplots(2,4,figsize=(14,7))

@@ -2,6 +2,7 @@
 #include <array>
 #include <cstddef>
 #include "ducklips/tissue_body_data.hpp"
+#include "ducklips/tissue_relaxation.hpp"
 
 namespace ducklips {
 
@@ -28,6 +29,10 @@ struct TissueMaterial final {
     double rest_gap{.00010};             // full central gap, m
     double convergence{.02};            // radians per medial surface
     double contact_depth{.0003};         // compliant contact layer depth, m
+    double relaxation_fraction{.1};
+    double relaxation_seconds{.1};
+    double relaxation_log_rate_sd{.6}; // experimental stochastic rate spread
+    std::uint64_t relaxation_seed{1};
     double air_density{1.14};
     double air_viscosity{1.86e-5};
 };
@@ -41,6 +46,11 @@ public:
     // Muscle posture moves the elastic equilibrium. Absolute surface/body
     // positions and their velocities remain continuous across the change.
     void set_adduction(double central_rest_gap);
+    // Active generalized closing force. Positive force pulls the passive
+    // body inward; it supplies work through displacement, not teleportation.
+    void set_holding_force(double newtons){holding_force_=newtons;}
+    [[nodiscard]] static double posture_stiffness() noexcept;
+    [[nodiscard]] double holding_work() const noexcept{return holding_work_;}
     // Quasi-steady slit airflow and distributed surface pressure. The flow
     // approximation is explicit and provisional; tissue motion is dynamic.
     double advance(double lung_pressure,double outlet_pressure,double dt);
@@ -59,9 +69,11 @@ private:
     void geometry();
     void aerodynamics(double lung,double outlet);
     TissueMaterial material_{};
+    TissueRelaxation relaxation_{};
     Field cover_{},body_{},cover_v_{},gap_{},rest_{},pressure_{},contact_{};
     std::array<double,modes> displacement_{},velocity_{},equilibrium_{},force_{};
     std::array<double,nz> area_{},resistance_{};
     double dx_{},dz_{},flow_{},minimum_area_{},reference_gap_{};
+    double holding_force_{},holding_work_{};
 };
 }

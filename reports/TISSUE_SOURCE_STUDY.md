@@ -5,7 +5,96 @@ directed development toward deformation and recoil governed by pressure and
 elasticity. This experiment is source work, not another pronunciation or speed
 tuning round. No naturalness result is accepted.
 
-## Current elastic volume representation (round 006 onward)
+## User rejection and active holding correction (round 008 onward)
+
+The user rejected round 007 as too sustained and nonhuman. Sustained
+oscillation is not an acceptance criterion for this project. The old source
+held breath pressure and posture constant and had velocity-dependent damping
+but no material stress history. That omission must not be called a human source.
+
+Round 008 introduces relaxing material stress with positive, independently
+varying rates. The compiler separates material stiffness from geometric
+prestress and factors the projected material operator. Each strain channel
+has a memory state. At a held deformation, branch stress decays and stored
+energy decreases even when its relaxation rate fluctuates. This is internal
+stress evolution, not noise added to the audio. The complete enhanced field
+still has nearly straight sustained bands; this correction alone is not an
+adequate acoustic result.
+
+The 10% relaxing fraction and 100 ms nominal time follow an existing
+continuum phonation study, not measurements of this configured body. A log
+rate standard deviation of 0.6 and independently varying strain channels are
+explicit prototype assumptions. The fixed longitudinal prestress has not yet
+been replaced by an anatomical muscle/ligament model. The remaining Voigt
+viscosity represents faster rate-dependent loss; these combined parameters
+have not been jointly identified from tissue measurements.
+
+The user further identified the missing maintenance mechanism: irregular
+nerve firing and overlapping muscle twitches must continually hold posture
+against relaxation and airflow. `MotorPool` supplies 64 independently timed
+units, 15/35 ms fast/slow twitch responses, approximately 90% fast units,
+variable recruitment and 8–40 Hz discharge. Intervals have coefficient of
+variation 0.2. A pair of first-order twitch states evolves each population;
+force remains continuous when a discharge occurs. No vocal pulse or pitch
+is supplied by these neural firings.
+
+`MotorHold` senses a 20 ms filtered gap after 30 ms delay. A bounded controller
+changes neural drive from the delayed error. Its feedforward estimate is
+based on the compiled static posture stiffness. Muscle force acts through
+that body's generalized posturing direction and supplies signed mechanical
+work. The controller does not directly alter tissue position or velocity.
+The unit count, recruitment distribution, force capacity, delay, filtering,
+gains and target gap are prototype assumptions, not an identified human
+reflex circuit. Neural randomness and passive stress relaxation are distinct
+states and sources of variation.
+
+The motor study also replaces the indefinitely replenished pressure source
+with a finite recoil volume (0.6 L above equilibrium, compliance 1e-6 m3/Pa).
+Each emitted flow increment depletes that volume; pressure follows it.
+An initial respiratory holding pressure releases over 12 ms. This is a
+simplified respiratory boundary, not a complete breathing-muscle model.
+
+Round 009 couples these mechanisms. The posture trace shows rising neural
+drive correcting an initially opened gap, with irregular force while holding.
+When closing-muscle firing stops at one second, the force relaxes, but the
+source later resumes vibration while breath continues. The missing opposing
+opening action is exposed, not concealed by an output fade. This round is
+not a naturalness success.
+
+Round 010 adds a separately firing opposing opening pool. Changing to an
+opening gesture preserves existing twitch force and lets the two populations
+overlap. The mean gap opens but large vibration returns while pressure remains.
+Thus the claimed release fix failed; this is not an acceptable speech source.
+The fixed-framework body and a single generalized posturing-force direction
+are a significant limit: pulling this surface shape is not the same as
+rotating/translating the arytenoid and changing the attachments. This is a
+mechanism to investigate, not a proved exclusive cause of the failure. No
+output envelope is applied to hide it. The latest whole-field inspection and
+current acceptance state are preserved in the JSON record.
+
+The local mechanics checks test held-strain relaxation (including its analytic
+constant-rate limit), absence of passive energy creation at fixed strain,
+vanishing twitch force after firing stops, and delayed recruitment after a
+posture perturbation. They do not establish natural voice quality. The random
+relaxation trial took 0.0752 s per audio second; the motor/finite-breath trial
+010 took 0.1093 s per 1.4 s (12.8x). Both exclude trace writes and offline
+visualization, and neither qualifies the full speech engine.
+
+Primary references for this correction:
+
+- [Bhattacharya, Kelleher and Siegmund (2015)](https://eprints.whiterose.ac.uk/id/eprint/110514/1/TS-graded-noadds-withsupp.pdf),
+  equations 11–12: nominal continuum stress relaxation parameters.
+- [Zhang and colleagues, transient lamina propria responses](https://pmc.ncbi.nlm.nih.gov/articles/PMC2600447/):
+  experimental stress relaxation and creep require material history.
+- [Luschei and colleagues (1999)](https://journals.physiology.org/doi/full/10.1152/jn.1999.81.5.2131):
+  human laryngeal motor-unit firing is variable, with typical phonatory
+  rates around 24 discharges per second.
+- [Manriquez and colleagues (2017)](https://www.isca-archive.org/interspeech_2017/manriquez17_interspeech.pdf):
+  overlapping fast/slow twitches and irregular intervals affect synthetic
+  vocal-fold motion. The 15/35 ms twitch times and 0.2 interval CV used here
+  follow their model; its human-perception benefit is not established here.
+
+## Elastic volume representation (round 006 onward)
 
 The scalar support experiment below has been superseded in `TissueSource`.
 `tools/compile_tissue_body.py` constructs a two-layer elastic volume from

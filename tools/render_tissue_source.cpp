@@ -28,6 +28,10 @@ int main(int argc,char** argv){
     std::ofstream setup(root/"setup.json");
     setup<<"{\"adducted\":"<<(adducted?"true":"false")<<",\"apposed\":"<<(apposed?"true":"false")
         <<",\"central_rest_gap_m\":"<<(adducted?-.0006:material.rest_gap)
+        <<",\"relaxation_fraction\":"<<material.relaxation_fraction
+        <<",\"relaxation_seconds\":"<<material.relaxation_seconds
+        <<",\"relaxation_log_rate_sd\":"<<material.relaxation_log_rate_sd
+        <<",\"relaxation_seed\":"<<material.relaxation_seed
         <<",\"initialization_seconds\":"<<(adducted?.3:0)
         <<",\"initial_kinetic_j\":"<<source.kinetic_energy()
         <<",\"cover_shear_pa\":"<<material.cover_shear<<",\"cover_viscosity_pa_s\":"<<material.viscosity<<"}\n";
