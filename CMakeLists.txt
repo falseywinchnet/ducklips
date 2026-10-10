@@ -346,3 +346,8 @@ add_test(NAME ducklips_relaxation_graph_fifth COMMAND ducklips_relaxation_graph_
 add_test(NAME ducklips_graph_joint_fifth COMMAND ducklips_graph_continuous_glottis_probe --joint-fifth)
 
 add_test(NAME ducklips_joint_accuracy COMMAND ducklips_graph_continuous_glottis_probe --joint-accuracy)
+
+add_executable(ducklips_joint_contact_probe tools/joint_contact_probe.cpp)
+target_link_libraries(ducklips_joint_contact_probe PRIVATE ducklips)
+add_test(NAME ducklips_joint_contact_zero_lower COMMAND ducklips_joint_contact_probe zero-lower 1e-5 1e-5 2.5e-5 2.5e-8)
+add_test(NAME ducklips_joint_contact_zero_upper COMMAND ducklips_joint_contact_probe zero-upper 1e-5 1e-5 2.5e-5 2.5e-8)

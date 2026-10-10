@@ -30,7 +30,7 @@ void GraphContinuousGlottis::prepare_joint(std::size_t radiation_branch,Relaxati
     joint_radiation_branch_=radiation_branch;joint_ready_=true;
 }
 bool GraphContinuousGlottis::advance_joint(const JointGraphGeometry& geometry,double dt,double reservoir,
-    const std::array<double,4>& external,std::span<const double> nodal,std::span<const double> series,double outlet_inertance) noexcept {
+    const std::array<double,4>& external,std::span<const double> nodal,std::span<const double> series,double outlet_inertance,ContinuousGlottalUpdate source_update) noexcept {
     if(!joint_ready_ || network.charge.size()!=joint_free_.charge.size() || network.momentum.size()!=joint_free_.momentum.size()
         || network.average_pressure.size()!=network.charge.size() || network.average_flow.size()!=network.momentum.size()
         || geometry.last_compliance.size()!=network.charge.size() || geometry.last_conductance.size()!=network.momentum.size()
@@ -69,7 +69,11 @@ bool GraphContinuousGlottis::advance_joint(const JointGraphGeometry& geometry,do
     if(!joint_response_.advance(geometry.midpoint_compliance,geometry.midpoint_conductance,joint_resistance_,joint_node_metrics_,joint_branch_metrics_,dt,unit_flow_)){return false;}
     receipt.free_pressure=joint_free_.average_pressure[source_node_];receipt.load_slope=joint_response_.average_pressure[source_node_];
     ContinuousGlottis candidate=source;
-    if(!candidate.advance(dt,reservoir,receipt.free_pressure,receipt.load_slope,external,ContinuousGlottalUpdate::relaxation,outlet_inertance)){return false;}
+    if(!candidate.advance(dt,reservoir,receipt.free_pressure,receipt.load_slope,external,source_update,outlet_inertance)){return false;}
+    if(source_update==ContinuousGlottalUpdate::dissipative){
+        ContinuousGlottalState before,after;if(!source.state(before) || !candidate.state(after)){return false;}
+        for(std::size_t j=0;j<2;++j){receipt.source_closures+=before.area[j]>0 && after.area[j]<=0?1:0;receipt.source_reopenings+=before.area[j]<=0 && after.area[j]>0?1:0;}
+    }
     receipt.flow=candidate.last.flow[2];receipt.source_port_work=candidate.last.port_work;receipt.source_geometry_work=candidate.last.geometry_work;
     for(std::size_t i=0;i<joint_drive_.size();++i){joint_drive_[i]=nodal.empty()?0:nodal[i];}joint_drive_[source_node_]+=receipt.flow;
     // Re-evaluate the accepted linear combination so its quadratic work and

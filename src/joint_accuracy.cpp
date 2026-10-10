@@ -54,9 +54,19 @@ double JointAccuracy::difference(const GraphContinuousGlottis& a,const GraphCont
     error=std::max(error,std::abs(a.radiation.momentum-b.radiation.momentum)*std::sqrt(a.radiation.inverse_inertance()/1e-6));
     return std::isfinite(error)?error:infinity;
 }
+bool JointAccuracy::step(GraphContinuousGlottis& model,const JointAdvanceInputs& inputs,double dt,const JointAccuracyOptions& options) noexcept {
+    if(model.advance_joint(inputs.geometry,dt,inputs.reservoir_pressure,inputs.external_force,inputs.nodal_flow,inputs.series_pressure,inputs.outlet_inertance)){return true;}
+    if(options.maximum_contact_step==0 || dt>options.maximum_contact_step){return false;}
+    // A failed joint step preserves physical state. Try the contact-capable
+    // source discretization against the SAME implicit passive pressure load.
+    // Do not accept its extra damping for an ordinary same-phase step.
+    return model.advance_joint(inputs.geometry,dt,inputs.reservoir_pressure,inputs.external_force,inputs.nodal_flow,inputs.series_pressure,inputs.outlet_inertance,ContinuousGlottalUpdate::dissipative)
+        && (model.last.source_closures || model.last.source_reopenings);
+}
 void JointAccuracy::accumulate(const GraphContinuousGlottis& model,double dt,JointAccuracyStep& receipt,
     std::vector<double>& pressure,std::vector<double>& flow) noexcept {
     const auto& s=model.source.last;const auto& g=model.last;
+    receipt.source_closures+=g.source_closures;receipt.source_reopenings+=g.source_reopenings;
     receipt.energy_change+=s.energy_change+g.passive_energy_change;
     receipt.external_work+=s.reservoir_work+s.external_work+s.geometry_work+g.graph_external_work+g.graph_geometry_work+g.thermal_geometry_work+g.viscous_geometry_work+g.radiation_geometry_work;
     receipt.physical_loss+=s.fluid_loss+s.tissue_loss+s.outlet_loss+g.thermal_dissipation+g.viscous_dissipation+g.radiated_energy;
@@ -70,7 +80,8 @@ bool JointAccuracy::advance(GraphContinuousGlottis& model,double first,double en
     if(!maximum_trials_ || !compatible(model) || !provider || !std::isfinite(first) || !std::isfinite(end) || end<=first
         || !std::isfinite(options.tolerance) || options.tolerance<=0 || !std::isfinite(options.maximum_step) || options.maximum_step<=0
         || !std::isfinite(options.minimum_step) || options.minimum_step<=0 || options.maximum_step<2*options.minimum_step
-        || !options.maximum_trials || options.maximum_trials>maximum_trials_ || !std::isfinite(end-first)){return false;}
+        || !options.maximum_trials || options.maximum_trials>maximum_trials_ || !std::isfinite(end-first)
+        || !std::isfinite(options.maximum_contact_step) || options.maximum_contact_step<0){return false;}
     accepted_=model;JointAccuracyStep receipt;receipt.minimum_step=infinity;
     std::fill(pressure_sum_.begin(),pressure_sum_.end(),0.);std::fill(flow_sum_.begin(),flow_sum_.end(),0.);
     const double block_count=std::ceil((end-first)/options.maximum_step);
@@ -93,10 +104,10 @@ bool JointAccuracy::advance(GraphContinuousGlottis& model,double first,double en
         bool solved=provider(context,t,finish,inputs);
         if(solved){solved=inputs.geometry.last_compliance.size()==end_compliance_.size() && inputs.geometry.last_conductance.size()==end_conductance_.size();}
         if(solved){end_compliance_.assign(inputs.geometry.last_compliance.begin(),inputs.geometry.last_compliance.end());end_conductance_.assign(inputs.geometry.last_conductance.begin(),inputs.geometry.last_conductance.end());
-            solved=full_.advance_joint(inputs.geometry,h,inputs.reservoir_pressure,inputs.external_force,inputs.nodal_flow,inputs.series_pressure,inputs.outlet_inertance);}
-        if(solved){solved=provider(context,t,middle,inputs) && halves_.advance_joint(inputs.geometry,middle-t,inputs.reservoir_pressure,inputs.external_force,inputs.nodal_flow,inputs.series_pressure,inputs.outlet_inertance);}
+            solved=step(full_,inputs,h,options);}
+        if(solved){solved=provider(context,t,middle,inputs) && step(halves_,inputs,middle-t,options);}
         if(solved){accumulate(halves_,middle-t,trial,trial_pressure_,trial_flow_);
-            solved=provider(context,middle,finish,inputs) && halves_.advance_joint(inputs.geometry,finish-middle,inputs.reservoir_pressure,inputs.external_force,inputs.nodal_flow,inputs.series_pressure,inputs.outlet_inertance);}
+            solved=provider(context,middle,finish,inputs) && step(halves_,inputs,finish-middle,options);}
         double error=infinity;
         if(solved){
             solved=std::equal(end_compliance_.begin(),end_compliance_.end(),inputs.geometry.last_compliance.begin(),inputs.geometry.last_compliance.end())
@@ -105,7 +116,7 @@ bool JointAccuracy::advance(GraphContinuousGlottis& model,double first,double en
         }
         attempt_error=error;
         if(solved && error<=options.tolerance){
-            accepted_=halves_;receipt.energy_change+=trial.energy_change;receipt.external_work+=trial.external_work;receipt.physical_loss+=trial.physical_loss;receipt.numerical_loss+=trial.numerical_loss;
+            accepted_=halves_;receipt.source_closures+=trial.source_closures;receipt.source_reopenings+=trial.source_reopenings;receipt.energy_change+=trial.energy_change;receipt.external_work+=trial.external_work;receipt.physical_loss+=trial.physical_loss;receipt.numerical_loss+=trial.numerical_loss;
             receipt.reservoir_volume+=trial.reservoir_volume;receipt.source_port_work+=trial.source_port_work;receipt.graph_port_work+=trial.graph_port_work;
             receipt.maximum_accepted_error=std::max(receipt.maximum_accepted_error,error);receipt.minimum_step=std::min(receipt.minimum_step,std::min(middle-t,finish-middle));
             trial_times_[receipt.accepted_steps++]=middle;trial_times_[receipt.accepted_steps++]=finish;

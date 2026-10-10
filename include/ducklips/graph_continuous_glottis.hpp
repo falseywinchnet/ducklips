@@ -23,6 +23,7 @@ struct JointGraphGeometry final {
     double midpoint_radiation_area{},last_radiation_area{};
 };
 struct GraphContinuousGlottalStep final {
+    std::size_t source_closures{},source_reopenings{};
     double free_pressure{},load_slope{},pressure{},flow{};
     double source_port_work{},graph_port_work{},port_residual{};
     double graph_external_work{},source_geometry_work{};
@@ -56,7 +57,8 @@ public:
     void prepare_joint(std::size_t radiation_branch=ground_node,RelaxationOrder order=RelaxationOrder::third);
     [[nodiscard]] bool advance_joint(const JointGraphGeometry&,double dt,double reservoir_pressure,
         const std::array<double,4>& external_force={},std::span<const double> nodal_flow={},
-        std::span<const double> series_pressure={},double outlet_inertance=-1.) noexcept;
+        std::span<const double> series_pressure={},double outlet_inertance=-1.,
+        ContinuousGlottalUpdate source_update=ContinuousGlottalUpdate::relaxation) noexcept;
     // Prescribed stage metrics, constant external drives, one source step.
     // No allocation after prepare. Failure preserves network, source and last.
     // A caller subdividing contact steps must recompute BOTH graph stages and

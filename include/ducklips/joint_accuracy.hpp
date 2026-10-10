@@ -15,17 +15,20 @@ struct JointAccuracyOptions final {
     // maximum_step bounds a trial; accepted leaves are its two half steps.
     double tolerance{1e-5},maximum_step{1e-6},minimum_step{1e-10};
     std::size_t maximum_trials{4096};
+    // Zero disables contact transitions. A positive bound permits a
+    // dissipative source update only when its endpoint phase actually changes.
+    double maximum_contact_step{};
 };
 struct JointAccuracyStep final {
     double energy_change{},external_work{},physical_loss{},numerical_loss{},energy_residual{};
     double source_port_work{},graph_port_work{},reservoir_volume{},maximum_accepted_error{},minimum_step{};
-    std::size_t trials{},rejected{},accepted_steps{};
+    std::size_t trials{},rejected{},accepted_steps{},source_closures{},source_reopenings{};
 };
 // Step doubling of the entire coupled source/tract system. Accept the two
 // half steps, without extrapolation; their physical work receipts remain the
 // receipts of the accepted path. Tolerance is local, not a global error bound.
 // Topology and loss ownership must remain those prepared by the model. This
-// does not add a source-contact transition rule.
+// permits an opt-in, bounded source-contact transition step.
 enum class JointAccuracyFailure {none,configuration,trial_limit,step_limit};
 class JointAccuracy final {
 public:
@@ -43,6 +46,8 @@ public:
     JointAccuracyFailure failure{JointAccuracyFailure::none};
     double attempt_time{},attempt_step{},attempt_error{};
 private:
+    [[nodiscard]] bool step(GraphContinuousGlottis&,const JointAdvanceInputs&,double,
+        const JointAccuracyOptions&) noexcept;
     [[nodiscard]] bool compatible(const GraphContinuousGlottis&) const noexcept;
     [[nodiscard]] double difference(const GraphContinuousGlottis&,const GraphContinuousGlottis&,
         const JointGraphGeometry&) const noexcept;

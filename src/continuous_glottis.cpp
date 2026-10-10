@@ -201,7 +201,9 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         Vector rhs=base,increment{};for(double& v:rhs){v=-v;}if(!solve(jacobian,rhs,increment)){return false;}double fraction=1;bool accepted=false;
         for(int line=0;line<24;++line){Vector next=change;for(std::size_t j=0;j<7;++j){next[j]+=fraction*increment[j];}if(evaluate(next) && (norm<old_norm || converged)){change=next;accepted=true;break;}fraction*=.5;}if(!accepted){return false;}
     }
-    if(iteration==24){return false;}for(std::size_t j=0;j<7;++j){if(!c1.active[j]){change[j]=0;}}ContinuousGlottis next=*this;next.position_=q1;next.momentum_=p1;next.effort_guess_=c1.gas.effort;next.active_=c1.active;
+    // The final permitted Newton correction may have converged in the
+    // line search. Do not reject it solely because the loop budget ended.
+    if(iteration==24 && !converged){return false;}for(std::size_t j=0;j<7;++j){if(!c1.active[j]){change[j]=0;}}ContinuousGlottis next=*this;next.position_=q1;next.momentum_=p1;next.effort_guess_=c1.gas.effort;next.active_=c1.active;
     // The three transferred volumes contain a cyclic throughflow coordinate.
     // Rebase their origins after each step, retaining the two actual gas
     // moments. Otherwise long throughflow subtracts large nearly equal
