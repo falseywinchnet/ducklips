@@ -1,0 +1,35 @@
+✔ worklet and LAN buffer sizes produce identical PCM and raw captures (278.657167ms)
+✔ LAN raw capture retains engine output while monitor is muted (144.135541ms)
+✔ saved six-section reference matches the preserved user file exactly (1.512416ms)
+✔ below-mouth geometry preserves diameter and material constraints in a connected 480-mode sheet (25.894875ms)
+✔ independent slow material states are bounded, seeded, and continuous through bubble resets (22.908292ms)
+✔ varying cached response agrees with independent complete eigenanalysis at both elasticity limits (45.563291ms)
+✔ packed air histories reproduce the original transport through reconfiguration and fractional delays (265.065958ms)
+✔ unchanged and pressure-only edits preserve the evolving material state and wave histories (59.904375ms)
+✔ whole-body elasticity covers 1 through 4, with doubled dry frequencies and finite running output (861.396792ms)
+✔ expanded varying sheet retains rotational equivalence (241.622291ms)
+✔ changing section count resets audio interpolation and retains the requested running state (14.203792ms)
+✔ material variation cannot excite exact rest, and output releases when reservoir pressure stops (626.477708ms)
+✔ volume blocks add their actual enclosed volume (4.61825ms)
+✔ symmetric eigendecomposition returns orthonormal eigenpairs (0.240875ms)
+✔ 384 modes are sorted and satisfy the complete periodic sheet equation (25.439959ms)
+✔ whole-body mass and elasticity scale the frequencies physically (9.616958ms)
+✔ moving one ring support and adding volume change global sheet modes (6.393375ms)
+✔ cached receptance agrees with explicit sums of all 384 modes (5.962209ms)
+✔ rotational compression matches all eight sectors, including contact (330.997417ms)
+✔ circumferential modes really move and couple to air in the full sheet (28.117166ms)
+✔ without reservoir pressure, exact rest remains silent (47.362459ms)
+✔ support recompilation preserves displacement and velocity (15.703583ms)
+✔ same design replays deterministically and produces finite pressure-driven output (162.102125ms)
+✔ legacy two-wall designs migrate to one ring support without mutating input (0.335417ms)
+✔ invalid imported physical parameters are rejected (0.112084ms)
+✔ removing pressure permits ringdown in the same sheet (310.479625ms)
+✔ reconfiguring unchanged geometry preserves every traveling-wave history (31.715ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2260.463875

@@ -1,6 +1,15 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {initialDesign,validateDesign,compile,TubeEngine,eigen,modeShape,N,P,C} from './engine.mjs';
+import {validateDesign,compile,TubeEngine,eigen,modeShape,N,P,C} from './engine.mjs';
 import {receptance} from './sheet.mjs';
+// Preserve the original six-section regression fixture independently of the new preset.
+function initialDesign(){return {version:2,pressure:650,wander:.012,monitor:.25,blocks:[],bands:[
+ {name:'01 · Return chamber',length:.050,radius:.009,material:'soft'},
+ {name:'02 · Vocal band',length:.016,radius:.00032,material:'fold'},
+ {name:'03 · Lower tract',length:.035,radius:.007,material:'soft'},
+ {name:'04 · Oral body',length:.045,radius:.011,material:'soft'},
+ {name:'05 · Front cavity',length:.035,radius:.008,material:'firm'},
+ {name:'06 · Outlet',length:.025,radius:.006,material:'soft'}
+ ].map(b=>({...b,mass:1,elasticity:1,offset:0,anchor:.5,support:1}))};}
 const near=(a,b,t=1e-9)=>assert.ok(Math.abs(a-b)<t,`${a} != ${b} (tolerance ${t})`);
 const design=initialDesign(),compiled=compile(design);
 test('volume blocks add their actual enclosed volume',()=>{const d=initialDesign();d.blocks.push({x:.42,width:.14,volume:1.5});const b=compile(d);near(b.area.reduce((s,v,i)=>s+(v-compiled.area[i])*b.dx[i],0),1.5e-6,1e-14);});

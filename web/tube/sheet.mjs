@@ -23,7 +23,7 @@ export function eigen(matrix,n){
 export function compileSheet(c,bands,materials,pointsPerBand){
  const n=c.x.length,C=CIRCUMFERENCE,angle=2*Math.PI/C,mass=new Float64Array(n),rootMass=new Float64Array(n),surface=new Float64Array(n),tension=new Float64Array(n),hoop=new Float64Array(n),foundation=new Float64Array(n),loss=new Float64Array(n),axial=new Float64Array(n-1),fir=[],impedance=new Float64Array(n);
  for(let i=0;i<n;i++){
-  const b=bands[Math.floor(i/pointsPerBand)],m=materials[b.material],circ=c.r[i]*angle;
+  const b=bands[c.bandAt[i]],m=materials[b.material],circ=c.r[i]*angle;
   const slope=i&&i<n-1?(c.r[i+1]-c.r[i-1])/(c.x[i+1]-c.x[i-1]):0;
   const area=circ*c.dx[i]*Math.hypot(1,slope);
   surface[i]=circ*c.dx[i];mass[i]=m.density*m.thickness*area*b.mass;rootMass[i]=Math.sqrt(mass[i]);
@@ -34,14 +34,14 @@ export function compileSheet(c,bands,materials,pointsPerBand){
   impedance[i]=Math.sqrt(m.density*m.thickness*b.mass*tension[i])*circ*.08;
  }
  for(let i=0;i<n-1;i++)axial[i]=2*tension[i]*tension[i+1]/(tension[i]+tension[i+1]) * angle*(c.r[i]+c.r[i+1])/2 / Math.hypot(c.x[i+1]-c.x[i],c.r[i+1]-c.r[i]);
- const base=new Float64Array(n*n);
+ const base=new Float64Array(n*n),supportDiagonal=new Float64Array(n),supportOff=new Float64Array(n-1);
  for(let i=0;i<n;i++)base[i*n+i]=foundation[i];
  for(let i=0;i<n-1;i++){const k=axial[i];base[i*n+i]+=k;base[(i+1)*n+i+1]+=k;base[i*n+i+1]-=k;base[(i+1)*n+i]-=k;}
  // Each handle is a ring support. Its footprint moves continuously within a band.
  for(let b=0;b<bands.length;b++){
-  const band=bands[b],at=band.anchor*(pointsPerBand-1),weights=Array.from({length:pointsPerBand},(_,j)=>Math.max(0,1-Math.abs(j-at)));
-  const first=b*pointsPerBand,k=band.support*(tension[first]*c.r[first]*angle/c.dx[first]+foundation[first]);
-  for(let i=0;i<pointsPerBand;i++)for(let j=0;j<pointsPerBand;j++)base[(first+i)*n+first+j]+=k*weights[i]*weights[j];
+  const band=bands[b],count=c.counts[b],at=band.anchor*(count-1),weights=Array.from({length:count},(_,j)=>Math.max(0,1-Math.abs(j-at)));
+  const first=c.starts[b],k=band.support*(tension[first]*c.r[first]*angle/c.dx[first]+foundation[first]);
+  for(let i=0;i<count;i++)for(let j=0;j<count;j++){const value=k*weights[i]*weights[j];base[(first+i)*n+first+j]+=value;if(i===j)supportDiagonal[first+i]+=value;else if(j===i+1)supportOff[first+i]+=value;}
  }
  const channels=[],modes=[],families=[];
  for(let k=0;k<=C/2;k++){
@@ -58,7 +58,7 @@ export function compileSheet(c,bands,materials,pointsPerBand){
  }
  modes.sort((a,b)=>a.frequency-b.frequency||a.channel-b.channel||a.axial-b.axial);
  const viscous=Float64Array.from(mass,(m,i)=>2*loss[i]*Math.sqrt(m*base[i*n+i]));
- return {n,circumference:C,mass,rootMass,surface,axial,hoop,foundation,base,families,channels,modes,impedance,fir,viscous};
+ return {bandAt:c.bandAt,tension,supportDiagonal,supportOff,n,circumference:C,mass,rootMass,surface,axial,hoop,foundation,base,families,channels,modes,impedance,fir,viscous};
 }
 export function modeShape(sheet,index){
  const mode=sheet.modes[index],ch=sheet.channels[mode.channel],shape=new Float64Array(sheet.n*sheet.circumference);let peak=0;
@@ -83,4 +83,52 @@ export function receptance(channel,n,rate,{dense=false}={}){
  rows.push(values.length);
  if(droppedRowBound>1e-12)throw Error('Receptance compression exceeded its error bound.');
  return {rows:Uint32Array.from(rows),columns:Uint32Array.from(columns),values:Float64Array.from(values),matrix,droppedRowBound};
+}
+
+// The axial matrices are tridiagonal in each angular Fourier family. During
+// slow elasticity variation their exact modal sum can be updated directly as
+// the inverse of I + h² K_normalized / 4. This O(n²) control-rate recurrence
+// avoids a new eigendecomposition; audio still applies one cached response.
+export class VariableReceptance {
+ constructor(sheet,channel,rate,baseKernel){
+  this.sheet=sheet;this.channel=channel;this.h2=1/(4*rate*rate);const n=sheet.n;
+  for(const key of ['pivot','lower','diagonal','off','inverseDiagonal','factor','axial','viscous','impedance'])this[key]=new Float64Array(n);
+  this.matrix=new Float64Array(n*n);this.kernel=baseKernel;
+  // Include a conservative spatial neighborhood and all remaining significant
+  // tails. Verify the omitted row norm on every control-rate update.
+  const rows=[],columns=[],values=[];
+  for(let i=0;i<n;i++){rows.push(values.length);for(let j=0;j<n;j++)if(Math.abs(i-j)<=2||Math.abs(baseKernel.matrix[i*n+j])>1e-16){columns.push(j);values.push(baseKernel.matrix[i*n+j]);}}
+  rows.push(values.length);this.rows=Uint32Array.from(rows);this.columns=Uint32Array.from(columns);this.values=Float64Array.from(values);this.next=Float64Array.from(values);this.delta=new Float64Array(values.length);this.droppedRowBound=0;
+ }
+ update(factors,mix=1){
+  const s=this.sheet,n=s.n,h2=this.h2,angular=4*Math.sin(Math.PI*this.channel.k/s.circumference)**2;
+  for(let i=0;i<n;i++)this.factor[i]=factors[s.bandAt[i]];
+  for(let i=0;i<n-1;i++){
+   const a=s.tension[i],b=s.tension[i+1],fa=this.factor[i],fb=this.factor[i+1];
+   this.axial[i]=s.axial[i]*fa*fb*(a+b)/(a*fa+b*fb);
+  }
+  for(let i=0;i<n;i++){
+   const f=this.factor[i],k=(s.foundation[i]+s.supportDiagonal[i]+s.hoop[i]*angular)*f+(i?this.axial[i-1]:0)+(i<n-1?this.axial[i]:0);
+   this.diagonal[i]=1+h2*k/s.mass[i];
+   if(i<n-1)this.off[i]=h2*(s.supportOff[i]*f-this.axial[i])/(s.rootMass[i]*s.rootMass[i+1]);
+   this.pivot[i]=this.diagonal[i]-(i?this.off[i-1]*this.lower[i-1]:0);if(!(this.pivot[i]>0))throw Error('Elastic response lost positive definiteness.');
+   this.lower[i]=i<n-1?this.off[i]/this.pivot[i]:0;
+   this.viscous[i]=s.viscous[i]*Math.sqrt((k-s.hoop[i]*angular*f)/s.base[i*n+i]);this.impedance[i]=s.impedance[i]*Math.sqrt(f);
+  }
+  this.inverseDiagonal[n-1]=1/this.pivot[n-1];
+  for(let i=n-2;i>=0;i--)this.inverseDiagonal[i]=1/this.pivot[i]+this.lower[i]**2*this.inverseDiagonal[i+1];
+  for(let j=0;j<n;j++){
+   let value=this.inverseDiagonal[j];this.matrix[j*n+j]=value;
+   for(let i=j-1;i>=0;i--){value*=-this.lower[i];this.matrix[i*n+j]=this.matrix[j*n+i]=value;}
+  }
+  let bound=0;
+  for(let i=0;i<n;i++){
+   let at=this.rows[i],dropped=0;
+   for(let j=0;j<n;j++){
+    if(at<this.rows[i+1]&&this.columns[at]===j){const start=this.values[at]+mix*this.delta[at];this.values[at]=start;this.next[at]=this.matrix[i*n+j];this.delta[at]=this.next[at]-start;at++;}
+    else dropped+=Math.abs(this.matrix[i*n+j]);
+   }bound=Math.max(bound,dropped);
+  }
+  if(bound>1e-12)throw Error('Changing elasticity exceeded the material response compression bound.');this.droppedRowBound=Math.max(this.droppedRowBound,bound);
+ }
 }

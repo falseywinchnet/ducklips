@@ -1,0 +1,134 @@
+{
+  "below-mouth-reference": {
+    "seconds": 2,
+    "settle": 1,
+    "realtime": 11.502416945360647,
+    "peak": 0.03949567303061485,
+    "rms": 0.023678446834251514,
+    "fault": null,
+    "audio_sha256": "c9b981856141ece61494e064c48db5c8af599505b6c83c90afe3cff5e8b5ec7e",
+    "source_sha256": {
+      "engine.mjs": "f866ccfcfe9aed8138394266b45c6e007f72b393c4625ba6ca30d7516fd85a3d",
+      "sheet.mjs": "8428d4e9968610c3c1db3ba7b4830f9973ddd72e69fea023361faac9aea9e416",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "below-mouth-mirrored-01": {
+    "seconds": 2,
+    "settle": 1,
+    "realtime": 7.899051449515831,
+    "peak": 0.0036096221301704645,
+    "rms": 0.000995697238996382,
+    "fault": null,
+    "audio_sha256": "b45235862e30f71745bd092cef7f241c38870a4109bd772660d55895ccbeed7a",
+    "source_sha256": {
+      "engine.mjs": "30703dafdc87128fd1c643cef802478bcaaa6ab1c012771f71d0491cf5ad04b2",
+      "sheet.mjs": "0e259576d855635f4c5c2ee1b80f79bc002253f45e2229dfee386e7728d26a6b",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "547a862bd39a88031c406039fcc41d3f89b664ed8f067158487c2923f8b38d4c",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "below-mouth-pressure-850": {
+    "seconds": 2,
+    "settle": 1,
+    "realtime": 8.619732939124214,
+    "peak": 0.031120674684643745,
+    "rms": 0.007948297649163457,
+    "fault": null,
+    "audio_sha256": "b3eaf63c035fc472d83103146a0f8313054f4d1ab00494bf174637296ac4833a",
+    "source_sha256": {
+      "engine.mjs": "30703dafdc87128fd1c643cef802478bcaaa6ab1c012771f71d0491cf5ad04b2",
+      "sheet.mjs": "d4f52543f35bae464ede982b6ebd269b913e2b2337f77cb7296518e3e9852598",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "547a862bd39a88031c406039fcc41d3f89b664ed8f067158487c2923f8b38d4c",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "below-mouth-cord-350um": {
+    "seconds": 2,
+    "settle": 1,
+    "realtime": 8.619856798663799,
+    "peak": 0.08681042492389679,
+    "rms": 0.016280891192123583,
+    "fault": null,
+    "audio_sha256": "b46318f9ec89caefbfbd72e75928dfa386b5548205d859299113d84bf46e027b",
+    "source_sha256": {
+      "engine.mjs": "30703dafdc87128fd1c643cef802478bcaaa6ab1c012771f71d0491cf5ad04b2",
+      "sheet.mjs": "d4f52543f35bae464ede982b6ebd269b913e2b2337f77cb7296518e3e9852598",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "547a862bd39a88031c406039fcc41d3f89b664ed8f067158487c2923f8b38d4c",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "below-mouth-final": {
+    "seconds": 6,
+    "settle": 1,
+    "realtime": 10.994766789699266,
+    "peak": 0.03336924687027931,
+    "rms": 0.00824388448341826,
+    "fault": null,
+    "audio_sha256": "50dcf4e1db23b5aebe3843726ee7472fb451ddbe368da57a98455bc91639a79f",
+    "source_sha256": {
+      "engine.mjs": "e2e72f2a921f667d4e8da6dc97f981b4b0d5bfaf3f2a911d9e73e29b37960863",
+      "sheet.mjs": "ada05a4ff0ef52b40028c33d668d03b57470863c9ee1eb558d0f01823ee55dc3",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "8c01bfeec04a145bfaec8e76c8ee8c4a19681f9fe23a526acd0596dfcd8522b8",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "below-mouth-reference-replay": {
+    "seconds": 2,
+    "settle": 1,
+    "realtime": 14.075387776933255,
+    "peak": 0.03949567303061485,
+    "rms": 0.023678446834251514,
+    "fault": null,
+    "audio_sha256": "c9b981856141ece61494e064c48db5c8af599505b6c83c90afe3cff5e8b5ec7e",
+    "source_sha256": {
+      "engine.mjs": "e2e72f2a921f667d4e8da6dc97f981b4b0d5bfaf3f2a911d9e73e29b37960863",
+      "sheet.mjs": "ada05a4ff0ef52b40028c33d668d03b57470863c9ee1eb558d0f01823ee55dc3",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "8c01bfeec04a145bfaec8e76c8ee8c4a19681f9fe23a526acd0596dfcd8522b8",
+      "render.mjs": "e31a4b82431c4e26c4a8e89b5600c3229dbe774b968a452ac17fa7b425555b40"
+    }
+  },
+  "checks": {
+    "reference_pcm_identical": true,
+    "tests": 27,
+    "passed": 27,
+    "browser_core_realtime": 11.3,
+    "lan_url": "http://192.168.1.18:8765/",
+    "other_laptop_measured": false
+  },
+  "lan_take": {
+    "path": "out/flat-tube-web/2026-10-10T19-13-38.156Z-21333b/",
+    "audio_sha256": "21f77504ea106bf00a4d022510bc964ea468213628998bd658fd3f04d7a22d70",
+    "source_sha256": {
+      "engine.mjs": "e2e72f2a921f667d4e8da6dc97f981b4b0d5bfaf3f2a911d9e73e29b37960863",
+      "sheet.mjs": "ada05a4ff0ef52b40028c33d668d03b57470863c9ee1eb558d0f01823ee55dc3",
+      "variation.mjs": "5f1a04b4b83cca4ecda64ea97f94a6160dc94a1e27aa32dbb8b7630ed7307d73",
+      "presets.mjs": "8c01bfeec04a145bfaec8e76c8ee8c4a19681f9fe23a526acd0596dfcd8522b8",
+      "audio-renderer.mjs": "2a63861b63f3d2f19aae939a48a7e93296413e1815b8d9cfaeef1f61bb834832",
+      "worklet.mjs": "4254d165d8d8df1f944f90e80d6cde9560eff8cfeed930ca9be6f4eb92fb2ee0",
+      "lan-audio.mjs": "e21633d7e80bb6680ad25649ed8bfbef37ba8d7aa9736ba946414cb85da22c15",
+      "audio-worker.mjs": "619a12b22fb8dd66a6e75b80808cc7792fb484f63b56d727d602983fc418bf37",
+      "app.mjs": "be37510e8befffd8d7fb04ab31df7cf237eb30d3518cd83f077461446e6d8553"
+    },
+    "field_visually_inspected": true
+  },
+  "final_field": {
+    "sha256": "50dcf4e1db23b5aebe3843726ee7472fb451ddbe368da57a98455bc91639a79f",
+    "shape": [
+      684,
+      1126
+    ],
+    "samples": [
+      0,
+      288000
+    ],
+    "visually_inspected": true,
+    "elapsed_seconds": 1158.2700919169001,
+    "lan_take_page": "http://192.168.1.18:8765/renders/below-mouth-20261010/index.html"
+  }
+}

@@ -1,7 +1,8 @@
-import {initialDesign,compile,validateDesign,MATERIALS,N,P,C,modeShape,wav,clamp} from './engine.mjs';
+import {referenceDesign} from './presets.mjs';
+import {initialDesign,compile,validateDesign,MATERIALS,C,modeShape,wav,clamp} from './engine.mjs';
 const $=id=>document.getElementById(id), svg=$('tube');
-let design=initialDesign();try{const saved=JSON.parse(localStorage.getItem('ducklips-sheet-tube-v2')||localStorage.getItem('ducklips-flat-tube-v1'));if(saved)design=validateDesign(saved);}catch{}
-let compiled=compile(design), selected=1,tool='anchors',history=[],context,node,running=false,state=null,drag=null,selectedBlock=-1,take=0,saveTimer,editTimer;
+let design=initialDesign();try{const saved=JSON.parse(localStorage.getItem('ducklips-below-mouth-v3'));if(saved)design=validateDesign(saved);}catch{}
+let compiled=compile(design),N=compiled.n,selected=compiled.cordIndex,history=[],context,node,running=false,state=null,drag=null,take=0,saveTimer,editTimer;
 let captureContext=null,modeIndex=0,previewShape=modeShape(compiled.sheet,0);
 let wave=new Float32Array(512),waveIndex=0,modeFrame=0;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -10,19 +11,21 @@ function geometryScale(){return Math.min(10500,155/Math.max(.001,...compiled.upp
 function checkpoint(){history.push(JSON.stringify(design));if(history.length>80)history.shift();}
 function notice(text){$('notice').textContent=text;}
 function refresh(send=true){
- compiled=compile(design);previewShape=modeShape(compiled.sheet,modeIndex);if(captureContext)captureContext.changes.push({milliseconds:performance.now()-captureContext.started,design:JSON.parse(JSON.stringify(design))});if(send&&node)node.port.postMessage({type:'configure',compiled});
- clearTimeout(saveTimer);saveTimer=setTimeout(()=>localStorage.setItem('ducklips-sheet-tube-v2',JSON.stringify(design)),200);
+ compiled=compile(design);N=compiled.n;selected=Math.min(selected,design.bands.length-1);modeIndex=Math.min(modeIndex,compiled.sheet.modes.length-1);previewShape=modeShape(compiled.sheet,modeIndex);if(captureContext)captureContext.changes.push({milliseconds:performance.now()-captureContext.started,design:JSON.parse(JSON.stringify(design))});if(send&&node)node.port.postMessage({type:'configure',compiled});
+ clearTimeout(saveTimer);saveTimer=setTimeout(()=>localStorage.setItem('ducklips-below-mouth-v3',JSON.stringify(design)),200);
  draw();panel();
 }
 function edited(){clearTimeout(editTimer);editTimer=setTimeout(()=>refresh(),35);draw();}
 function panel(){
  const b=design.bands[selected];$('band-name').textContent=b.name.slice(5);
- $('band-description').textContent=selected===1?'The second section is an elastic ring in the connected sheet. Its one handle controls the support around the tube.':selected===0?'The chamber behind the band. Returning pressure stays connected to the constriction.':'The enclosing material carries motion while its shape determines the air passage.';
- $('material').value=b.material;
+ $('band-description').textContent=selected===compiled.cordIndex?'The constricting elastic cord. Feedback arrives through connected tissue and air on both sides.':design.bands[selected].role==='adapter'?'A light elastic adapter with little support, open to the main tube diameter.':design.bands[selected].role==='soft'?'Heavy soft tissue with little external support; it responds to returning pressure.':'This section shapes returning pressure and carries material motion.';
+ $('material').value=b.material;$('preset').value=design.version===3?'below-mouth':'reference';$('bands').style.setProperty('--sections',design.bands.length);
+ $('body-elasticity').value=design.elasticityScale??1;$('body-elasticity-value').textContent=(design.elasticityScale??1).toFixed(2)+' ×';
+ $('elasticity-variation').value=design.elasticityVariation??0;$('elasticity-variation-value').textContent='±'+Math.round((design.elasticityVariation??0)*100)+'% maximum';
  for(const k of ['mass','elasticity','support']){$(k).value=b[k];$(k+'-value').textContent=b[k].toFixed(2)+' ×';}
  $('pressure').value=design.pressure;$('pressure-value').textContent=design.pressure+' Pa';$('wander').value=design.wander;$('wander-value').textContent=(design.wander*100).toFixed(1)+'%';$('monitor-value').textContent=Math.round(+$('monitor').value*100)+'%';
  $('mode-select').innerHTML=compiled.sheet.modes.map((m,i)=>`<option value="${i}">${String(i+1).padStart(3,'0')} · ${m.frequency.toFixed(1)} Hz · ${m.k===0?'ring motion':m.k+' around circumference'}</option>`).join('');$('mode-select').value=modeIndex;
- $('mode-summary').textContent=`${compiled.sheet.modes.length} modes · ${compiled.sheet.modes[0].frequency.toFixed(1)}–${compiled.sheet.modes.at(-1).frequency.toFixed(1)} Hz`;
+ $('mode-summary').textContent=`${compiled.sheet.modes.length} nominal modes · ${compiled.sheet.modes[0].frequency.toFixed(1)}–${compiled.sheet.modes.at(-1).frequency.toFixed(1)} Hz`;
  $('bands').innerHTML=design.bands.map((b,i)=>`<button data-band="${i}" class="${i===selected?'selected':''}" aria-pressed="${i===selected}">${esc(b.name)}<span>${MATERIALS[b.material].name}</span></button>`).join('');
  $('undo').disabled=!history.length;
 }
@@ -41,23 +44,22 @@ function draw(){
    const p=((state?.pressure[i]||0)+(state?.pressure[N+i]||0))/2, strength=Math.min(.72,Math.abs(p)/900+.07),color=p<0?'#c195bd':'#75b9ce';
    content+=`<rect class="cell" x="${X(compiled.x[i]-compiled.dx[i]/2)}" y="${actualTop[i][1]}" width="${compiled.dx[i]/compiled.length*880+1}" height="${Math.max(1,actualBottom[i][1]-actualTop[i][1])}" fill="${color}" opacity="${strength}"/>`;
  }
- for(let b=0;b<6;b++){
-   const band=design.bands[b],left=X(start),right=X(start+band.length);content+=`<rect x="${left}" y="26" width="${right-left}" height="398" fill="${b===selected?'#a7bb66':'#000'}" opacity="${b===selected?'.045':'0'}"/><line x1="${left}" x2="${left}" y1="55" y2="400" stroke="#36432f" stroke-dasharray="2 6"/><text x="${(left+right)/2}" y="32" fill="#92a58a" font-size="10" text-anchor="middle">${String(b+1).padStart(2,'0')}</text>`;
-   const points=actualTop.slice(b*P,b*P+P),lower=actualBottom.slice(b*P,b*P+P),color=MATERIALS[band.material].color;
+ for(let b=0;b<design.bands.length;b++){
+   const band=design.bands[b],first=compiled.starts[b],count=compiled.counts[b],left=X(start),right=X(start+band.length);content+=`<rect x="${left}" y="26" width="${right-left}" height="398" fill="${b===selected?'#a7bb66':'#000'}" opacity="${b===selected?'.045':'0'}"/><line x1="${left}" x2="${left}" y1="55" y2="400" stroke="#36432f" stroke-dasharray="2 6"/><text x="${(left+right)/2}" y="32" fill="#92a58a" font-size="10" text-anchor="middle">${String(b+1).padStart(2,'0')}</text>`;
+   const points=actualTop.slice(first,first+count),lower=actualBottom.slice(first,first+count),color=MATERIALS[band.material].color;
    content+=`<polyline points="${path(points)}" fill="none" stroke="${color}" stroke-width="${band.radius<.001?2:7}" stroke-linecap="round" stroke-linejoin="round"/><polyline points="${path(lower)}" fill="none" stroke="${color}" stroke-width="${band.radius<.001?2:7}" stroke-linecap="round" stroke-linejoin="round"/>`;
-   if(b<5){content+=`<line x1="${points.at(-1)[0]}" y1="${points.at(-1)[1]}" x2="${actualTop[(b+1)*P][0]}" y2="${actualTop[(b+1)*P][1]}" stroke="${color}" stroke-width="7"/><line x1="${lower.at(-1)[0]}" y1="${lower.at(-1)[1]}" x2="${actualBottom[(b+1)*P][0]}" y2="${actualBottom[(b+1)*P][1]}" stroke="${color}" stroke-width="7"/>`;}
-   const pos=band.anchor,ax=left+(right-left)*(.5/P+(1-1/P)*pos),target=Y(compiled.r[b*P+Math.round(pos*(P-1))]),ay=target-34;
+   if(b<design.bands.length-1){content+=`<line x1="${points.at(-1)[0]}" y1="${points.at(-1)[1]}" x2="${actualTop[first+count][0]}" y2="${actualTop[first+count][1]}" stroke="${color}" stroke-width="7"/><line x1="${lower.at(-1)[0]}" y1="${lower.at(-1)[1]}" x2="${actualBottom[first+count][0]}" y2="${actualBottom[first+count][1]}" stroke="${color}" stroke-width="7"/>`;}
+   const pos=band.anchor,ax=left+(right-left)*(.5/count+(1-1/count)*pos),target=Y(compiled.r[first+Math.round(pos*(count-1))]),ay=target-34;
    content+=`<line x1="${ax}" y1="${target}" x2="${ax}" y2="${ay}" stroke="#a1af7d" stroke-width="1"/><path class="anchor" data-band="${b}" role="button" tabindex="0" aria-label="${esc(band.name.slice(5))} ring support" d="M${ax} ${ay-8}l8 8-8 8-8-8Z" fill="${b===selected?'#d8ed96':'#697e5b'}" stroke="#142015" stroke-width="2"/><text x="${ax}" y="${ay-16}" text-anchor="middle" font-size="9" fill="#8c9b81">${b+1}</text>`;
    start+=band.length;
  }
  if($('links').checked){for(let i=0;i<N-1;i++)for(let side=0;side<2;side++){
    const a=side?actualBottom[i]:actualTop[i],b=side?actualTop[i+1]:actualBottom[i+1];content+=`<line x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}" stroke="#79b4c8" opacity=".3" stroke-width=".8"/>`;
- }for(let i=0;i<N-P;i++){content+=`<path d="M${actualTop[i][0]} ${actualTop[i][1]-7} Q${(actualTop[i][0]+actualTop[i+P][0])/2} ${Math.min(actualTop[i][1],actualTop[i+P][1])-35} ${actualTop[i+P][0]} ${actualTop[i+P][1]-7}" fill="none" stroke="#d1b489" opacity=".27" stroke-width=".8"/>`;}}
- design.blocks.forEach((b,i)=>{const x=60+b.x*880,w=b.width*880;content+=`<g class="volume-block" data-block="${i}" role="button" tabindex="0" aria-label="Volume block ${i+1}, ${b.volume} millilitres"><rect x="${x-w/2}" y="204" width="${w}" height="42" rx="5" fill="#b7c77e" fill-opacity=".15" stroke="${selectedBlock===i?'#f1f8bf':'#9caf71'}" stroke-dasharray="4 3"/><text x="${x}" y="229" fill="#e0ebad" font-size="11" text-anchor="middle">+${b.volume} mL</text></g>`;});
+ }for(let i=0;i<N-1;i++){content+=`<path d="M${actualTop[i][0]} ${actualTop[i][1]-7} Q${(actualTop[i][0]+actualTop[i+1][0])/2} ${Math.min(actualTop[i][1],actualTop[i+1][1])-35} ${actualTop[i+1][0]} ${actualTop[i+1][1]-7}" fill="none" stroke="#d1b489" opacity=".27" stroke-width=".8"/>`;}}
  content+='<text x="16" y="214" fill="#aabd84" font-size="9">PRESSURE</text><path d="M18 230h25m-6-5 6 5-6 5" stroke="#d8ed96" fill="none"/><text x="948" y="214" fill="#aabd84" font-size="9">SAMPLE</text><path d="M950 230h25m-6-5 6 5-6 5" stroke="#d8ed96" fill="none"/><text x="60" y="422" fill="#76876e" font-size="10">0 mm</text><text x="940" y="422" text-anchor="end" fill="#76876e" font-size="10">'+(compiled.length*1000).toFixed(0)+' mm · side cutaway</text>';
  if($('mode-view').checked)content+=`<text x="500" y="65" text-anchor="middle" fill="#d8ed96" font-size="11">Tube mode ${modeIndex+1} · ${compiled.sheet.modes[modeIndex].frequency.toFixed(1)} Hz · shape preview</text>`;
  svg.innerHTML=content;drawSheet();
- const gap=state?.gap??2*Math.min(...compiled.r.slice(P,2*P));$('opening').innerHTML=(gap*1000).toFixed(2)+' <small>mm</small>';
+ const gap=state?.gap??2*Math.min(...compiled.r.slice(compiled.starts[compiled.cordIndex],compiled.starts[compiled.cordIndex]+compiled.counts[compiled.cordIndex]));$('opening').innerHTML=(gap*1000).toFixed(2)+' <small>mm</small>';
 }
 function drawSheet(){
  const shown=$('mode-view').checked;$('sheet-view').hidden=!shown;if(!shown)return;
@@ -73,21 +75,19 @@ function drawSheet(){
 }
 function coords(e){const p=svg.createSVGPoint();p.x=e.clientX;p.y=e.clientY;return p.matrixTransform(svg.getScreenCTM().inverse());}
 svg.addEventListener('pointerdown',e=>{
- const anchor=e.target.closest('.anchor'),block=e.target.closest('.volume-block'),point=coords(e);checkpoint();
- if(anchor){selected=+anchor.dataset.band;drag={type:'anchor',band:selected,x:point.x,y:point.y,initial:design.bands[selected].offset,scale:geometryScale()};selectedBlock=-1;}
- else if(block){selectedBlock=+block.dataset.block;drag={type:'block',index:selectedBlock};}
- else if(tool==='blocks'&&point.x>=60&&point.x<=940&&point.y>50&&point.y<400){design.blocks.push({x:clamp((point.x-60)/880,0,1),volume:+$('block-volume').value,width:.12});selectedBlock=design.blocks.length-1;drag={type:'block',index:selectedBlock};refresh();}
+ const anchor=e.target.closest('.anchor'),point=coords(e);checkpoint();
+ if(anchor){selected=+anchor.dataset.band;drag={type:'anchor',band:selected,x:point.x,y:point.y,initial:design.bands[selected].offset,scale:geometryScale()};}
  else {history.pop();return;}
  svg.setPointerCapture(e.pointerId);panel();
 });
 svg.addEventListener('pointermove',e=>{
  if(!drag)return;const point=coords(e);
  if(drag.type==='anchor'){
-  const b=design.bands[drag.band];
+  const b=design.bands[drag.band],count=compiled.counts[drag.band];
   b.offset=clamp(drag.initial-(point.y-drag.y)/drag.scale,-b.radius+.000025,.02);
   const start=design.bands.slice(0,drag.band).reduce((s,b)=>s+b.length,0);
-  b.anchor=clamp((((point.x-60)/880*width()-start)/b.length-.5/P)/(1-1/P),0,1);
- }else design.blocks[drag.index].x=clamp((point.x-60)/880,0,1);
+  b.anchor=clamp((((point.x-60)/880*width()-start)/b.length-.5/count)/(1-1/count),0,1);
+ }
  edited();
 });
 const endDrag=()=>{if(drag){drag=null;clearTimeout(editTimer);refresh();}};svg.addEventListener('pointerup',endDrag);svg.addEventListener('pointercancel',endDrag);
@@ -97,23 +97,25 @@ svg.addEventListener('keydown',e=>{
  if(e.key==='ArrowUp'||e.key==='ArrowDown')b.offset=clamp(b.offset+(e.key==='ArrowUp'?1:-1)*.0001,-b.radius+.000025,.02);
  else b.anchor=clamp(b.anchor+(e.key==='ArrowRight'?.03:-.03),0,1);refresh();svg.querySelector(`.anchor[data-band="${anchor.dataset.band}"]`)?.focus();
  }
- const block=e.target.closest('.volume-block');if(block)selectedBlock=+block.dataset.block;
- if((e.key==='Delete'||e.key==='Backspace')&&selectedBlock>=0){e.preventDefault();checkpoint();design.blocks.splice(selectedBlock,1);selectedBlock=-1;refresh();}
+
 });
 $('bands').onclick=e=>{const b=e.target.closest('button');if(b){selected=+b.dataset.band;panel();draw();}};
-for(const mode of ['anchors','blocks'])$(mode).onclick=()=>{tool=mode;for(const m of ['anchors','blocks']){$(m).classList.toggle('active',m===mode);$(m).setAttribute('aria-pressed',m===mode);} $('hint').textContent=mode==='blocks'?'Click inside to add volume. Drag blocks; Delete removes one.':'One support per section. Drag down to tighten, up to expand; left/right moves the support.';};
 for(const k of ['mass','elasticity','support','pressure','wander']){
  $(k).addEventListener('pointerdown',checkpoint);$(k).addEventListener('keydown',e=>{if(e.key.startsWith('Arrow'))checkpoint();});
  $(k).oninput=()=>{if(['pressure','wander'].includes(k))design[k]=+$(k).value;else design.bands[selected][k]=+$(k).value;refresh();};
 }
+for(const [id,key] of [['body-elasticity','elasticityScale'],['elasticity-variation','elasticityVariation']]){
+ $(id).onpointerdown=checkpoint;$(id).onkeydown=e=>{if(e.key.startsWith('Arrow'))checkpoint();};$(id).oninput=()=>{design[key]=+$(id).value;refresh();};
+}
+$('preset').onchange=()=>{checkpoint();design=$('preset').value==='reference'?referenceDesign():initialDesign();state=null;selected=compile(design).cordIndex;modeIndex=0;refresh(false);if(node)node.port.postMessage({type:'reset',compiled});};
 $('material').onchange=()=>{checkpoint();design.bands[selected].material=$('material').value;refresh();};
 $('monitor').oninput=()=>{if(node)node.port.postMessage({type:'level',value:+$('monitor').value});panel();};
 $('links').onchange=draw;$('mode-view').onchange=draw;$('mode-select').onchange=()=>{modeIndex=+$('mode-select').value;previewShape=modeShape(compiled.sheet,modeIndex);$('mode-view').checked=true;draw();};
 $('undo').onclick=()=>{if(history.length){design=JSON.parse(history.pop());state=null;refresh();}};
-$('reset').onclick=()=>{checkpoint();design=initialDesign();state=null;refresh(false);if(node)node.port.postMessage({type:'reset',compiled});};
+$('reset').onclick=()=>{checkpoint();design=initialDesign();selected=4;state=null;refresh(false);if(node)node.port.postMessage({type:'reset',compiled});};
 function download(data,type,name){const url=URL.createObjectURL(new Blob([data],{type})),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),10000);}
 $('save').onclick=()=>download(JSON.stringify(design,null,2),'application/json','ducklips-tube.json');
-$('load').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>100000)throw Error('Design file is too large.');const value=validateDesign(JSON.parse(await file.text()));checkpoint();design=value;state=null;refresh();notice('Tube loaded.');}catch(e){notice(e.message);}finally{$('load').value='';}};
+$('load').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>100000)throw Error('Design file is too large.');const value=validateDesign(JSON.parse(await file.text()));checkpoint();design=value;selected=compile(design).cordIndex;state=null;refresh();notice('Tube loaded.');}catch(e){notice(e.message);}finally{$('load').value='';}};
 async function audio(){
  if(context){await context.resume();return;}
  context=new AudioContext({sampleRate:48000});
@@ -127,7 +129,7 @@ async function audio(){
   node.connect(context.destination);
  }catch(error){await context.close();context=null;node=null;throw error;}
  node.port.postMessage({type:'configure',compiled});node.port.postMessage({type:'level',value:+$('monitor').value});
- node.port.onmessage=({data:d})=>{if(d.type==='state'){state=d;wave=d.scope;waveIndex=d.scopeIndex;$('pressure-reading').textContent=Math.round(d.drive)+' Pa inlet';if(d.fault){running=false;node.port.postMessage({type:'run',value:false});$('start').textContent='Restart pressure';$('status').textContent='Model stopped';notice(d.fault);}}
+ node.port.onmessage=({data:d})=>{if(d.type==='state'){state=d;$('elasticity-live').textContent=d.elasticityFactors?`Selected material: ${((d.elasticityFactors[selected]-1)*100).toFixed(2)}% from its set elasticity`:'';wave=d.scope;waveIndex=d.scopeIndex;$('pressure-reading').textContent=Math.round(d.drive)+' Pa inlet';if(d.fault){running=false;node.port.postMessage({type:'run',value:false});$('start').textContent='Restart pressure';$('status').textContent='Model stopped';notice(d.fault);}}
  if(d.type==='recording'){addTake(d.samples,d.rate,'Live tube',captureContext);captureContext=null;$('record').disabled=false;$('record').textContent='Record 2 seconds';}
  };
  await context.resume();

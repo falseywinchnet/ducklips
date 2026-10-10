@@ -2,7 +2,7 @@
 
 A speech-engine experiment built around a connected 2D material sheet that
 wraps around a directly editable tube. The side cutaway is its editing view.
-Open the two-wall cutaway, insert volume blocks, move its supports, and inspect
+Open the two-wall cutaway, move its supports, and inspect
 pressure-driven motion and outlet sound. Materials have mass, elasticity,
 supported modes and separate solid propagation. Air travels bidirectionally
 through an invisible crisscross network with FIR attenuation.
@@ -25,13 +25,17 @@ to this computer, start with `HOST=127.0.0.1 node web/tube/server.mjs`.
 - **Move supports:** one diamond per section controls a ring around the tube.
   Drag down to tighten, up to expand, and horizontally to move the support.
   Both cutaway walls follow that ring. Arrow keys also work.
-- **Insert volume:** choose a block volume and click in the tube. Drag it to
-  relocate the volume; select it and press Delete to remove it.
+- **Tube configuration:** the default nine-section below-mouth system adds
+  feedback tissue before the cord. Your exact saved six-section model remains
+  available as a separate reference preset. Volume insertion is removed.
 - Select a band to adjust material, mass, elasticity or support stiffness.
-  The second band is the initially tight vocal band; the first is its return
-  chamber. All **384 supported sheet modes** update when geometry, material or
+  The fifth section is the cord, with feedback tissue on both sides. All
+  **480 supported sheet modes** update when geometry, material or
   support changes. The frequency-ordered mode selector previews the complete
   unrolled sheet, including its joined circumferential edges.
+- **Whole-body elasticity:** 1–4 multiplies the material settings. Independent
+  noise, sawtooth relaxation and bubble pulses vary every section by at most
+  ±10%; this changes material response, not an imposed voice waveform.
 - **Start pressure** connects the reservoir and outlet monitor. Set pressure,
   slight pressure wander and monitor level in the sidebar.
 - **Record 2 seconds** captures the current engine and automatically computes
