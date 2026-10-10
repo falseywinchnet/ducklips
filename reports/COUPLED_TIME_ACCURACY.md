@@ -116,6 +116,11 @@ residual is at most 1.42e-16 J and air residual at most 3.82e-20 m³. Continuati
 preserves graph and relaxation states exactly and checks source physical-state
 round trips. The source files and executable were unchanged throughout this
 run. All 31 historical JSON regressions also remain exact with this executable.
+The full first closing interval also passes ASAN/UBSAN. It takes the same 3732
+accepted substeps as Release, with a maximum common-time pressure difference
+of 8.88e-9 Pa. Its independently accumulated work and air residuals are
+1.42e-16 J and 1.96e-20 m³. The [completed validation receipt](joint_accuracy_validation.json)
+binds 158 checked files to these results, including the unchanged speech WAV.
 
 An earlier, separately identified executable is still collecting the finer
 moving tolerances. Its coarse closing pressure samples match the current
