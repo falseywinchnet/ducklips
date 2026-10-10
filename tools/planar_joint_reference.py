@@ -12,7 +12,12 @@ from slit_viscous_reference import spectrum as viscous_spectrum
 from radiation_boundary_reference import inverse as radiation_inverse,COEFF
 A=np.array([[5/12,-1/12],[3/4,1/4]]);AI=np.linalg.inv(A);WEIGHT=np.array([.75,.25])
 
-def audit_joint(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False):
+def audit_joint(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,stages=2):
+    assert stages in [2,3]
+    if stages==3:
+        r=np.sqrt(6);a=np.array([[(88-7*r)/360,(296-169*r)/1800,(-2+3*r)/225],[(296+169*r)/1800,(88+7*r)/360,(-2-3*r)/225],[(16-r)/36,(16+r)/36,1/9]])
+    else:a=A
+    ai=np.linalg.inv(a);weight=a[-1];stability=weight[:,None]*a+weight[None,:]*a.T-np.outer(weight,weight)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry'];md=.5*(p['x_edges'][-1]-p['x_edges'][0]);ed=.5*(p['y_edges'][1]-p['y_edges'][0]);cd=.5*(p['y_edges'][-1]-p['y_edges'][0])
     line=LineString([(p['x_edges'][0],.09),(p['x_edges'][-1],.09)]);checks=0
     tw,tp=thermal_spectrum();tw*=.4;vw,vp=viscous_spectrum()
@@ -58,29 +63,29 @@ def audit_joint(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_wid
         return result
     def step_reference(x,c,g,configuration,dt,drive):
         no,bo,nk,nl,bk,bl,resistance=configuration;n=14;m=15;count=n+m+len(no)+len(bo)
-        matrix=lil_matrix((2*count,2*count));right=np.zeros((count,2));sqc=np.sqrt(c);sqg=np.sqrt(g)
-        def add(i,j,block):matrix[2*i:2*i+2,2*j:2*j+2]+=block
-        for i in range(n):add(i,i,AI);right[i]=AI@np.ones(2)*x[i]/sqc[i]+dt*drive[i]/sqc[i]
+        matrix=lil_matrix((stages*count,stages*count));right=np.zeros((count,stages));sqc=np.sqrt(c);sqg=np.sqrt(g)
+        def add(i,j,block):matrix[stages*i:stages*(i+1),stages*j:stages*(j+1)]+=block
+        for i in range(n):add(i,i,ai);right[i]=ai@np.ones(stages)*x[i]/sqc[i]+dt*drive[i]/sqc[i]
         for e in range(m):
-            if g[e]==0:add(n+e,n+e,np.eye(2));continue
-            add(n+e,n+e,AI+dt*resistance[e]*g[e]*np.eye(2));right[n+e]=AI@np.ones(2)*x[n+e]*sqg[e]
+            if g[e]==0:add(n+e,n+e,np.eye(stages));continue
+            add(n+e,n+e,ai+dt*resistance[e]*g[e]*np.eye(stages));right[n+e]=ai@np.ones(stages)*x[n+e]*sqg[e]
             for i in np.nonzero(B[:,e])[0]:
-                block=dt*B[i,e]*sqg[e]/sqc[i]*np.eye(2);add(i,n+e,block);add(n+e,i,-block)
+                block=dt*B[i,e]*sqg[e]/sqc[i]*np.eye(stages);add(i,n+e,block);add(n+e,i,-block)
         for node,owners,storage,rates,offset in [(True,no,nk,nl,n+m),(False,bo,bk,bl,n+m+len(no))]:
             for j,(owner,k,rate) in enumerate(zip(owners,storage,rates)):
                 index=offset+j
                 if k==0:
-                    assert x[index]==0;add(index,index,np.eye(2));continue
-                add(index,index,A+np.eye(2)/(dt*rate));right[index]=-x[index]/np.sqrt(k)
+                    assert x[index]==0;add(index,index,np.eye(stages));continue
+                add(index,index,a+np.eye(stages)/(dt*rate));right[index]=-x[index]/np.sqrt(k)
                 if node:
-                    scale=np.sqrt(k)/sqc[owner];add(index,owner,-scale*np.eye(2));add(owner,index,scale*np.eye(2))
+                    scale=np.sqrt(k)/sqc[owner];add(index,owner,-scale*np.eye(stages));add(owner,index,scale*np.eye(stages))
                 elif g[owner]>0:
-                    scale=np.sqrt(k)*sqg[owner];add(index,n+owner,-scale*np.eye(2));add(n+owner,index,scale*np.eye(2))
+                    scale=np.sqrt(k)*sqg[owner];add(index,n+owner,-scale*np.eye(stages));add(n+owner,index,scale*np.eye(stages))
         matrix=csc_matrix(matrix);scale=1/np.asarray(abs(matrix).max(axis=1).toarray()).ravel()
-        solution=splu(diags(scale)@matrix).solve(right.ravel()*scale).reshape(count,2)
+        solution=splu((diags(scale)@matrix).tocsc()).solve(right.ravel()*scale).reshape(count,stages)
         pressure=solution[:n]/sqc[:,None];flow=solution[n:n+m]*sqg[:,None]
-        result=x.copy();result[:n]=c*pressure[:,1];result[n:n+m]=np.divide(flow[:,1],g,out=np.zeros(m),where=g>0)
-        heat_node=heat_branch=0.;df=np.zeros((count,2));df[:n]=drive[:,None]-B@flow
+        result=x.copy();result[:n]=c*pressure[:,-1];result[n:n+m]=np.divide(flow[:,-1],g,out=np.zeros(m),where=g>0)
+        heat_node=heat_branch=0.;df=np.zeros((count,stages));df[:n]=drive[:,None]-B@flow
         drop=B.T@pressure;df[n:n+m]=drop-resistance[:,None]*flow
         for node,owners,storage,rates,offset in [(True,no,nk,nl,n+m),(False,bo,bk,bl,n+m+len(no))]:
             for j,(owner,k,rate) in enumerate(zip(owners,storage,rates)):
@@ -88,12 +93,12 @@ def audit_joint(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_wid
                 if k==0:result[index]=0;continue
                 f=solution[index]*np.sqrt(k)/dt;df[index]=f
                 value=pressure[owner] if node else flow[owner]
-                result[index]=k*value[1]-f[1]/rate if dt*rate>1 else x[index]+dt*(A[1]@f)
-                heat=dt*(WEIGHT@(f*f))/k/rate
+                result[index]=k*value[-1]-f[-1]/rate if dt*rate>1 else x[index]+dt*(a[-1]@f)
+                heat=dt*(weight@(f*f))/k/rate
                 if node:df[owner]-=f;heat_node+=heat
                 else:df[n+owner]-=f;heat_branch+=heat
-        h=metric(c,g,nk,bk);heat_dc=dt*np.sum(resistance*(flow*flow@WEIGHT));numeric=np.sum(h*(dt*(df[:,0]-df[:,1]))**2)/32
-        work=dt*np.sum(drive*(pressure@WEIGHT));return result,pressure@WEIGHT,flow@WEIGHT,heat_node+heat_branch+heat_dc,numeric,work
+        h=metric(c,g,nk,bk);heat_dc=dt*np.sum(resistance*(flow*flow@weight));numeric=.5*dt*dt*np.sum(h*np.einsum("ni,ij,nj->n",df,stability,df))
+        work=dt*np.sum(drive*(pressure@weight));return result,pressure@weight,flow@weight,heat_node+heat_branch+heat_dc,numeric,work
     old=data['initial'];reference_state=state(old);initial_mass=sum(stored(old))+sum(old['continuous_source']['mass']);transfer=0.;max_mass=max_local=max_pressure=max_memory=max_heat=max_numeric=max_work=0.;energy=physical=numerical=geometry_work=0.
     if geometry_check:geometry(old['geometry'])
     for s in data['steps']:

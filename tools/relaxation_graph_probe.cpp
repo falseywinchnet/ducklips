@@ -17,12 +17,12 @@ void require(bool value,const char* message){if(!value){throw std::runtime_error
 double number(){double x;require(std::scanf("%lf",&x)==1,"number");return x;}
 void read(std::vector<double>& values){for(double& x:values){x=number();}}
 void print(std::span<const double> values){for(double x:values){std::printf(" %.17g",x);}}
-void fixture(){unsigned n,m,a,b,steps;double dt;
+void fixture(bool fifth=false){unsigned n,m,a,b,steps;double dt;
     while(std::scanf("%u %u %u %u %lf %u",&n,&m,&a,&b,&dt,&steps)==6){
         require(n>0 && n<100 && m<200 && a<2000 && b<2000 && steps>0 && steps<100000,"dimensions");
         std::vector<ducklips::TreeEdge> edges(m);for(auto& e:edges){e.first_node=static_cast<std::size_t>(number());e.second_node=static_cast<std::size_t>(number());if(e.second_node==n){e.second_node=ducklips::ground_node;}}
         std::vector<std::size_t> na(a),ba(b);for(auto& i:na){i=static_cast<std::size_t>(number());}for(auto& i:ba){i=static_cast<std::size_t>(number());}
-        ducklips::RelaxationGraphReference model;model.prepare(n,edges,na,ba);
+        ducklips::RelaxationGraphReference model;model.prepare(n,edges,na,ba,fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);
         std::vector<double> c(n),g(m),r(m),nodal(n),series(m);read(c);read(g);read(r);
         std::vector<ducklips::RelaxationMetric> nm(a),bm(b);for(auto& x:nm){x={number(),number()};}for(auto& x:bm){x={number(),number()};}
         read(model.charge);read(model.momentum);read(model.node_memory);read(model.branch_memory);read(nodal);read(series);
@@ -32,9 +32,9 @@ void fixture(){unsigned n,m,a,b,steps;double dt;
         const auto& s=model.last;const double receipt[]={s.energy_change,s.physical_dissipation,s.numerical_dissipation,s.external_work,s.energy_residual,s.air_residual};print(receipt);std::puts("");
     }
 }
-void controls(){
+void controls(bool fifth=false){
     ducklips::RelaxationGraphReference model;const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
-    const std::array<std::size_t,2> no{0,2};const std::array<std::size_t,3> bo{1,1,3};model.prepare(3,edges,no,bo);
+    const std::array<std::size_t,2> no{0,2};const std::array<std::size_t,3> bo{1,1,3};model.prepare(3,edges,no,bo,fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);
     const std::array<double,3> c{1e-11,1.4e-11,8e-12},drive{0,1e-5,0};const std::array<double,4> g{.002,.003,.001,.0025},r{0,1e5,0,1e4};
     const std::array<ducklips::RelaxationMetric,2> nm={{{4e-12,1e5},{3e-12,2e7}}};std::array<ducklips::RelaxationMetric,3> bm={{{12,1e4},{18,3e7},{400,1e5}}};
     model.charge={1e-9,-2e-9,5e-10};model.momentum={.01,-.02,.015,.005};model.node_memory={2e-10,-1e-10};model.branch_memory={.001,-.002,.005};
@@ -48,4 +48,4 @@ void controls(){
     std::printf("PASS coupled relaxation graph: work residual %.17g J, air, shared modes, closure, rollback and no allocation\n",worst);
 }
 }
-int main(int argc,char** argv){try{if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}else{require(argc==1,"arguments");controls();}return 0;}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 1;}}
+int main(int argc,char** argv){try{if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}else if(argc==2 && std::string(argv[1])=="--fixture-fifth"){fixture(true);}else if(argc==2 && std::string(argv[1])=="--fifth"){controls(true);}else{require(argc==1,"arguments");controls();}return 0;}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 1;}}

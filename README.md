@@ -128,6 +128,13 @@ reported separately. Independent full-stage equations and continuous
 trajectories check the result. Source gas-pressure error and moving-geometry
 time error remain measurable; this has not produced a new listening sample.
 
+A [damped lip-mode diagnostic and higher-order passive update](reports/LIP_TRANSIENT_ACCURACY.md)
+now distinguish physical decay from timestep damping in that opening control.
+The same physical states can use a three-stage pressure solve, substantially
+reducing the isolated mode's amplitude and phase error. Actual moving controls
+and the independent source trajectory check the resulting limits. Source
+pressure accuracy and complete speech integration remain unfinished.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

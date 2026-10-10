@@ -42,7 +42,7 @@ void prepare(GraphContinuousGlottis& model,std::size_t nodes,std::span<const duc
     model.prepare(nodes,edges,port,{}, {},1.,folds(state),{state[0],state[1]},
         {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span,column);
 }
-void fixture(bool column=false,bool radiation=false,bool thermal=false,bool viscosity=false,bool joint=false){
+void fixture(bool column=false,bool radiation=false,bool thermal=false,bool viscosity=false,bool joint=false,bool fifth=false){
     unsigned n,m,steps,port;require(std::scanf("%u%u%u%u",&n,&m,&steps,&port)==4,"fixture dimensions");
     require(n>0 && n<=64 && m<=256 && steps<=1000000,"fixture size");
     std::vector<ducklips::TreeEdge> edges(m);
@@ -60,7 +60,7 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false,bool visc
         for(unsigned i=0;i<count;++i){const auto branch=static_cast<std::size_t>(number());const double l=number(),g=number(),a=number();sites.push_back({branch,{l,g,a}});viscous_geometry.push_back({l,g,a});}
         model.prepare_viscous({},sites);for(auto& site:model.viscous){for(double& z:site.momentum){z=number();}}
     }
-    if(joint){model.prepare_joint(radiation?m-1:ducklips::ground_node);}
+    if(joint){model.prepare_joint(radiation?m-1:ducklips::ground_node,fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);}
     std::vector<double> c1(n),c2(n),g1(m),g2(m),nodal(n),series(m);
     for(unsigned step=0;step<steps;++step){
         const double dt=number(),pressure=number();const int mode=static_cast<int>(number());const double next_inertance=column?number():-1.;
@@ -92,7 +92,7 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false,bool visc
         }if(joint){const double extra[]={r.passive_numerical_dissipation,r.passive_energy_residual};print(extra);}std::puts("");
     }
 }
-void radiation_controls(bool thermal=false,bool viscosity=false,bool joint=false){
+void radiation_controls(bool thermal=false,bool viscosity=false,bool joint=false,bool fifth=false){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
     const std::array<double,3> c={1e-11,1.4e-11,8e-12};const std::array<double,4> g={.002,.003,.001,.0025};
     GraphContinuousGlottis model;prepare(model,3,edges,1,initial,1.,80.);
@@ -102,7 +102,7 @@ void radiation_controls(bool thermal=false,bool viscosity=false,bool joint=false
     std::array<ducklips::ViscousGeometry,3> viscous_geometry={{{.4/g[1],g[1],.001},{.6/g[1],g[1],.002},{.8/g[3],g[3],.0005}}};
     if(viscosity){const std::array<ducklips::ViscousSite,3> sites={{{1,viscous_geometry[0]},{1,viscous_geometry[1]},{3,viscous_geometry[2]}}};model.prepare_viscous({},sites);}
     if(thermal){const std::array<ducklips::ThermalSite,3> sites={{{0,c[0],.001},{1,c[1],.002},{2,c[2],.0005}}};model.prepare_thermal({},sites);}
-    if(joint){model.prepare_joint(3);}
+    if(joint){model.prepare_joint(3,fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);}
     const auto thermal_energy=[&](){double value=0;for(const auto& t:model.thermal){value+=t.energy();}for(const auto& v:model.viscous){value+=v.energy();}return value;};
     const auto stored_air=[&](){double value=0;for(double q:model.network.charge){value+=q;}for(const auto& t:model.thermal){value+=t.stored_air();}return value;};
     ducklips::ContinuousGlottalState state;require(model.source.state(state),"source state");
@@ -257,6 +257,8 @@ int main(int argc,char** argv){try{
     else if(argc==2 && std::string(argv[1])=="--column-fixture"){fixture(true);}
     else if(argc==2 && std::string(argv[1])=="--radiation-fixture"){fixture(true,true);}
     else if(argc==2 && std::string(argv[1])=="--thermal-fixture"){fixture(true,true,true);}
+    else if(argc==2 && std::string(argv[1])=="--joint-fifth-fixture"){fixture(true,true,true,true,true,true);}
+    else if(argc==2 && std::string(argv[1])=="--joint-fifth"){radiation_controls(true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--joint-fixture"){fixture(true,true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--viscous-fixture"){fixture(true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--radiation"){radiation_controls();}

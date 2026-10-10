@@ -19,13 +19,13 @@ bool metric_work(std::span<const double> q,std::span<const double> p,std::span<c
     if(!std::isfinite(value)){return false;}work=value;return true;
 }
 }
-void GraphContinuousGlottis::prepare_joint(std::size_t radiation_branch){
+void GraphContinuousGlottis::prepare_joint(std::size_t radiation_branch,RelaxationOrder order){
     if(network.charge.empty() || (radiation_branch!=ground_node && radiation_branch>=joint_edges_.size())){throw std::invalid_argument("joint relaxation topology");}
     std::vector<std::size_t> no,bo;
     for(auto node:thermal_nodes_){for(std::size_t j=0;j<SlitThermal::modes;++j){no.push_back(node);}}
     for(auto branch:viscous_branches_){for(std::size_t j=0;j<SlitViscous::modes;++j){bo.push_back(branch);}}
     if(radiation_branch!=ground_node){bo.push_back(radiation_branch);}
-    joint_free_.prepare(network.charge.size(),joint_edges_,no,bo);joint_response_.prepare(network.charge.size(),joint_edges_,no,bo);joint_final_.prepare(network.charge.size(),joint_edges_,no,bo);
+    joint_free_.prepare(network.charge.size(),joint_edges_,no,bo,order);joint_response_.prepare(network.charge.size(),joint_edges_,no,bo,order);joint_final_.prepare(network.charge.size(),joint_edges_,no,bo,order);
     joint_node_metrics_.resize(no.size());joint_branch_metrics_.resize(bo.size());joint_resistance_.resize(joint_edges_.size());joint_drive_.resize(network.charge.size());
     joint_radiation_branch_=radiation_branch;joint_ready_=true;
 }

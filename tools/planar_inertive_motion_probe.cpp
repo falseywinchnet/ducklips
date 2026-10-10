@@ -216,7 +216,7 @@ int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     double thermal_width=0;
-    bool joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
+    bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
@@ -241,6 +241,7 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(lip_viscous_width) || lip_viscous_width<=0){return 2;}
         }
+        else if(arg=="--joint-fifth" && !joint_fifth){joint_fifth=true;}
         else if(arg=="--joint-relaxation" && !joint_relaxation){joint_relaxation=true;}
         else if(arg=="--outlet-viscous" && !outlet_viscous){outlet_viscous=true;}
         else if(arg=="--lip-viscous-order" && i+1<argc){
@@ -253,7 +254,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
-    if((joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -462,7 +463,7 @@ int main(int argc,char** argv){
     }
     std::vector<ducklips::ThermalGeometry> midpoint_thermal(thermal_geometry.size());
     std::vector<ducklips::ViscousGeometry> midpoint_viscous(viscous_geometry.size());
-    if(joint_relaxation){try{continuous.prepare_joint(radiation_mode?radiation_branch:ducklips::ground_node);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}}
+    if(joint_relaxation){try{continuous.prepare_joint(radiation_mode?radiation_branch:ducklips::ground_node,joint_fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}}
     // Optional continuation appends canonical charge then branch momentum.
     // The caller must certify identical endpoint geometry and node/branch
     // ownership across calls; this is not a general remeshing operation.

@@ -340,3 +340,6 @@ target_link_libraries(ducklips_relaxation_graph_probe PRIVATE ducklips)
 add_test(NAME ducklips_relaxation_graph COMMAND ducklips_relaxation_graph_probe)
 
 add_test(NAME ducklips_graph_joint_relaxation COMMAND ducklips_graph_continuous_glottis_probe --joint)
+
+add_test(NAME ducklips_relaxation_graph_fifth COMMAND ducklips_relaxation_graph_probe --fifth)
+add_test(NAME ducklips_graph_joint_fifth COMMAND ducklips_graph_continuous_glottis_probe --joint-fifth)

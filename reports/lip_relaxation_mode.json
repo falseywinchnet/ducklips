@@ -1,0 +1,208 @@
+{
+  "scope": "Frozen actual opening endpoint, all tract viscous/thermal/radiation memories, source port unforced. Rational pressure operator avoids cancellation of fast-memory rates. A mode and native time-response diagnostic, not a complete moving-source spectrum or a proof of audible effect.",
+  "frequency_Hz": 62392.89802850312,
+  "physical_decay_s": 2433.1248744288832,
+  "secular_residual": 1.8189894035458565e-11,
+  "charge_balance_residual_m3_s": 1.3236505289386756e-23,
+  "pressure_balance_residual_Pa": 6.429251234118251e-16,
+  "complex_pressure_shape": [
+    [
+      7.407998624312886e-08,
+      -3.7335601163729675e-09
+    ],
+    [
+      1.0183874832905478e-07,
+      -5.1336302536634236e-09
+    ],
+    [
+      -0.0008033604330147941,
+      3.049750428283894e-05
+    ],
+    [
+      0.007059815180239585,
+      -0.00017406078229519417
+    ],
+    [
+      -0.062037376143365,
+      0.0005772601749410257
+    ],
+    [
+      1.0,
+      0.0
+    ],
+    [
+      -1.648404963729415e-09,
+      1.0406189304220223e-10
+    ],
+    [
+      2.6476732947309195e-10,
+      -1.951491256469756e-11
+    ],
+    [
+      -3.764482838887211e-11,
+      3.1388527668199197e-12
+    ],
+    [
+      5.273067926419597e-12,
+      -4.887378377476697e-13
+    ],
+    [
+      -7.38343837651531e-13,
+      7.506815623442802e-14
+    ],
+    [
+      1.0334035925737396e-13,
+      -1.140040263606638e-14
+    ],
+    [
+      -1.4423222799280064e-14,
+      1.7099890752706605e-15
+    ],
+    [
+      1.750515410941396e-15,
+      -2.1940878209140887e-16
+    ]
+  ],
+  "complex_mode_energy_J": 1.73130404068669e-13,
+  "energy_partition_J": {
+    "node": 8.656520203433447e-14,
+    "branch": 8.539380802672373e-14,
+    "thermal": 3.501274127641376e-33,
+    "viscous_and_radiation": 1.1713940076107529e-15
+  },
+  "cases": [
+    {
+      "order": 3,
+      "subdivisions_per_ms": 256,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 1.657286234088194e-22,
+      "native_to_continuous_mode_energy_coordinate_error": 1.7512751029908098e-07,
+      "extra_numerical_decay_s": 14445.604370566267,
+      "frequency_error_Hz": -1130.9933477935626,
+      "relative_amplitude_error": -0.972986028737424,
+      "last_lip_pressure_error_Pa": 0.4379980499004795,
+      "hashes": {
+        "out/lip-relaxation-mode/order-3-256.input": "7cd3c1a61a3e8e1403d6c342d77c529903cd12298b1a5c353733f7f7a5e63fbf",
+        "out/lip-relaxation-mode/order-3-256.txt": "650564c7c73508aa7f4ee41c27728e21232c17d06250d5dd4cfc7fcecef8e735"
+      }
+    },
+    {
+      "order": 3,
+      "subdivisions_per_ms": 512,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 3.2897915486666946e-21,
+      "native_to_continuous_mode_energy_coordinate_error": 6.976100162025826e-08,
+      "extra_numerical_decay_s": 2269.0760620993033,
+      "frequency_error_Hz": -85.87610614087602,
+      "relative_amplitude_error": -0.4329280092634743,
+      "last_lip_pressure_error_Pa": 0.17043168531595027,
+      "hashes": {
+        "out/lip-relaxation-mode/order-3-512.input": "e3999ba800d9f52afc4a1ca67358f24ca310b5f55e5808ad5676dda6cecce167",
+        "out/lip-relaxation-mode/order-3-512.txt": "28f4a1b17d5d1aefc34b74b4f468e99b2b497f3024eaf378b8db28bcf8c7e112"
+      }
+    },
+    {
+      "order": 3,
+      "subdivisions_per_ms": 1024,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 1.0108922574301057e-20,
+      "native_to_continuous_mode_energy_coordinate_error": 1.1689609563729026e-08,
+      "extra_numerical_decay_s": 299.500761518389,
+      "frequency_error_Hz": -6.109178446368247,
+      "relative_amplitude_error": -0.07214071513285192,
+      "last_lip_pressure_error_Pa": 0.029235990303678613,
+      "hashes": {
+        "out/lip-relaxation-mode/order-3-1024.input": "e68ac888d7a3228468c2f2563a13171cc8f213a9ce8be2a8a2abc1478cf2e831",
+        "out/lip-relaxation-mode/order-3-1024.txt": "a205ea11dd4d9b00ea035f46c17adcff52a6ac9b46e50e4ca9f0358795f4f442"
+      }
+    },
+    {
+      "order": 3,
+      "subdivisions_per_ms": 2048,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 5.573481798469303e-21,
+      "native_to_continuous_mode_energy_coordinate_error": 1.5864657206318307e-09,
+      "extra_numerical_decay_s": 37.96430016606064,
+      "frequency_error_Hz": -0.4596378845659424,
+      "relative_amplitude_error": -0.009446176944802875,
+      "last_lip_pressure_error_Pa": 0.00396778833139357,
+      "hashes": {
+        "out/lip-relaxation-mode/order-3-2048.input": "16adc90774f2d7fe388746482004daff0e0bb51384a518f44718021f85644db4",
+        "out/lip-relaxation-mode/order-3-2048.txt": "b564111f3e48dfd57c6b8a7f9b77d9d85977a3c28ab9f939ac60c7c386066bdf"
+      }
+    },
+    {
+      "order": 5,
+      "subdivisions_per_ms": 256,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 7.481463571026703e-21,
+      "native_to_continuous_mode_energy_coordinate_error": 1.701169268988771e-08,
+      "extra_numerical_decay_s": 391.7488796187645,
+      "frequency_error_Hz": -19.606162444518745,
+      "relative_amplitude_error": -0.09329417495474857,
+      "last_lip_pressure_error_Pa": 0.03280761898761232,
+      "hashes": {
+        "out/lip-relaxation-mode/order-5-256.input": "7cd3c1a61a3e8e1403d6c342d77c529903cd12298b1a5c353733f7f7a5e63fbf",
+        "out/lip-relaxation-mode/order-5-256.txt": "fa8ac69f398fcf0282130a61d95f8ad92c0c7b6d79ad04c7af5b4fa716514575"
+      }
+    },
+    {
+      "order": 5,
+      "subdivisions_per_ms": 512,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 5.713691587999297e-21,
+      "native_to_continuous_mode_energy_coordinate_error": 5.438099344931298e-10,
+      "extra_numerical_decay_s": 13.74305078472662,
+      "frequency_error_Hz": -0.3729227871673875,
+      "relative_amplitude_error": -0.0034298672172842215,
+      "last_lip_pressure_error_Pa": 0.0013386334386889377,
+      "hashes": {
+        "out/lip-relaxation-mode/order-5-512.input": "e3999ba800d9f52afc4a1ca67358f24ca310b5f55e5808ad5676dda6cecce167",
+        "out/lip-relaxation-mode/order-5-512.txt": "7b5adf205ea172f22979de558ecb25652a87fd8dd5821fbb38fb5cd8b6c767b0"
+      }
+    },
+    {
+      "order": 5,
+      "subdivisions_per_ms": 1024,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 1.707794005031834e-20,
+      "native_to_continuous_mode_energy_coordinate_error": 1.8187094889923412e-11,
+      "extra_numerical_decay_s": 0.4423247463887492,
+      "frequency_error_Hz": -0.00726755736161146,
+      "relative_amplitude_error": -0.00011057507272316247,
+      "last_lip_pressure_error_Pa": 4.5486354950957316e-05,
+      "hashes": {
+        "out/lip-relaxation-mode/order-5-1024.input": "e68ac888d7a3228468c2f2563a13171cc8f213a9ce8be2a8a2abc1478cf2e831",
+        "out/lip-relaxation-mode/order-5-1024.txt": "8ca4804bdf862a3199ecaed3a75df95d2390d836ebde81cb13e42b64f8046c8d"
+      }
+    },
+    {
+      "order": 5,
+      "subdivisions_per_ms": 2048,
+      "duration_s": 0.00025,
+      "native_to_discrete_mode_energy_coordinate_error": 1.4836657714694307e-20,
+      "native_to_continuous_mode_energy_coordinate_error": 5.874734614652208e-13,
+      "extra_numerical_decay_s": 0.013934204895122093,
+      "frequency_error_Hz": -0.00015558948221840524,
+      "relative_amplitude_error": -3.483545156224288e-06,
+      "last_lip_pressure_error_Pa": 1.4692850372315349e-06,
+      "hashes": {
+        "out/lip-relaxation-mode/order-5-2048.input": "16adc90774f2d7fe388746482004daff0e0bb51384a518f44718021f85644db4",
+        "out/lip-relaxation-mode/order-5-2048.txt": "7ed4de7dd056d7c236ec2fc4b3e0a2b0050dba035bc42ba2642f0798e5d492cb"
+      }
+    }
+  ],
+  "hashes": {
+    "tools/lip_relaxation_mode.py": "6e3e7231b27b9749081457679572107c33c1766ca372a1648174b73c983e3cf3",
+    "out/planar-joint-fine/opening-1-2048.json": "7195a82066ce60b60e50cc5c4978f6ef52ef6ff960d75b8898e7ec8d3c34429b",
+    "build/ducklips_relaxation_graph_probe": "b0e14dea59c3e6df7b28d2fff66ba089d1d1387833f4c7c60e59ce4dd90a3de6",
+    "tools/relaxation_graph_reference.py": "8f35b67af32ce0523c8de6028b9e62dc20cdd654e4af7b91986f6d307de8ddf6",
+    "tools/radau5_reference.py": "4f76058c15b2011b26c866684a9e23b6cbb17df9904ee9f09847910620840932",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "tools/planar_source_reference.py": "f4a3d967301ac9980e42fc68385d413fdc6398a821fdc8a1c6358be5c51dae97",
+    "src/relaxation_graph.cpp": "f754e3d959e1177a50e8f6d14380fd025714f78fc19a5946ecaace8bb7e55a95",
+    "include/ducklips/relaxation_graph.hpp": "fc89f327d599d3a07e867608893f2d66f3924b197c3b902043f448d8d7eaa12b"
+  }
+}

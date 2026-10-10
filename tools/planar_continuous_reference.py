@@ -37,7 +37,7 @@ def decay_exponential(matrix):
     for _ in range(scalings):increment=2*increment+increment@increment
     return np.eye(len(matrix))+increment
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False):
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -64,6 +64,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
     if lip_viscous_width:command+=['--lip-viscous-width',str(lip_viscous_width),'--lip-viscous-order',str(lip_viscous_order)]
     if outlet_viscous:command+=['--outlet-viscous']
     if joint_relaxation:command+=['--joint-relaxation']
+    if joint_fifth:command+=['--joint-fifth']
     if previous is not None:command+=['--initial-state']
     with path.open() as f,path.with_suffix('.json').open('w') as g:
         result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)

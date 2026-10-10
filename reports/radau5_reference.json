@@ -1,0 +1,150 @@
+{
+  "scope": "Three-stage fifth-order Radau IIA. Coupled fixed-metric pressure/transport/relaxation update. Independent full-state Radau equations, continuous matrix exponential and stiff ODE, and large-compliance constant-pressure reservoir controls. No speech claim.",
+  "random_cases": 80,
+  "maximum_scaled_state_error": 1.8804923488551165e-12,
+  "maximum_pressure_error_Pa": 2.1884716261411086e-12,
+  "maximum_flow_error_m3_s": 1.9989977555201488e-19,
+  "maximum_energy_residual_J": 1.0587911840678754e-22,
+  "continuous_oracle_agreement": 6.807434390493361e-17,
+  "refinements": [
+    {
+      "steps": 16,
+      "maximum_energy_coordinate_error": 2.8267575539098373e-08
+    },
+    {
+      "steps": 32,
+      "maximum_energy_coordinate_error": 8.833063814888895e-10
+    },
+    {
+      "steps": 64,
+      "maximum_energy_coordinate_error": 2.7528484808532483e-11
+    },
+    {
+      "steps": 128,
+      "maximum_energy_coordinate_error": 8.584830979777025e-13
+    },
+    {
+      "steps": 256,
+      "maximum_energy_coordinate_error": 2.6755507531728284e-14
+    }
+  ],
+  "forced_flow": [
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 0.01,
+      "average_flow_ratio": 0.9999999999999294,
+      "reservoir_pressure_deviation_Pa": -2.302173257023662e-29
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 0.1,
+      "average_flow_ratio": 0.9999999999999958,
+      "reservoir_pressure_deviation_Pa": -2.3337278876173405e-28
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 1.0,
+      "average_flow_ratio": 0.999999999999999,
+      "reservoir_pressure_deviation_Pa": -2.336883350676301e-27
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 10.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.3371988969823777e-26
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 100.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.337230451613217e-25
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 10000.0,
+      "average_flow_ratio": 1.0000000000000004,
+      "reservoir_pressure_deviation_Pa": -2.3372339226220217e-23
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 0.01,
+      "average_flow_ratio": 0.9999999999999976,
+      "reservoir_pressure_deviation_Pa": -2.3372339576827315e-29
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 0.1,
+      "average_flow_ratio": 0.9999999999999997,
+      "reservoir_pressure_deviation_Pa": -2.3372339576832445e-28
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 1.0,
+      "average_flow_ratio": 0.999999999999999,
+      "reservoir_pressure_deviation_Pa": -2.337233957682891e-27
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 10.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.337233957683037e-26
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 100.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.3372339576832837e-25
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 10000.0,
+      "average_flow_ratio": 1.0000000000000004,
+      "reservoir_pressure_deviation_Pa": -2.3372339576827218e-23
+    }
+  ],
+  "hashes": {
+    "tools/radau5_reference.py": "4f76058c15b2011b26c866684a9e23b6cbb17df9904ee9f09847910620840932",
+    "tools/relaxation_graph_reference.py": "8f35b67af32ce0523c8de6028b9e62dc20cdd654e4af7b91986f6d307de8ddf6",
+    "src/relaxation_graph.cpp": "f754e3d959e1177a50e8f6d14380fd025714f78fc19a5946ecaace8bb7e55a95",
+    "include/ducklips/relaxation_graph.hpp": "fc89f327d599d3a07e867608893f2d66f3924b197c3b902043f448d8d7eaa12b",
+    "tools/relaxation_graph_probe.cpp": "30991f1a8fd5f2c8f1890cdcac4396da637affc8a0572389312d0327844f7e07",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "build/ducklips_relaxation_graph_probe": "b0e14dea59c3e6df7b28d2fff66ba089d1d1387833f4c7c60e59ce4dd90a3de6",
+    "out/radau5-reference/forced-rest-0.01.input": "7d8227e3b6078e195ea01e8913ad67c2fe5f51a76c34a3796419ed7d783ab21c",
+    "out/radau5-reference/forced-rest-0.01.txt": "92052522ad54aaebb174ecc1ee366e49dc6ea68fc58d67ff7c81b662aede871c",
+    "out/radau5-reference/forced-rest-0.1.input": "da2c021d165082a8ed34c1f7efcdca66221ded4148d3d20f58e965cc6f1142a1",
+    "out/radau5-reference/forced-rest-0.1.txt": "3590c28d2c5197c7ef40425308e0fd9c6eb9ee7a8abd0bdb20b45eb27127bae7",
+    "out/radau5-reference/forced-rest-1.0.input": "34b2717fb1283c3483461a9d30c5a7a9bf23d15074c833f9297937a1c3ff454c",
+    "out/radau5-reference/forced-rest-1.0.txt": "17dc650ec78f1b72ef4216d65590eacbb10bb778935fb111ce478e35552f628e",
+    "out/radau5-reference/forced-rest-10.0.input": "ad7cba0968c520a00b329c982416d8c4beda016143ceff366c6aa3b5f53a4176",
+    "out/radau5-reference/forced-rest-10.0.txt": "bef419b5257869c056567504cc3f2976a2550036df2afc891b7b450b5432db6a",
+    "out/radau5-reference/forced-rest-100.0.input": "b880d7390bb48355c574e42d352183fc4b44960d9b3d99fc4c0318a16c8d410b",
+    "out/radau5-reference/forced-rest-100.0.txt": "7afb07aae91c09e97d951ddd0f42061a685685eaeb3345a302a3ed2dbbf4677b",
+    "out/radau5-reference/forced-rest-10000.0.input": "40326609542d6789fc5f29208a955fa8313d92f9166fc11c0180a5fa792b9eb3",
+    "out/radau5-reference/forced-rest-10000.0.txt": "a56c6beac70f98c7d0359ac49c481e8d77c2fa43d83a87ccc70371b0b75566be",
+    "out/radau5-reference/forced-steady-0.01.input": "8854b4994408d46072d449b1fb327047fa2311dfd69c7d543d520dfc6f62eeca",
+    "out/radau5-reference/forced-steady-0.01.txt": "fbd44dbf6a4e55fad15b1c960bca2c55763ac7bc5064dcdcc23f80805da6c277",
+    "out/radau5-reference/forced-steady-0.1.input": "8ee7e8af417f5712970b0c2f254ac8c080f35b23897f09d607212a4dfd9ec62b",
+    "out/radau5-reference/forced-steady-0.1.txt": "497bc46a8876ee0d1513853f552eeac07b571b9dc5032852fa0d2b665335722d",
+    "out/radau5-reference/forced-steady-1.0.input": "fdf7047aa467256ead9947f89b78c8328a2ba19cfdc9e89c8419493ff1c54f02",
+    "out/radau5-reference/forced-steady-1.0.txt": "114031ded153f1fc91bcfa51848a749a02eb07381968dc9a5cb4eb82970616cd",
+    "out/radau5-reference/forced-steady-10.0.input": "db185ef7c2894b974db5aa0dd6cde53ace95e0b1c5d2150c2e151217589d4883",
+    "out/radau5-reference/forced-steady-10.0.txt": "79c05834ba4cff32b2983767e1d0973ae14cc1fbb43092b08db86738b92f6af6",
+    "out/radau5-reference/forced-steady-100.0.input": "d0d7a4f579feb69a4e9d46322d1b80f4dfb19bdcdfeac462d740472fb8eba980",
+    "out/radau5-reference/forced-steady-100.0.txt": "ddd57e49225b283bd507ef1e9508b2838a5cfe7403c2e2347be2233df7106d29",
+    "out/radau5-reference/forced-steady-10000.0.input": "a42170fb1e28157dbebb78c14fe832b3927e3a263357036e2c08403435d1f0f0",
+    "out/radau5-reference/forced-steady-10000.0.txt": "a6213ac0c477d11bff24606cd32cd0b935f2d75417b4fff68b9c552f6f91c55b",
+    "out/radau5-reference/random.input": "7ddfad92fd5cbabd703e2f6ee928d29d15f46794e5774b0bdac8f044343815a6",
+    "out/radau5-reference/random.txt": "11ad6f567c6b026d43a9b313ad2e59f2394033ea9d302d7909d388a40b5130ac",
+    "out/radau5-reference/trajectory-128.input": "f1355cb253d673a1a4f76346ffb1991656bfca31dc8a53138b8196c4277f3d50",
+    "out/radau5-reference/trajectory-128.txt": "8145ea85a1793fe6f3d1f59b6c72f86b85c4413e1d711dc31554afdd0f16d1cb",
+    "out/radau5-reference/trajectory-16.input": "6ac54d1f90b9fa9537803f1a3cd796747b53a528e8235111ee9e259c18132d4c",
+    "out/radau5-reference/trajectory-16.txt": "119ae69198b1f839ca4dd403b6a0905ae39cba46aa8895957868bc61cede83c2",
+    "out/radau5-reference/trajectory-256.input": "b34114d5c02587698be57523e4e9eac8cfb6d76b8ce94c452177364070c29816",
+    "out/radau5-reference/trajectory-256.txt": "bc1e13c5259abc62aa4101796c4aa0c946eef1ab0e57a927903f89e2d99a5de6",
+    "out/radau5-reference/trajectory-32.input": "aea2cc6f5ac9dae61c933c944b1414d3273e8770710166fd5902b2c53649e7a6",
+    "out/radau5-reference/trajectory-32.txt": "02a15ddc2b09c909de35f306a10487760602dc26310486911c8fa34e1a39536a",
+    "out/radau5-reference/trajectory-64.input": "add571a0582d9ffef3500030b99ab68e9841926f880ab5f7b5519b1175cf18b1",
+    "out/radau5-reference/trajectory-64.txt": "03682dbe0902224d5348be47eea0d755bc5dd16f4e762454b935f6e90571f318"
+  }
+}

@@ -53,7 +53,7 @@ public:
     // Call after configuring loss sites. All passive memories, pressure and
     // flow then share one solve. Midpoint freezing of prescribed geometry;
     // endpoint metric work and exact absence are separately accounted.
-    void prepare_joint(std::size_t radiation_branch=ground_node);
+    void prepare_joint(std::size_t radiation_branch=ground_node,RelaxationOrder order=RelaxationOrder::third);
     [[nodiscard]] bool advance_joint(const JointGraphGeometry&,double dt,double reservoir_pressure,
         const std::array<double,4>& external_force={},std::span<const double> nodal_flow={},
         std::span<const double> series_pressure={},double outlet_inertance=-1.) noexcept;

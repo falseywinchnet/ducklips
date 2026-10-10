@@ -15,12 +15,12 @@ class SavedOracle:
   assert np.max(abs(self.times[indices]-times))<1e-18
   return self.y[:,indices]
 
-def run(n,oracle):
+def run(n,oracle,*,fixture='--joint-fixture',out=OUT):
  dt=DURATION/n;lines=[f'3 4 {n} {PORT}',*[f'{i} {j}' for i,j in EDGES],' '.join(map(str,INITIAL)),'1','80','1e-4 .004',' '.join(map(str,XINITIAL)),
  ' '.join(map(str,np.c_[C,GAPS].ravel())),' '.join(['0']*72),'3',*[' '.join(map(str,[VBRANCH[i],VL[i],G[VBRANCH[i]],VGAP[i]])) for i in range(3)],' '.join(['0']*72)]
  for k in range(n):lines.append(' '.join(map(str,np.r_[dt,1400.,2.,80.,1e-4,1e-4,G[-1],G[-1],np.c_[C,GAPS].ravel(),np.c_[VL,G[VBRANCH],VGAP].ravel(),C,C,G,G,NODAL,SERIES])))
- path=OUT/f'fixed-{n}.input';path.write_text('\n'.join(lines)+'\n')
- result=subprocess.run([str(ROOT/'build/ducklips_graph_continuous_glottis_probe'),'--joint-fixture'],input=path.read_text(),capture_output=True,text=True)
+ path=out/f'fixed-{n}.input';path.write_text('\n'.join(lines)+'\n')
+ result=subprocess.run([str(ROOT/'build/ducklips_graph_continuous_glottis_probe'),fixture],input=path.read_text(),capture_output=True,text=True)
  path.with_suffix('.txt').write_text(result.stdout);path.with_suffix('.stderr').write_text(result.stderr);assert result.returncode==0,result.stderr
  data=np.loadtxt(path.with_suffix('.txt'));assert data.shape==(n,204),data.shape
  ledger=data[:,23:42];times=np.arange(1,n+1)*dt

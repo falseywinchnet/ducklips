@@ -1,0 +1,190 @@
+{
+  "scope": "Preserved third-order random, transient and stiff driven-flow fixtures rerun after generalizing the implementation. Whole numerical output compared at 1e-15 scaled tolerance; bit equality reported separately.",
+  "runs": [
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-0.01.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-0.01.input": "7d8227e3b6078e195ea01e8913ad67c2fe5f51a76c34a3796419ed7d783ab21c",
+        "out/relaxation-graph-reference/forced-rest-0.01.txt": "2623d7a8a6a83a3cc98a7709018075c768a04e5f65028b246ef46716726cbc33",
+        "out/radau5-compatibility/forced-rest-0.01.txt": "2623d7a8a6a83a3cc98a7709018075c768a04e5f65028b246ef46716726cbc33"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-0.1.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-0.1.input": "da2c021d165082a8ed34c1f7efcdca66221ded4148d3d20f58e965cc6f1142a1",
+        "out/relaxation-graph-reference/forced-rest-0.1.txt": "f1a099d5eea2d410a4c0fda9d1a7546539f219debf215bd8caa26c8e183a1d2a",
+        "out/radau5-compatibility/forced-rest-0.1.txt": "f1a099d5eea2d410a4c0fda9d1a7546539f219debf215bd8caa26c8e183a1d2a"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-1.0.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-1.0.input": "34b2717fb1283c3483461a9d30c5a7a9bf23d15074c833f9297937a1c3ff454c",
+        "out/relaxation-graph-reference/forced-rest-1.0.txt": "746869259320cc9fac5c052c56a6aa325bd4e5501bbd73aa6525bc39e5dfaaff",
+        "out/radau5-compatibility/forced-rest-1.0.txt": "746869259320cc9fac5c052c56a6aa325bd4e5501bbd73aa6525bc39e5dfaaff"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-10.0.input",
+      "bit_identical": false,
+      "maximum_scaled_difference": 1.305060893599705e-54,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-10.0.input": "ad7cba0968c520a00b329c982416d8c4beda016143ceff366c6aa3b5f53a4176",
+        "out/relaxation-graph-reference/forced-rest-10.0.txt": "8994f42cf14212b867fd632842c4e68758fa6da5777b6f458f527625daf2a155",
+        "out/radau5-compatibility/forced-rest-10.0.txt": "8fe14b401442564426b764218626567a05ee275fcff7c798379e851c3aea326e"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-100.0.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-100.0.input": "b880d7390bb48355c574e42d352183fc4b44960d9b3d99fc4c0318a16c8d410b",
+        "out/relaxation-graph-reference/forced-rest-100.0.txt": "bdb752cef5938921c3dfd7c468be6d0edb643dc4131cc409e1c01a65089f6300",
+        "out/radau5-compatibility/forced-rest-100.0.txt": "bdb752cef5938921c3dfd7c468be6d0edb643dc4131cc409e1c01a65089f6300"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-rest-10000.0.input",
+      "bit_identical": false,
+      "maximum_scaled_difference": 1.7105694144590052e-49,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-rest-10000.0.input": "40326609542d6789fc5f29208a955fa8313d92f9166fc11c0180a5fa792b9eb3",
+        "out/relaxation-graph-reference/forced-rest-10000.0.txt": "e515d4c1f5e832b5dbe3ffc49787554f982c58d5008152effd4644def59a4135",
+        "out/radau5-compatibility/forced-rest-10000.0.txt": "de97f6d23da1351479aaf2e6eeda085a5da532bbcce29ec9a6a7f13d03c4b6fb"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-0.01.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-0.01.input": "8854b4994408d46072d449b1fb327047fa2311dfd69c7d543d520dfc6f62eeca",
+        "out/relaxation-graph-reference/forced-steady-0.01.txt": "0b7d2bf620e4bbed91aa0f0882ce483f996bc307b9e90de33f19cb90dbbe4d07",
+        "out/radau5-compatibility/forced-steady-0.01.txt": "0b7d2bf620e4bbed91aa0f0882ce483f996bc307b9e90de33f19cb90dbbe4d07"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-0.1.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-0.1.input": "8ee7e8af417f5712970b0c2f254ac8c080f35b23897f09d607212a4dfd9ec62b",
+        "out/relaxation-graph-reference/forced-steady-0.1.txt": "98b849e6f4d5a12e95a38e030041c90473735eb6705a4701aabcc6495488f6c9",
+        "out/radau5-compatibility/forced-steady-0.1.txt": "98b849e6f4d5a12e95a38e030041c90473735eb6705a4701aabcc6495488f6c9"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-1.0.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-1.0.input": "fdf7047aa467256ead9947f89b78c8328a2ba19cfdc9e89c8419493ff1c54f02",
+        "out/relaxation-graph-reference/forced-steady-1.0.txt": "38e6d2fc80b74044549fdc9bcb6f7024e5605452cb31da14140c7944dc0e0944",
+        "out/radau5-compatibility/forced-steady-1.0.txt": "38e6d2fc80b74044549fdc9bcb6f7024e5605452cb31da14140c7944dc0e0944"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-10.0.input",
+      "bit_identical": false,
+      "maximum_scaled_difference": 1.305060893599705e-54,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-10.0.input": "db185ef7c2894b974db5aa0dd6cde53ace95e0b1c5d2150c2e151217589d4883",
+        "out/relaxation-graph-reference/forced-steady-10.0.txt": "6691c21bef66de79b605aa28b0fb0074bd437481abf22707574bdfa4e01336fc",
+        "out/radau5-compatibility/forced-steady-10.0.txt": "e42207a30b2636b7982f7258ee965ec8e2cc6f291c895b5d702677b2912575be"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-100.0.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-100.0.input": "d0d7a4f579feb69a4e9d46322d1b80f4dfb19bdcdfeac462d740472fb8eba980",
+        "out/relaxation-graph-reference/forced-steady-100.0.txt": "ec35c687bf9f75c7131d3c46bbb2c74ceb71ead3f35f40e960e75c49b8cb91e4",
+        "out/radau5-compatibility/forced-steady-100.0.txt": "ec35c687bf9f75c7131d3c46bbb2c74ceb71ead3f35f40e960e75c49b8cb91e4"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/forced-steady-10000.0.input",
+      "bit_identical": false,
+      "maximum_scaled_difference": 1.7105694144590052e-49,
+      "hashes": {
+        "out/relaxation-graph-reference/forced-steady-10000.0.input": "a42170fb1e28157dbebb78c14fe832b3927e3a263357036e2c08403435d1f0f0",
+        "out/relaxation-graph-reference/forced-steady-10000.0.txt": "53b98d4e015a5ef1487f7c7fd0baa75a50187586387c0811a931f4500fd6c8b2",
+        "out/radau5-compatibility/forced-steady-10000.0.txt": "4b5fc38035c97e564a678f511d47aa7ecc65796cce68a47966a3c7aa215349a1"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/random.input",
+      "bit_identical": false,
+      "maximum_scaled_difference": 8.271806125530277e-25,
+      "hashes": {
+        "out/relaxation-graph-reference/random.input": "7ddfad92fd5cbabd703e2f6ee928d29d15f46794e5774b0bdac8f044343815a6",
+        "out/relaxation-graph-reference/random.txt": "bea97a2c9809385dfc5e4161fb3e6c65740790c38536c89287d4ff49a232bb22",
+        "out/radau5-compatibility/random.txt": "6e82cb24c5333b15b52f2764d8c824f9bbf7fe3a192522f33b044d132af90e32"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/trajectory-128.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/trajectory-128.input": "f1355cb253d673a1a4f76346ffb1991656bfca31dc8a53138b8196c4277f3d50",
+        "out/relaxation-graph-reference/trajectory-128.txt": "a58c03e146cb23aa30830007e2bb4b470c9d98ee63005f5e5afb0d17775a8e2f",
+        "out/radau5-compatibility/trajectory-128.txt": "a58c03e146cb23aa30830007e2bb4b470c9d98ee63005f5e5afb0d17775a8e2f"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/trajectory-16.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/trajectory-16.input": "6ac54d1f90b9fa9537803f1a3cd796747b53a528e8235111ee9e259c18132d4c",
+        "out/relaxation-graph-reference/trajectory-16.txt": "0292101e0114a08b543774c6e2535b157fc041679257e55c682e952774f90b56",
+        "out/radau5-compatibility/trajectory-16.txt": "0292101e0114a08b543774c6e2535b157fc041679257e55c682e952774f90b56"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/trajectory-256.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/trajectory-256.input": "b34114d5c02587698be57523e4e9eac8cfb6d76b8ce94c452177364070c29816",
+        "out/relaxation-graph-reference/trajectory-256.txt": "dbc85ac4bb8b88613b55f7fbaaa2a9f99c4e64df01b51b02766384c4a94a2b1e",
+        "out/radau5-compatibility/trajectory-256.txt": "dbc85ac4bb8b88613b55f7fbaaa2a9f99c4e64df01b51b02766384c4a94a2b1e"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/trajectory-32.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/trajectory-32.input": "aea2cc6f5ac9dae61c933c944b1414d3273e8770710166fd5902b2c53649e7a6",
+        "out/relaxation-graph-reference/trajectory-32.txt": "4bebe60601224391f9db71ed06fccae2e798d93b769d1e74e4cae8ca833698fb",
+        "out/radau5-compatibility/trajectory-32.txt": "4bebe60601224391f9db71ed06fccae2e798d93b769d1e74e4cae8ca833698fb"
+      }
+    },
+    {
+      "input": "out/relaxation-graph-reference/trajectory-64.input",
+      "bit_identical": true,
+      "maximum_scaled_difference": 0.0,
+      "hashes": {
+        "out/relaxation-graph-reference/trajectory-64.input": "add571a0582d9ffef3500030b99ab68e9841926f880ab5f7b5519b1175cf18b1",
+        "out/relaxation-graph-reference/trajectory-64.txt": "8d23e8a0ff5bcf1a74d5f8e5151d951e3d106fa78c669a9ecdead99f21c4f95f",
+        "out/radau5-compatibility/trajectory-64.txt": "8d23e8a0ff5bcf1a74d5f8e5151d951e3d106fa78c669a9ecdead99f21c4f95f"
+      }
+    }
+  ],
+  "hashes": {
+    "tools/radau5_compatibility.py": "2b85ae34b0b6dd24bc0391bfc1e1831130dfaad60b89c79096f9d783344bdb68",
+    "build/ducklips_relaxation_graph_probe": "b0e14dea59c3e6df7b28d2fff66ba089d1d1387833f4c7c60e59ce4dd90a3de6",
+    "reports/relaxation_graph_reference.json": "15697055442532c76262efedb25a560e5f4870cf71006c71f46c5991b25ba576"
+  }
+}
