@@ -1,0 +1,55 @@
+{
+  "scope": "Positive quadrature of local stationary-wall slit impedances along the three open internal lip paths, retaining exact integrated plug inertia. Direct adaptive spatial integration, no full moving-wall PDE or speech claim.",
+  "profiles": 18,
+  "native_fixtures": 216,
+  "frequency_range_Hz": [
+    20,
+    200000
+  ],
+  "frequencies": 257,
+  "slit_width_m": 0.03,
+  "maximum_relative_errors_by_order": {
+    "4": {
+      "spatial_correction": 0.06341752466968482,
+      "combined_correction": 0.0634175123708173,
+      "combined_total_impedance": 0.05142344512806108,
+      "inertance_normalization": 0.001362324111578328,
+      "geometry": 8.881784197001252e-16
+    },
+    "8": {
+      "spatial_correction": 0.00019177284125990375,
+      "combined_correction": 0.019516269416563797,
+      "combined_total_impedance": 0.00014950824367255145,
+      "inertance_normalization": 1.138559906355141e-07,
+      "geometry": 1.1102230246251565e-15
+    },
+    "16": {
+      "spatial_correction": 4.467327657106738e-08,
+      "combined_correction": 0.019516269416562853,
+      "combined_total_impedance": 0.00014950824367293905,
+      "inertance_normalization": 6.106226635438361e-15,
+      "geometry": 1.5543122344752192e-15
+    },
+    "32": {
+      "spatial_correction": 1.2632175324248273e-14,
+      "combined_correction": 0.01951626941656241,
+      "combined_total_impedance": 0.00014950824367293658,
+      "inertance_normalization": 2.55351295663786e-15,
+      "geometry": 1.887379141862766e-15
+    }
+  },
+  "maximum_correction_error_single_DC_matched_slit": 0.17587005651291834,
+  "hashes": {
+    "tools/lip_viscous_reference.py": "22ba0b33edcd38d06b94a4ebe120959ae0486a7c5cfb24c8ab0cffe882aeab03",
+    "tools/lip_profile_reference.py": "aea9a6d869018ed578f2a77eff63e249d707b78226672bd290d1b24cd88eb7fe",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "src/lip_viscous.cpp": "363c304f4281f822a22202da1e51ee485b87af40c632b535a2fb1989c082a18d",
+    "include/ducklips/lip_viscous.hpp": "4ed35760e49e03a794905b17b4d0b58043e607edea0de9043f2a36241ddd5b3e",
+    "src/lip_profile.cpp": "a8c314104236be2fad3cac94fa5fbb73d75bd892a7122ff3d52dce4865b72fb9",
+    "tools/lip_viscous_probe.cpp": "c185c26a2aa2a500063e5764db49a42586dfe960ea0fee165f60f47424fad04a",
+    "build/ducklips_lip_viscous_probe": "2bb324e832890686fb8204f53c52b7675eee42195f50258f2ba782e0630e8223",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "out/lip-viscous-reference/geometry.input": "619751ce89050de198112ff2e8faa40cbfb5fd4991c760b79466c7116eb17743",
+    "out/lip-viscous-reference/geometry.txt": "52cd12a0cff9664d3e8fa76b344506451f8640e4d79ecf4763edf70faf0d980e"
+  }
+}

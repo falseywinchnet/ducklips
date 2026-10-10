@@ -1,0 +1,67 @@
+{
+  "scope": "Six selected actual matrices, compared with 50-digit mpmath full matrix exponential; not a bound on every trajectory or matrix.",
+  "precision_digits": 50,
+  "cases": [
+    {
+      "case": "closing",
+      "selection": "least_stiff",
+      "time": 6.91327435458983e-07,
+      "inertia_fraction": 0.012468427602879821,
+      "matrix_norm_1": 265.0632447178962,
+      "scipy_expm_max_absolute_error": 3.3306690738754696e-15,
+      "increment_exponential_max_absolute_error": 1.3908619807094513e-16
+    },
+    {
+      "case": "closing",
+      "selection": "median",
+      "time": 4.714763376290908e-06,
+      "inertia_fraction": 0.04644719209322764,
+      "matrix_norm_1": 1809.1048502541782,
+      "scipy_expm_max_absolute_error": 6.306066779870889e-14,
+      "increment_exponential_max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "case": "closing",
+      "selection": "most_stiff",
+      "time": 0.0003579483391172454,
+      "inertia_fraction": 0.04083003001533329,
+      "matrix_norm_1": 137334.7395670995,
+      "scipy_expm_max_absolute_error": 2.950528710243816e-12,
+      "increment_exponential_max_absolute_error": 1.942890293094024e-16
+    },
+    {
+      "case": "opening",
+      "selection": "least_stiff",
+      "time": 1.8499303396989344e-07,
+      "inertia_fraction": 0.012471813698401469,
+      "matrix_norm_1": 70.92855989005193,
+      "scipy_expm_max_absolute_error": 5.995204332975845e-15,
+      "increment_exponential_max_absolute_error": 1.1102230246251565e-16
+    },
+    {
+      "case": "opening",
+      "selection": "median",
+      "time": 1.3281805083271297e-06,
+      "inertia_fraction": 0.020822372681621435,
+      "matrix_norm_1": 509.3650080865142,
+      "scipy_expm_max_absolute_error": 9.658940314238862e-15,
+      "increment_exponential_max_absolute_error": 1.3877787807814457e-16
+    },
+    {
+      "case": "opening",
+      "selection": "most_stiff",
+      "time": 0.00022772572910964827,
+      "inertia_fraction": 0.05056244291368595,
+      "matrix_norm_1": 87386.90318451858,
+      "scipy_expm_max_absolute_error": 2.4614754678964346e-12,
+      "increment_exponential_max_absolute_error": 2.7842311789427754e-16
+    }
+  ],
+  "hashes": {
+    "out/planar-lip-viscous-16/closing-1-512.json": "14fec24bf9eaf3a4ab1590c366516b6b648677932cfb9187854eef83d1fdbc19",
+    "out/planar-lip-viscous-16/opening-1-512.json": "0fc94f25ade70a37a45b27fb2d8c49195d315fafa5f3ff55e0a7b6e161b7ddce",
+    "tools/lip_viscous_exponential_reference.py": "d224a0cc9191f5e4845ce318ed5f942ecb08043c9c314843af79828492d26ff5",
+    "tools/planar_continuous_reference.py": "7cdcb51e8f140251327cd2ca1f86ccc57b2aab227243989c1e7ef7dd172d75e2",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97"
+  }
+}

@@ -1,15 +1,16 @@
 #!/usr/bin/env python3
 """Locate current endpoint refinement error in the frozen tract's wave modes."""
-import hashlib,json
+import argparse,hashlib,json
 from pathlib import Path
 import numpy as np
 from scipy.linalg import eigh
 from planar_source_reference import B
 ROOT=Path(__file__).resolve().parents[1]
 def main():
+ parser=argparse.ArgumentParser();parser.add_argument('--input',type=Path,default=ROOT/'out/planar-viscous');parser.add_argument('--report',type=Path,default=ROOT/'reports/viscous_refinement_location.json');args=parser.parse_args()
  records=[];paths=[]
  for name in ['closing','opening']:
-  pair=[ROOT/f'out/planar-viscous/{name}-1-{n}.json' for n in [512,1024]];paths+=pair
+  pair=[args.input.resolve()/f'{name}-1-{n}.json' for n in [512,1024]];paths+=pair
   a,b=[json.loads(p.read_text())['steps'][-1] for p in pair]
   assert a['volume']==b['volume'] and a['compliance']==b['compliance'] and a['conductance']==b['conductance']
   delta=np.array(b['pressure'])-a['pressure'];i=int(abs(delta).argmax())
@@ -23,5 +24,5 @@ def main():
   records.append(record);print(json.dumps(dict(case=name,**diagnostic)),flush=True)
  paths += [Path(__file__),ROOT/'tools/planar_inertive_motion_probe.cpp',ROOT/'tools/planar_source_reference.py']
  report=dict(scope='Localize the current endpoint timestep discrepancy. Nodes: mouth 0-1, lips 2-5, throat 6-13. A numerical-error location, not proof of its physical cause or audible consequence.',cases=records,hashes={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in paths})
- (ROOT/'reports/viscous_refinement_location.json').write_text(json.dumps(report,indent=2)+'\n')
+ args.report.write_text(json.dumps(report,indent=2)+'\n')
 if __name__=='__main__':main()

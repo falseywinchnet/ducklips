@@ -104,6 +104,15 @@ the last lip storage section; the largest throat-node difference is only
 0.114 Pa. This is a frozen-tract diagnostic, not a complete damped spectrum or
 proof that the numerical discrepancy cannot affect audible output.
 
+[Viscous integration along the actual lip profile](reports/CONTINUOUS_LIP_VISCOUS.md)
+now supplies wall drag on its three open internal paths. It retains the existing
+integrated air inertia and checks spatial quadrature independently of the
+finite relaxation spectrum. In the same controls, the finest-step maximum
+closing difference falls from 39.54 to 0.113 Pa; opening falls from 2.76 to
+0.642 Pa. The remaining exterior and attachment paths, disappearing loss
+memory, and whole-utterance integration are unfinished. This has not changed
+the spatial-pressure listening sample.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

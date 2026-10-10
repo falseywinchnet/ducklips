@@ -3,7 +3,7 @@
 import argparse,hashlib,json,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=ROOT/'out/radiation-regressions');parser.add_argument('--include-radiation',action='store_true');parser.add_argument('--include-thermal',action='store_true');options=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=ROOT/'out/radiation-regressions');parser.add_argument('--include-radiation',action='store_true');parser.add_argument('--include-thermal',action='store_true');parser.add_argument('--include-viscous',action='store_true');options=parser.parse_args()
 OUT=options.output.resolve();OUT.mkdir(parents=True,exist_ok=True)
 cases=[('out/planar-lip-profile/audit/closing-0-16.txt',['--lip-profile']),('out/planar-lip-profile/audit/opening-0-16.txt',['--lip-profile']),
  ('out/articulated-lip/closure-128.txt',['--lip-tube']),('out/articulated-lip/release-128.txt',['--lip-tube']),('out/articulated-lip/lip-narrowing-128.txt',['--lip-tube']),
@@ -25,6 +25,12 @@ if options.include_thermal:
    command=['--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry','--radiation','--thermal-slit-width','0.03']
    if interval:command+=['--initial-state']
    cases.append((f'out/planar-thermal/{name}-{interval}-256.txt',command))
+if options.include_viscous:
+ for name in ['closing','opening']:
+  for interval in [0,1]:
+   command=['--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry','--radiation','--thermal-slit-width','0.03','--viscous-slit-width','0.03']
+   if interval:command+=['--initial-state']
+   cases.append((f'out/planar-viscous/{name}-{interval}-256.txt',command))
 records=[];binary=ROOT/'build/ducklips_planar_inertive_motion_probe'
 for i,(path,args) in enumerate(cases):
  p=ROOT/path

@@ -1,0 +1,1092 @@
+{
+  "lip_viscous_width": 0.03,
+  "lip_viscous_order": 8,
+  "viscous_slit_width": 0.03,
+  "thermal_slit_width": 0.03,
+  "radiation_enabled": true,
+  "scope": "Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Yielding-wall losses are absent; open internal lip-path viscous quadrature is enabled by lip_viscous_width; explicit throat-internal viscous segments are enabled by viscous_slit_width; explicit throat slit thermal storage is enabled by thermal_slit_width, and aperture radiation by radiation_enabled. No new speech.",
+  "runs": [
+    {
+      "name": "closing-0",
+      "subdivisions": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/closing-0-256.txt": "2ee4763379c3e2259b353dcd4df315aff3ba36b5dfb3026122ef5f4647fee2a7",
+        "out/planar-lip-viscous/closing-0-256.json": "218869784d193dca9a6f7ea6090b14aac59a3610b7f7d2a5b9ec469431627b51",
+        "out/planar-lip-viscous/closing-0-256.log": "9a9aeb488ed2a75b67f30f14cfc97ebc21042958f58bd25d1c1bf7b17d819f68"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 1.7573989311332726e-07,
+      "viscous_geometry_work_J": 9.704624341328195e-14,
+      "maximum_independent_viscous_momentum_error_Pa_s": 6.248900865073875e-17,
+      "maximum_independent_viscous_energy_error_J": 1.356028197431149e-20,
+      "maximum_independent_viscous_geometry_work_error_J": 5.343743771967134e-27,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 1.1199480225632485e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": 1.692977796573924e-22,
+      "maximum_independent_thermal_energy_error_J": 2.747156382439308e-19,
+      "maximum_independent_thermal_geometry_work_error_J": 1.3362827754160244e-25,
+      "steps": 257,
+      "geometry_snapshots_checked": 772,
+      "maximum_local_mass_residual_m3": 6.208326539334322e-21,
+      "maximum_combined_mass_residual_m3": 4.082301759071702e-20,
+      "maximum_source_work_residual_J": 4.5829432295243166e-17,
+      "maximum_port_work_residual_J": 1.3234889800848443e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": 5.299853000906296e-09,
+      "radiation_enabled": true,
+      "radiated_energy_J": 4.681333751731555e-13,
+      "radiation_geometry_work_J": -1.500974759338357e-12,
+      "maximum_radiation_momentum_error_Pa_s": 8.506379194778146e-16,
+      "maximum_radiated_energy_error_J": 2.2785773930765793e-25,
+      "maximum_radiation_geometry_work_error_J": 5.294771286971014e-25,
+      "net_external_transfer_m3": 8.080259012374095e-08,
+      "initial_total_mass_m3": 6.142355469174827e-05,
+      "final_total_mass_m3": 6.150435728187203e-05
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 1.3877787807814457e-17,
+        "source_energy_roundtrip_J": 2.541098841762901e-21
+      },
+      "files": {
+        "out/planar-lip-viscous/closing-1-256.txt": "91dd881e6cee32e450c892a14c5970391513ae66844b676eaf45e3a68a23cff1",
+        "out/planar-lip-viscous/closing-1-256.json": "57eccc057a747cf5693b42253f26250192879ad27ea6da11ec6198dbe04a1889",
+        "out/planar-lip-viscous/closing-1-256.log": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.7667879015927477e-07,
+      "viscous_geometry_work_J": -3.770631867439996e-27,
+      "maximum_independent_viscous_momentum_error_Pa_s": 1.3608092517408688e-16,
+      "maximum_independent_viscous_energy_error_J": 1.1540203520880427e-20,
+      "maximum_independent_viscous_geometry_work_error_J": 7.957692055432266e-29,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 3.4031564707340614e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": 8.572337644176984e-22,
+      "maximum_independent_thermal_energy_error_J": 1.4083348083695749e-18,
+      "maximum_independent_thermal_geometry_work_error_J": 1.3079410847450686e-24,
+      "steps": 256,
+      "geometry_snapshots_checked": 769,
+      "maximum_local_mass_residual_m3": 6.726425946128083e-21,
+      "maximum_combined_mass_residual_m3": 3.2346070673273594e-20,
+      "maximum_source_work_residual_J": 2.040290611698796e-19,
+      "maximum_port_work_residual_J": 5.293955920339377e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": 3.3778064789657947e-09,
+      "radiation_enabled": true,
+      "radiated_energy_J": 0.0,
+      "radiation_geometry_work_J": 0.0,
+      "maximum_radiation_momentum_error_Pa_s": 0.0,
+      "maximum_radiated_energy_error_J": 0.0,
+      "maximum_radiation_geometry_work_error_J": 0.0,
+      "net_external_transfer_m3": 1.340832633157958e-07,
+      "initial_total_mass_m3": 6.150435728187203e-05,
+      "final_total_mass_m3": 6.163844054518784e-05
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/closing-0-512.txt": "d3ada4c596368415371d0ab78344bfb3acfcf1e10336db3f54c352885d344977",
+        "out/planar-lip-viscous/closing-0-512.json": "ae905bc3935347682cb73a6e6628affdbd623d8b68fda07097b89f7d57ce2182",
+        "out/planar-lip-viscous/closing-0-512.log": "05afdd9e82208a2319956addd3cd836deebb139da0e77e2ebb4fe40bd81137ad"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 1.7569399146678276e-07,
+      "viscous_geometry_work_J": 9.709292785146697e-14,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 1.1162816447415051e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 513,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.659837906817564e-21,
+      "maximum_combined_mass_residual_m3": 4.848601878540827e-20,
+      "maximum_source_work_residual_J": 1.925622202975265e-17,
+      "maximum_port_work_residual_J": 6.617444900424222e-24,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 2.8842030798428995e-13,
+      "radiation_geometry_work_J": -1.5254906403194604e-12,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": 8.080403969129462e-08,
+      "initial_total_mass_m3": 6.142355469174827e-05,
+      "final_total_mass_m3": 6.150435873143959e-05
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 2.541098841762901e-21
+      },
+      "files": {
+        "out/planar-lip-viscous/closing-1-512.txt": "dda52697cdc42a0fad74b94c8b98764a00661f4135d6eb941f8dc1e9c4cb8e18",
+        "out/planar-lip-viscous/closing-1-512.json": "2054f125af460e39b8f2eb8e78464fabaf883b42415f03562867f86e1108b627",
+        "out/planar-lip-viscous/closing-1-512.log": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.7669231311694624e-07,
+      "viscous_geometry_work_J": -3.8537087815210835e-27,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 3.4030719284264014e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 512,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.744598070210107e-21,
+      "maximum_combined_mass_residual_m3": 3.128727948920572e-20,
+      "maximum_source_work_residual_J": 2.0545842926837123e-19,
+      "maximum_port_work_residual_J": 2.6469779601696886e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 0.0,
+      "radiation_geometry_work_J": 0.0,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": 1.3408528478717694e-07,
+      "initial_total_mass_m3": 6.150435873143959e-05,
+      "final_total_mass_m3": 6.163844401622678e-05
+    },
+    {
+      "name": "closing-0",
+      "subdivisions": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/closing-0-1024.txt": "25a8a0cd705253aeacbc0cb547400f4a81ba8f8d5ec7c6b5cd008067a3dbf5cc",
+        "out/planar-lip-viscous/closing-0-1024.json": "3ae73a85d1f5ff00a889102fc5204e1114db5eb95366337c5c0d331e44e47de5",
+        "out/planar-lip-viscous/closing-0-1024.log": "d9e7c7d668bf2fd0f1da93d07e53273d9769075c61b4ccdbaacc6fc277e2b719"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 1.7567673917863387e-07,
+      "viscous_geometry_work_J": 9.732140762506871e-14,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 1.1148297271466064e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 1025,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.470891760334553e-21,
+      "maximum_combined_mass_residual_m3": 4.593168505384452e-20,
+      "maximum_source_work_residual_J": 1.0820157686904043e-17,
+      "maximum_port_work_residual_J": 3.308722450212111e-24,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 1.5790761958993567e-13,
+      "radiation_geometry_work_J": -1.5381973847993076e-12,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": 8.080467936871272e-08,
+      "initial_total_mass_m3": 6.142355469174827e-05,
+      "final_total_mass_m3": 6.150435937111701e-05
+    },
+    {
+      "name": "closing-1",
+      "subdivisions": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 4.163336342344337e-17,
+        "source_energy_roundtrip_J": 4.235164736271502e-21
+      },
+      "files": {
+        "out/planar-lip-viscous/closing-1-1024.txt": "2fc1f8b3732a9fd6f791e3a6be7b18a628621ecdeaefdb6d46965092d828070a",
+        "out/planar-lip-viscous/closing-1-1024.json": "19d466fbcf0f52d980a6f7c245201e3153283db1d70d6cf9787a6797fcd2e3ba",
+        "out/planar-lip-viscous/closing-1-1024.log": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.766977798541227e-07,
+      "viscous_geometry_work_J": -3.924151595166991e-27,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 3.403046126496833e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 1024,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.4147856503487296e-21,
+      "maximum_combined_mass_residual_m3": 4.282810339554556e-20,
+      "maximum_source_work_residual_J": 4.83367027586751e-17,
+      "maximum_port_work_residual_J": 1.3234889800848443e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 0.0,
+      "radiation_geometry_work_J": 0.0,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": 1.3408623288741301e-07,
+      "initial_total_mass_m3": 6.150435937111701e-05,
+      "final_total_mass_m3": 6.16384456040044e-05
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/opening-0-256.txt": "335dc629683644282d7f42c767b2c2bc8a88021581193f70a093cde28f074f2f",
+        "out/planar-lip-viscous/opening-0-256.json": "c90931c75587af88d46e0d5ed0d552ce6f7a98e8baf3f70dbae5c81b16962a54",
+        "out/planar-lip-viscous/opening-0-256.log": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.6454604751915247e-08,
+      "viscous_geometry_work_J": -3.212140538487408e-10,
+      "maximum_independent_viscous_momentum_error_Pa_s": 3.0038519990892385e-16,
+      "maximum_independent_viscous_energy_error_J": 2.131902932490575e-21,
+      "maximum_independent_viscous_geometry_work_error_J": 1.7067870276008713e-23,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4767355361278735e-10,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": 5.125769422292033e-20,
+      "maximum_independent_thermal_energy_error_J": 3.380727082952052e-18,
+      "maximum_independent_thermal_geometry_work_error_J": 4.947995503815617e-23,
+      "steps": 256,
+      "geometry_snapshots_checked": 769,
+      "maximum_local_mass_residual_m3": 6.20886937661131e-21,
+      "maximum_combined_mass_residual_m3": 4.426574330016272e-20,
+      "maximum_source_work_residual_J": 1.377487330472306e-19,
+      "maximum_port_work_residual_J": 3.308722450212111e-24,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": 7.298808668565471e-09,
+      "radiation_enabled": true,
+      "radiated_energy_J": 3.922898197435233e-08,
+      "radiation_geometry_work_J": 9.091883187753531e-07,
+      "maximum_radiation_momentum_error_Pa_s": 1.3461454173580023e-13,
+      "maximum_radiated_energy_error_J": 2.6836324010634446e-20,
+      "maximum_radiation_geometry_work_error_J": 3.4078186875959634e-20,
+      "net_external_transfer_m3": -3.924776202019287e-08,
+      "initial_total_mass_m3": 6.766266243603952e-05,
+      "final_total_mass_m3": 6.762341467401932e-05
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 256,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.168404344971009e-19,
+        "source_energy_roundtrip_J": 2.541098841762901e-21
+      },
+      "files": {
+        "out/planar-lip-viscous/opening-1-256.txt": "00f68ca8bc815c966627a1570f66609579984a4e78257ae445874d1bf7a831eb",
+        "out/planar-lip-viscous/opening-1-256.json": "dd1607ee2ec4c135e5fe1f5b107e40dad77885cf7bf623e7edaafaf492323110",
+        "out/planar-lip-viscous/opening-1-256.log": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.346664685586757e-06,
+      "viscous_geometry_work_J": -6.339953055067552e-08,
+      "maximum_independent_viscous_momentum_error_Pa_s": 2.612385134603823e-16,
+      "maximum_independent_viscous_energy_error_J": 9.143654491161168e-20,
+      "maximum_independent_viscous_geometry_work_error_J": 1.0821590363724985e-21,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4081956569591987e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": 5.10424204685034e-20,
+      "maximum_independent_thermal_energy_error_J": 2.865506739767257e-18,
+      "maximum_independent_thermal_geometry_work_error_J": 4.888265045418354e-23,
+      "steps": 256,
+      "geometry_snapshots_checked": 769,
+      "maximum_local_mass_residual_m3": 6.415380186414002e-21,
+      "maximum_combined_mass_residual_m3": 4.783089174026627e-20,
+      "maximum_source_work_residual_J": 1.0128396466793296e-18,
+      "maximum_port_work_residual_J": 5.293955920339377e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": 7.125208867364563e-09,
+      "radiation_enabled": true,
+      "radiated_energy_J": 2.4883845772752365e-07,
+      "radiation_geometry_work_J": 1.8737093085571827e-05,
+      "maximum_radiation_momentum_error_Pa_s": 2.111921748593204e-13,
+      "maximum_radiated_energy_error_J": 1.744173394089766e-19,
+      "maximum_radiation_geometry_work_error_J": 2.0896567506559606e-19,
+      "net_external_transfer_m3": -2.5178703845684246e-07,
+      "initial_total_mass_m3": 6.762341467401932e-05,
+      "final_total_mass_m3": 6.737162763556249e-05
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/opening-0-512.txt": "5fdef525f665585d2ef78ae8f36d82c252586d7835b91474ec8ced10da8dbd4c",
+        "out/planar-lip-viscous/opening-0-512.json": "955c8dd167e900ddf4ba8591f4f840a4a402f8ba83c4dd21848f8341964080a5",
+        "out/planar-lip-viscous/opening-0-512.log": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.6433607369235668e-08,
+      "viscous_geometry_work_J": -3.212416472740487e-10,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4725631069620937e-10,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 512,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.708744960534762e-21,
+      "maximum_combined_mass_residual_m3": 5.879930666271942e-20,
+      "maximum_source_work_residual_J": 1.3819210185555902e-19,
+      "maximum_port_work_residual_J": 1.6543612251060553e-24,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 1.8555716973479094e-08,
+      "radiation_geometry_work_J": 9.074850484139179e-07,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": -3.923436357134139e-08,
+      "initial_total_mass_m3": 6.766266243603952e-05,
+      "final_total_mass_m3": 6.762342807246819e-05
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 512,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.6020852139652106e-18,
+        "source_energy_roundtrip_J": 0.0
+      },
+      "files": {
+        "out/planar-lip-viscous/opening-1-512.txt": "f561a1722d6c5a5cb37b596501b2525d846a4ad396a09b4f8f6ae6024653e350",
+        "out/planar-lip-viscous/opening-1-512.json": "928fce2cd979fa88b10f2883c1ac87bf7732fe4775585856d00e4e8b1b20f717",
+        "out/planar-lip-viscous/opening-1-512.log": "67643d576334a273f2a16f098f31721a205e07c354b363c4ae97cae633936900"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.3455476907158638e-06,
+      "viscous_geometry_work_J": -6.339977565707116e-08,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4059648909023135e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 512,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 7.282394715340287e-21,
+      "maximum_combined_mass_residual_m3": 6.03246277122672e-20,
+      "maximum_source_work_residual_J": 5.869408928880267e-19,
+      "maximum_port_work_residual_J": 2.6469779601696886e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 1.0431492694668403e-07,
+      "radiation_geometry_work_J": 1.871091930994581e-05,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": -2.517507631781586e-07,
+      "initial_total_mass_m3": 6.762342807246819e-05,
+      "final_total_mass_m3": 6.737167730929002e-05
+    },
+    {
+      "name": "opening-0",
+      "subdivisions": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8"
+      ],
+      "continuation": null,
+      "files": {
+        "out/planar-lip-viscous/opening-0-1024.txt": "95a8ed7a67a7e357a1baa2b4c44ebda250dcdc94d824527dda19dd37ceddc109",
+        "out/planar-lip-viscous/opening-0-1024.json": "552c979d80d331d9cf0810083d22f25d506ee9e5a0e21e5280b7bd6046450959",
+        "out/planar-lip-viscous/opening-0-1024.log": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.6424437622086863e-08,
+      "viscous_geometry_work_J": -3.212334246370522e-10,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4709528545434833e-10,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 1024,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 6.500276059125792e-21,
+      "maximum_combined_mass_residual_m3": 6.446053077503234e-20,
+      "maximum_source_work_residual_J": 2.5041896292404786e-18,
+      "maximum_port_work_residual_J": 1.6543612251060553e-24,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 8.830462117062796e-09,
+      "radiation_geometry_work_J": 9.063674449330099e-07,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": -3.9228360960705544e-08,
+      "initial_total_mass_m3": 6.766266243603952e-05,
+      "final_total_mass_m3": 6.762343407507879e-05
+    },
+    {
+      "name": "opening-1",
+      "subdivisions": 1024,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 3.469446951953614e-18,
+        "source_energy_roundtrip_J": 4.235164736271502e-21
+      },
+      "files": {
+        "out/planar-lip-viscous/opening-1-1024.txt": "9a5847351b538933c0f523a7ac49bf062e780db57d99e035528adaa711788460",
+        "out/planar-lip-viscous/opening-1-1024.json": "cb3f5a95e9f203683ccd008516696b925a00e7dc20272aef979c995c664b7b56",
+        "out/planar-lip-viscous/opening-1-1024.log": "1478f63e65416c99016028e59ec73beb1092737841e26da10abfd2b510624c58"
+      },
+      "lip_viscous_width": 0.03,
+      "lip_viscous_order": 8,
+      "viscous_slit_width": 0.03,
+      "viscous_dissipation_J": 2.3451580186832206e-06,
+      "viscous_geometry_work_J": -6.340008130001034e-08,
+      "maximum_independent_viscous_momentum_error_Pa_s": null,
+      "maximum_independent_viscous_energy_error_J": null,
+      "maximum_independent_viscous_geometry_work_error_J": null,
+      "thermal_slit_width": 0.03,
+      "thermal_dissipation_J": 2.4052217504055717e-08,
+      "thermal_geometry_work_J": 0.0,
+      "maximum_independent_thermal_charge_error_m3": null,
+      "maximum_independent_thermal_energy_error_J": null,
+      "maximum_independent_thermal_geometry_work_error_J": null,
+      "steps": 1024,
+      "geometry_snapshots_checked": 0,
+      "maximum_local_mass_residual_m3": 9.346497918169923e-21,
+      "maximum_combined_mass_residual_m3": 6.620091878384391e-20,
+      "maximum_source_work_residual_J": 5.731501377155427e-19,
+      "maximum_port_work_residual_J": 2.6469779601696886e-23,
+      "maximum_column_metric_error": 0.0,
+      "maximum_independent_graph_pressure_error_Pa": null,
+      "radiation_enabled": true,
+      "radiated_energy_J": 4.881880276195661e-08,
+      "radiation_geometry_work_J": 1.8699713439113886e-05,
+      "maximum_radiation_momentum_error_Pa_s": null,
+      "maximum_radiated_energy_error_J": null,
+      "maximum_radiation_geometry_work_error_J": null,
+      "net_external_transfer_m3": -2.517400999041262e-07,
+      "initial_total_mass_m3": 6.762343407507879e-05,
+      "final_total_mass_m3": 6.737169397517468e-05
+    }
+  ],
+  "refinements": [
+    {
+      "case": "closing",
+      "subdivisions": 256,
+      "endpoint_pressure_difference_Pa": null,
+      "whole_control_mass_residual_m3": 2.472277414798489e-20,
+      "final_source": {
+        "energy": 7.54194191781519e-06,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          8.86680427880255e-09,
+          1.0392501282123398e-08
+        ],
+        "effort": [
+          224.9699520223059,
+          459.53120554538623
+        ],
+        "flow": [
+          0.00014613688730210264,
+          0.00014273341526754456,
+          0.00013804952356052884
+        ],
+        "area": [
+          4.887046029195254e-06,
+          7.920228934691866e-06
+        ],
+        "lower_position": [
+          6.73945010426877e-05,
+          6.739450104268758e-05
+        ],
+        "lower_velocity": [
+          0.050826808407238674,
+          0.05082680840723865
+        ],
+        "upper_position": [
+          0.00017572246195328092,
+          0.0001757224619532809
+        ],
+        "upper_velocity": [
+          0.14223178156249544,
+          0.14223178156249536
+        ],
+        "canonical_momentum": [
+          0.004144691747269503,
+          0.07642518360049973,
+          0.0006306128811563538,
+          6.3504622421854406e-06,
+          6.350462242185436e-06,
+          3.5575770306163083e-06,
+          3.557577030616306e-06
+        ]
+      }
+    },
+    {
+      "case": "closing",
+      "subdivisions": 512,
+      "endpoint_pressure_difference_Pa": 0.4192996255790149,
+      "whole_control_mass_residual_m3": 3.0122609186731056e-20,
+      "final_source": {
+        "energy": 7.542740131401933e-06,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          8.866891576420518e-09,
+          1.0392592715972385e-08
+        ],
+        "effort": [
+          225.03765567967397,
+          459.11178494280273
+        ],
+        "flow": [
+          0.00014614916590101784,
+          0.00014274384972848793,
+          0.00013806100753902684
+        ],
+        "area": [
+          4.887097255719968e-06,
+          7.920314439734276e-06
+        ],
+        "lower_position": [
+          6.739633056142745e-05,
+          6.73963305614274e-05
+        ],
+        "lower_velocity": [
+          0.050826363940928064,
+          0.05082636394092792
+        ],
+        "upper_position": [
+          0.0001757255157047958,
+          0.0001757255157047953
+        ],
+        "upper_velocity": [
+          0.14222856249238705,
+          0.14222856249238686
+        ],
+        "canonical_momentum": [
+          0.00414505165768676,
+          0.07642989502696089,
+          0.0006307879742693672,
+          6.3504064827242706e-06,
+          6.350406482724252e-06,
+          3.557496677434505e-06,
+          3.5574966774345003e-06
+        ]
+      }
+    },
+    {
+      "case": "closing",
+      "subdivisions": 1024,
+      "endpoint_pressure_difference_Pa": 0.11335914141835701,
+      "whole_control_mass_residual_m3": 1.2705494208814505e-21,
+      "final_source": {
+        "energy": 7.542923380328629e-06,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          8.866923034394507e-09,
+          1.0392633298192034e-08
+        ],
+        "effort": [
+          225.02214969911515,
+          459.04627687956054
+        ],
+        "flow": [
+          0.00014615158187491876,
+          0.00014274636197326177,
+          0.000138063654265224
+        ],
+        "area": [
+          4.8871124876955185e-06,
+          7.92035100382926e-06
+        ],
+        "lower_position": [
+          6.739687456055424e-05,
+          6.73968745605542e-05
+        ],
+        "lower_velocity": [
+          0.05082613849689468,
+          0.05082613849689487
+        ],
+        "upper_position": [
+          0.00017572682156533068,
+          0.00017572682156533079
+        ],
+        "upper_velocity": [
+          0.14222731793000767,
+          0.14222731793000654
+        ],
+        "canonical_momentum": [
+          0.004145101671617489,
+          0.07643095018484837,
+          0.0006308262083210526,
+          6.350378259419755e-06,
+          6.350378259419779e-06,
+          3.557465587110799e-06,
+          3.5574655871107708e-06
+        ]
+      }
+    },
+    {
+      "case": "opening",
+      "subdivisions": 256,
+      "endpoint_pressure_difference_Pa": null,
+      "whole_control_mass_residual_m3": 3.705769144237564e-22,
+      "final_source": {
+        "energy": 2.7900248492441766e-05,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          1.7421237534891298e-08,
+          2.2182038662148755e-08
+        ],
+        "effort": [
+          -27.762675426967043,
+          444.1264556475882
+        ],
+        "flow": [
+          0.00033583417385763426,
+          0.00032908722909218304,
+          0.00032150326249772766
+        ],
+        "area": [
+          8.447310181097454e-06,
+          1.7910222514930994e-05
+        ],
+        "lower_position": [
+          0.000194546792182052,
+          0.0001945467921820518
+        ],
+        "lower_velocity": [
+          0.145191151737073,
+          0.14519115173707237
+        ],
+        "upper_position": [
+          0.0005325079469618216,
+          0.0005325079469618207
+        ],
+        "upper_velocity": [
+          0.20201891981548134,
+          0.20201891981548173
+        ],
+        "canonical_momentum": [
+          0.007732307520117044,
+          0.0860441683131608,
+          0.0038981241393436688,
+          1.8140678441120705e-05,
+          1.814067844112062e-05,
+          5.054347827007825e-06,
+          5.054347827007834e-06
+        ]
+      }
+    },
+    {
+      "case": "opening",
+      "subdivisions": 512,
+      "endpoint_pressure_difference_Pa": 7.468495756178136,
+      "whole_control_mass_residual_m3": 2.117582368135751e-21,
+      "final_source": {
+        "energy": 2.7894477928808024e-05,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          1.7421639442352554e-08,
+          2.218260078573304e-08
+        ],
+        "effort": [
+          -27.543198861258123,
+          444.13564321969005
+        ],
+        "flow": [
+          0.00033576670451487806,
+          0.0003290159965055038,
+          0.00032142952900280665
+        ],
+        "area": [
+          8.447455869930555e-06,
+          1.7910699180902082e-05
+        ],
+        "lower_position": [
+          0.00019455199535466216,
+          0.00019455199535466328
+        ],
+        "lower_velocity": [
+          0.14520695705329295,
+          0.14520695705329326
+        ],
+        "upper_position": [
+          0.0005325249707465024,
+          0.0005325249707465032
+        ],
+        "upper_velocity": [
+          0.20206114258047517,
+          0.20206114258047814
+        ],
+        "canonical_momentum": [
+          0.007730866265271511,
+          0.08602345985611586,
+          0.0038970991848780397,
+          1.8142655539019247e-05,
+          1.814265553901929e-05,
+          5.055402683797068e-06,
+          5.055402683797142e-06
+        ]
+      }
+    },
+    {
+      "case": "opening",
+      "subdivisions": 1024,
+      "endpoint_pressure_difference_Pa": 0.6420663732280758,
+      "whole_control_mass_residual_m3": 1.4928955695357043e-20,
+      "final_source": {
+        "energy": 2.789236282113544e-05,
+        "rest_area": 3e-06,
+        "outlet_inertance": 25.399246983345304,
+        "mass": [
+          1.7421814001459754e-08,
+          2.2182842608820293e-08
+        ],
+        "effort": [
+          -27.369578084973956,
+          444.2068516975286
+        ],
+        "flow": [
+          0.0003357416424129968,
+          0.00032898951410371085,
+          0.00032140284548491546
+        ],
+        "area": [
+          8.447515829445903e-06,
+          1.7910894384653635e-05
+        ],
+        "lower_position": [
+          0.00019455413676591684,
+          0.00019455413676593337
+        ],
+        "lower_velocity": [
+          0.14521325590056763,
+          0.14521325590056894
+        ],
+        "upper_position": [
+          0.000532531942309053,
+          0.0005325319423090637
+        ],
+        "upper_velocity": [
+          0.20207767514554592,
+          0.20207767514555106
+        ],
+        "canonical_momentum": [
+          0.007730315657155285,
+          0.08601561398779513,
+          0.003896760765683866,
+          1.8143443445727792e-05,
+          1.8143443445727955e-05,
+          5.055815723419698e-06,
+          5.055815723419825e-06
+        ]
+      }
+    }
+  ],
+  "input_poses": {
+    "out/planar-lip-profile/poses/pose-1.284.json": "0ad7bf0a0e4d1142a5d18a282ccd3aafda4a7fd41c915906528bac7c5f26cd76",
+    "out/planar-lip-profile/poses/pose-1.285.json": "21bcae7a8e28dbbf5479ecccf32b144d8bb36328e6be9a4d76eafeaa5d6efa05",
+    "out/planar-lip-profile/poses/pose-1.286.json": "a2847df108f32bb63ad443243b4065111977aaa1f6957421d19884d3ca8de0b2",
+    "out/planar-lip-profile/poses/pose-1.374.json": "fe90f9de25a3e6db37673b24435391a5afba9f0fde51564e1773dafb2bab269c",
+    "out/planar-lip-profile/poses/pose-1.375.json": "a799e7970d0827a546caa8bd6a17c9808c179e35ec3fd21f19f78eed208f5e3a",
+    "out/planar-lip-profile/poses/pose-1.376.json": "a21d5342016b295d1c1f11d5ecd37341d703fd505c272c72c0452e74a4a59ab1"
+  },
+  "hashes": {
+    "tools/planar_continuous_reference.py": "7cdcb51e8f140251327cd2ca1f86ccc57b2aab227243989c1e7ef7dd172d75e2",
+    "build/ducklips_planar_inertive_motion_probe": "8c82d0461bf9db2f2d441a891b64e3985d024413fe271c0eae49f401f1f038a4",
+    "tools/planar_inertive_motion_probe.cpp": "8f374cb66f40d59b7aad5256af445bd6257abf4567d5096b3df5f1e705d304a3",
+    "src/continuous_glottis.cpp": "ee696b46db805329ce1a67fcdff1e084141fd26bfa839d7a7c7e8d7b6156d7a8",
+    "src/graph_continuous_glottis.cpp": "5132bd10f1ac6c8ab11dc805094596e3f5f3bd61a74aaf58bd29cdf47c264b13",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "out/nato-spatial-airway.csv": "85f3269d93397fe7c1b20089ffffb502038524f96bd2274411a01562a0402f7e",
+    "tools/planar_source_reference.py": "f4a3d967301ac9980e42fc68385d413fdc6398a821fdc8a1c6358be5c51dae97",
+    "tools/planar_lip_profile_reference.py": "1ee9eab282756bb364581a0b70f5c429c812a009818884b4f08a481a0c2e5196",
+    "tools/lip_profile_reference.py": "aea9a6d869018ed578f2a77eff63e249d707b78226672bd290d1b24cd88eb7fe",
+    "tools/planar_inertive_motion_reference.py": "204715cf885c3cd68b95597137922d3fb98cd6f58ed5181d48dd613d08d874be",
+    "src/radiation_boundary.cpp": "055d59364b627698e59fbc2bb5efb6a751969d96cecbb353e0b2859e84ab901f",
+    "include/ducklips/radiation_boundary.hpp": "34430ea046a75e6bde655ce5160c19cbb4b4c53d73330e05da0d6451422cdd1e",
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "src/slit_thermal.cpp": "b8bd337e8a2f103ee4cf47d6ef07887b233c696e5842907b207eeeb4888a3112",
+    "include/ducklips/slit_thermal.hpp": "0be0cd329c28b7edd0ae9df6d0f9a98def456429d40dbf882fdede3e6a7cb6c8",
+    "include/ducklips/thermal_spectrum.hpp": "8d59e2f5bdc69cd0b5f591b1aba91c09ef502c95cb0e017ef7c2e87b23f5300f",
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "src/slit_viscous.cpp": "a2467fa5251bd6a1b04428a3ee6fcfb467a668e0d03914d11ea974f2d08fd65a",
+    "include/ducklips/slit_viscous.hpp": "f399c6dfca1566b9cc4543932019a71ebbdd75df06ad63cf1f8a1659bfb697fd",
+    "include/ducklips/viscous_spectrum.hpp": "8625f61b022976e48cac00c60dc55f8f1029256aef355de2feed48bd81645da9",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "src/lip_viscous.cpp": "363c304f4281f822a22202da1e51ee485b87af40c632b535a2fb1989c082a18d",
+    "include/ducklips/lip_viscous.hpp": "4ed35760e49e03a794905b17b4d0b58043e607edea0de9043f2a36241ddd5b3e",
+    "tools/lip_viscous_reference.py": "22ba0b33edcd38d06b94a4ebe120959ae0486a7c5cfb24c8ab0cffe882aeab03"
+  }
+}

@@ -51,6 +51,7 @@ add_library(ducklips STATIC
     src/body_config.cpp
     src/articulation.cpp
     src/lip_profile.cpp
+    src/lip_viscous.cpp
     src/tongue.cpp
     src/tongue_flow.cpp
     src/tongue_surface.cpp
@@ -82,6 +83,9 @@ add_test(NAME ducklips_slit_thermal COMMAND ducklips_slit_thermal_probe)
 add_executable(ducklips_slit_viscous_probe tools/slit_viscous_probe.cpp)
 target_link_libraries(ducklips_slit_viscous_probe PRIVATE ducklips)
 add_test(NAME ducklips_slit_viscous COMMAND ducklips_slit_viscous_probe)
+add_executable(ducklips_lip_viscous_probe tools/lip_viscous_probe.cpp)
+target_link_libraries(ducklips_lip_viscous_probe PRIVATE ducklips)
+add_test(NAME ducklips_lip_viscous COMMAND ducklips_lip_viscous_probe)
 add_test(NAME ducklips_graph_continuous_thermal COMMAND ducklips_graph_continuous_glottis_probe --thermal)
 add_test(NAME ducklips_graph_continuous_viscous COMMAND ducklips_graph_continuous_glottis_probe --viscous)
 add_test(NAME ducklips_tests COMMAND ducklips_tests)
