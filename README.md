@@ -81,6 +81,16 @@ source, fixed tract and changing radiation load; actual moving-mouth controls
 verify the connection and exact lip sealing. Those controls remain temporally
 unconverged. This has not produced a new speech recording.
 
+An explicit [finite-gap thermal-storage model](reports/CONTINUOUS_THERMAL_STORAGE.md)
+now connects heat diffusion to the continuous-source graph and the eight throat
+sections in a declared slit configuration. Thermal relaxation retains the extra
+stored-air term, reaches the correct sealed isothermal equilibrium, and accounts
+for its own acoustic energy and geometry work. Independent diffusion and coupled
+trajectory checks pass, but the observed endpoint refinement is not uniformly
+second order. Moving-mouth closing sensitivity is almost unchanged. Viscous
+drag, yielding walls, thermal geometry beyond those throat sections and complete
+utterance integration remain unfinished; this has not changed the listening sample.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

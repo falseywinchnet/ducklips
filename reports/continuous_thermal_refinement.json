@@ -1,0 +1,28 @@
+{
+  "scope": "Additional fresh native 3200-step run of the identical 0.5 ms thermal/source control, evaluated at the exact saved independent reference sample times. Reuses the previously verified Radau reference; does not claim a newly integrated ODE.",
+  "native_command": [
+    "build/ducklips_graph_continuous_glottis_probe",
+    "--thermal-fixture"
+  ],
+  "native_input": "out/continuous-thermal/fixed-3200.input",
+  "run": {
+    "steps": 3200,
+    "endpoint_scaled_error": 8.90113129173864e-05,
+    "maximum_sampled_scaled_error": 0.0010033126576798335,
+    "joint_work_residual_J": 6.052965203715011e-16,
+    "mass_residual_m3": 3.679299364635867e-21,
+    "thermal_dissipation_J": 7.262917279251918e-07,
+    "independent_thermal_dissipation_J": 7.262476446115291e-07,
+    "thermal_dissipation_error_J": 4.408331366279233e-11
+  },
+  "hashes": {
+    "tools/continuous_thermal_reference.py": "153386973362b541606012e2f8e5bd329ffb59f895e6f475e7fe451c7da8e695",
+    "reports/continuous_thermal_reference.json": "e79e441cd2f8e8da978db6095c4948d1089614d88bde0c34e0368e5586ad6f73",
+    "out/continuous-thermal/continuous.npz": "66e3dd4af32cabfed9819abff6cbafcfcb43405d6d0e8c2fe60cea59c6f64d54",
+    "out/continuous-thermal/refinement-3200.json": "1288e8159ef9b657f7cb796bf03392c01d971aa5b6b6c05cb729a641adafd661",
+    "out/continuous-thermal/fixed-3200.input": "231a2c36ffecbf06ac15e1cae937290d1feedb7bb81a39553c252162763c28d5",
+    "out/continuous-thermal/fixed-3200.txt": "2c05ef1715a615821d90c165255b6d75f3fb919e8bc053edf59a34f4597edcb5",
+    "out/continuous-thermal/fixed-3200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "build/ducklips_graph_continuous_glottis_probe": "f2326616f251a64bee77080c6f346573a4e988b7b0242b25be69619016f3ea05"
+  }
+}

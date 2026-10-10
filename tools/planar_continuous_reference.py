@@ -7,6 +7,8 @@ import subprocess
 from pathlib import Path
 import numpy as np
 from shapely.geometry import LineString
+from scipy.linalg import expm
+from slit_thermal_reference import spectrum
 from radiation_boundary_reference import inverse as radiation_inverse, COEFF as radiation_coefficient
 from planar_source_reference import (ROOT,RHO,BULK,B,EDGES,setup,pose_at,PORTS,
     lip_metrics,vector,write_input,dense_step,sha,check_geometry,exact_regions,check_boundaries)
@@ -15,7 +17,7 @@ from planar_source_reference import (ROOT,RHO,BULK,B,EDGES,setup,pose_at,PORTS,
 def source_vector(s):
     return np.array(sum([s[k] for k in ['effort','flow','lower_position','lower_velocity','upper_position','upper_velocity']],[]))
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.):
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -31,8 +33,11 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False):
             for k in ['charge','momentum']:f.write(' '.join(map(str,previous[k]))+'\n')
             f.write(' '.join(map(str,source_vector(previous['continuous_source'])))+'\n')
             if radiation:f.write(str(previous['radiation_state']['momentum'])+'\n')
+            if thermal_width:
+                for site in previous['thermal_sites']:f.write(' '.join(map(str,site['charge']))+'\n')
     command=[str(binary),'--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry']
     if radiation:command+=['--radiation']
+    if thermal_width:command+=['--thermal-slit-width',str(thermal_width)]
     if previous is not None:command+=['--initial-state']
     with path.open() as f,path.with_suffix('.json').open('w') as g:
         result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
@@ -44,6 +49,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False):
         for k in ['volume','compliance','conductance','charge','momentum']:
             assert data['initial'][k]==previous[k],k
         if radiation:assert data['initial']['radiation_state']==previous['radiation_state']
+        if thermal_width:assert data['initial']['thermal_sites']==previous['thermal_sites']
         a=data['initial']['continuous_source'];b=previous['continuous_source']
         mass_error=float(np.max(abs(np.array(a['mass'])-b['mass'])))
         momentum_error=float(np.max(abs(np.array(a['canonical_momentum'])-b['canonical_momentum'])))
@@ -53,7 +59,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False):
     return data,dict(name=name,subdivisions=n,command=command,continuation=continuation,
         files={str(path.with_suffix(ext).relative_to(ROOT)):sha(path.with_suffix(ext)) for ext in ['.txt','.json','.log']})
 
-def audit(data,p,q,profiles,epi,geometry_check,radiation=False):
+def audit(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_width=0.):
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
     md=.5*(p['x_edges'][-1]-p['x_edges'][0]);ed=.5*(p['y_edges'][1]-p['y_edges'][0]);cd=.5*(p['y_edges'][-1]-p['y_edges'][0])
     line=LineString([(p['x_edges'][0],.09),(p['x_edges'][-1],.09)])
@@ -90,7 +96,29 @@ def audit(data,p,q,profiles,epi,geometry_check,radiation=False):
         a=h*common+(duct-h*common)*decay;b=g*common+(memory-g*common)*decay
         heat=.5*g*(duct*duct-a*a)+.5*h*(memory*memory-b*b)
         return a,b,heat
-    old=data['initial'];initial_mass=sum(np.array(old['volume'])+old['charge'])+sum(old['continuous_source']['mass'])
+    def stored(record):
+        result=np.array(record['volume'])+record['charge']
+        if thermal_width:
+            for site in record['thermal_sites']:
+                assert abs(sum(site['charge'])-site['stored_air'])<1e-20
+                result[site['node']]+=site['stored_air']
+        return result
+    thermal_k,thermal_p=spectrum();thermal_k*=.4
+    thermal_metric=np.r_[1.,np.sqrt(thermal_k)]
+    thermal_matrix=np.zeros((25,25));thermal_matrix[0,0]=-np.sum(thermal_k*thermal_p)
+    thermal_matrix[0,1:]=thermal_matrix[1:,0]=thermal_p*np.sqrt(thermal_k);thermal_matrix[1:,1:]=-np.diag(thermal_p)
+    exponentials={}
+    def thermal_exchange(primary,memory,compliance,gap,dt):
+        time=dt*2.3e-5/gap**2
+        if time not in exponentials:exponentials[time]=expm(thermal_matrix*time)
+        energy_state=np.r_[primary,memory]/thermal_metric
+        next_state=exponentials[time]@energy_state
+        heat=.5*(energy_state@energy_state-next_state@next_state)/compliance
+        physical=next_state*thermal_metric
+        return physical[0],physical[1:],heat
+    old=data['initial'];initial_mass=sum(stored(old))+sum(old['continuous_source']['mass'])
+    thermal_memory=np.array([site['charge'] for site in old.get('thermal_sites',[])],dtype=float)
+    max_thermal=max_thermal_heat=max_thermal_work=thermal_heat=thermal_work=0.
     transfer=0.;max_mass=0.;max_local=0.;max_graph=0.;max_work=0.;max_port=0.;max_column=0.
     max_radiation=0.;max_radiation_heat=0.;max_radiation_work=0.;radiated=0.;radiation_work=0.
     rad_momentum=old['radiation_state']['momentum'] if radiation else 0.
@@ -105,7 +133,14 @@ def audit(data,p,q,profiles,epi,geometry_check,radiation=False):
             radiated+=s['radiated_energy'];radiation_work+=s['radiation_geometry_work']
             assert abs(s['radiation_work_residual'])<1e-17
             assert abs(s['radiation_state']['area']-exit_area(s['geometry']['fraction']))<1e-18
-        network=np.array(s['volume'])+s['charge'];prior=np.array(old['volume'])+old['charge']
+        network=stored(s);prior=stored(old)
+        if thermal_width:
+            assert s['thermal_dissipation']>=0 and abs(s['thermal_work_residual'])<1e-16 and abs(s['thermal_air_residual'])<1e-20
+            thermal_heat+=s['thermal_dissipation'];thermal_work+=s['thermal_geometry_work']
+            for i,site in enumerate(s['thermal_sites']):
+                fraction=s['geometry']['fraction'];a,l=(1-fraction)*epi[0]+fraction*epi[1]
+                assert site['node']==6+i and abs(site['half_gap']-a[i]/(2*thermal_width))<1e-15
+                assert abs(site['compliance']-a[i]*l[i]/BULK)<1e-22
         local=network-prior+dt*B@flow;local[-1]-=dt*s['source_flow']
         max_local=max(max_local,float(np.max(abs(local))))
         source_mass=sum(s['continuous_source']['mass']);old_source_mass=sum(old['continuous_source']['mass'])
@@ -116,12 +151,17 @@ def audit(data,p,q,profiles,epi,geometry_check,radiation=False):
         t=s['geometry']['fraction'];ea,el=(1-t)*epi[0]+t*epi[1]
         max_column=max(max_column,abs(s['continuous_source']['outlet_inertance']-RHO*.5*el[-1]/ea[-1]))
         if geometry_check:
-            first_g=g[6]
+            first_g=g[6];old_c=c.copy()
             _,c1,g1=metrics(s['stage1']);_,c2,g2=metrics(s['stage2']);v,c,g=metrics(s['geometry'])
             assert np.max(abs(v-s['volume']))<1e-17
             assert np.max(abs(c-s['compliance']))<1e-20
             assert np.max(abs(g-s['conductance']))<1e-10
             z[14:][(g1==0)&(g2==0)]=0
+            step_thermal_heat=step_thermal_work=0.
+            if thermal_width:
+                for i,site in enumerate(old['thermal_sites']):
+                    z[6+i],thermal_memory[i],h=thermal_exchange(z[6+i],thermal_memory[i],old_c[6+i],site['half_gap'],dt/2)
+                    step_thermal_heat+=h
             if radiation:
                 a0=exit_area(old['geometry']['fraction']);am=exit_area(.5*(old['geometry']['fraction']+s['geometry']['fraction']));a1=exit_area(s['geometry']['fraction'])
                 work=.5*(radiation_inverse(am)-radiation_inverse(a0))*rad_momentum**2
@@ -136,37 +176,50 @@ def audit(data,p,q,profiles,epi,geometry_check,radiation=False):
                 max_radiation=max(max_radiation,abs(rad_momentum-s['radiation_state']['momentum']))
                 max_radiation_heat=max(max_radiation_heat,abs(heat+second_heat-s['radiated_energy']))
                 max_radiation_work=max(max_radiation_work,abs(work-s['radiation_geometry_work']))
+            if thermal_width:
+                for i,site in enumerate(s['thermal_sites']):
+                    step_thermal_work+=.5*np.sum(thermal_memory[i]**2/thermal_k)*(1/c[6+i]-1/old_c[6+i])
+                    z[6+i],thermal_memory[i],h=thermal_exchange(z[6+i],thermal_memory[i],c[6+i],site['half_gap'],dt/2)
+                    step_thermal_heat+=h
+                    max_thermal=max(max_thermal,float(np.max(abs(thermal_memory[i]-site['charge']))))
+                max_thermal_heat=max(max_thermal_heat,abs(step_thermal_heat-s['thermal_dissipation']))
+                max_thermal_work=max(max_thermal_work,abs(step_thermal_work-s['thermal_geometry_work']))
             z[14:][g==0]=0
             max_graph=max(max_graph,float(np.max(abs(z[:14]/c-s['pressure']))),float(np.max(abs(ap-s['average_pressure']))))
-            assert np.max(abs(z[14:]-s['momentum']))<1e-9
+            assert np.max(abs(z[14:]-s['momentum']))<1e-9,(s['geometry']['fraction'],float(np.max(abs(z[14:]-s['momentum']))),max_graph,max_thermal)
             ov=v
         # A step ending at closure can transport air before its endpoint.
         # Exact zero average flow applies to an entirely sealed interval.
         if old['conductance'][6]==0 and s['conductance'][6]==0:assert flow[6]==0
         old=s
     assert max_radiation<1e-12 and max_radiation_heat<1e-17 and max_radiation_work<1e-17,(max_radiation,max_radiation_heat,max_radiation_work)
+    assert max_thermal<1e-18 and max_thermal_heat<1e-16 and max_thermal_work<1e-16,(max_thermal,max_thermal_heat,max_thermal_work)
     assert max_local<1e-17 and max_mass<1e-17,(max_local,max_mass)
     assert max_work<1e-12 and max_port<1e-18,(max_work,max_port)
     assert max_column<1e-10 and max_graph<1e-5,(max_column,max_graph)
-    return dict(steps=len(data['steps']),geometry_snapshots_checked=checks,maximum_local_mass_residual_m3=max_local,
+    return dict(thermal_slit_width=thermal_width,thermal_dissipation_J=thermal_heat,thermal_geometry_work_J=thermal_work,
+        maximum_independent_thermal_charge_error_m3=max_thermal if geometry_check else None,maximum_independent_thermal_energy_error_J=max_thermal_heat if geometry_check else None,maximum_independent_thermal_geometry_work_error_J=max_thermal_work if geometry_check else None,
+        steps=len(data['steps']),geometry_snapshots_checked=checks,maximum_local_mass_residual_m3=max_local,
         maximum_combined_mass_residual_m3=max_mass,maximum_source_work_residual_J=max_work,
         maximum_port_work_residual_J=max_port,maximum_column_metric_error=max_column,
         maximum_independent_graph_pressure_error_Pa=max_graph if geometry_check else None,
         radiation_enabled=radiation,radiated_energy_J=radiated,radiation_geometry_work_J=radiation_work,
         maximum_radiation_momentum_error_Pa_s=max_radiation if geometry_check else None,maximum_radiated_energy_error_J=max_radiation_heat if geometry_check else None,maximum_radiation_geometry_work_error_J=max_radiation_work if geometry_check else None,
         net_external_transfer_m3=transfer,initial_total_mass_m3=initial_mass,
-        final_total_mass_m3=sum(np.array(old['volume'])+old['charge'])+sum(old['continuous_source']['mass']))
+        final_total_mass_m3=sum(stored(old))+sum(old['continuous_source']['mass']))
 
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('--subdivisions',nargs='+',type=int,default=[256,512,1024])
     parser.add_argument('--binary',type=Path,default=ROOT/'build/ducklips_planar_inertive_motion_probe')
     parser.add_argument('--radiation',action='store_true')
+    parser.add_argument('--thermal-slit-width',type=float,default=0.)
     parser.add_argument('--output',type=Path)
     parser.add_argument('--report',type=Path)
     args=parser.parse_args()
-    if args.output is None:args.output=ROOT/('out/planar-radiation' if args.radiation else 'out/planar-continuous')
-    if args.report is None:args.report=ROOT/('reports/planar_radiation_reference.json' if args.radiation else 'reports/planar_continuous_reference.json')
+    assert np.isfinite(args.thermal_slit_width) and args.thermal_slit_width>=0
+    if args.output is None:args.output=ROOT/('out/planar-thermal' if args.thermal_slit_width else 'out/planar-radiation' if args.radiation else 'out/planar-continuous')
+    if args.report is None:args.report=ROOT/('reports/planar_thermal_reference.json' if args.thermal_slit_width else 'reports/planar_radiation_reference.json' if args.radiation else 'reports/planar_continuous_reference.json')
     args.binary=args.binary.resolve();args.output=args.output.resolve();args.report=args.report.resolve();args.output.mkdir(parents=True,exist_ok=True)
     rows=list(csv.DictReader((ROOT/'out/lip-profile/nato.csv').open()))
     airway=list(csv.DictReader((ROOT/'out/nato-spatial-airway.csv').open()))
@@ -179,8 +232,8 @@ def main():
                 index=start+interval;p,q,paths=setup(index/1000)
                 profiles=np.array([vector(rows[i]) for i in [index,index+1]])
                 epi=np.array([[[float(airway[t][f'{field}_{i}']) for i in reversed(range(8))] for field in ['area','length']] for t in [index,index+1]])
-                data,receipt=run(f'{name}-{interval}',p,q,profiles,epi,n,pressure,previous,args.binary,args.output,args.radiation)
-                receipt.update(audit(data,p,q,profiles,epi,n==args.subdivisions[0],args.radiation));runs.append(receipt)
+                data,receipt=run(f'{name}-{interval}',p,q,profiles,epi,n,pressure,previous,args.binary,args.output,args.radiation,args.thermal_slit_width)
+                receipt.update(audit(data,p,q,profiles,epi,n==args.subdivisions[0],args.radiation,args.thermal_slit_width));runs.append(receipt)
                 if first_mass is None:first_mass=receipt['initial_total_mass_m3']
                 net+=receipt['net_external_transfer_m3'];previous=data['steps'][-1]
                 inputs.update({str(path.relative_to(ROOT)):sha(path) for path in paths})
@@ -193,7 +246,8 @@ def main():
     paths=[Path(__file__),args.binary,ROOT/'tools/planar_inertive_motion_probe.cpp',ROOT/'src/continuous_glottis.cpp',ROOT/'src/graph_continuous_glottis.cpp',
         ROOT/'bodies/reference.body',ROOT/'out/lip-profile/nato.csv',ROOT/'out/nato-spatial-airway.csv',ROOT/'tools/planar_source_reference.py',ROOT/'tools/planar_lip_profile_reference.py',ROOT/'tools/lip_profile_reference.py',ROOT/'tools/planar_inertive_motion_reference.py']
     paths += [ROOT/'src/radiation_boundary.cpp',ROOT/'include/ducklips/radiation_boundary.hpp',ROOT/'tools/radiation_boundary_reference.py']
-    report=dict(radiation_enabled=args.radiation,scope='Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Wall losses are absent; aperture radiation is explicit when radiation_enabled is true. No new speech.',runs=runs,refinements=refinements,input_poses=inputs,
+    paths += [ROOT/'src/slit_thermal.cpp',ROOT/'include/ducklips/slit_thermal.hpp',ROOT/'include/ducklips/thermal_spectrum.hpp',ROOT/'tools/slit_thermal_reference.py']
+    report=dict(thermal_slit_width=args.thermal_slit_width,radiation_enabled=args.radiation,scope='Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Viscous and yielding-wall losses are absent; explicit throat slit thermal storage is enabled by thermal_slit_width, and aperture radiation by radiation_enabled. No new speech.',runs=runs,refinements=refinements,input_poses=inputs,
         hashes={str(p.relative_to(ROOT)):sha(p) for p in paths})
     args.report.write_text(json.dumps(report,indent=2)+'\n')
 

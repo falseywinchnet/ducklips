@@ -1,0 +1,80 @@
+{
+  "scope": "Open continuous source with fixed cyclic tract, aperture radiation and grouped finite-slit thermal storage, compared with independent time-continuous ODE. Tests trajectory accuracy of the split coupling, not speech or anatomical calibration.",
+  "reference_refinement_scaled_error": 3.7156844268082523e-09,
+  "duration_s": 0.0005,
+  "runs": [
+    {
+      "steps": 200,
+      "endpoint_scaled_error": 0.002236865282339351,
+      "maximum_sampled_scaled_error": 0.05968095282972838,
+      "joint_work_residual_J": 8.014964560099092e-17,
+      "mass_residual_m3": 2.6469779601696886e-23,
+      "thermal_dissipation_J": 7.288104568074243e-07,
+      "independent_thermal_dissipation_J": 7.262476446115291e-07,
+      "thermal_dissipation_error_J": 2.5628121958952958e-09
+    },
+    {
+      "steps": 400,
+      "endpoint_scaled_error": 0.0005610480399516338,
+      "maximum_sampled_scaled_error": 0.037093741021123616,
+      "joint_work_residual_J": 9.802542891984567e-17,
+      "mass_residual_m3": 1.1911400820763599e-22,
+      "thermal_dissipation_J": 7.271896956789732e-07,
+      "independent_thermal_dissipation_J": 7.262476446115291e-07,
+      "thermal_dissipation_error_J": 9.42051067444187e-10
+    },
+    {
+      "steps": 800,
+      "endpoint_scaled_error": 0.00019534807318632996,
+      "maximum_sampled_scaled_error": 0.014803236253223107,
+      "joint_work_residual_J": 1.9495310314004977e-16,
+      "mass_residual_m3": 3.742165091189897e-21,
+      "thermal_dissipation_J": 7.265896217942273e-07,
+      "independent_thermal_dissipation_J": 7.262476446115291e-07,
+      "thermal_dissipation_error_J": 3.4197718269827013e-10
+    },
+    {
+      "steps": 1600,
+      "endpoint_scaled_error": 0.0001856149381941341,
+      "maximum_sampled_scaled_error": 0.003995614477022458,
+      "joint_work_residual_J": 4.2118543895630634e-16,
+      "mass_residual_m3": 4.6189765404961065e-21,
+      "thermal_dissipation_J": 7.263707681247293e-07,
+      "independent_thermal_dissipation_J": 7.262476446115291e-07,
+      "thermal_dissipation_error_J": 1.23123513200246e-10
+    }
+  ],
+  "endpoint_refinement_ratios": [
+    3.9869407306586155,
+    2.872042865846371,
+    1.052437239625703
+  ],
+  "hashes": {
+    "tools/continuous_thermal_reference.py": "153386973362b541606012e2f8e5bd329ffb59f895e6f475e7fe451c7da8e695",
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "tools/continuous_outlet_column_reference.py": "ff9ffb4108d22f86b08510db0228c68261614c9d9cf4bdfc119d096d32e9b64e",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/graph_continuous_glottis_reference.py": "6a09b5e01297965cc4f1da84bb316aecc80a27c087ebacec6e36c946342c12ee",
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "tools/graph_continuous_glottis_probe.cpp": "bb89c1c83189c10181b2bbb23344802fa132672b83133f0a534e5ead2604d346",
+    "src/graph_continuous_glottis.cpp": "6f21b84419b179fa5944aaa2f39a220643299388b64187087afe3a6bb8f3e103",
+    "include/ducklips/graph_continuous_glottis.hpp": "33e40e8e1a7010d027ddee9a1b138fed619e0052498939d3ee71360d877ebce9",
+    "src/slit_thermal.cpp": "b8bd337e8a2f103ee4cf47d6ef07887b233c696e5842907b207eeeb4888a3112",
+    "include/ducklips/slit_thermal.hpp": "0be0cd329c28b7edd0ae9df6d0f9a98def456429d40dbf882fdede3e6a7cb6c8",
+    "include/ducklips/thermal_spectrum.hpp": "8d59e2f5bdc69cd0b5f591b1aba91c09ef502c95cb0e017ef7c2e87b23f5300f",
+    "build/ducklips_graph_continuous_glottis_probe": "f2326616f251a64bee77080c6f346573a4e988b7b0242b25be69619016f3ea05",
+    "out/continuous-thermal/continuous.npz": "66e3dd4af32cabfed9819abff6cbafcfcb43405d6d0e8c2fe60cea59c6f64d54",
+    "out/continuous-thermal/fixed-1600.input": "9c3dbff17c014422a00f0f9fe1cea6f782c4a3bb40a6780eb1eb2426402f6fd1",
+    "out/continuous-thermal/fixed-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-thermal/fixed-1600.txt": "4558453e4c9303ba513978acef56915931be1d0e0d4679d1eb45da20206c3910",
+    "out/continuous-thermal/fixed-200.input": "b189701169a722a17357ed9b2202973ffa38020d33f1ab8b82dd5cb46e3d3335",
+    "out/continuous-thermal/fixed-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-thermal/fixed-200.txt": "6256692b56f33f264462a4427690b0be40a0bb2a860a82105d1807a73ecba176",
+    "out/continuous-thermal/fixed-400.input": "1060d6a3aba34c568af2df5c6764bb311a9656c08da601abf86837039f214b4a",
+    "out/continuous-thermal/fixed-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-thermal/fixed-400.txt": "ad803598ff273b66e058cc319a3d98f1fe300c08a0888c49d9d5bcb5e32039fd",
+    "out/continuous-thermal/fixed-800.input": "da6976179e3525dd77389d0de8d46a0c5a5da8c454a1b7993c29250ec77ec299",
+    "out/continuous-thermal/fixed-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-thermal/fixed-800.txt": "77574d2ffc96bba50b00513c6e3a40919444884c8d315bb295c0f383d511cc18"
+  }
+}

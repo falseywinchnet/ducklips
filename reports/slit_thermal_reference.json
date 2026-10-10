@@ -1,0 +1,23 @@
+{
+  "scope": "Isothermal-wall slit thermal diffusion; grouped positive spectrum compared with exact tanh transfer and independent matrix exponential. Linear local model, no moving-wall advection or full speech.",
+  "matrix_cases": 100,
+  "maximum_scaled_state_error": 5.39272433439575e-14,
+  "maximum_relative_energy_error": 3.806818057570772e-14,
+  "maximum_relative_complex_compliance_error": 7.974944702902019e-05,
+  "dimensionless_frequency_range": [
+    1e-06,
+    100000000.0
+  ],
+  "static_thermal_weight_sum": 1.0000000000000002,
+  "hashes": {
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "include/ducklips/thermal_spectrum.hpp": "8d59e2f5bdc69cd0b5f591b1aba91c09ef502c95cb0e017ef7c2e87b23f5300f",
+    "include/ducklips/slit_thermal.hpp": "0be0cd329c28b7edd0ae9df6d0f9a98def456429d40dbf882fdede3e6a7cb6c8",
+    "src/slit_thermal.cpp": "b8bd337e8a2f103ee4cf47d6ef07887b233c696e5842907b207eeeb4888a3112",
+    "tools/slit_thermal_probe.cpp": "40a16b203b4932cad57d8561fea21122fe236cd0ea55c4a81dc215d62ea3edcc",
+    "build/ducklips_slit_thermal_probe": "a4abff60b5f241120e03c6a8a85c09983b961c49b78967a7d2a6701b4a759466",
+    "out/slit-thermal/frequency.npz": "192380ca1b5ec45256616fd0b08d15d86d0f8168fad592f17ef24914a5b7e43e",
+    "out/slit-thermal/matrix.input": "9fa041e52d2dfcd3b046c2e1e7f4dba7592d8fb76ed402a6d0ad476b28261774",
+    "out/slit-thermal/matrix.txt": "728d2650305bd84e185a9ec09307b0585336863c59430647447270e444f91ace"
+  }
+}

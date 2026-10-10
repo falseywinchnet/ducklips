@@ -214,6 +214,7 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
+    double thermal_width=0;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
@@ -223,11 +224,16 @@ int main(int argc,char** argv){
         else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--radiation" && !radiation_mode){radiation_mode=true;}
+        else if(arg=="--thermal-slit-width" && thermal_width==0 && i+1<argc){
+            try{std::size_t used=0;const std::string value=argv[++i];thermal_width=std::stod(value,&used);if(used!=value.size()){return 2;}}
+            catch(...){return 2;}
+            if(!std::isfinite(thermal_width) || thermal_width<=0){return 2;}
+        }
         else if(arg=="--initial-state" && !initial_state){initial_state=true;}
         else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
         else{return 2;}
     }
-    if((radiation_mode && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if(((radiation_mode || thermal_width>0) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -384,6 +390,14 @@ int main(int argc,char** argv){
     auto& charge=lip_mode?graph.charge:acoustic.charge;
     auto& momentum=lip_mode?graph.momentum:acoustic.momentum;
     for(std::size_t i=0;i<total_nodes;++i){charge[i]=compliance[i]*initial[i];}
+    const std::size_t thermal_base=nodes+lip.sections.size();
+    std::vector<ducklips::ThermalGeometry> thermal_geometry;
+    if(thermal_width>0){
+        std::vector<ducklips::ThermalSite> sites;thermal_geometry.resize(epi.sections.size());
+        for(std::size_t i=0;i<epi.sections.size();++i){sites.push_back({thermal_base+i,compliance[thermal_base+i],epi.sections[i].first_area/(2*thermal_width)});}
+        try{continuous.prepare_thermal({},sites);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
+        for(std::size_t i=0;i<sites.size();++i){if(!continuous.thermal[i].equilibrate(initial[thermal_base+i])){return 2;}}
+    }
     // Optional continuation appends canonical charge then branch momentum.
     // The caller must certify identical endpoint geometry and node/branch
     // ownership across calls; this is not a general remeshing operation.
@@ -405,6 +419,7 @@ int main(int argc,char** argv){
             double value;if(std::scanf("%lf",&value)!=1 || !std::isfinite(value) || (continuous.radiation.area()==0 && value!=0)){return 2;}
             continuous.radiation.momentum=value;
         }
+        if(thermal_width>0){for(auto& site:continuous.thermal){for(double& z:site.charge){if(std::scanf("%lf",&z)!=1 || !std::isfinite(z)){return 2;}}}}
         if(fold_mode){
             ducklips::FoldState s;
             if(std::scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf",&s.lower_position[0],&s.lower_position[1],&s.lower_velocity[0],&s.lower_velocity[1],
@@ -414,6 +429,10 @@ int main(int argc,char** argv){
     }
     const auto snapshot=[&](){if(radiation_mode){
         std::printf(",\"radiation_state\":{\"area\":%.17g,\"momentum\":%.17g,\"inverse_inertance\":%.17g,\"energy\":%.17g}",continuous.radiation.area(),continuous.radiation.momentum,continuous.radiation.inverse_inertance(),continuous.radiation.energy());
+    }if(thermal_width>0){
+        std::printf(",\"thermal_sites\":[");for(std::size_t i=0;i<continuous.thermal.size();++i){const auto& site=continuous.thermal[i];
+            std::printf("%s{\"node\":%zu,\"compliance\":%.17g,\"half_gap\":%.17g,\"stored_air\":%.17g,\"energy\":%.17g",i?",":"",thermal_base+i,site.compliance(),site.half_gap(),site.stored_air(),site.energy());
+            values("charge",site.charge);std::putchar('}');}std::putchar(']');
     }if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
@@ -468,10 +487,14 @@ int main(int argc,char** argv){
             const double column=ducklips::AirProperties{}.density*.5*std::lerp(e.first_length,e.last_length,t1)/std::lerp(e.first_area,e.last_area,t1);
             ducklips::RadiationGeometry radiation_geometry;
             if(radiation_mode){radiation_geometry={radiation_branch,radiation_first_g,gend[radiation_branch],radiation_area(.5*(t0+t1)),radiation_area(t1)};}
-            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr)){
+            for(std::size_t i=0;i<thermal_geometry.size();++i){const auto& section=epi.sections[i];thermal_geometry[i]={compliance[thermal_base+i],std::lerp(section.first_area,section.last_area,t1)/(2*thermal_width)};}
+            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr,thermal_geometry)){
                 std::fprintf(stderr,"continuous source solve failed at step %zu, dt %.17g\n",step,dt);return 1;
             }
             if(!continuous_state(continuous)){return 1;}
+            if(thermal_width>0){const auto& r=continuous.last;
+                std::printf(",\"thermal_dissipation\":%.17g,\"thermal_geometry_work\":%.17g,\"thermal_work_residual\":%.17g,\"thermal_air_residual\":%.17g",r.thermal_dissipation,r.thermal_geometry_work,r.thermal_energy_residual,r.thermal_air_residual);
+            }
             if(radiation_mode){const auto& r=continuous.last;
                 std::printf(",\"radiated_energy\":%.17g,\"radiation_geometry_work\":%.17g,\"radiation_work_residual\":%.17g",r.radiated_energy,r.radiation_geometry_work,r.radiation_energy_residual);
             }
