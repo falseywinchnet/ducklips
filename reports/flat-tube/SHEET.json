@@ -1,0 +1,50 @@
+{
+  "grid": [
+    48,
+    8
+  ],
+  "modeCount": 384,
+  "axisymmetricModes": 48,
+  "frequencyRangeHz": [
+    72.21919453553322,
+    1234.164374818236
+  ],
+  "kernelEntries": 262,
+  "kernelDroppedRowBound": 1.0220726876990543e-14,
+  "fullVsSymmetricPCMMaxError": 6.838233271300176e-9,
+  "timings": [
+    {
+      "realtime": 12.2524869745802,
+      "fault": null
+    },
+    {
+      "realtime": 12.159326672908133,
+      "fault": null
+    },
+    {
+      "realtime": 12.062113903796057,
+      "fault": null
+    }
+  ],
+  "browserRealtime": 13,
+  "take": "out/flat-tube-web/2026-10-10T18-33-30.881Z-11467f",
+  "audio_sha256": "d9050d720d22eea2a7692f711ae218912ed062ca203e5aaf2d2e4a39bf5eb7df",
+  "source_sha256": {
+    "engine.mjs": "8c0622cac5415adff17b8a8588b072f95bdcccdf4b49b698b30699741cf5c666",
+    "sheet.mjs": "8428d4e9968610c3c1db3ba7b4830f9973ddd72e69fea023361faac9aea9e416",
+    "audio-renderer.mjs": "cffcfe5ea8f6ee24295b2cc26e35156af0558f63484676153eca2cd75c946bbc",
+    "worklet.mjs": "4254d165d8d8df1f944f90e80d6cde9560eff8cfeed930ca9be6f4eb92fb2ee0",
+    "lan-audio.mjs": "e21633d7e80bb6680ad25649ed8bfbef37ba8d7aa9736ba946414cb85da22c15",
+    "audio-worker.mjs": "619a12b22fb8dd66a6e75b80808cc7792fb484f63b56d727d602983fc418bf37",
+    "app.mjs": "902e8f46895e9b0978a97e5739239d35da49acf113701145c0cc09543c95ecd1"
+  },
+  "enhancedShape": [
+    684,
+    376
+  ],
+  "enhancedSamples": [
+    0,
+    96000
+  ],
+  "tests": 17
+}

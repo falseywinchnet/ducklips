@@ -1,145 +1,174 @@
-# Flat tube experiment
+# Connected sheet tube
 
-This is a fresh implementation of the requested side-cutaway tube. It does not
-import the previous Ducklips synthesizer, source, gesture planner or recordings.
-The first objective is an editable, inspectable physical instrument. Natural
-human phonation and intelligible speech are not established by this version.
+The engine's material is a two-dimensional periodic sheet. Length runs along
+one coordinate and circumference along the other; the circumferential edges
+join. The two lines in the main editor are a side cutaway of this tube, not
+two independently simulated strips.
 
-## Direct manipulation
+## Geometry and controls
 
-The two walls define an equivalent circular tube: A = pi ((upper + lower)/2)^2.
-The cutaway retains separate upper/lower motion, but it is not a full 3D fluid
-or shell discretization. Six bands contain four axial samples each. Band 1 is
-the return chamber; band 2 is the initially tight elastic band. There is no
-special waveform source in that band. All bands use the same engine.
+Six sections each contain eight axial positions. Eight samples around each
+ring make a 48 × 8 sheet with **384 radial degrees of freedom and 384 computed
+modes**. Elastic connections cross every section boundary and the periodic
+seam. Section materials may differ in density, thickness, modulus, damping
+and tissue-transport FIR coefficients.
 
-Volume blocks specify added enclosed air volume, in mL. Their compact spatial
-weights are normalized on the actual axial grid, so integral(delta A dx)
-equals their stated volume. They expand the walls; they are not air obstacles
-or additional inertial tissue. Dragging a block relocates that volume.
+There is one handle per section. It controls a ring support: vertical motion
+changes the section's resting radius, and horizontal motion moves its support
+footprint along that section. Both visible cutaway walls follow the same
+ring. Mass, elasticity and support stiffness in the sidebar belong to the
+selected section. Supports are circumferential rings, not isolated points.
 
-Each surface has a support handle. Vertical movement changes its rest position;
-horizontal movement relocates the support spring within that material patch.
-The support slider changes stiffness. At present each segment's vertical rest
-offset is uniform; this is a coarse patch model, not an arbitrary spline wall.
-Undo, reset and JSON save/open retain the physical design. The browser saves
-the current design locally. Nothing is published or uploaded to an external site.
+Volume blocks add enclosed air volume, not obstacles. Weights on the axial
+grid are normalized so sum(delta A * dx) equals the requested mL. For the
+resting circular geometry A = pi r². In the full moving state, angular
+quadrature averages pi r(theta)². The editor retains its side cutaway while
+the optional mode view displays the complete unrolled material sheet.
 
-## Receptive materials
+Version 2 designs have one `offset` and `anchor` per section. Version 1 saves
+are migrated by averaging their upper/lower offsets and anchor positions;
+the original saved JSON is not modified. The old browser storage key remains
+available. New edits save under a separate version 2 key.
 
-Each surface patch has a diagonal mass matrix and a symmetric stiffness matrix
-assembled from membrane tension, a bulk support term, and the positioned
-support. Wall arc length affects prestretch. A small eigendecomposition of
-M^(-1/2) K M^(-1/2) produces four modes. The displayed frequencies are results
-of that calculation, not pitch targets. Material density, modulus, thickness,
-damping and three FIR coefficients are explicit in engine.mjs. These are
-prototype material settings, not measurements of a particular human body.
+## Supported sheet modes
 
-Modal displacement/velocity retains physical state when a support changes:
-old nodal displacement and velocity are projected into the new basis. Moving
-a support or inserting volume changes rest geometry and can do external work;
-a complete ledger for that editing work has not been implemented.
+`sheet.mjs` assembles a lumped mass M and symmetric stiffness K from axial
+membrane tension, circumferential tension, hoop restoring stiffness, an
+elastic foundation representing surrounding material, and the ring supports.
+Axial distances include the radial slope between samples. The foundation's
+15 mm support depth and the prestress/material parameters are explicit
+prototype choices, not measured human anatomy.
 
-The linked example [Computing vibrations of a moose drumskin, Alexander
-Gustafsson](https://www.youtube.com/watch?v=OEsBoatyHvU) demonstrates modes tied
-to the supported domain. This implementation uses that principle on a much
-coarser membrane patch. It does not claim to reproduce the video's arbitrary
-2D/3D domain calculation.
+Because rest geometry, materials and supports are uniform around each ring,
+the periodic coordinate separates into an exact discrete Fourier basis.
+Each angular family has a 48 × 48 mass-normalized eigenproblem. The full
+set of real angular functions consists of a constant, three sine/cosine
+pairs, and the alternating angular mode. All 384 eigenpairs are retained and
+sorted by frequency; none are discarded to meet the runtime target.
 
-## The two communication paths
+The default dry supported-sheet frequencies span about **72.2–1234.2 Hz**.
+There are **48 axisymmetric modes** as well as 336 circumferential modes.
+These are material modes before air and delayed tissue-port loading, not
+acoustic formants. Their frequency range follows the chosen geometry and
+constitutive parameters. A finite sheet has a finite spatial bandwidth.
 
-Air has two representative lanes with axial, transverse and crisscross links.
-Each link has geometric propagation delay and the same three-tap attenuation
-FIR. Fractional-delay interpolation is folded into the attenuation taps, so
-there is one combined FIR per directed link and no iterative propagation pass.
-At a junction, admittance-weighted incoming waves determine pressure and the
-outgoing waves. These relations follow pressure continuity and volume balance;
-see [Julius O. Smith, Digital Waveguide Theory](https://dsprelated.com/freebooks/pasp/Digital_Waveguide_Theory.html).
+The test suite applies the complete periodic-sheet K and M to every returned
+mode, including the wraparound seam, and checks K phi = omega² M phi.
+Changing whole-body mass by 4 divides frequencies by 2; changing elasticity
+by 4 multiplies them by 2. Moving a support or reshaping volume recomputes
+the supported response. Physical displacement and velocity survive edits;
+editing the rest configuration can do work, for which there is not yet a
+complete energy ledger.
 
-Internally, delay buffers store sqrt(admittance) times pressure. This energy
-normalization avoids inventing wave energy simply by changing a port area.
-The junction receives pressure, and wall motion exchanges volume with it.
-The same surface S converts p to force and wall velocity to volume velocity.
-A closed-form local midpoint exchange accounts for the air-port impedance;
-it requires no global per-sample linear solve. Supported material responses
-advance as modal states; air and solid connections each advance once per step.
+## Efficient sum of modes
 
-Solid connections carry traveling velocity amplitudes between matching nodes
-of adjacent material patches on each wall. Their FIR is the geometric mean
-of the adjacent materials' attenuation taps. It transmits only what survives
-both materials, including their different losses. Finite delays use a speed
-estimate from the lowest material mode and patch size. Modal receptance is
-local to each material, while the FIR governs propagation between materials;
-these are distinct operations. The mechanical port impedance is currently a
-fixed prototype value. This path is a representative network, not a validated
-continuum elastic propagator. Tissue modes themselves use recursive states,
-not a truncated sampled impulse-response convolution.
+The runtime caches the sum of modes as a spatial receptance rather than
+performing dense modal projections at each sample. For each angular family,
+with mass-normalized coordinates, step h and eigenvector matrix Phi:
 
-## Pressure, contact and observation
+    R = Phi diag(1 / (1 + h² omega² / 4)) Phiᵀ
+    z = h * velocity
+    response = R (2 * displacement + z)
+    next_displacement = response - displacement
+    next_z = 2 * response - 4 * displacement - z
 
-Only the inlet reservoir supplies sustained external energy. Its target
-pressure approaches through a 35 ms reservoir response. Seeded low-rate
-stochastic pressure wander provides the requested slight variability. It is
-not an audio-rate noise source or a prescribed oscillation. The first chamber
-remains bidirectionally connected to the second band and the rest of the tube.
+This is the implicit-midpoint response of the complete elastic modal system,
+compiled when the design changes. At audio time it is a matrix application,
+not a global solve. Its rapidly decaying spatial tails allow sparse storage:
+terms smaller than 1e-14 are omitted, with the maximum omitted absolute row
+sum measured and required to remain below 1e-12. The default axisymmetric
+kernel stores 262 of 2304 coefficients. Tests independently compare the
+cached update against explicit sums of all 384 modal responses.
 
-Opposing walls have a nonadhesive compression/recoil contact force. Minimum
-hydraulic radius is 25 micrometres: complete airtight sealing is not yet
-represented. The present air model is a moving acoustic network with reservoir
-flow; it does not yet resolve a separated glottal jet, shear-layer turbulence,
-or a validated viscous constriction law. Consequently, any observed sustained
-oscillation is a candidate behavior of this approximation, not established
-physiological phonation. In particular, regular spectral lines do not prove
-that its energy transfer is anatomically correct.
+With ring supports, a uniform inlet and a resting tube, all eight angular
+sectors remain identical by symmetry. The normal playback path computes one
+representative sector and its 48 axisymmetric modes. This removes duplicate
+work; it does not replace the sheet with two walls or force an asymmetric
+state to be symmetric. The full eight-sector path handles nonuniform initial
+states, including diagnostic displacement of circumferential modes. Tests
+compare its pressure-driven output with the compressed path through contact
+and separately verify circumferential motion and air coupling. The diagnostic
+`displaceMode` is not used as a running voice source or connected to the mode
+preview control.
 
-The outlet sample is a two-tap pressure difference, a simple radiation
-observation, with a fixed conversion gain. There is no source sine, imposed
-pitch, phoneme scheduling, sample playback, output EQ or timbre correction.
-Live monitor level and a final monitor clip guard are separate from the raw
-float WAV capture. Faults stop the model visibly rather than substituting a
-fallback sound. Stopping pressure releases the reservoir and lets the same material and
-air states ring down. Reset clears state.
+## Air and tissue paths
 
-## Time and representation
+Air connections run axially, diagonally across neighboring angular sectors,
+and around each ring. Each directed connection has a geometric delay and the
+same attenuation FIR. Fractional delay and attenuation share a combined FIR.
+A delay has a one-sample minimum, so short-path dispersion remains a material
+limitation at the 24 kHz physics rate. This is a representative pressure-wave
+network, not a resolved fluid cross-section or a validated glottal jet model.
 
-The engine advances at 24 kHz, with causal linear reconstruction to a requested
-48 kHz Web Audio context. Short propagation paths have a one-engine-sample
-minimum delay; mesh dispersion and this delay floor require calibration before
-physical formant claims. Four modes per surface are retained. This is a
-bandlimited representative model, not 48 kHz fluid mechanics.
+At each junction, incoming waves are combined by acoustic admittance. Delay
+histories store pressure multiplied by sqrt(admittance), avoiding a simple
+wave-energy jump when areas change. The same projected surface converts
+pressure to radial force and wall velocity to air volume velocity. A scalar
+midpoint exchange includes the local air impedance, tissue ports and viscous
+damping. It does not perform a global per-sample solve.
 
-The first browser measurement was below 10x. Combining fractional delay and
-attenuation into one FIR and storing only the required path history improved
-the representation without reducing the modal count. The recorded final
-0.8-second render measured 10.43x including trace collection; a subsequent
-browser core measurement should be reported separately. Compilation, UI,
-record encoding and offline enhanced analysis are outside the core benchmark.
-No universal speed guarantee is implied.
+Separate delayed connections in the material carry velocity wave amplitudes
+axially and around the periodic seam. Their FIR taps are the geometric means
+of the connected materials' taps. Their impedance derives from the local
+membrane parameters with an explicit prototype coupling factor. These ports
+provide additional delayed, lossy loading of the conservative sheet response;
+their combined continuum/anatomical calibration is not established.
 
-## Audio -> depiction
+Both connection banks store delay histories contiguously. This changed their
+representation without changing the two-second reference PCM at all in the
+measured comparison. Waveguide scattering follows the pressure/flow framework
+in [Julius O. Smith's Digital Waveguide Theory](https://www.dsprelated.com/freebooks/pasp/Digital_Waveguide_Theory.html).
+The supported-domain inspiration remains the user's
+[drumskin mode example](https://www.youtube.com/watch?v=OEsBoatyHvU).
 
-Every recorded take automatically submits its complete raw WAV to the local
-server for the existing enhanced field renderer. It returns the full magma
-field at native computed cell size, with metadata and NPZ data. It does not
-add an ordinary-STFT panel, crop the take or downsample the image. The viewer
-scrolls instead of shrinking. The waveform uses min/max bins so narrow spikes
-remain visible. Enhanced analysis is offline and takes longer than synthesis.
+## Excitation, contact and limitations
 
-Run from the repository root:
+The inlet reservoir is the only sustained external energy source. It approaches
+the selected pressure through a 35 ms response with seeded slow pressure
+wander. The return chamber, second vocal section and rest of the tube remain
+bidirectionally connected. There is no pitch oscillator, prescribed phonation
+wave, phoneme sequence, output timbre correction or voice recording in the
+engine.
+
+Contact currently imposes a 25 micrometre radial floor and removes inward
+velocity at contact. This is an inelastic nonpenetration approximation, not
+an airtight collision/jet model. The outlet is observed with a two-tap pressure
+difference and fixed conversion gain. The monitor has a separate level and
+clip guard; the recorded float WAV contains the raw output.
+
+The sheet describes radial membrane motion on a cylindrical topology. It is
+not a full shell model with tangential motion, a multilayer vocal fold, or a
+3D fluid solver. Material values, external foundation, contact, port loading,
+short-path delay floor and flow laws need physical calibration. Implementing
+the requested topology and modes does not establish natural human phonation.
+The current fresh field contains broadband energy and moving bands; it has
+not been accepted as a realistic voice.
+
+## Running, timing and paired depiction
 
     node web/tube/server.mjs
     node --test web/tube/*.test.mjs
-    node web/tube/render.mjs out/flat-tube-new 0.8
+    node web/tube/render.mjs out/sheet-tube-check 2
 
-The server binds 0.0.0.0:8765 for LAN access and prints the host's IPv4 addresses.
-Use HOST=127.0.0.1 to restrict it to this computer. No npm packages or build
-step are required. On HTTP LAN origins, the shared audio renderer runs in a
-Worker and supplies four scheduled 2048-frame buffers to ordinary Web Audio;
-localhost/HTTPS use AudioWorklet. The transport test verifies identical PCM
-and raw capture across 128-frame worklet and 2048-frame LAN block sizes. There
-is about 0.2 s of LAN playback buffering, and long main-thread stalls can still
-cause scheduling gaps. This is a playback transport change, not a new
-physical model. Unlike AudioWorklet, this path does not require a secure
-context. See [AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet)
-and [AudioBufferSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode).
-The enhanced renderer uses ~/miniforge3/bin/python unless DUCKLIPS_PYTHON is set.
+Physics advances at 24 kHz and is linearly reconstructed to 48 kHz playback.
+The initial dense modal path measured about 4x realtime. Cached receptance,
+rotation symmetry and contiguous connection histories improved the measured
+normal playback path to about 11–13x on this host. This is a pressure-on core
+measurement, not a universal promise for every device, design or fully
+asymmetric state. Compilation, drawing, audio encoding and offline enhanced
+analysis are outside that measurement. The benchmark runs the loaded design
+at page startup; subsequent geometry changes do not rerun it automatically.
+
+Each recording automatically submits its entire raw WAV to the local enhanced
+renderer. Its complete magma field preserves every computed row and column.
+The viewer scrolls rather than shrinking it; no ordinary STFT companion or
+cropped substitute is added. The receipt freezes the engine, sheet compiler,
+audio renderer, both browser transports, app source and recording provenance.
+
+The server binds 0.0.0.0:8765 for LAN access and prints interface addresses.
+Use HOST=127.0.0.1 to restrict it to this computer. No build step or npm packages
+are required. Localhost/HTTPS uses AudioWorklet; HTTP LAN uses the same renderer
+in a Worker feeding scheduled Web Audio buffers, adding about 0.2 seconds of
+playback buffering. Block-size parity tests cover the two paths. The host must
+remain awake with the server running. The enhanced renderer uses
+~/miniforge3/bin/python unless DUCKLIPS_PYTHON is set.
