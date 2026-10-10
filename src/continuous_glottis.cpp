@@ -142,7 +142,13 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         // coordinates. Preserving this dependence retains the cyclic common
         // transferred-volume coordinate and its throughflow momentum law.
         std::array<double,4> gradient=cm.potential_gradient,dz;double norm2=0,work=0;
-        for(std::size_t k=0;k<4;++k){double h=2e-5*std::max(1.,std::abs(zm[k]));Matrix derivative;
+        for(std::size_t k=0;k<4;++k){
+            // Gas moments can become much smaller than the nominal volume
+            // scale as contact narrows the occupied support. A unit floor
+            // then makes the capped difference perturb 10% of the remaining
+            // gas, biasing the kinetic force. Differentiate positive gas
+            // moments relatively; signed area keeps its contact-side rule.
+            double h=2e-5*(k<2?std::abs(zm[k]):std::max(1.,std::abs(zm[k])));Matrix derivative;
             if(k>=2 && zm[k]==0){
                 // At exact contact use the closed-side derivative. This is
                 // also a defined Newton starting point for opening from rest.

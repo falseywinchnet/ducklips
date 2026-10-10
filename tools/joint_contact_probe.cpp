@@ -35,12 +35,20 @@ void values(const char* key,std::span<const double> values){
 }
 }
 int main(int argc,char** argv){try{
-    require(argc==6 || argc==7,"mode duration macro_step tolerance contact_step [--initial-state]");
-    const bool restart=argc==7;require(!restart || std::string(argv[6])=="--initial-state","restart option");
+    require(argc>=6,"mode duration macro_step tolerance contact_step [--initial-state] [--stop-after count]");
+    bool restart=false;std::size_t stop_after=0;
+    for(int i=6;i<argc;++i){const std::string option=argv[i];
+        if(option=="--initial-state" && !restart){restart=true;}
+        else if(option=="--stop-after" && !stop_after && i+1<argc){
+            std::size_t used=0;const std::string value=argv[++i];stop_after=std::stoul(value,&used);
+            require(used==value.size() && stop_after>0,"positive checkpoint index");
+        }else{require(false,"unknown option");}
+    }
     const std::string mode=argv[1];const double duration=std::stod(argv[2]),macro_step=std::stod(argv[3]),tolerance=std::stod(argv[4]),contact_step=std::stod(argv[5]);
     require(mode=="lower" || mode=="upper" || mode=="zero-lower" || mode=="zero-upper" || mode=="phonation","mode");
     for(double value:{duration,macro_step,tolerance,contact_step}){require(std::isfinite(value) && value>0,"positive finite settings");}
     const auto count=static_cast<std::size_t>(std::ceil(duration/macro_step));require(count>0 && count<=1000000,"macro interval count");
+    require(stop_after<=count,"checkpoint outside trajectory");const std::size_t last_step=stop_after?stop_after:count;
     const bool zero=mode.starts_with("zero-"),lower=mode=="lower" || mode=="zero-lower",phonation=mode=="phonation";
     ducklips::AirProperties air;ducklips::FoldParameters f;ducklips::FoldState folds;folds.rest_area=3e-6;
     double pressure=0,reservoir=0;
@@ -78,7 +86,7 @@ int main(int argc,char** argv){try{
     ducklips::ContinuousGlottalState first,state;require(model.source.state(first),"initial source");
     const double e0=energy(model,first,c,g),m0=mass(model,first);double work=0,loss=0,numerical=0,net=0,worst_work=0,worst_mass=0;
     std::size_t closures=0,reopenings=0,substeps=0,rejected=0;
-    for(std::size_t i=0;i<=count;++i){
+    for(std::size_t i=0;i<=last_step;++i){
         const double time=duration*static_cast<double>(i)/static_cast<double>(count);
         if(i){
             const double start=duration*static_cast<double>(i-1)/static_cast<double>(count);const auto allocation_count=allocations.load();
@@ -98,7 +106,7 @@ int main(int argc,char** argv){try{
         std::printf(",\"outlet_flow\":%.17g,\"radiation_flow\":%.17g,\"radiation_resistance\":%.17g",g.back()*model.network.momentum.back(),model.radiation.inverse_inertance()*model.radiation.momentum,model.radiation.resistance());
         values("area",state.area);values("gas_mass",state.mass);values("effort",state.effort);values("flow",state.flow);values("lower_position",state.folds.lower_position);values("upper_position",state.folds.upper_position);
         std::array<double,nodes> pressure_values;for(std::size_t j=0;j<nodes;++j){pressure_values[j]=model.network.charge[j]/c[j];}values("pressure",pressure_values);
-        if(i==count || (restart && i==0)){
+        if(i==last_step || (restart && i==0)){
             // Physical-state continuation for this fixed tube/body control.
             // The numeric stdin order is source, charge, momentum, radiation,
             // thermal memories, viscous memories. It does not reset profiles.

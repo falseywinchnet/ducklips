@@ -1,0 +1,28 @@
+{
+  "scope": "Small-moment derivative correction, independent force reference and source/coupling regression controls. Original trajectory replay and corrected continuation pending.",
+  "release_tests": 6,
+  "address_undefined_sanitizer_tests": 6,
+  "exact_replayed_prefix_observations": 356,
+  "exact_replayed_prefix_last_local_time_s": 0.00355,
+  "replay_pid": 30769,
+  "corrected_retry_manifest": "out/source-small-mass-retry/run.json",
+  "hashes": {
+    "src/continuous_glottis.cpp": "65986741f3fd9d1edab93724209d1ceeaacd94304b2b0a5d6cbbc28abbe58e62",
+    "tools/joint_contact_probe.cpp": "c6f27f09c0043fefd4204c558c5f634561a9e9f14f3af825d4e2777036f5558b",
+    "tools/continuous_force_probe.cpp": "cec5d9d3716163f32a1b19913b89b3f053f01c8a06108bded5786b91fb9b84f4",
+    "tools/small_source_mass_reference.py": "690189b3115635aaa6809e6e7581a31d6a1ad89a66f053549cdbea95f3e3d810",
+    "reports/small_source_mass_reference.json": "537fd977e59aa97f5340f48d64391b09601181df4e80176432a565a0b8ad7cd5",
+    "out/source-closure-checkpoint/release-tests.log": "5e372a39db0f0e6705a920c4f5e89caaf31dd4624109fac87709f7ed81d4c474",
+    "out/source-closure-checkpoint/asan-tests.log": "fd7a35d448b98dd2e6faccfa3268c5e8509b4bec77aaec1aa21270a0524e5a49",
+    "out/source-closure-checkpoint/asan-build.log": "ffb2295d9da4fc639e8f8f4e564d65a5f9badbf17b3b4e1f7397d210a6ffcc12",
+    "out/source-closure-checkpoint/build.json": "45f827038385ebd2fa7d50ea60165f0f5fa3e2baf8ee682baa162bdf85cbe0b7",
+    "out/source-closure-checkpoint/command.json": "aa86b7536befcad081e06a60436ea7837d73083dfa898ad63e95ef63e73af646",
+    "out/source-small-mass-retry/probe": "246be923272890c5a6a684d6c5e9886f6fe20ab0e83f71ab70754973ab744c4d",
+    "build/ducklips_continuous_glottis_probe": "f1fdbfdfe0e5092d085a69a17b0bab83ac86b783b195befb9e07fbf97a20e155",
+    "build/ducklips_graph_continuous_glottis_probe": "8fa75d4c765605dc22544a2390170bb0199d3e6f058052929e58c56223874590",
+    "build/ducklips_joint_contact_probe": "246be923272890c5a6a684d6c5e9886f6fe20ab0e83f71ab70754973ab744c4d",
+    ".build/asan/ducklips_continuous_glottis_probe": "872890dc57dce6bf2f13bbab74e0d813301e4b459579dafbbbf432de51ddf93b",
+    ".build/asan/ducklips_graph_continuous_glottis_probe": "f9e7c3bed1cd10d8cfa541dae94a4e27b94526f03c98b8fc52996c28aede6bf6",
+    ".build/asan/ducklips_joint_contact_probe": "c28539f63dcc7ed28b99e8d93b3b65ca3e30c2bee777deadc09c1a044e3e7bbd"
+  }
+}

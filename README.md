@@ -168,6 +168,11 @@ sustained source operation and new speech remain unfinished. The next audio
 deliverable must be newly rendered speech from the current engine; earlier
 recordings and onset diagnostics do not satisfy that request.
 
+An [independent small-air-moment force check](reports/SMALL_SOURCE_MASS.md)
+has identified and corrected a derivative scale error near a partly closed
+source. The original failure is being replayed to test continuation from the
+same physical state. This correction has not yet established sustained speech.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures
