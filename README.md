@@ -57,6 +57,17 @@ matrix-decay and smooth-trajectory checks. Contact localization and this decay
 fit alone do not converge the longer tract-coupled motion; the full fast
 pressure evolution remains an accuracy requirement before new speech.
 
+An [independent open-trajectory check](reports/CONTINUOUS_TRACT_ACCURACY.md)
+now separates work balance from motion accuracy. Before the first seal, two
+step halvings reduce the sampled error by factors of 4.07 and 4.05. An audit
+finds tiny kinetic-force derivative errors at the four tested open states;
+those derivatives have not been changed. The tube research driver also has an
+opt-in step-doubling accuracy control, with tighter tolerances verified against
+the independent smooth trajectory. Completed longer refinements preserve three
+closures and reopenings; successive final tract-pressure differences fall from
+206.7 to 34.2 to 8.47 Pa. This is numerical validation of the developing source,
+with whole-utterance speech integration still unfinished.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

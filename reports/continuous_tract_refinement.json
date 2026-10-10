@@ -1,0 +1,433 @@
+{
+  "scope": "Common-state 16 ms contact refinement with both open step and crossing cap refined on the finest pair. Adjacent-run differences are not errors against an independent contact oracle.",
+  "original_source_commit": "224a4b12ce883fd52b89e7f93315e9a58e2a1c0e",
+  "native": {
+    "fitted-6400": {
+      "summary": {
+        "complete": true,
+        "steps": 6400,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 6430,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.560383766641138e-15,
+        "maximum_mass_residual_m3": 7.72917564369549e-21,
+        "numerical_loss_J": 1.5432347700959095e-08,
+        "port_work_J": 8.988310047852729e-06,
+        "pressure_range_Pa": [
+          -1025.4975209595873,
+          1019.2933120984226
+        ]
+      },
+      "final": {
+        "step": 6400,
+        "time": 0.016,
+        "source": [
+          -425.73648602484445,
+          285.03818670846294,
+          6.3212964094715965e-06,
+          8.257263046537156e-06,
+          0.0003609171927755732,
+          0.00035499630831664663,
+          0.00034771128235615723,
+          0.003073298426044053,
+          0.005749079887637622
+        ],
+        "charge": [
+          7.761788940662896e-09,
+          6.264885496567703e-09,
+          5.0912217936255695e-09,
+          4.324331828493372e-09,
+          3.845204579018425e-09,
+          3.5841819259143755e-09,
+          2.541135651329088e-09,
+          8.94237837390065e-10
+        ],
+        "momentum": [
+          0.04306057174600282,
+          0.0424590155643847,
+          0.041130744981901855,
+          0.040394254237660285,
+          0.039671600529982705,
+          0.03951926147489551,
+          0.03962109109614948,
+          0.019695334252723667
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": 8.988310047852729e-06,
+        "numerical_loss": 1.5432347700959095e-08
+      },
+      "maximum_step_s": 2.5e-06,
+      "contact_step_cap_s": 7.8125001e-08,
+      "reproduction_command": [
+        "out/continuous-tract-contact/fitted-probe",
+        "6400",
+        ".016",
+        "--graph-state",
+        "--relaxation",
+        "--contact-step",
+        "7.8125001e-08"
+      ]
+    },
+    "fitted-12800": {
+      "summary": {
+        "complete": true,
+        "steps": 12800,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 12824,
+        "minimum_dt": 7.8125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.4237742929079644e-15,
+        "maximum_mass_residual_m3": 1.1249656330721176e-20,
+        "numerical_loss_J": 4.149465837124659e-09,
+        "port_work_J": -3.2506791107987337e-05,
+        "pressure_range_Pa": [
+          -1023.5091081507351,
+          1016.9063105827089
+        ]
+      },
+      "final": {
+        "step": 12800,
+        "time": 0.016,
+        "source": [
+          637.4406301516631,
+          438.298555881714,
+          2.8369904868831357e-06,
+          3.2021833082249317e-06,
+          0.00010240285909022288,
+          9.507054094038775e-05,
+          8.649347694791928e-05,
+          0.00406437074293121,
+          0.006505003511688116
+        ],
+        "charge": [
+          1.4237495333963235e-08,
+          1.20279785441824e-08,
+          9.915586506658456e-09,
+          8.203021560100082e-09,
+          6.656116288196821e-09,
+          5.280564083448159e-09,
+          3.0773002306209427e-09,
+          8.232029348867527e-10
+        ],
+        "momentum": [
+          0.007185277672357508,
+          0.0048077437825427,
+          0.0017383815923773006,
+          -0.0020441053868129762,
+          -0.005784119961421206,
+          -0.00946087377685804,
+          -0.012502417957505282,
+          -0.006915456146732423
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": -3.2506791107987337e-05,
+        "numerical_loss": 4.149465837124659e-09
+      },
+      "maximum_step_s": 1.25e-06,
+      "contact_step_cap_s": 7.8125001e-08,
+      "reproduction_command": [
+        "out/continuous-tract-contact/fitted-probe",
+        "12800",
+        ".016",
+        "--graph-state",
+        "--relaxation",
+        "--contact-step",
+        "7.8125001e-08"
+      ]
+    },
+    "fitted-25600": {
+      "summary": {
+        "complete": true,
+        "steps": 25600,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 25624,
+        "minimum_dt": 3.90625e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 1.825145937162098e-15,
+        "maximum_mass_residual_m3": 1.1858461261560205e-20,
+        "numerical_loss_J": 1.3158858912638397e-09,
+        "port_work_J": -2.849182469457672e-05,
+        "pressure_range_Pa": [
+          -1023.026508326199,
+          1016.3015197324513
+        ]
+      },
+      "final": {
+        "step": 25600,
+        "time": 0.016,
+        "source": [
+          1036.7722721076507,
+          463.41371578619936,
+          2.130712526138209e-06,
+          2.1235079139824577e-06,
+          5.1921747726749176e-05,
+          4.484876764548741e-05,
+          3.663909841101474e-05,
+          0.003948175632343549,
+          0.006193610995495999
+        ],
+        "charge": [
+          1.522299620324276e-08,
+          1.3099387735310522e-08,
+          1.0859340760524222e-08,
+          8.874953707039294e-09,
+          7.116861239535361e-09,
+          5.4108584866017875e-09,
+          3.0125086118672765e-09,
+          7.959701820390911e-10
+        ],
+        "momentum": [
+          0.0005800736383807567,
+          -0.0017924992243898413,
+          -0.004786447431678736,
+          -0.008558293289466974,
+          -0.012313467495573925,
+          -0.0160964483080149,
+          -0.01912445781248463,
+          -0.01016040534924838
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": -2.849182469457672e-05,
+        "numerical_loss": 1.3158858912638397e-09
+      },
+      "maximum_step_s": 6.25e-07,
+      "contact_step_cap_s": 3.9062501e-08,
+      "reproduction_command": [
+        "out/continuous-tract-contact/fitted-probe",
+        "25600",
+        ".016",
+        "--graph-state",
+        "--relaxation",
+        "--contact-step",
+        "3.9062501e-08"
+      ]
+    },
+    "fitted-51200": {
+      "summary": {
+        "complete": true,
+        "steps": 51200,
+        "duration": 0.016,
+        "nodes": 8,
+        "length_m": 0.175,
+        "area_m2": 0.0002,
+        "segments": 51224,
+        "minimum_dt": 1.953125e-08,
+        "closures": 3,
+        "reopenings": 3,
+        "maximum_work_residual_J": 2.6105419909105976e-15,
+        "maximum_mass_residual_m3": 1.5167183711772315e-20,
+        "numerical_loss_J": 5.108739116603811e-10,
+        "port_work_J": -2.731795845804132e-05,
+        "pressure_range_Pa": [
+          -1022.9178250802152,
+          1016.1657160794836
+        ]
+      },
+      "final": {
+        "step": 51200,
+        "time": 0.016,
+        "source": [
+          1135.7441535011658,
+          471.76016977029144,
+          1.952505324855248e-06,
+          1.8165870707735175e-06,
+          4.036393478603416e-05,
+          3.3476355706418194e-05,
+          2.5535147555002605e-05,
+          0.0038737964653358247,
+          0.00596200201919851
+        ],
+        "charge": [
+          1.5398971611443457e-08,
+          1.3350800816235182e-08,
+          1.112463620944768e-08,
+          9.112704188658555e-09,
+          7.321785166798529e-09,
+          5.530718719634816e-09,
+          3.066688953093011e-09,
+          8.188409282649941e-10
+        ],
+        "momentum": [
+          -0.0008111523583092279,
+          -0.003121211814651689,
+          -0.006048164975349456,
+          -0.009767111972606416,
+          -0.013519019781365662,
+          -0.0173053230598842,
+          -0.02032040166216107,
+          -0.010752484990227015
+        ],
+        "closures": 3,
+        "reopenings": 3,
+        "port_work": -2.731795845804132e-05,
+        "numerical_loss": 5.108739116603811e-10
+      },
+      "maximum_step_s": 3.125e-07,
+      "contact_step_cap_s": 1.9531251e-08,
+      "reproduction_command": [
+        "out/continuous-tract-contact/fitted-probe",
+        "51200",
+        ".016",
+        "--graph-state",
+        "--relaxation",
+        "--contact-step",
+        "1.9531251e-08"
+      ]
+    }
+  },
+  "comparisons": [
+    {
+      "cases": [
+        "fitted-6400",
+        "fitted-12800"
+      ],
+      "windows": [
+        {
+          "end_s": 0.000425,
+          "last_sample_s": 0.0004,
+          "samples": 9,
+          "maximum_scaled_source_difference": 0.03114840391332109,
+          "final_scaled_source_difference": 0.006772530681019817,
+          "maximum_area_difference_mm2": 0.0005967595112174589,
+          "final_area_difference_mm2": 0.0005967595112174589,
+          "maximum_tract_pressure_difference_Pa": 0.0070850760129499936,
+          "final_tract_pressure_difference_Pa": 0.005940098648090236
+        },
+        {
+          "end_s": 0.006,
+          "last_sample_s": 0.006,
+          "samples": 121,
+          "maximum_scaled_source_difference": 0.03114840391332109,
+          "final_scaled_source_difference": 0.02563069046502761,
+          "maximum_area_difference_mm2": 0.01840545608085353,
+          "final_area_difference_mm2": 0.005445399801091599,
+          "maximum_tract_pressure_difference_Pa": 1.5947540390370787,
+          "final_tract_pressure_difference_Pa": 1.5947540390370787
+        },
+        {
+          "end_s": 0.016,
+          "last_sample_s": 0.016,
+          "samples": 321,
+          "maximum_scaled_source_difference": 8.248440133539303,
+          "final_scaled_source_difference": 5.055079738312224,
+          "maximum_area_difference_mm2": 5.0761029156110276,
+          "final_area_difference_mm2": 5.055079738312224,
+          "maximum_tract_pressure_difference_Pa": 658.1457588400152,
+          "final_tract_pressure_difference_Pa": 206.70454807414683
+        }
+      ]
+    },
+    {
+      "cases": [
+        "fitted-12800",
+        "fitted-25600"
+      ],
+      "windows": [
+        {
+          "end_s": 0.000425,
+          "last_sample_s": 0.000425,
+          "samples": 18,
+          "maximum_scaled_source_difference": 0.039987843534777315,
+          "final_scaled_source_difference": 0.007204921851917163,
+          "maximum_area_difference_mm2": 0.00015782553749356544,
+          "final_area_difference_mm2": 0.00015782553749356544,
+          "maximum_tract_pressure_difference_Pa": 0.0018930684768037242,
+          "final_tract_pressure_difference_Pa": 0.0016654994790576605
+        },
+        {
+          "end_s": 0.006,
+          "last_sample_s": 0.006,
+          "samples": 241,
+          "maximum_scaled_source_difference": 0.039987843534777315,
+          "final_scaled_source_difference": 0.00621999374568645,
+          "maximum_area_difference_mm2": 0.004447380588392961,
+          "final_area_difference_mm2": 0.0013740520894822542,
+          "maximum_tract_pressure_difference_Pa": 0.38913887540882774,
+          "final_tract_pressure_difference_Pa": 0.38913887540882774
+        },
+        {
+          "end_s": 0.016,
+          "last_sample_s": 0.016,
+          "samples": 641,
+          "maximum_scaled_source_difference": 3.0615998250250516,
+          "final_scaled_source_difference": 1.078675394242474,
+          "maximum_area_difference_mm2": 1.078675394242474,
+          "final_area_difference_mm2": 1.078675394242474,
+          "maximum_tract_pressure_difference_Pa": 136.90191395857062,
+          "final_tract_pressure_difference_Pa": 34.19938138080966
+        }
+      ]
+    },
+    {
+      "cases": [
+        "fitted-25600",
+        "fitted-51200"
+      ],
+      "windows": [
+        {
+          "end_s": 0.000425,
+          "last_sample_s": 0.000425,
+          "samples": 35,
+          "maximum_scaled_source_difference": 0.009796895756694539,
+          "final_scaled_source_difference": 0.0017644365772790137,
+          "maximum_area_difference_mm2": 3.75427539337789e-05,
+          "final_area_difference_mm2": 3.75427539337789e-05,
+          "maximum_tract_pressure_difference_Pa": 0.00047330964231264393,
+          "final_tract_pressure_difference_Pa": 0.0003989517203430599
+        },
+        {
+          "end_s": 0.006,
+          "last_sample_s": 0.006,
+          "samples": 481,
+          "maximum_scaled_source_difference": 0.009796895756694539,
+          "final_scaled_source_difference": 0.0013998809639554494,
+          "maximum_area_difference_mm2": 0.0009594614788436932,
+          "final_area_difference_mm2": 0.0004355704370047255,
+          "maximum_tract_pressure_difference_Pa": 0.09293490153148487,
+          "final_tract_pressure_difference_Pa": 0.09293490153148487
+        },
+        {
+          "end_s": 0.016,
+          "last_sample_s": 0.016,
+          "samples": 1281,
+          "maximum_scaled_source_difference": 0.9934006680349466,
+          "final_scaled_source_difference": 0.30692084320894025,
+          "maximum_area_difference_mm2": 0.30692084320894025,
+          "final_area_difference_mm2": 0.30692084320894025,
+          "maximum_tract_pressure_difference_Pa": 29.07674982332757,
+          "final_tract_pressure_difference_Pa": 8.468230729636767
+        }
+      ]
+    }
+  ],
+  "fine_contact_temporal_convergence_established": false,
+  "hashes": {
+    "tools/continuous_tract_refinement_check.py": "5d7a04c15c1c02906fa3e25254924d365b3fabf0bd71cd14fe8460bd6a8a7b8e",
+    "out/continuous-tract-contact/fitted-probe": "603bcba17dbed594977d2104fcd1b94b92b2dc2b8b663446145ee0c19b03b5ab",
+    "out/continuous-tract-contact/seed.input": "aa2e241b7f0bd5f617dd0b7d0daf7c4196ed19df721a76a7f4cfbdecb9ed6904",
+    "out/continuous-tract-contact/fitted-6400.jsonl": "1f15cb442bf3253989d8a1a0c3cc2c25fff8c6f6371e8bfc68801e35990dd907",
+    "out/continuous-tract-contact/fitted-6400.stderr": "e0e0d6bcca4fa3c7c8e56fb74cf8bbf7e0e39f7580e4357f38a200f919a67c94",
+    "out/continuous-tract-contact/fitted-12800.jsonl": "baa53acb341a18fb9a9862fcb3ffb7d629d700fca5a1373ca912be5b1ca0e451",
+    "out/continuous-tract-contact/fitted-12800.stderr": "2268be0781c3728cc7d2f3855e2e4e9faa72bf60feee0643ed86630106f428aa",
+    "out/continuous-tract-contact/fitted-25600.jsonl": "8ac941a7849218231f460ff604b095d9e2c6583b5e0ce093e1b0734d9f7981a9",
+    "out/continuous-tract-contact/fitted-25600.stderr": "ec02e16ce4b1b6537263918b65ce9835d80cee8e5debe376e6922cddf4aa302a",
+    "out/continuous-tract-contact/fitted-51200.jsonl": "4c6a9d7475f1fae0d9a5bd78153f0908da919c1b4278a82de5a8826aca84f2b8",
+    "out/continuous-tract-contact/fitted-51200.stderr": "5b2cc1022662174b58f26a203615fdd173970061c827cbe0e3cf1c554f11a39f"
+  }
+}
