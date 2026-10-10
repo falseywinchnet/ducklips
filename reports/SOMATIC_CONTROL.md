@@ -7,6 +7,36 @@ in the CLI with `--living-control`. This path uses the current elastic-volume
 `TissueSource`, the moving conservative tongue and the local airflow engine.
 It does not run the earlier two-mass source. Human naturalness is unaccepted.
 
+## Listening feedback, 10 October
+
+The listener clarified that the reported silence was their muted playback,
+then described the latest take as: "it sounds like someone sickly."
+This applies to the round 003 waveform, freshly reproduced for the mono MP3
+in `out/somatic-playback-004/`; the fresh raw waveform was verified identical.
+This is evidence of a person-like but unhealthy-sounding impression, not an
+acceptance of healthy natural phonation. The specific distinction between
+hoarseness, weakness and shakiness has not yet been supplied.
+
+Round 004 is an isolation experiment, generated with
+`ducklips_somatic_study out/somatic-round-004 --no-control-variation`.
+It sets only `SomaticControl::Settings::noise` to zero. Delayed compensation,
+mean twitch dynamics, opposing tone, passive relaxation and finite breath
+remain active. The tissue source's separately varying relaxation also remains
+active, so this is not an all-randomness-disabled comparison. The normal
+engine retains its requested imperfect holding mechanism. The exact render
+receipt and complete enhanced inspection are in `somatic_control_rounds.json`.
+
+The complete native enhanced field for round 004 still has broad sustained
+texture and weak harmonic organization. The late vertical transients of
+round 003 are absent. Its fold-area and flow traces retain large irregular
+cycle-to-cycle changes despite much smoother holding trajectories. Thus the
+added holding variation is not necessary for the sustained visual defect;
+the post-release transients are affected by it. This does not yet establish
+which physical assumption produces the perceived sickly quality. In
+particular, tissue relaxation variability and the approximate source/tract
+pressure coupling remain separate candidates. The listener has not assessed
+round 004. Normal engine settings and their imperfect holding remain intact.
+
 ## What carries history
 
 `SomaticControl` maintains 29 coordinates: tongue body, jaw, blade and root;

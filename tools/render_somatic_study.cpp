@@ -5,13 +5,15 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <string_view>
 
 int main(int argc,char** argv){
-    if(argc!=2){return 2;}
+    if(argc!=2 && !(argc==3 && std::string_view(argv[2])=="--no-control-variation")){return 2;}
     const std::filesystem::path root=argv[1];std::filesystem::create_directories(root);
     auto voice=ducklips::baritone_voice();voice.seed=41;voice.jitter=voice.shimmer=voice.tremor_depth=0;
     voice.aspiration_gain=voice.frication_gain=0;voice.audible_breath=false;
     ducklips::SynthesisOptions options;options.local_flow=true;options.living_control=true;options.conservative_tongue=true;
+    if(argc==3){options.somatic.noise=0;}
     options.oral_sections=24;options.nasal_sections=9;options.local_substeps=1;options.air_path.full_scale_pressure=128;
     options.trace_start=0;options.trace_samples=57600;
     ducklips::Synthesizer engine;engine.prepare(voice,options);
@@ -41,7 +43,7 @@ int main(int argc,char** argv){
     for(std::size_t i=0;i<engine.trace().size();++i){const auto& t=engine.trace()[i];trace<<double(i)/48000<<','<<t.lung_pressure<<','<<t.glottal_flow<<','<<t.glottal_area<<','<<t.lips<<','<<t.glottal_pressure<<'\n';}
     const auto& statistics=engine.statistics();
     std::ofstream report(root/"run.json");report<<std::setprecision(17)
-        <<"{\"source\":\"elastic-volume TissueSource\",\"control\":\"SomaticControl, 29 coordinates\",\"seed\":41,\"noise\":0.08,\"opposing_tone\":0.02,"
+        <<"{\"source\":\"elastic-volume TissueSource\",\"control\":\"SomaticControl, 29 coordinates\",\"seed\":41,\"noise\":"<<options.somatic.noise<<",\"opposing_tone\":0.02,"
         <<"\"audio_seconds\":1.2,\"render_seconds\":"<<elapsed<<",\"realtime_factor\":"<<1.2/elapsed
         <<",\"somatic_seconds\":"<<statistics.somatic_seconds<<",\"tissue_seconds\":"<<statistics.tissue_seconds<<",\"airway_seconds\":"<<statistics.airway_seconds
         <<",\"geometry_seconds\":"<<statistics.geometry_seconds<<",\"nonfinite\":"<<statistics.nonfinite_samples<<",\"clipped\":"<<statistics.clipped_samples

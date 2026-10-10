@@ -102,6 +102,51 @@
         "src/tissue_source.cpp": "ddabb1101c156cef3e8ea4966805cb391c4f1e62d43e5d97ffb5deb102d87479",
         "tools/render_somatic_study.cpp": "7706e538e186f41e9858f33aef3d63be4a1f60c7b29a6aa039db012d2498afeb"
       }
+    },
+    "4": {
+      "audio_sha256": "f2fa174a1afc02eb76a84dabfe6ac90a802da45c05b209708995d7c60057230e",
+      "raw_sha256": "7776067f8c8338465fb83d3f146db316d3486260dad2dec66efee882155ed344",
+      "executable_sha256": "f12be50b8ed5db4167c006a007a714daa95b0370fe8b8fe34aca0929fc7882ca",
+      "audio_seconds": 1.2,
+      "render_seconds": 0.20354631599999978,
+      "realtime_factor": 5.895464106557454,
+      "somatic_seconds": 0.0059590000000000285,
+      "tissue_seconds": 0.08296805999999045,
+      "airway_seconds": 0.0848731669999938,
+      "geometry_seconds": 0.01924268499999987,
+      "trace_frames": 57600,
+      "gain": 253.6411347719967,
+      "processing": "one constant playback gain; no EQ, fade, crop or added output noise",
+      "status": "control-variation isolation diagnostic; no human listening assessment",
+      "full_render_completed": true,
+      "enhanced_inspected": true,
+      "visual_finding": "Full native 684-by-451 enhanced magma field inspected. Sustained output remains broadly textured with weak harmonic organization, despite disabling SomaticControl variation. The late vertical transients seen in round 003 are absent. Passive tissue relaxation still varies; the experiment does not isolate every stochastic component or establish the perceptual cause of sickly voice.",
+      "directory": "out/somatic-round-004",
+      "enhanced_shape": [
+        684,
+        451
+      ],
+      "control_noise": 0,
+      "normal_control_noise": 0.08,
+      "tissue_relaxation_variation_retained": true,
+      "sources": {
+        "include/ducklips/somatic_control.hpp": "139a1d50677c8a6615a42377cfbd44d830b52af937229bdb7f78ccb6b504737c",
+        "src/somatic_control.cpp": "31e941723508c1d56732823f9aa1a536819962904684417a154b71e4c9341057",
+        "src/synthesizer.cpp": "95e05a6b0decafb747c98b5f76493e3f95fb7f0b9c8f211e73089c0e13056dad",
+        "src/tissue_source.cpp": "ddabb1101c156cef3e8ea4966805cb391c4f1e62d43e5d97ffb5deb102d87479",
+        "tools/render_somatic_study.cpp": "56a7f872d4cc8f643c0107fb432d5f6b58854daf08d79154feb1e6731b7b0a38"
+      }
     }
-  }
+  },
+  "listening_feedback": [
+    {
+      "date": "2026-10-10",
+      "quote": "oh. i was muted. ok. it sounds like someone sickly.",
+      "applies_to": "round 003 waveform, freshly re-rendered as somatic-playback-004; PCM waveform verified identical",
+      "raw_sha256": "ca3dcce213ccffa332a47ddcf3aeeadf7d36056fc6b076f02c8b48ed66695ff8",
+      "interpretation": "Listener reports a sickly person-like voice; no healthy or natural voice acceptance. Hoarseness versus weakness versus shakiness not yet specified.",
+      "playback_correction": "User reports that silence was caused by being muted, not an empty audio file."
+    }
+  ],
+  "latest_diagnostic_round": 4
 }
