@@ -35,13 +35,17 @@ void values(const char* key,std::span<const double> values){
 }
 }
 int main(int argc,char** argv){try{
-    require(argc>=6,"mode duration macro_step tolerance contact_step [--initial-state] [--stop-after count] [--compare-step seconds]");
-    bool restart=false;std::size_t stop_after=0;double compare_step=0;
+    require(argc>=6,"mode duration macro_step tolerance contact_step [--initial-state] [--stop-after count] [--compare-step seconds] [--checkpoint-every count]");
+    bool restart=false;std::size_t stop_after=0,checkpoint_every=0;double compare_step=0;
     for(int i=6;i<argc;++i){const std::string option=argv[i];
         if(option=="--initial-state" && !restart){restart=true;}
         else if(option=="--compare-step" && compare_step==0 && i+1<argc){
             std::size_t used=0;const std::string value=argv[++i];compare_step=std::stod(value,&used);
             require(used==value.size() && std::isfinite(compare_step) && compare_step>0,"positive comparison step");
+        }
+        else if(option=="--checkpoint-every" && !checkpoint_every && i+1<argc){
+            std::size_t used=0;const std::string value=argv[++i];checkpoint_every=std::stoul(value,&used);
+            require(used==value.size() && value.find('-')==std::string::npos && checkpoint_every>0,"positive checkpoint period");
         }
         else if(option=="--stop-after" && !stop_after && i+1<argc){
             std::size_t used=0;const std::string value=argv[++i];stop_after=std::stoul(value,&used);
@@ -126,7 +130,7 @@ int main(int argc,char** argv){try{
         std::printf(",\"outlet_flow\":%.17g,\"radiation_flow\":%.17g,\"radiation_resistance\":%.17g",g.back()*model.network.momentum.back(),model.radiation.inverse_inertance()*model.radiation.momentum,model.radiation.resistance());
         values("area",state.area);values("gas_mass",state.mass);values("effort",state.effort);values("flow",state.flow);values("lower_position",state.folds.lower_position);values("upper_position",state.folds.upper_position);
         std::array<double,nodes> pressure_values;for(std::size_t j=0;j<nodes;++j){pressure_values[j]=model.network.charge[j]/c[j];}values("pressure",pressure_values);
-        if(i==last_step || (restart && i==0)){
+        if(i==last_step || (restart && i==0) || (checkpoint_every && i%checkpoint_every==0)){
             // Physical-state continuation for this fixed tube/body control.
             // The numeric stdin order is source, charge, momentum, radiation,
             // thermal memories, viscous memories. It does not reset profiles.

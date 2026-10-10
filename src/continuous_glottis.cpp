@@ -142,23 +142,29 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         // coordinates. Preserving this dependence retains the cyclic common
         // transferred-volume coordinate and its throughflow momentum law.
         std::array<double,4> gradient=cm.potential_gradient,dz;double norm2=0,work=0;
+        const Vector kinetic_velocity0=multiply(cm.inverse,momentum_),kinetic_velocity1=multiply(cm.inverse,p1);
         for(std::size_t k=0;k<4;++k){
             // Gas moments can become much smaller than the nominal volume
             // scale as contact narrows the occupied support. A unit floor
             // then makes the capped difference perturb 10% of the remaining
             // gas, biasing the kinetic force. Differentiate positive gas
             // moments relatively; signed area keeps its contact-side rule.
-            double h=2e-5*(k<2?std::abs(zm[k]):std::max(1.,std::abs(zm[k])));Matrix derivative;
+            double h=2e-5*(k<2?std::abs(zm[k]):std::max(1.,std::abs(zm[k])));std::array<double,25> fluid_derivative;
             if(k>=2 && zm[k]==0){
                 // At exact contact use the closed-side derivative. This is
                 // also a defined Newton starting point for opening from rest.
                 auto minus=zm,twice=zm;minus[k]-=h;twice[k]-=2*h;Configuration cn,c2;if(!configuration(minus,cn) || !configuration(twice,c2)){return false;}
-                for(std::size_t j=0;j<49;++j){derivative[j]=(3*cm.inverse[j]-4*cn.inverse[j]+c2.inverse[j])/(2*h);}
+                for(std::size_t j=0;j<25;++j){fluid_derivative[j]=(3*cm.flow.inertia[j]-4*cn.flow.inertia[j]+c2.flow.inertia[j])/(2*h);}
             }else{
                 h=std::min(h,.1*std::abs(zm[k]));if(h<=0){return false;}auto plus=zm,minus=zm;plus[k]+=h;minus[k]-=h;Configuration cp,cn;if(!configuration(plus,cp) || !configuration(minus,cn)){return false;}
-                for(std::size_t j=0;j<49;++j){derivative[j]=(cp.inverse[j]-cn.inverse[j])/(2*h);}
+                for(std::size_t j=0;j<25;++j){fluid_derivative[j]=(cp.flow.inertia[j]-cn.flow.inertia[j])/(2*h);}
             }
-            gradient[k]+=dissipative?.5*dot(momentum_,multiply(derivative,momentum_)):.25*(dot(momentum_,multiply(derivative,momentum_))+dot(p1,multiply(derivative,p1)));dz[k]=z1[k]-c0.z[k];norm2+=dz[k]*dz[k];work+=gradient[k]*dz[k];}
+            // At fixed canonical momentum, dK = -v^T(dG)v/2, v=G^-1 p.
+            // Only fluid inertia depends on these coordinates. Exclude the
+            // constant tissue and outlet-column masses before differencing:
+            // adding them first can round away the small fluid variation.
+            const Matrix derivative=transform(fluid_derivative,width_,1/energy_scale);
+            gradient[k]-=dissipative?.5*dot(kinetic_velocity0,multiply(derivative,kinetic_velocity0)):.25*(dot(kinetic_velocity0,multiply(derivative,kinetic_velocity0))+dot(kinetic_velocity1,multiply(derivative,kinetic_velocity1)));dz[k]=z1[k]-c0.z[k];norm2+=dz[k]*dz[k];work+=gradient[k]*dz[k];}
         Matrix difference;for(std::size_t j=0;j<49;++j){difference[j]=c1.inverse[j]-c0.inverse[j];}
         const double delta=c1.potential-c0.potential+(dissipative?.5*dot(momentum_,multiply(difference,momentum_)):.25*(dot(momentum_,multiply(difference,momentum_))+dot(p1,multiply(difference,p1))));
         // Dividing cancellation in endpoint energies by a vanishing state

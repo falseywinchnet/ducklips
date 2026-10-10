@@ -1,0 +1,119 @@
+{
+  "scope": "Fluid kinetic-force derivative and saved closure continuation; not completed closure or speech",
+  "force_reference": {
+    "path": "reports/moving_source_force_reference.json",
+    "sha256": "09deeba7c4e33808efd150d8d2bfb1159ef71de2c8d07a1c08e5cb8786c1513c"
+  },
+  "continuations": [
+    {
+      "name": "source-occupied-effort",
+      "status": "failed",
+      "error": "contact advance failed mode=phonation macro=37 reason=3 time=7.3585937499999993e-07 trial=1.5258789065056359e-13 error=inf\n",
+      "wall_s": 413.89793779095635,
+      "last_checkpoint_s": 7.2e-07,
+      "restart_available": false,
+      "area_m2": [
+        -3.464830737103917e-06,
+        1.0381983577045584e-09
+      ],
+      "gas_mass_m3": [
+        6.775580720827169e-20,
+        5.909721197930451e-16
+      ],
+      "work_residual_J": 5.643491050293147e-16,
+      "mass_residual_m3": 7.937573459270569e-22,
+      "files": {
+        "out/source-occupied-effort/last-pocket-run.json": "d2edce247449bcafd3605f8c009e40b8e1f370f33b000c4cf3a336f3046494e5",
+        "out/source-occupied-effort/last-pocket.jsonl": "02940f5239622f7e5aca3590ab95e63b5b072fcc9ea4fc29a9b35148ae45a0cd",
+        "out/source-occupied-effort/last-pocket.log": "e0bc63b0f54e01a0c531ec6355ae42eff045aee1e0944d0e91a3df6e927d0729"
+      }
+    },
+    {
+      "name": "source-metric-gradient",
+      "status": "failed",
+      "error": "contact advance failed mode=phonation macro=37 reason=3 time=7.3593749999999989e-07 trial=1.5258789065056359e-13 error=inf\n",
+      "wall_s": 383.936045459006,
+      "last_checkpoint_s": 7.2e-07,
+      "restart_available": true,
+      "area_m2": [
+        -3.464830737103923e-06,
+        1.038198357692124e-09
+      ],
+      "gas_mass_m3": [
+        6.775580889216586e-20,
+        5.909721421332544e-16
+      ],
+      "work_residual_J": 5.14580685724696e-16,
+      "mass_residual_m3": 9.789941043506505e-22,
+      "files": {
+        "out/source-metric-gradient/last-pocket-run.json": "a3aa605e6fa6f8e3964351eb824dddb063719c6ef16d4a00d4f9e631fba80582",
+        "out/source-metric-gradient/last-pocket.jsonl": "4e9d1aa012f2e8ea22d26a593efebbd2bf5f2d33b25f61fca8aedb3212934921",
+        "out/source-metric-gradient/last-pocket.log": "9238c170ec539f444f0b103de089d0571561f2c1429b8311020ba33275ba60df"
+      }
+    },
+    {
+      "name": "source-fluid-gradient",
+      "status": "failed",
+      "error": "contact advance failed mode=phonation macro=38 reason=3 time=7.4035156249999993e-07 trial=1.5258789065056359e-13 error=inf\n",
+      "wall_s": 326.4216028340161,
+      "last_checkpoint_s": 7.399999999999999e-07,
+      "restart_available": true,
+      "area_m2": [
+        -3.4649699663724196e-06,
+        6.950897241073474e-10
+      ],
+      "gas_mass_m3": [
+        2.0106660966138128e-20,
+        2.6307746897139237e-16
+      ],
+      "work_residual_J": 5.281562167824983e-16,
+      "mass_residual_m3": 1.3350824333576578e-21,
+      "files": {
+        "out/source-fluid-gradient/last-pocket-run.json": "3f1d7b7ee04d7f48f9fc96161dfc98cfa73b0a42f69bb050154b5ef16e5bae34",
+        "out/source-fluid-gradient/last-pocket.jsonl": "a23b40e273d1b96e25b6515274eb0883b388561872782e9796579d8c30fe4765",
+        "out/source-fluid-gradient/last-pocket.log": "058005a6e55e014ef6835295702cf45c739bf481a71110aabad67bbfb1f4734e"
+      }
+    }
+  ],
+  "trial_solves": [
+    {
+      "path": "out/source-fluid-gradient/trial-1e-7.json",
+      "sha256": "175a07525ac85e6fb077c458bdf48bbb93c26dc488d684d71146b4801e3fc181",
+      "step_s": 1e-07,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "out/source-fluid-gradient/trial-1e-8.json",
+      "sha256": "5efec0b3b3b3436180221cfce54b3b3d19f4e06a3fbbd3564b1c261f361e5128",
+      "step_s": 1e-08,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "out/source-fluid-gradient/trial-2.5e-8.json",
+      "sha256": "54dd71c3fc68116f9f26d29a9492cd3e3e80290c8551dcf94c3d877c983552dc",
+      "step_s": 2.5e-08,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "out/source-fluid-gradient/trial-5e-7.json",
+      "sha256": "3ce3bad474c524bf0088b36697b90403788584dfab1be0bb9c7978cf3607fcc6",
+      "step_s": 5e-07,
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "periodic_checkpoint_physical_observations_match": true,
+  "hashes": {
+    "src/continuous_glottis.cpp": "d8fcc64f1540263b5f451365bdf023871913fe58c14d2f66254ba4c892ba876c",
+    "tools/continuous_force_probe.cpp": "57cf7b782854ed3810fea02f5f1d838653d79f3ca047122f228df5e10a820232",
+    "tools/joint_contact_probe.cpp": "f4907140c7857717225b67c3e1f6389ca8678bcdc5e504413c43df2f20374169",
+    "out/source-fluid-gradient/release-tests.log": "3f01854c0dbe45efd82c30b075b4254ef81e672db54f64fb4f334175d22d59fd",
+    "out/source-fluid-gradient/asan-tests.log": "7c4a4d444985f5ca60ab2fae4157c0f25c3dae52c201ae2111bdc64c5d3e88f3",
+    "out/source-fluid-gradient/plain-check.jsonl": "a830bb4d11850785bcb6e997ba2cbc2b4aa4c12472006b1038ab0cbbd8f9d991",
+    "out/source-fluid-gradient/checkpoints-check.jsonl": "38ac2bda8fa9190338d6ec302af2719426869748ba95b7c6b398076d888afea3",
+    "reports/actual_coupled_1750_completed.json": "51348b92ec4c108a2fd723355dd9ff946fb99b9b10ea50d4de05da0cd06806f5"
+  },
+  "invalid_checkpoint_periods_rejected": [
+    "-1",
+    "0"
+  ]
+}
