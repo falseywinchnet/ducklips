@@ -29,12 +29,13 @@ double oscillator(double dt){
     check(std::abs(s.charge[0]+s.charge[1]-1)<2e-13,"neighbor exchange conserves air");
     return std::abs(s.charge[0]-.5*(1+std::cos(std::sqrt(2.))));
 }
-double inlet_charge(double dt,double lung){
+double inlet_charge(double dt,double lung,bool axial=false){
     ducklips::AirProperties air;air.viscosity=0;
     ducklips::AcousticNetwork n=pair();
     for(ducklips::AcousticBranch& edge:n.branches){edge.conductance=0;}
     for(ducklips::AcousticNode& node:n.nodes){node.compliance=1e-11;}
     ducklips::LocalSpeech s;s.prepare(n,air,1e-8,.003);step(s,n,dt);
+    if(axial){s.set_glottal_load(500,2e5,1.2e-5);}
     const double area=1e-5;
     double previous=s.energy();bool passive=true,conservative=true;
     // 1/3000 s is an exact integer number of steps at all rates below.
@@ -91,6 +92,7 @@ int main(int argc,char** argv){
     const double coarse=oscillator(.05),fine=oscillator(.025);
     check(coarse/fine>3.99 && coarse/fine<4.01,"phase error converges quadratically against analytic oscillator");
     const double inlet_coarse=inlet_charge(1./48000,600);
+    (void)inlet_charge(1./48000,600,true);
     const double inlet_fine=inlet_charge(1./96000,600);
     const double inlet_reference=inlet_charge(1./384000,600);
     check(std::abs(inlet_coarse-inlet_reference)>3*std::abs(inlet_fine-inlet_reference),

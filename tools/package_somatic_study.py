@@ -14,9 +14,9 @@ wavfile.write(root/'voice.wav',fs,np.rint(raw*gain*32767).astype(np.int16))
 receipt=json.loads((root/'run.json').read_text());receipt.update(gain=gain,processing='one constant playback gain; no EQ, fade, crop or added output noise',enhanced_inspected=False)
 receipt['audio_sha256']=hashlib.sha256((root/'voice.wav').read_bytes()).hexdigest()
 receipt['raw_sha256']=hashlib.sha256((root/'voice-raw.wav').read_bytes()).hexdigest()
-shutil.copy2(ROOT/'build/ducklips_somatic_study',root/'render')
+shutil.copy2(ROOT/'build'/receipt.get('renderer','ducklips_somatic_study'),root/'render')
 receipt['executable_sha256']=hashlib.sha256((root/'render').read_bytes()).hexdigest()
-paths=[ROOT/'CMakeLists.txt',*sorted((ROOT/'include/ducklips').glob('*.hpp')),*sorted((ROOT/'src').glob('*.cpp')),ROOT/'tools/render_somatic_study.cpp',Path(__file__)]
+paths=[ROOT/'CMakeLists.txt',*sorted((ROOT/'include/ducklips').glob('*.hpp')),*sorted((ROOT/'src').glob('*.cpp')),ROOT/'tools/render_somatic_study.cpp',ROOT/'tools/render_papa_ideas.cpp',Path(__file__)]
 receipt['sources']={}
 for p in paths:
  d=root/'snapshot'/p.relative_to(ROOT);d.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(p,d);receipt['sources'][str(p.relative_to(ROOT))]=hashlib.sha256(p.read_bytes()).hexdigest()

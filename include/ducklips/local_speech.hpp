@@ -11,6 +11,11 @@ public:
     void prepare(const AcousticNetwork& layout, const AirProperties& air, double wall_compliance,
                  double glottal_length=0.003);
     void reset() noexcept;
+    // Use the current distributed glottal passage's integrated coefficients.
+    // Zero inertia restores the reference uniform-slit inlet.
+    void set_glottal_load(double inertia,double resistance,double jet_area) noexcept{
+        inlet_inertia_=inertia;inlet_resistance_=resistance;inlet_jet_area_=jet_area;
+    }
     void advance(const AcousticNetwork& first, const AcousticNetwork& last,
                  double fraction, double increment, double dt, std::size_t substeps,
                  double glottal_area, double lung_pressure, std::size_t aspiration_branch,
@@ -39,5 +44,6 @@ private:
     std::vector<double> jet_coefficient_{},half_step_{};
     double wall_compliance_{},glottal_flow_{},glottal_length_{},glottal_momentum_{},glottal_conductance_{};
     bool ready_{};
+    double inlet_inertia_{},inlet_resistance_{},inlet_jet_area_{};
 };
 }

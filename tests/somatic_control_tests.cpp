@@ -71,6 +71,12 @@ int main(){
     require(whole.statistics().airflow_failures==0 && whole.statistics().geometry_failures==0,"integrated control must render without a physical failure");
     require(contiguous==pieces,"stream chunk boundaries must preserve identical audio");
     require(*std::max_element(contiguous.begin(),contiguous.end())>0,"integrated control must produce nonzero audio");
+    ducklips::Synthesizer initial;initial.prepare(voice,options);
+    ducklips::Cue seal;seal.kind=ducklips::CueKind::constriction;seal.slot=ducklips::ConstrictionSlot::lips;
+    seal.gesture.width=.005;seal.value=1.25;seal.angular_rate=0;
+    require(initial.enqueue(seal),"initial lip seal must fit");
+    std::array<float,96> first_block{};initial.render(first_block);
+    require(initial.somatic_control().observations()[7].position>1.2,"time-zero preparatory lip closure must be established before sound generation");
     options.somatic.tone=-1;bool rejected=false;
     try{whole.prepare(voice,options);}catch(const std::invalid_argument&){rejected=true;}
     require(rejected,"invalid control settings must be rejected before noexcept reset");

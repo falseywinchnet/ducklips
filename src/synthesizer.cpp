@@ -65,6 +65,7 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
         throw std::invalid_argument("living control currently requires local flow, 48 kHz and 48-sample control blocks");
     }
     if(options.living_control){SomaticControl::validate(options.somatic);}
+    if(options.tissue_idea!=TissueIdea::reference && !options.living_control){throw std::invalid_argument("tissue ideas require the living-control engine");}
     voice_ = voice;
     options_ = options;
     air_ = options.air;
@@ -183,7 +184,12 @@ void Synthesizer::reset() noexcept {
     glottis_.reset(voice_.folds);
     if(options_.living_control){
         TissueMaterial material;material.rest_gap=.0003;material.relaxation_seed=voice_.seed;
+        material.shared_relaxation=options_.tissue_idea==TissueIdea::shared_relaxation;
+        material.contact_recovery=options_.tissue_idea==TissueIdea::contact_recovery;
+        material.hardening_strain=options_.tissue_idea==TissueIdea::strain_hardening?.15:0;
         tissue_.reset(material);somatic_.reset(articulators_,voice_.seed,options_.somatic);
+        tissue_hold_.reset(tissue_.mean_gap(),tissue_.mean_gap(),TissueSource::posture_stiffness(),voice_.seed+77);
+        tissue_hold_previous_=tissue_hold_current_=0;
     }
     intraoral_.reset();
     if(options_.spatial_pressure){mean_airway_.reset();}
@@ -309,11 +315,19 @@ void Synthesizer::begin_block() noexcept {
         apply_cue(cue);
         queue_.pop();
     }
+    // Time-zero placements define initial body state. Capture them before
+    // any mechanical or acoustic history exists, including an initial /p/.
+    if(options_.living_control && position_==0 && !geometry_ready_){somatic_.reset(articulators_,voice_.seed,options_.somatic);}
     const double block_seconds = static_cast<double>(options_.control_block) * sample_period_;
     // Geometry solves remain at control rate; physiological forces follow
     // their continuous trajectories in render_samples, not a block hold.
     if(options_.living_control){const auto timer=std::chrono::steady_clock::now();somatic_.advance(articulators_,block_seconds,local_.pressure(),local_.glottal_flow());statistics_.somatic_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-timer).count();}
     else{articulators_.advance_geometry(block_seconds);}
+    if(options_.tissue_idea==TissueIdea::measured_posture){
+        const double opening=(articulators_.glottal_rest_area.value-voice_.adducted_area)/std::max(voice_.abducted_area-voice_.adducted_area,1e-8);
+        tissue_hold_.set_target_gap(.02*compiled_tissue::height+(2./3)*.0003*std::clamp(opening,-.5,4.));
+        tissue_hold_previous_=tissue_hold_current_;tissue_hold_current_=tissue_hold_.advance(tissue_.mean_gap());
+    }
     const std::chrono::steady_clock::time_point geometry_begin=std::chrono::steady_clock::now();
     if(options_.local_flow){model_.build(geometry_tangent(articulators_),local_tangent_shape_);}
     model_.build(articulators_, shape_);
@@ -660,7 +674,8 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
                 try{
                     const auto tissue_timer=std::chrono::steady_clock::now();
                     const double opening=(rest_area_-voice_.adducted_area)/std::max(voice_.abducted_area-voice_.adducted_area,1e-8);
-                    tissue_.set_adduction(.0003*std::clamp(opening,-.5,4.));
+                    if(options_.tissue_idea==TissueIdea::measured_posture){tissue_.set_holding_force(std::lerp(tissue_hold_previous_,tissue_hold_current_,fraction));}
+                    else{tissue_.set_adduction(.0003*std::clamp(opening,-.5,4.));}
                     const double intended_ratio=std::clamp(articulators_.pitch.value/voice_.base_pitch,.6,1.8);
                     tissue_.set_tension_scale(intended_ratio*intended_ratio);
                     for(std::size_t substep=0;substep<options_.glottis_substeps;++substep){
@@ -690,6 +705,7 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
         const double frication=frication_scale_*turbulence_pressure(jet,2*std::sqrt(local_area/pi),air_)
             *std::sqrt(local_area/(.1*square_centimetre))*frication_noise_.next();
         const auto airway_timer=std::chrono::steady_clock::now();
+        if(options_.tissue_idea==TissueIdea::axial_airway){local_.set_glottal_load(tissue_.flow_inertance(),tissue_.flow_resistance(),tissue_.jet_area());}
         local_.advance(networks_[1-current_],layout,fraction,1/block_length,sample_period_,options_.local_substeps,
                        area,lung_pressure_,aspiration_branch_,frication_branch_,branch,aspiration,frication);
         statistics_.airway_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-airway_timer).count();

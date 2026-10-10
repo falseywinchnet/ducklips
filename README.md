@@ -13,6 +13,12 @@ sustained-vowel diagnostic completes, but human timbre is unaccepted and the
 full path currently runs about 5.5x realtime. Earlier Papa/alphabet listening
 results do not score this source or control mechanism.
 
+The [five Papa hypotheses](reports/PAPA_FIVE_IDEAS.md) now compare shared
+material relaxation, contact recovery damping, strain hardening, distributed
+glottal hydraulics and feedback from the actual tissue opening. Each has a
+fresh recording from this same system, a full enhanced depiction and frozen
+provenance. They are listening candidates, not accepted natural voices.
+
 **Local engine listening failed, 2026-10-10:** `ducklips_say --local-flow --conservative-tongue`
 and `ducklips_stream --local-flow --conservative-tongue` now run a new local
 air-exchange core. It carries breath pressure and sound in one state, with

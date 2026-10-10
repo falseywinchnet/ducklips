@@ -73,6 +73,7 @@ private:
 // changes motor drive; it never clamps the tissue or specifies vibration F0.
 class MotorHold final {
 public:
+    void set_target_gap(double target) noexcept{target_=target;}
     void reset(double passive_gap,double target_gap,double stiffness,std::uint64_t seed){
         pool_.reset(seed);opener_.reset(seed+101);rest_=passive_gap;target_=target_gap;stiffness_=stiffness;
         maximum_force_=stiffness*.00025;sensed_=passive_gap;delayed_.fill(passive_gap);

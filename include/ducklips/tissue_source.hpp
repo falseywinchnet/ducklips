@@ -6,6 +6,8 @@
 
 namespace ducklips {
 
+enum class TissueIdea { reference, shared_relaxation, contact_recovery, strain_hardening, axial_airway, measured_posture };
+
 // Experimental reduced elastic volume. The body compiler derives coupled
 // three-dimensional displacement from geometry, density and material law.
 // Runtime pressure and contact evolve the deformation coordinates. No
@@ -33,6 +35,9 @@ struct TissueMaterial final {
     double relaxation_seconds{.1};
     double relaxation_log_rate_sd{.6}; // experimental stochastic rate spread
     std::uint64_t relaxation_seed{1};
+    bool shared_relaxation{false};
+    bool contact_recovery{false};
+    double hardening_strain{0}; // >0 adds a positive quartic material energy
     double air_density{1.14};
     double air_viscosity{1.86e-5};
 };
@@ -63,6 +68,10 @@ public:
     [[nodiscard]] const Field& velocity() const noexcept{return cover_v_;}
     [[nodiscard]] const std::array<double,nz>& area() const noexcept{return area_;}
     [[nodiscard]] double flow() const noexcept{return flow_;}
+    [[nodiscard]] double flow_resistance() const noexcept{return flow_resistance_;}
+    [[nodiscard]] double flow_inertance() const noexcept{return flow_inertance_;}
+    [[nodiscard]] double jet_area() const noexcept{return jet_area_;}
+    [[nodiscard]] double mean_gap() const noexcept;
     [[nodiscard]] double minimum_area() const noexcept{return minimum_area_;}
     [[nodiscard]] double kinetic_energy() const noexcept;
     [[nodiscard]] double elastic_energy() const noexcept;
@@ -77,5 +86,6 @@ private:
     double dx_{},dz_{},flow_{},minimum_area_{},reference_gap_{};
     double holding_force_{},holding_work_{},tension_scale_{1};
     std::array<double,modes*modes> geometric_stiffness_{};
+    double hardening_energy_{},flow_resistance_{},flow_inertance_{},jet_area_{};
 };
 }

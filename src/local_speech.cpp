@@ -38,6 +38,7 @@ void LocalSpeech::reset() noexcept {
     std::fill(wall_inverse_c_.begin(),wall_inverse_c_.end(),0.);
     std::fill(radiation_h_.begin(),radiation_h_.end(),0.);
     glottal_flow_=0;glottal_momentum_=0;glottal_conductance_=0;ready_=false;
+    inlet_inertia_=inlet_resistance_=inlet_jet_area_=0;
 }
 void LocalSpeech::exchange(std::size_t b,double series) noexcept {
     const AcousticBranch& edge=branches_[b];
@@ -79,11 +80,12 @@ void LocalSpeech::inject(double area,double lung,double h) noexcept {
     // an instantaneous resistor charging a tiny isolated inlet volume.
     if(area<=1e-12){glottal_momentum_=0;glottal_conductance_=0;return;}
     const double drop=lung-pressure();
-    const double g=area/(air_.density*glottal_length_);
+    const double g=inlet_inertia_>0?1/inlet_inertia_:area/(air_.density*glottal_length_);
     glottal_conductance_=g;
-    const double denominator=1+.25*h*h*g*inverse_c_[0];
+    const double denominator=1+.25*h*h*g*inverse_c_[0]+.5*h*g*inlet_resistance_;
     const double linear=g*(glottal_momentum_+.5*h*drop)/denominator;
-    const double beta=.5*air_.density/(area*area);
+    const double jet_area=inlet_inertia_>0?inlet_jet_area_:area;
+    const double beta=.5*air_.density/(jet_area*jet_area);
     const double coefficient=.5*h*g*beta/denominator;
     const double flow=2*linear/(1+std::sqrt(1+4*coefficient*std::abs(linear)));
     glottal_momentum_=2*flow/g-glottal_momentum_;

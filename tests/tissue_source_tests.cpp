@@ -19,6 +19,12 @@ int main(){
         varying_rate=varying_rate || memory.rates()!=initial_rates;
     }
     require(correction<0 && varying_rate,"held strain must relax with changing positive rates");
+    memory.reset(.1,.1,.6,42,true);correction=0;
+    for(int step=0;step<200;++step){
+        memory.advance(held,.001);
+        for(double rate:memory.rates()){require(rate==memory.rates()[0],"shared material relaxation must use one stochastic clock");}
+        const double next=memory.energy_correction(held);require(next<=correction+1e-18,"shared relaxation must dissipate held-strain energy");correction=next;
+    }
     memory.reset(.1,.1,0,42);memory.advance(held,.1);
     const auto strain=memory.strain(held);double expected=0;
     for(double value:strain){expected+=.1*value*value*(std::exp(-2)-1);}
@@ -87,4 +93,17 @@ int main(){
     std::cout<<"zero-input rest, pressure-driven motion, unforced recoil and dissipation passed\n"
         <<"energy initial="<<initial<<" maximum="<<maximum<<" final="<<final<<'\n'
         <<"constant-pressure opening cycles="<<openings<<" flow range="<<low<<" to "<<high<<'\n';
+    for(int idea=1;idea<=3;++idea){
+        ducklips::TissueMaterial alternative;
+        alternative.shared_relaxation=idea==1;alternative.contact_recovery=idea==2;alternative.hardening_strain=idea==3?.15:0;
+        source.reset(alternative);
+        for(int i=0;i<19200;++i){source.advance(600*(1-std::exp(-i*dt/.012)),0,dt);}
+        const double stored=source.elastic_energy()+source.kinetic_energy();double peak=stored;
+        require(stored>0,"alternative must carry physical energy before release");
+        require(source.flow_resistance()>0 && source.flow_inertance()>0 && source.jet_area()>0,"distributed flow coefficients must be positive");
+        for(int i=0;i<48000;++i){source.advance(0,0,dt);const double e=source.elastic_energy()+source.kinetic_energy();require(std::isfinite(e),"alternative energy must stay finite");peak=std::max(peak,e);}
+        require(peak<stored*1.03,"alternative source cannot create substantial unforced energy");
+        require(source.elastic_energy()+source.kinetic_energy()<stored*.001,"alternative must dissipate unforced motion");
+    }
+    std::cout<<"shared relaxation, recoil damping, strain-hardening passivity and positive axial coefficients passed\n";
 }

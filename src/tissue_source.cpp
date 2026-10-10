@@ -19,7 +19,7 @@ double exposed_fraction(double gap,double u,double v) noexcept {
 }
 void TissueSource::reset(const TissueMaterial& material){
     material_=material;
-    relaxation_.reset(material.relaxation_fraction,material.relaxation_seconds,material.relaxation_log_rate_sd,material.relaxation_seed);
+    relaxation_.reset(material.relaxation_fraction,material.relaxation_seconds,material.relaxation_log_rate_sd,material.relaxation_seed,material.shared_relaxation);
     // The mode basis belongs to one exact configured body. Never silently
     // interpret a different material using these reference-body modes.
     if(material.length!=compiled_tissue::length || material.height!=compiled_tissue::height
@@ -32,7 +32,8 @@ void TissueSource::reset(const TissueMaterial& material){
         throw std::invalid_argument("elastic body changed: recompile data/tissue_body.json");
     }
     if(!std::isfinite(material.rest_gap)||!std::isfinite(material.convergence)
-        || !std::isfinite(material.contact_depth)||material.contact_depth<=0){
+        || !std::isfinite(material.contact_depth)||material.contact_depth<=0
+        || !std::isfinite(material.hardening_strain)||material.hardening_strain<0){
         throw std::invalid_argument("invalid tissue posture/contact");
     }
     dx_=material.length/(nx-1);dz_=material.height/(nz-1);reference_gap_=material.rest_gap;
@@ -46,12 +47,27 @@ void TissueSource::reset(const TissueMaterial& material){
         }
     }
     tension_scale_=1;
+    flow_resistance_=flow_inertance_=jet_area_=0;
+    // Two-fold material energy scale. A reduced positive quartic law, not
+    // a measured finite-strain constitutive fit to this particular body.
+    hardening_energy_=2*material.length*material.height
+        *(material.cover_shear*material.cover_depth+material.body_shear*material.body_depth)
+        *material.hardening_strain*material.hardening_strain;
     for(std::size_t i=0;i<modes;++i){for(std::size_t j=0;j<modes;++j){
         double material=0;
         for(std::size_t k=0;k<modes;++k){material+=compiled_tissue::material_factor[i*modes+k]*compiled_tissue::material_factor[j*modes+k];}
         geometric_stiffness_[i*modes+j]=(i==j?compiled_tissue::stiffness[i]:0)-material;
     }}
     geometry();
+}
+
+double TissueSource::mean_gap() const noexcept{
+    double total=0;
+    for(std::size_t z=0;z<nz;++z){for(std::size_t x=0;x<nx;++x){
+        const double wx=(x==0||x+1==nx)?.5:1,wz=(z==0||z+1==nz)?.5:1;
+        total+=wx*wz*gap_[z*nx+x];
+    }}
+    return total/double((nx-1)*(nz-1));
 }
 
 double TissueSource::posture_stiffness() noexcept{
@@ -131,6 +147,10 @@ void TissueSource::aerodynamics(double lung,double outlet){
     }
     const double delta=std::abs(lung-outlet);
     jet_area=std::max(jet_area,1e-12);
+    flow_resistance_=total_resistance;jet_area_=jet_area;flow_inertance_=0;
+    for(std::size_t z=1;z<nz;++z){
+        flow_inertance_+=.5*material_.air_density*dz_*(1/std::max(ordered_area[z-1],1e-12)+1/std::max(ordered_area[z],1e-12));
+    }
     const double beta=.5*material_.air_density/(jet_area*jet_area);
     flow_=minimum_area_<=1e-12?0:2*delta/(total_resistance+std::sqrt(total_resistance*total_resistance+4*beta*delta));
     const double magnitude=flow_;
@@ -167,11 +187,26 @@ double TissueSource::advance(double lung,double outlet,double dt){
         // modulus 3G is the incompressible uniaxial small-strain limit.
         contact_[i]=3*material_.cover_shear*strain*(1+strain*strain)
             +3*material_.viscosity/material_.contact_depth*strain*std::max(0.,-cover_v_[i]);
+        if(material_.contact_recovery){
+            const double elastic=3*material_.cover_shear*strain*(1+strain*strain);
+            const double damping=-3*material_.viscosity/material_.contact_depth*strain*cover_v_[i];
+            // Oppose both compression and unloading, but never adhere.
+            contact_[i]=std::max(0.,elastic+damping);
+        }
         const double force=(pressure_[i]+contact_[i])*compiled_tissue::surface_area[i];
         for(std::size_t mode=0;mode<modes;++mode){force_[mode]+=compiled_tissue::surface_basis[i*modes+mode]*force;}
     }
     std::array<double,modes> acceleration{};
     const auto relieved=relaxation_.relieved_force();
+    TissueRelaxation::Coordinates deformation{},material_force{};
+    for(std::size_t i=0;i<modes;++i){deformation[i]=displacement_[i]-equilibrium_[i];}
+    double hardening=0;
+    if(hardening_energy_>0){
+        const auto strain=relaxation_.strain(deformation);double energy=0;
+        for(double value:strain){energy+=value*value;}
+        hardening=energy/hardening_energy_;
+        for(std::size_t i=0;i<modes;++i){for(std::size_t j=0;j<=i;++j){material_force[i]+=compiled_tissue::material_factor[i*modes+j]*strain[j];}}
+    }
     const double holding_shift=-holding_force_/posture_stiffness();
     for(std::size_t mode=0;mode<modes;++mode){
         double damping=0;
@@ -179,7 +214,7 @@ double TissueSource::advance(double lung,double outlet,double dt){
         force_[mode]+=holding_shift*compiled_tissue::stiffness[mode]*compiled_tissue::posture[mode];
         double tension_force=0;
         if(tension_scale_!=1){for(std::size_t other=0;other<modes;++other){tension_force+=(tension_scale_-1)*geometric_stiffness_[mode*modes+other]*(displacement_[other]-equilibrium_[other]);}}
-        acceleration[mode]=force_[mode]-tension_force-compiled_tissue::stiffness[mode]*(displacement_[mode]-equilibrium_[mode])-damping+relieved[mode];
+        acceleration[mode]=force_[mode]-tension_force-compiled_tissue::stiffness[mode]*(displacement_[mode]-equilibrium_[mode])-damping+relieved[mode]-hardening*material_force[mode];
     }
     for(std::size_t mode=0;mode<modes;++mode){
         velocity_[mode]+=dt*acceleration[mode];displacement_[mode]+=dt*velocity_[mode];
@@ -203,6 +238,11 @@ double TissueSource::elastic_energy() const noexcept{
     TissueRelaxation::Coordinates deformation{};
     for(std::size_t mode=0;mode<modes;++mode){deformation[mode]=displacement_[mode]-equilibrium_[mode];}
     double energy=relaxation_.energy_correction(deformation);
+    if(hardening_energy_>0){
+        const auto strain=relaxation_.strain(deformation);double material_energy=0;
+        for(double value:strain){material_energy+=value*value;}
+        energy+=material_energy*material_energy/(2*hardening_energy_);
+    }
     for(std::size_t mode=0;mode<modes;++mode){
         const double offset=displacement_[mode]-equilibrium_[mode];
         energy+=compiled_tissue::stiffness[mode]*offset*offset;

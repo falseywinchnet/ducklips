@@ -26,6 +26,7 @@ enum class OutputTap { microphones, lips, glottal_source };
 
 struct SynthesisOptions final {
     bool living_control{false}; // shared physical-coordinate regulation + elastic-volume source
+    TissueIdea tissue_idea{TissueIdea::reference};
     SomaticControl::Settings somatic{};
     bool local_flow{false}; // bounded local exchanges; unified mean/acoustic air state
     std::size_t local_substeps{4};
@@ -202,6 +203,8 @@ private:
     TwoMassGlottis glottis_{};
     TissueSource tissue_{};
     SomaticControl somatic_{};
+    MotorHold tissue_hold_{};
+    double tissue_hold_previous_{},tissue_hold_current_{};
     IntraoralPressure intraoral_{};
     MeanAirway mean_airway_{};
     TurbulenceNoise aspiration_noise_{};
