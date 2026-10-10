@@ -95,6 +95,7 @@ int main(int argc,char** argv){try{
         for(std::size_t j=0;j<2;++j){if(state.area[j]<=0){require(state.flow[j==0?0:2]==0,"zero closed-port flow");}}
         worst_work=std::max(worst_work,std::abs(energy(model,state,c,g)-e0+loss+numerical-work));worst_mass=std::max(worst_mass,std::abs(mass(model,state)-m0-net));
         std::printf("{\"time\":%.17g,\"closures\":%zu,\"reopenings\":%zu,\"substeps\":%zu,\"rejected\":%zu,\"energy\":%.17g,\"work\":%.17g,\"physical_loss\":%.17g,\"numerical_loss\":%.17g,\"work_residual\":%.17g,\"mass_residual\":%.17g",time,closures,reopenings,substeps,rejected,energy(model,state,c,g),work,loss,numerical,worst_work,worst_mass);
+        std::printf(",\"outlet_flow\":%.17g,\"radiation_flow\":%.17g,\"radiation_resistance\":%.17g",g.back()*model.network.momentum.back(),model.radiation.inverse_inertance()*model.radiation.momentum,model.radiation.resistance());
         values("area",state.area);values("gas_mass",state.mass);values("effort",state.effort);values("flow",state.flow);values("lower_position",state.folds.lower_position);values("upper_position",state.folds.upper_position);
         std::array<double,nodes> pressure_values;for(std::size_t j=0;j<nodes;++j){pressure_values[j]=model.network.charge[j]/c[j];}values("pressure",pressure_values);
         if(i==count || (restart && i==0)){
