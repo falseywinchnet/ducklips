@@ -1,0 +1,25 @@
+{
+  "rate": 24000,
+  "environment": "v25.2.1",
+  "core_only": true,
+  "runs": [
+    {
+      "seconds": 2,
+      "elapsed": 0.17579050000000002,
+      "fault": null,
+      "realtime": 11.377179085331687
+    },
+    {
+      "seconds": 2,
+      "elapsed": 0.197071,
+      "fault": null,
+      "realtime": 10.148626637100335
+    },
+    {
+      "seconds": 2,
+      "elapsed": 0.192619209,
+      "fault": null,
+      "realtime": 10.383180423090616
+    }
+  ]
+}

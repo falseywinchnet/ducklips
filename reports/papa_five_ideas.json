@@ -3,7 +3,7 @@
   "engine": "current Synthesizer with TissueSource, SomaticControl and LocalSpeech",
   "utterance": "P AA0 P AA1",
   "all_current_system": true,
-  "human_listening": "not yet assessed",
+  "human_listening": "Rejected collectively by the user: honestly none of this helps. Superseded by the requested flat-tube restart.",
   "default_promoted": false,
   "checks": {
     "core_synthesis": "passed",
@@ -340,5 +340,10 @@
     "tools/render_somatic_study.cpp": "56a7f872d4cc8f643c0107fb432d5f6b58854daf08d79154feb1e6731b7b0a38",
     "tools/render_papa_ideas.cpp": "9efd7e8c436250279d227886a16d6cefe8ea0d3a19a0b5526e3aa891ac5b29cb",
     "tools/package_somatic_study.py": "720e23a345ca927a08b88c6517aabb17e9d7303c28a946f04f538547ee320116"
+  },
+  "latest_user_feedback": {
+    "status": "rejected_collectively",
+    "quote": "honestly none of this helps",
+    "subsequent_direction": "Throw it all away and start over with a directly editable tube and separate air/tissue propagation."
   }
 }

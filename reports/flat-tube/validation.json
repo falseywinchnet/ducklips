@@ -1,0 +1,58 @@
+{
+  "engine": "flat-tube; independent of historical synthesis",
+  "current_engine_sha256": "b018d0a8775ddeced82ece5cb098ba9349d0e811a594126a38a54c73a5e5415b",
+  "current_worklet_sha256": "ac92b761ec0535b4caeaa23926f0ec783d18cab9aa4fc4ea3fc20cee85341b86",
+  "recording": "out/flat-tube-web/2026-10-10T18-07-43.484Z-e7e49a/outlet.wav",
+  "audio_sha256": "8e20e59c2ac19eeaacc98a852f4add470ea237073a3d5c92ff1fe08ab633f74e",
+  "receipt_audio_matches": true,
+  "depiction_audio_matches": true,
+  "frozen_source_hashes_match": {
+    "engine.mjs": true,
+    "worklet.mjs": true,
+    "app.mjs": true
+  },
+  "physical_core_matches_current": true,
+  "worklet_matches_current": true,
+  "frames": 96000,
+  "rate": 48000,
+  "peak": 0.16950392723083496,
+  "rms": 0.04650157232723886,
+  "full_enhanced_reviewed": true,
+  "shape": [
+    684,
+    376
+  ],
+  "enhanced_seconds": 125.85430362494662,
+  "visual_observation": "Sustained, strongly periodic ridges across the full band; much more stationary than a natural speech target. Not a human-realism acceptance.",
+  "human_listening": "unassessed",
+  "browser_core_realtime": 10.1,
+  "browser_errors": [],
+  "tests_passed": 10,
+  "ui_tests": [
+    "block insertion",
+    "anchor drag in two dimensions",
+    "anchor keyboard adjustment",
+    "material change",
+    "undo",
+    "save JSON",
+    "load JSON",
+    "live AudioWorklet",
+    "raw 2-second capture",
+    "enhanced rendering with source and design provenance",
+    "reservoir release"
+  ],
+  "browser_native_image_check": {
+    "natural": [
+      1504,
+      684
+    ],
+    "display": [
+      1504,
+      684
+    ],
+    "resized": false
+  },
+  "final_browser_core_realtime": 10.8,
+  "final_ui_state": "Pressure off; default design; monitor 25%; workshop tab retained",
+  "ui_only_change_after_capture": "Continue updating the opening readout during material ringdown; core and worklet byte hashes remain equal to the frozen take."
+}

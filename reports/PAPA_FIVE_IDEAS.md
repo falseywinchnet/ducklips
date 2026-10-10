@@ -1,5 +1,7 @@
 # Five physical hypotheses in the current tissue speech engine
 
+**Subsequent listening outcome:** The user rejected the usefulness of all five ("honestly none of this helps") and requested a fresh tube-based engine. These takes are archived failures, not current listening candidates.
+
 The user requested five principled attempts to improve the sickly-sounding
 current system, each saying Papa. Every take uses the same `Synthesizer`,
 elastic-volume `TissueSource`, 29-coordinate `SomaticControl`, conservative

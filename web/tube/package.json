@@ -1,0 +1,1 @@
+{"name":"ducklips-flat-tube","private":true,"type":"module","scripts":{"start":"node server.mjs","test":"node --test engine.test.mjs","render":"node render.mjs"}}
