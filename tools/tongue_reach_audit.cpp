@@ -11,11 +11,12 @@
 #include <iomanip>
 #include <string>
 int main(int argc,char** argv) {
- if(argc<4 || argc%2!=0){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] [--airway CSV] [--lip-profile CSV] [--source-cues JSON] > trajectory.csv\n");return 2;}
+ if(argc<4 || argc%2!=0){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] [--airway CSV] [--lip-profile CSV] [--source-cues JSON] [--source-controls CSV] > trajectory.csv\n");return 2;}
  std::size_t partition=0;
  std::ofstream airway_file;
  std::ofstream lip_file;
  std::ofstream source_file;
+ std::ofstream control_file;
  for(int arg=4;arg<argc;arg+=2){
   if(std::string(argv[arg])=="--partition"){
    const std::string value=argv[arg+1];const auto parsed=std::from_chars(value.data(),value.data()+value.size(),partition);
@@ -26,6 +27,8 @@ int main(int argc,char** argv) {
    lip_file.open(argv[arg+1]);if(!lip_file){return 2;}
   }else if(std::string(argv[arg])=="--source-cues" && !source_file.is_open()){
    source_file.open(argv[arg+1]);if(!source_file){return 2;}
+  }else if(std::string(argv[arg])=="--source-controls" && !control_file.is_open()){
+   control_file.open(argv[arg+1]);if(!control_file){return 2;}
   }else{std::fprintf(stderr,"unknown or repeated option\n");return 2;}
  }
  ducklips::VoiceProfile voice=ducklips::baritone_voice();std::string error;
@@ -69,6 +72,12 @@ int main(int argc,char** argv) {
  const ducklips::SampleCount block=static_cast<ducklips::SampleCount>(options.control_block);
  const double block_seconds=ducklips::seconds_from_samples(options.rate,block);
  ducklips::ArticulatorState state;state.apply_speeds(voice.speeds);state.place_vowel(engine.vowels().shape(ducklips::Phone::AX));
+ // Separate scalar trackers keep this optional export from changing geometry.
+ // These are muscle/pressure targets, never an old renderer's audio waveform.
+ ducklips::ArticulatorState controls;controls.apply_speeds(voice.speeds);
+ controls.glottal_rest_area.place(voice.abducted_area);controls.lung_pressure.place(0.);
+ controls.pitch.place(voice.base_pitch);controls.effort.place(1.);controls.loudness.place(1.);controls.port_area.place(0.);
+ if(control_file.is_open()){control_file<<std::setprecision(17)<<"time,tracker_time,glottal_rest_area_m2,lung_pressure_Pa,pitch_Hz,effort,loudness,velum_area_m2\n";}
  ducklips::TractModel model;model.prepare(voice,options.oral_sections,options.nasal_sections);model.set_conservative_body(true);
  ducklips::TractShape airway;model.allocate(airway);std::size_t cue=0,phone=0;
  if(lip_file.is_open()){lip_file<<std::setprecision(17)<<"time,length,base_area,activation,place,core,width,target_area,sections\n";}
@@ -86,12 +95,31 @@ int main(int argc,char** argv) {
    if(c.kind==ducklips::CueKind::vowel){if(c.angular_rate<=0)state.place_vowel(c.vowel);else state.target_vowel(c.vowel,c.angular_rate);}
    if(c.kind==ducklips::CueKind::constriction)state.slot[static_cast<std::size_t>(c.slot)].begin(c.gesture,c.value,c.angular_rate);
    if(c.kind==ducklips::CueKind::release){ducklips::CriticallyDampedTracker& a=state.slot[static_cast<std::size_t>(c.slot)].activation;if(c.angular_rate<=0)a.place(c.value);else{a.target=c.value;a.angular_rate=c.angular_rate;}}
+   if(control_file.is_open()){
+    ducklips::CriticallyDampedTracker* target=nullptr;
+    switch(c.kind){
+     case ducklips::CueKind::glottis:target=&controls.glottal_rest_area;break;
+     case ducklips::CueKind::lungs:target=&controls.lung_pressure;break;
+     case ducklips::CueKind::pitch:target=&controls.pitch;break;
+     case ducklips::CueKind::effort:target=&controls.effort;break;
+     case ducklips::CueKind::loudness:target=&controls.loudness;break;
+     case ducklips::CueKind::velum:target=&controls.port_area;break;
+     default:break;
+    }
+    if(target){if(c.angular_rate<=0)target->place(c.value);else{target->target=c.value;target->angular_rate=c.angular_rate;}}
+   }
   }
   state.advance_geometry(block_seconds);model.build(state,airway);
   if(model.geometry_error()){fprintf(stderr,"%.6f %s\n",ducklips::seconds_from_samples(options.rate,sample),model.geometry_error());return 1;}
   const ducklips::TongueShape& s=model.tongue();
   const ducklips::Point2 pull=model.required_drag();state.body_offset_x.target=pull.x;state.body_offset_y.target=pull.y;
   const double time=ducklips::seconds_from_samples(options.rate,sample);while(phone+1<plan.phones.size() && plan.phones[phone+1].start<=time)++phone;
+  if(control_file.is_open()){
+   controls.advance_physiology(block_seconds);controls.port_area.advance(block_seconds);
+   // Match the geometry export's block-end state / block-start label. Record
+   // the actual tracker time too, so the convention is explicit.
+   control_file<<time<<','<<time+block_seconds<<','<<controls.glottal_rest_area.value<<','<<controls.lung_pressure.value<<','<<controls.pitch.value<<','<<controls.effort.value<<','<<controls.loudness.value<<','<<controls.port_area.value<<'\n';
+  }
   if(lip_file.is_open()){
    const auto p=model.lip_profile(state);
    lip_file<<time<<','<<p.length<<','<<p.base_area<<','<<p.activation<<','<<p.place<<','<<p.core<<','<<p.width<<','<<p.target_area<<','<<model.lip_sections()<<'\n';

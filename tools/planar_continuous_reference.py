@@ -37,12 +37,14 @@ def decay_exponential(matrix):
     for _ in range(scalings):increment=2*increment+increment@increment
     return np.eye(len(matrix))+increment
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.,reservoir_pressure=700.,reservoir_end=None,fold_rest_target=None):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.,reservoir_pressure=700.,reservoir_end=None,fold_rest_target=None,body_path=None,initial_rest_equilibrium=False,compact_memory=False,on_start=None):
     if reservoir_end is not None and (not np.isfinite(reservoir_end) or not joint_relaxation or joint_tolerance<=0):
         raise ValueError('finite lung-pressure endpoint and joint accuracy required')
     if fold_rest_target is not None:
         if len(fold_rest_target)!=2 or not all(np.isfinite(v) for v in fold_rest_target) or not joint_relaxation or joint_tolerance<=0:
             raise ValueError('two finite signed fold rest targets and joint accuracy required')
+    if initial_rest_equilibrium and (fold_rest_target is None or previous is not None):
+        raise ValueError('rest equilibrium only initializes a fresh controlled source')
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -65,7 +67,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
                 for site in previous['thermal_sites']:f.write(' '.join(map(str,site['charge']))+'\n')
             if viscous_width or lip_viscous_width:
                 for site in previous['viscous_sites']:f.write(' '.join(map(str,site['momentum']))+'\n')
-    command=[str(binary),'--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry']
+    command=[str(binary),'--lip-profile','--epilarynx','--continuous-folds',str(body_path or ROOT/'bodies/reference.body'),'--compact-geometry']
     if radiation:command+=['--radiation']
     if thermal_width:command+=['--thermal-slit-width',str(thermal_width)]
     if viscous_width:command+=['--viscous-slit-width',str(viscous_width)]
@@ -77,9 +79,14 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
     if source_contact_step:command+=['--source-contact-step',str(source_contact_step)]
     if reservoir_end is not None:command+=['--reservoir-end',format(reservoir_end,'.17g')]
     if fold_rest_target is not None:command+=['--fold-rest-target',*[format(v,'.17g') for v in fold_rest_target]]
+    if initial_rest_equilibrium:command+=['--initial-rest-equilibrium']
+    if compact_memory:command+=['--compact-memory']
     if previous is not None:command+=['--initial-state']
     with path.open() as f,path.with_suffix('.json').open('w') as g:
-        result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
+        process=subprocess.Popen(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
+        if on_start is not None:on_start(process.pid)
+        _,stderr=process.communicate()
+        result=subprocess.CompletedProcess(command,process.returncode,stderr=stderr)
     path.with_suffix('.log').write_text(result.stderr)
     assert result.returncode==0,(name,n,result.stderr)
     data=json.loads(path.with_suffix('.json').read_text())

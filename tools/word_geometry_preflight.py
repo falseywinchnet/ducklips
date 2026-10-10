@@ -20,6 +20,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('directory', type=Path)
     parser.add_argument('--word', required=True)
+    parser.add_argument('--body', type=Path, default=ROOT/'bodies/reference.body')
     args = parser.parse_args()
     out = args.directory.resolve()
     frames = list(csv.DictReader((out/'geometry.csv').open()))
@@ -77,7 +78,7 @@ def main():
             if closed != old_closed:events.append(dict(time=time, closed=closed))
             old_closed = closed
             hashes[str(path.relative_to(ROOT))] = sha(path)
-    paths = [Path(__file__), binary, lip_binary, ROOT/'bodies/reference.body', ROOT/'samples/nato.dict',
+    paths = [Path(__file__), binary, lip_binary, args.body.resolve(), ROOT/'samples/nato.dict',
              *[out/name for name in ['geometry.csv', 'lips.csv', 'airway.csv', 'native-regions.jsonl',
                                      'lip-metrics.input', 'lip-metrics.jsonl', 'lip-metrics.log']],
              ROOT/'tools/tongue_reach_audit.cpp', ROOT/'tools/airspace_geometry_probe.cpp',

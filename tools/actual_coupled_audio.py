@@ -103,11 +103,31 @@ def collect(run_path):
     return rows, segments, joins, previous, manifests
 
 
-def export(run_path, prefix, gain=1.):
+def export(run_path, prefix, gain=1., peak=None):
     if not np.isfinite(gain) or gain <= 0:
         raise ValueError('positive fixed playback gain required')
+    manifest = json.loads(run_path.read_bytes())
+    word = manifest.get('word')
+    if word:
+        target = manifest.get('target_duration_s', float('nan'))
+        completed = manifest.get('completed_duration_s', float('nan'))
+        if (manifest.get('status') != 'complete' or not np.isfinite(target)
+                or target <= 0 or not np.isfinite(completed)
+                or abs(completed-target) > 1e-12):
+            raise ValueError('word audio requires the complete requested utterance')
+        if any(prefix.with_suffix(s).exists() for s in ['.npz', '.wav', '.json']):
+            raise ValueError('use a new word audio prefix; preserve previous renders')
+    if peak is not None and (not np.isfinite(peak) or not 0 < peak < 1 or gain != 1.):
+        raise ValueError('peak must be between zero and one, without an explicit gain')
     rows, segments, joins, _, manifests = collect(run_path)
     times, signal, audio, native_rate = power_wave(rows, 48000)
+    if word and abs(times[-1]-target) > 1e-12:
+        raise ValueError('word trajectory does not cover the requested utterance')
+    if peak is not None:
+        amplitude = float(np.max(abs(audio)))
+        if not np.isfinite(amplitude) or amplitude <= 0:
+            raise ValueError('cannot set playback level for silent or invalid audio')
+        gain = peak / amplitude
     played = gain * audio
     if not np.all(np.isfinite(played)) or np.max(abs(played)) >= 1:
         raise ValueError('fixed playback gain clips')
@@ -134,6 +154,15 @@ def export(run_path, prefix, gain=1.):
                          [Path(__file__), ROOT / 'tools/coupled_phonation.py',
                           ROOT / 'include/ducklips/physics.hpp', ROOT / 'include/ducklips/acoustic_network.hpp',
                           prefix.with_suffix('.npz'), prefix.with_suffix('.wav')]})
+    if word:
+        report.update(scope=manifest['scope'], word=word,
+                      input_start_s=manifest['input_start_s'], input_end_s=manifest['input_end_s'],
+                      applied_controls=manifest['applied_controls'],
+                      unapplied_controls=manifest['unapplied_controls'],
+                      body_sha256=manifest['body_sha256'],
+                      perceptual_status='Newly rendered utterance; intelligibility unassessed.')
+    report['playback_level_selection'] = ('single gain from complete waveform peak'
+                                        if peak is not None else 'explicit fixed gain')
     save(prefix.with_suffix('.json'), report)
     return report
 
@@ -142,9 +171,11 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('run', type=Path)
     parser.add_argument('--out', type=Path, required=True)
-    parser.add_argument('--gain', type=float, default=1.)
+    levels = parser.add_mutually_exclusive_group()
+    levels.add_argument('--gain', type=float, default=1.)
+    levels.add_argument('--peak', type=float, help='set one fixed gain from the complete waveform peak')
     args = parser.parse_args()
-    report = export(args.run.resolve(), args.out.resolve(), args.gain)
+    report = export(args.run.resolve(), args.out.resolve(), args.gain, args.peak)
     print(json.dumps({k: report[k] for k in ['duration_s', 'peak_before_gain', 'sampled_radiation_energy_J']}))
 
 

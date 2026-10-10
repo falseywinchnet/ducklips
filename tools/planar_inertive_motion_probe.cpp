@@ -219,6 +219,8 @@ int main(int argc,char** argv){
     double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5,source_contact_step=0;
     bool reservoir_ramp=false;double reservoir_end=0;
     bool rest_control=false;double rest_start=0,rest_end=0;
+    bool initial_rest_equilibrium=false;
+    bool compact_memory=false;
     bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -229,6 +231,8 @@ int main(int argc,char** argv){
         else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--radiation" && !radiation_mode){radiation_mode=true;}
+        else if(arg=="--initial-rest-equilibrium" && !initial_rest_equilibrium){initial_rest_equilibrium=true;}
+        else if(arg=="--compact-memory" && !compact_memory){compact_memory=true;}
         else if(arg=="--fold-rest-target" && !rest_control && i+2<argc){
             for(double* endpoint:{&rest_start,&rest_end}){
                 try{std::size_t used=0;const std::string value=argv[++i];*endpoint=std::stod(value,&used);if(used!=value.size()){return 2;}}
@@ -276,6 +280,8 @@ int main(int argc,char** argv){
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
     if(reservoir_ramp && (!continuous_mode || joint_tolerance<=0)){return 2;}
     if(rest_control && (!continuous_mode || joint_tolerance<=0)){return 2;}
+    if(initial_rest_equilibrium && (!rest_control || initial_state)){return 2;}
+    if(compact_memory && joint_tolerance<=0){return 2;}
     if((source_contact_step>0 && joint_tolerance<=0) || (joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
@@ -409,6 +415,10 @@ int main(int argc,char** argv){
                 if(!ducklips::load_body_config(fold_body,body,error)){std::fprintf(stderr,"%s\n",error.c_str());return 2;}
                 if(continuous_mode){
                     ducklips::FoldState seed;seed.rest_area=glottal_area;seed.lower_position.fill(1e-6);
+                    if(initial_rest_equilibrium){
+                        const double offset=(rest_start-glottal_area)/(2*body.folds.length);
+                        seed.lower_position.fill(offset);seed.upper_position.fill(offset);
+                    }
                     const auto& e=epi.sections.back();const double column=ducklips::AirProperties{}.density*.5*e.first_length/e.first_area;
                     continuous.prepare(total_nodes,branches,total_nodes-1,body.folds,{},tension,seed,{initial.back(),initial.back()},{},1.,ducklips::ContourPressureProfile::linear_span,column);
                 }else{phonation.prepare(total_nodes,branches,total_nodes-1,body.folds);}
@@ -530,17 +540,17 @@ int main(int argc,char** argv){
         }
         for(std::size_t i=0;i<channels;++i){if(gend[i]==0){momentum[i]=0;}}
     }
-    const auto snapshot=[&](){if(radiation_mode){
+    const auto snapshot=[&](bool memories=true){if(radiation_mode){
         std::printf(",\"radiation_state\":{\"area\":%.17g,\"momentum\":%.17g,\"inverse_inertance\":%.17g,\"energy\":%.17g}",continuous.radiation.area(),continuous.radiation.momentum,continuous.radiation.inverse_inertance(),continuous.radiation.energy());
     }if(thermal_width>0){
         std::printf(",\"thermal_sites\":[");for(std::size_t i=0;i<continuous.thermal.size();++i){const auto& site=continuous.thermal[i];
             std::printf("%s{\"node\":%zu,\"compliance\":%.17g,\"half_gap\":%.17g,\"stored_air\":%.17g,\"energy\":%.17g",i?",":"",thermal_base+i,site.compliance(),site.half_gap(),site.stored_air(),site.energy());
-            values("charge",site.charge);std::putchar('}');}std::putchar(']');
+            if(memories){values("charge",site.charge);}std::putchar('}');}std::putchar(']');
     }if(viscous_mode){
         std::printf(",\"viscous_sites\":[");for(std::size_t i=0;i<continuous.viscous.size();++i){const auto& site=continuous.viscous[i];
             std::printf("%s{\"branch\":%zu,\"segment_inertance\":%.17g,\"branch_conductance\":%.17g,\"half_gap\":%.17g,\"energy\":%.17g",i?",":"",viscous_branches[i],site.segment_inertance(),site.branch_conductance(),site.half_gap(),site.energy());
             if(lip_viscous_width>0 && i>=lip_viscous_offset){std::printf(",\"position\":%.17g",viscous_positions[i]);}
-            values("momentum",site.momentum);std::putchar('}');}std::putchar(']');
+            if(memories){values("momentum",site.momentum);}std::putchar('}');}std::putchar(']');
     }if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
@@ -572,6 +582,8 @@ int main(int argc,char** argv){
         std::printf(",\"fold_rest_control\":{\"shape\":\"linear spring bias\",\"baseline_area_m2\":%.17g,\"start_area_m2\":%.17g,\"end_area_m2\":%.17g,\"sampling\":\"trial midpoint\",\"force_order\":\"lower left, lower right, upper left, upper right\"",glottal_area,rest_start,rest_end);
         values("start_force_N",rest_force(rest_start));values("end_force_N",rest_force(rest_end));std::putchar('}');
     }
+    if(initial_rest_equilibrium){std::printf(",\"initial_fold_state\":\"spring-rest equilibrium at first command\"");}
+    if(compact_memory){std::printf(",\"memory_snapshots\":\"initial and final; intermediate energies and stored air retained\"");}
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
@@ -608,7 +620,7 @@ int main(int argc,char** argv){
             const double begin=cuts[step-1]*duration,finish=cuts[step]*duration;
             if(!controller.advance(continuous,begin,finish,callback,&provider,options)){std::fprintf(stderr,"joint accuracy failed at interval %zu reason=%d time=%.17g trial=%.17g difference=%.17g\n",step,static_cast<int>(controller.failure),controller.attempt_time,controller.attempt_step,controller.attempt_error);return 1;}
             const auto& r=controller.last;accepted+=r.accepted_steps;rejected+=r.rejected;closures+=r.source_closures;reopenings+=r.source_reopenings;
-            std::printf("%s{\"dt\":%.17g,\"geometry\":",step>1?",":"",finish-begin);geometry_json(cuts[step],geometry,compact_geometry?std::span<const PlanarContour>{}:va);snapshot();if(!continuous_state(continuous)){return 1;}
+            std::printf("%s{\"dt\":%.17g,\"geometry\":",step>1?",":"",finish-begin);geometry_json(cuts[step],geometry,compact_geometry?std::span<const PlanarContour>{}:va);snapshot(!compact_memory || step+1==cuts.size());if(!continuous_state(continuous)){return 1;}
             std::printf(",\"accuracy\":{\"energy_change\":%.17g,\"external_work\":%.17g,\"physical_loss\":%.17g,\"numerical_loss\":%.17g,\"energy_residual\":%.17g,\"source_port_work\":%.17g,\"graph_port_work\":%.17g,\"reservoir_volume\":%.17g,\"maximum_accepted_error\":%.17g,\"minimum_step\":%.17g,\"trials\":%zu,\"rejected\":%zu,\"accepted_steps\":%zu",r.energy_change,r.external_work,r.physical_loss,r.numerical_loss,r.energy_residual,r.source_port_work,r.graph_port_work,r.reservoir_volume,r.maximum_accepted_error,r.minimum_step,r.trials,r.rejected,r.accepted_steps);
             if(source_contact_step>0){std::printf(",\"source_closures\":%zu,\"source_reopenings\":%zu",r.source_closures,r.source_reopenings);}
             values("average_pressure",controller.average_pressure);values("average_flow",controller.average_flow);values("accepted_end_times",controller.accepted_end_times());std::printf("}}");

@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "status": "running",
+      "completed_duration_s": 0.122,
+      "rejected_before_audio": true
+    },
+    {
+      "status": "failed",
+      "completed_duration_s": 0.122,
+      "rejected_before_audio": true
+    },
+    {
+      "status": "complete",
+      "completed_duration_s": 0.122,
+      "rejected_before_audio": true
+    }
+  ],
+  "scope": "Incomplete and failed fresh-word manifests cannot emit a listening sample. Positive full-word export remains pending.",
+  "hashes": {
+    "tools/actual_coupled_audio.py": "cbe75cc72f10a7b38aa7a8d71a1dc906a772f6e8b592223a9082c4d992c369da",
+    "tools/finish_coupled_word.py": "f28e975c77b50c3f084a38420277a1ccf44f537a9994bef4c63b6814c210f133"
+  }
+}
