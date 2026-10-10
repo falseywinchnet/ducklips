@@ -1,12 +1,18 @@
 #pragma once
 #include "ducklips/continuous_glottis.hpp"
 #include "ducklips/moving_graph.hpp"
+#include "ducklips/radiation_boundary.hpp"
 
 namespace ducklips {
+struct RadiationGeometry final {
+    std::size_t branch{};
+    double first_conductance{},last_conductance{},midpoint_area{},last_area{};
+};
 struct GraphContinuousGlottalStep final {
     double free_pressure{},load_slope{},pressure{},flow{};
     double source_port_work{},graph_port_work{},port_residual{};
     double graph_external_work{},source_geometry_work{};
+    double radiated_energy{},radiation_geometry_work{},radiation_energy_residual{};
 };
 // Implicit work-conjugate coupling of the continuous source to a linear
 // acoustic graph. Graph pressure is its linearized mass-effort variable;
@@ -27,9 +33,10 @@ public:
         std::span<const double> g1,std::span<const double> g2,double dt,double reservoir_pressure,
         const std::array<double,4>& external_force={},std::span<const double> nodal_flow={},
         std::span<const double> series_pressure={},
-        ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric,double outlet_inertance=-1.) noexcept;
+        ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric,double outlet_inertance=-1.,const RadiationGeometry* radiation_geometry=nullptr) noexcept;
     MovingGraphReference network{};
     ContinuousGlottis source{};
+    RadiationBoundary radiation{}; // Explicitly prepare before enabling a radiation step.
     GraphContinuousGlottalStep last{};
 private:
     MovingGraphReference free_{},response_{};

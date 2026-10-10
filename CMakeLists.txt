@@ -28,6 +28,7 @@ add_library(ducklips STATIC
     src/continuous_glottis.cpp
     src/glottal_relaxation.cpp
     src/graph_continuous_glottis.cpp
+    src/radiation_boundary.cpp
     src/contour_pressure_loss.cpp
     src/contour_pressure_flow.cpp
     src/contour_pressure_storage.cpp
@@ -308,3 +309,8 @@ add_executable(ducklips_continuous_force_probe tools/continuous_force_probe.cpp)
 target_link_libraries(ducklips_continuous_force_probe PRIVATE ducklips)
 
 add_test(NAME ducklips_graph_continuous_column COMMAND ducklips_graph_continuous_glottis_probe --column)
+
+add_executable(ducklips_radiation_boundary_probe tools/radiation_boundary_probe.cpp)
+target_link_libraries(ducklips_radiation_boundary_probe PRIVATE ducklips)
+add_test(NAME ducklips_radiation_boundary COMMAND ducklips_radiation_boundary_probe)
+add_test(NAME ducklips_graph_continuous_radiation COMMAND ducklips_graph_continuous_glottis_probe --radiation)

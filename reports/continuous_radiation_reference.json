@@ -1,0 +1,179 @@
+{
+  "scope": "Open continuous gas/tissue source plus cyclic fixed tract and passive one-pole radiation, checked against independent time-continuous equations. Changing aperture work and radiated energy are separate. No speech or high-frequency aperture calibration.",
+  "cases": [
+    {
+      "moving_aperture": false,
+      "reference_refinement_scaled_error": 1.8129209244932554e-09,
+      "runs": [
+        {
+          "steps": 200,
+          "endpoint_scaled_error": 0.008194271310440093,
+          "maximum_sampled_scaled_error": 0.07430639956280623,
+          "joint_work_residual_J": 6.330439644708363e-15,
+          "mass_residual_m3": 8.031923747889899e-22,
+          "radiated_energy_J": 8.822543451441051e-07,
+          "independent_radiated_energy_J": 7.901465327779221e-07,
+          "radiated_energy_error_J": 9.210781236618293e-08,
+          "radiation_geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0
+        },
+        {
+          "steps": 400,
+          "endpoint_scaled_error": 0.0021236230113548804,
+          "maximum_sampled_scaled_error": 0.07066069687028498,
+          "joint_work_residual_J": 3.280687353723888e-15,
+          "mass_residual_m3": 1.4392942658422682e-22,
+          "radiated_energy_J": 8.140468282748736e-07,
+          "independent_radiated_energy_J": 7.901465327779221e-07,
+          "radiated_energy_error_J": 2.3900295496951484e-08,
+          "radiation_geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0
+        },
+        {
+          "steps": 800,
+          "endpoint_scaled_error": 0.0005358080323599745,
+          "maximum_sampled_scaled_error": 0.05973392728466165,
+          "joint_work_residual_J": 2.2776377138489234e-16,
+          "mass_residual_m3": 3.8050308177439273e-23,
+          "radiated_energy_J": 7.961788306209187e-07,
+          "independent_radiated_energy_J": 7.901465327779221e-07,
+          "radiated_energy_error_J": 6.0322978429966e-09,
+          "radiation_geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0
+        },
+        {
+          "steps": 1600,
+          "endpoint_scaled_error": 0.00013426021762535933,
+          "maximum_sampled_scaled_error": 0.03711480883679444,
+          "joint_work_residual_J": 2.404760418572849e-16,
+          "mass_residual_m3": 1.8694281843698425e-22,
+          "radiated_energy_J": 7.916582271569164e-07,
+          "independent_radiated_energy_J": 7.901465327779221e-07,
+          "radiated_energy_error_J": 1.5116943789942735e-09,
+          "radiation_geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        3.85862804585646,
+        3.963402717203307,
+        3.990817546975062
+      ],
+      "radiated_energy_refinement_ratios": [
+        3.8538357142040947,
+        3.962054944733762,
+        3.990421560613245
+      ]
+    },
+    {
+      "moving_aperture": true,
+      "reference_refinement_scaled_error": 1.8181813832285343e-09,
+      "runs": [
+        {
+          "steps": 200,
+          "endpoint_scaled_error": 0.007223516514857309,
+          "maximum_sampled_scaled_error": 0.07430640022826056,
+          "joint_work_residual_J": 5.7754365526130336e-15,
+          "mass_residual_m3": 7.998836523387778e-22,
+          "radiated_energy_J": 8.687785984071125e-07,
+          "independent_radiated_energy_J": 7.86465078276895e-07,
+          "radiated_energy_error_J": 8.231352013021751e-08,
+          "radiation_geometry_work_J": -5.426410024826101e-08,
+          "independent_geometry_work_J": -5.470134579529766e-08,
+          "geometry_work_error_J": 4.372455470366492e-10
+        },
+        {
+          "steps": 400,
+          "endpoint_scaled_error": 0.0018662154747587367,
+          "maximum_sampled_scaled_error": 0.07066064437294572,
+          "joint_work_residual_J": 3.1279232676206803e-15,
+          "mass_residual_m3": 1.4103429444029122e-22,
+          "radiated_energy_J": 8.077403564880909e-07,
+          "independent_radiated_energy_J": 7.86465078276895e-07,
+          "radiated_energy_error_J": 2.127527821119582e-08,
+          "radiation_geometry_work_J": -5.458732461059066e-08,
+          "independent_geometry_work_J": -5.470134579529766e-08,
+          "geometry_work_error_J": 1.1402118470700248e-10
+        },
+        {
+          "steps": 800,
+          "endpoint_scaled_error": 0.00047047426419172256,
+          "maximum_sampled_scaled_error": 0.05973393002837257,
+          "joint_work_residual_J": 2.2733009051589814e-16,
+          "mass_residual_m3": 8.602678370551488e-23,
+          "radiated_energy_J": 7.918293350467548e-07,
+          "independent_radiated_energy_J": 7.86465078276895e-07,
+          "radiated_energy_error_J": 5.364256769859798e-09,
+          "radiation_geometry_work_J": -5.4672520444112406e-08,
+          "independent_geometry_work_J": -5.470134579529766e-08,
+          "geometry_work_error_J": 2.882535118525341e-11
+        },
+        {
+          "steps": 1600,
+          "endpoint_scaled_error": 0.00011786439613742372,
+          "maximum_sampled_scaled_error": 0.03711480927567731,
+          "joint_work_residual_J": 2.409368277805912e-16,
+          "mass_residual_m3": 2.183756817139993e-22,
+          "radiated_energy_J": 7.878090132928341e-07,
+          "independent_radiated_energy_J": 7.86465078276895e-07,
+          "radiated_energy_error_J": 1.3439350159390601e-09,
+          "radiation_geometry_work_J": -5.469411974487598e-08,
+          "independent_geometry_work_J": -5.470134579529766e-08,
+          "geometry_work_error_J": 7.226050421681546e-12
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        3.870676571145227,
+        3.9666685657395213,
+        3.9916571891920114
+      ],
+      "radiated_energy_refinement_ratios": [
+        3.868975028815424,
+        3.9661185368186387,
+        3.9914554693789133
+      ]
+    }
+  ],
+  "hashes": {
+    "tools/continuous_radiation_reference.py": "488e8b5417ade1da3a3b03db62214ced1e15107959da56df2030706049ffab88",
+    "tools/continuous_outlet_column_reference.py": "ff9ffb4108d22f86b08510db0228c68261614c9d9cf4bdfc119d096d32e9b64e",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "tools/graph_continuous_glottis_probe.cpp": "78d3020d627b888f889f961076ce41574ab5ecd74662a5bdbe5c245ae8300407",
+    "src/graph_continuous_glottis.cpp": "502674730634761e0ed1eda8cc1e5698df30eb44a34365e3c11be216dfd93823",
+    "include/ducklips/graph_continuous_glottis.hpp": "e90c2c281fc72d0db4efcd0222a83b1880ff59294b1a2079c2750d2f213dcd1e",
+    "src/radiation_boundary.cpp": "055d59364b627698e59fbc2bb5efb6a751969d96cecbb353e0b2859e84ab901f",
+    "include/ducklips/radiation_boundary.hpp": "34430ea046a75e6bde655ce5160c19cbb4b4c53d73330e05da0d6451422cdd1e",
+    "build/ducklips_graph_continuous_glottis_probe": "c14bb7994ea7adba0f6ad7b6c7a112fa0943383037da3a52b603d9e2593e53c2",
+    "out/continuous-radiation/fixed-1600.input": "0dee7c314ca7c8fe109a6a7017f144e3ab2732a51a934f5aabde6ecaa903b244",
+    "out/continuous-radiation/fixed-200.input": "b70706ed68e221e09f8b700c0837500654cd88d344586cd1aaf14fd937d26b74",
+    "out/continuous-radiation/fixed-400.input": "da2c5940d50807e233f72303d576da89bdc8bb826534d6b1a1f9d267f14f6d07",
+    "out/continuous-radiation/fixed-800.input": "567b1d7cbd9f5e9bd0f11c5eca530d06a09517c6946a5643029af9a2e775a4a6",
+    "out/continuous-radiation/moving-1600.input": "abfe5089765586a02d3469b7dfa791ecf9c925ffe74ba3b5d585fa65f92fdeb3",
+    "out/continuous-radiation/moving-200.input": "af0846aadba46f264770eca40de77d0221aaf50c8de57108d0c4cab30611c8b4",
+    "out/continuous-radiation/moving-400.input": "6de35cfae2a68feb0211f54b4dc6376b7a0913c601a755fa6f56784f0d126f43",
+    "out/continuous-radiation/moving-800.input": "fc6a34365da630823258f2391e4af795178a7cc45f2b31c11bb78c55f97136d9",
+    "out/continuous-radiation/fixed-1600.txt": "2c01f1221cdde259ebf163237f3fe953c3f140d9e11d859ca0f7d307fb8ea253",
+    "out/continuous-radiation/fixed-200.txt": "119494098c76b194aa9980c1eb8a0d5305f8c0d7341aed8866b0166b41244838",
+    "out/continuous-radiation/fixed-400.txt": "a5304aa13cba16c02debdfb19a922299e8ddabac59b35fee8a7df584ac266a96",
+    "out/continuous-radiation/fixed-800.txt": "7f90d25e878e1b5e6e58e6d93e02965a0c3a9f6015804408b0a5af084e757eea",
+    "out/continuous-radiation/moving-1600.txt": "3b479d4c531b2e08f7229b178a7abb975a97af00e6873e216e1ddb0723c0cc62",
+    "out/continuous-radiation/moving-200.txt": "db9464d31304c1556564504f0f59196108d920586b9105b2f266b46bac605f69",
+    "out/continuous-radiation/moving-400.txt": "8eb6c2028c65ebecd7e4ab7e4bb11d51a5119f7f7e1b53b974ab9d0779c3a058",
+    "out/continuous-radiation/moving-800.txt": "14ce8c0458470eba75c73490907ca2770656a872523f53c8eba3d79439980f83",
+    "out/continuous-radiation/fixed-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/fixed-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/fixed-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/fixed-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/moving-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/moving-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/moving-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/moving-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-radiation/continuous-False.npz": "13e5edc96df87ac94ef490ab252bef7143d0dfafc57abcd91aab1ff8c53a4b11",
+    "out/continuous-radiation/continuous-True.npz": "5b96ab9b72bcd8068b169e29148e8ff506511369849c9a7d54c6977089b81cd2"
+  }
+}

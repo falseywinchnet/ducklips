@@ -212,7 +212,7 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 
 }
 int main(int argc,char** argv){
-    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false;
+    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -222,11 +222,12 @@ int main(int argc,char** argv){
         else if(arg=="--glottal-orifice" && !orifice_mode){orifice_mode=true;}
         else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
+        else if(arg=="--radiation" && !radiation_mode){radiation_mode=true;}
         else if(arg=="--initial-state" && !initial_state){initial_state=true;}
         else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
         else{return 2;}
     }
-    if((epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((radiation_mode && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -367,6 +368,12 @@ int main(int argc,char** argv){
         else{acoustic.prepare(nodes,branches);}
     }
     catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
+    const auto radiation_area=[&](double fraction){return lip.integrated?lip.profile(fraction).area(0.):std::lerp(lip.sections.back().first_area,lip.sections.back().last_area,fraction);};
+    const std::size_t radiation_branch=ports.size()+loads.size()+lip.attachments.size()+lip.sections.size()-1;
+    if(radiation_mode){
+        const ducklips::NetworkLosses parameters;
+        if(!continuous.radiation.prepare({},radiation_area(0.),parameters.end_correction,parameters.radiation_factor)){return 2;}
+    }
     const auto original_first=views(first),original_last=views(last);
     if(!geometry.build_regions(first[0],std::span<const PlanarContour>(original_first).subspan(1),depth,selected) || geometry.regions.size()!=nodes){return 1;}
     std::vector<std::size_t> cells(nodes);
@@ -394,6 +401,10 @@ int main(int argc,char** argv){
             const auto& e=epi.sections.back();const double column=ducklips::AirProperties{}.density*.5*e.first_length/e.first_area;
             if(!continuous.source.prepare(body.folds,{},tension,restored,effort,flow,1.,ducklips::ContourPressureProfile::linear_span,column)){return 2;}
         }
+        if(radiation_mode){
+            double value;if(std::scanf("%lf",&value)!=1 || !std::isfinite(value) || (continuous.radiation.area()==0 && value!=0)){return 2;}
+            continuous.radiation.momentum=value;
+        }
         if(fold_mode){
             ducklips::FoldState s;
             if(std::scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf",&s.lower_position[0],&s.lower_position[1],&s.lower_velocity[0],&s.lower_velocity[1],
@@ -401,7 +412,9 @@ int main(int argc,char** argv){
         }
         for(std::size_t i=0;i<channels;++i){if(gend[i]==0){momentum[i]=0;}}
     }
-    const auto snapshot=[&](){if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
+    const auto snapshot=[&](){if(radiation_mode){
+        std::printf(",\"radiation_state\":{\"area\":%.17g,\"momentum\":%.17g,\"inverse_inertance\":%.17g,\"energy\":%.17g}",continuous.radiation.area(),continuous.radiation.momentum,continuous.radiation.inverse_inertance(),continuous.radiation.energy());
+    }if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
     std::vector<double> cuts;for(std::size_t i=0;i<=subdivisions;++i){cuts.push_back(double(i)/double(subdivisions));}
@@ -434,6 +447,7 @@ int main(int argc,char** argv){
     for(std::size_t step=1;step<cuts.size();++step){
         const double t0=cuts[step-1],t1=cuts[step],width=t1-t0,dt=duration*width;
         const double first_stage=t0+(.5-offset)*width,second_stage=t0+(.5+offset)*width;
+        const double radiation_first_g=radiation_mode?gend[radiation_branch]:0.;
         old_volume=volume;
         std::printf("%s{\"dt\":%.17g,\"stage1\":",step>1?",":"",dt);
         sample(first,last,first_stage,a);
@@ -452,10 +466,15 @@ int main(int argc,char** argv){
         if(continuous_mode){
             const auto& e=epi.sections.back();
             const double column=ducklips::AirProperties{}.density*.5*std::lerp(e.first_length,e.last_length,t1)/std::lerp(e.first_area,e.last_area,t1);
-            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column)){
+            ducklips::RadiationGeometry radiation_geometry;
+            if(radiation_mode){radiation_geometry={radiation_branch,radiation_first_g,gend[radiation_branch],radiation_area(.5*(t0+t1)),radiation_area(t1)};}
+            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr)){
                 std::fprintf(stderr,"continuous source solve failed at step %zu, dt %.17g\n",step,dt);return 1;
             }
             if(!continuous_state(continuous)){return 1;}
+            if(radiation_mode){const auto& r=continuous.last;
+                std::printf(",\"radiated_energy\":%.17g,\"radiation_geometry_work\":%.17g,\"radiation_work_residual\":%.17g",r.radiated_energy,r.radiation_geometry_work,r.radiation_energy_residual);
+            }
             const auto& r=continuous.source.last;
             std::printf(",\"source_flow\":%.17g,\"source_pressure\":%.17g,\"source_impedance\":%.17g",continuous.last.flow,continuous.last.pressure,continuous.last.load_slope);
             std::printf(",\"source_reservoir_flow\":%.17g,\"source_port_work\":%.17g,\"source_geometry_work\":%.17g,\"source_work_residual\":%.17g,\"source_port_residual\":%.17g",r.flow[0],r.port_work,r.geometry_work,r.energy_residual,continuous.last.port_residual);

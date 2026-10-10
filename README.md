@@ -72,9 +72,14 @@ The [continuous source now connects to actual moving mouth, lip and throat geome
 Its shared kinetic energy includes the glottis-to-throat half-section, and
 changing that inertia has an explicit geometry-work receipt. Bravo closing and
 reopening controls conserve the source and tract air together and continue
-state across geometry intervals. Their inviscid pressure trajectories still
-need temporal resolution, wall losses and radiation; this has not produced a
-new speech recording.
+state across geometry intervals. Their pressure trajectories still need
+temporal resolution and interior wall/thermal losses. An explicit
+[aperture-radiation connection](reports/CONTINUOUS_RADIATION.md) now separates
+energy stored in the exterior air from radiated energy and work from aperture
+motion. Independent continuous equations verify refinement of the coupled
+source, fixed tract and changing radiation load; actual moving-mouth controls
+verify the connection and exact lip sealing. Those controls remain temporally
+unconverged. This has not produced a new speech recording.
 
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).

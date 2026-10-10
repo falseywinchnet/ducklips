@@ -26,16 +26,23 @@ void GraphContinuousGlottis::prepare(std::size_t nodes,std::span<const TreeEdge>
 bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const double> c2,
     std::span<const double> g1,std::span<const double> g2,double dt,double reservoir_pressure,
     const std::array<double,4>& external_force,std::span<const double> nodal_flow,
-    std::span<const double> series_pressure,ContinuousGlottalUpdate update,double outlet_inertance) noexcept {
+    std::span<const double> series_pressure,ContinuousGlottalUpdate update,double outlet_inertance,const RadiationGeometry* radiation_geometry) noexcept {
     if(unit_flow_.empty() || network.charge.size()!=free_.charge.size() || network.momentum.size()!=free_.momentum.size()
         || network.average_pressure.size()!=free_.average_pressure.size() || network.average_flow.size()!=free_.average_flow.size()){return false;}
     std::copy(network.charge.begin(),network.charge.end(),free_.charge.begin());
     std::copy(network.momentum.begin(),network.momentum.end(),free_.momentum.begin());
+    RadiationBoundary next_radiation=radiation;GraphContinuousGlottalStep receipt;
+    if(radiation_geometry){
+        const auto& r=*radiation_geometry;double work;
+        if(r.branch>=free_.momentum.size() || !next_radiation.change_area(r.midpoint_area,work)
+            || !next_radiation.advance(free_.momentum[r.branch],r.first_conductance,dt/2)){return false;}
+        receipt.radiation_geometry_work=work;receipt.radiated_energy=next_radiation.last.radiated_energy;
+        receipt.radiation_energy_residual=next_radiation.last.energy_residual;
+    }
     std::fill(response_.charge.begin(),response_.charge.end(),0.);
     std::fill(response_.momentum.begin(),response_.momentum.end(),0.);
     if(!free_.advance(c1,c2,g1,g2,dt,nodal_flow,series_pressure)
         || !response_.advance(c1,c2,g1,g2,dt,unit_flow_)){return false;}
-    GraphContinuousGlottalStep receipt;
     receipt.free_pressure=free_.average_pressure[source_node_];receipt.load_slope=response_.average_pressure[source_node_];
     ContinuousGlottis candidate=source;
     if(!candidate.advance(dt,reservoir_pressure,receipt.free_pressure,receipt.load_slope,external_force,update,outlet_inertance)){return false;}
@@ -49,10 +56,17 @@ bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const 
     for(std::size_t i=0;i<nodal_flow.size();++i){receipt.graph_external_work+=dt*nodal_flow[i]*free_.average_pressure[i];}
     for(std::size_t i=0;i<series_pressure.size();++i){receipt.graph_external_work+=dt*series_pressure[i]*free_.average_flow[i];}
     if(!std::isfinite(receipt.graph_port_work) || !std::isfinite(receipt.port_residual) || !std::isfinite(receipt.graph_external_work)){return false;}
+    if(radiation_geometry){
+        const auto& r=*radiation_geometry;double work;
+        if(!next_radiation.advance(free_.momentum[r.branch],r.last_conductance,dt/2)
+            || !next_radiation.change_area(r.last_area,work)){return false;}
+        receipt.radiation_geometry_work+=work;receipt.radiated_energy+=next_radiation.last.radiated_energy;
+        receipt.radiation_energy_residual+=next_radiation.last.energy_residual;
+    }
     std::copy(free_.charge.begin(),free_.charge.end(),network.charge.begin());
     std::copy(free_.momentum.begin(),free_.momentum.end(),network.momentum.begin());
     std::copy(free_.average_pressure.begin(),free_.average_pressure.end(),network.average_pressure.begin());
     std::copy(free_.average_flow.begin(),free_.average_flow.end(),network.average_flow.begin());
-    source=candidate;last=receipt;return true;
+    source=candidate;if(radiation_geometry){radiation=next_radiation;}last=receipt;return true;
 }
 }

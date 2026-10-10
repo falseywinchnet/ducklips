@@ -1,0 +1,18 @@
+{
+  "scope": "100 seeded positive-area fixed-coefficient radiation exchanges against SciPy expm in energy-scaled coordinates; includes separately prescribed aperture-work checks",
+  "cases": 100,
+  "seed": 251019,
+  "maximum_errors": [
+    6.752845623154207e-15,
+    1.440752670441454e-14,
+    3.8536211660949735e-16
+  ],
+  "hashes": {
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "src/radiation_boundary.cpp": "055d59364b627698e59fbc2bb5efb6a751969d96cecbb353e0b2859e84ab901f",
+    "include/ducklips/radiation_boundary.hpp": "34430ea046a75e6bde655ce5160c19cbb4b4c53d73330e05da0d6451422cdd1e",
+    "build/ducklips_radiation_boundary_probe": "c910b60aa30d4b8ec2dfe0f0ddd580468d53001932d7cb8f2ccb84371fe5c1d1",
+    "out/radiation-boundary/matrix.input": "b27783df0ba6083040fbb41426dbcead258904c3f4e3ab69c0a356c3bef652b7",
+    "out/radiation-boundary/matrix.txt": "47834b5ca5bb54c513745bda67181b19d10cb3b4b39f7d74678fcab288477947"
+  }
+}

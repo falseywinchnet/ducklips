@@ -42,20 +42,23 @@ void prepare(GraphContinuousGlottis& model,std::size_t nodes,std::span<const duc
     model.prepare(nodes,edges,port,{}, {},1.,folds(state),{state[0],state[1]},
         {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span,column);
 }
-void fixture(bool column=false){
+void fixture(bool column=false,bool radiation=false){
     unsigned n,m,steps,port;require(std::scanf("%u%u%u%u",&n,&m,&steps,&port)==4,"fixture dimensions");
     require(n>0 && n<=64 && m<=256 && steps<=1000000,"fixture size");
     std::vector<ducklips::TreeEdge> edges(m);
     for(auto& edge:edges){int first,second;require(std::scanf("%d%d",&first,&second)==2 && first>=0 && second>=-1,"fixture edge");edge={static_cast<std::size_t>(first),second<0?ducklips::ground_node:static_cast<std::size_t>(second)};}
     std::array<double,9> y;for(double& v:y){v=number();}const double loss=number(),inertance=column?number():0.;GraphContinuousGlottis model;prepare(model,n,edges,port,y,loss,inertance);
+    if(radiation){const double area=number();require(model.radiation.prepare({},area),"radiation prepare");model.radiation.momentum=number();}
     read(model.network.charge);read(model.network.momentum);
     std::vector<double> c1(n),c2(n),g1(m),g2(m),nodal(n),series(m);
     for(unsigned step=0;step<steps;++step){
         const double dt=number(),pressure=number();const int mode=static_cast<int>(number());const double next_inertance=column?number():-1.;
+        ducklips::RadiationGeometry boundary;boundary.branch=m-1;
+        if(radiation){boundary.midpoint_area=number();boundary.last_area=number();boundary.first_conductance=number();boundary.last_conductance=number();}
         read(c1);read(c2);read(g1);read(g2);read(nodal);read(series);
         require(mode>=0 && mode<=2,"fixture update mode");
         const ducklips::ContinuousGlottalUpdate updates[]={ducklips::ContinuousGlottalUpdate::symmetric,ducklips::ContinuousGlottalUpdate::dissipative,ducklips::ContinuousGlottalUpdate::relaxation};
-        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance)){
+        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance,radiation?&boundary:nullptr)){
             std::fprintf(stderr,"coupled fixture failed at step %u\n",step);throw std::runtime_error("fixture advance");
         }
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"fixture state");
@@ -64,8 +67,38 @@ void fixture(bool column=false){
         const auto& s=model.source.last;const auto& r=model.last;
         const double ledger[]={state.energy,state.mass[0],state.mass[1],s.reservoir_work,s.external_work,s.fluid_loss,s.tissue_loss,
             s.outlet_loss,s.numerical_loss,s.energy_residual,r.graph_port_work,r.graph_external_work,r.port_residual,r.flow,r.pressure,r.free_pressure,r.load_slope,
-            s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);if(column){const double extra[]={s.geometry_work,state.outlet_inertance};print(extra);}std::puts("");
+            s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);if(column){const double extra[]={s.geometry_work,state.outlet_inertance};print(extra);}if(radiation){const double extra[]={model.radiation.momentum,model.radiation.energy(),r.radiated_energy,r.radiation_geometry_work,r.radiation_energy_residual};print(extra);}std::puts("");
     }
+}
+void radiation_controls(){
+    const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
+    const std::array<double,3> c={1e-11,1.4e-11,8e-12};const std::array<double,4> g={.002,.003,.001,.0025};
+    GraphContinuousGlottis model;prepare(model,3,edges,1,initial,1.,80.);
+    require(model.radiation.prepare({},1e-4),"radiation prepare");model.radiation.momentum=.004;
+    model.network.charge={1e-9,-2e-9,5e-10};model.network.momentum={.01,-.02,.015,.005};
+    ducklips::ContinuousGlottalState state;require(model.source.state(state),"source state");
+    const double initial_energy=state.energy+graph_energy(model.network,c,g)+model.radiation.energy();
+    double work=0,loss=0,worst=0,radiated=0;
+    for(int step=0;step<300;++step){
+        const double area=1e-4*(1+.2*std::sin(2*ducklips::pi*(step+1)/300.));
+        const ducklips::RadiationGeometry geometry{3,g[3],g[3],.5*(area+model.radiation.area()),area};
+        const auto count=allocations.load();
+        require(model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&geometry),"radiation coupled advance");
+        require(allocations.load()==count,"radiation advance allocated");require(model.source.state(state),"accepted source");
+        const auto& s=model.source.last;const auto& r=model.last;
+        work+=s.reservoir_work+s.external_work+s.geometry_work+r.graph_external_work+r.radiation_geometry_work;
+        loss+=s.fluid_loss+s.tissue_loss+s.outlet_loss+s.numerical_loss+r.radiated_energy;radiated+=r.radiated_energy;
+        require(r.radiated_energy>=0,"radiation passive");
+        worst=std::max(worst,std::abs(state.energy+graph_energy(model.network,c,g)+model.radiation.energy()-initial_energy+loss-work));
+    }
+    require(worst<1e-13 && radiated>0,"joint radiation work");
+    const auto saved=model;const auto physical_before=physical(state);
+    const ducklips::RadiationGeometry bad{3,g[3],g[3],model.radiation.area(),-1.};
+    require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&bad),"reject endpoint radiation after source trial");
+    require(model.source.state(state) && physical(state)==physical_before && model.network.charge==saved.network.charge
+        && model.network.momentum==saved.network.momentum && model.radiation.momentum==saved.radiation.momentum
+        && model.radiation.area()==saved.radiation.area() && model.last.radiated_energy==saved.last.radiated_energy,"radiation transaction");
+    std::printf("PASS radiating coupled source: work residual %.17g J, radiated %.17g J; allocation-free and rollback\n",worst,radiated);
 }
 void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlottalUpdate::symmetric,bool column=false){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
@@ -138,6 +171,8 @@ void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlott
 int main(int argc,char** argv){try{
     if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}
     else if(argc==2 && std::string(argv[1])=="--column-fixture"){fixture(true);}
+    else if(argc==2 && std::string(argv[1])=="--radiation-fixture"){fixture(true,true);}
+    else if(argc==2 && std::string(argv[1])=="--radiation"){radiation_controls();}
     else if(argc==2 && std::string(argv[1])=="--column"){controls(ducklips::ContinuousGlottalUpdate::relaxation,true);}
     else if(argc==2 && std::string(argv[1])=="--relaxation"){controls(ducklips::ContinuousGlottalUpdate::relaxation);}
     else{require(argc==1,"arguments");controls();}return 0;
