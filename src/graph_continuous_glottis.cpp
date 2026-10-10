@@ -12,7 +12,7 @@ bool combine(std::vector<double>& free,const std::vector<double>& response,doubl
 }
 bool viscous_partition(std::span<const std::size_t> branches,std::span<const ViscousGeometry> geometry) noexcept {
     for(std::size_t i=0;i<branches.size();++i){const auto& a=geometry[i];double total=0;
-        if(!std::isfinite(a.segment_inertance) || a.segment_inertance<=0 || !std::isfinite(a.branch_conductance) || a.branch_conductance<=0){return false;}
+        if(!std::isfinite(a.segment_inertance) || a.segment_inertance<0 || !std::isfinite(a.branch_conductance) || a.branch_conductance<0){return false;}
         for(std::size_t j=0;j<branches.size();++j){if(branches[i]==branches[j]){
             if(a.branch_conductance!=geometry[j].branch_conductance){return false;}total+=geometry[j].segment_inertance;
         }}

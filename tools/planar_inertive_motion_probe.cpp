@@ -216,7 +216,7 @@ int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     double thermal_width=0;
-    double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
+    bool outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
@@ -241,6 +241,7 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(lip_viscous_width) || lip_viscous_width<=0){return 2;}
         }
+        else if(arg=="--outlet-viscous" && !outlet_viscous){outlet_viscous=true;}
         else if(arg=="--lip-viscous-order" && i+1<argc){
             try{std::size_t used=0;const std::string value=argv[++i];lip_viscous_order=std::stoul(value,&used);if(used!=value.size()){return 2;}}
             catch(...){return 2;}
@@ -251,7 +252,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
-    if((lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -412,7 +413,7 @@ int main(int argc,char** argv){
     const std::size_t viscous_base=ports.size()+loads.size()+lip.attachments.size()+lip.sections.size()+epi.attachments.size();
     const std::size_t lip_viscous_offset=viscous_width>0?2*(epi.sections.size()-1):0;
     const std::size_t lip_viscous_branch=ports.size()+loads.size()+lip.attachments.size();
-    std::vector<ducklips::ViscousGeometry> viscous_geometry(lip_viscous_offset+(lip_viscous_width>0?(lip.sections.size()-1)*lip_viscous_order:0));
+    std::vector<ducklips::ViscousGeometry> viscous_geometry(lip_viscous_offset+(lip_viscous_width>0?(lip.sections.size()-1)*lip_viscous_order+(outlet_viscous?lip_viscous_order+1:0):0));
     std::vector<std::size_t> viscous_branches(viscous_geometry.size());std::vector<double> viscous_positions(viscous_geometry.size());
     const auto set_viscous_geometry=[&](double fraction){
         if(viscous_width>0){for(std::size_t i=1;i<epi.sections.size();++i){for(std::size_t half=0;half<2;++half){const auto& s=epi.sections[i-1+half];
@@ -429,6 +430,16 @@ int main(int argc,char** argv){
                 if(!ducklips::lip_viscous_segments(profile,centre[i],centre[i-1],lip_viscous_width,ducklips::AirProperties{}.density,std::span(segments).first(lip_viscous_order),measure)){return false;}
                 const auto branch=lip_viscous_branch+i-1;
                 for(std::size_t j=0;j<lip_viscous_order;++j){const auto index=lip_viscous_offset+(i-1)*lip_viscous_order+j;const auto& segment=segments[j];
+                    viscous_branches[index]=branch;viscous_positions[index]=segment.position;
+                    viscous_geometry[index]={segment.inertance,gend[branch],segment.half_gap};
+                }
+            }
+            if(outlet_viscous){
+                std::array<ducklips::LipViscousSegment,33> segments{};ducklips::LipViscousMeasure measure;
+                if(!ducklips::lip_outlet_viscous_segments(profile,centre[lip.sections.size()-1],lip_viscous_width,ducklips::AirProperties{}.density,std::span(segments).first(lip_viscous_order+1),measure)){return false;}
+                const auto branch=lip_viscous_branch+lip.sections.size()-1;
+                const auto offset=lip_viscous_offset+(lip.sections.size()-1)*lip_viscous_order;
+                for(std::size_t j=0;j<=lip_viscous_order;++j){const auto index=offset+j;const auto& segment=segments[j];
                     viscous_branches[index]=branch;viscous_positions[index]=segment.position;
                     viscous_geometry[index]={segment.inertance,gend[branch],segment.half_gap};
                 }

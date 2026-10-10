@@ -15,4 +15,11 @@ struct LipViscousMeasure final {
 // uniform-gap approximation or a complete moving-wall Stokes PDE.
 [[nodiscard]] bool lip_viscous_segments(const LipProfile&,double first,double last,double slit_width,double density,
     std::span<LipViscousSegment>,LipViscousMeasure&) noexcept;
+// Outlet profile with place=0 and 0<core<last: one exact flat-core site and
+// 4/8/16/32 fixed-reference shoulder sites. At exact core closure the first
+// site is absent (inertance=gap=0); shoulder air remains and has zero through-
+// flow. No open-path normalization is applied when conductance is zero.
+// quadrature_inertance then sums only the finite surviving shoulder sites.
+[[nodiscard]] bool lip_outlet_viscous_segments(const LipProfile&,double last,double slit_width,double density,
+    std::span<LipViscousSegment>,LipViscousMeasure&) noexcept;
 }

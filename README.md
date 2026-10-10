@@ -113,6 +113,13 @@ closing difference falls from 39.54 to 0.113 Pa; opening falls from 2.76 to
 memory, and whole-utterance integration are unfinished. This has not changed
 the spatial-pressure listening sample.
 
+The [outlet path now distinguishes a vanished core from surviving shoulder air](reports/CONTINUOUS_OUTLET_VISCOSITY.md)
+through exact closure and reopening, with separate profile decay and geometry
+work. A driven-flow check also exposes a numerical coupling defect: alternating
+pressure transport and drag can pass too much air through a stiff slit even
+when endpoint velocity is tiny and the work ledger closes. Pressure and viscous
+flow need a common update before the developing path can support new speech.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

@@ -141,6 +141,23 @@ void radiation_controls(bool thermal=false,bool viscosity=false){
         const std::array<ducklips::ViscousSite,2> duplicate={{{1,{.6/g[1],g[1],.001}},{1,{.6/g[1],g[1],.001}}}};
         bool rejected=false;try{model.prepare_viscous({},duplicate);}catch(const std::invalid_argument&){rejected=true;}
         require(rejected && model.viscous.size()==saved.viscous.size(),"no duplicated plug inertia");
+        auto sealed_g=g;sealed_g[1]=0.;viscous_geometry[0].half_gap=.001;
+        const auto open_geometry=viscous_geometry;
+        for(std::size_t i=0;i<2;++i){double metric_work;
+            require(model.viscous[i].equilibrate(1e-4),"seed surviving profile");
+            viscous_geometry[i].branch_conductance=0.;
+            require(model.viscous[i].change_geometry(viscous_geometry[i].segment_inertance,0.,viscous_geometry[i].half_gap,metric_work),"block local through-flow");
+        }
+        model.network.momentum[1]=0.;const double surviving=model.viscous[1].energy();
+        const auto count=allocations.load();
+        require(model.advance(c,c,sealed_g,sealed_g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry,viscous_geometry),"sealed viscous graph");
+        require(allocations.load()==count && model.network.average_flow[1]==0,"sealed flow and allocation");
+        require(model.viscous[1].energy()>0 && model.viscous[1].energy()<surviving,"surviving air relaxes behind seal");
+        viscous_geometry[0]={0,0,0};
+        require(model.advance(c,c,sealed_g,sealed_g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry,viscous_geometry),"retire absent segment transaction");
+        require(model.viscous[0].energy()==0 && model.viscous[1].energy()>0,"retire only vanished air");
+        for(double z:model.viscous[0].momentum){require(z==0,"no absent history");}
+        require(model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry,open_geometry),"reopen viscous graph");
         std::printf("PASS shared-branch viscous coupling; ");
     }
     std::printf("PASS radiating coupled source: work residual %.17g J, radiated %.17g J; allocation-free and rollback\n",worst,radiated);

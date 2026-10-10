@@ -3,11 +3,19 @@
 #include <array>
 #include <cstddef>
 namespace ducklips {
-struct SlitViscousStep final {double dissipated_energy{},energy_change{},energy_residual{};};
+struct SlitViscousStep final {double dissipated_energy{},energy_change{},energy_residual{},blocked_impulse{};};
 // No-slip, stationary parallel-wall Stokes impedance of one axial segment.
 // The graph owns the complete branch's plug-flow inertia (1/conductance).
 // This object adds that segment's wall drag and transverse profile memory,
 // not another plug-flow inertia. Several segments may share one branch.
+// A zero branch conductance constrains through-flow while any surviving local
+// profile relaxes. The constraint absorbs blocked_impulse with zero flow work.
+// The caller owns the branch's canonical momentum: at zero conductance it is
+// an unobservable gauge, left unchanged here and reset by the graph's closure
+// handling before reopening. This object owns only local profile memory.
+// The exact tuple (0,0,0) denotes an absent segment, not a finite inertance.
+// Changing to absence retires its memory and returns its metric-energy change;
+// reopening starts that segment with no resurrected velocity profile.
 class SlitViscous final {
 public:
     static constexpr std::size_t modes=24;

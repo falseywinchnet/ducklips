@@ -1,0 +1,18 @@
+{
+  "scope": "24 independent stiff ODE profiles at zero through-flow and one exactly absent state. Native transition controls separately test retirement and reopening. No moving-wall PDE or speech.",
+  "ode_cases": 24,
+  "absent_cases": 1,
+  "maximum_scaled_state_error": 2.6057117674907795e-14,
+  "maximum_relative_dissipation_error": 3.4382247973489966e-15,
+  "hashes": {
+    "tools/blocked_viscous_reference.py": "b7a56502bb6551024a2ea5d21a054459856385ab2e4960977a21e3cab9fd1c97",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "src/slit_viscous.cpp": "dfc1273d96aaa144c21b6514175f0f12847a48f2ee371600df7ea7192a8e5df0",
+    "include/ducklips/slit_viscous.hpp": "4116132ff8e98c75c9d1ad65c6fc10a5c6b51c5b377dd9a29897d826ccfcdb55",
+    "include/ducklips/viscous_spectrum.hpp": "8625f61b022976e48cac00c60dc55f8f1029256aef355de2feed48bd81645da9",
+    "tools/slit_viscous_probe.cpp": "98d867a925d2b22be22b36d5ace714f5fd2c716b6d693c64c39db1cb284be634",
+    "build/ducklips_slit_viscous_probe": "a7301705adeac81b75c4911c220c7ce9aa8984ca015fa77c1aa5be063baa5602",
+    "out/blocked-viscous-reference/states.input": "c757c7ba022d6d5a13c2444b27068dc9f9464784e2f26b49ee6433a43794e2f4",
+    "out/blocked-viscous-reference/states.txt": "2e2d588b5190238fdf81398177447ed8a26cb4d8836039378c27d8262f860834"
+  }
+}

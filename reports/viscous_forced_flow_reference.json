@@ -1,0 +1,71 @@
+{
+  "scope": "Uniform fixed slit under constant pressure: same separated drag/pressure/drag composition used by the graph adapter. A diagnostic of forced-flow consistency, not a full airway error estimate.",
+  "finding": "Exact unforced decay and a closed work ledger do not make the separated scheme asymptotically correct for stiff driven flow. Pressure and drag need a common update.",
+  "cases": [
+    {
+      "dc_decay_times_step": 0.01,
+      "step_seconds": 2.0430107526881723e-08,
+      "split_average_flow_m3_s": 1.4303008590946952e-05,
+      "split_endpoint_flow_m3_s": 1.4300504559133737e-05,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 1.0001351871865163,
+      "last_step_work_residual_J": 2.3034568799766084e-24
+    },
+    {
+      "dc_decay_times_step": 0.1,
+      "step_seconds": 2.0430107526881724e-07,
+      "split_average_flow_m3_s": 1.4362322923158695e-05,
+      "split_endpoint_flow_m3_s": 1.42831364649061e-05,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 1.0042827307171118,
+      "last_step_work_residual_J": 6.64344890184427e-25
+    },
+    {
+      "dc_decay_times_step": 1.0,
+      "step_seconds": 2.043010752688172e-06,
+      "split_average_flow_m3_s": 1.6235205005197635e-05,
+      "split_endpoint_flow_m3_s": 1.3736492641606908e-05,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 1.1352436582581806,
+      "last_step_work_residual_J": 1.853165394474525e-23
+    },
+    {
+      "dc_decay_times_step": 10.0,
+      "step_seconds": 2.0430107526881726e-05,
+      "split_average_flow_m3_s": 7.153644671077056e-05,
+      "split_endpoint_flow_m3_s": 1.8980639992471261e-06,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 5.002172589550122,
+      "last_step_work_residual_J": 2.7175554013895537e-21
+    },
+    {
+      "dc_decay_times_step": 100.0,
+      "step_seconds": 0.00020430107526881721,
+      "split_average_flow_m3_s": 0.0007150537634408602,
+      "split_endpoint_flow_m3_s": 1.6014530222430789e-21,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 50.00000000000001,
+      "last_step_work_residual_J": 2.226719053231658e-19
+    },
+    {
+      "dc_decay_times_step": 10000.0,
+      "step_seconds": 0.02043010752688172,
+      "split_average_flow_m3_s": 0.07150537634408603,
+      "split_endpoint_flow_m3_s": 0.0,
+      "continuous_steady_flow_m3_s": 1.4301075268817203e-05,
+      "average_flow_ratio": 5000.000000000001,
+      "last_step_work_residual_J": 2.4900836521780207e-15
+    }
+  ],
+  "hashes": {
+    "tools/viscous_forced_flow_reference.py": "c204ea1f24423d5aea15520e250a501e31594a71e6d727cd7bcef4111e2db096",
+    "tools/viscous_forced_flow_probe.cpp": "cfdb19da1c73134c3a72a2a4a044da04b9f623765b9aa07c18f7277211a0a007",
+    "tools/planar_continuous_reference.py": "1c374b32650448201409444116909db81e6b217c609b769fe3b05af115a62612",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "src/slit_viscous.cpp": "dfc1273d96aaa144c21b6514175f0f12847a48f2ee371600df7ea7192a8e5df0",
+    "include/ducklips/slit_viscous.hpp": "4116132ff8e98c75c9d1ad65c6fc10a5c6b51c5b377dd9a29897d826ccfcdb55",
+    "build/ducklips_viscous_forced_flow_probe": "08bc2ffab3ffd1357b37e144c7176460a2761c50910e398895718efe71104acb",
+    "out/viscous-forced-flow/states.input": "34433f4a03d610777325c181341294141517f73432eda8c9305dd1d9fffefd00",
+    "out/viscous-forced-flow/states.txt": "2d6a4df9ef4e950b64d7af41142d997c1f349cb08bab4c437bcd3a2781a4e770"
+  }
+}

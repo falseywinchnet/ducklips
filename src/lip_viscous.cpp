@@ -35,4 +35,32 @@ bool lip_viscous_segments(const LipProfile& profile,double first,double last,dou
     for(std::size_t i=0;i<segments.size();++i){segments[i]=candidate[i];}
     measure={g,approximate,normalization-1};return true;
 }
+bool lip_outlet_viscous_segments(const LipProfile& profile,double last,double width,double density,
+    std::span<LipViscousSegment> segments,LipViscousMeasure& measure) noexcept {
+    if(!profile.valid() || profile.place!=0 || profile.core<=0 || profile.base_area<=0
+        || !std::isfinite(last) || last<=profile.core || last>profile.length
+        || !std::isfinite(width) || width<=0 || !std::isfinite(density) || density<=0){return false;}
+    std::span<const double> points,weights;
+    switch(segments.size()){
+    case 5:points=x4;weights=w4;break;case 9:points=x8;weights=w8;break;
+    case 17:points=x16;weights=w16;break;case 33:points=x32;weights=w32;break;default:return false;
+    }
+    double g;if(!profile.conductance(0,last,density,g)){return false;}
+    const double minimum=profile.minimum_area();std::array<LipViscousSegment,33> candidate{};
+    candidate[0]={profile.core*.5,minimum>0?density*profile.core/minimum:0.,minimum/(2*width)};
+    double approximate=candidate[0].inertance;
+    const double half=(last-profile.core)*.5,middle=profile.core+half;
+    for(std::size_t i=0;i<points.size();++i){for(std::size_t side=0;side<2;++side){
+        const auto j=1+2*i+side;const double x=middle+(side?1.:-1.)*half*points[i],area=profile.area(x);
+        candidate[j]={x,density*half*weights[i]/area,area/(2*width)};approximate+=candidate[j].inertance;
+    }}
+    const double normalization=g>0?1/(g*approximate):1.;
+    if(!std::isfinite(approximate) || !std::isfinite(normalization) || normalization<=0){return false;}
+    for(std::size_t i=0;i<segments.size();++i){auto& s=candidate[i];s.inertance*=normalization;
+        if(!std::isfinite(s.inertance) || !std::isfinite(s.half_gap) || s.inertance<0 || s.half_gap<0
+            || (i>0 && (s.inertance==0 || s.half_gap==0))){return false;}
+    }
+    for(std::size_t i=0;i<segments.size();++i){segments[i]=candidate[i];}
+    measure={g,approximate,normalization-1};return true;
+}
 }

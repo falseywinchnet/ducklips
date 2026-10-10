@@ -38,6 +38,8 @@ public:
     void prepare_thermal(const AirProperties&,std::span<const ThermalSite>);
     // Distinct physical segments may share a branch. Their inertances must
     // sum to no more than that branch's existing plug-flow inertia.
+    // Zero-conductance branches may retain finite local profile sites; the
+    // tuple (0,0,0) explicitly retires an absent site's memory and energy metric.
     void prepare_viscous(const AirProperties&,std::span<const ViscousSite>);
     // Prescribed stage metrics, constant external drives, one source step.
     // No allocation after prepare. Failure preserves network, source and last.

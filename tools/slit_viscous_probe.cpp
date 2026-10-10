@@ -33,6 +33,17 @@ void controls(){double worst=0;std::size_t count=0;
     require(!model.prepare({},100.,-.01,.001) && model.momentum==saved.momentum,"prepare rollback");
     require(model.advance(p,1e8) && p==0,"long decay leaves no artificial residue");
     for(double z:model.momentum){require(z==0,"relaxed memory");}
+    require(model.prepare({},100.,.01,.001) && model.equilibrate(.001),"closure profile");
+    const auto open_memory=model.momentum;const double open_energy=model.energy();
+    require(model.change_geometry(100.,0.,.001,work) && work==0 && model.momentum==open_memory,"blocked path retains local air");
+    require(!model.equilibrate(.001),"blocked flow cannot equilibrate");
+    p=0;require(model.advance(p,1e-4) && p==0 && model.last.blocked_impulse>0,"blocked reaction without flow");
+    require(model.energy()>0 && model.energy()<open_energy && std::abs(model.last.energy_residual)<1e-18,"blocked profile decays physically");
+    const double remaining=model.energy();
+    require(model.change_geometry(0,0,0,work) && work==-remaining,"absent metric work");
+    require(model.energy()==0 && model.advance(p,1.) && p==0,"absent path");
+    for(double z:model.momentum){require(z==0,"absence retires history");}
+    require(model.change_geometry(100.,.01,.001,work) && work==0 && model.advance(p,1e-4) && p==0,"reopening cannot resurrect history");
     std::printf("PASS finite-gap viscosity: %zu controls, relative energy %.17g; shared inertia, geometry work and rollback\n",count,worst);
 }
 }

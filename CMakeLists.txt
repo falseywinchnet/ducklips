@@ -328,3 +328,7 @@ add_executable(ducklips_radiation_boundary_probe tools/radiation_boundary_probe.
 target_link_libraries(ducklips_radiation_boundary_probe PRIVATE ducklips)
 add_test(NAME ducklips_radiation_boundary COMMAND ducklips_radiation_boundary_probe)
 add_test(NAME ducklips_graph_continuous_radiation COMMAND ducklips_graph_continuous_glottis_probe --radiation)
+
+# Diagnostic of pressure/drag splitting under a sustained pressure drop.
+add_executable(ducklips_viscous_forced_flow_probe tools/viscous_forced_flow_probe.cpp)
+target_link_libraries(ducklips_viscous_forced_flow_probe PRIVATE ducklips)

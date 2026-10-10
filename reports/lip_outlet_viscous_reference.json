@@ -1,0 +1,44 @@
+{
+  "scope": "Actual outlet flat core plus fixed-reference shoulder quadrature; exact closure and near-seal spatial controls. No moving-wall PDE or speech claim.",
+  "profiles": 25,
+  "fixtures": 100,
+  "frequency_Hz": [
+    20,
+    200000
+  ],
+  "maximum_relative_errors_by_order": {
+    "4": {
+      "geometry": 9.254819133275305e-13,
+      "correction": 0.011861349859893462,
+      "inertia_normalization": 0.006373989395423774
+    },
+    "8": {
+      "geometry": 9.265921363521556e-13,
+      "correction": 0.0016608507673322385,
+      "inertia_normalization": 0.0026528329914634607
+    },
+    "16": {
+      "geometry": 9.423573033018329e-13,
+      "correction": 0.00033716915332754165,
+      "inertia_normalization": 0.0005823056280149785
+    },
+    "32": {
+      "geometry": 9.399148126476575e-13,
+      "correction": 0.00014361163430243185,
+      "inertia_normalization": 0.00011713304475824415
+    }
+  },
+  "hashes": {
+    "tools/lip_outlet_viscous_reference.py": "2f44ae2766117eb6c7ed8952ccce53e8dc2ea30fa49f0c2a2aab6434264c0ae4",
+    "tools/lip_viscous_reference.py": "22ba0b33edcd38d06b94a4ebe120959ae0486a7c5cfb24c8ab0cffe882aeab03",
+    "tools/lip_profile_reference.py": "aea9a6d869018ed578f2a77eff63e249d707b78226672bd290d1b24cd88eb7fe",
+    "src/lip_viscous.cpp": "9fb8b8d78ff5183248667ecce4b7064b62692d64426ddc0232b032f97c20d996",
+    "include/ducklips/lip_viscous.hpp": "7522ba22b114b6a059b8ee30f9b6bf8739fcdd376d39dfa395b512d19e2aecda",
+    "src/lip_profile.cpp": "a8c314104236be2fad3cac94fa5fbb73d75bd892a7122ff3d52dce4865b72fb9",
+    "tools/lip_viscous_probe.cpp": "c829e28748a0e3d0bd6d7c95f42c02aae43e7405b99b54536f76e9fe404d1816",
+    "build/ducklips_lip_viscous_probe": "2d37de37cbd40b997d0caad4f2ceea2ba926e808721bd02bba26547324b53586",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "out/lip-outlet-viscous-reference/geometry.input": "57c0c0f7660012c3c9a9ef3f6db2ce95b83045a1a832d9a2933682ae00bcb838",
+    "out/lip-outlet-viscous-reference/geometry.txt": "258c8599eccedd753470d276da22f72f979da5784da98dac6bebb568be71e8af"
+  }
+}
