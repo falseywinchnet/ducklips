@@ -1,0 +1,15 @@
+{
+  "kind": "user-provided sustained soft /a/ spectrogram screenshot",
+  "source_path": "/Users/joshuahkuttenkuler/.codex/attachments/16f193f9-c6c5-4129-9273-90a3192bd853/Screenshot 2026-10-10 at 6.43.53\u202fAM.png",
+  "sha256": "55c3877cfd5ea74ea9f43eed8e4dbdbf49ac34f4e9da567d2d03224b7bcf638a",
+  "raw_audio_available": false,
+  "time_frequency_axes_available": false,
+  "use": "Whole-vowel visual reference, including source and vocal tract. Do not treat screenshot as measured glottal flow or infer absolute frequency, duration, intensity, or source waveform.",
+  "observations": [
+    "Distinct lower harmonic lines persist through the vowel.",
+    "Small coordinated waviness appears in harmonic trajectories.",
+    "Energy gathers in broad horizontal groups separated by darker regions.",
+    "Fine irregular texture is visible, especially toward the upper bands."
+  ],
+  "latest_user_feedback": "Even the bare vocal-fold source does not sound like a person; source remains perceptually rejected."
+}

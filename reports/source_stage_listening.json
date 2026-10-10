@@ -21,5 +21,10 @@
     }
   },
   "enhanced_status": "rendering asynchronously; inspect complete fields before changing model",
-  "audio_directory": "out/source-stage-listening"
+  "audio_directory": "out/source-stage-listening",
+  "user_assessment": {
+    "bare_source": "rejected: even the beginning does not sound like a person",
+    "human_reference": "reports/user_soft_a_reference.json",
+    "next_scope": "Investigate excitation; use sustained whole-vowel soft /a/ for comparison with the supplied human screenshot. Original human audio needed for identical enhanced analysis."
+  }
 }
