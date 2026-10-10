@@ -10,6 +10,16 @@ bool combine(std::vector<double>& free,const std::vector<double>& response,doubl
     for(std::size_t i=0;i<free.size();++i){free[i]+=flow*response[i];if(!std::isfinite(free[i])){return false;}}
     return true;
 }
+bool viscous_partition(std::span<const std::size_t> branches,std::span<const ViscousGeometry> geometry) noexcept {
+    for(std::size_t i=0;i<branches.size();++i){const auto& a=geometry[i];double total=0;
+        if(!std::isfinite(a.segment_inertance) || a.segment_inertance<=0 || !std::isfinite(a.branch_conductance) || a.branch_conductance<=0){return false;}
+        for(std::size_t j=0;j<branches.size();++j){if(branches[i]==branches[j]){
+            if(a.branch_conductance!=geometry[j].branch_conductance){return false;}total+=geometry[j].segment_inertance;
+        }}
+        if(!std::isfinite(total) || total*a.branch_conductance>1+1e-13){return false;}
+    }
+    return true;
+}
 }
 void GraphContinuousGlottis::prepare(std::size_t nodes,std::span<const TreeEdge> branches,std::size_t source_node,
     const FoldParameters& folds,const AirProperties& air,double tension,const FoldState& initial,
@@ -32,22 +42,38 @@ void GraphContinuousGlottis::prepare_thermal(const AirProperties& air,std::span<
     }
     auto trial=candidate;thermal=std::move(candidate);thermal_trial_=std::move(trial);thermal_nodes_=std::move(nodes);
 }
+void GraphContinuousGlottis::prepare_viscous(const AirProperties& air,std::span<const ViscousSite> sites){
+    std::vector<SlitViscous> candidate(sites.size());std::vector<std::size_t> branches;std::vector<ViscousGeometry> geometry;
+    for(std::size_t i=0;i<sites.size();++i){const auto& s=sites[i];const auto& g=s.geometry;
+        if(s.branch>=network.momentum.size() || !candidate[i].prepare(air,g.segment_inertance,g.branch_conductance,g.half_gap)){throw std::invalid_argument("invalid viscous site");}
+        branches.push_back(s.branch);geometry.push_back(g);
+    }
+    if(!viscous_partition(branches,geometry)){throw std::invalid_argument("viscous segments exceed branch inertia");}
+    auto trial=candidate;viscous=std::move(candidate);viscous_trial_=std::move(trial);viscous_branches_=std::move(branches);
+}
 bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const double> c2,
     std::span<const double> g1,std::span<const double> g2,double dt,double reservoir_pressure,
     const std::array<double,4>& external_force,std::span<const double> nodal_flow,
     std::span<const double> series_pressure,ContinuousGlottalUpdate update,double outlet_inertance,const RadiationGeometry* radiation_geometry,
-    std::span<const ThermalGeometry> thermal_geometry) noexcept {
+    std::span<const ThermalGeometry> thermal_geometry,std::span<const ViscousGeometry> viscous_geometry) noexcept {
     if(unit_flow_.empty() || network.charge.size()!=free_.charge.size() || network.momentum.size()!=free_.momentum.size()
         || network.average_pressure.size()!=free_.average_pressure.size() || network.average_flow.size()!=free_.average_flow.size()
-        || thermal.size()!=thermal_nodes_.size() || thermal.size()!=thermal_trial_.size() || thermal.size()!=thermal_geometry.size()){return false;}
+        || thermal.size()!=thermal_nodes_.size() || thermal.size()!=thermal_trial_.size() || thermal.size()!=thermal_geometry.size()
+        || viscous.size()!=viscous_branches_.size() || viscous.size()!=viscous_trial_.size() || viscous.size()!=viscous_geometry.size()
+        || !viscous_partition(viscous_branches_,viscous_geometry)){return false;}
     std::copy(network.charge.begin(),network.charge.end(),free_.charge.begin());
     std::copy(network.momentum.begin(),network.momentum.end(),free_.momentum.begin());
     RadiationBoundary next_radiation=radiation;GraphContinuousGlottalStep receipt;
+    std::copy(viscous.begin(),viscous.end(),viscous_trial_.begin());
     std::copy(thermal.begin(),thermal.end(),thermal_trial_.begin());
     for(std::size_t i=0;i<thermal_trial_.size();++i){auto& t=thermal_trial_[i];
         if(!t.advance(free_.charge[thermal_nodes_[i]],dt/2)){return false;}
         receipt.thermal_dissipation+=t.last.dissipated_energy;receipt.thermal_energy_residual+=t.last.energy_residual;
         receipt.thermal_air_residual+=t.last.stored_air_residual;
+    }
+    for(std::size_t i=0;i<viscous_trial_.size();++i){auto& v=viscous_trial_[i];
+        if(!v.advance(free_.momentum[viscous_branches_[i]],dt/2)){return false;}
+        receipt.viscous_dissipation+=v.last.dissipated_energy;receipt.viscous_energy_residual+=v.last.energy_residual;
     }
     if(radiation_geometry){
         const auto& r=*radiation_geometry;double work;
@@ -80,6 +106,13 @@ bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const 
         receipt.radiation_geometry_work+=work;receipt.radiated_energy+=next_radiation.last.radiated_energy;
         receipt.radiation_energy_residual+=next_radiation.last.energy_residual;
     }
+    // Reverse the segment order: shared-branch exchanges need a symmetric
+    // composition, since their independent profile memories do not commute.
+    for(std::size_t end=viscous_trial_.size();end>0;--end){const auto i=end-1;auto& v=viscous_trial_[i];const auto& g=viscous_geometry[i];double work;
+        if(!v.change_geometry(g.segment_inertance,g.branch_conductance,g.half_gap,work)
+            || !v.advance(free_.momentum[viscous_branches_[i]],dt/2)){return false;}
+        receipt.viscous_geometry_work+=work;receipt.viscous_dissipation+=v.last.dissipated_energy;receipt.viscous_energy_residual+=v.last.energy_residual;
+    }
     for(std::size_t i=0;i<thermal_trial_.size();++i){auto& t=thermal_trial_[i];const auto& geometry=thermal_geometry[i];double work;
         if(!t.change_geometry(geometry.compliance,geometry.half_gap,work)
             || !t.advance(free_.charge[thermal_nodes_[i]],dt/2)){return false;}
@@ -91,6 +124,7 @@ bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const 
     std::copy(free_.average_pressure.begin(),free_.average_pressure.end(),network.average_pressure.begin());
     std::copy(free_.average_flow.begin(),free_.average_flow.end(),network.average_flow.begin());
     source=candidate;if(radiation_geometry){radiation=next_radiation;}
-    std::copy(thermal_trial_.begin(),thermal_trial_.end(),thermal.begin());last=receipt;return true;
+    std::copy(thermal_trial_.begin(),thermal_trial_.end(),thermal.begin());
+    std::copy(viscous_trial_.begin(),viscous_trial_.end(),viscous.begin());last=receipt;return true;
 }
 }

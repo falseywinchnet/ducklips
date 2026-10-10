@@ -1,0 +1,90 @@
+{
+  "scope": "Localize the current endpoint timestep discrepancy. Nodes: mouth 0-1, lips 2-5, throat 6-13. A numerical-error location, not proof of its physical cause or audible consequence.",
+  "cases": [
+    {
+      "case": "closing",
+      "coarse_subdivisions": 512,
+      "fine_subdivisions": 1024,
+      "endpoint_pressure_difference_Pa": [
+        0.004468411113066395,
+        0.0007280143867092193,
+        0.005552677225068692,
+        0.10307354355012421,
+        -1.7371548901695633,
+        39.53880475849979,
+        -0.0017405757764663576,
+        0.013688100444312568,
+        0.11336007754044886,
+        0.08468638501045689,
+        -0.041868880332856406,
+        -0.0804078154326362,
+        -0.07511343920481295,
+        -0.06480542329381933
+      ],
+      "largest_node": 5,
+      "largest_region": "last lip storage section",
+      "maximum_mouth_difference_Pa": 0.004468411113066395,
+      "maximum_throat_difference_Pa": 0.11336007754044886,
+      "largest_node_fine_volume_m3": 9.081920170409972e-09,
+      "largest_node_fine_pressure_Pa": 457.57273015121467,
+      "largest_node_fine_compliance_m3_Pa": 6.50334419649837e-14,
+      "lip_internal_conductance": 0.01625311104455122,
+      "lip_outlet_conductance": 0,
+      "frozen_inviscid_tract_diagnostic": {
+        "scope": "Frozen inviscid endpoint tract wave basis; excludes source, thermal, viscous and radiation memory feedback, and branch circulation not visible to node divergence. Diagnostic basis, not the lossy coupled spectrum.",
+        "dominant_error_mode_frequency_Hz": 81300.0948492186,
+        "dominant_mode_error_energy_fraction": 0.9988576908625145,
+        "dominant_mode_last_lip_energy_coordinate_fraction": 0.9508670458157998,
+        "dominant_mode_pressure_error_Pa": 39.53135922986587,
+        "total_modal_error_energy_J": 5.476479517429482e-11
+      }
+    },
+    {
+      "case": "opening",
+      "coarse_subdivisions": 512,
+      "fine_subdivisions": 1024,
+      "endpoint_pressure_difference_Pa": [
+        0.033555053764189324,
+        0.03353824595322408,
+        0.04405203515376854,
+        0.040417423372389294,
+        -0.11432976982700893,
+        2.757776272179008,
+        0.03321343893583162,
+        0.03537541626917573,
+        0.03246754385241957,
+        0.03110457683851564,
+        0.03359664001067131,
+        0.03640176148900309,
+        0.03910392178102029,
+        0.15411381851720307
+      ],
+      "largest_node": 5,
+      "largest_region": "last lip storage section",
+      "maximum_mouth_difference_Pa": 0.033555053764189324,
+      "maximum_throat_difference_Pa": 0.15411381851720307,
+      "largest_node_fine_volume_m3": 2.232571278663628e-08,
+      "largest_node_fine_pressure_Pa": 59.54133481902626,
+      "largest_node_fine_compliance_m3_Pa": 1.5986904967158098e-13,
+      "lip_internal_conductance": 0.02275001500163668,
+      "lip_outlet_conductance": 0.0008572190539217491,
+      "frozen_inviscid_tract_diagnostic": {
+        "scope": "Frozen inviscid endpoint tract wave basis; excludes source, thermal, viscous and radiation memory feedback, and branch circulation not visible to node divergence. Diagnostic basis, not the lossy coupled spectrum.",
+        "dominant_error_mode_frequency_Hz": 62931.92583744291,
+        "dominant_mode_error_energy_fraction": 0.7030301468789126,
+        "dominant_mode_last_lip_energy_coordinate_fraction": 0.9257791607997451,
+        "dominant_mode_pressure_error_Pa": 2.6991522904918153,
+        "total_modal_error_energy_J": 5.971859362024249e-12
+      }
+    }
+  ],
+  "hashes": {
+    "out/planar-viscous/closing-1-512.json": "062b6e54aa2c2febf430f54b9d828d4bb54b047fbc342b702c4e4dda37b446f9",
+    "out/planar-viscous/closing-1-1024.json": "8e5eabcfb00912e5784277afb1364cff4430ecef5d5fe788942ee199d2da65a9",
+    "out/planar-viscous/opening-1-512.json": "cc8101f1a53ee1c1f025b43ba67f1c31d5887f46474b98f6738218390fcc8c92",
+    "out/planar-viscous/opening-1-1024.json": "edc8c193d1313bc84a42bf947301b3207a321ab5ea677ac638a6cffbd89341e2",
+    "tools/viscous_refinement_location.py": "291e8fd3e1db82e2556cd752d4b73ab302b50fa478401173439f9372001acaae",
+    "tools/planar_inertive_motion_probe.cpp": "625b5fe562c30a6beec2a85ee2f4f6e225cbceb559a447cb740d809a8417f6cc",
+    "tools/planar_source_reference.py": "f4a3d967301ac9980e42fc68385d413fdc6398a821fdc8a1c6358be5c51dae97"
+  }
+}

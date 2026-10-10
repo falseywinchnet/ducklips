@@ -215,6 +215,7 @@ int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     double thermal_width=0;
+    double viscous_width=0;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
@@ -229,11 +230,16 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(thermal_width) || thermal_width<=0){return 2;}
         }
+        else if(arg=="--viscous-slit-width" && viscous_width==0 && i+1<argc){
+            try{std::size_t used=0;const std::string value=argv[++i];viscous_width=std::stod(value,&used);if(used!=value.size()){return 2;}}
+            catch(...){return 2;}
+            if(!std::isfinite(viscous_width) || viscous_width<=0){return 2;}
+        }
         else if(arg=="--initial-state" && !initial_state){initial_state=true;}
         else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
         else{return 2;}
     }
-    if(((radiation_mode || thermal_width>0) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if(((radiation_mode || thermal_width>0 || viscous_width>0) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -391,6 +397,20 @@ int main(int argc,char** argv){
     auto& momentum=lip_mode?graph.momentum:acoustic.momentum;
     for(std::size_t i=0;i<total_nodes;++i){charge[i]=compliance[i]*initial[i];}
     const std::size_t thermal_base=nodes+lip.sections.size();
+    const std::size_t viscous_base=ports.size()+loads.size()+lip.attachments.size()+lip.sections.size()+epi.attachments.size();
+    std::vector<ducklips::ViscousGeometry> viscous_geometry;
+    const auto set_viscous_geometry=[&](double fraction){
+        for(std::size_t i=1;i<epi.sections.size();++i){for(std::size_t half=0;half<2;++half){const auto& s=epi.sections[i-1+half];
+            const double area=std::lerp(s.first_area,s.last_area,fraction),length=std::lerp(s.first_length,s.last_length,fraction);
+            viscous_geometry[2*(i-1)+half]={ducklips::AirProperties{}.density*.5*length/area,gend[viscous_base+i-1],area/(2*viscous_width)};
+        }}
+    };
+    if(viscous_width>0){
+        viscous_geometry.resize(2*(epi.sections.size()-1));set_viscous_geometry(0);
+        std::vector<ducklips::ViscousSite> sites;
+        for(std::size_t i=0;i<viscous_geometry.size();++i){sites.push_back({viscous_base+i/2,viscous_geometry[i]});}
+        try{continuous.prepare_viscous({},sites);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
+    }
     std::vector<ducklips::ThermalGeometry> thermal_geometry;
     if(thermal_width>0){
         std::vector<ducklips::ThermalSite> sites;thermal_geometry.resize(epi.sections.size());
@@ -420,6 +440,7 @@ int main(int argc,char** argv){
             continuous.radiation.momentum=value;
         }
         if(thermal_width>0){for(auto& site:continuous.thermal){for(double& z:site.charge){if(std::scanf("%lf",&z)!=1 || !std::isfinite(z)){return 2;}}}}
+        if(viscous_width>0){for(auto& site:continuous.viscous){for(double& z:site.momentum){if(std::scanf("%lf",&z)!=1 || !std::isfinite(z)){return 2;}}}}
         if(fold_mode){
             ducklips::FoldState s;
             if(std::scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf",&s.lower_position[0],&s.lower_position[1],&s.lower_velocity[0],&s.lower_velocity[1],
@@ -433,6 +454,10 @@ int main(int argc,char** argv){
         std::printf(",\"thermal_sites\":[");for(std::size_t i=0;i<continuous.thermal.size();++i){const auto& site=continuous.thermal[i];
             std::printf("%s{\"node\":%zu,\"compliance\":%.17g,\"half_gap\":%.17g,\"stored_air\":%.17g,\"energy\":%.17g",i?",":"",thermal_base+i,site.compliance(),site.half_gap(),site.stored_air(),site.energy());
             values("charge",site.charge);std::putchar('}');}std::putchar(']');
+    }if(viscous_width>0){
+        std::printf(",\"viscous_sites\":[");for(std::size_t i=0;i<continuous.viscous.size();++i){const auto& site=continuous.viscous[i];
+            std::printf("%s{\"branch\":%zu,\"segment_inertance\":%.17g,\"branch_conductance\":%.17g,\"half_gap\":%.17g,\"energy\":%.17g",i?",":"",viscous_base+i/2,site.segment_inertance(),site.branch_conductance(),site.half_gap(),site.energy());
+            values("momentum",site.momentum);std::putchar('}');}std::putchar(']');
     }if(lip_mode){state(graph,volume,compliance,gend);}else{state(acoustic,volume,compliance,gend);}};
     // Contact times split the integration. No dissipative mobility is assigned
     // to artificial grid faces. Inverse inertance is A/(rho*centre_distance).
@@ -488,10 +513,14 @@ int main(int argc,char** argv){
             ducklips::RadiationGeometry radiation_geometry;
             if(radiation_mode){radiation_geometry={radiation_branch,radiation_first_g,gend[radiation_branch],radiation_area(.5*(t0+t1)),radiation_area(t1)};}
             for(std::size_t i=0;i<thermal_geometry.size();++i){const auto& section=epi.sections[i];thermal_geometry[i]={compliance[thermal_base+i],std::lerp(section.first_area,section.last_area,t1)/(2*thermal_width)};}
-            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr,thermal_geometry)){
+            if(viscous_width>0){set_viscous_geometry(t1);}
+            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr,thermal_geometry,viscous_geometry)){
                 std::fprintf(stderr,"continuous source solve failed at step %zu, dt %.17g\n",step,dt);return 1;
             }
             if(!continuous_state(continuous)){return 1;}
+            if(viscous_width>0){const auto& r=continuous.last;
+                std::printf(",\"viscous_dissipation\":%.17g,\"viscous_geometry_work\":%.17g,\"viscous_work_residual\":%.17g",r.viscous_dissipation,r.viscous_geometry_work,r.viscous_energy_residual);
+            }
             if(thermal_width>0){const auto& r=continuous.last;
                 std::printf(",\"thermal_dissipation\":%.17g,\"thermal_geometry_work\":%.17g,\"thermal_work_residual\":%.17g,\"thermal_air_residual\":%.17g",r.thermal_dissipation,r.thermal_geometry_work,r.thermal_energy_residual,r.thermal_air_residual);
             }

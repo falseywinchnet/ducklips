@@ -1,0 +1,25 @@
+{
+  "scope": "No-slip stationary-wall slit impedance, with full branch inertia shared by a segment. Exact Stokes transfer and independent matrix decay; no anatomical calibration or full speech.",
+  "matrix_cases": 100,
+  "maximum_scaled_state_error": 1.908582757298757e-13,
+  "maximum_relative_energy_error": 2.6801875752526322e-14,
+  "maximum_relative_impedance_error": 0.00015065327121229058,
+  "maximum_relative_resistance_error": 0.0193860295207251,
+  "maximum_relative_viscous_correction_error": 0.01958522177252555,
+  "dimensionless_frequency_range": [
+    1e-06,
+    100000000.0
+  ],
+  "profile_inertia_fraction": 0.2,
+  "hashes": {
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "src/slit_viscous.cpp": "a2467fa5251bd6a1b04428a3ee6fcfb467a668e0d03914d11ea974f2d08fd65a",
+    "include/ducklips/slit_viscous.hpp": "f399c6dfca1566b9cc4543932019a71ebbdd75df06ad63cf1f8a1659bfb697fd",
+    "include/ducklips/viscous_spectrum.hpp": "8625f61b022976e48cac00c60dc55f8f1029256aef355de2feed48bd81645da9",
+    "tools/slit_viscous_probe.cpp": "2f0da542106436373238d31acca15f07362035e67848500f0697b23498fada5f",
+    "build/ducklips_slit_viscous_probe": "5b507e282b083a4424fe65d8ae43a6fec9da8e0026e6f3ff1b2783f1540f8cac",
+    "out/slit-viscous/frequency.npz": "8b43f2e59a2ecd9fb32df3f868359080b79fa05fff83f810b1e916abfa92b443",
+    "out/slit-viscous/matrix.input": "14e23a0228605f4bc05bae376bbfebc306baf77bfd5f5d6f286047990a01e1fc",
+    "out/slit-viscous/matrix.txt": "88fd1517051cde0a2dce90ea727482c5268030d6071d01c372e57fbc42ccbf87"
+  }
+}

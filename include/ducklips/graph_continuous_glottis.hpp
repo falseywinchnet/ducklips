@@ -3,6 +3,7 @@
 #include "ducklips/moving_graph.hpp"
 #include "ducklips/radiation_boundary.hpp"
 #include "ducklips/slit_thermal.hpp"
+#include "ducklips/slit_viscous.hpp"
 
 namespace ducklips {
 struct RadiationGeometry final {
@@ -11,12 +12,15 @@ struct RadiationGeometry final {
 };
 struct ThermalSite final {std::size_t node{};double compliance{},half_gap{};};
 struct ThermalGeometry final {double compliance{},half_gap{};};
+struct ViscousGeometry final {double segment_inertance{},branch_conductance{},half_gap{};};
+struct ViscousSite final {std::size_t branch{};ViscousGeometry geometry{};};
 struct GraphContinuousGlottalStep final {
     double free_pressure{},load_slope{},pressure{},flow{};
     double source_port_work{},graph_port_work{},port_residual{};
     double graph_external_work{},source_geometry_work{};
     double radiated_energy{},radiation_geometry_work{},radiation_energy_residual{};
     double thermal_dissipation{},thermal_geometry_work{},thermal_energy_residual{},thermal_air_residual{};
+    double viscous_dissipation{},viscous_geometry_work{},viscous_energy_residual{};
 };
 // Implicit work-conjugate coupling of the continuous source to a linear
 // acoustic graph. Graph pressure is its linearized mass-effort variable;
@@ -32,6 +36,9 @@ public:
     // Initializes zero thermal charge; equilibrate explicitly for an initially
     // isothermal pressure state. Thermal stored_air() belongs in total mass.
     void prepare_thermal(const AirProperties&,std::span<const ThermalSite>);
+    // Distinct physical segments may share a branch. Their inertances must
+    // sum to no more than that branch's existing plug-flow inertia.
+    void prepare_viscous(const AirProperties&,std::span<const ViscousSite>);
     // Prescribed stage metrics, constant external drives, one source step.
     // No allocation after prepare. Failure preserves network, source and last.
     // A caller subdividing contact steps must recompute BOTH graph stages and
@@ -42,17 +49,20 @@ public:
         const std::array<double,4>& external_force={},std::span<const double> nodal_flow={},
         std::span<const double> series_pressure={},
         ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric,double outlet_inertance=-1.,const RadiationGeometry* radiation_geometry=nullptr,
-        std::span<const ThermalGeometry> thermal_geometry={}) noexcept;
+        std::span<const ThermalGeometry> thermal_geometry={},std::span<const ViscousGeometry> viscous_geometry={}) noexcept;
     MovingGraphReference network{};
     ContinuousGlottis source{};
     RadiationBoundary radiation{}; // Explicitly prepare before enabling a radiation step.
     std::vector<SlitThermal> thermal{};
+    std::vector<SlitViscous> viscous{};
     GraphContinuousGlottalStep last{};
 private:
     MovingGraphReference free_{},response_{};
     std::vector<double> unit_flow_{};
     std::vector<SlitThermal> thermal_trial_{};
     std::vector<std::size_t> thermal_nodes_{};
+    std::vector<SlitViscous> viscous_trial_{};
+    std::vector<std::size_t> viscous_branches_{};
     std::size_t source_node_{};
 };
 }

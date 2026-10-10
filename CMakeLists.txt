@@ -30,6 +30,7 @@ add_library(ducklips STATIC
     src/graph_continuous_glottis.cpp
     src/radiation_boundary.cpp
     src/slit_thermal.cpp
+    src/slit_viscous.cpp
     src/contour_pressure_loss.cpp
     src/contour_pressure_flow.cpp
     src/contour_pressure_storage.cpp
@@ -78,7 +79,11 @@ enable_testing()
 add_executable(ducklips_slit_thermal_probe tools/slit_thermal_probe.cpp)
 target_link_libraries(ducklips_slit_thermal_probe PRIVATE ducklips)
 add_test(NAME ducklips_slit_thermal COMMAND ducklips_slit_thermal_probe)
+add_executable(ducklips_slit_viscous_probe tools/slit_viscous_probe.cpp)
+target_link_libraries(ducklips_slit_viscous_probe PRIVATE ducklips)
+add_test(NAME ducklips_slit_viscous COMMAND ducklips_slit_viscous_probe)
 add_test(NAME ducklips_graph_continuous_thermal COMMAND ducklips_graph_continuous_glottis_probe --thermal)
+add_test(NAME ducklips_graph_continuous_viscous COMMAND ducklips_graph_continuous_glottis_probe --viscous)
 add_test(NAME ducklips_tests COMMAND ducklips_tests)
 
 # Optional: DuckLips as a GUI.Forms AudioGenerator. Builds the GUI.Forms

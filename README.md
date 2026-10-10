@@ -91,6 +91,19 @@ second order. Moving-mouth closing sensitivity is almost unchanged. Viscous
 drag, yielding walls, thermal geometry beyond those throat sections and complete
 utterance integration remain unfinished; this has not changed the listening sample.
 
+An explicit [finite-gap viscous connection](reports/CONTINUOUS_VISCOUS_DRAG.md)
+now adds wall drag and transverse velocity-profile memory to the seven internal
+throat flows. Adjoining half-sections share the existing branch inertia.
+Independent slit, matrix-decay and source/tract ODE checks quantify both model
+approximation and time error. The moving closing control still has about 39.54 Pa
+of endpoint change at its finest refinement. Mouth/lip drag and the two end
+half-sections remain unfinished; no new speech recording follows from this step.
+The [endpoint mode diagnostic](reports/viscous_refinement_location.json) now
+localizes the dominant closing discrepancy to an 81.3 kHz mode concentrated in
+the last lip storage section; the largest throat-node difference is only
+0.114 Pa. This is a frozen-tract diagnostic, not a complete damped spectrum or
+proof that the numerical discrepancy cannot affect audible output.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

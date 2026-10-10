@@ -42,7 +42,7 @@ void prepare(GraphContinuousGlottis& model,std::size_t nodes,std::span<const duc
     model.prepare(nodes,edges,port,{}, {},1.,folds(state),{state[0],state[1]},
         {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span,column);
 }
-void fixture(bool column=false,bool radiation=false,bool thermal=false){
+void fixture(bool column=false,bool radiation=false,bool thermal=false,bool viscosity=false){
     unsigned n,m,steps,port;require(std::scanf("%u%u%u%u",&n,&m,&steps,&port)==4,"fixture dimensions");
     require(n>0 && n<=64 && m<=256 && steps<=1000000,"fixture size");
     std::vector<ducklips::TreeEdge> edges(m);
@@ -55,16 +55,22 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false){
         for(std::size_t i=0;i<n;++i){const double c=number(),gap=number();sites.push_back({i,c,gap});thermal_geometry.push_back({c,gap});}
         model.prepare_thermal({},sites);for(auto& site:model.thermal){for(double& z:site.charge){z=number();}}
     }
+    std::vector<ducklips::ViscousGeometry> viscous_geometry;
+    if(viscosity){unsigned count;require(std::scanf("%u",&count)==1 && count<=256,"viscous count");std::vector<ducklips::ViscousSite> sites;
+        for(unsigned i=0;i<count;++i){const auto branch=static_cast<std::size_t>(number());const double l=number(),g=number(),a=number();sites.push_back({branch,{l,g,a}});viscous_geometry.push_back({l,g,a});}
+        model.prepare_viscous({},sites);for(auto& site:model.viscous){for(double& z:site.momentum){z=number();}}
+    }
     std::vector<double> c1(n),c2(n),g1(m),g2(m),nodal(n),series(m);
     for(unsigned step=0;step<steps;++step){
         const double dt=number(),pressure=number();const int mode=static_cast<int>(number());const double next_inertance=column?number():-1.;
         ducklips::RadiationGeometry boundary;boundary.branch=m-1;
         if(radiation){boundary.midpoint_area=number();boundary.last_area=number();boundary.first_conductance=number();boundary.last_conductance=number();}
         if(thermal){for(auto& site:thermal_geometry){site.compliance=number();site.half_gap=number();}}
+        if(viscosity){for(auto& site:viscous_geometry){site.segment_inertance=number();site.branch_conductance=number();site.half_gap=number();}}
         read(c1);read(c2);read(g1);read(g2);read(nodal);read(series);
         require(mode>=0 && mode<=2,"fixture update mode");
         const ducklips::ContinuousGlottalUpdate updates[]={ducklips::ContinuousGlottalUpdate::symmetric,ducklips::ContinuousGlottalUpdate::dissipative,ducklips::ContinuousGlottalUpdate::relaxation};
-        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance,radiation?&boundary:nullptr,thermal_geometry)){
+        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance,radiation?&boundary:nullptr,thermal_geometry,viscous_geometry)){
             std::fprintf(stderr,"coupled fixture failed at step %u\n",step);throw std::runtime_error("fixture advance");
         }
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"fixture state");
@@ -76,18 +82,22 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false){
             s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);if(column){const double extra[]={s.geometry_work,state.outlet_inertance};print(extra);}if(radiation){const double extra[]={model.radiation.momentum,model.radiation.energy(),r.radiated_energy,r.radiation_geometry_work,r.radiation_energy_residual};print(extra);}
         if(thermal){double energy=0,mass=0;for(const auto& site:model.thermal){print(site.charge);energy+=site.energy();mass+=site.stored_air();}
             const double extra[]={energy,mass,r.thermal_dissipation,r.thermal_geometry_work,r.thermal_energy_residual};print(extra);
+        }if(viscosity){double energy=0;for(const auto& site:model.viscous){print(site.momentum);energy+=site.energy();}
+            const double extra[]={energy,r.viscous_dissipation,r.viscous_geometry_work,r.viscous_energy_residual};print(extra);
         }std::puts("");
     }
 }
-void radiation_controls(bool thermal=false){
+void radiation_controls(bool thermal=false,bool viscosity=false){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
     const std::array<double,3> c={1e-11,1.4e-11,8e-12};const std::array<double,4> g={.002,.003,.001,.0025};
     GraphContinuousGlottis model;prepare(model,3,edges,1,initial,1.,80.);
     require(model.radiation.prepare({},1e-4),"radiation prepare");model.radiation.momentum=.004;
     model.network.charge={1e-9,-2e-9,5e-10};model.network.momentum={.01,-.02,.015,.005};
     std::array<ducklips::ThermalGeometry,3> thermal_geometry{};
+    std::array<ducklips::ViscousGeometry,3> viscous_geometry={{{.4/g[1],g[1],.001},{.6/g[1],g[1],.002},{.8/g[3],g[3],.0005}}};
+    if(viscosity){const std::array<ducklips::ViscousSite,3> sites={{{1,viscous_geometry[0]},{1,viscous_geometry[1]},{3,viscous_geometry[2]}}};model.prepare_viscous({},sites);}
     if(thermal){const std::array<ducklips::ThermalSite,3> sites={{{0,c[0],.001},{1,c[1],.002},{2,c[2],.0005}}};model.prepare_thermal({},sites);}
-    const auto thermal_energy=[&](){double value=0;for(const auto& t:model.thermal){value+=t.energy();}return value;};
+    const auto thermal_energy=[&](){double value=0;for(const auto& t:model.thermal){value+=t.energy();}for(const auto& v:model.viscous){value+=v.energy();}return value;};
     const auto stored_air=[&](){double value=0;for(double q:model.network.charge){value+=q;}for(const auto& t:model.thermal){value+=t.stored_air();}return value;};
     ducklips::ContinuousGlottalState state;require(model.source.state(state),"source state");
     const double initial_energy=state.energy+graph_energy(model.network,c,g)+model.radiation.energy();
@@ -97,11 +107,11 @@ void radiation_controls(bool thermal=false){
         const ducklips::RadiationGeometry geometry{3,g[3],g[3],.5*(area+model.radiation.area()),area};
         for(std::size_t i=0;i<3;++i){thermal_geometry[i]={c[i],.001*(1+.2*std::sin(.01*(step+1)+i))};}
         const auto count=allocations.load();
-        require(model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&geometry,thermal?std::span<const ducklips::ThermalGeometry>(thermal_geometry):std::span<const ducklips::ThermalGeometry>{}),"radiation coupled advance");
+        require(model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&geometry,thermal?std::span<const ducklips::ThermalGeometry>(thermal_geometry):std::span<const ducklips::ThermalGeometry>{},viscosity?std::span<const ducklips::ViscousGeometry>(viscous_geometry):std::span<const ducklips::ViscousGeometry>{}),"radiation coupled advance");
         require(allocations.load()==count,"radiation advance allocated");require(model.source.state(state),"accepted source");
         const auto& s=model.source.last;const auto& r=model.last;
-        work+=s.reservoir_work+s.external_work+s.geometry_work+r.graph_external_work+r.radiation_geometry_work+r.thermal_geometry_work;
-        loss+=s.fluid_loss+s.tissue_loss+s.outlet_loss+s.numerical_loss+r.radiated_energy+r.thermal_dissipation;radiated+=r.radiated_energy;heat+=r.thermal_dissipation;
+        work+=s.reservoir_work+s.external_work+s.geometry_work+r.graph_external_work+r.radiation_geometry_work+r.thermal_geometry_work+r.viscous_geometry_work;
+        loss+=s.fluid_loss+s.tissue_loss+s.outlet_loss+s.numerical_loss+r.radiated_energy+r.thermal_dissipation+r.viscous_dissipation;radiated+=r.radiated_energy;heat+=r.thermal_dissipation;
         transfer+=2.5e-6*(s.flow[0]-model.network.average_flow[3]);mass_error=std::max(mass_error,std::abs(state.mass[0]+state.mass[1]+stored_air()-initial_mass-transfer));
         require(r.radiated_energy>=0,"radiation passive");
         worst=std::max(worst,std::abs(state.energy+graph_energy(model.network,c,g)+model.radiation.energy()+thermal_energy()-initial_energy+loss-work));
@@ -109,17 +119,29 @@ void radiation_controls(bool thermal=false){
     require(worst<1e-13 && radiated>0 && mass_error<1e-20 && (!thermal || heat>0),"joint radiation/thermal work and air");
     const auto saved=model;const auto physical_before=physical(state);
     const ducklips::RadiationGeometry bad{3,g[3],g[3],model.radiation.area(),-1.};
-    require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&bad,thermal?std::span<const ducklips::ThermalGeometry>(thermal_geometry):std::span<const ducklips::ThermalGeometry>{}),"reject endpoint radiation after source trial");
+    require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,&bad,thermal?std::span<const ducklips::ThermalGeometry>(thermal_geometry):std::span<const ducklips::ThermalGeometry>{},viscosity?std::span<const ducklips::ViscousGeometry>(viscous_geometry):std::span<const ducklips::ViscousGeometry>{}),"reject endpoint radiation after source trial");
     require(model.source.state(state) && physical(state)==physical_before && model.network.charge==saved.network.charge
         && model.network.momentum==saved.network.momentum && model.radiation.momentum==saved.radiation.momentum
         && model.radiation.area()==saved.radiation.area() && model.last.radiated_energy==saved.last.radiated_energy,"radiation transaction");
     if(thermal){
         for(std::size_t i=0;i<3;++i){require(model.thermal[i].charge==saved.thermal[i].charge,"thermal rollback");}
         thermal_geometry.back().compliance=-1.;
-        require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry),"late thermal geometry rejection");
+        require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry,viscosity?std::span<const ducklips::ViscousGeometry>(viscous_geometry):std::span<const ducklips::ViscousGeometry>{}),"late thermal geometry rejection");
         require(model.source.state(state) && physical(state)==physical_before && model.network.charge==saved.network.charge,"late thermal rollback");
         for(std::size_t i=0;i<3;++i){require(model.thermal[i].charge==saved.thermal[i].charge,"all thermal states preserved");}
         std::printf("PASS thermal coupling: dissipated %.17g J, stored-air residual %.17g m3; ",heat,mass_error);
+    }
+    if(viscosity){
+        for(std::size_t i=0;i<3;++i){require(model.viscous[i].momentum==saved.viscous[i].momentum,"viscous rollback");}
+        for(std::size_t i=0;i<3;++i){thermal_geometry[i].compliance=c[i];}
+        viscous_geometry[0].half_gap=-1;
+        require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},ducklips::ContinuousGlottalUpdate::relaxation,-1.,nullptr,thermal_geometry,viscous_geometry),"late viscous rejection");
+        require(model.network.momentum==saved.network.momentum && model.source.state(state) && physical(state)==physical_before,"viscous transaction");
+        for(std::size_t i=0;i<3;++i){require(model.viscous[i].momentum==saved.viscous[i].momentum,"all viscous memories preserved");}
+        const std::array<ducklips::ViscousSite,2> duplicate={{{1,{.6/g[1],g[1],.001}},{1,{.6/g[1],g[1],.001}}}};
+        bool rejected=false;try{model.prepare_viscous({},duplicate);}catch(const std::invalid_argument&){rejected=true;}
+        require(rejected && model.viscous.size()==saved.viscous.size(),"no duplicated plug inertia");
+        std::printf("PASS shared-branch viscous coupling; ");
     }
     std::printf("PASS radiating coupled source: work residual %.17g J, radiated %.17g J; allocation-free and rollback\n",worst,radiated);
 }
@@ -196,8 +218,10 @@ int main(int argc,char** argv){try{
     else if(argc==2 && std::string(argv[1])=="--column-fixture"){fixture(true);}
     else if(argc==2 && std::string(argv[1])=="--radiation-fixture"){fixture(true,true);}
     else if(argc==2 && std::string(argv[1])=="--thermal-fixture"){fixture(true,true,true);}
+    else if(argc==2 && std::string(argv[1])=="--viscous-fixture"){fixture(true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--radiation"){radiation_controls();}
     else if(argc==2 && std::string(argv[1])=="--thermal"){radiation_controls(true);}
+    else if(argc==2 && std::string(argv[1])=="--viscous"){radiation_controls(true,true);}
     else if(argc==2 && std::string(argv[1])=="--column"){controls(ducklips::ContinuousGlottalUpdate::relaxation,true);}
     else if(argc==2 && std::string(argv[1])=="--relaxation"){controls(ducklips::ContinuousGlottalUpdate::relaxation);}
     else{require(argc==1,"arguments");controls();}return 0;
