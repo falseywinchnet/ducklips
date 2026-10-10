@@ -4,6 +4,9 @@
 #include <cmath>
 #include <limits>
 namespace ducklips {
+double SlitViscous::memory_storage(std::size_t i) const noexcept {return i<modes?inertance_*viscous_spectrum::weight[i]/viscous_spectrum::pole[i]:0.;}
+double SlitViscous::memory_rate(std::size_t i) const noexcept {return i<modes && inertance_>0?viscosity_/half_gap_/half_gap_*viscous_spectrum::pole[i]:0.;}
+double SlitViscous::steady_resistance() const noexcept {return inertance_>0?3*inertance_*viscosity_/half_gap_/half_gap_:0.;}
 bool SlitViscous::diagonalize(double ratio) noexcept {
     constexpr std::size_t n=dimension;std::array<double,n*n> a{};vectors_.fill(0.);a[0]=3*ratio;
     for(std::size_t i=0;i<n;++i){vectors_[n*i+i]=1.;}

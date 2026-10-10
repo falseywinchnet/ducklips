@@ -4,6 +4,8 @@
 #include <cmath>
 #include <limits>
 namespace ducklips {
+double SlitThermal::memory_storage(std::size_t i) const noexcept {return i<modes?compliance_*capacity_[i]:0.;}
+double SlitThermal::memory_rate(std::size_t i) const noexcept {return i<modes && compliance_>0?diffusivity_/half_gap_/half_gap_*thermal_spectrum::pole[i]:0.;}
 bool SlitThermal::prepare(const AirProperties& air,double compliance,double half_gap) noexcept {
     if(!std::isfinite(air.heat_capacity_ratio) || air.heat_capacity_ratio<=1
         || !std::isfinite(air.thermal_diffusivity) || air.thermal_diffusivity<=0){return false;}

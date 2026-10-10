@@ -1,0 +1,128 @@
+{
+  "scope": "Fresh AddressSanitizer runs using the release audit inputs. Full JSON compared against Release (2e-9 scaled tolerance, source effort 1e-6 absolute because its reconstruction cancels large terms); per-step passive/source work and air receipts checked; independent full-stage audit is in planar_joint_reference.json and is not rerun here.",
+  "runs": [
+    {
+      "case": "closing",
+      "interval": 0,
+      "steps": 257,
+      "maximum_relative_difference": 4.359536198705882e-08,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/.build/asan/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        ".03",
+        "--viscous-slit-width",
+        ".03",
+        "--lip-viscous-width",
+        ".03",
+        "--outlet-viscous",
+        "--joint-relaxation"
+      ],
+      "hashes": {
+        "out/planar-joint/closing-0-256.txt": "2ee4763379c3e2259b353dcd4df315aff3ba36b5dfb3026122ef5f4647fee2a7",
+        "out/planar-joint/closing-0-256.json": "2ffa139552121dfdf35e448bbda3c381774acb93b5670739e34a0c18e2faf93a",
+        "out/planar-joint-asan/closing-0-256.json": "2fdc669c82a673ee7822cd6874ac3d2dde346bbf6af6960fc8d995a7647da594",
+        "out/planar-joint-asan/closing-0-256.stderr": "9a9aeb488ed2a75b67f30f14cfc97ebc21042958f58bd25d1c1bf7b17d819f68"
+      }
+    },
+    {
+      "case": "closing",
+      "interval": 1,
+      "steps": 256,
+      "maximum_relative_difference": 9.201890110022039e-10,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/.build/asan/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        ".03",
+        "--viscous-slit-width",
+        ".03",
+        "--lip-viscous-width",
+        ".03",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--initial-state"
+      ],
+      "hashes": {
+        "out/planar-joint/closing-1-256.txt": "3cfb7da48b154832845e71d80c1debc0bb9514b6f84630324982a8f12f1e73dc",
+        "out/planar-joint/closing-1-256.json": "7488511f53d37d615f81eb660f6fa3d8ecab3ae5bf5096a02b39be20952484c8",
+        "out/planar-joint-asan/closing-1-256.json": "a00d67af43d8fa680ead0c72a3f076a0d7de3a01bbd53910d91d8a94e419419d",
+        "out/planar-joint-asan/closing-1-256.stderr": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      }
+    },
+    {
+      "case": "opening",
+      "interval": 0,
+      "steps": 256,
+      "maximum_relative_difference": 3.983691803518181e-12,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/.build/asan/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        ".03",
+        "--viscous-slit-width",
+        ".03",
+        "--lip-viscous-width",
+        ".03",
+        "--outlet-viscous",
+        "--joint-relaxation"
+      ],
+      "hashes": {
+        "out/planar-joint/opening-0-256.txt": "335dc629683644282d7f42c767b2c2bc8a88021581193f70a093cde28f074f2f",
+        "out/planar-joint/opening-0-256.json": "680c0c1e73445acf325694e42c41a73e0edc9d4df4484cdc1214e12c70e97aca",
+        "out/planar-joint-asan/opening-0-256.json": "d22b55cb5c12fdee9938b0877a24004f3d27129d8c460d77d962567b1541c7ba",
+        "out/planar-joint-asan/opening-0-256.stderr": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      }
+    },
+    {
+      "case": "opening",
+      "interval": 1,
+      "steps": 256,
+      "maximum_relative_difference": 3.347364247557293e-11,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/.build/asan/ducklips_planar_inertive_motion_probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        ".03",
+        "--viscous-slit-width",
+        ".03",
+        "--lip-viscous-width",
+        ".03",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--initial-state"
+      ],
+      "hashes": {
+        "out/planar-joint/opening-1-256.txt": "79688a441218b55cd9f4b71b0147740c5c83f8f8dd419fa55f786e2c546074fc",
+        "out/planar-joint/opening-1-256.json": "c9127936685d55afc2af80c980c149496e7780dbb51ca49f08cc919e93635650",
+        "out/planar-joint-asan/opening-1-256.json": "b61139ae5deec3c7e2eca9a181474c0104280eb5a2589a5b3daa450136a625ed",
+        "out/planar-joint-asan/opening-1-256.stderr": "c57c2915d9e17e652d0f1bbdfd4f3a1b9f324617dd6ca97e5f50fef3241984f4"
+      }
+    }
+  ],
+  "hashes": {
+    "tools/joint_sanitizer_controls.py": "038a6a2277acb034e107b9d8db6fe2534567c680590f9f1952eb75b0ebe0257a",
+    ".build/asan/ducklips_planar_inertive_motion_probe": "314360934951cc7cacd7c44e053bb7bb5feadf42aa978dcd62932e583b0497ff",
+    "bodies/reference.body": "d857b0e0262fa951bf11a989a6f7f1e28d17bc8c2f038e294977baf7bae23787"
+  }
+}

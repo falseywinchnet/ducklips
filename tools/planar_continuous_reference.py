@@ -37,7 +37,7 @@ def decay_exponential(matrix):
     for _ in range(scalings):increment=2*increment+increment@increment
     return np.eye(len(matrix))+increment
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False):
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -63,6 +63,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
     if viscous_width:command+=['--viscous-slit-width',str(viscous_width)]
     if lip_viscous_width:command+=['--lip-viscous-width',str(lip_viscous_width),'--lip-viscous-order',str(lip_viscous_order)]
     if outlet_viscous:command+=['--outlet-viscous']
+    if joint_relaxation:command+=['--joint-relaxation']
     if previous is not None:command+=['--initial-state']
     with path.open() as f,path.with_suffix('.json').open('w') as g:
         result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
@@ -295,17 +296,22 @@ def main():
     parser.add_argument('--thermal-slit-width',type=float,default=0.)
     parser.add_argument('--viscous-slit-width',type=float,default=0.)
     parser.add_argument('--lip-viscous-width',type=float,default=0.)
+    parser.add_argument('--joint-relaxation',action='store_true')
     parser.add_argument('--outlet-viscous',action='store_true')
     parser.add_argument('--lip-viscous-order',type=int,choices=[4,8,16,32],default=8)
     parser.add_argument('--output',type=Path)
     parser.add_argument('--report',type=Path)
     args=parser.parse_args()
+    audit_function=audit
+    if args.joint_relaxation:
+        from planar_joint_reference import audit_joint
+        audit_function=audit_joint
     assert not args.outlet_viscous or args.lip_viscous_width>0
     assert np.isfinite(args.lip_viscous_width) and args.lip_viscous_width>=0
     assert np.isfinite(args.viscous_slit_width) and args.viscous_slit_width>=0
     assert np.isfinite(args.thermal_slit_width) and args.thermal_slit_width>=0
-    if args.output is None:args.output=ROOT/('out/planar-outlet-viscous' if args.outlet_viscous else 'out/planar-lip-viscous' if args.lip_viscous_width else 'out/planar-viscous' if args.viscous_slit_width else 'out/planar-thermal' if args.thermal_slit_width else 'out/planar-radiation' if args.radiation else 'out/planar-continuous')
-    if args.report is None:args.report=ROOT/('reports/planar_outlet_viscous_reference.json' if args.outlet_viscous else 'reports/planar_lip_viscous_reference.json' if args.lip_viscous_width else 'reports/planar_viscous_reference.json' if args.viscous_slit_width else 'reports/planar_thermal_reference.json' if args.thermal_slit_width else 'reports/planar_radiation_reference.json' if args.radiation else 'reports/planar_continuous_reference.json')
+    if args.output is None:args.output=ROOT/('out/planar-joint' if args.joint_relaxation else 'out/planar-outlet-viscous' if args.outlet_viscous else 'out/planar-lip-viscous' if args.lip_viscous_width else 'out/planar-viscous' if args.viscous_slit_width else 'out/planar-thermal' if args.thermal_slit_width else 'out/planar-radiation' if args.radiation else 'out/planar-continuous')
+    if args.report is None:args.report=ROOT/('reports/planar_joint_reference.json' if args.joint_relaxation else 'reports/planar_outlet_viscous_reference.json' if args.outlet_viscous else 'reports/planar_lip_viscous_reference.json' if args.lip_viscous_width else 'reports/planar_viscous_reference.json' if args.viscous_slit_width else 'reports/planar_thermal_reference.json' if args.thermal_slit_width else 'reports/planar_radiation_reference.json' if args.radiation else 'reports/planar_continuous_reference.json')
     args.binary=args.binary.resolve();args.output=args.output.resolve();args.report=args.report.resolve();args.output.mkdir(parents=True,exist_ok=True)
     rows=list(csv.DictReader((ROOT/'out/lip-profile/nato.csv').open()))
     airway=list(csv.DictReader((ROOT/'out/nato-spatial-airway.csv').open()))
@@ -318,8 +324,8 @@ def main():
                 index=start+interval;p,q,paths=setup(index/1000)
                 profiles=np.array([vector(rows[i]) for i in [index,index+1]])
                 epi=np.array([[[float(airway[t][f'{field}_{i}']) for i in reversed(range(8))] for field in ['area','length']] for t in [index,index+1]])
-                data,receipt=run(f'{name}-{interval}',p,q,profiles,epi,n,pressure,previous,args.binary,args.output,args.radiation,args.thermal_slit_width,args.viscous_slit_width,args.lip_viscous_width,args.lip_viscous_order,args.outlet_viscous)
-                receipt.update(audit(data,p,q,profiles,epi,n==args.subdivisions[0],args.radiation,args.thermal_slit_width,args.viscous_slit_width,args.lip_viscous_width,args.lip_viscous_order,args.outlet_viscous));runs.append(receipt)
+                data,receipt=run(f'{name}-{interval}',p,q,profiles,epi,n,pressure,previous,args.binary,args.output,args.radiation,args.thermal_slit_width,args.viscous_slit_width,args.lip_viscous_width,args.lip_viscous_order,args.outlet_viscous,args.joint_relaxation)
+                receipt.update(audit_function(data,p,q,profiles,epi,n==args.subdivisions[0],args.radiation,args.thermal_slit_width,args.viscous_slit_width,args.lip_viscous_width,args.lip_viscous_order,args.outlet_viscous));runs.append(receipt)
                 if first_mass is None:first_mass=receipt['initial_total_mass_m3']
                 net+=receipt['net_external_transfer_m3'];previous=data['steps'][-1]
                 inputs.update({str(path.relative_to(ROOT)):sha(path) for path in paths})
@@ -335,7 +341,8 @@ def main():
     paths += [ROOT/'src/slit_thermal.cpp',ROOT/'include/ducklips/slit_thermal.hpp',ROOT/'include/ducklips/thermal_spectrum.hpp',ROOT/'tools/slit_thermal_reference.py']
     paths += [ROOT/'src/slit_viscous.cpp',ROOT/'include/ducklips/slit_viscous.hpp',ROOT/'include/ducklips/viscous_spectrum.hpp',ROOT/'tools/slit_viscous_reference.py']
     paths += [ROOT/'src/lip_viscous.cpp',ROOT/'include/ducklips/lip_viscous.hpp',ROOT/'tools/lip_viscous_reference.py',ROOT/'tools/lip_outlet_viscous_reference.py']
-    report=dict(outlet_viscous_enabled=args.outlet_viscous,lip_viscous_width=args.lip_viscous_width,lip_viscous_order=args.lip_viscous_order,viscous_slit_width=args.viscous_slit_width,thermal_slit_width=args.thermal_slit_width,radiation_enabled=args.radiation,scope='Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Outlet core/shoulder viscosity with absent-core and blocked-flow states is enabled by outlet_viscous_enabled. Yielding-wall losses are absent; open internal lip-path viscous quadrature is enabled by lip_viscous_width; explicit throat-internal viscous segments are enabled by viscous_slit_width; explicit throat slit thermal storage is enabled by thermal_slit_width, and aperture radiation by radiation_enabled. No new speech.',runs=runs,refinements=refinements,input_poses=inputs,
+    paths += [ROOT/'src/relaxation_graph.cpp',ROOT/'include/ducklips/relaxation_graph.hpp',ROOT/'src/graph_joint_relaxation.cpp',ROOT/'tools/planar_joint_reference.py']
+    report=dict(joint_relaxation=args.joint_relaxation,outlet_viscous_enabled=args.outlet_viscous,lip_viscous_width=args.lip_viscous_width,lip_viscous_order=args.lip_viscous_order,viscous_slit_width=args.viscous_slit_width,thermal_slit_width=args.thermal_slit_width,radiation_enabled=args.radiation,scope='joint_relaxation enables a common Radau passive solve with midpoint geometry and separate numerical dissipation. Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Outlet core/shoulder viscosity with absent-core and blocked-flow states is enabled by outlet_viscous_enabled. Yielding-wall losses are absent; open internal lip-path viscous quadrature is enabled by lip_viscous_width; explicit throat-internal viscous segments are enabled by viscous_slit_width; explicit throat slit thermal storage is enabled by thermal_slit_width, and aperture radiation by radiation_enabled. No new speech.',runs=runs,refinements=refinements,input_poses=inputs,
         hashes={str(p.relative_to(ROOT)):sha(p) for p in paths})
     args.report.write_text(json.dumps(report,indent=2)+'\n')
 

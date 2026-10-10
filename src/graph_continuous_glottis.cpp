@@ -29,7 +29,7 @@ void GraphContinuousGlottis::prepare(std::size_t nodes,std::span<const TreeEdge>
     if(!candidate.source.prepare(folds,air,tension,initial,effort,flow,outlet_loss,profile,outlet_inertance)){
         throw std::invalid_argument("invalid continuous source");
     }
-    candidate.network.prepare(nodes,branches);candidate.free_.prepare(nodes,branches);candidate.response_.prepare(nodes,branches);
+    candidate.network.prepare(nodes,branches);candidate.free_.prepare(nodes,branches);candidate.response_.prepare(nodes,branches);candidate.joint_edges_.assign(branches.begin(),branches.end());
     candidate.unit_flow_.assign(nodes,0.);candidate.unit_flow_[source_node]=1.;candidate.source_node_=source_node;
     *this=std::move(candidate);
 }

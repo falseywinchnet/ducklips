@@ -4,6 +4,7 @@
 #include "ducklips/radiation_boundary.hpp"
 #include "ducklips/slit_thermal.hpp"
 #include "ducklips/slit_viscous.hpp"
+#include "ducklips/relaxation_graph.hpp"
 
 namespace ducklips {
 struct RadiationGeometry final {
@@ -14,6 +15,13 @@ struct ThermalSite final {std::size_t node{};double compliance{},half_gap{};};
 struct ThermalGeometry final {double compliance{},half_gap{};};
 struct ViscousGeometry final {double segment_inertance{},branch_conductance{},half_gap{};};
 struct ViscousSite final {std::size_t branch{};ViscousGeometry geometry{};};
+struct JointGraphGeometry final {
+    std::span<const double> first_compliance,midpoint_compliance,last_compliance;
+    std::span<const double> first_conductance,midpoint_conductance,last_conductance;
+    std::span<const ThermalGeometry> midpoint_thermal,last_thermal;
+    std::span<const ViscousGeometry> midpoint_viscous,last_viscous;
+    double midpoint_radiation_area{},last_radiation_area{};
+};
 struct GraphContinuousGlottalStep final {
     double free_pressure{},load_slope{},pressure{},flow{};
     double source_port_work{},graph_port_work{},port_residual{};
@@ -21,6 +29,7 @@ struct GraphContinuousGlottalStep final {
     double radiated_energy{},radiation_geometry_work{},radiation_energy_residual{};
     double thermal_dissipation{},thermal_geometry_work{},thermal_energy_residual{},thermal_air_residual{};
     double viscous_dissipation{},viscous_geometry_work{},viscous_energy_residual{};
+    double graph_geometry_work{},passive_numerical_dissipation{},passive_energy_change{},passive_energy_residual{},passive_air_residual{};
 };
 // Implicit work-conjugate coupling of the continuous source to a linear
 // acoustic graph. Graph pressure is its linearized mass-effort variable;
@@ -41,6 +50,13 @@ public:
     // Zero-conductance branches may retain finite local profile sites; the
     // tuple (0,0,0) explicitly retires an absent site's memory and energy metric.
     void prepare_viscous(const AirProperties&,std::span<const ViscousSite>);
+    // Call after configuring loss sites. All passive memories, pressure and
+    // flow then share one solve. Midpoint freezing of prescribed geometry;
+    // endpoint metric work and exact absence are separately accounted.
+    void prepare_joint(std::size_t radiation_branch=ground_node);
+    [[nodiscard]] bool advance_joint(const JointGraphGeometry&,double dt,double reservoir_pressure,
+        const std::array<double,4>& external_force={},std::span<const double> nodal_flow={},
+        std::span<const double> series_pressure={},double outlet_inertance=-1.) noexcept;
     // Prescribed stage metrics, constant external drives, one source step.
     // No allocation after prepare. Failure preserves network, source and last.
     // A caller subdividing contact steps must recompute BOTH graph stages and
@@ -59,6 +75,12 @@ public:
     std::vector<SlitViscous> viscous{};
     GraphContinuousGlottalStep last{};
 private:
+    bool joint_ready_{};
+    std::size_t joint_radiation_branch_{ground_node};
+    std::vector<TreeEdge> joint_edges_;
+    RelaxationGraphReference joint_free_,joint_response_,joint_final_;
+    std::vector<RelaxationMetric> joint_node_metrics_,joint_branch_metrics_;
+    std::vector<double> joint_resistance_,joint_drive_;
     MovingGraphReference free_{},response_{};
     std::vector<double> unit_flow_{};
     std::vector<SlitThermal> thermal_trial_{};

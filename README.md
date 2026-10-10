@@ -120,6 +120,14 @@ pressure transport and drag can pass too much air through a stiff slit even
 when endpoint velocity is tiny and the work ledger closes. Pressure and viscous
 flow need a common update before the developing path can support new speech.
 
+A [common pressure/airflow/relaxation update](reports/CONTINUOUS_JOINT_RELAXATION.md)
+now removes that steady-flow bias in the tested stiff slit and connects the
+same passive solve to the continuous source and moving airway. Thermal,
+viscous and radiation memories share the pressure solve, with numerical loss
+reported separately. Independent full-stage equations and continuous
+trajectories check the result. Source gas-pressure error and moving-geometry
+time error remain measurable; this has not produced a new listening sample.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

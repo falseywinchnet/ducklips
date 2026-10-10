@@ -216,7 +216,7 @@ int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     double thermal_width=0;
-    bool outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
+    bool joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
         else if(arg=="--lip-tube" && !lip_mode){lip_mode=true;}
@@ -241,6 +241,7 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(lip_viscous_width) || lip_viscous_width<=0){return 2;}
         }
+        else if(arg=="--joint-relaxation" && !joint_relaxation){joint_relaxation=true;}
         else if(arg=="--outlet-viscous" && !outlet_viscous){outlet_viscous=true;}
         else if(arg=="--lip-viscous-order" && i+1<argc){
             try{std::size_t used=0;const std::string value=argv[++i];lip_viscous_order=std::stoul(value,&used);if(used!=value.size()){return 2;}}
@@ -252,7 +253,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
-    if((outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -402,7 +403,7 @@ int main(int argc,char** argv){
     const auto original_first=views(first),original_last=views(last);
     if(!geometry.build_regions(first[0],std::span<const PlanarContour>(original_first).subspan(1),depth,selected) || geometry.regions.size()!=nodes){return 1;}
     std::vector<std::size_t> cells(nodes);
-    std::vector<double> gend(channels),old_volume(total_nodes),c1(total_nodes),c2(total_nodes),g1(channels),g2(channels),scratch(total_nodes);
+    std::vector<double> gend(channels),old_volume(total_nodes),old_compliance(total_nodes),old_conductance(channels),c1(total_nodes),c2(total_nodes),g1(channels),g2(channels),scratch(total_nodes);
     for(std::size_t i=0;i<nodes;++i){cells[i]=geometry.regions[i].cell;}
     if(!compatible(geometry,cells,ports,loads,lip,epi)){return 1;}
     if(!metrics(geometry,ports,loads,volume,compliance,gend,lip,epi,0)){return 1;}
@@ -415,11 +416,11 @@ int main(int argc,char** argv){
     const std::size_t lip_viscous_branch=ports.size()+loads.size()+lip.attachments.size();
     std::vector<ducklips::ViscousGeometry> viscous_geometry(lip_viscous_offset+(lip_viscous_width>0?(lip.sections.size()-1)*lip_viscous_order+(outlet_viscous?lip_viscous_order+1:0):0));
     std::vector<std::size_t> viscous_branches(viscous_geometry.size());std::vector<double> viscous_positions(viscous_geometry.size());
-    const auto set_viscous_geometry=[&](double fraction){
+    const auto set_viscous_geometry=[&](double fraction,std::span<const double> conductance){
         if(viscous_width>0){for(std::size_t i=1;i<epi.sections.size();++i){for(std::size_t half=0;half<2;++half){const auto& s=epi.sections[i-1+half];
             const double area=std::lerp(s.first_area,s.last_area,fraction),length=std::lerp(s.first_length,s.last_length,fraction);
             const auto index=2*(i-1)+half;const auto branch=viscous_base+i-1;viscous_branches[index]=branch;
-            viscous_geometry[index]={ducklips::AirProperties{}.density*.5*length/area,gend[branch],area/(2*viscous_width)};
+            viscous_geometry[index]={ducklips::AirProperties{}.density*.5*length/area,conductance[branch],area/(2*viscous_width)};
         }}}
         if(lip_viscous_width>0){
             const auto profile=lip.profile(fraction);std::array<double,256> centre{};
@@ -431,7 +432,7 @@ int main(int argc,char** argv){
                 const auto branch=lip_viscous_branch+i-1;
                 for(std::size_t j=0;j<lip_viscous_order;++j){const auto index=lip_viscous_offset+(i-1)*lip_viscous_order+j;const auto& segment=segments[j];
                     viscous_branches[index]=branch;viscous_positions[index]=segment.position;
-                    viscous_geometry[index]={segment.inertance,gend[branch],segment.half_gap};
+                    viscous_geometry[index]={segment.inertance,conductance[branch],segment.half_gap};
                 }
             }
             if(outlet_viscous){
@@ -441,14 +442,14 @@ int main(int argc,char** argv){
                 const auto offset=lip_viscous_offset+(lip.sections.size()-1)*lip_viscous_order;
                 for(std::size_t j=0;j<=lip_viscous_order;++j){const auto index=offset+j;const auto& segment=segments[j];
                     viscous_branches[index]=branch;viscous_positions[index]=segment.position;
-                    viscous_geometry[index]={segment.inertance,gend[branch],segment.half_gap};
+                    viscous_geometry[index]={segment.inertance,conductance[branch],segment.half_gap};
                 }
             }
         }
         return true;
     };
     if(viscous_mode){
-        if(!set_viscous_geometry(0)){return 2;}std::vector<ducklips::ViscousSite> sites;
+        if(!set_viscous_geometry(0,gend)){return 2;}std::vector<ducklips::ViscousSite> sites;
         for(std::size_t i=0;i<viscous_geometry.size();++i){sites.push_back({viscous_branches[i],viscous_geometry[i]});}
         try{continuous.prepare_viscous({},sites);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
     }
@@ -459,6 +460,9 @@ int main(int argc,char** argv){
         try{continuous.prepare_thermal({},sites);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
         for(std::size_t i=0;i<sites.size();++i){if(!continuous.thermal[i].equilibrate(initial[thermal_base+i])){return 2;}}
     }
+    std::vector<ducklips::ThermalGeometry> midpoint_thermal(thermal_geometry.size());
+    std::vector<ducklips::ViscousGeometry> midpoint_viscous(viscous_geometry.size());
+    if(joint_relaxation){try{continuous.prepare_joint(radiation_mode?radiation_branch:ducklips::ground_node);}catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}}
     // Optional continuation appends canonical charge then branch momentum.
     // The caller must certify identical endpoint geometry and node/branch
     // ownership across calls; this is not a general remeshing operation.
@@ -529,12 +533,12 @@ int main(int argc,char** argv){
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
-    constexpr double offset=.28867513459481288225;
+    const double offset=joint_relaxation?0.:.28867513459481288225;
     for(std::size_t step=1;step<cuts.size();++step){
         const double t0=cuts[step-1],t1=cuts[step],width=t1-t0,dt=duration*width;
         const double first_stage=t0+(.5-offset)*width,second_stage=t0+(.5+offset)*width;
         const double radiation_first_g=radiation_mode?gend[radiation_branch]:0.;
-        old_volume=volume;
+        old_volume=volume;old_compliance=compliance;old_conductance=gend;
         std::printf("%s{\"dt\":%.17g,\"stage1\":",step>1?",":"",dt);
         sample(first,last,first_stage,a);
         if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip,epi)){return 1;}
@@ -555,11 +559,22 @@ int main(int argc,char** argv){
             ducklips::RadiationGeometry radiation_geometry;
             if(radiation_mode){radiation_geometry={radiation_branch,radiation_first_g,gend[radiation_branch],radiation_area(.5*(t0+t1)),radiation_area(t1)};}
             for(std::size_t i=0;i<thermal_geometry.size();++i){const auto& section=epi.sections[i];thermal_geometry[i]={compliance[thermal_base+i],std::lerp(section.first_area,section.last_area,t1)/(2*thermal_width)};}
-            if(viscous_mode && !set_viscous_geometry(t1)){std::fprintf(stderr,"lip viscous path disappeared or failed at step %zu\n",step);return 1;}
-            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr,thermal_geometry,viscous_geometry)){
+            if(joint_relaxation){
+                const double midpoint=.5*(t0+t1);
+                for(std::size_t i=0;i<midpoint_thermal.size();++i){const auto& section=epi.sections[i];midpoint_thermal[i]={c1[thermal_base+i],std::lerp(section.first_area,section.last_area,midpoint)/(2*thermal_width)};}
+                if(viscous_mode && !set_viscous_geometry(midpoint,g1)){return 1;}midpoint_viscous=viscous_geometry;
+            }
+            if(viscous_mode && !set_viscous_geometry(t1,gend)){std::fprintf(stderr,"lip viscous path disappeared or failed at step %zu\n",step);return 1;}
+            const ducklips::JointGraphGeometry whole{old_compliance,c1,compliance,old_conductance,g1,gend,midpoint_thermal,thermal_geometry,midpoint_viscous,viscous_geometry,radiation_geometry.midpoint_area,radiation_geometry.last_area};
+            const bool success=joint_relaxation?continuous.advance_joint(whole,dt,reservoir_pressure,{},inflow,series,column):
+                continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column,radiation_mode?&radiation_geometry:nullptr,thermal_geometry,viscous_geometry);
+            if(!success){
                 std::fprintf(stderr,"continuous source solve failed at step %zu, dt %.17g\n",step,dt);return 1;
             }
             if(!continuous_state(continuous)){return 1;}
+            if(joint_relaxation){const auto& r=continuous.last;
+                std::printf(",\"joint_passive\":{\"energy_change\":%.17g,\"energy_residual\":%.17g,\"air_residual\":%.17g,\"numerical_dissipation\":%.17g,\"graph_geometry_work\":%.17g,\"external_work\":%.17g,\"viscous_dissipation\":%.17g,\"thermal_dissipation\":%.17g,\"radiated_energy\":%.17g,\"viscous_geometry_work\":%.17g,\"thermal_geometry_work\":%.17g,\"radiation_geometry_work\":%.17g}",r.passive_energy_change,r.passive_energy_residual,r.passive_air_residual,r.passive_numerical_dissipation,r.graph_geometry_work,r.graph_external_work,r.viscous_dissipation,r.thermal_dissipation,r.radiated_energy,r.viscous_geometry_work,r.thermal_geometry_work,r.radiation_geometry_work);
+            }else{
             if(viscous_mode){const auto& r=continuous.last;
                 std::printf(",\"viscous_dissipation\":%.17g,\"viscous_geometry_work\":%.17g,\"viscous_work_residual\":%.17g",r.viscous_dissipation,r.viscous_geometry_work,r.viscous_energy_residual);
             }
@@ -568,6 +583,7 @@ int main(int argc,char** argv){
             }
             if(radiation_mode){const auto& r=continuous.last;
                 std::printf(",\"radiated_energy\":%.17g,\"radiation_geometry_work\":%.17g,\"radiation_work_residual\":%.17g",r.radiated_energy,r.radiation_geometry_work,r.radiation_energy_residual);
+            }
             }
             const auto& r=continuous.source.last;
             std::printf(",\"source_flow\":%.17g,\"source_pressure\":%.17g,\"source_impedance\":%.17g",continuous.last.flow,continuous.last.pressure,continuous.last.load_slope);

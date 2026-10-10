@@ -21,6 +21,8 @@ public:
     [[nodiscard]] double energy() const noexcept;
     [[nodiscard]] double compliance() const noexcept{return compliance_;}
     [[nodiscard]] double half_gap() const noexcept{return half_gap_;}
+    [[nodiscard]] double memory_storage(std::size_t mode) const noexcept;
+    [[nodiscard]] double memory_rate(std::size_t mode) const noexcept;
     std::array<double,modes> charge{};
     SlitThermalStep last{};
 private:

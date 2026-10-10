@@ -18,6 +18,7 @@ add_library(ducklips STATIC
     src/moving_mode.cpp
     src/canonical_speech.cpp
     src/moving_tree.cpp
+    src/relaxation_graph.cpp
     src/moving_graph.cpp
     src/graph_orifice.cpp
     src/graph_phonation.cpp
@@ -27,6 +28,7 @@ add_library(ducklips STATIC
     src/glottal_contour.cpp
     src/continuous_glottis.cpp
     src/glottal_relaxation.cpp
+    src/graph_joint_relaxation.cpp
     src/graph_continuous_glottis.cpp
     src/radiation_boundary.cpp
     src/slit_thermal.cpp
@@ -332,3 +334,9 @@ add_test(NAME ducklips_graph_continuous_radiation COMMAND ducklips_graph_continu
 # Diagnostic of pressure/drag splitting under a sustained pressure drop.
 add_executable(ducklips_viscous_forced_flow_probe tools/viscous_forced_flow_probe.cpp)
 target_link_libraries(ducklips_viscous_forced_flow_probe PRIVATE ducklips)
+
+add_executable(ducklips_relaxation_graph_probe tools/relaxation_graph_probe.cpp)
+target_link_libraries(ducklips_relaxation_graph_probe PRIVATE ducklips)
+add_test(NAME ducklips_relaxation_graph COMMAND ducklips_relaxation_graph_probe)
+
+add_test(NAME ducklips_graph_joint_relaxation COMMAND ducklips_graph_continuous_glottis_probe --joint)

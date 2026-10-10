@@ -1,0 +1,149 @@
+{
+  "scope": "Coupled fixed-metric pressure/transport/relaxation update. Independent full-state Radau equations, continuous matrix exponential and stiff ODE, and large-compliance constant-pressure reservoir controls. No speech claim.",
+  "random_cases": 80,
+  "maximum_scaled_state_error": 9.956573654287686e-13,
+  "maximum_pressure_error_Pa": 3.872457909892546e-12,
+  "maximum_flow_error_m3_s": 3.7777669447541795e-19,
+  "maximum_energy_residual_J": 1.0587911840678754e-22,
+  "continuous_oracle_agreement": 6.807434390493361e-17,
+  "refinements": [
+    {
+      "steps": 16,
+      "maximum_energy_coordinate_error": 1.2052126740955322e-05
+    },
+    {
+      "steps": 32,
+      "maximum_energy_coordinate_error": 1.5167537448083392e-06
+    },
+    {
+      "steps": 64,
+      "maximum_energy_coordinate_error": 1.8892789685747303e-07
+    },
+    {
+      "steps": 128,
+      "maximum_energy_coordinate_error": 2.3539472039884983e-08
+    },
+    {
+      "steps": 256,
+      "maximum_energy_coordinate_error": 2.9366613363062885e-09
+    }
+  ],
+  "forced_flow": [
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 0.01,
+      "average_flow_ratio": 0.9999999999999809,
+      "reservoir_pressure_deviation_Pa": -2.3021732570237016e-29
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 0.1,
+      "average_flow_ratio": 0.9999999999999986,
+      "reservoir_pressure_deviation_Pa": -2.3337278876173405e-28
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 1.0,
+      "average_flow_ratio": 1.0000000000000007,
+      "reservoir_pressure_deviation_Pa": -2.3368833506763013e-27
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 10.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.3371988969823777e-26
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 100.0,
+      "average_flow_ratio": 1.0000000000000004,
+      "reservoir_pressure_deviation_Pa": -2.3372304516132453e-25
+    },
+    {
+      "initialization": "rest",
+      "dc_decay_times_step": 10000.0,
+      "average_flow_ratio": 1.0,
+      "reservoir_pressure_deviation_Pa": -2.337233922622022e-23
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 0.01,
+      "average_flow_ratio": 1.0,
+      "reservoir_pressure_deviation_Pa": -2.3372339576827318e-29
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 0.1,
+      "average_flow_ratio": 1.0,
+      "reservoir_pressure_deviation_Pa": -2.337233957683245e-28
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 1.0,
+      "average_flow_ratio": 1.0000000000000007,
+      "reservoir_pressure_deviation_Pa": -2.3372339576828913e-27
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 10.0,
+      "average_flow_ratio": 1.0000000000000002,
+      "reservoir_pressure_deviation_Pa": -2.3372339576830367e-26
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 100.0,
+      "average_flow_ratio": 1.0000000000000004,
+      "reservoir_pressure_deviation_Pa": -2.3372339576833113e-25
+    },
+    {
+      "initialization": "steady",
+      "dc_decay_times_step": 10000.0,
+      "average_flow_ratio": 1.0,
+      "reservoir_pressure_deviation_Pa": -2.3372339576827227e-23
+    }
+  ],
+  "hashes": {
+    "tools/relaxation_graph_reference.py": "8f35b67af32ce0523c8de6028b9e62dc20cdd654e4af7b91986f6d307de8ddf6",
+    "src/relaxation_graph.cpp": "6971f7d0f7191d55c8dc593d576275d60a9d3ee3d2bd5cc08832d93a46d92023",
+    "include/ducklips/relaxation_graph.hpp": "0b81a91e9fc0da9a34c731946db87f1622b9851d12cd363f4bbe51a29a09511c",
+    "tools/relaxation_graph_probe.cpp": "98aa48fea399294f1d2f844cd5a95cb4ec764df9f812dc3b4a1eba0d228cc400",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "build/ducklips_relaxation_graph_probe": "8f6a40d87ad01e08e41527d8311f1e6e1882b71ba06f17767fbfe4cfbdc4793d",
+    "out/relaxation-graph-reference/forced-rest-0.01.input": "7d8227e3b6078e195ea01e8913ad67c2fe5f51a76c34a3796419ed7d783ab21c",
+    "out/relaxation-graph-reference/forced-rest-0.01.txt": "2623d7a8a6a83a3cc98a7709018075c768a04e5f65028b246ef46716726cbc33",
+    "out/relaxation-graph-reference/forced-rest-0.1.input": "da2c021d165082a8ed34c1f7efcdca66221ded4148d3d20f58e965cc6f1142a1",
+    "out/relaxation-graph-reference/forced-rest-0.1.txt": "f1a099d5eea2d410a4c0fda9d1a7546539f219debf215bd8caa26c8e183a1d2a",
+    "out/relaxation-graph-reference/forced-rest-1.0.input": "34b2717fb1283c3483461a9d30c5a7a9bf23d15074c833f9297937a1c3ff454c",
+    "out/relaxation-graph-reference/forced-rest-1.0.txt": "746869259320cc9fac5c052c56a6aa325bd4e5501bbd73aa6525bc39e5dfaaff",
+    "out/relaxation-graph-reference/forced-rest-10.0.input": "ad7cba0968c520a00b329c982416d8c4beda016143ceff366c6aa3b5f53a4176",
+    "out/relaxation-graph-reference/forced-rest-10.0.txt": "8994f42cf14212b867fd632842c4e68758fa6da5777b6f458f527625daf2a155",
+    "out/relaxation-graph-reference/forced-rest-100.0.input": "b880d7390bb48355c574e42d352183fc4b44960d9b3d99fc4c0318a16c8d410b",
+    "out/relaxation-graph-reference/forced-rest-100.0.txt": "bdb752cef5938921c3dfd7c468be6d0edb643dc4131cc409e1c01a65089f6300",
+    "out/relaxation-graph-reference/forced-rest-10000.0.input": "40326609542d6789fc5f29208a955fa8313d92f9166fc11c0180a5fa792b9eb3",
+    "out/relaxation-graph-reference/forced-rest-10000.0.txt": "e515d4c1f5e832b5dbe3ffc49787554f982c58d5008152effd4644def59a4135",
+    "out/relaxation-graph-reference/forced-steady-0.01.input": "8854b4994408d46072d449b1fb327047fa2311dfd69c7d543d520dfc6f62eeca",
+    "out/relaxation-graph-reference/forced-steady-0.01.txt": "0b7d2bf620e4bbed91aa0f0882ce483f996bc307b9e90de33f19cb90dbbe4d07",
+    "out/relaxation-graph-reference/forced-steady-0.1.input": "8ee7e8af417f5712970b0c2f254ac8c080f35b23897f09d607212a4dfd9ec62b",
+    "out/relaxation-graph-reference/forced-steady-0.1.txt": "98b849e6f4d5a12e95a38e030041c90473735eb6705a4701aabcc6495488f6c9",
+    "out/relaxation-graph-reference/forced-steady-1.0.input": "fdf7047aa467256ead9947f89b78c8328a2ba19cfdc9e89c8419493ff1c54f02",
+    "out/relaxation-graph-reference/forced-steady-1.0.txt": "38e6d2fc80b74044549fdc9bcb6f7024e5605452cb31da14140c7944dc0e0944",
+    "out/relaxation-graph-reference/forced-steady-10.0.input": "db185ef7c2894b974db5aa0dd6cde53ace95e0b1c5d2150c2e151217589d4883",
+    "out/relaxation-graph-reference/forced-steady-10.0.txt": "6691c21bef66de79b605aa28b0fb0074bd437481abf22707574bdfa4e01336fc",
+    "out/relaxation-graph-reference/forced-steady-100.0.input": "d0d7a4f579feb69a4e9d46322d1b80f4dfb19bdcdfeac462d740472fb8eba980",
+    "out/relaxation-graph-reference/forced-steady-100.0.txt": "ec35c687bf9f75c7131d3c46bbb2c74ceb71ead3f35f40e960e75c49b8cb91e4",
+    "out/relaxation-graph-reference/forced-steady-10000.0.input": "a42170fb1e28157dbebb78c14fe832b3927e3a263357036e2c08403435d1f0f0",
+    "out/relaxation-graph-reference/forced-steady-10000.0.txt": "53b98d4e015a5ef1487f7c7fd0baa75a50187586387c0811a931f4500fd6c8b2",
+    "out/relaxation-graph-reference/random.input": "7ddfad92fd5cbabd703e2f6ee928d29d15f46794e5774b0bdac8f044343815a6",
+    "out/relaxation-graph-reference/random.txt": "bea97a2c9809385dfc5e4161fb3e6c65740790c38536c89287d4ff49a232bb22",
+    "out/relaxation-graph-reference/trajectory-128.input": "f1355cb253d673a1a4f76346ffb1991656bfca31dc8a53138b8196c4277f3d50",
+    "out/relaxation-graph-reference/trajectory-128.txt": "a58c03e146cb23aa30830007e2bb4b470c9d98ee63005f5e5afb0d17775a8e2f",
+    "out/relaxation-graph-reference/trajectory-16.input": "6ac54d1f90b9fa9537803f1a3cd796747b53a528e8235111ee9e259c18132d4c",
+    "out/relaxation-graph-reference/trajectory-16.txt": "0292101e0114a08b543774c6e2535b157fc041679257e55c682e952774f90b56",
+    "out/relaxation-graph-reference/trajectory-256.input": "b34114d5c02587698be57523e4e9eac8cfb6d76b8ce94c452177364070c29816",
+    "out/relaxation-graph-reference/trajectory-256.txt": "dbc85ac4bb8b88613b55f7fbaaa2a9f99c4e64df01b51b02766384c4a94a2b1e",
+    "out/relaxation-graph-reference/trajectory-32.input": "aea2cc6f5ac9dae61c933c944b1414d3273e8770710166fd5902b2c53649e7a6",
+    "out/relaxation-graph-reference/trajectory-32.txt": "4bebe60601224391f9db71ed06fccae2e798d93b769d1e74e4cae8ca833698fb",
+    "out/relaxation-graph-reference/trajectory-64.input": "add571a0582d9ffef3500030b99ab68e9841926f880ab5f7b5519b1175cf18b1",
+    "out/relaxation-graph-reference/trajectory-64.txt": "8d23e8a0ff5bcf1a74d5f8e5151d951e3d106fa78c669a9ecdead99f21c4f95f"
+  }
+}

@@ -27,6 +27,9 @@ public:
     [[nodiscard]] double segment_inertance() const noexcept{return inertance_;}
     [[nodiscard]] double branch_conductance() const noexcept{return conductance_;}
     [[nodiscard]] double half_gap() const noexcept{return half_gap_;}
+    [[nodiscard]] double memory_storage(std::size_t mode) const noexcept;
+    [[nodiscard]] double memory_rate(std::size_t mode) const noexcept;
+    [[nodiscard]] double steady_resistance() const noexcept;
     std::array<double,modes> momentum{};
     SlitViscousStep last{};
 private:
