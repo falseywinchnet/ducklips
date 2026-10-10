@@ -128,8 +128,18 @@ remain visible. Enhanced analysis is offline and takes longer than synthesis.
 Run from the repository root:
 
     node web/tube/server.mjs
-    node --test web/tube/engine.test.mjs
+    node --test web/tube/*.test.mjs
     node web/tube/render.mjs out/flat-tube-new 0.8
 
-The server binds only 127.0.0.1:8765. No npm packages or build step are required.
+The server binds 0.0.0.0:8765 for LAN access and prints the host's IPv4 addresses.
+Use HOST=127.0.0.1 to restrict it to this computer. No npm packages or build
+step are required. On HTTP LAN origins, the shared audio renderer runs in a
+Worker and supplies four scheduled 2048-frame buffers to ordinary Web Audio;
+localhost/HTTPS use AudioWorklet. The transport test verifies identical PCM
+and raw capture across 128-frame worklet and 2048-frame LAN block sizes. There
+is about 0.2 s of LAN playback buffering, and long main-thread stalls can still
+cause scheduling gaps. This is a playback transport change, not a new
+physical model. Unlike AudioWorklet, this path does not require a secure
+context. See [AudioWorklet](https://developer.mozilla.org/en-US/docs/Web/API/AudioWorklet)
+and [AudioBufferSourceNode](https://developer.mozilla.org/en-US/docs/Web/API/AudioBufferSourceNode).
 The enhanced renderer uses ~/miniforge3/bin/python unless DUCKLIPS_PYTHON is set.

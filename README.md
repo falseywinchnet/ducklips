@@ -10,7 +10,16 @@ through an invisible crisscross network with FIR attenuation.
 node web/tube/server.mjs
 ```
 
-Open **http://127.0.0.1:8765/**. No dependencies or build step are required.
+Open **http://127.0.0.1:8765/** on the host Mac. On another device on the same
+LAN, use the LAN address printed by the server (currently
+**http://192.168.1.18:8765/** on this Mac mini), or
+**http://Joshuahs-Mac-mini.local:8765/**. Keep the host Mac awake and the server
+running. No dependencies or build step are required.
+
+LAN HTTP uses the same synthesis renderer in a Worker with scheduled Web Audio
+buffers; localhost retains AudioWorklet. No certificate installation is needed.
+LAN playback keeps about 0.2 seconds of audio buffered. To restrict access back
+to this computer, start with `HOST=127.0.0.1 node web/tube/server.mjs`.
 
 - **Move anchors:** drag a wall's diamond. Vertical motion adjusts the resting
   wall; horizontal motion relocates its support. Arrow keys also work.
@@ -31,7 +40,7 @@ limits, especially glottal jet formation. Read the [model and implementation
 notes](web/tube/MODEL.md) and [first-round evidence](reports/flat-tube/README.md).
 
 ```sh
-node --test web/tube/engine.test.mjs
+node --test web/tube/*.test.mjs
 ```
 
 The previous engine was rejected and is no longer the project entry point.

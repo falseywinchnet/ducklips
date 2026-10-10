@@ -10,7 +10,7 @@ function geometryScale(){return Math.min(10500,155/Math.max(.001,...compiled.upp
 function checkpoint(){history.push(JSON.stringify(design));if(history.length>80)history.shift();}
 function notice(text){$('notice').textContent=text;}
 function refresh(send=true){
- compiled=compile(design);if(captureContext)captureContext.changes.push({milliseconds:performance.now()-captureContext.started,design:structuredClone(design)});if(send&&node)node.port.postMessage({type:'configure',compiled});
+ compiled=compile(design);if(captureContext)captureContext.changes.push({milliseconds:performance.now()-captureContext.started,design:JSON.parse(JSON.stringify(design))});if(send&&node)node.port.postMessage({type:'configure',compiled});
  clearTimeout(saveTimer);saveTimer=setTimeout(()=>localStorage.setItem('ducklips-flat-tube-v1',JSON.stringify(design)),200);
  draw();panel();
 }
@@ -105,14 +105,24 @@ $('save').onclick=()=>download(JSON.stringify(design,null,2),'application/json',
 $('load').onchange=async e=>{try{const file=e.target.files[0];if(!file)return;if(file.size>100000)throw Error('Design file is too large.');const value=validateDesign(JSON.parse(await file.text()));checkpoint();design=value;state=null;refresh();notice('Tube loaded.');}catch(e){notice(e.message);}finally{$('load').value='';}};
 async function audio(){
  if(context){await context.resume();return;}
- context=new AudioContext({sampleRate:48000});await context.audioWorklet.addModule('./worklet.mjs');node=new AudioWorkletNode(context,'flat-tube',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[1]});node.connect(context.destination);node.port.postMessage({type:'configure',compiled});node.port.postMessage({type:'level',value:+$('monitor').value});
+ context=new AudioContext({sampleRate:48000});
+ try{
+  if(context.audioWorklet&&globalThis.isSecureContext){
+   await context.audioWorklet.addModule('./worklet.mjs');
+   node=new AudioWorkletNode(context,'flat-tube',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[1]});
+  }else{
+   const {createLanAudio}=await import('./lan-audio.mjs');node=createLanAudio(context);
+  }
+  node.connect(context.destination);
+ }catch(error){await context.close();context=null;node=null;throw error;}
+ node.port.postMessage({type:'configure',compiled});node.port.postMessage({type:'level',value:+$('monitor').value});
  node.port.onmessage=({data:d})=>{if(d.type==='state'){state=d;wave=d.scope;waveIndex=d.scopeIndex;$('pressure-reading').textContent=Math.round(d.drive)+' Pa inlet';if(d.fault){running=false;node.port.postMessage({type:'run',value:false});$('start').textContent='Restart pressure';$('status').textContent='Model stopped';notice(d.fault);}}
  if(d.type==='recording'){addTake(d.samples,d.rate,'Live tube',captureContext);captureContext=null;$('record').disabled=false;$('record').textContent='Record 2 seconds';}
  };
  await context.resume();
 }
 $('start').onclick=async()=>{try{await audio();if(state?.fault){node.port.postMessage({type:'reset',compiled});state=null;}running=!running;node.port.postMessage({type:'run',value:running});$('start').textContent=running?'Stop pressure':'Start pressure';$('status').textContent=running?'Running · outlet connected':'Pressure off · releasing';}catch(e){notice('Audio could not start: '+e.message);}};
-$('record').onclick=async()=>{try{await audio();if(!running){running=true;node.port.postMessage({type:'run',value:true});$('start').textContent='Stop pressure';$('status').textContent='Running · recording outlet';}$('record').disabled=true;$('record').textContent='Recording…';captureContext={started:performance.now(),date:new Date().toISOString(),design:structuredClone(design),initialObservation:state,changes:[]};node.port.postMessage({type:'capture',seconds:2});}catch(e){notice(e.message);$('record').disabled=false;}};
+$('record').onclick=async()=>{try{await audio();if(!running){running=true;node.port.postMessage({type:'run',value:true});$('start').textContent='Stop pressure';$('status').textContent='Running · recording outlet';}$('record').disabled=true;$('record').textContent='Recording…';captureContext={started:performance.now(),date:new Date().toISOString(),design:JSON.parse(JSON.stringify(design)),initialObservation:state,changes:[]};node.port.postMessage({type:'capture',seconds:2});}catch(e){notice(e.message);$('record').disabled=false;}};
 function addTake(samples,rate,title,provenance){
  take++;const bytes=wav(samples,rate),blob=new Blob([bytes],{type:'audio/wav'}),url=URL.createObjectURL(blob);let peak=0;for(const x of samples)peak=Math.max(peak,Math.abs(x));
  const row=document.createElement('div');row.className='take';const label=document.createElement('span');label.textContent=`${String(take).padStart(2,'0')} · ${title}`;const player=document.createElement('audio');player.controls=true;player.src=url;const link=document.createElement('a');link.href=url;link.download=`ducklips-tube-${take}.wav`;link.textContent='WAV';const enhanced=document.createElement('button');enhanced.textContent='Depict enhanced';const receipt=document.createElement('small');receipt.textContent=`${(samples.length/rate).toFixed(2)} s · ${(rate/1000).toFixed(1)} kHz · peak ${peak.toFixed(4)}`;
