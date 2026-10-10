@@ -5,6 +5,7 @@
 #include "ducklips/cues.hpp"
 #include "ducklips/modal.hpp"
 #include "ducklips/canonical_speech.hpp"
+#include "ducklips/local_speech.hpp"
 #include "ducklips/mean_airway.hpp"
 #include "ducklips/sources.hpp"
 #include "ducklips/tree_operator.hpp"
@@ -22,6 +23,8 @@ namespace ducklips {
 enum class OutputTap { microphones, lips, glottal_source };
 
 struct SynthesisOptions final {
+    bool local_flow{false}; // bounded local exchanges; unified mean/acoustic air state
+    std::size_t local_substeps{4};
     bool conservative_tongue{false}; // material body map; explicit research option
     bool canonical_motion{false}; // experimental full physical moving-state path
     bool spatial_pressure{false}; // experimental local mean-pressure/flow coupling; requires canonical motion
@@ -47,6 +50,7 @@ struct SynthesisOptions final {
 };
 
 struct SynthesisStatistics final {
+    double geometry_seconds{}; // measured control-rate body construction, separate from audio updates
     std::size_t airflow_failures{};
     double airflow_failure_time{};
     double airflow_failure_residual{};
@@ -162,6 +166,7 @@ private:
     void begin_block() noexcept;
     void begin_geometry_step() noexcept;
     void render_samples(std::span<float> stereo) noexcept;
+    void render_local_samples(std::span<float> stereo) noexcept;
     void track_pitch(double glottal_area) noexcept;
 
     VoiceProfile voice_{};
@@ -181,6 +186,7 @@ private:
     ModalSolver solver_{};
     ModalResonator resonator_{};
     CanonicalSpeech canonical_{};
+    LocalSpeech local_{};
     bool canonical_ready_{false};
     TwoMassGlottis glottis_{};
     IntraoralPressure intraoral_{};

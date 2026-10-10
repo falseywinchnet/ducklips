@@ -117,6 +117,22 @@ double ConservativeTongueSurface::wall_penetration() const noexcept {
     return maximum;
 }
 double ConservativeTongueSurface::ray_gap(Point2 wall,Point2 inward) const noexcept {
+    if(polygon_queries_){
+        bool inside=false;double best=missing;
+        for(std::size_t i=0;i<contour_count;++i){
+            const Point2 a{contour_[i].x-wall.x,contour_[i].y-wall.y};
+            const Point2 b{contour_[(i+1)%contour_count].x-wall.x,contour_[(i+1)%contour_count].y-wall.y};
+            const Point2 edge{b.x-a.x,b.y-a.y};
+            if((a.y>0)!=(b.y>0)){
+                if(a.x-a.y*edge.x/edge.y>0){inside=!inside;}
+            }
+            const double denominator=cross(inward,edge);
+            if(std::abs(denominator)<1e-15){continue;}
+            const double t=cross(a,edge)/denominator,u=cross(a,inward)/denominator;
+            if(u>=0 && u<=1 && t>=-1e-10){best=std::min(best,std::max(t,0.));}
+        }
+        return inside?0.:best;
+    }
     TongueMaterialPoint inverse{.position=wall,.valid=true};
     if (attachment_active_) { inverse=attachment_map_.map(wall,true); }
     if (inverse.valid && command_!=0) { inverse=map_.map(inverse.position,-command_); }

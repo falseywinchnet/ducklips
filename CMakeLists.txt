@@ -17,6 +17,7 @@ add_library(ducklips STATIC
     src/modal.cpp
     src/moving_mode.cpp
     src/canonical_speech.cpp
+    src/local_speech.cpp
     src/moving_tree.cpp
     src/relaxation_graph.cpp
     src/moving_graph.cpp
@@ -80,6 +81,9 @@ add_executable(ducklips_tests tests/ducklips_tests.cpp)
 target_link_libraries(ducklips_tests PRIVATE ducklips)
 
 enable_testing()
+add_executable(ducklips_local_speech_tests tests/local_speech_tests.cpp)
+target_link_libraries(ducklips_local_speech_tests PRIVATE ducklips)
+add_test(NAME ducklips_local_speech COMMAND ducklips_local_speech_tests)
 add_executable(ducklips_slit_thermal_probe tools/slit_thermal_probe.cpp)
 target_link_libraries(ducklips_slit_thermal_probe PRIVATE ducklips)
 add_test(NAME ducklips_slit_thermal COMMAND ducklips_slit_thermal_probe)

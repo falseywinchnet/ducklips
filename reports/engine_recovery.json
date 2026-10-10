@@ -1,0 +1,166 @@
+{
+  "scope": "New local-engine speech candidates. Intelligibility unassessed; excessive consonant transients remain unresolved.",
+  "runs": [
+    {
+      "name": "papa",
+      "duration_s": 1.37,
+      "render_seconds": 0.125,
+      "realtime_multiple": 10.96,
+      "body_construction_seconds": 0.012095,
+      "full_scale_pressure_Pa": 128,
+      "raw_peak": 0.0007040092605166137,
+      "fixed_playback_gain": 1136.3486886705819,
+      "raw_sha256": "83c10ac4f5d6af03b41e4c16ede52a50bfa7b9dbfc510550acead6217b63b2e3",
+      "playback_sha256": "0fce02b34f4c3d989c8da8a5312534bd7fc9582b5018719bfb4637bcc3c3360e"
+    },
+    {
+      "name": "november",
+      "duration_s": 1.57,
+      "render_seconds": 0.181,
+      "realtime_multiple": 8.67403314917127,
+      "body_construction_seconds": 0.05162,
+      "full_scale_pressure_Pa": 128,
+      "raw_peak": 0.019185999408364296,
+      "fixed_playback_gain": 41.69707206658379,
+      "raw_sha256": "987a354df7a538edfa8596cab294ac92b940ab8c2cf9e57f058102ed649f86ef",
+      "playback_sha256": "55e39ccffcf33ab9d8651f9a847319de1f0156b923169638a773856f19dac519"
+    },
+    {
+      "name": "foxtrot",
+      "duration_s": 1.66,
+      "render_seconds": 0.524,
+      "realtime_multiple": 3.1679389312977095,
+      "body_construction_seconds": 0.385365,
+      "full_scale_pressure_Pa": 128,
+      "raw_peak": 0.45608916878700256,
+      "fixed_playback_gain": 1.7540429695527515,
+      "raw_sha256": "9d05bd88c88e4b0f40d3c8ceefcd2a172d0e1d7981d9559c027c19684be3b34e",
+      "playback_sha256": "d146c4b07518c8b78776d7b388cc03c9a61165ce36255ada5ce04d79dd01918f"
+    },
+    {
+      "name": "alphabet",
+      "duration_s": 23.24,
+      "render_seconds": 8.671,
+      "realtime_multiple": 2.6801983623572827,
+      "body_construction_seconds": 6.711624,
+      "full_scale_pressure_Pa": 128,
+      "raw_peak": 0.4559587836265564,
+      "fixed_playback_gain": 1.7545445525515382,
+      "raw_sha256": "0e964d2cf0efd85dce9bd498372eed61a10c2bcfd4f133d5c183b8eef1ab37cd",
+      "playback_sha256": "16cf9fde3e377dad8fa6efb8bac94b79022dd53b42776c072acc5fabda8bc663"
+    }
+  ],
+  "tube_modes": [
+    {
+      "sections": 24,
+      "substeps": 1,
+      "modes": [
+        {
+          "mode": 1,
+          "analytic_discrete_Hz": 499.910761393804,
+          "measured_Hz": 499.69482421875,
+          "relative_error": -0.00043195144359753357
+        },
+        {
+          "mode": 2,
+          "analytic_discrete_Hz": 1497.5915895534279,
+          "measured_Hz": 1495.42236328125,
+          "relative_error": -0.0014484765321263193
+        },
+        {
+          "mode": 3,
+          "analytic_discrete_Hz": 2488.85950061214,
+          "measured_Hz": 2480.712890625,
+          "relative_error": -0.003273230162303742
+        },
+        {
+          "mode": 4,
+          "analytic_discrete_Hz": 3469.469733192569,
+          "measured_Hz": 3448.79150390625,
+          "relative_error": -0.0059600546701674695
+        }
+      ]
+    },
+    {
+      "sections": 24,
+      "substeps": 2,
+      "modes": [
+        {
+          "mode": 1,
+          "analytic_discrete_Hz": 499.910761393804,
+          "measured_Hz": 499.8779296875,
+          "relative_error": -6.567513412292225e-05
+        },
+        {
+          "mode": 2,
+          "analytic_discrete_Hz": 1497.5915895534279,
+          "measured_Hz": 1497.25341796875,
+          "relative_error": -0.00022581028568591233
+        },
+        {
+          "mode": 3,
+          "analytic_discrete_Hz": 2488.85950061214,
+          "measured_Hz": 2487.3046875,
+          "relative_error": -0.0006247090732753868
+        },
+        {
+          "mode": 4,
+          "analytic_discrete_Hz": 3469.469733192569,
+          "measured_Hz": 3465.4541015625,
+          "relative_error": -0.0011574194153219919
+        }
+      ]
+    },
+    {
+      "sections": 64,
+      "substeps": 4,
+      "modes": [
+        {
+          "mode": 1,
+          "analytic_discrete_Hz": 499.98745024352513,
+          "measured_Hz": 500.06103515625,
+          "relative_error": 0.00014717351943338564
+        },
+        {
+          "mode": 2,
+          "analytic_discrete_Hz": 1499.6611769862836,
+          "measured_Hz": 1499.45068359375,
+          "relative_error": -0.00014036063329758708
+        },
+        {
+          "mode": 3,
+          "analytic_discrete_Hz": 2498.431563911969,
+          "measured_Hz": 2497.9248046875,
+          "relative_error": -0.0002028309407344775
+        },
+        {
+          "mode": 4,
+          "analytic_discrete_Hz": 3495.696989085927,
+          "measured_Hz": 3494.56787109375,
+          "relative_error": -0.00032300224982373393
+        }
+      ]
+    }
+  ],
+  "validation": {
+    "release_local": true,
+    "asan_local": true,
+    "existing_stream": true,
+    "tongue_flow": true,
+    "tongue_surface": true
+  },
+  "hashes": {
+    "include/ducklips/local_speech.hpp": "9e18f8386d40a594187fb8d7422312344d095306c8af0fafb374c49164a17e6c",
+    "src/local_speech.cpp": "c84d5b8fccba8d5125695047c336344ce53ef04f5b6b92c11139e8509d2a6781",
+    "src/synthesizer.cpp": "082c316fd7b168b4082979b5d442997cd0f839b365bd0dbb8b1e2102a0cd3a53",
+    "src/tongue_flow.cpp": "c0a32c133e8da81b5ec1d312c27e29b50cd8f34dac84dc322be2c10fb5bb481b",
+    "src/tongue_surface.cpp": "dc3d0c1f805907b96e2f1035fe1b67abe5d37f6ef7768f7b7ed16195d189bbf0",
+    "tests/local_speech_tests.cpp": "a14bdd1017e82609ee77655f406b209be7155393083d9ef1028bf716473d746a",
+    "tools/render_local_engine.py": "d303ac51ecbfd7509ee3b8c7a58b8777a439607c48b5a02da984a98b265b8924",
+    "out/recovered-engine-20261010-final/run.json": "d01dc7b069432026fb45310890d19a5b8582ed4d8bd46100e20142eb4ab4514d",
+    "out/recovered-engine-20261010-final/verification/local-release.log": "26fc87fbde4668b9a73406f1b1ec60be77a015ccb0a75fe65ac4516756e955d3",
+    "out/recovered-engine-20261010-final/verification/local-sanitizers.log": "26fc87fbde4668b9a73406f1b1ec60be77a015ccb0a75fe65ac4516756e955d3",
+    "out/recovered-engine-20261010-final/verification/geometry-and-local-ctest.log": "0df64879074fb2d7573536b4d6366f6a8140f564efbe6007ff52fc101b3491a3",
+    "out/recovered-engine-20261010-final/verification/tube-modes.json": "119e8c229a85a2a689640b404e8bc705226f8f006f5caeb1d0d8572c2afd3b47"
+  }
+}

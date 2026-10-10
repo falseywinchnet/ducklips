@@ -50,6 +50,17 @@ ConservativeTongueMap::Field ConservativeTongueMap::field(Point2 point) const no
 TongueMaterialPoint ConservativeTongueMap::map(Point2 point,double command,std::size_t steps) const noexcept {
     TongueMaterialPoint result{.position=point};
     if (!count_ || !steps || !std::isfinite(command) || !std::isfinite(point.x) || !std::isfinite(point.y)) { return result; }
+    // The anchored region does not move. Above the gate, x is fixed and y
+    // follows a vertical shear exactly. Integrating either region repeatedly
+    // adds no mechanics; retain its exact material map and unit determinant.
+    if(command==0 || point.y<=anchor_y_){result.valid=true;return result;}
+    if(point.y>=anchor_y_+height_){
+        double value=0,derivative=0,integral=0;profile(point.x,value,derivative,integral);
+        const double end=point.y+command*value;
+        if(std::isfinite(end) && end>=anchor_y_+height_){
+            result.position.y=end;result.gradient[2]=command*derivative;result.valid=true;return result;
+        }
+    }
     const double h=command/static_cast<double>(steps),half=h/2;
     for (std::size_t step=0;step<steps;++step) {
         const Point2 initial=result.position;const Field start=field(initial);
@@ -108,6 +119,12 @@ TongueMaterialTranslation::Field TongueMaterialTranslation::field(Point2 point,d
 TongueMaterialPoint TongueMaterialTranslation::map(Point2 point,bool inverse,std::size_t steps) const noexcept {
     TongueMaterialPoint result{.position=point};
     if (radius_squared_<=0 || !steps || !std::isfinite(point.x) || !std::isfinite(point.y)) { return result; }
+    // Outside the entire swept support, the field and its gradient vanish
+    // for the whole command interval. A stationary point cannot enter it.
+    const double length_squared=displacement_.x*displacement_.x+displacement_.y*displacement_.y;
+    const double fraction=length_squared>0 ? std::clamp(((point.x-start_.x)*displacement_.x+(point.y-start_.y)*displacement_.y)/length_squared,0.,1.) : 0.;
+    const double outside_x=point.x-start_.x-fraction*displacement_.x,outside_y=point.y-start_.y-fraction*displacement_.y;
+    if(length_squared==0 || outside_x*outside_x+outside_y*outside_y>=radius_squared_){result.valid=true;return result;}
     const double h=(inverse?-1.:1.)/static_cast<double>(steps),half=h/2;
     for (std::size_t step=0;step<steps;++step) {
         const double time=(inverse?1.:0.)+(static_cast<double>(step)+.5)*h;

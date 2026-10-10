@@ -152,6 +152,7 @@ public:
     // and splits the open column in front of the tip. Off by default.
     void set_floor(bool enabled) noexcept;
     void set_conservative_body(bool enabled) noexcept { conservative_body_=enabled; }
+    void set_polygon_surface(bool enabled) noexcept { body_surface_.set_polygon_queries(enabled); }
     [[nodiscard]] const char* geometry_error() const noexcept { return geometry_error_; }
     // The oral sections that can hold space under the tongue (between
     // MidsagittalTongue::floor_back_x and incisors_x).

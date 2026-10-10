@@ -27,6 +27,10 @@ struct Arguments final {
     std::string dictionary{};
     std::string probe_path{};
     bool conservative_tongue{false};
+    bool local_flow{false};
+    std::size_t local_substeps{1};
+    std::size_t local_sections{24};
+    double full_scale_pressure{2.};
     bool canonical_motion{false};
     bool spatial_pressure{false};
     std::size_t canonical_substeps{8};
@@ -56,6 +60,7 @@ void print_usage() {
                 "                    [--trace START_S FILE.csv] [--tap microphones|lips|source]\n"
                 "                    [--until SECONDS] (render a prefix of the complete plan)\n"
                 "                    [--invariant passive|charge|pressure]\n"
+                "[--local-flow] [--local-substeps 1..16] [--local-sections 24..128] [--full-scale-pa PA]\n"
                 "[--canonical-motion] [--conservative-tongue] [--spatial-pressure] [--canonical-substeps 1..64]\n"
                 "voices: baritone alto child gravel whisper\n");
 }
@@ -66,6 +71,17 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
         bool has_value = index + 1 < count;
         if (flag == "--conservative-tongue") {
             arguments.conservative_tongue=true;
+        } else if (flag == "--local-flow") {
+            arguments.local_flow=true;
+        } else if (flag == "--local-substeps" && has_value) {
+            std::istringstream parsed(values[++index]);std::string extra;
+            if (!(parsed>>arguments.local_substeps) || (parsed>>extra) || arguments.local_substeps<1 || arguments.local_substeps>16) { return false; }
+        } else if (flag == "--local-sections" && has_value) {
+            std::istringstream parsed(values[++index]);std::string extra;
+            if (!(parsed>>arguments.local_sections) || (parsed>>extra) || arguments.local_sections<24 || arguments.local_sections>128) { return false; }
+        } else if (flag == "--full-scale-pa" && has_value) {
+            std::istringstream parsed(values[++index]);std::string extra;
+            if (!(parsed>>arguments.full_scale_pressure) || (parsed>>extra) || !std::isfinite(arguments.full_scale_pressure) || arguments.full_scale_pressure<=0) { return false; }
         } else if (flag == "--canonical-motion") {
             arguments.canonical_motion=true;
         } else if (flag == "--spatial-pressure") {
@@ -165,14 +181,17 @@ int main(int argc, char** argv) {
     if (arguments.rate > 0.0) { voice.speaking_rate = arguments.rate; }
     ducklips::SynthesisOptions options{};
     options.conservative_tongue=arguments.conservative_tongue;
-    if (options.conservative_tongue && !arguments.canonical_motion) { std::fprintf(stderr,"--conservative-tongue requires --canonical-motion\n");return 2; }
+    options.local_flow=arguments.local_flow;options.local_substeps=arguments.local_substeps;
+    if(options.local_flow){options.oral_sections=arguments.local_sections;options.nasal_sections=std::max<std::size_t>(6,3*arguments.local_sections/8);}
+    if(options.local_flow && (arguments.canonical_motion || arguments.spatial_pressure)){std::fprintf(stderr,"--local-flow selects a distinct engine\n");return 2;}
+    if (options.conservative_tongue && !arguments.canonical_motion && !arguments.local_flow) { std::fprintf(stderr,"--conservative-tongue requires --local-flow or --canonical-motion\n");return 2; }
     options.canonical_motion=arguments.canonical_motion;
     options.spatial_pressure=arguments.spatial_pressure;
     if(options.spatial_pressure && !options.canonical_motion){std::fprintf(stderr,"--spatial-pressure requires --canonical-motion\n");return 2;}
     options.canonical_substeps=arguments.canonical_substeps;
     std::printf("tongue body: %s\n",options.conservative_tongue?"conservative material map":"rigid circle");
-    std::printf("acoustic path: %s\n",options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
-    std::printf("mean airflow: %s\n",options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity");
+    std::printf("acoustic path: %s\n",options.local_flow ? "local air exchanges (fixed work, no global solver)" : options.canonical_motion ? "canonical moving network (causal-loss integration reference)" : "compact modal");
+    std::printf("mean airflow: %s\n",options.local_flow?"unified breath and acoustic storage":options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity");
     options.radiate_mean_flow = !arguments.no_pop;
     if (arguments.tap == "lips") {
         options.tap = ducklips::OutputTap::lips;
@@ -184,6 +203,7 @@ int main(int argc, char** argv) {
         options.trace_samples = 48000 * 8;
     }
     options.air_path.room.enabled = arguments.room;
+    options.air_path.full_scale_pressure=arguments.full_scale_pressure;
     options.control_block = arguments.control_block;
     options.diagnostics = arguments.diagnostics;
     if (arguments.invariant == "charge") {
@@ -320,6 +340,7 @@ int main(int argc, char** argv) {
     }
     const ducklips::SynthesisStatistics& statistics = synthesizer.statistics();
     std::printf("output audit: nonfinite %zu, clipped %zu\n", synthesizer.statistics().nonfinite_samples, synthesizer.statistics().clipped_samples);
+    if(options.local_flow){std::printf("local engine: %zu oral sections, %zu nasal sections, %zu fixed substeps; body construction %.6f s\n",options.oral_sections,options.nasal_sections,options.local_substeps,statistics.geometry_seconds);}
     std::printf("rendered %.2f s in %.3f s: real-time factor %.3f (lower is faster)\n", audio_seconds, render_seconds,
                 render_seconds / audio_seconds);
     std::printf("geometry steps %zu (at most %zu per block), modes %zu..%zu, warm-started %zu, bisected %zu, "

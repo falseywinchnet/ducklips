@@ -22,6 +22,9 @@ int main(int argc, char** argv) {
         std::string flag = argv[i];
         if (flag == "--conservative-tongue") {
             options.conservative_tongue=true;
+        } else if (flag == "--local-flow") {
+            options.local_flow=true;
+            options.oral_sections=24;options.nasal_sections=9;options.local_substeps=1;
         } else if (flag == "--canonical-motion") {
             options.canonical_motion=true;
         } else if (flag == "--spatial-pressure") {
@@ -33,16 +36,17 @@ int main(int argc, char** argv) {
             std::string extra{};
             if (!(value >> speed) || (value >> extra) || !std::isfinite(speed) || speed < .25 || speed > 4) { return 2; }
         } else {
-            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--canonical-motion] [--conservative-tongue] [--spatial-pressure] < nudges > stereo.f32\n";
+            std::cerr << "usage: ducklips_stream [--body FILE] [--speed FACTOR] [--local-flow] [--canonical-motion] [--conservative-tongue] [--spatial-pressure] < nudges > stereo.f32\n";
             return 2;
         }
     }
-    if (options.conservative_tongue && !options.canonical_motion) { std::cerr << "--conservative-tongue requires --canonical-motion\n";return 2; }
+    if(options.local_flow && (options.canonical_motion || options.spatial_pressure)){std::cerr<<"--local-flow selects a distinct engine\n";return 2;}
+    if (options.conservative_tongue && !options.canonical_motion && !options.local_flow) { std::cerr << "--conservative-tongue requires --local-flow or --canonical-motion\n";return 2; }
     if(options.spatial_pressure && !options.canonical_motion){std::cerr<<"--spatial-pressure requires --canonical-motion\n";return 2;}
     std::cerr << "tongue body: " << (options.conservative_tongue?"conservative material map":"rigid circle") << '\n';
     ducklips::NudgeStream stream{};
     stream.prepare(voice, speed,4096,options);
-    std::cerr << "acoustic path: " << (options.canonical_motion ? "canonical moving network" : "compact modal") << '\n';
+    std::cerr << "acoustic path: " << (options.local_flow ? "local air exchanges" : options.canonical_motion ? "canonical moving network" : "compact modal") << '\n';
     std::cerr << "mean airflow: " << (options.spatial_pressure?"spatial pressure and local constriction flow":"single oral cavity") << '\n';
     std::array<float, 960> chunk{};
     std::string line{};

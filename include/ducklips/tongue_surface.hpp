@@ -12,6 +12,9 @@ public:
     bool move_attachment(Point2 start,Point2 displacement) noexcept;
     [[nodiscard]] TongueMaterialPoint material(Point2 point) const noexcept;
     [[nodiscard]] double ray_gap(Point2 wall,Point2 inward) const noexcept;
+    // Engine representation: intersect the carried polygon directly. The
+    // mapped-circle refinement remains the offline geometric reference.
+    void set_polygon_queries(bool enabled) noexcept { polygon_queries_=enabled; }
     [[nodiscard]] double wall_penetration() const noexcept;
     [[nodiscard]] const char* error() const noexcept { return error_; }
 private:
@@ -20,6 +23,7 @@ private:
     ConservativeTongueMap map_{};
     TongueMaterialTranslation attachment_map_{};
     bool attachment_active_{false};
+    bool polygon_queries_{false};
     Point2 centre_{};
     double command_{};
     std::array<Point2,contour_count> contour_{};
