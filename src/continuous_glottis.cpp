@@ -43,6 +43,9 @@ bool ContinuousGlottis::configuration(const std::array<double,4>& z,Configuratio
     candidate.potential_gradient={candidate.gas.effort[0]*mass_scale/energy_scale,candidate.gas.effort[1]*mass_scale/energy_scale,
         (candidate.gas.area_effort[0]+contact.area_effort[0])*area_scale/energy_scale,(candidate.gas.area_effort[1]+contact.area_effort[1])*area_scale/energy_scale};
     candidate.metric=transform(candidate.flow.inertia,width_,1/energy_scale);
+    // The same outlet transfer coordinate carries the attached half-column.
+    // Its inertia belongs in the shared metric, not an independent flow state.
+    candidate.metric[16]+=outlet_inertance_*mass_scale*mass_scale/(time_scale*time_scale*energy_scale);
     for(std::size_t i=0;i<4;++i){candidate.metric[7*(3+i)+3+i]+=mass_[i]*position_scale*position_scale/(time_scale*time_scale*energy_scale);}
     if(!inverse(candidate.metric,candidate.active,candidate.inverse)){return false;}result=candidate;return true;
 }
@@ -54,12 +57,12 @@ double ContinuousGlottis::mechanical(const Vector& q) const noexcept {
     double e=0;for(std::size_t i=0;i<4;++i){e+=.5*stiffness_[i]*q[3+i]*q[3+i];}
     for(std::size_t i=0;i<2;++i){const double d=q[3+i]-q[5+i];e+=.5*coupling_[i]*d*d;}return e*position_scale*position_scale/energy_scale;
 }
-bool ContinuousGlottis::prepare(const FoldParameters& f,const AirProperties& air,double tension,const FoldState& initial,const std::array<double,2>& effort,const std::array<double,3>& flow,double outlet_loss,ContourPressureProfile profile) noexcept {
+bool ContinuousGlottis::prepare(const FoldParameters& f,const AirProperties& air,double tension,const FoldState& initial,const std::array<double,2>& effort,const std::array<double,3>& flow,double outlet_loss,ContourPressureProfile profile,double outlet_inertance) noexcept {
     for(double v:{f.lower_mass,f.upper_mass,f.lower_stiffness,f.upper_stiffness,f.length,f.asymmetry,tension}){if(!std::isfinite(v) || v<=0){return false;}}
-    for(double v:{f.coupling_stiffness,f.lower_damping_ratio,f.upper_damping_ratio,outlet_loss}){if(!std::isfinite(v) || v<0){return false;}}
+    for(double v:{f.coupling_stiffness,f.lower_damping_ratio,f.upper_damping_ratio,outlet_loss,outlet_inertance}){if(!std::isfinite(v) || v<0){return false;}}
     if(!finite(effort) || !finite(flow) || !std::isfinite(initial.rest_area) || !finite(initial.lower_position) || !finite(initial.upper_position) || !finite(initial.lower_velocity) || !finite(initial.upper_velocity)){return false;}
     ContinuousGlottis candidate;if(!candidate.storage_.configure(f,air,profile) || !candidate.kinetics_.configure(f,air,profile) || !candidate.loss_.configure(f,air,profile) || !candidate.contact_.configure(f,tension) || !candidate.gas_.configure(air)){return false;}
-    candidate.profile_=profile;candidate.rest_area_=initial.rest_area;candidate.width_=f.length;candidate.density_=air.density;candidate.bulk_=air.density*air.sound_speed*air.sound_speed;candidate.gamma_=air.heat_capacity_ratio;candidate.outlet_loss_=outlet_loss;candidate.effort_guess_=effort;
+    candidate.profile_=profile;candidate.rest_area_=initial.rest_area;candidate.width_=f.length;candidate.density_=air.density;candidate.bulk_=air.density*air.sound_speed*air.sound_speed;candidate.gamma_=air.heat_capacity_ratio;candidate.outlet_loss_=outlet_loss;candidate.outlet_inertance_=outlet_inertance;candidate.effort_guess_=effort;
     Vector velocity{};for(std::size_t j=0;j<3;++j){velocity[j]=flow[j]*time_scale/mass_scale;}
     for(std::size_t side=0;side<2;++side){const double q=tension*(side?f.asymmetry:1.);candidate.coupling_[side]=f.coupling_stiffness*q;
         candidate.mass_[side]=f.lower_mass/q;candidate.mass_[side+2]=f.upper_mass/q;candidate.stiffness_[side]=f.lower_stiffness*q;candidate.stiffness_[side+2]=f.upper_stiffness*q;
@@ -75,9 +78,28 @@ bool ContinuousGlottis::state(ContinuousGlottalState& result) const noexcept {
     for(std::size_t j=0;j<3;++j){candidate.flow[j]=velocity[j]*mass_scale/time_scale;}
     for(std::size_t j=0;j<2;++j){candidate.folds.lower_position[j]=position_[3+j]*position_scale;candidate.folds.upper_position[j]=position_[5+j]*position_scale;candidate.folds.lower_velocity[j]=velocity[3+j]*position_scale/time_scale;candidate.folds.upper_velocity[j]=velocity[5+j]*position_scale/time_scale;}
     const Vector canonical=multiply(c.metric,velocity);for(std::size_t j=0;j<7;++j){candidate.momentum[j]=canonical[j]*energy_scale*time_scale/coordinate_scale[j];}
-    candidate.energy=energy_scale*(c.potential+mechanical(position_)+.5*dot(momentum_,velocity));if(!std::isfinite(candidate.energy)){return false;}result=candidate;return true;
+    candidate.outlet_inertance=outlet_inertance_;candidate.energy=energy_scale*(c.potential+mechanical(position_)+.5*dot(momentum_,velocity));if(!std::isfinite(candidate.energy)){return false;}result=candidate;return true;
 }
-bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_load,double load_slope,const std::array<double,4>& force,ContinuousGlottalUpdate update) noexcept {
+bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_load,double load_slope,const std::array<double,4>& force,ContinuousGlottalUpdate update,double outlet_inertance) noexcept {
+    if(!std::isfinite(outlet_inertance) || (outlet_inertance<0 && outlet_inertance!=-1.)){return false;}
+    if(outlet_inertance>=0 && outlet_inertance!=outlet_inertance_){
+        // Prescribed geometry changes Hamiltonian coefficients, not canonical
+        // state. Symmetric midpoint freezing is second order for smooth motion.
+        ContinuousGlottis candidate=*this;ContinuousGlottalState before,middle,after;
+        if(!state(before)){return false;}
+        candidate.outlet_inertance_=.5*outlet_inertance_+.5*outlet_inertance;
+        if(!candidate.state(middle)){return false;}
+        double geometry_work=middle.energy-before.energy;
+        if(!candidate.advance(dt,reservoir_pressure,free_load,load_slope,force,update)){return false;}
+        if(!candidate.state(middle)){return false;}
+        candidate.outlet_inertance_=outlet_inertance;
+        if(!candidate.state(after)){return false;}
+        geometry_work+=after.energy-middle.energy;
+        candidate.last.geometry_work=geometry_work;candidate.last.energy_change=after.energy-before.energy;
+        candidate.last.energy_residual=candidate.last.energy_change+candidate.last.numerical_loss+candidate.last.tissue_loss+candidate.last.fluid_loss+candidate.last.load_work-candidate.last.reservoir_work-candidate.last.external_work-geometry_work;
+        if(!std::isfinite(candidate.last.energy_residual)){return false;}
+        *this=candidate;return true;
+    }
     if(!std::isfinite(dt) || dt<=0 || !std::isfinite(free_load) || !std::isfinite(load_slope) || load_slope<0 || !finite(force)){return false;}
     const bool dissipative=update==ContinuousGlottalUpdate::dissipative;
     const bool fitted=update==ContinuousGlottalUpdate::relaxation;

@@ -11,7 +11,7 @@ struct ContinuousGlottalState final {
     // and the four tissue positions. Closed-port coordinates are eliminated;
     // their reported momenta and velocities are zero.
     std::array<double,7> momentum{};
-    double energy{};
+    double energy{},outlet_inertance{};
 };
 struct ContinuousGlottalStep final {
     std::array<double,3> flow{};
@@ -19,6 +19,7 @@ struct ContinuousGlottalStep final {
     // load_work = port_work + outlet_loss. The affine load exchanges port
     // work with an attached tract; only the kinetic exit term is dissipation.
     double port_work{},outlet_loss{};
+    double geometry_work{}; // Prescribed change of the attached outlet-column inertia.
     double numerical_loss{},energy_change{},energy_residual{},maximum_scaled_residual{};
     // Estimated endpoint-arithmetic scale, not a relaxed force tolerance.
     double energy_roundoff_scale{};
@@ -35,9 +36,12 @@ class ContinuousGlottis final {
 public:
     [[nodiscard]] bool prepare(const FoldParameters&,const AirProperties&,double tension,
         const FoldState&,const std::array<double,2>& effort,
-        const std::array<double,3>& flow={},double outlet_loss=1.,ContourPressureProfile profile=ContourPressureProfile::flat_caps) noexcept;
+        const std::array<double,3>& flow={},double outlet_loss=1.,ContourPressureProfile profile=ContourPressureProfile::flat_caps,double outlet_inertance=0.) noexcept;
+    // outlet_inertance=-1 retains the current column; otherwise the endpoint
+    // inertia is prescribed. Midpoint parameter splitting retains canonical
+    // momentum and records its exact Hamiltonian change as geometry_work.
     [[nodiscard]] bool advance(double dt,double reservoir_pressure,double free_load,double load_slope,
-        const std::array<double,4>& external_force={},ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric) noexcept;
+        const std::array<double,4>& external_force={},ContinuousGlottalUpdate update=ContinuousGlottalUpdate::symmetric,double outlet_inertance=-1.) noexcept;
     [[nodiscard]] bool state(ContinuousGlottalState&) const noexcept;
     ContinuousGlottalStep last{};
 private:
@@ -64,6 +68,6 @@ private:
     std::array<double,2> coupling_{};
     std::array<bool,7> active_{};
     ContourPressureProfile profile_{ContourPressureProfile::flat_caps};
-    double rest_area_{},width_{},density_{},bulk_{},gamma_{},outlet_loss_{};
+    double rest_area_{},width_{},density_{},bulk_{},gamma_{},outlet_loss_{},outlet_inertance_{};
 };
 }

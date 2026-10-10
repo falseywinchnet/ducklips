@@ -1,0 +1,174 @@
+{
+  "scope": "Open symmetric continuous source and cyclic fixed tract with constant or prescribed changing outlet-column inertia. Independent time-continuous trajectory, geometric work, mass and graph coupling; not a speech or through-contact validation.",
+  "cases": [
+    {
+      "moving_column": false,
+      "oracle_refinement_scaled_error": 1.6979240236025817e-09,
+      "runs": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "endpoint_scaled_error": 0.004615027074690636,
+          "maximum_sampled_scaled_error": 0.07430275281357092,
+          "joint_work_residual_J": 7.426568041091208e-15,
+          "mass_residual_m3": 7.990564717262247e-22,
+          "graph_collocation_error_Pa": 2.9985297205047253e-12,
+          "geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0,
+          "port_residual_J": 2.117582368135751e-22
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "endpoint_scaled_error": 0.0009575894931747042,
+          "maximum_sampled_scaled_error": 0.07064413847309436,
+          "joint_work_residual_J": 3.4551354832768055e-15,
+          "mass_residual_m3": 1.3979352352146168e-22,
+          "graph_collocation_error_Pa": 2.895132143935597e-12,
+          "geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0,
+          "port_residual_J": 1.0587911840678754e-22
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "endpoint_scaled_error": 0.00021334436939429713,
+          "maximum_sampled_scaled_error": 0.059734220364678264,
+          "joint_work_residual_J": 2.3993394077104213e-16,
+          "mass_residual_m3": 9.26442286059391e-23,
+          "graph_collocation_error_Pa": 6.255553382432272e-12,
+          "geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0,
+          "port_residual_J": 5.293955920339377e-23
+        },
+        {
+          "steps": 1600,
+          "dt_s": 1.25e-06,
+          "endpoint_scaled_error": 5.3256955630465175e-05,
+          "maximum_sampled_scaled_error": 0.03711519000945093,
+          "joint_work_residual_J": 2.4231918555051024e-16,
+          "mass_residual_m3": 2.500980582054079e-21,
+          "graph_collocation_error_Pa": 1.4734154661100805e-11,
+          "geometry_work_J": 0.0,
+          "independent_geometry_work_J": 0.0,
+          "geometry_work_error_J": 0.0,
+          "port_residual_J": 2.6469779601696886e-23
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        4.819421169075696,
+        4.488468553884888,
+        4.0059437658178
+      ],
+      "geometry_work_refinement_ratios": []
+    },
+    {
+      "moving_column": true,
+      "oracle_refinement_scaled_error": 1.9509425741581765e-09,
+      "runs": [
+        {
+          "steps": 200,
+          "dt_s": 1e-05,
+          "endpoint_scaled_error": 0.004090702090893461,
+          "maximum_sampled_scaled_error": 0.0673992324456273,
+          "joint_work_residual_J": 5.112772184789893e-15,
+          "mass_residual_m3": 7.800313176375051e-22,
+          "graph_collocation_error_Pa": 1.7060600133906196e-12,
+          "geometry_work_J": 5.160697011052795e-07,
+          "independent_geometry_work_J": 5.162718021001153e-07,
+          "geometry_work_error_J": 2.021009948357591e-10,
+          "port_residual_J": 2.117582368135751e-22
+        },
+        {
+          "steps": 400,
+          "dt_s": 5e-06,
+          "endpoint_scaled_error": 0.0009045277377442984,
+          "maximum_sampled_scaled_error": 0.06706066957378398,
+          "joint_work_residual_J": 3.402660098128507e-15,
+          "mass_residual_m3": 1.2655863372061323e-22,
+          "graph_collocation_error_Pa": 3.1019272970738538e-12,
+          "geometry_work_J": 5.162210674349638e-07,
+          "independent_geometry_work_J": 5.162718021001153e-07,
+          "geometry_work_error_J": 5.0734665151487673e-11,
+          "port_residual_J": 1.0587911840678754e-22
+        },
+        {
+          "steps": 800,
+          "dt_s": 2.5e-06,
+          "endpoint_scaled_error": 0.0002136955214269154,
+          "maximum_sampled_scaled_error": 0.055342845803795615,
+          "joint_work_residual_J": 2.4345759783162e-16,
+          "mass_residual_m3": 6.617444900424221e-23,
+          "graph_collocation_error_Pa": 4.756288522179909e-12,
+          "geometry_work_J": 5.162591038815097e-07,
+          "independent_geometry_work_J": 5.162718021001153e-07,
+          "geometry_work_error_J": 1.2698218605549779e-11,
+          "port_residual_J": 5.293955920339377e-23
+        },
+        {
+          "steps": 1600,
+          "dt_s": 1.25e-06,
+          "endpoint_scaled_error": 5.335038443848861e-05,
+          "maximum_sampled_scaled_error": 0.0343326395548228,
+          "joint_work_residual_J": 2.38334742566626e-16,
+          "mass_residual_m3": 3.3021050053116865e-21,
+          "graph_collocation_error_Pa": 6.927637630131607e-12,
+          "geometry_work_J": 5.162686259973098e-07,
+          "independent_geometry_work_J": 5.162718021001153e-07,
+          "geometry_work_error_J": 3.1761028055335747e-12,
+          "port_residual_J": 2.6469779601696886e-23
+        }
+      ],
+      "endpoint_refinement_ratios": [
+        4.522472800109823,
+        4.232787527340156,
+        4.005510432137559
+      ],
+      "geometry_work_refinement_ratios": [
+        3.9834892815850775,
+        3.995415949865125,
+        3.9980502468075874
+      ]
+    }
+  ],
+  "hashes": {
+    "tools/continuous_outlet_column_reference.py": "ff9ffb4108d22f86b08510db0228c68261614c9d9cf4bdfc119d096d32e9b64e",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/graph_continuous_glottis_reference.py": "6a09b5e01297965cc4f1da84bb316aecc80a27c087ebacec6e36c946342c12ee",
+    "tools/graph_continuous_glottis_probe.cpp": "96da57a52c85428ea495f61c9f79623ae80db2ec1ff35c4dc5e8d4727f6d7d59",
+    "src/continuous_glottis.cpp": "ee696b46db805329ce1a67fcdff1e084141fd26bfa839d7a7c7e8d7b6156d7a8",
+    "include/ducklips/continuous_glottis.hpp": "0ed0555c94ef8c0e358a421430e64195b0dbf886b3cc20dd399f221606c7a95a",
+    "src/graph_continuous_glottis.cpp": "690f8de84845a9d273b158fedc53bc48921bfd38d71605265d019aba1626577e",
+    "include/ducklips/graph_continuous_glottis.hpp": "0001aa8eee0efe2c0fd833c4f53c5894442f656f52ff70bb1d1f30b8b1ced945",
+    "build/ducklips_graph_continuous_glottis_probe": "3a5e2728d05c315a0980a8edaa0cd614d69206ecfba3f41b99eb61cdc0db3f7f",
+    "out/continuous-outlet-column/fixed-1600.input": "527a7d8bf735c364b0d50036d9fb7110b0f5cdb7885b2316d3a43faecf296212",
+    "out/continuous-outlet-column/fixed-200.input": "3fbf674ef810ae8dd7b9f08e29aa0d52c25bfb47c643fd70d479b211a95697e6",
+    "out/continuous-outlet-column/fixed-400.input": "2fc83d8220ffb2c0e3a91a93436d90978b9a58223e5824d13d7f49530ff1f547",
+    "out/continuous-outlet-column/fixed-800.input": "852669afee8803ba04ac18ec2c5383bc7ef1df563bf70711d2c0935dd9f5692e",
+    "out/continuous-outlet-column/moving-1600.input": "2ff0035c7bd944618c257a90fed154821bf7923dbf4b9569542ac6077a13e5ea",
+    "out/continuous-outlet-column/moving-200.input": "817778cc7d21b36e5b9714c19c7dc9be46f495e345e16d12d33e43daf6dec4ff",
+    "out/continuous-outlet-column/moving-400.input": "112195c44c47a62668971bd12dff9152247b4467861890db1d690bd4e0d4694b",
+    "out/continuous-outlet-column/moving-800.input": "b5da6ea49c9912980ea695a4cf0497281a6a7046cb54335449853acb86cfafec",
+    "out/continuous-outlet-column/fixed-1600.txt": "beb51ad055c8cae61d01d1c159465a53816e53bb529ae141a2dae7a00409d36e",
+    "out/continuous-outlet-column/fixed-200.txt": "eac86ec762e0ea9b43645ef14129cbfecd0c5069c3f45cc14725da7435da5102",
+    "out/continuous-outlet-column/fixed-400.txt": "13ac2915806ab23cc1232e73917d11179bcb3d60fe1ed833d0df8dc8880f2b0d",
+    "out/continuous-outlet-column/fixed-800.txt": "ebea058e82a659537842af01278b0198ee72aa4a2fbb2438733809fcce246814",
+    "out/continuous-outlet-column/moving-1600.txt": "b2b16b829a0122a5fbed1f1acf172c0e676bb589b90f97a072dc312f1e38aa69",
+    "out/continuous-outlet-column/moving-200.txt": "ccc4cff553adf1b690a66d02a337d041054ab838c1961427c06fd29957c231b4",
+    "out/continuous-outlet-column/moving-400.txt": "0f7cf668653838a6c2f04040c0d033fae6a98724a0157c563b3ef7c719c7edef",
+    "out/continuous-outlet-column/moving-800.txt": "c556138ccb16d7f7610f0c706c033125255501db3c5b28aab1a48b8d1ad53844",
+    "out/continuous-outlet-column/fixed-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/fixed-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/fixed-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/fixed-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/moving-1600.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/moving-200.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/moving-400.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/moving-800.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "out/continuous-outlet-column/continuous-False.npz": "f6e36c2d4b73913d81b4cc30da04f7e8c631cfd2cbf8dc28978c0f6c576a0ee7",
+    "out/continuous-outlet-column/continuous-True.npz": "63d5711010ab4f6c1afad175c83b459b85bb96e88b64d06231484ff5caf950cb"
+  }
+}

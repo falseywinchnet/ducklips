@@ -1,0 +1,151 @@
+#!/usr/bin/env python3
+"""Connect the shared continuous source to actual moving Bravo geometry."""
+import argparse
+import csv
+import json
+import subprocess
+from pathlib import Path
+import numpy as np
+from shapely.geometry import LineString
+from planar_source_reference import (ROOT,RHO,BULK,B,EDGES,setup,pose_at,PORTS,
+    lip_metrics,vector,write_input,dense_step,sha,check_geometry,exact_regions,check_boundaries)
+
+
+def source_vector(s):
+    return np.array(sum([s[k] for k in ['effort','flow','lower_position','lower_velocity','upper_position','upper_velocity']],[]))
+
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out):
+    path=out/f'{name}-{n}.txt'
+    write_input(p,q,n,[pressure]*2,PORTS,path)
+    mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
+    md=.5*(p['x_edges'][-1]-p['x_edges'][0]);ed=.5*(p['y_edges'][1]-p['y_edges'][0])
+    with path.open('a') as f:
+        f.write('4 2\n');f.writelines(' '.join(map(str,v))+'\n' for v in profiles)
+        f.write(' '.join(map(str,[pressure]*4))+'\n')
+        f.writelines(f'{mouth} {i} {md}\n' for i in range(2))
+        f.write('8 1\n');f.writelines(' '.join(map(str,v))+'\n' for v in np.column_stack([epi[0,0],epi[0,1],epi[1,0],epi[1,1]]))
+        f.write(' '.join(map(str,[pressure]*8))+'\n')
+        f.write(f'{entry} 0 {ed}\n3e-6 700\n1\n')
+        if previous is not None:
+            for k in ['charge','momentum']:f.write(' '.join(map(str,previous[k]))+'\n')
+            f.write(' '.join(map(str,source_vector(previous['continuous_source'])))+'\n')
+    command=[str(binary),'--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry']
+    if previous is not None:command+=['--initial-state']
+    with path.open() as f,path.with_suffix('.json').open('w') as g:
+        result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)
+    path.with_suffix('.log').write_text(result.stderr)
+    assert result.returncode==0,(name,n,result.stderr)
+    data=json.loads(path.with_suffix('.json').read_text())
+    continuation=None
+    if previous is not None:
+        for k in ['volume','compliance','conductance','charge','momentum']:
+            assert data['initial'][k]==previous[k],k
+        a=data['initial']['continuous_source'];b=previous['continuous_source']
+        mass_error=float(np.max(abs(np.array(a['mass'])-b['mass'])))
+        momentum_error=float(np.max(abs(np.array(a['canonical_momentum'])-b['canonical_momentum'])))
+        assert mass_error<1e-20 and momentum_error<1e-14,(mass_error,momentum_error)
+        continuation=dict(source_mass_roundtrip_m3=mass_error,source_momentum_roundtrip=momentum_error,
+            source_energy_roundtrip_J=abs(a['energy']-b['energy']))
+    return data,dict(name=name,subdivisions=n,command=command,continuation=continuation,
+        files={str(path.with_suffix(ext).relative_to(ROOT)):sha(path.with_suffix(ext)) for ext in ['.txt','.json','.log']})
+
+def audit(data,p,q,profiles,epi,geometry_check):
+    mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
+    md=.5*(p['x_edges'][-1]-p['x_edges'][0]);ed=.5*(p['y_edges'][1]-p['y_edges'][0]);cd=.5*(p['y_edges'][-1]-p['y_edges'][0])
+    line=LineString([(p['x_edges'][0],.09),(p['x_edges'][-1],.09)])
+    checks=0
+    def metrics(record):
+        nonlocal checks
+        fraction=record['fraction'];pose=pose_at(p,q,record)
+        check_geometry(pose,record)
+        regions,cells,error=exact_regions(pose,record)
+        boundary,errors=check_boundaries(pose,record,[mouth,entry],regions)
+        lip=lip_metrics((1-fraction)*profiles[0]+fraction*profiles[1]);ea,el=(1-fraction)*epi[0]+fraction*epi[1]
+        v=np.r_[[r.area*p['depth'] for r in regions],lip['volume'],ea*el]
+        cap=np.array([boundary[(mouth,i)][0] for i in range(2)]);share=cap/sum(cap)
+        mouth_g=np.zeros(2) if lip['conductance'][0]==0 else 1/(RHO*md/cap+1/(lip['conductance'][0]*share))
+        entry_g=1/(RHO*(ed/boundary[(entry,0)][0]+.5*el[0]/ea[0]))
+        internal=regions[0].intersection(regions[1]).intersection(line).length*p['depth']
+        g=np.r_[internal/(RHO*cd),mouth_g,lip['conductance'][1:],entry_g,1/(RHO*(.5*el[:-1]/ea[:-1]+.5*el[1:]/ea[1:]))]
+        checks+=1
+        return v,v/BULK,g
+    old=data['initial'];initial_mass=sum(np.array(old['volume'])+old['charge'])+sum(old['continuous_source']['mass'])
+    transfer=0.;max_mass=0.;max_local=0.;max_graph=0.;max_work=0.;max_port=0.;max_column=0.
+    z=np.r_[old['charge'],old['momentum']]
+    if geometry_check:
+        ov,c,g=metrics(old['geometry'])
+        assert np.max(abs(ov-old['volume']))<1e-17
+    for s in data['steps']:
+        dt=s['dt'];flow=np.array(s['average_flow'])
+        network=np.array(s['volume'])+s['charge'];prior=np.array(old['volume'])+old['charge']
+        local=network-prior+dt*B@flow;local[-1]-=dt*s['source_flow']
+        max_local=max(max_local,float(np.max(abs(local))))
+        source_mass=sum(s['continuous_source']['mass']);old_source_mass=sum(old['continuous_source']['mass'])
+        max_local=max(max_local,abs(source_mass-old_source_mass-dt*(s['source_reservoir_flow']-s['source_flow'])))
+        transfer+=dt*(s['source_reservoir_flow']-flow[6])
+        max_mass=max(max_mass,abs(sum(network)+source_mass-initial_mass-transfer))
+        max_work=max(max_work,abs(s['source_work_residual']));max_port=max(max_port,abs(s['source_port_residual']))
+        t=s['geometry']['fraction'];ea,el=(1-t)*epi[0]+t*epi[1]
+        max_column=max(max_column,abs(s['continuous_source']['outlet_inertance']-RHO*.5*el[-1]/ea[-1]))
+        if geometry_check:
+            _,c1,g1=metrics(s['stage1']);_,c2,g2=metrics(s['stage2']);v,c,g=metrics(s['geometry'])
+            assert np.max(abs(v-s['volume']))<1e-17
+            assert np.max(abs(c-s['compliance']))<1e-20
+            assert np.max(abs(g-s['conductance']))<1e-10
+            z[14:][(g1==0)&(g2==0)]=0
+            drive=-(v-ov)/dt;drive[-1]+=s['source_flow']
+            z,af,ap=dense_step(z,c1,c2,g1,g2,drive,dt,B)
+            z[14:][g==0]=0
+            max_graph=max(max_graph,float(np.max(abs(z[:14]/c-s['pressure']))),float(np.max(abs(ap-s['average_pressure']))))
+            assert np.max(abs(z[14:]-s['momentum']))<1e-9
+            ov=v
+        # A step ending at closure can transport air before its endpoint.
+        # Exact zero average flow applies to an entirely sealed interval.
+        if old['conductance'][6]==0 and s['conductance'][6]==0:assert flow[6]==0
+        old=s
+    assert max_local<1e-17 and max_mass<1e-17,(max_local,max_mass)
+    assert max_work<1e-12 and max_port<1e-18,(max_work,max_port)
+    assert max_column<1e-10 and max_graph<1e-5,(max_column,max_graph)
+    return dict(steps=len(data['steps']),geometry_snapshots_checked=checks,maximum_local_mass_residual_m3=max_local,
+        maximum_combined_mass_residual_m3=max_mass,maximum_source_work_residual_J=max_work,
+        maximum_port_work_residual_J=max_port,maximum_column_metric_error=max_column,
+        maximum_independent_graph_pressure_error_Pa=max_graph if geometry_check else None,
+        net_external_transfer_m3=transfer,initial_total_mass_m3=initial_mass,
+        final_total_mass_m3=sum(np.array(old['volume'])+old['charge'])+sum(old['continuous_source']['mass']))
+
+def main():
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--subdivisions',nargs='+',type=int,default=[256,512,1024])
+    parser.add_argument('--binary',type=Path,default=ROOT/'build/ducklips_planar_inertive_motion_probe')
+    parser.add_argument('--output',type=Path,default=ROOT/'out/planar-continuous')
+    parser.add_argument('--report',type=Path,default=ROOT/'reports/planar_continuous_reference.json')
+    args=parser.parse_args();args.binary=args.binary.resolve();args.output=args.output.resolve();args.report=args.report.resolve();args.output.mkdir(parents=True,exist_ok=True)
+    rows=list(csv.DictReader((ROOT/'out/lip-profile/nato.csv').open()))
+    airway=list(csv.DictReader((ROOT/'out/nato-spatial-airway.csv').open()))
+    runs=[];refinements=[];inputs={}
+    for name,start,pressure in [('closing',1284,0.),('opening',1374,700.)]:
+        last=None
+        for n in args.subdivisions:
+            previous=None;first_mass=None;net=0.
+            for interval in range(2):
+                index=start+interval;p,q,paths=setup(index/1000)
+                profiles=np.array([vector(rows[i]) for i in [index,index+1]])
+                epi=np.array([[[float(airway[t][f'{field}_{i}']) for i in reversed(range(8))] for field in ['area','length']] for t in [index,index+1]])
+                data,receipt=run(f'{name}-{interval}',p,q,profiles,epi,n,pressure,previous,args.binary,args.output)
+                receipt.update(audit(data,p,q,profiles,epi,n==args.subdivisions[0]));runs.append(receipt)
+                if first_mass is None:first_mass=receipt['initial_total_mass_m3']
+                net+=receipt['net_external_transfer_m3'];previous=data['steps'][-1]
+                inputs.update({str(path.relative_to(ROOT)):sha(path) for path in paths})
+            balance=abs(receipt['final_total_mass_m3']-first_mass-net);assert balance<1e-17,balance
+            final=np.array(previous['pressure'])
+            refinement=dict(case=name,subdivisions=n,endpoint_pressure_difference_Pa=None if last is None else float(np.max(abs(final-last))),whole_control_mass_residual_m3=balance,
+                final_source=previous['continuous_source'])
+            refinements.append(refinement);last=final
+            print(json.dumps(dict(case=name,subdivisions=n,endpoint_pressure_difference_Pa=refinement['endpoint_pressure_difference_Pa'],mass_residual_m3=balance)),flush=True)
+    paths=[Path(__file__),args.binary,ROOT/'tools/planar_inertive_motion_probe.cpp',ROOT/'src/continuous_glottis.cpp',ROOT/'src/graph_continuous_glottis.cpp',
+        ROOT/'bodies/reference.body',ROOT/'out/lip-profile/nato.csv',ROOT/'out/nato-spatial-airway.csv',ROOT/'tools/planar_source_reference.py',ROOT/'tools/planar_lip_profile_reference.py',ROOT/'tools/lip_profile_reference.py',ROOT/'tools/planar_inertive_motion_reference.py']
+    report=dict(scope='Continuous shared-inertia gas/tissue source connected to moving Bravo mouth, lip and epilarynx controls. Independent graph solve uses the recorded coupled source flux; it is not an independent whole-source motion oracle. Inviscid, no radiation or new speech.',runs=runs,refinements=refinements,input_poses=inputs,
+        hashes={str(p.relative_to(ROOT)):sha(p) for p in paths})
+    args.report.write_text(json.dumps(report,indent=2)+'\n')
+
+if __name__=='__main__':main()

@@ -12,6 +12,7 @@
 #include "ducklips/lip_profile.hpp"
 #include "ducklips/graph_orifice.hpp"
 #include "ducklips/graph_phonation.hpp"
+#include "ducklips/graph_continuous_glottis.hpp"
 #include "ducklips/body_config.hpp"
 #include <algorithm>
 #include <array>
@@ -189,6 +190,14 @@ bool metrics(const ducklips::PlanarAirspace& geometry,std::span<const Port> port
     // source port's own canonical momentum, not another storage cell.
     return true;
 }
+bool continuous_state(const ducklips::GraphContinuousGlottis& model){
+    ducklips::ContinuousGlottalState s;if(!model.source.state(s)){return false;}
+    std::printf(",\"continuous_source\":{\"energy\":%.17g,\"rest_area\":%.17g,\"outlet_inertance\":%.17g",s.energy,s.folds.rest_area,s.outlet_inertance);
+    values("mass",s.mass);values("effort",s.effort);values("flow",s.flow);values("area",s.area);
+    values("lower_position",s.folds.lower_position);values("lower_velocity",s.folds.lower_velocity);
+    values("upper_position",s.folds.upper_position);values("upper_velocity",s.folds.upper_velocity);
+    values("canonical_momentum",s.momentum);std::putchar('}');return true;
+}
 template<class Acoustic>
 void state(const Acoustic& acoustic,std::span<const double> v,
            std::span<const double> c,std::span<const double> g){
@@ -203,7 +212,7 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 
 }
 int main(int argc,char** argv){
-    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false;
+    bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false;
     std::string fold_body;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -211,6 +220,7 @@ int main(int argc,char** argv){
         else if(arg=="--lip-profile" && !lip_mode){lip_mode=true;profile_mode=true;}
         else if(arg=="--epilarynx" && !epi_mode){epi_mode=true;}
         else if(arg=="--glottal-orifice" && !orifice_mode){orifice_mode=true;}
+        else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--initial-state" && !initial_state){initial_state=true;}
         else if(arg=="--compact-geometry" && !compact_geometry){compact_geometry=true;}
@@ -319,6 +329,7 @@ int main(int argc,char** argv){
     if(orifice_mode && (std::scanf("%lf %lf",&glottal_area,&reservoir_pressure)!=2 || !std::isfinite(glottal_area)
         || (!fold_mode && glottal_area<0) || !std::isfinite(reservoir_pressure))){return 2;}
     if(fold_mode && (std::scanf("%lf %lf",&tension,&surface_pressure)!=2 || !std::isfinite(tension) || tension<=0 || !std::isfinite(surface_pressure))){return 2;}
+    if(continuous_mode && (std::scanf("%lf",&tension)!=1 || !std::isfinite(tension) || tension<=0)){return 2;}
     const std::size_t total_nodes=nodes+lip.sections.size()+epi.sections.size();
     initial.resize(total_nodes,0.);
     if(lip_mode && total_nodes>256){return 2;}
@@ -328,8 +339,9 @@ int main(int argc,char** argv){
     for(std::size_t i=0;i<loads.size();++i){series[ports.size()+i]=-loads[i].pressure;}
     ducklips::PlanarAirspace geometry;ducklips::PlanarFaceMotion face_motion;
     ducklips::MovingTreeReference acoustic;ducklips::MovingGraphReference passive;ducklips::GraphOrifice orifice;
+    ducklips::GraphContinuousGlottis continuous;ducklips::VoiceProfile body;
     ducklips::GraphPhonation phonation;auto& source=fold_mode?phonation.source:orifice;
-    auto& graph=orifice_mode?source.state:passive;
+    auto& graph=continuous_mode?continuous.network:(orifice_mode?source.state:passive);
     try{
         geometry.prepare(x,y,edges);geometry.prepare_regions(262144,524288);face_motion.prepare(edges,262144);
         std::vector<ducklips::TreeEdge> branches;
@@ -342,10 +354,14 @@ int main(int argc,char** argv){
             const std::size_t base=nodes+lip.sections.size();
             for(const auto& b:epi.attachments){branches.push_back({b.region,base});}
             for(std::size_t i=1;i<epi.sections.size();++i){branches.push_back({base+i-1,base+i});}
-            if(fold_mode){
-                ducklips::VoiceProfile body;std::string error;
+            if(fold_mode || continuous_mode){
+                std::string error;
                 if(!ducklips::load_body_config(fold_body,body,error)){std::fprintf(stderr,"%s\n",error.c_str());return 2;}
-                phonation.prepare(total_nodes,branches,total_nodes-1,body.folds);
+                if(continuous_mode){
+                    ducklips::FoldState seed;seed.rest_area=glottal_area;seed.lower_position.fill(1e-6);
+                    const auto& e=epi.sections.back();const double column=ducklips::AirProperties{}.density*.5*e.first_length/e.first_area;
+                    continuous.prepare(total_nodes,branches,total_nodes-1,body.folds,{},tension,seed,{initial.back(),initial.back()},{},1.,ducklips::ContourPressureProfile::linear_span,column);
+                }else{phonation.prepare(total_nodes,branches,total_nodes-1,body.folds);}
             }else if(orifice_mode){source.prepare(total_nodes,branches,total_nodes-1);}else{graph.prepare(total_nodes,branches);}
         }
         else{acoustic.prepare(nodes,branches);}
@@ -367,7 +383,17 @@ int main(int argc,char** argv){
     if(initial_state){
         for(double& q:charge){if(std::scanf("%lf",&q)!=1 || !std::isfinite(q)){return 2;}}
         for(double& m:momentum){if(std::scanf("%lf",&m)!=1 || !std::isfinite(m)){return 2;}}
-        if(orifice_mode && (std::scanf("%lf",&source.momentum)!=1 || !std::isfinite(source.momentum))){return 2;}
+        if(orifice_mode && !continuous_mode && (std::scanf("%lf",&source.momentum)!=1 || !std::isfinite(source.momentum))){return 2;}
+        if(continuous_mode){
+            std::array<double,2> effort;std::array<double,3> flow;ducklips::FoldState restored;restored.rest_area=glottal_area;
+            for(double& v:effort){if(std::scanf("%lf",&v)!=1){return 2;}}
+            for(double& v:flow){if(std::scanf("%lf",&v)!=1){return 2;}}
+            for(auto* field:{&restored.lower_position,&restored.lower_velocity,&restored.upper_position,&restored.upper_velocity}){
+                for(double& v:*field){if(std::scanf("%lf",&v)!=1){return 2;}}
+            }
+            const auto& e=epi.sections.back();const double column=ducklips::AirProperties{}.density*.5*e.first_length/e.first_area;
+            if(!continuous.source.prepare(body.folds,{},tension,restored,effort,flow,1.,ducklips::ContourPressureProfile::linear_span,column)){return 2;}
+        }
         if(fold_mode){
             ducklips::FoldState s;
             if(std::scanf("%lf %lf %lf %lf %lf %lf %lf %lf %lf",&s.lower_position[0],&s.lower_position[1],&s.lower_velocity[0],&s.lower_velocity[1],
@@ -402,7 +428,7 @@ int main(int argc,char** argv){
     std::putchar(']');
     if(profile_mode){values("lip_contact_cuts",lip_contact_cuts);}
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
-    snapshot();if(orifice_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
+    snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
     constexpr double offset=.28867513459481288225;
     for(std::size_t step=1;step<cuts.size();++step){
@@ -423,7 +449,18 @@ int main(int argc,char** argv){
         // A closed passage has no kinetic state to accumulate pressure history.
         // The zero-metric momentum is discarded, as in CanonicalSpeech.
         for(std::size_t i=0;i<channels;++i){if(g1[i]==0 && g2[i]==0){momentum[i]=0;}}
-        if(orifice_mode){
+        if(continuous_mode){
+            const auto& e=epi.sections.back();
+            const double column=ducklips::AirProperties{}.density*.5*std::lerp(e.first_length,e.last_length,t1)/std::lerp(e.first_area,e.last_area,t1);
+            if(!continuous.advance(c1,c2,g1,g2,dt,reservoir_pressure,{},inflow,series,ducklips::ContinuousGlottalUpdate::relaxation,column)){
+                std::fprintf(stderr,"continuous source solve failed at step %zu, dt %.17g\n",step,dt);return 1;
+            }
+            if(!continuous_state(continuous)){return 1;}
+            const auto& r=continuous.source.last;
+            std::printf(",\"source_flow\":%.17g,\"source_pressure\":%.17g,\"source_impedance\":%.17g",continuous.last.flow,continuous.last.pressure,continuous.last.load_slope);
+            std::printf(",\"source_reservoir_flow\":%.17g,\"source_port_work\":%.17g,\"source_geometry_work\":%.17g,\"source_work_residual\":%.17g,\"source_port_residual\":%.17g",r.flow[0],r.port_work,r.geometry_work,r.energy_residual,continuous.last.port_residual);
+        }
+        else if(orifice_mode){
             const double midpoint=.5*(t0+t1);const auto& e=epi.sections.back();
             const double inlet_inertance=ducklips::AirProperties{}.density*.5*std::lerp(e.first_length,e.last_length,midpoint)/std::lerp(e.first_area,e.last_area,midpoint);
             const bool advanced=fold_mode?

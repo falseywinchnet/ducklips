@@ -38,24 +38,24 @@ constexpr std::array<double,9> initial={112.18465038080178,-3.138675468892969,
     3.6868231667933133e-6,4.149026342131548e-6,.00017466261521028343,
     .00017466261521028343,.00017466261521028343,0.,0.};
 void prepare(GraphContinuousGlottis& model,std::size_t nodes,std::span<const ducklips::TreeEdge> edges,
-    std::size_t port,const std::array<double,9>& state=initial,double loss=1.){
+    std::size_t port,const std::array<double,9>& state=initial,double loss=1.,double column=0.){
     model.prepare(nodes,edges,port,{}, {},1.,folds(state),{state[0],state[1]},
-        {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span);
+        {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span,column);
 }
-void fixture(){
+void fixture(bool column=false){
     unsigned n,m,steps,port;require(std::scanf("%u%u%u%u",&n,&m,&steps,&port)==4,"fixture dimensions");
     require(n>0 && n<=64 && m<=256 && steps<=1000000,"fixture size");
     std::vector<ducklips::TreeEdge> edges(m);
     for(auto& edge:edges){int first,second;require(std::scanf("%d%d",&first,&second)==2 && first>=0 && second>=-1,"fixture edge");edge={static_cast<std::size_t>(first),second<0?ducklips::ground_node:static_cast<std::size_t>(second)};}
-    std::array<double,9> y;for(double& v:y){v=number();}const double loss=number();GraphContinuousGlottis model;prepare(model,n,edges,port,y,loss);
+    std::array<double,9> y;for(double& v:y){v=number();}const double loss=number(),inertance=column?number():0.;GraphContinuousGlottis model;prepare(model,n,edges,port,y,loss,inertance);
     read(model.network.charge);read(model.network.momentum);
     std::vector<double> c1(n),c2(n),g1(m),g2(m),nodal(n),series(m);
     for(unsigned step=0;step<steps;++step){
-        const double dt=number(),pressure=number();const int mode=static_cast<int>(number());
+        const double dt=number(),pressure=number();const int mode=static_cast<int>(number());const double next_inertance=column?number():-1.;
         read(c1);read(c2);read(g1);read(g2);read(nodal);read(series);
         require(mode>=0 && mode<=2,"fixture update mode");
         const ducklips::ContinuousGlottalUpdate updates[]={ducklips::ContinuousGlottalUpdate::symmetric,ducklips::ContinuousGlottalUpdate::dissipative,ducklips::ContinuousGlottalUpdate::relaxation};
-        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode])){
+        if(!model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance)){
             std::fprintf(stderr,"coupled fixture failed at step %u\n",step);throw std::runtime_error("fixture advance");
         }
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"fixture state");
@@ -64,27 +64,33 @@ void fixture(){
         const auto& s=model.source.last;const auto& r=model.last;
         const double ledger[]={state.energy,state.mass[0],state.mass[1],s.reservoir_work,s.external_work,s.fluid_loss,s.tissue_loss,
             s.outlet_loss,s.numerical_loss,s.energy_residual,r.graph_port_work,r.graph_external_work,r.port_residual,r.flow,r.pressure,r.free_pressure,r.load_slope,
-            s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);std::puts("");
+            s.flow[0],s.load_work-s.port_work-s.outlet_loss};print(ledger);if(column){const double extra[]={s.geometry_work,state.outlet_inertance};print(extra);}std::puts("");
     }
 }
-void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlottalUpdate::symmetric){
+void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlottalUpdate::symmetric,bool column=false){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
     const std::array<double,4> c={1e-11,1.4e-11,8e-12,2e-11},g={.002,.003,.001,.0025};
     const std::array<double,4> nodal={0.,1e-6,0.,-2e-6},series={0.,30.,0.,-10.};
-    GraphContinuousGlottis model;prepare(model,4,edges,1);
+    GraphContinuousGlottis model;prepare(model,4,edges,1,initial,1.,column?80.:0.);
     model.network.charge={1e-9,-2e-9,5e-10,3e-9};model.network.momentum={.01,-.02,.015,.005};
     ducklips::ContinuousGlottalState before;require(model.source.state(before),"initial source");
+    if(column){
+        GraphContinuousGlottis bare;prepare(bare,4,edges,1);ducklips::ContinuousGlottalState base;
+        require(bare.source.state(base),"bare state");
+        require(std::abs(before.energy-base.energy-.5*80.*initial[6]*initial[6])<1e-18,"column stored kinetic energy");
+    }
     const double initial_energy=before.energy+graph_energy(model.network,c,g);double work=0,loss=0,worst_energy=0,worst_mass=0,worst_direct=0,worst_port=0;
     double mass=before.mass[0]+before.mass[1];for(double v:model.network.charge){mass+=v;}double transfer=0;
     for(int step=0;step<300;++step){
         ducklips::MovingGraphReference direct=model.network;const double dt=2.5e-6;
         const std::size_t count=allocations.load();
-        require(model.advance(c,c,g,g,dt,1400.,{},nodal,series,update),"coupled fixed advance");
+        require(model.advance(c,c,g,g,dt,1400.,{},nodal,series,update,column?80.*(1.+.2*std::sin(2*ducklips::pi*(step+1)/300.)):-1.),"coupled fixed advance");
         require(allocations.load()==count,"coupled advance allocated");
         auto drives=nodal;drives[1]+=model.last.flow;require(direct.advance(c,c,g,g,dt,drives,series),"direct graph advance");
         for(std::size_t i=0;i<c.size();++i){worst_direct=std::max(worst_direct,std::abs(direct.charge[i]-model.network.charge[i])/c[i]);worst_direct=std::max(worst_direct,std::abs(direct.average_pressure[i]-model.network.average_pressure[i]));}
         for(std::size_t i=0;i<g.size();++i){require(std::abs(direct.momentum[i]-model.network.momentum[i])<1e-12,"direct momentum");require(std::abs(direct.average_flow[i]-model.network.average_flow[i])<1e-14,"direct flow");}
-        const auto& s=model.source.last;work+=s.reservoir_work+s.external_work+model.last.graph_external_work;
+        const auto& s=model.source.last;work+=s.reservoir_work+s.external_work+s.geometry_work+model.last.graph_external_work;
+        require(s.geometry_work==model.last.source_geometry_work,"geometry receipt");
         loss+=s.fluid_loss+s.tissue_loss+s.outlet_loss+s.numerical_loss;
         require(s.outlet_loss>=0 && std::abs(s.load_work-s.port_work-s.outlet_loss)<1e-18,"exit loss split");
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"accepted source");
@@ -95,11 +101,13 @@ void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlott
     }
     require(worst_energy<1e-14 && worst_mass<1e-20 && worst_direct<1e-8 && worst_port<1e-20,"coupled conservation");
     const auto saved=model;ducklips::ContinuousGlottalState saved_source;require(model.source.state(saved_source),"saved source");
+    require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},update,-2.),"reject negative outlet column");
+    require(!model.advance(c,c,g,g,2.5e-6,1400.,{},{},{},update,std::numeric_limits<double>::quiet_NaN()),"reject nonfinite outlet column");
     auto bad=c;bad[0]=0.;require(!model.advance(bad,c,g,g,2.5e-6,1400.),"reject graph metric");
     std::array<double,4> force{};force[0]=std::numeric_limits<double>::quiet_NaN();
     require(!model.advance(c,c,g,g,2.5e-6,1400.,force),"reject source after graph trials");
     ducklips::ContinuousGlottalState after;require(model.source.state(after),"rollback state");
-    require(physical(after)==physical(saved_source) && after.momentum==saved_source.momentum && after.energy==saved_source.energy
+    require(physical(after)==physical(saved_source) && after.momentum==saved_source.momentum && after.energy==saved_source.energy && after.outlet_inertance==saved_source.outlet_inertance
         && model.network.charge==saved.network.charge && model.network.momentum==saved.network.momentum
         && model.network.average_pressure==saved.network.average_pressure && model.network.average_flow==saved.network.average_flow
         && model.last.pressure==saved.last.pressure && model.last.graph_port_work==saved.last.graph_port_work
@@ -129,6 +137,8 @@ void controls(ducklips::ContinuousGlottalUpdate update=ducklips::ContinuousGlott
 }
 int main(int argc,char** argv){try{
     if(argc==2 && std::string(argv[1])=="--fixture"){fixture();}
+    else if(argc==2 && std::string(argv[1])=="--column-fixture"){fixture(true);}
+    else if(argc==2 && std::string(argv[1])=="--column"){controls(ducklips::ContinuousGlottalUpdate::relaxation,true);}
     else if(argc==2 && std::string(argv[1])=="--relaxation"){controls(ducklips::ContinuousGlottalUpdate::relaxation);}
     else{require(argc==1,"arguments");controls();}return 0;
 }catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 1;}}

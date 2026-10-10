@@ -306,3 +306,5 @@ add_test(NAME ducklips_glottal_relaxation COMMAND ducklips_glottal_relaxation_pr
 add_test(NAME ducklips_graph_continuous_relaxation COMMAND ducklips_graph_continuous_glottis_probe --relaxation)
 add_executable(ducklips_continuous_force_probe tools/continuous_force_probe.cpp)
 target_link_libraries(ducklips_continuous_force_probe PRIVATE ducklips)
+
+add_test(NAME ducklips_graph_continuous_column COMMAND ducklips_graph_continuous_glottis_probe --column)

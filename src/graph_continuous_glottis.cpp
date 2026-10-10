@@ -13,10 +13,10 @@ bool combine(std::vector<double>& free,const std::vector<double>& response,doubl
 }
 void GraphContinuousGlottis::prepare(std::size_t nodes,std::span<const TreeEdge> branches,std::size_t source_node,
     const FoldParameters& folds,const AirProperties& air,double tension,const FoldState& initial,
-    const std::array<double,2>& effort,const std::array<double,3>& flow,double outlet_loss,ContourPressureProfile profile){
+    const std::array<double,2>& effort,const std::array<double,3>& flow,double outlet_loss,ContourPressureProfile profile,double outlet_inertance){
     if(source_node>=nodes){throw std::invalid_argument("continuous source outside graph");}
     GraphContinuousGlottis candidate;
-    if(!candidate.source.prepare(folds,air,tension,initial,effort,flow,outlet_loss,profile)){
+    if(!candidate.source.prepare(folds,air,tension,initial,effort,flow,outlet_loss,profile,outlet_inertance)){
         throw std::invalid_argument("invalid continuous source");
     }
     candidate.network.prepare(nodes,branches);candidate.free_.prepare(nodes,branches);candidate.response_.prepare(nodes,branches);
@@ -26,7 +26,7 @@ void GraphContinuousGlottis::prepare(std::size_t nodes,std::span<const TreeEdge>
 bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const double> c2,
     std::span<const double> g1,std::span<const double> g2,double dt,double reservoir_pressure,
     const std::array<double,4>& external_force,std::span<const double> nodal_flow,
-    std::span<const double> series_pressure,ContinuousGlottalUpdate update) noexcept {
+    std::span<const double> series_pressure,ContinuousGlottalUpdate update,double outlet_inertance) noexcept {
     if(unit_flow_.empty() || network.charge.size()!=free_.charge.size() || network.momentum.size()!=free_.momentum.size()
         || network.average_pressure.size()!=free_.average_pressure.size() || network.average_flow.size()!=free_.average_flow.size()){return false;}
     std::copy(network.charge.begin(),network.charge.end(),free_.charge.begin());
@@ -38,7 +38,8 @@ bool GraphContinuousGlottis::advance(std::span<const double> c1,std::span<const 
     GraphContinuousGlottalStep receipt;
     receipt.free_pressure=free_.average_pressure[source_node_];receipt.load_slope=response_.average_pressure[source_node_];
     ContinuousGlottis candidate=source;
-    if(!candidate.advance(dt,reservoir_pressure,receipt.free_pressure,receipt.load_slope,external_force,update)){return false;}
+    if(!candidate.advance(dt,reservoir_pressure,receipt.free_pressure,receipt.load_slope,external_force,update,outlet_inertance)){return false;}
+    receipt.source_geometry_work=candidate.last.geometry_work;
     receipt.flow=candidate.last.flow[2];
     if(!combine(free_.charge,response_.charge,receipt.flow) || !combine(free_.momentum,response_.momentum,receipt.flow)
         || !combine(free_.average_pressure,response_.average_pressure,receipt.flow)

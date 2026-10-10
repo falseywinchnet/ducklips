@@ -31,8 +31,8 @@ using shared inertia and [finite narrow-gap loss](reports/CONTOUR_PRESSURE_LOSS.
 Open and already sealed phases advance with a complete work ledger. An explicit
 [full-span tip-contact profile](reports/CONTINUOUS_CONTACT_MOTION.md) now carries
 two free controls through sealing and reopening, with numerical damping reported
-separately from physical loss. Sustained phonation and connection to the speech
-tract remain unfinished; these results have not produced a new speech recording.
+separately from physical loss. Sustained phonation through a complete utterance
+remains unfinished; these results have not produced a new speech recording.
 
 The source now has [independently checked pressure-driven onset](reports/CONTINUOUS_PHONATION_ONSET.md):
 small disturbances decay at 700 Pa and grow at 1400 Pa in the configured
@@ -67,6 +67,14 @@ the independent smooth trajectory. Completed longer refinements preserve three
 closures and reopenings; successive final tract-pressure differences fall from
 206.7 to 34.2 to 8.47 Pa. This is numerical validation of the developing source,
 with whole-utterance speech integration still unfinished.
+
+The [continuous source now connects to actual moving mouth, lip and throat geometry](reports/CONTINUOUS_MOVING_AIRWAY.md).
+Its shared kinetic energy includes the glottis-to-throat half-section, and
+changing that inertia has an explicit geometry-work receipt. Bravo closing and
+reopening controls conserve the source and tract air together and continue
+state across geometry intervals. Their inviscid pressure trajectories still
+need temporal resolution, wall losses and radiation; this has not produced a
+new speech recording.
 
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
