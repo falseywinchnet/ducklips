@@ -14,6 +14,7 @@ bool TwoMassGlottis::restore(const FoldState& state) noexcept {
     if(!std::isfinite(state.rest_area)){return false;}
     lower_position_=state.lower_position;lower_velocity_=state.lower_velocity;
     upper_position_=state.upper_position;upper_velocity_=state.upper_velocity;rest_area_=state.rest_area;
+    rest_initialized_=true;
     return true;
 }
 
@@ -44,6 +45,7 @@ void TwoMassGlottis::reset(const FoldParameters& folds) noexcept {
     upper_position_.fill(0.0);
     upper_velocity_.fill(0.0);
     rest_area_ = 0.0;
+    rest_initialized_ = false;
 }
 
 // The opening of one strip (m^2, negative when the folds press together),
@@ -55,8 +57,22 @@ double TwoMassGlottis::strip_gap(double rest_area, std::size_t strip, double pos
 }
 
 void TwoMassGlottis::advance(double transglottal_pressure, double rest_area, double tension, double sample_period,
-                             std::size_t substeps, double surface_turbulence) noexcept {
+                             std::size_t substeps, double surface_turbulence,double supplied_flow,double air_density) noexcept {
+    // Adduction moves the spring's equilibrium, not the tissue itself.
+    // Positions are relative to that equilibrium, while velocities carry
+    // the actual tissue momentum. Preserve absolute position as it moves;
+    // the springs then accelerate the two masses according to their inertia.
+    // Previously both levels teleported with the rest aperture, preserving
+    // an artificial perfectly parallel equilibrium through a short vowel.
+    if (rest_initialized_) {
+        const double shift=(rest_area_-rest_area)/(2.0*folds_.length);
+        for(std::size_t side=0;side<2;++side){
+            lower_position_[side]+=shift;
+            upper_position_[side]+=shift;
+        }
+    }
     rest_area_ = rest_area;
+    rest_initialized_ = true;
     const double step = sample_period / static_cast<double>(substeps);
     const double length = folds_.length;
     const double share = 1.0 / static_cast<double>(strips_);
@@ -91,6 +107,12 @@ void TwoMassGlottis::advance(double transglottal_pressure, double rest_area, dou
         double upper_overlap = 0.0;
         double lower_closed = 0.0;
         double upper_closed = 0.0;
+        double total_opening=0;
+        if(std::isfinite(supplied_flow)){
+            for(std::size_t strip=0;strip<strips_;++strip){
+                total_opening+=std::max(0.,std::min(strip_gap(rest_area,strip,lower_sum),strip_gap(rest_area,strip,upper_sum)));
+            }
+        }
         for (std::size_t strip = 0; strip < strips_; ++strip) {
             double lower_gap = strip_gap(rest_area, strip, lower_sum);
             double upper_gap = strip_gap(rest_area, strip, upper_sum);
@@ -98,6 +120,18 @@ void TwoMassGlottis::advance(double transglottal_pressure, double rest_area, dou
             if (lower_gap > 0.0 && upper_gap > 0.0) {
                 double ratio = std::min(lower_gap, upper_gap) / lower_gap;
                 pressure = transglottal_pressure * (1.0 - ratio * ratio) + surface_turbulence;
+                if(std::isfinite(supplied_flow) && total_opening>0){
+                    // The local airway stores glottal air momentum. Its flow
+                    // cannot jump to the steady Bernoulli value on release.
+                    // Use that actual flow for the lower-surface pressure;
+                    // assuming instantaneous steady flow made a parallel
+                    // resting glottis exert exactly zero opening force.
+                    const double velocity=supplied_flow/total_opening*ratio;
+                    const double remaining=transglottal_pressure-.5*air_density*velocity*std::abs(velocity);
+                    // Same separated-jet, non-suction surface assumption as
+                    // the simplified two-mass force above.
+                    pressure=std::clamp(remaining,std::min(transglottal_pressure,0.),std::max(transglottal_pressure,0.))+surface_turbulence;
+                }
             } else if (lower_gap > 0.0) {
                 pressure = transglottal_pressure;
             }

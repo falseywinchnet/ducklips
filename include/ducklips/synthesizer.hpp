@@ -179,6 +179,8 @@ private:
     TractShape shape_{};          // target geometry of the current block
     TractShape start_shape_{};    // geometry at the start of the block
     TractShape geometry_shape_{}; // geometry currently simulated
+    TractShape local_tangent_shape_{};
+    AcousticNetwork local_tangent_network_{};
     std::array<AcousticNetwork, 2> networks_{};
     std::array<ModalBasis, 2> bases_{};
     std::size_t current_{};

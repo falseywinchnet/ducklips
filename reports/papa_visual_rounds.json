@@ -1,0 +1,156 @@
+{
+  "candidate_round": 9,
+  "human_acceptance": false,
+  "working_word_count": 0,
+  "rounds": [
+    {
+      "round": 4,
+      "directory": "out/visual-round-004",
+      "wave_sha256": "9e2879e1b6e916092dc853f30b768c0b2481971d2a43a52b343e457a8d53f5af",
+      "enhanced_sha256": "0010de86f1ef091e422e7a66ddffe0c47b7a1464d231b0b64b0e30eddcf49e61",
+      "binary_sha256": "8f80339fa33c314d34977808687240b55d0a433bb43198659f9f82be04fd01bb",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "A short first harmonic region is now visible, but extended noise remains at both intended P closures. Physiology plot identifies open lip boundary during both closures.",
+        "next_change": "Represent mouth-plane opening separately from cavity storage."
+      },
+      "playback": {
+        "fixed_gain": 938.7285327357773,
+        "frames": 65760,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " Saha!",
+          "not_human_acceptance": true
+        }
+      ]
+    },
+    {
+      "round": 5,
+      "directory": "out/visual-round-005",
+      "wave_sha256": "e7a82425a817bcdbac823425f202f6505772f4ddb569bd91fe54d77004f4ab35",
+      "enhanced_sha256": "cc4ac972bc16835802459ae13d6f48f28307e73365911561fac434d203224ab0",
+      "binary_sha256": "9402c9f70f48ff6f6358f5b5b27871715c40781d577b2e2cf38232e3e1dc0444",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "Long noisy leak is gone. Three brief transients precede the final harmonic vowel, but no harmonic first vowel is present.",
+        "next_change": "Carry fold tissue inertia when its spring equilibrium moves."
+      },
+      "playback": {
+        "fixed_gain": 976.3076895187202,
+        "frames": 65760,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " Ahh.",
+          "not_human_acceptance": true
+        }
+      ]
+    },
+    {
+      "round": 6,
+      "directory": "out/visual-round-006",
+      "wave_sha256": "725a16c3225698f834a922cab3a5596bf747ab7765c726114b65d404b4cb8073",
+      "enhanced_sha256": "06680f46c59cb19c71a5a222176857f59963a5cd5635590e9ddcc89e584e6d1f",
+      "binary_sha256": "095636a0664c172220e2dd4ba02417cfce77d0d6e2cd76ba7f37bea6008b4b29",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "First harmonic vowel remains absent; tissue coordinate correction alone does not restore the sound. The final vowel and brief pre-vowel transients remain.",
+        "next_change": "Use actual inertive airflow in the fold surface force instead of the incompatible steady-flow assumption."
+      },
+      "playback": {
+        "fixed_gain": 1097.5365887338417,
+        "frames": 65760,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " Ah",
+          "not_human_acceptance": true
+        }
+      ]
+    },
+    {
+      "round": 7,
+      "directory": "out/visual-round-007",
+      "wave_sha256": "734f10c9b5da36d603b950b11cdda4560d0b449b085811bc1abd827d4c375385",
+      "enhanced_sha256": "b63f725bb657f623c4305d4e1505e468a502bd2498bd01b7ffd388c3295f9b51",
+      "binary_sha256": "117d944e589440613e4e3f5bb8947fa6fab982baeddf97977b91408b7ca03191",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "First harmonic region has appeared after the first release; a real quiet closure separates it from the second vowel. The first region is shorter than the human reference and there is an unrelated earlier closure transient.",
+        "next_change": "Preserve the first open vowel in the NATO pronunciation instead of schwa reduction."
+      },
+      "playback": {
+        "fixed_gain": 945.012709513849,
+        "frames": 65760,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " the pa",
+          "not_human_acceptance": true
+        }
+      ]
+    },
+    {
+      "round": 8,
+      "directory": "out/visual-round-008",
+      "wave_sha256": "b09f5b0979bb14ac05b1e7277886007dec78a5b8e5130e06ec139f0d706f16e2",
+      "enhanced_sha256": "a85ad4f569186520004ec478c736c072d35a1f43ea21bb023e0dfe81e1e839c3",
+      "binary_sha256": "117d944e589440613e4e3f5bb8947fa6fab982baeddf97977b91408b7ca03191",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "Two AA regions are present, but the first remains short and an initial preparatory closure transient precedes the word.",
+        "next_change": "Initialize the isolated stop closure before acoustic storage starts; use the existing speed input at 0.8 for a longer first vowel."
+      },
+      "playback": {
+        "fixed_gain": 948.4379119135723,
+        "frames": 67200,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " Buh-bye!",
+          "not_human_acceptance": true
+        }
+      ]
+    },
+    {
+      "round": 9,
+      "directory": "out/visual-round-009",
+      "wave_sha256": "029323121e3e1980ec3e7fa24d6e4741a96a6eaf0a532c4f2b70cdc6938dab84",
+      "enhanced_sha256": "d050c120122623ffd22e6dd1dc94a4ffa3b88727fd48fa2b0fac23971e377c07",
+      "binary_sha256": "e2bdb131bd0013e3445c397d3a8a299c186b9e5d159505bcfc7aa85b36ede694",
+      "inspection": {
+        "field": "enhanced-cells.png",
+        "result": "Two complete harmonic vowel regions with intervening closure; the separate early preparation transient is absent. First vowel is longer than 008. Synthetic timbre and narrow high-frequency ridges remain.",
+        "human_acceptance": false
+      },
+      "playback": {
+        "fixed_gain": 882.4414167632915,
+        "frames": 72480,
+        "sample_rate": 48000,
+        "processing": "one fixed gain over the full recording; no cuts or filters"
+      },
+      "recognizers": [
+        {
+          "unprompted_transcription": " Buh-bye!",
+          "not_human_acceptance": true
+        },
+        {
+          "model": "small.en",
+          "unprompted_transcription": " Papa",
+          "not_human_acceptance": true
+        }
+      ]
+    }
+  ]
+}

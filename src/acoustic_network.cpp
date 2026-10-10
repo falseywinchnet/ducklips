@@ -30,6 +30,7 @@ void write_tube_branch(AcousticBranch& branch, std::size_t from, std::size_t to,
     branch.kind = kind;
     branch.resistance = 0.0;
     branch.radiation_coefficient = 0.0;
+    branch.aperture = -1.0;
     if (first.area <= closed_area || second.area <= closed_area) {
         branch.conductance = 0.0;
         branch.viscous_coefficient = 0.0;
@@ -53,6 +54,7 @@ void write_radiation_branch(AcousticBranch& branch, std::size_t from, BranchKind
     branch.to = ground_node;
     branch.kind = kind;
     branch.resistance = 0.0;
+    branch.aperture = half.area;
     if (half.area <= closed_area) {
         branch.conductance = 0.0;
         branch.viscous_coefficient = 0.0;
@@ -76,6 +78,7 @@ void write_node(AcousticNode& node, double raw_area, double length, double perim
     double wall = perimeter_factor * circular_perimeter(area) * length;
     node.area = area;
     node.compliance = area * length / bulk_stiffness;
+    node.compliance_rate = 0;
     node.wall_area = wall;
     node.thermal_coefficient = thermal_scale * wall;
 }
@@ -148,7 +151,7 @@ void AcousticNetwork::assemble(const TractShape& shape, const AirProperties& air
                           first, second, air, viscous_scale);
     }
     std::size_t lip_section = oral_sections_ - 1;
-    TubeHalf lips{.area = shape.oral_area[lip_section], .length = shape.oral_length[lip_section],
+    TubeHalf lips{.area = shape.lip_aperture >= 0 ? shape.lip_aperture : shape.oral_area[lip_section], .length = shape.oral_length[lip_section],
                   .perimeter_factor = losses.oral_perimeter_factor};
     write_radiation_branch(branches[lip_branch()], lip_section, BranchKind::lip_radiation, lips, air, losses, viscous_scale);
 

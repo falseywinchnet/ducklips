@@ -16,6 +16,9 @@ struct TractShape final {
     std::vector<double> nasal_length{}; // m
     double port_area{0.0};              // m^2 velopharyngeal opening; 0 closes the nasal branch
     double port_length{0.01};           // m
+    // Opening at the mouth plane, distinct from the air volume immediately
+    // behind it. Negative retains the uniform last-section convention.
+    double lip_aperture{-1.0};         // m^2; zero is actual lip contact
     // Side cavities (piriform fossae, paranasal sinuses): every section of
     // every cavity, in the order of the network's SideCavity list.
     std::vector<double> side_area{};    // m^2
@@ -76,6 +79,7 @@ struct AcousticBranch final {
     double viscous_coefficient{};
     double resistance{};
     double radiation_coefficient{};
+    double aperture{-1.0};             // m^2 at an exterior boundary, independent of node storage
 };
 
 // The compressible air volume of one tube section. Its shunt thermal
@@ -85,6 +89,7 @@ struct AcousticNode final {
     double thermal_coefficient{};
     double area{};                // m^2 after the compliance floor
     double wall_area{};           // m^2 of yielding surface
+    double compliance_rate{};     // m^3/(Pa s), tangent of moving local geometry
 };
 
 // The airway as a lumped acoustic network: oral sections 0..oral-1 from the

@@ -96,6 +96,7 @@ def main():
     # and save without a plotting resampler. Exact axes remain in NPZ/JSON and
     # the full-field viewer adds axes without scaling away any image cells.
     rgba = enhanced_rgba(texture.merged, reference, a.db_range)
+    plt.imsave(str(a.out) + "-cells.png", rgba)
     plt.imsave(str(a.out) + ".png", np.repeat(rgba, 4, axis=1))
     report = dict(source=str(a.wav.resolve()),
                   source_sha256=hashlib.sha256(a.wav.read_bytes()).hexdigest(),

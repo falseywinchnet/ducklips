@@ -1,0 +1,19 @@
+# SI units. An illustrative body, not a fit to a named human speaker.
+preset=baritone
+name=reference-adult
+tract_length=0.175
+nasal_length=0.115
+folds.length=0.014
+folds.lower_mass=0.000125
+folds.upper_mass=0.000025
+folds.contact_softness=0.00000003
+folds.medial_roundness=0.00000025
+lung_pressure=600
+base_pitch=110
+speaking_rate=1
+speeds.tongue_tip=230
+speeds.tongue_body=75
+speeds.jaw=45
+
+# Isolated word audition: speak without a preceding automatic inhalation.
+audible_breath=false

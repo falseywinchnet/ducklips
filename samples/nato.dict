@@ -18,7 +18,8 @@ LIMA  L IY1 M AX0
 MIKE  M AY1 K
 NOVEMBER  N OW0 V EH1 M B ER0
 OSCAR  AA1 S K ER0
-PAPA  P AX0 P AA1
+;;; NATO pronunciation guide: pah-PAH; preserve the first open vowel.
+PAPA  P AA0 P AA1
 QUEBEC  K EH0 B EH1 K
 ROMEO  R OW1 M IY0 OW0
 SIERRA  S IY0 EH1 R AX0

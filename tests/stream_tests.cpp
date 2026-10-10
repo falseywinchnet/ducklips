@@ -47,7 +47,7 @@ int main() {
     std::size_t installed = lexicon.load_cmu_file(std::string(DUCKLIPS_SOURCE_DIR) + "/samples/nato.dict");
     ducklips::WordPronunciation papa = lexicon.pronounce("papa");
     ducklips::WordPronunciation quebec = lexicon.pronounce("quebec");
-    check(installed == 30 && papa.phones[1].phone == ducklips::Phone::AX && papa.phones[3].stress == 1
+    check(installed == 30 && papa.phones[1].phone == ducklips::Phone::AA && papa.phones[3].stress == 1
           && quebec.phones[1].phone == ducklips::Phone::EH, "explicit NATO dictionary overrides built-in pronunciations");
     body = ducklips::baritone_voice();
     ducklips::NudgeStream whole{};

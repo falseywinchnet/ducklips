@@ -341,6 +341,13 @@ UtterancePlan UtterancePlanner::plan_phrases(const std::vector<Phrase>& phrases)
         // inhale must fit in the pause after the previous phrase; a short
         // pause (a comma) gets no breath, only the pressure back.
         const PhoneSpec& opening = phone_spec(tokens[0].phone);
+        if(phrase_index==0 && !voice_.audible_breath && opening.kind==PhoneClass::stop){
+            // Begin an isolated utterance in its preparatory closure. This
+            // is initial body state, before acoustic storage is initialized;
+            // closing from an unrelated open posture added a separate thump
+            // long before the actual word. Subsequent closures still move.
+            writer.gesture(0.0,opening.primary,1.25,0.0);
+        }
         const double room = phrase_index == 0 ? lead : phrase_start - previous_end - 0.05;
         const bool inhale = voice_.audible_breath && room >= breath_room;
         if (inhale) {
@@ -374,7 +381,10 @@ UtterancePlan UtterancePlanner::plan_phrases(const std::vector<Phrase>& phrases)
                 writer.scalar(pressurize, CueKind::velum, 0.0, 60.0);
             }
         } else {
-            writer.scalar(phrase_start - std::min(0.20, std::max(room, 0.08)), CueKind::lungs, voice_.lung_pressure, 40.0);
+            // A voiceless opening must form before the pressure rise. The
+            // former 200 ms lead blew air through the still-open mouth.
+            const double pressure_lead = opening.voiced ? 0.12 : 0.05;
+            writer.scalar(phrase_start - std::min(pressure_lead, std::max(room, 0.08)), CueKind::lungs, voice_.lung_pressure, 40.0);
         }
         if (opening.kind != PhoneClass::nasal) {
             writer.scalar(phrase_start - 0.10, CueKind::velum, 0.0, 45.0);
@@ -458,9 +468,14 @@ UtterancePlan UtterancePlanner::plan_phrases(const std::vector<Phrase>& phrases)
                     // releases into the vowel (the human "shore"). Released
                     // first, the open tract passed a weak breath: a near-silent
                     // gap between "sh" and the vowel.
-                    double lag = spec.kind == PhoneClass::fricative ? -0.040 : -0.010;
+                    // These are motor-command times, not acoustic onset times.
+                    // The three-pole adduction tracker needs about 28 ms to
+                    // complete 95% of this movement at rate 160. Issuing the
+                    // command at the intended onset consumed short vowels.
+                    const double adduction_time = 6.30 / (1.4 * std::min(160.0, voice_.speeds.glottis));
+                    double lag = spec.kind == PhoneClass::fricative ? -0.040 : -adduction_time;
                     if (spec.kind == PhoneClass::stop && is_vowel(next_phone) && tokens[index + 1].stress == 1) {
-                        lag = 0.025;
+                        lag = 0.025 - adduction_time;
                     }
                     writer.scalar(end + lag, CueKind::glottis, voice_.adducted_area, 160.0);
                 }

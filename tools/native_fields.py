@@ -13,7 +13,17 @@ from enhanced_specgram.display import enhanced_rgba
 
 def png_bytes(rgba):
     buffer = io.BytesIO()
-    Image.fromarray(rgba).save(buffer, format='PNG')
+    original = Image.fromarray(rgba)
+    # Magma has 256 colors. Store palette indices losslessly, never resample
+    # the field to make a multi-round comparison fit the inline size limit.
+    colors, indices = np.unique(rgba.reshape(-1, 4), axis=0, return_inverse=True)
+    image = original
+    if len(colors) <= 256 and np.all(colors[:, 3] == 255):
+        indexed = Image.fromarray(indices.reshape(rgba.shape[:2]).astype(np.uint8), mode='P')
+        indexed.putpalette(colors[:, :3].flatten().tolist())
+        assert np.array_equal(np.asarray(indexed.convert('RGBA')), rgba)
+        image = indexed
+    image.save(buffer, format='PNG', optimize=True)
     return buffer.getvalue()
 
 
@@ -52,9 +62,13 @@ def main():
     parser.add_argument('--human-label', default='Human: valeatory')
     parser.add_argument('--generated-label', default='DuckLips: reference body')
     parser.add_argument('--png-prefix', type=Path, help='Also export both full-field color PNGs')
+    parser.add_argument('--previous-field', nargs=2, action='append', default=[], metavar=('LABEL', 'NPZ'),
+                        help='Earlier full enhanced field; repeat for visual progression')
     args = parser.parse_args()
-    records = [encode(args.human, args.human_label, args.png_prefix),
-               encode(args.generated, args.generated_label, args.png_prefix)]
+    records = [encode(args.human, args.human_label, args.png_prefix)]
+    for label, path in args.previous_field:
+        records.append(encode(Path(path), label))
+    records.append(encode(args.generated, args.generated_label, args.png_prefix))
     # Exact same magma color map as the field, left to right from floor to peak.
     import matplotlib
     ramp = matplotlib.colormaps['magma'](np.linspace(0, 1, 160), bytes=True)[None, :, :]

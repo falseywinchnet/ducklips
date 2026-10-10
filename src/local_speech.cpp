@@ -5,6 +5,18 @@
 #include <stdexcept>
 
 namespace ducklips {
+namespace {
+double moving_compliance(const AcousticNode& a,const AcousticNode& b,double t,double duration) noexcept {
+    // Hermite geometry carries the actual articulator velocity at both ends.
+    // Interpolating positions alone makes a new piston-velocity step at every
+    // control boundary, which radiates even when there is no breath.
+    if(duration==0){return a.compliance;}
+    const double u=1-t;
+    const double c=u*u*(1+2*t)*a.compliance+t*t*(3-2*t)*b.compliance
+        +duration*t*u*(u*a.compliance_rate-t*b.compliance_rate);
+    return std::max(c,std::min(a.compliance,b.compliance)*1e-6);
+}
+}
 void LocalSpeech::prepare(const AcousticNetwork& layout,const AirProperties& air,double wall_compliance,double glottal_length) {
     if(!std::isfinite(wall_compliance) || wall_compliance<=0){throw std::invalid_argument("local wall compliance must be positive");}
     if(!std::isfinite(glottal_length) || glottal_length<=0){throw std::invalid_argument("glottal length must be positive");}
@@ -83,6 +95,7 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
                           double area,double lung,std::size_t aspiration_branch,
                           std::size_t frication_branch,std::size_t jet_branch,double aspiration,double frication) noexcept {
     const double middle=fraction+.5*increment,end=fraction+increment;
+    const double duration=increment>0?dt/increment:0;
     const double bulk=air_.density*air_.sound_speed*air_.sound_speed;
     const double h=dt/double(substeps),half=.5*h;
     double total_wall=0;
@@ -91,8 +104,8 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
     }
     for(std::size_t b=0;b<branches_.size();++b){old_flow_[b]=flow(b);}
     for(std::size_t n=0;n<charge.size();++n){
-        const double c=std::lerp(first.nodes[n].compliance,last.nodes[n].compliance,middle);
-        const double v=bulk*std::lerp(first.nodes[n].compliance,last.nodes[n].compliance,end);
+        const double c=moving_compliance(first.nodes[n],last.nodes[n],middle,duration);
+        const double v=bulk*moving_compliance(first.nodes[n],last.nodes[n],end,duration);
         // Charge is excess air volume: reducing the cavity displaces air,
         // while changing its compliance does not reset its pressure history.
         if(ready_){charge[n]-=.5*(v-volume_[n]);}
@@ -112,7 +125,8 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
         }else if(original_g>0){
             // Circular Poiseuille drag. Frequency-dependent boundary-layer
             // memory is deliberately not claimed by this first local engine.
-            double aperture=node_area;
+            double aperture=a.aperture>=0 && z.aperture>=0 ? std::lerp(a.aperture,z.aperture,middle) : node_area;
+            aperture=std::max(aperture,1e-12);
             if(a.to!=ground_node){aperture=std::min(aperture,std::lerp(first.nodes[a.to].area,last.nodes[a.to].area,middle));}
             resistance+=8*pi*air_.viscosity*inertia/(air_.density*aperture);
             // A smooth tube's changes of section exchange pressure and
@@ -121,7 +135,7 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
             if(a.to==ground_node || b==jet_branch){jet_coefficient_[b]=.5*air_.density/(aperture*aperture);}
             const double radiation=std::lerp(a.radiation_coefficient,z.radiation_coefficient,middle);
             if(radiation>0){
-                const double exterior=air_.density*last.losses.end_correction/std::sqrt(pi*node_area);
+                const double exterior=air_.density*last.losses.end_correction/std::sqrt(pi*aperture);
                 inertia=std::max(inertia-exterior,1e-12);
                 radiation_h_[b]=1/exterior;
                 const double r=exterior*exterior/radiation;
@@ -153,7 +167,7 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
     }
     glottal_flow_/=dt;
     for(std::size_t n=0;n<charge.size();++n){
-        const double c=std::lerp(first.nodes[n].compliance,last.nodes[n].compliance,end);
+        const double c=moving_compliance(first.nodes[n],last.nodes[n],end,duration);
         const double v=bulk*c;
         if(ready_){charge[n]-=.5*(v-volume_[n]);}
         volume_[n]=v;inverse_c_[n]=1/c;
@@ -166,7 +180,8 @@ void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& la
         if(conductance==0){g_[b]=0;momentum[b]=0;radiation_momentum[b]=0;radiation_h_[b]=0;continue;}
         double inertia=1/conductance;
         if(std::lerp(a.radiation_coefficient,z.radiation_coefficient,end)>0){
-            const double aperture=std::lerp(first.nodes[a.from].area,last.nodes[a.from].area,end);
+            const double aperture=std::max(a.aperture>=0 && z.aperture>=0 ? std::lerp(a.aperture,z.aperture,end)
+                : std::lerp(first.nodes[a.from].area,last.nodes[a.from].area,end),1e-12);
             const double exterior=air_.density*last.losses.end_correction/std::sqrt(pi*aperture);
             inertia=std::max(inertia-exterior,1e-12);radiation_h_[b]=1/exterior;
         }

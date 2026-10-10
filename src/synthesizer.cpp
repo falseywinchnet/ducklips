@@ -9,6 +9,20 @@ namespace {
 
 constexpr double critical_reynolds = 1800.0;
 constexpr double minimum_cycle_amplitude = 2.0e-6; // m^2 of glottal area swing for a counted cycle
+constexpr double geometry_tangent_interval = 1e-6;
+
+ArticulatorState geometry_tangent(const ArticulatorState& state) noexcept {
+    ArticulatorState moved=state;
+    for(CriticallyDampedTracker& t:moved.shape){t.value+=geometry_tangent_interval*t.velocity;}
+    for(CriticallyDampedTracker* t:{&moved.lip_area,&moved.lip_protrusion,&moved.port_area,
+                                 &moved.body_offset_x,&moved.body_offset_y}){t->value+=geometry_tangent_interval*t->velocity;}
+    for(ConstrictionSlotState& s:moved.slot){
+        for(CriticallyDampedTracker* t:{&s.activation,&s.place,&s.target_area,&s.width,&s.tip_down}){
+            t->value+=geometry_tangent_interval*t->velocity;
+        }
+    }
+    return moved;
+}
 
 // Dynamic pressure of a turbulent jet that has crossed the critical Reynolds
 // number; zero below it. The returned value is scaled by a source gain and
@@ -77,6 +91,8 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
         if(options.spatial_pressure){mean_airway_.prepare(networks_[0],geometry_shape_,air_,voice.static_wall_compliance);}
     }
     if(options.local_flow){
+        model_.allocate(local_tangent_shape_);
+        local_tangent_network_.prepare(options.oral_sections,options.nasal_sections,model_.port_section(),model_.side_cavities());
         model_.build(articulators_,geometry_shape_);
         networks_[0].assemble(geometry_shape_,air_,voice_.losses);
         local_.prepare(networks_[0],air_,voice_.static_wall_compliance,
@@ -287,6 +303,7 @@ void Synthesizer::begin_block() noexcept {
     // their continuous trajectories in render_samples, not a block hold.
     articulators_.advance_geometry(block_seconds);
     const std::chrono::steady_clock::time_point geometry_begin=std::chrono::steady_clock::now();
+    if(options_.local_flow){model_.build(geometry_tangent(articulators_),local_tangent_shape_);}
     model_.build(articulators_, shape_);
     statistics_.geometry_seconds+=std::chrono::duration<double>(std::chrono::steady_clock::now()-geometry_begin).count();
     if (model_.geometry_error()) {
@@ -337,6 +354,7 @@ void Synthesizer::begin_block() noexcept {
         steps = static_cast<std::size_t>(std::clamp(wanted, 1.0, static_cast<double>(options_.maximum_geometry_steps)));
     }
     start_shape_.port_area = geometry_shape_.port_area;
+    start_shape_.lip_aperture = geometry_shape_.lip_aperture;
     for (std::size_t section = 0; section < shape_.oral_area.size(); ++section) {
         start_shape_.oral_area[section] = geometry_shape_.oral_area[section];
         start_shape_.oral_length[section] = geometry_shape_.oral_length[section];
@@ -344,6 +362,7 @@ void Synthesizer::begin_block() noexcept {
     if (!geometry_ready_) {
         // First block: start from the target itself.
         start_shape_.port_area = shape_.port_area;
+        start_shape_.lip_aperture = shape_.lip_aperture;
         for (std::size_t section = 0; section < shape_.oral_area.size(); ++section) {
             start_shape_.oral_area[section] = shape_.oral_area[section];
             start_shape_.oral_length[section] = shape_.oral_length[section];
@@ -457,6 +476,7 @@ void Synthesizer::begin_geometry_step() noexcept {
     geometry_step_index_ += 1;
     const double fraction = static_cast<double>(geometry_step_index_) / static_cast<double>(geometry_steps_);
     geometry_shape_.port_area = start_shape_.port_area + fraction * (shape_.port_area - start_shape_.port_area);
+    geometry_shape_.lip_aperture = std::lerp(start_shape_.lip_aperture, shape_.lip_aperture, fraction);
     for (std::size_t section = 0; section < shape_.oral_area.size(); ++section) {
         double start_area = start_shape_.oral_area[section];
         double start_length = start_shape_.oral_length[section];
@@ -471,6 +491,12 @@ void Synthesizer::begin_geometry_step() noexcept {
     const std::size_t next = 1 - current_;
     AcousticNetwork& network = networks_[next];
     network.assemble(geometry_shape_, air_, voice_.losses);
+    if(options_.local_flow){
+        local_tangent_network_.assemble(local_tangent_shape_,air_,voice_.losses);
+        for(std::size_t n=0;n<network.nodes.size();++n){
+            network.nodes[n].compliance_rate=(local_tangent_network_.nodes[n].compliance-network.nodes[n].compliance)/geometry_tangent_interval;
+        }
+    }
     if (options_.canonical_motion || options_.local_flow) {
         if (!canonical_ready_) {
             networks_[current_].assemble(geometry_shape_,air_,voice_.losses);
@@ -617,13 +643,17 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
         }
         double area=std::max(rest_area_,0.);
         if(voice_.phonation){
-            glottis_.advance(lung_pressure_-local_.pressure(),rest_area_,tension_,sample_period_,options_.glottis_substeps,aspiration);
+            glottis_.advance(lung_pressure_-local_.pressure(),rest_area_,tension_,sample_period_,options_.glottis_substeps,aspiration,
+                            local_.glottal_flow(),air_.density);
             area=std::max(glottis_.minimum_area(),0.);
         }
         glottal_area_=area;track_pitch(area);
         const std::size_t constriction=model_.narrowest_section();
         const std::size_t branch=constriction+1<layout.oral_sections()?layout.oral_branch(constriction):layout.lip_branch();
-        const double local_area=std::max(constriction_area_,0.);
+        const double local_area=branch==layout.lip_branch()
+            ? std::max(std::lerp(networks_[1-current_].branches[branch].aperture,
+                                layout.branches[branch].aperture,fraction),0.)
+            : std::max(constriction_area_,0.);
         const double jet=local_area>1e-12?std::abs(local_.flow(branch))/local_area:0.;
         const double frication=frication_scale_*turbulence_pressure(jet,2*std::sqrt(local_area/pi),air_)
             *std::sqrt(local_area/(.1*square_centimetre))*frication_noise_.next();

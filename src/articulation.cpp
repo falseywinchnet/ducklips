@@ -12,6 +12,22 @@ constexpr double lip_fraction = 0.06;
 constexpr double minimum_vowel_area = 0.15; // cm^2, reference scale
 constexpr double constriction_core = 0.0015; // m, flat-topped half width at reference scale
 
+double lip_storage_area(const LipProfile& profile,double first,double last) noexcept {
+    // Fixed eight-point volume quadrature on each smooth piece. Contact at
+    // the exterior does not empty the partially open section behind it.
+    constexpr std::array<double,4> x{.1834346424956498,.525532409916329,.7966664774136267,.9602898564975363};
+    constexpr std::array<double,4> w{.362683783378362,.3137066458778873,.2223810344533745,.1012285362903763};
+    std::array<double,4> cuts{first,last,std::clamp(profile.place-profile.core,first,last),
+                            std::clamp(profile.place+profile.core,first,last)};
+    std::sort(cuts.begin(),cuts.end());
+    double volume=0;
+    for(std::size_t piece=1;piece<cuts.size();++piece){
+        const double mid=.5*(cuts[piece]+cuts[piece-1]),half=.5*(cuts[piece]-cuts[piece-1]);
+        for(std::size_t q=0;q<x.size();++q){volume+=half*w[q]*(profile.area(mid-half*x[q])+profile.area(mid+half*x[q]));}
+    }
+    return volume/(last-first);
+}
+
 struct Knot final {
     double position{}; // fraction of length
     double value{};
@@ -65,16 +81,18 @@ void CriticallyDampedTracker::advance(double step) noexcept {
         rate = std::min(rate, speed_limit);
     }
     rate *= 1.4;
-    // Substeps keep the explicit integration well inside its stable range.
-    std::size_t substeps = static_cast<std::size_t>(std::ceil(rate * step / 0.2));
-    substeps = std::max<std::size_t>(substeps, 1);
-    double delta = step / static_cast<double>(substeps);
-    for (std::size_t substep = 0; substep < substeps; ++substep) {
-        command += delta * rate * (target - command);
-        double acceleration = rate * rate * (command - value) - 2.0 * rate * velocity;
-        velocity += delta * acceleration;
-        value += delta * velocity;
-    }
+    // Exact motion of the three repeated poles under a held target. The old
+    // Euler steps gave geometry endpoints a velocity inconsistent with the
+    // tracker's stored velocity. A radiating moving wall exposes that error.
+    const double displacement=value-target;
+    const double command_error=command-target;
+    const double slope=velocity+rate*displacement;
+    const double curvature=rate*rate*command_error;
+    const double polynomial=displacement+step*(slope+.5*step*curvature);
+    const double decay=std::exp(-rate*step);
+    value=target+decay*polynomial;
+    velocity=decay*(slope+step*curvature-rate*polynomial);
+    command=target+decay*command_error;
 }
 
 void CriticallyDampedTracker::place(double position) noexcept {
@@ -108,8 +126,12 @@ void ConstrictionSlotState::begin(const ConstrictionGesture& gesture, double act
         tip_down.angular_rate = glide_rate;
     }
     obstacle_from_lips = gesture.obstacle_from_lips;
-    activation.target = activation_target;
-    activation.angular_rate = angular_rate;
+    if (angular_rate<=0) {
+        activation.place(activation_target);
+    } else {
+        activation.target = activation_target;
+        activation.angular_rate = angular_rate;
+    }
 }
 
 ConstrictionGesture ConstrictionSlotState::current() const noexcept {
@@ -287,6 +309,7 @@ void TractModel::allocate(TractShape& shape) const {
     shape.nasal_area.assign(nasal_sections_, 0.0);
     shape.nasal_length.assign(nasal_sections_, 0.0);
     shape.port_area = 0.0;
+    shape.lip_aperture = -1.0;
     shape.port_length = 0.01 * length_scale_;
     shape.side_area = side_area_;
     shape.side_length = side_length_;
@@ -413,6 +436,10 @@ void TractModel::finish(TractShape& shape) noexcept {
         }
     }
     oral_volume_ = volume;
+    if (shape.lip_aperture >= 0 && shape.lip_aperture < narrowest_area_) {
+        narrowest_area_ = shape.lip_aperture;
+        narrowest_ = oral_sections_ - 1;
+    }
 }
 
 namespace {
@@ -464,6 +491,14 @@ void TractModel::build(const ArticulatorState& state, TractShape& shape) noexcep
     write_posture(posture, body_gesture, tip_gesture, residual, state.lip_area.value, state.lip_protrusion.value,
                   false, shape);
     apply_constriction(lip_slot.current(), lip_slot.activation.value, shape);
+    const LipProfile lips=lip_profile(state);
+    shape.lip_aperture = lips.area(0.0);
+    double outward=0;
+    for(std::size_t section=oral_sections_;section-->oral_sections_-lip_sections_;){
+        const double inward=outward+shape.oral_length[section];
+        shape.oral_area[section]=lip_storage_area(lips,outward,inward);
+        outward=inward;
+    }
     shape.port_area = std::max(state.port_area.value, 0.0) * area_scale_;
     finish(shape);
 }
@@ -473,6 +508,7 @@ void TractModel::build_vowel(const VowelShape& vowel, TractShape& shape) noexcep
     TongueGesture idle{};
     std::span<const double> residual(vowel.coefficients.data() + tongue_parameter_count, anatomy_parameter_count);
     write_posture(posture_from(vowel.coefficients), idle, idle, residual, vowel.lip_area, vowel.lip_protrusion, true, shape);
+    shape.lip_aperture = shape.oral_area.back();
     shape.port_area = 0.0;
     finish(shape);
 }

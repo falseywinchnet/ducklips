@@ -22,6 +22,14 @@ The [failure investigation](reports/LOCAL_SPEECH_FAILURE.md) isolates
 geometry-driven noise and adds missing glottal air inertia. The source correction
 passes isolated physical checks; it has not recovered intelligible speech.
 
+The subsequent [Papa visual rounds](reports/VISUAL_WORKFLOW.md) repair a missed
+mouth-plane seal and couple fold force to the actual inertive airflow. The
+latest fresh Papa take is round 009 at speaking rate 0.8, with two voiced
+regions and no separate preparatory closing thump. This remains a listening
+candidate, not a user-approved word or a recovered alphabet. Every round has
+a complete matching enhanced depiction and frozen synthesis provenance;
+the images are internal working evidence. See [the round records](reports/papa_visual_rounds.json).
+
 **Status: active research, not perfected speech.** Current work connects a
 volume-conserving tongue body to the canonical moving acoustic network and
 fixes physical and pronunciation-planning failures. Local material transport

@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <limits>
 
 namespace ducklips {
 
@@ -73,9 +74,12 @@ public:
     // the transglottal drop (Pa); rest_area is the abduction (m^2); tension is
     // Q. surface_turbulence (Pa) is the fluctuating jet pressure on the lower
     // fold surface. Without it the symmetric rest posture is an exact, if
-    // unstable, equilibrium and the folds never start.
+    // unstable, equilibrium in the steady-flow approximation. A finite
+    // supplied_flow instead couples force to the actual inertive airway flow;
+    // air_density is in kg/m^3. NaN retains the steady-flow approximation.
     void advance(double transglottal_pressure, double rest_area, double tension, double sample_period,
-                 std::size_t substeps, double surface_turbulence) noexcept;
+                 std::size_t substeps, double surface_turbulence,
+                 double supplied_flow=std::numeric_limits<double>::quiet_NaN(), double air_density=1.14) noexcept;
     [[nodiscard]] double lower_area() const noexcept;
     [[nodiscard]] double upper_area() const noexcept;
     [[nodiscard]] double minimum_area() const noexcept;
@@ -98,6 +102,7 @@ private:
     std::array<double, 2> upper_position_{};
     std::array<double, 2> upper_velocity_{};
     double rest_area_{};
+    bool rest_initialized_{false};
 };
 
 // Quasi-steady Bernoulli flow through an orifice of area a with an extra

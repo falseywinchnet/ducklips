@@ -79,6 +79,15 @@ int main(int argc,char** argv){
         }
         return 0;
     }
+    ducklips::CriticallyDampedTracker tracker;tracker.place(0);tracker.target=1;tracker.angular_rate=40;
+    ducklips::CriticallyDampedTracker partitioned=tracker;
+    tracker.advance(.1);
+    for(std::size_t i=0;i<100;++i){partitioned.advance(.001);}
+    const double time=1.4*40*.1;
+    check(std::abs(tracker.value-(1-std::exp(-time)*(1+time+.5*time*time)))<1e-14,
+          "articulator follows analytic three-pole step response");
+    check(std::abs(tracker.value-partitioned.value)<1e-13 && std::abs(tracker.velocity-partitioned.velocity)<1e-12,
+          "articulator position and velocity do not depend on timestep partition");
     const double coarse=oscillator(.05),fine=oscillator(.025);
     check(coarse/fine>3.99 && coarse/fine<4.01,"phase error converges quadratically against analytic oscillator");
     const double inlet_coarse=inlet_charge(1./48000,600);
@@ -112,6 +121,41 @@ int main(int argc,char** argv){
     }
     check(largest<.002,"carried polygon gap agrees with smooth circle within 20 micrometres");
     ducklips::SynthesisOptions options;options.local_flow=true;options.local_substeps=1;options.oral_sections=24;options.nasal_sections=9;options.conservative_tongue=true;
+    ducklips::TwoMassGlottis moving_folds;moving_folds.reset({});
+    moving_folds.advance(0,2.5e-5,1,0,1,0);
+    const double original_lower=moving_folds.lower_area(),original_upper=moving_folds.upper_area();
+    moving_folds.advance(0,3e-6,1,0,1,0);
+    check(std::abs(moving_folds.lower_area()-original_lower)<1e-18
+          && std::abs(moving_folds.upper_area()-original_upper)<1e-18,
+          "moving fold equilibrium preserves actual tissue position before time advances");
+    moving_folds.advance(0,3e-6,1,1./48000,4,0);
+    check(moving_folds.lower_area()<original_lower && moving_folds.upper_area()<original_upper,
+          "adduction accelerates fold tissue through its springs and mass");
+    ducklips::TwoMassGlottis loaded_folds;loaded_folds.reset({});
+    loaded_folds.advance(600,3e-6,1,1./48000,4,0,0,1.14);
+    check(loaded_folds.lower_area()>3e-6,
+          "unaccelerated air leaves an opening pressure on resting folds without a noise kick");
+    for(std::size_t sections:{24,64}){
+        const ducklips::VoiceProfile voice=ducklips::baritone_voice();
+        ducklips::AirProperties air;
+        ducklips::VowelLibrary vowels;vowels.build(voice,sections,9,air);
+        ducklips::TractModel model;model.prepare(voice,sections,9);
+        ducklips::TractShape shape;model.allocate(shape);
+        ducklips::ArticulatorState state;state.place_vowel(vowels.shape(ducklips::Phone::AX));
+        ducklips::ConstrictionSlotState& lips=state.slot[static_cast<std::size_t>(ducklips::ConstrictionSlot::lips)];
+        lips.begin({.place_from_lips=0,.width=.0045,.target_area=0},1.25,180);
+        lips.activation.place(1.25);model.build(state,shape);
+        ducklips::AcousticNetwork network;network.prepare(sections,9,model.port_section(),model.side_cavities());
+        network.assemble(shape,air,voice.losses);
+        check(shape.lip_aperture==0 && model.narrowest_area()==0
+              && network.branches[network.lip_branch()].conductance==0,
+              "lip contact seals the mouth even when the last section centre misses contact");
+        check(network.nodes[sections-1].compliance>voice.losses.minimum_area*shape.oral_length.back()/(air.density*air.sound_speed*air.sound_speed),
+              "sealed mouth retains air storage behind the lip boundary");
+        lips.activation.place(0);model.build(state,shape);network.assemble(shape,air,voice.losses);
+        check(shape.lip_aperture>0 && network.branches[network.lip_branch()].conductance>0,
+              "lip release reopens the physical boundary");
+    }
     ducklips::NudgeStream a,b;a.prepare(ducklips::baritone_voice(),1,4096,options);b.prepare(ducklips::baritone_voice(),1,4096,options);
     std::string error;
     for(const char* cue:{"0 lungs 600 40","0 glottis .000025 170","0 vowel AA 75",".1 glottis .000003 170",".15 diphthong AY .2 75"}){
