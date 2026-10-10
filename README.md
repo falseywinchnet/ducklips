@@ -160,6 +160,14 @@ its measured frequency and decay, while explaining the fixed tube's growing
 mode at the same pressure. A higher-pressure native control is in progress.
 This is a short physical-onset diagnostic, not a new NATO listening result.
 
+The actual-mouth adapter now accepts a [streamed lung-pressure ramp](reports/STREAMED_LUNG_PRESSURE.md)
+without resetting its physical state. Constant-input identity, chunk continuity,
+pressure-work accounting and step refinement are checked. The separate long
+fixed-tube run stopped at a contact trial limit after 28.95 ms of observed motion;
+sustained source operation and new speech remain unfinished. The next audio
+deliverable must be newly rendered speech from the current engine; earlier
+recordings and onset diagnostics do not satisfy that request.
+
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).
 A new [solid-airspace geometry reference](reports/PLANAR_AIRSPACE.md) measures

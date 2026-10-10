@@ -1,0 +1,564 @@
+{
+  "scope": "State-preserving lung-pressure control over a 0.2 ms held actual-mouth interval. Accelerated validation ramp, not a physiological onset or speech recording.",
+  "constant_pressure_native_output_unchanged": true,
+  "split_endpoint_error": {
+    "pressure_Pa": 6.373710448315251e-10,
+    "source_area_m2": 2.193815333388638e-19,
+    "source_flow_m3_s": 3.3003114130458755e-16
+  },
+  "successive_endpoint_differences": [
+    {
+      "pressure_Pa": 0.008169205808719937,
+      "source_area_m2": 1.154437822599311e-13,
+      "source_flow_m3_s": 5.27552999603307e-10
+    },
+    {
+      "pressure_Pa": 0.015226330831509927,
+      "source_area_m2": 3.376425522635604e-13,
+      "source_flow_m3_s": 7.39829648173547e-10
+    },
+    {
+      "pressure_Pa": 0.0006565705506460517,
+      "source_area_m2": 2.0140681657176973e-14,
+      "source_flow_m3_s": 3.015276876382374e-11
+    }
+  ],
+  "pressure_control_effect": {
+    "pressure_Pa": 71.87606266029645,
+    "source_area_m2": 1.561230050167522e-08,
+    "source_flow_m3_s": 1.4840749407676797e-05
+  },
+  "independent_reservoir_work_bounds": true,
+  "runs": [
+    {
+      "name": "old-hold",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/lip-outlet-core-reference/planar-probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/old-hold-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/old-hold-20.json": "c69628caf919647816c7cb403213649f1dc3a7c527ed8c832d904128eb04f51c",
+        "out/reservoir-control/old-hold-20.log": "5f3eabb2d8589986a0b8f7b053054541c3ab0257b92f58cac7e8a8114a284ae2"
+      },
+      "checks": {
+        "accepted_steps": 80,
+        "rejected_trials": 15,
+        "minimum_step_s": 2.4999999999999795e-06,
+        "work_residual_J": 2.9571614254542133e-17,
+        "mass_residual_m3": 2.341210646739462e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856367215926657e-05,
+        "net_external_air_m3": 7.28721005455975e-10
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "hold",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/hold-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/hold-20.json": "c69628caf919647816c7cb403213649f1dc3a7c527ed8c832d904128eb04f51c",
+        "out/reservoir-control/hold-20.log": "5f3eabb2d8589986a0b8f7b053054541c3ab0257b92f58cac7e8a8114a284ae2"
+      },
+      "checks": {
+        "accepted_steps": 80,
+        "rejected_trials": 15,
+        "minimum_step_s": 2.4999999999999795e-06,
+        "work_residual_J": 2.9571614254542133e-17,
+        "mass_residual_m3": 2.341210646739462e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856367215926657e-05,
+        "net_external_air_m3": 7.28721005455975e-10
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "flat-ramp",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1400",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/flat-ramp-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/flat-ramp-20.json": "601d4168700a1fc087187a423ee2735fbe01da3380dce33d0608738ac5a9da62",
+        "out/reservoir-control/flat-ramp-20.log": "5f3eabb2d8589986a0b8f7b053054541c3ab0257b92f58cac7e8a8114a284ae2"
+      },
+      "checks": {
+        "accepted_steps": 80,
+        "rejected_trials": 15,
+        "minimum_step_s": 2.4999999999999795e-06,
+        "work_residual_J": 2.9571614254542133e-17,
+        "mass_residual_m3": 2.341210646739462e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856367215926657e-05,
+        "net_external_air_m3": 7.28721005455975e-10
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "ramp",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1750",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/ramp-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/ramp-20.json": "34065ff6eb027003f091793f2d67035a6bc18a8626f5e0e2fbdb47bb8c3ccc47",
+        "out/reservoir-control/ramp-20.log": "ae17370aeb7c9d6700eded5b9dd1781f449b7a5480fc7dbadb7e0003d71f8cec"
+      },
+      "checks": {
+        "accepted_steps": 190,
+        "rejected_trials": 70,
+        "minimum_step_s": 6.249999999999881e-07,
+        "work_residual_J": 2.878556767949014e-17,
+        "mass_residual_m3": 2.733914642549012e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856488338895863e-05,
+        "net_external_air_m3": 1.9399506974782534e-09
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "split-first",
+      "subdivisions": 10,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1575",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/split-first-10.txt": "d092652e639b0e55a242f582d8b20c5071d5eb2a7ecebc95abc82e724134d70d",
+        "out/reservoir-control/split-first-10.json": "acf59b320693bf5c7763bd06b3e3c2f9626e539a65472ed69d0cc550caab3f18",
+        "out/reservoir-control/split-first-10.log": "514cb7e221efd2d90642df0d03ff814c60d70bb542f15f403ae9c8c846b010dd"
+      },
+      "checks": {
+        "accepted_steps": 114,
+        "rejected_trials": 45,
+        "minimum_step_s": 6.249999999999881e-07,
+        "work_residual_J": 2.1033522146218786e-17,
+        "mass_residual_m3": 2.3199314254815352e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856360657383207e-05,
+        "net_external_air_m3": 6.631355709309208e-10
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "split-second",
+      "subdivisions": 10,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "1e-05",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1750",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 5.551115123125783e-17,
+        "source_energy_roundtrip_J": 1.0164395367051604e-20
+      },
+      "files": {
+        "out/reservoir-control/split-second-10.txt": "c9daa0c86047d4f8adf1064f43595095e7e17b219e975520c41cffba5c41b866",
+        "out/reservoir-control/split-second-10.json": "acbe43216146ad14146990473af14ff450b9c0728fcf18b7e520cafaf0fd7ecd",
+        "out/reservoir-control/split-second-10.log": "1e44267be71056dcf19851da81f2c63f59eaef77f8c0245c8af035e8095d1d3b"
+      },
+      "checks": {
+        "accepted_steps": 76,
+        "rejected_trials": 26,
+        "minimum_step_s": 1.2499999999999897e-06,
+        "work_residual_J": 8.466941340753986e-18,
+        "mass_residual_m3": 1.8645478187557797e-20,
+        "initial_air_m3": 6.856360657383207e-05,
+        "final_air_m3": 6.856488338895863e-05,
+        "net_external_air_m3": 1.2768151265476142e-09
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 5.551115123125783e-17,
+        "energy_J": 1.0164395367051604e-20
+      }
+    },
+    {
+      "name": "fine",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "2.5e-06",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1750",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/fine-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/fine-20.json": "4f404e6004b98cc26b12471a9e8274642620d8ccf3262318264502209d08e2b2",
+        "out/reservoir-control/fine-20.log": "dc5db72df67c2e612353912ed42c613c876ae272ee97ed3c0012be368fb7cf46"
+      },
+      "checks": {
+        "accepted_steps": 202,
+        "rejected_trials": 16,
+        "minimum_step_s": 4.999999999999986e-07,
+        "work_residual_J": 2.865681867150749e-17,
+        "mass_residual_m3": 2.408584507631906e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856488338812981e-05,
+        "net_external_air_m3": 1.939949868663156e-09
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "finest",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "6.25e-07",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1750",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/finest-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/finest-20.json": "629bb6a1d0ce4ef06769007923e635a79f5d997729071d6ea2c5047a412c9483",
+        "out/reservoir-control/finest-20.log": "d5fe58546b6b7de16a537266c856418af133cb538330bc854600007303561d28"
+      },
+      "checks": {
+        "accepted_steps": 650,
+        "rejected_trials": 0,
+        "minimum_step_s": 2.9411764705880995e-07,
+        "work_residual_J": 1.1058862159352145e-17,
+        "mass_residual_m3": 2.561033894525429e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856488338776026e-05,
+        "net_external_air_m3": 1.939949499111321e-09
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    },
+    {
+      "name": "resolved",
+      "subdivisions": 20,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/reservoir-control/probe",
+        "--lip-profile",
+        "--epilarynx",
+        "--continuous-folds",
+        "/Users/joshuahkuttenkuler/ducklips/bodies/reference.body",
+        "--compact-geometry",
+        "--radiation",
+        "--thermal-slit-width",
+        "0.03",
+        "--viscous-slit-width",
+        "0.03",
+        "--lip-viscous-width",
+        "0.03",
+        "--lip-viscous-order",
+        "8",
+        "--outlet-viscous",
+        "--joint-relaxation",
+        "--joint-fifth",
+        "--joint-tolerance",
+        "0.0001",
+        "--joint-max-step",
+        "3.125e-07",
+        "--source-contact-step",
+        "1e-07",
+        "--reservoir-end",
+        "1750",
+        "--initial-state"
+      ],
+      "continuation": {
+        "source_mass_roundtrip_m3": 0.0,
+        "source_momentum_roundtrip": 2.7755575615628914e-17,
+        "source_energy_roundtrip_J": 5.082197683525802e-21
+      },
+      "files": {
+        "out/reservoir-control/resolved-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+        "out/reservoir-control/resolved-20.json": "b9a89ce001b7aa9661864b58c8ddd2cec6cbc0036917b213a9771dbf290aab65",
+        "out/reservoir-control/resolved-20.log": "7380eb5e07fe23b4e95ff022d8ec9ed9951b24da6040bcf99e7496511ab7a5a6"
+      },
+      "checks": {
+        "accepted_steps": 1290,
+        "rejected_trials": 0,
+        "minimum_step_s": 1.5151515151513384e-07,
+        "work_residual_J": 1.1817803680091998e-17,
+        "mass_residual_m3": 2.6670577695394133e-20,
+        "initial_air_m3": 6.856294343826112e-05,
+        "final_air_m3": 6.856488338764749e-05,
+        "net_external_air_m3": 1.9399493863603285e-09
+      },
+      "join": {
+        "mass_m3": 0.0,
+        "canonical_momentum": 2.7755575615628914e-17,
+        "energy_J": 5.082197683525802e-21
+      }
+    }
+  ],
+  "hashes": {
+    "tools/reservoir_control_validation.py": "398179c6e4662e009eaa4f152c337ee218abce16446766d03b3b24aca221e16b",
+    "tools/planar_inertive_motion_probe.cpp": "622ee96d469676bc1fa7db867aafcebf0172087e26559e93fe6e441e7075caea",
+    "tools/planar_continuous_reference.py": "ee63897772b77ae8749576b3447c31ef06981aad7fbdd96f9ba02c7c6c1cea64",
+    "out/reservoir-control/probe": "1e9506740fc3421ca19fdf0e73d03c220d0f2a5eab058c8bc5882f1ad7c51d48",
+    "out/lip-outlet-core-reference/planar-probe": "540e72d9962ecc5da0d079f20502911379d3d137fdbe6c71ea8c1fcbb29c0cc4",
+    "out/actual-coupled-phonation-50ms/run.json": "f15538273cb4fce348ed370b2bc0b9f9882459dce4cc3deb4f1df8a745b853e4",
+    "out/actual-coupled-phonation-50ms/final-hold-029-100.json": "88bcfa7c4c9297761989adefc3382902c41dcea1d0ae7d0c6ce6a37a947d0b21",
+    "out/actual-coupled-phonation-50ms/poses/pose-1.501.json": "044f61291591fc968b19db2c56dbfa73fc917ddd4baf23cb13167736811faf73",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "out/nato-spatial-airway.csv": "85f3269d93397fe7c1b20089ffffb502038524f96bd2274411a01562a0402f7e"
+  }
+}

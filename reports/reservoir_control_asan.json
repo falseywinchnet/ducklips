@@ -1,0 +1,22 @@
+{
+  "scope": "ASAN pressure-ramp continuation; independent physical accounting and Release comparison.",
+  "checks": {
+    "accepted_steps": 190,
+    "rejected_trials": 70,
+    "minimum_step_s": 6.249999999999881e-07,
+    "work_residual_J": 2.905661822261152e-17,
+    "mass_residual_m3": 2.8630375361685394e-20,
+    "initial_air_m3": 6.856294343826112e-05,
+    "final_air_m3": 6.856488338895863e-05,
+    "net_external_air_m3": 1.939950697476962e-09
+  },
+  "maximum_release_pressure_difference_Pa": 6.781846195735852e-10,
+  "hashes": {
+    "out/reservoir-control/asan-command.json": "fa3d4a0ad1b5573a5a3fc072caf0018da1b7227235da4e822b345953968fc79a",
+    "out/reservoir-control/asan-ramp.log": "ae17370aeb7c9d6700eded5b9dd1781f449b7a5480fc7dbadb7e0003d71f8cec",
+    "out/reservoir-control/asan-ramp.json": "cbcabd1414e226bc768a039fc148ca403826a93e0f6c35cd393cca2137c3ecde",
+    "out/reservoir-control/ramp-20.txt": "bceb897a0290d74e825d97755f8dfb1e3271e4d5add3159931f2109cd893bba5",
+    "out/reservoir-control/ramp-20.json": "34065ff6eb027003f091793f2d67035a6bc18a8626f5e0e2fbdb47bb8c3ccc47",
+    ".build/asan/ducklips_planar_inertive_motion_probe": "bce5caa6f2f737ba4830a5b3a0cd858e4f4aaa6ed42504e2b5e5d42329f195e6"
+  }
+}

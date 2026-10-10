@@ -1,0 +1,66 @@
+{
+  "scope": "Preserved terminal fixed-tube continuation failure, not a completed 250 ms voice.",
+  "completed_restartable_duration_s": 0.025,
+  "last_observed_total_time_s": 0.028950000000000004,
+  "failure": "contact advance failed mode=phonation macro=396 reason=2 time=0.0039544970703125001 trial=1.2207031253874678e-09 error=6.7558555863797665e-05",
+  "failure_enum": "JointAccuracyFailure::trial_limit (2)",
+  "last_observation": {
+    "time": 0.00395,
+    "closures": 1,
+    "reopenings": 0,
+    "substeps": 11142,
+    "rejected": 4884,
+    "energy": 0.00010230320210238856,
+    "work": 0.0010547674530990005,
+    "physical_loss": 0.0012104608401299704,
+    "numerical_loss": 1.1213362682377969e-10,
+    "work_residual": 2.0257233390719165e-15,
+    "mass_residual": 1.9852334701272664e-21,
+    "outlet_flow": 9.725340901731362e-05,
+    "radiation_flow": 0.00012127787565594195,
+    "radiation_resistance": 2792999.9999999995,
+    "area": [
+      -3.4177644500179195e-06,
+      1.1681710715877762e-07
+    ],
+    "gas_mass": [
+      6.667419998369382e-14,
+      5.84359866915362e-12
+    ],
+    "effort": [
+      606308.0440747216,
+      -3916.1939750845536
+    ],
+    "flow": [
+      0,
+      2.883300249047163e-08,
+      1.71385998872305e-06
+    ],
+    "lower_position": [
+      -0.00022920587321492323,
+      -0.0002292058732149281
+    ],
+    "upper_position": [
+      -0.00010297081760146911,
+      -0.00010297081760147536
+    ],
+    "pressure": [
+      -917.9195797799781,
+      -899.7120681187901,
+      -853.7293900393745,
+      -812.3157425410636,
+      -840.0619841691922,
+      -746.6700429778332,
+      -499.0524793222295,
+      -208.40539343595816
+    ]
+  },
+  "binary_sha256": "7f07c9d8bde8e0a27db764662494249f7648f976c98c9318af59c48106bebb00",
+  "files": {
+    "out/coupled-phonation-long/run.json": "f2165cd461265697d624b19f4be9d25a8697c9f3c9cbda8d1deee3569ef2f78a",
+    "out/coupled-phonation-long/segment-0001.jsonl": "d59d5e34a6e0852b4537847c362d7a6f8105da4f003120b27045648442caffe3",
+    "out/coupled-phonation-long/segment-0001.log": "0e027014c4626026e8b3937d01298858dd5a67f14ce3bb5b7db1a192cc93ed92",
+    "out/coupled-phonation-long/segment-0001.input": "96cda12738a3e0f07ef7eeef3800680aa5f47cd51fa1248f1a0130956fd21cca",
+    "include/ducklips/joint_accuracy.hpp": "4e7c7a08879d5ad3280e02ffcdd225dce74ee8ab6a3c803e677bd84decfc23a2"
+  }
+}

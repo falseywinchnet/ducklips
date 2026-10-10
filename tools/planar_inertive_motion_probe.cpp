@@ -217,6 +217,7 @@ int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
     double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5,source_contact_step=0;
+    bool reservoir_ramp=false;double reservoir_end=0;
     bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -227,6 +228,11 @@ int main(int argc,char** argv){
         else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--radiation" && !radiation_mode){radiation_mode=true;}
+        else if(arg=="--reservoir-end" && !reservoir_ramp && i+1<argc){
+            try{std::size_t used=0;const std::string value=argv[++i];reservoir_end=std::stod(value,&used);if(used!=value.size()){return 2;}}
+            catch(...){return 2;}
+            if(!std::isfinite(reservoir_end)){return 2;}reservoir_ramp=true;
+        }
         else if(arg=="--thermal-slit-width" && thermal_width==0 && i+1<argc){
             try{std::size_t used=0;const std::string value=argv[++i];thermal_width=std::stod(value,&used);if(used!=value.size()){return 2;}}
             catch(...){return 2;}
@@ -259,6 +265,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
+    if(reservoir_ramp && (!continuous_mode || joint_tolerance<=0)){return 2;}
     if((source_contact_step>0 && joint_tolerance<=0) || (joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
@@ -536,6 +543,7 @@ int main(int argc,char** argv){
     std::printf("{\"contact_cuts\":[");for(std::size_t i=0;i<contact_cuts.size();++i){std::printf("%s%.17g",i?",":"",contact_cuts[i]);}
     std::putchar(']');
     if(profile_mode){values("lip_contact_cuts",lip_contact_cuts);}
+    if(reservoir_ramp){std::printf(",\"reservoir_control\":{\"shape\":\"linear\",\"start_Pa\":%.17g,\"end_Pa\":%.17g,\"duration_s\":%.17g,\"sampling\":\"trial midpoint\"}",reservoir_pressure,reservoir_end,duration);}
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
@@ -559,7 +567,11 @@ int main(int argc,char** argv){
             if(viscous_mode && !set_viscous_geometry(t1,gend)){return false;}
             request.geometry={old_compliance,c1,compliance,old_conductance,g1,gend,midpoint_thermal,thermal_geometry,midpoint_viscous,viscous_geometry,radiation_mode?radiation_area(mid):0.,radiation_mode?radiation_area(t1):0.};
             const auto& section=epi.sections.back();request.outlet_inertance=ducklips::AirProperties{}.density*.5*std::lerp(section.first_length,section.last_length,t1)/std::lerp(section.first_area,section.last_area,t1);
-            request.reservoir_pressure=reservoir_pressure;request.nodal_flow=inflow;request.series_pressure=series;return true;
+            // Sample the control at each trial's actual midpoint, including
+            // rejected and half steps. The committed receipt integrates the
+            // pressure work of the accepted leaves; no state is reset here.
+            request.reservoir_pressure=reservoir_ramp?std::lerp(reservoir_pressure,reservoir_end,mid):reservoir_pressure;
+            request.nodal_flow=inflow;request.series_pressure=series;return true;
         };
         const auto callback=[](void* context,double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {return (*static_cast<decltype(provider)*>(context))(begin,finish,request);};
         std::size_t accepted=0,rejected=0,closures=0,reopenings=0;
