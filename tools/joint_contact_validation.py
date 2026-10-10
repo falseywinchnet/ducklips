@@ -30,6 +30,7 @@ def main():
         assert hashlib.sha256(keep(ROOT / name).read_bytes()).hexdigest() == expected, name
 
     controls = []
+    refinements = []
     for name in ['lower', 'upper']:
         data = rows(name)
         assert len(data) == 201 and data[-1]['time'] == .002
@@ -46,6 +47,31 @@ def main():
         controls.append(dict(name=name, **{key: data[-1][key] for key in
                         ['time', 'closures', 'reopenings', 'substeps', 'rejected',
                          'work_residual', 'mass_residual', 'physical_loss', 'numerical_loss']}))
+        fine = rows(name + '-fine')
+        assert len(fine) == len(data) and fine[-1]['time'] == .002
+        assert fine[-1]['closures'] == fine[-1]['reopenings'] == 1
+        assert f'PASS {name}:' in keep(OUT / f'{name}-fine.log').read_text()
+        for row in fine:
+            assert row['work_residual'] < 1e-12 and row['mass_residual'] < 1e-18
+            assert min(row['gas_mass']) > 0
+            for j in range(2):
+                if row['area'][j] <= 0:
+                    assert row['flow'][0 if j == 0 else 2] == 0
+        delta = {key: float(np.max(abs(np.array([r[key] for r in data]) -
+                                      np.array([r[key] for r in fine]))))
+                 for key in ['effort', 'pressure', 'area']}
+        radiation_delta = max(abs((a['outlet_flow'] - a['radiation_flow']) -
+                                  (b['outlet_flow'] - b['radiation_flow']))
+                              for a, b in zip(data, fine))
+        refinements.append(dict(name=name, coarse_tolerance=1e-4, fine_tolerance=2.5e-5,
+                                coarse_contact_step_s=1e-7, fine_contact_step_s=2.5e-8,
+                                fine_accepted_steps=fine[-1]['substeps'],
+                                maximum_source_effort_difference_Pa=delta['effort'],
+                                maximum_tract_pressure_difference_Pa=delta['pressure'],
+                                maximum_area_difference_m2=delta['area'],
+                                maximum_radiation_port_flow_difference_m3_s=radiation_delta,
+                                fine_work_residual_J=fine[-1]['work_residual'],
+                                fine_mass_residual_m3=fine[-1]['mass_residual']))
 
     for path in [ROOT / '.build/contact-final-ctest.log', OUT / 'asan-ctest.log']:
         assert '100% tests passed, 0 tests failed out of 5' in keep(path).read_text()
@@ -85,8 +111,9 @@ def main():
         keep(path)
     report = dict(scope='Current coupled-source contact controls, zero-cap regression checks, '
                   'physical continuation and an explicitly bounded pressure-driven prefix. '
-                  'The longer continued run and finer cycles are not claimed complete. No speech rendering.',
-                  build=build, free_controls=controls, release_checks=5, sanitizer_checks=5,
+                  'The longer continued run is not claimed complete. No speech rendering.',
+                  build=build, free_controls=controls, joint_refinements=refinements,
+                  release_checks=5, sanitizer_checks=5,
                   continuation=dict(graph_and_loss_states_identical=True,
                                     maximum_scaled_source_difference=source_error,
                                     gas_mass_difference_m3=mass_error, energy_difference_J=energy_error),

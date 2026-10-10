@@ -72,8 +72,15 @@ source port. Physical and numerical losses remain nonnegative. The final
 solver correction leaves all previously recorded fields of both coarse free
 controls unchanged. Five focused checks pass in Release and ASAN/UBSAN builds,
 including the tighter exact-zero regressions. Finer whole-cycle runs with the
-current binary remain in progress; one pair of resolutions is not a proof of
-contact-time convergence.
+same current binary also complete one closing and reopening each, using local
+tolerance 2.5e-5 and a 25 ns contact-step bound. They take 4714 lower and 3654
+upper substeps. Maximum common-time source-pressure changes are 4.28 and
+4.12 Pa, while the maximum tract-pressure changes are 0.00145 and 0.0000418 Pa.
+Opening-area differences stay below 2.06e-11 and 7.96e-12 m² respectively.
+This distinguishes internal fast pressure sensitivity from its effect on the
+tract and tissue in these controls. One pair of jointly refined tolerances
+and contact bounds is not a proof of convergence or an isolation of either
+error source.
 
 ## Continuing phonation without resetting memories
 

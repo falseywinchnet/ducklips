@@ -1,5 +1,5 @@
 {
-  "scope": "Current coupled-source contact controls, zero-cap regression checks, physical continuation and an explicitly bounded pressure-driven prefix. The longer continued run and finer cycles are not claimed complete. No speech rendering.",
+  "scope": "Current coupled-source contact controls, zero-cap regression checks, physical continuation and an explicitly bounded pressure-driven prefix. The longer continued run is not claimed complete. No speech rendering.",
   "build": {
     "commit": "584531a21ad7b0c10a38e84d2aed2326ab0deea3",
     "binary_sha256": "7f07c9d8bde8e0a27db764662494249f7648f976c98c9318af59c48106bebb00",
@@ -39,6 +39,36 @@
       "numerical_loss": 1.9670110040359433e-12
     }
   ],
+  "joint_refinements": [
+    {
+      "name": "lower",
+      "coarse_tolerance": 0.0001,
+      "fine_tolerance": 2.5e-05,
+      "coarse_contact_step_s": 1e-07,
+      "fine_contact_step_s": 2.5e-08,
+      "fine_accepted_steps": 4714,
+      "maximum_source_effort_difference_Pa": 4.278196481129029,
+      "maximum_tract_pressure_difference_Pa": 0.0014479493054615489,
+      "maximum_area_difference_m2": 2.051579023640854e-11,
+      "maximum_radiation_port_flow_difference_m3_s": 5.337961253418423e-12,
+      "fine_work_residual_J": 1.4291259252114356e-17,
+      "fine_mass_residual_m3": 1.2472849661533966e-21
+    },
+    {
+      "name": "upper",
+      "coarse_tolerance": 0.0001,
+      "fine_tolerance": 2.5e-05,
+      "coarse_contact_step_s": 1e-07,
+      "fine_contact_step_s": 2.5e-08,
+      "fine_accepted_steps": 3654,
+      "maximum_source_effort_difference_Pa": 4.116550456661171,
+      "maximum_tract_pressure_difference_Pa": 4.170032873629381e-05,
+      "maximum_area_difference_m2": 7.957998190170825e-12,
+      "maximum_radiation_port_flow_difference_m3_s": 1.6760597235965268e-12,
+      "fine_work_residual_J": 1.5660460906645587e-18,
+      "fine_mass_residual_m3": 3.467437730245723e-22
+    }
+  ],
   "release_checks": 5,
   "sanitizer_checks": 5,
   "continuation": {
@@ -68,8 +98,12 @@
     "CMakeLists.txt": "991d992e262b6ea3dfc20d060761078a8a382668840507d9ad2f6352800c627b",
     "out/joint-contact-v2/lower.jsonl": "def36fced6983e7764c65d1f8e35e6502eb77616cb48da811e3ff242c31e6ed3",
     "out/joint-contact-v2/lower.log": "da190117204d7c5b07ed80cebc9c04653c9137ce78099414bb2a3c21e79ad111",
+    "out/joint-contact-v2/lower-fine.jsonl": "87db88bfcff5a93122ef29b93685a1331d91383278e76ff8995eb04ebeb093ad",
+    "out/joint-contact-v2/lower-fine.log": "9fb1cd4e2009d3febe97e7de59f8904b2a994d31f7ee0e68b6aa5972f4504da1",
     "out/joint-contact-v2/upper.jsonl": "3db730e21ec45148d69cae0b1dff7329774a756d16707df8770861af954bbbb2",
     "out/joint-contact-v2/upper.log": "a199eb4202da346559edc25ac4be6c1a473a1d971f26326a0dd017e4d73e703f",
+    "out/joint-contact-v2/upper-fine.jsonl": "243576e982297ebc9a99ffe2d3b1c01c08d1ee05a14fa2535d906b4c66494f08",
+    "out/joint-contact-v2/upper-fine.log": "3b9bfa642a5fbd6c38c22d178d23f0e6c558a2586ba522f6e6e3acff02bc4345",
     ".build/contact-final-ctest.log": "f653fc2a07f61334d7531a2e1aa5dc2dd09ebb840dfe59c07f4f276c695e2256",
     "out/joint-contact-v2/asan-ctest.log": "e518d9faf3d661d315d30dcfee0af669530a52d2405a8d93446a780234d27044",
     "out/joint-contact-v2/phonation-start.jsonl": "aa351f4c611f4b3c730785ef9fbd25beb96bc76dd138c83624f554bcab61faec",
@@ -81,11 +115,11 @@
     "out/joint-contact-v2/actual-closing-continuation.log": "fb5a4700bf3b9b2b629a98bdb357b6f02423c659ae2826bf7dacfa451340de21",
     "out/joint-accuracy-moving-current/tol-0.0001/closing-1-64.txt": "7371a7eff83ddd77c51ca319ec3ac4252383e1367ea91f4db29c4ca97ebc94e1",
     "out/joint-contact-v2/phonation-continued.input": "b7bc884979bd9b6c8ed40aa59eb8eb3d542ed8eb1ea6a5a3060cf96e7586d95f",
-    "tools/joint_contact_validation.py": "d18294f000c43fc1394357d596279b5a76c7734fa1d4b6151ae674a8558a99d5",
+    "tools/joint_contact_validation.py": "9b026a023a05bc4b51d71635b69246c1b04a51199d4759217576d77890a3e651",
     "tools/planar_inertive_motion_probe.cpp": "1611ecee6ff01c5dbc9fc661a230d3ac40faecd572c1834a54b856c1079404dd",
     "tools/planar_continuous_reference.py": "2ae98a4e509a7a1eba39965add2d6fb54d515c82e45a4be1959ec39a96d46aea",
     "README.md": "f58ef605aa77ab0bcec9b6c560d81c69134f722c8674ebbaacaadaeffe39838b",
     "RESEARCH.md": "5e65f41058f95ef335a6c9e4a21a762c54a7962e0876567e4bbeee4da36077ac",
-    "reports/COUPLED_SOURCE_CONTACT.md": "707cf7f410d66325a472cfa7aea3ad9971b2b8e8a44e1ef7e159071b30c934bf"
+    "reports/COUPLED_SOURCE_CONTACT.md": "d8e8bc2081fdb5de7b817defe1ecec456b0b67d709781ded42a7548b3d51f4b2"
   }
 }
