@@ -223,7 +223,12 @@
           684,
           567
         ],
-        "verified_source_hash": true
+        "verified_source_hash": true,
+        "user_assessment": {
+          "status": "rejected",
+          "listened_round": 16,
+          "reason": "P less distinct; embedded voiced hum unchanged. 015 is the same physical configuration."
+        }
       },
       {
         "round": 16,
@@ -272,7 +277,12 @@
           684,
           567
         ],
-        "verified_source_hash": true
+        "verified_source_hash": true,
+        "user_assessment": {
+          "status": "rejected",
+          "listened_round": 16,
+          "reason": "P less distinct; embedded voiced hum unchanged. 015 is the same physical configuration."
+        }
       }
     ],
     "validation": {
@@ -288,5 +298,74 @@
       "timing_scope": "render with sample-rate physical trace and probes enabled; not a production timing qualification",
       "naturalness": "not established"
     }
+  },
+  "latest_feedback": {
+    "round": 16,
+    "status": "rejected",
+    "user": "sounds worse, actually. the p is less distinct. and the underlying behavior i mentioned remains. i think its due to how the source excitation is synthesized",
+    "decision": "Reject bowed-fold candidate 015/016; investigate excitation from one-strip 012 baseline."
+  },
+  "source_investigation": {
+    "baseline_round": 12,
+    "diagnostic_rerender_round": 17,
+    "candidate_round": 18,
+    "rounds": [
+      {
+        "round": 17,
+        "directory": "out/visual-round-017",
+        "audio_sha256": "7669ab08f93c8448141e46e4ac2e3aa19daa85fffdd0600fc8ffe0757621fe10",
+        "raw_sha256": "750f23a0c4f49e06b9f6ecdc68b938132e89159cb7ad84f451ccd0ba34894719",
+        "enhanced_sha256": "09560525066d373dac57b4b9a4ce63507dbe7cba3041531c5e265459868009de",
+        "enhanced_source_matches_audio": true,
+        "full_field_shape": [
+          684,
+          567
+        ],
+        "playback": {
+          "fixed_gain": 882.4414167632915,
+          "gain_selection": "declared",
+          "tap": "microphones",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one fixed gain over the full recording; no cuts or filters"
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Full 684 x 567 field inspected: two harmonic vowel regions and quiet closure, strong lower comb, residual horizontal upper ridges. Raw audio byte-identical to 012. Supplemental source trace shows near-symmetric pulses and closely agreeing mean/endpoint flows.",
+          "next_experiment": "One change: expose both fold layers to downstream gauge pressure while retaining existing separated-jet pressure difference law."
+        }
+      },
+      {
+        "round": 18,
+        "directory": "out/visual-round-018",
+        "audio_sha256": "271a13e335c844d245421b4775d38333dbb0f11eb32e2efa30e00b3a7a983afd",
+        "raw_sha256": "c900cc0c1e1cf9d3c6be1882017324370146f60225e6815c0abe760fe984421a",
+        "enhanced_sha256": "45cc582beee93d331315c3c2a71e5fac33d1656bca53c49100a09a06c52767ee",
+        "enhanced_source_matches_audio": true,
+        "full_field_shape": [
+          684,
+          567
+        ],
+        "playback": {
+          "fixed_gain": 571.3160472874877,
+          "gain_selection": "voiced RMS match",
+          "tap": "microphones",
+          "frames": 72480,
+          "sample_rate": 48000,
+          "processing": "one fixed gain over the full recording; no cuts or filters"
+        },
+        "inspection": {
+          "full_field": "enhanced-cells.png",
+          "result": "Complete field inspected: two voiced regions remain separated by a quiet closure; no new conspicuous broadband click stripe. Increased voiced mid/upper harmonic energy and changed lower harmonic strengths at common physical scale; narrow upper bands remain. Source-cycle trace shows faster flow decline than rise. No perceptual hum cure or P clarity acceptance inferred.",
+          "listening_status": "new candidate awaiting user assessment",
+          "baseline": "017 freshly reproduces 012; rejected 015/016 bowed geometry not used"
+        }
+      }
+    ],
+    "baseline_raw_and_enhanced_unchanged": true,
+    "main_engine_physics": "unchanged; source-state observations added",
+    "candidate_engine": "isolated current local-flow engine plus source_pressure_experiment.patch",
+    "acceptance": "pending; one intelligible word remains the count from 009",
+    "validation": "Main local suite and isolated candidate local suite passed; candidate pressure controls and existing chunk invariance included; patch applies cleanly."
   }
 }

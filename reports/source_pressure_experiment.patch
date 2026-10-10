@@ -1,0 +1,101 @@
+--- a/include/ducklips/sources.hpp
++++ b/include/ducklips/sources.hpp
+@@ -77,9 +77,12 @@
+     // unstable, equilibrium in the steady-flow approximation. A finite
+     // supplied_flow instead couples force to the actual inertive airway flow;
+     // air_density is in kg/m^3. NaN retains the steady-flow approximation.
++    // supraglottal_pressure is gauge pressure relative to the tissue exterior;
++    // pressure drop controls flow, while gauge pressure loads exposed tissue.
+     void advance(double transglottal_pressure, double rest_area, double tension, double sample_period,
+                  std::size_t substeps, double surface_turbulence,
+-                 double supplied_flow=std::numeric_limits<double>::quiet_NaN(), double air_density=1.14) noexcept;
++                 double supplied_flow=std::numeric_limits<double>::quiet_NaN(), double air_density=1.14,
++                 double supraglottal_pressure=0.0) noexcept;
+     [[nodiscard]] double lower_area() const noexcept;
+     [[nodiscard]] double upper_area() const noexcept;
+     [[nodiscard]] double minimum_area() const noexcept;
+--- a/src/sources.cpp
++++ b/src/sources.cpp
+@@ -57,7 +57,7 @@
+ }
+ 
+ void TwoMassGlottis::advance(double transglottal_pressure, double rest_area, double tension, double sample_period,
+-                             std::size_t substeps, double surface_turbulence,double supplied_flow,double air_density) noexcept {
++                             std::size_t substeps, double surface_turbulence,double supplied_flow,double air_density,double supraglottal_pressure) noexcept {
+     // Adduction moves the spring's equilibrium, not the tissue itself.
+     // Positions are relative to that equilibrium, while velocities carry
+     // the actual tissue momentum. Preserve absolute position as it moves;
+@@ -103,6 +103,7 @@
+         double lower_sum = lower_position_[0] + lower_position_[1];
+         double upper_sum = upper_position_[0] + upper_position_[1];
+         double lower_drive = 0.0;
++        double upper_drive = 0.0;
+         double lower_overlap = 0.0; // shape-weighted half-overlap (m), negative when pressed
+         double upper_overlap = 0.0;
+         double lower_closed = 0.0;
+@@ -135,6 +136,14 @@
+             } else if (lower_gap > 0.0) {
+                 pressure = transglottal_pressure;
+             }
++            // The separated-jet law above gives pressure relative to the
++            // downstream airway. Tissue is referenced to the surrounding
++            // body, not to that oscillating downstream pressure. Exposed
++            // lower tissue therefore sees downstream pressure plus the drop;
++            // the separated upper surface sees downstream pressure itself.
++            // Contacted surfaces are not exposed to the air.
++            if (lower_gap > 0.0) { pressure += supraglottal_pressure; }
++            if (upper_gap > 0.0) { upper_drive += share * shape_[strip] * supraglottal_pressure; }
+             lower_drive += share * shape_[strip] * pressure;
+             if (lower_gap < 0.0) {
+                 lower_overlap += share * shape_[strip] * lower_gap / (2.0 * length * share);
+@@ -157,7 +166,8 @@
+                 - coupling[side] * (lower_position_[side] - upper_position_[side])
+                 - lower_contact * lower_overlap
+                 - lower_damping * lower_velocity_[side];
+-            double upper_force = -upper_stiffness[side] * upper_position_[side]
++            double upper_force = length * folds_.upper_thickness * upper_drive
++                - upper_stiffness[side] * upper_position_[side]
+                 - coupling[side] * (upper_position_[side] - lower_position_[side])
+                 - upper_contact * upper_overlap
+                 - upper_damping * upper_velocity_[side];
+--- a/src/synthesizer.cpp
++++ b/src/synthesizer.cpp
+@@ -644,7 +644,7 @@
+         double area=std::max(rest_area_,0.);
+         if(voice_.phonation){
+             glottis_.advance(lung_pressure_-local_.pressure(),rest_area_,tension_,sample_period_,options_.glottis_substeps,aspiration,
+-                            local_.glottal_flow(),air_.density);
++                            local_.glottal_flow(),air_.density,local_.pressure());
+             area=std::max(glottis_.minimum_area(),0.);
+         }
+         glottal_area_=area;track_pitch(area);
+--- a/tests/local_speech_tests.cpp
++++ b/tests/local_speech_tests.cpp
+@@ -135,6 +135,27 @@
+     loaded_folds.advance(600,3e-6,1,1./48000,4,0,0,1.14);
+     check(loaded_folds.lower_area()>3e-6,
+           "unaccelerated air leaves an opening pressure on resting folds without a noise kick");
++    ducklips::TwoMassGlottis equal_pressure;
++    equal_pressure.reset({});
++    equal_pressure.advance(0,3e-6,1,1e-8,1,0,0,1.14,600);
++    check(equal_pressure.state().lower_velocity[0]>0 && equal_pressure.state().upper_velocity[0]>0,
++          "equal positive airway pressures load both exposed fold surfaces despite zero transglottal drop");
++    ducklips::TwoMassGlottis suction;
++    suction.reset({});
++    suction.advance(0,3e-6,1,1e-8,1,0,0,1.14,-100);
++    check(suction.state().lower_velocity[0]<0 && suction.state().upper_velocity[0]<0,
++          "negative gauge pressure pulls both exposed surfaces inward");
++    ducklips::FoldState partial_contact{};
++    partial_contact.rest_area=3e-6;
++    partial_contact.lower_position.fill(-.0002);
++    ducklips::TwoMassGlottis unloaded_contact,loaded_contact;
++    unloaded_contact.reset({});loaded_contact.reset({});
++    check(unloaded_contact.restore(partial_contact)&&loaded_contact.restore(partial_contact),"restore partial contact control");
++    unloaded_contact.advance(0,3e-6,1,1e-8,1,0,0,1.14,0);
++    loaded_contact.advance(0,3e-6,1,1e-8,1,0,0,1.14,100);
++    check(loaded_contact.state().lower_velocity==unloaded_contact.state().lower_velocity
++          && loaded_contact.state().upper_velocity[0]>unloaded_contact.state().upper_velocity[0],
++          "contact hides lower surface while exposed upper tissue feels downstream pressure");
+     for(std::size_t sections:{24,64}){
+         const ducklips::VoiceProfile voice=ducklips::baritone_voice();
+         ducklips::AirProperties air;

@@ -30,6 +30,9 @@ def main():
                    help='Observe the same engine at a diagnostic output; does not disconnect feedback')
     p.add_argument('--playback-gain', type=float,
                    help='Use a declared common gain for controlled comparisons instead of peak normalization')
+    p.add_argument('--level-match', type=Path,
+                   help='Match one constant playback gain to this reference WAV in the declared windows')
+    p.add_argument('--level-window', type=float, nargs=2, action='append', metavar=('START', 'END'))
     p.add_argument('--hop', type=int, default=128)
     p.add_argument('--display-reference', type=float, default=.17808298734486477)
     p.add_argument('--reference-field', type=Path, help='Full enhanced human reference NPZ')
@@ -39,6 +42,10 @@ def main():
         p.error('--playback-gain must be finite and positive')
     if args.viewer and not args.reference_field:
         p.error('--viewer requires --reference-field')
+    if args.level_match and (not args.level_window or args.playback_gain is None):
+        p.error('--level-match requires --level-window and the reference --playback-gain')
+    if args.level_window and not args.level_match:
+        p.error('--level-window requires --level-match')
     out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=False)
     for source, name in [(ROOT/'build/ducklips_say', 'ducklips_say'),
@@ -75,10 +82,30 @@ def main():
         if not np.isfinite(raw).all() or not 0 < peak < 1:
             raise ValueError('Native speech is invalid, silent or clipped')
         gain = args.playback_gain if args.playback_gain is not None else .8/peak
+        if args.level_match:
+            reference_fs, reference = wavfile.read(args.level_match)
+            if reference_fs != fs or reference.shape != raw.shape or reference.dtype != np.int16:
+                raise ValueError('Level reference must be a same-shape, same-rate PCM16 recording')
+            selected = np.zeros(len(raw), dtype=bool)
+            for start, end in args.level_window:
+                if not np.isfinite([start, end]).all() or not 0 <= start < end <= len(raw)/fs:
+                    raise ValueError('Level windows must be finite, ordered and inside the recording')
+                selected[round(start*fs):round(end*fs)] = True
+            reference_rms = float(np.sqrt(np.mean((reference[selected].astype(float)/32767)**2)))
+            candidate_rms = float(np.sqrt(np.mean(raw[selected].astype(float)**2)))
+            if not reference_rms > 0 or not candidate_rms > 0:
+                raise ValueError('Level windows must contain nonzero audio')
+            gain = reference_rms/candidate_rms
+            args.display_reference *= gain/args.playback_gain
+            record['level_match'] = dict(reference=str(args.level_match.resolve()),
+                reference_sha256=digest(args.level_match), windows_seconds=args.level_window,
+                reference_rms=reference_rms, candidate_raw_rms=candidate_rms,
+                reference_playback_gain=args.playback_gain, display_reference=args.display_reference,
+                method='one stereo RMS gain over union of windows; not perceptual loudness matching')
         if peak*gain > 1:
             raise ValueError('Declared playback gain would clip; choose a lower common gain')
         wavfile.write(out/'speech.wav', fs, np.rint(raw*gain*32767).astype(np.int16))
-        record['playback'] = dict(fixed_gain=gain, gain_selection='declared' if args.playback_gain is not None else 'peak 0.8',
+        record['playback'] = dict(fixed_gain=gain, gain_selection='voiced RMS match' if args.level_match else ('declared' if args.playback_gain is not None else 'peak 0.8'),
                                   tap=args.tap, frames=len(raw), sample_rate=fs,
                                   processing='one fixed gain over the full recording; no cuts or filters')
         record['status'] = 'audio rendered; enhanced field pending'

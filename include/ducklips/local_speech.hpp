@@ -19,6 +19,9 @@ public:
     [[nodiscard]] double flow(std::size_t branch) const noexcept;
     [[nodiscard]] double flow_derivative(std::size_t branch,double dt) const noexcept;
     [[nodiscard]] double glottal_flow() const noexcept { return glottal_flow_; }
+    [[nodiscard]] double glottal_endpoint_flow() const noexcept {
+        return glottal_conductance_*glottal_momentum_;
+    }
     [[nodiscard]] double glottal_kinetic_energy() const noexcept {
         return .5*glottal_conductance_*glottal_momentum_*glottal_momentum_;
     }

@@ -672,7 +672,10 @@ void Synthesizer::render_local_samples(std::span<float> stereo) noexcept {
                 .energy=local_.energy(),.glottal_area=area,.glottal_flow=glottal_flow_,.tension=tension_,
                 .frication_pressure=frication,.frication_branch=frication_branch_,.constriction_area=local_area,
                 .cavity_pressure=local_.pressure(),.oral_mean_flow=local_.flow(layout.lip_branch()),
-                .nasal_mean_flow=local_.flow(layout.nostril_branch()),.constriction_flow=local_.flow(branch)});
+                .nasal_mean_flow=local_.flow(layout.nostril_branch()),.constriction_flow=local_.flow(branch),
+                .lower_fold_area=glottis_.lower_area(),.upper_fold_area=glottis_.upper_area(),
+                .rest_fold_area=rest_area_,.lung_pressure=lung_pressure_,
+                .glottal_endpoint_flow=local_.glottal_endpoint_flow()});
         }
         if(options_.tap!=OutputTap::microphones){
             const double derivative=options_.tap==OutputTap::lips?lips:(glottal_flow_-tap_previous_flow_)/sample_period_;

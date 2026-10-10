@@ -363,11 +363,11 @@ int main(int argc, char** argv) {
     if (!arguments.trace_path.empty()) {
         std::FILE* trace = std::fopen(arguments.trace_path.c_str(), "w");
         if (trace != nullptr) {
-            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change,frication_pressure,frication_branch,constriction_area,cavity_pressure,cavity_displacement_flow,cavity_mass_residual,oral_mean_flow,nasal_mean_flow,constriction_flow\n");
+            std::fprintf(trace, "time,lips,nostrils,throat,p0,energy,modes,area,flow,tension,geometry_lip_metric_jump,geometry_lip_projection_jump,geometry_pressure_jump,geometry_lip_slope_jump,geometry_energy_ratio,geometry_parameter_change,frication_pressure,frication_branch,constriction_area,cavity_pressure,cavity_displacement_flow,cavity_mass_residual,oral_mean_flow,nasal_mean_flow,constriction_flow,lower_fold_area,upper_fold_area,rest_fold_area,lung_pressure,glottal_endpoint_flow\n");
             const std::vector<ducklips::TraceSample>& samples = synthesizer.trace();
             for (std::size_t index = 0; index < samples.size(); ++index) {
                 double time = arguments.trace_start + static_cast<double>(index) / options.rate.samples_per_second;
-                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%zu,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
+                std::fprintf(trace, "%.6f,%.6e,%.6e,%.6e,%.3f,%.6e,%zu,%.6e,%.6e,%.5f,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%zu,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e,%.9e\n", time, samples[index].lips,
                              samples[index].nostrils, samples[index].throat, samples[index].glottal_pressure,
                              samples[index].energy, samples[index].modes, samples[index].glottal_area,
                              samples[index].glottal_flow, samples[index].tension, samples[index].geometry_lip_metric_jump,
@@ -376,7 +376,9 @@ int main(int argc, char** argv) {
                              samples[index].geometry_parameter_change, samples[index].frication_pressure, samples[index].frication_branch,
                              samples[index].constriction_area, samples[index].cavity_pressure,
                              samples[index].cavity_displacement_flow,samples[index].cavity_mass_residual,
-                             samples[index].oral_mean_flow,samples[index].nasal_mean_flow,samples[index].constriction_flow);
+                             samples[index].oral_mean_flow,samples[index].nasal_mean_flow,samples[index].constriction_flow,
+                             samples[index].lower_fold_area,samples[index].upper_fold_area,samples[index].rest_fold_area,
+                             samples[index].lung_pressure,samples[index].glottal_endpoint_flow);
             }
             std::fclose(trace);
         }

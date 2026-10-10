@@ -104,6 +104,9 @@ struct TraceSample final {
     double cavity_displacement_flow{};
     double cavity_mass_residual{};
     double oral_mean_flow{},nasal_mean_flow{},constriction_flow{};
+    // Local source diagnostics, sampled after the fold and airway advances.
+    double lower_fold_area{},upper_fold_area{},rest_fold_area{},lung_pressure{};
+    double glottal_endpoint_flow{};
 };
 
 // Values from the most recent control block, for diagnostics.

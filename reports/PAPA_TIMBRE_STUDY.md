@@ -228,3 +228,88 @@ updated stream test executable passes with zero failures, including invalid
 integer rejection and existing chunk-invariance checks. The failed loss copy
 remains isolated and is not a candidate default. A CTest regex invocation
 selected no tests; validation used the actual test executable directly.
+
+
+## Source investigation after the 016 rejection
+
+User feedback on 016: “sounds worse, actually. the p is less distinct. and the
+underlying behavior i mentioned remains.” The user suspects the source
+excitation. Round 016 and its identical physical configuration 015 are rejected
+for advancement: weaker P articulation and no relief of the embedded voiced
+hum, despite the RMS-matched comparison. Return to the one-strip 012 body for
+investigation. The accepted intelligibility count remains one word (009);
+there is no accepted natural voice.
+
+Source audit: the current finite-flow force uses the pressure difference
+`lung - tract` as its lower-layer surface pressure before the kinetic-pressure
+subtraction, and the upper-layer aerodynamic drive is zero. Those are different
+quantities: a drop drives flow, while local pressure relative to the tissue
+exterior drives its surface. The existing simplified model effectively takes
+the downstream pressure as the surface-pressure reference. This is a concrete
+omission to test, not an established cause of the listener's hum.
+
+Relevant primary research: [Titze 2022, How can vocal folds oscillate with a
+limited mucosal wave?](https://pmc.ncbi.nlm.nih.gov/articles/PMC9533394/) distinguishes
+transglottal pressure from medial-surface pressure and describes the alternating
+push from an inertive supraglottal load. It motivates checking this reference;
+it does not validate our reduced pressure distribution or predict this word's
+quality. [Perrine and Scherer 2023](https://pmc.ncbi.nlm.nih.gov/articles/PMC10497319/)
+compares low-dimensional source flow shapes with human recordings, including
+rise/fall skew and closing slope. Our microphone recording alone does not give
+an independently measured human glottal waveform.
+
+**017 — instrumented one-strip baseline.** Fresh audio is byte-identical to
+012. Added observation of signed lower/upper openings, rest opening, lung
+pressure, and endpoint glottal flow; these do not alter dynamics. The complete
+684 x 567 enhanced field was inspected before the next source experiment: two
+voiced regions remain with a quiet closure, strong lower harmonics and residual
+upper horizontal ridges. Supplemental whole-utterance and cycle-detail traces
+show nearly symmetric source pulses, smooth mean flow, and closely agreeing
+mean and endpoint flow. No large sample-to-sample source chatter is evident
+in the inspected cycles. This does not exclude a subtle numerical defect.
+
+**018 — downstream pressure on exposed fold tissue.** The isolated current
+engine copy `out/papa-source-pressure-study` applies downstream gauge pressure
+to exposed lower and upper fold surfaces. The original separated-jet drop
+calculation remains; pressure is added only where the signed layer gap is
+open. The new upper force uses the existing upper thickness and fold length.
+No spring, contact, phonetic, lip, tract, timing or body parameter changes.
+Default arguments keep isolated calibration and earlier callers unchanged.
+This is a limited source-force experiment, not a complete description of
+intraglottal pressure or a fluid/tissue energy-conservation proof.
+
+The patch is retained in `source_pressure_experiment.patch`; it applies to the
+instrumented main tree with `git apply`. Candidate equations are isolated
+while the audible outcome is assessed. Both main and candidate local-engine
+test executables pass. The candidate includes three pressure controls: equal
+positive lung/tract pressure pushes exposed tissue despite zero pressure drop;
+negative gauge pressure pulls exposed tissue inward; contact shields a closed
+lower surface while downstream pressure acts on the open upper surface. These
+tests establish the intended force behavior, not timbre.
+
+018 is freshly rendered with the exact 012 body and speaking rate. Its one
+constant playback gain is 571.3160472874877, selected from the same voiced
+windows as 016. The final PCM RMS ratio to 012 in those windows is
+1.0000002276. The entire sound has that same gain; no cuts, equalization,
+compression or waveform replacement. The enhanced display reference is
+0.11529566324322615 to preserve the common physical scale.
+
+The source-cycle plot shows a steeper closing slope and a changed pulse shape;
+52 detected cycles versus baseline 46 also means the loaded oscillator changed,
+not just its output gain. Both release-window RMS levels remain within about
+2 percent of 012 at the matched vowel level (0.690–0.707 and 0.890–0.909 s);
+these windows are waveform checks and do not prove that either P is perceptually
+clear. The traced render takes 0.156 s for 1.51 s of audio, about 9.7x realtime,
+and is therefore not performance-qualified against the 10x target. Performance
+work remains parked per the user's later instruction.
+
+The complete 018 enhanced field was then inspected: both voiced regions and
+the separating closure remain; no new conspicuous broadband click stripe
+appears. Mid/upper voiced harmonic energy increases and lower harmonic
+strengths change at the common physical display scale. Narrow bands remain.
+This is evidence of a changed excitation and preserved visible word structure,
+not evidence that the transistor quality has disappeared. Listening approval
+is pending. The 017 full enhanced array is exactly equal to 012, confirming
+that instrumentation did not change the baseline. No image was cropped,
+desaturated or reduced; the full 684 x 567 cell images belong to their freshly
+rendered WAVs and were inspected internally.
