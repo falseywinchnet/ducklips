@@ -37,9 +37,12 @@ def decay_exponential(matrix):
     for _ in range(scalings):increment=2*increment+increment@increment
     return np.eye(len(matrix))+increment
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.,reservoir_pressure=700.,reservoir_end=None):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.,reservoir_pressure=700.,reservoir_end=None,fold_rest_target=None):
     if reservoir_end is not None and (not np.isfinite(reservoir_end) or not joint_relaxation or joint_tolerance<=0):
         raise ValueError('finite lung-pressure endpoint and joint accuracy required')
+    if fold_rest_target is not None:
+        if len(fold_rest_target)!=2 or not all(np.isfinite(v) for v in fold_rest_target) or not joint_relaxation or joint_tolerance<=0:
+            raise ValueError('two finite signed fold rest targets and joint accuracy required')
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -73,6 +76,7 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
     if joint_tolerance:command+=['--joint-tolerance',str(joint_tolerance),'--joint-max-step',str(joint_maximum_step)]
     if source_contact_step:command+=['--source-contact-step',str(source_contact_step)]
     if reservoir_end is not None:command+=['--reservoir-end',format(reservoir_end,'.17g')]
+    if fold_rest_target is not None:command+=['--fold-rest-target',*[format(v,'.17g') for v in fold_rest_target]]
     if previous is not None:command+=['--initial-state']
     with path.open() as f,path.with_suffix('.json').open('w') as g:
         result=subprocess.run(command,stdin=f,stdout=g,stderr=subprocess.PIPE,text=True)

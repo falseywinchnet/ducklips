@@ -218,6 +218,7 @@ int main(int argc,char** argv){
     std::string fold_body;
     double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5,source_contact_step=0;
     bool reservoir_ramp=false;double reservoir_end=0;
+    bool rest_control=false;double rest_start=0,rest_end=0;
     bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -228,6 +229,14 @@ int main(int argc,char** argv){
         else if(arg=="--continuous-folds" && !orifice_mode && i+1<argc){orifice_mode=true;continuous_mode=true;fold_body=argv[++i];}
         else if(arg=="--vocal-folds" && !orifice_mode && i+1<argc){orifice_mode=true;fold_mode=true;fold_body=argv[++i];}
         else if(arg=="--radiation" && !radiation_mode){radiation_mode=true;}
+        else if(arg=="--fold-rest-target" && !rest_control && i+2<argc){
+            for(double* endpoint:{&rest_start,&rest_end}){
+                try{std::size_t used=0;const std::string value=argv[++i];*endpoint=std::stod(value,&used);if(used!=value.size()){return 2;}}
+                catch(...){return 2;}
+                if(!std::isfinite(*endpoint)){return 2;}
+            }
+            rest_control=true;
+        }
         else if(arg=="--reservoir-end" && !reservoir_ramp && i+1<argc){
             try{std::size_t used=0;const std::string value=argv[++i];reservoir_end=std::stod(value,&used);if(used!=value.size()){return 2;}}
             catch(...){return 2;}
@@ -266,6 +275,7 @@ int main(int argc,char** argv){
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
     if(reservoir_ramp && (!continuous_mode || joint_tolerance<=0)){return 2;}
+    if(rest_control && (!continuous_mode || joint_tolerance<=0)){return 2;}
     if((source_contact_step>0 && joint_tolerance<=0) || (joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
@@ -407,6 +417,20 @@ int main(int argc,char** argv){
         else{acoustic.prepare(nodes,branches);}
     }
     catch(const std::exception& e){std::fprintf(stderr,"%s\n",e.what());return 2;}
+    // A commanded rest opening biases the tissue springs through an external
+    // force. The geometrical baseline and all gas/tissue state stay continuous.
+    // Equal rest offsets in both layers leave their coupling spring unbiased.
+    // The existing source work receipt accounts for sum(force * displacement).
+    const auto rest_force=[&](double target){
+        std::array<double,4> force{};
+        const double offset=(target-glottal_area)/(2*body.folds.length);
+        for(std::size_t side=0;side<2;++side){
+            const double factor=tension*(side?body.folds.asymmetry:1.);
+            force[side]=body.folds.lower_stiffness*factor*offset;
+            force[side+2]=body.folds.upper_stiffness*factor*offset;
+        }
+        return force;
+    };
     const auto radiation_area=[&](double fraction){return lip.integrated?lip.profile(fraction).area(0.):std::lerp(lip.sections.back().first_area,lip.sections.back().last_area,fraction);};
     const std::size_t radiation_branch=ports.size()+loads.size()+lip.attachments.size()+lip.sections.size()-1;
     if(radiation_mode){
@@ -544,6 +568,10 @@ int main(int argc,char** argv){
     std::putchar(']');
     if(profile_mode){values("lip_contact_cuts",lip_contact_cuts);}
     if(reservoir_ramp){std::printf(",\"reservoir_control\":{\"shape\":\"linear\",\"start_Pa\":%.17g,\"end_Pa\":%.17g,\"duration_s\":%.17g,\"sampling\":\"trial midpoint\"}",reservoir_pressure,reservoir_end,duration);}
+    if(rest_control){
+        std::printf(",\"fold_rest_control\":{\"shape\":\"linear spring bias\",\"baseline_area_m2\":%.17g,\"start_area_m2\":%.17g,\"end_area_m2\":%.17g,\"sampling\":\"trial midpoint\",\"force_order\":\"lower left, lower right, upper left, upper right\"",glottal_area,rest_start,rest_end);
+        values("start_force_N",rest_force(rest_start));values("end_force_N",rest_force(rest_end));std::putchar('}');
+    }
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
@@ -571,6 +599,7 @@ int main(int argc,char** argv){
             // rejected and half steps. The committed receipt integrates the
             // pressure work of the accepted leaves; no state is reset here.
             request.reservoir_pressure=reservoir_ramp?std::lerp(reservoir_pressure,reservoir_end,mid):reservoir_pressure;
+            if(rest_control){request.external_force=rest_force(std::lerp(rest_start,rest_end,mid));}
             request.nodal_flow=inflow;request.series_pressure=series;return true;
         };
         const auto callback=[](void* context,double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {return (*static_cast<decltype(provider)*>(context))(begin,finish,request);};
