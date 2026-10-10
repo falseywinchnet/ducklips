@@ -1,0 +1,39 @@
+{
+  "scope": "Radiation export and 20 us native continuation plumbing; not voice realism.",
+  "passband_max_error": 1.5547416055278207e-07,
+  "alias_rms_ratio": 1.3257902269140834e-05,
+  "analytic_radiation_energy_J": 2.0000000000000005e-05,
+  "native_continuation_joins": [
+    {
+      "maximum_scaled_source_difference": 2.168404344971009e-15,
+      "energy_difference_J": 5.421010862427522e-20,
+      "gas_mass_difference_m3": 0.0
+    }
+  ],
+  "joined_native_samples": 503,
+  "audio_samples": 240,
+  "original_continuation_max_differences": {
+    "effort": 2.165148771382519e-07,
+    "area": 4.743384504624082e-20,
+    "flow": 5.1681749158039025e-15,
+    "pressure": 6.403695351764327e-10,
+    "outlet_flow": 0.0,
+    "radiation_flow": 0.0
+  },
+  "rejects": [
+    "irregular clock",
+    "negative radiation resistance",
+    "reset thermal memory",
+    "changed source effort",
+    "incomplete native segment"
+  ],
+  "hashes": {
+    "tools/coupled_phonation_controls.py": "fff874a2b47991819eb295661c060ed4871e31b4ea2a2f7144a29d934b4c7d98",
+    "tools/coupled_phonation.py": "712f04c9763d5c53d65858d33bbda2fa44744ffce15d25d61b3cea79641d99cf",
+    "out/joint-contact-v2/phonation-start.jsonl": "aa351f4c611f4b3c730785ef9fbd25beb96bc76dd138c83624f554bcab61faec",
+    "out/coupled-phonation-driver-control-v2/segment-0000.jsonl": "9a953019b293a7045988dbf41d5fc29d24ad599de19047ff715f77f571937d47",
+    "out/coupled-phonation-driver-control-v2/run.json": "d0eb52ca5b66bd311400e8f2e505ceffd91703bcb771d436e34020d693464aed",
+    "out/coupled-phonation-driver-control-v2/segment-0000.input": "ff01e9b75427f2f591cfe58921ed0b112ccf796084c26a65add4f85f4aace8d2",
+    "out/coupled-phonation-driver-control-v2/segment-0000.log": "8c224f0f4ee40bb2696871cf5238cbb4002877d862c03dbdb5f355a722594fcc"
+  }
+}
