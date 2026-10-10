@@ -79,7 +79,8 @@ void Synthesizer::prepare(const VoiceProfile& voice, const SynthesisOptions& opt
     if(options.local_flow){
         model_.build(articulators_,geometry_shape_);
         networks_[0].assemble(geometry_shape_,air_,voice_.losses);
-        local_.prepare(networks_[0],air_,voice_.static_wall_compliance);
+        local_.prepare(networks_[0],air_,voice_.static_wall_compliance,
+                       voice_.folds.lower_thickness+voice_.folds.upper_thickness);
     }
     air_path_.prepare(options.air_path, air_, options.rate);
     queue_.prepare(options.cue_capacity);

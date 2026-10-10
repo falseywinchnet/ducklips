@@ -8,7 +8,8 @@ namespace ducklips {
 // Both mean and acoustic flow use the same physical state.
 class LocalSpeech final {
 public:
-    void prepare(const AcousticNetwork& layout, const AirProperties& air, double wall_compliance);
+    void prepare(const AcousticNetwork& layout, const AirProperties& air, double wall_compliance,
+                 double glottal_length=0.003);
     void reset() noexcept;
     void advance(const AcousticNetwork& first, const AcousticNetwork& last,
                  double fraction, double increment, double dt, std::size_t substeps,
@@ -18,6 +19,9 @@ public:
     [[nodiscard]] double flow(std::size_t branch) const noexcept;
     [[nodiscard]] double flow_derivative(std::size_t branch,double dt) const noexcept;
     [[nodiscard]] double glottal_flow() const noexcept { return glottal_flow_; }
+    [[nodiscard]] double glottal_kinetic_energy() const noexcept {
+        return .5*glottal_conductance_*glottal_momentum_*glottal_momentum_;
+    }
     [[nodiscard]] double energy() const noexcept;
     // Exposed physical state permits independent conservation/reference tests.
     std::vector<double> charge{}, momentum{}, wall_charge{}, radiation_momentum{};
@@ -30,7 +34,7 @@ private:
     std::vector<double> transfer_p_{},transfer_d_{},momentum_p_{},momentum_d_{};
     std::vector<double> radiation_h_{},radiation_decay_{};
     std::vector<double> jet_coefficient_{},half_step_{};
-    double wall_compliance_{},glottal_flow_{};
+    double wall_compliance_{},glottal_flow_{},glottal_length_{},glottal_momentum_{},glottal_conductance_{};
     bool ready_{};
 };
 }

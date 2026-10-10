@@ -1,5 +1,5 @@
 {
-  "scope": "New local-engine speech candidates. Intelligibility unassessed; excessive consonant transients remain unresolved.",
+  "scope": "Failed local-engine listening candidates. The user rejected Papa, November, Foxtrot and the alphabet; numerical validation did not establish intelligibility.",
   "runs": [
     {
       "name": "papa",
@@ -162,5 +162,12 @@
     "out/recovered-engine-20261010-final/verification/local-sanitizers.log": "26fc87fbde4668b9a73406f1b1ec60be77a015ccb0a75fe65ac4516756e955d3",
     "out/recovered-engine-20261010-final/verification/geometry-and-local-ctest.log": "0df64879074fb2d7573536b4d6366f6a8140f564efbe6007ff52fc101b3491a3",
     "out/recovered-engine-20261010-final/verification/tube-modes.json": "119e8c229a85a2a689640b404e8bc705226f8f006f5caeb1d0d8572c2afd3b47"
+  },
+  "listening": {
+    "source_commit": "c528814a4877caca441518e68fd5b771642dd8bf",
+    "raw_feedback": "(high pitched noise, cut off first sound, pa)\n\nclick-click-ember\nnothing but noise from foxtrot.\n\nnothing but clicks and garbage in alphabet.",
+    "association": "Papa and November are associated by the order of the four presented recordings; Foxtrot and alphabet are named explicitly.",
+    "status": "failed",
+    "current_engine_approved_words": 0
   }
 }

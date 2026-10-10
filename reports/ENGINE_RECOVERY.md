@@ -1,4 +1,4 @@
-# Running engine recovery
+# Local engine recovery attempt — listening failed
 
 The coupled gas-source solver had become the speech implementation. Its latest
 Papa attempt stopped after 135 ms of completed preparation, with no complete
@@ -23,8 +23,10 @@ sweep gives a symmetric composition with a fixed number of operations. There
 is no global acoustic matrix factorization, eigenbasis, Newton loop, rejected
 timestep or convergence controller in this audio update.
 
-The glottal opening drives the inlet through the stable quadratic Bernoulli
-root and the inlet compliance. The same air state supplies pressure back to
+The rejected recording used an instantaneous Bernoulli inlet feeding a tiny
+compliance. The subsequent [failure investigation](LOCAL_SPEECH_FAILURE.md)
+adds the missing inertia of air crossing the folds; this has not established
+intelligible speech. The same air state supplies pressure back to
 the moving folds. Nasal and side branches participate directly. Mouth closure
 therefore stores pressure in the same system that subsequently produces its
 release. Nodal air is retained at a seal; absent passage momentum is cleared.
@@ -87,7 +89,12 @@ consonant transients without clipping. Each listening copy uses one fixed gain
 for the entire waveform, recorded in the manifest. There is no time stretch,
 looping, denoising or dynamic gain correction. This headroom does not repair
 the excessive transients. The original 2 Pa scale clipped on several words.
-Intelligibility and realism remain unassessed for this engine.
+Human listening rejected all four recordings: Papa had high-pitched noise and
+a cut-off opening followed by “pa”; November was “click-click-ember”; Foxtrot
+was only noise; the alphabet was clicks and garbage. The first two associations
+follow the presentation order. No pronunciation is approved for this engine.
+The passing numerical checks above did not establish intelligibility. The exact
+feedback and recording hashes are retained in `engine_recovery.json`.
 
 See `engine_recovery.json` for measured render times. Preparation is separate.
 Papa exceeds 10× realtime in the measured run; the full alphabet does not.
@@ -100,7 +107,7 @@ cmake --build build --target ducklips_say ducklips_stream ducklips_local_speech_
   --body bodies/reference.body --dictionary samples/nato.dict \
   --text 'Papa.' --out out/papa-new.wav
 
-# Freeze provenance and render complete fresh listening candidates.
+# Historical reproduction tool; the alphabet below failed human listening.
 OPENBLAS_NUM_THREADS=1 /Users/joshuahkuttenkuler/miniforge3/bin/python \
   tools/render_local_engine.py --out out/a-new-recovery-run --alphabet
 ```

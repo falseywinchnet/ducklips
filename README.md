@@ -5,18 +5,22 @@ nudges into a body; its moving airway, self-oscillating vocal folds, airflow and
 acoustic radiation produce the sound. Body geometry and tissue properties are
 configuration, not a speaker embedding or a bank of recorded sounds.
 
-**Engine recovery, 2026-10-10:** `ducklips_say --local-flow --conservative-tongue`
+**Local engine listening failed, 2026-10-10:** `ducklips_say --local-flow --conservative-tongue`
 and `ducklips_stream --local-flow --conservative-tongue` now run a new local
 air-exchange core. It carries breath pressure and sound in one state, with
 fixed forward/backward exchanges instead of a global acoustic solve,
 eigenbasis or adaptive timestep. Fresh Papa, November, Foxtrot and full-alphabet
-recordings have been rendered. They are listening candidates, not approved
-pronunciations. Complex-consonant transients and the cost of constructing the
+recordings have been rendered. The user rejected all four: Papa lost its first sound, November
+was clicks plus “ember,” and Foxtrot and the alphabet were noise/clicks. No word
+is approved for this engine. Complex-consonant transients and the cost of constructing the
 deformed tongue remain unresolved; the full alphabet does not meet 10× realtime.
 The old coupled solver is retained as an offline reference and its unfinished
 Papa run was stopped. See [the recovery implementation, tests and recordings](reports/ENGINE_RECOVERY.md).
 The unflagged CLI remains the older modal path; select `--local-flow` explicitly
-for the recovered engine. Earlier listening results below do not score it.
+for this experimental engine. Earlier listening results below do not score it.
+The [failure investigation](reports/LOCAL_SPEECH_FAILURE.md) isolates
+geometry-driven noise and adds missing glottal air inertia. The source correction
+passes isolated physical checks; it has not recovered intelligible speech.
 
 **Status: active research, not perfected speech.** Current work connects a
 volume-conserving tongue body to the canonical moving acoustic network and

@@ -29,6 +29,33 @@ double oscillator(double dt){
     check(std::abs(s.charge[0]+s.charge[1]-1)<2e-13,"neighbor exchange conserves air");
     return std::abs(s.charge[0]-.5*(1+std::cos(std::sqrt(2.))));
 }
+double inlet_charge(double dt,double lung){
+    ducklips::AirProperties air;air.viscosity=0;
+    ducklips::AcousticNetwork n=pair();
+    for(ducklips::AcousticBranch& edge:n.branches){edge.conductance=0;}
+    for(ducklips::AcousticNode& node:n.nodes){node.compliance=1e-11;}
+    ducklips::LocalSpeech s;s.prepare(n,air,1e-8,.003);step(s,n,dt);
+    const double area=1e-5;
+    double previous=s.energy();bool passive=true,conservative=true;
+    // 1/3000 s is an exact integer number of steps at all rates below.
+    for(std::size_t i=0;i<std::size_t(std::lround((1./3000)/dt));++i){
+        const double before=s.charge[0];
+        s.advance(n,n,0,0,dt,1,area,lung,ducklips::ground_node,ducklips::ground_node,ducklips::ground_node,0,0);
+        const double air_added=s.charge[0]-before;
+        conservative&=std::abs(air_added-dt*s.glottal_flow())<1e-20;
+        const double energy=s.energy();
+        passive&=energy-previous<=lung*air_added+1e-18;
+        previous=energy;
+    }
+    check(passive,"inertive inlet never creates energy beyond reservoir work");
+    check(conservative,"inertive inlet preserves supplied air including reversed breath");
+    check(s.glottal_kinetic_energy()>0,"source energy includes moving air between the folds");
+    const double pressure=s.pressure();
+    s.advance(n,n,0,0,dt,1,0,lung,ducklips::ground_node,ducklips::ground_node,ducklips::ground_node,0,0);
+    check(s.glottal_flow()==0 && s.glottal_kinetic_energy()==0 && s.pressure()==pressure,
+          "sealed glottis stops inlet flow and retains the cavity air");
+    return pressure;
+}
 }
 void* operator new(std::size_t n){++allocations;void* p=std::malloc(std::max<std::size_t>(n,1));if(!p){throw std::bad_alloc();}return p;}
 void* operator new[](std::size_t n){return ::operator new(n);}
@@ -54,6 +81,13 @@ int main(int argc,char** argv){
     }
     const double coarse=oscillator(.05),fine=oscillator(.025);
     check(coarse/fine>3.99 && coarse/fine<4.01,"phase error converges quadratically against analytic oscillator");
+    const double inlet_coarse=inlet_charge(1./48000,600);
+    const double inlet_fine=inlet_charge(1./96000,600);
+    const double inlet_reference=inlet_charge(1./384000,600);
+    check(std::abs(inlet_coarse-inlet_reference)>3*std::abs(inlet_fine-inlet_reference),
+          "inertive glottal exchange converges under timestep refinement");
+    check(std::abs(inlet_charge(1./48000,-600)+inlet_coarse)<1e-10,
+          "inhale and exhale obey the same pressure-flow law");
     ducklips::AirProperties air;air.viscosity=0;
     ducklips::AcousticNetwork n=pair(.7);ducklips::LocalSpeech s;s.prepare(n,air,1);step(s,n,.1);s.charge[0]=1;
     double previous=s.energy();bool passive=true;

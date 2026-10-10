@@ -5,9 +5,10 @@
 #include <stdexcept>
 
 namespace ducklips {
-void LocalSpeech::prepare(const AcousticNetwork& layout,const AirProperties& air,double wall_compliance) {
+void LocalSpeech::prepare(const AcousticNetwork& layout,const AirProperties& air,double wall_compliance,double glottal_length) {
     if(!std::isfinite(wall_compliance) || wall_compliance<=0){throw std::invalid_argument("local wall compliance must be positive");}
-    air_=air;wall_compliance_=wall_compliance;
+    if(!std::isfinite(glottal_length) || glottal_length<=0){throw std::invalid_argument("glottal length must be positive");}
+    air_=air;wall_compliance_=wall_compliance;glottal_length_=glottal_length;
     branches_=layout.branches;
     const std::size_t n=layout.nodes.size(),b=branches_.size();
     charge.resize(n);inverse_c_.resize(n);volume_.resize(n);
@@ -24,7 +25,7 @@ void LocalSpeech::reset() noexcept {
     std::fill(inverse_c_.begin(),inverse_c_.end(),1.);
     std::fill(wall_inverse_c_.begin(),wall_inverse_c_.end(),0.);
     std::fill(radiation_h_.begin(),radiation_h_.end(),0.);
-    glottal_flow_=0;ready_=false;
+    glottal_flow_=0;glottal_momentum_=0;glottal_conductance_=0;ready_=false;
 }
 void LocalSpeech::exchange(std::size_t b,double series) noexcept {
     const AcousticBranch& edge=branches_[b];
@@ -61,10 +62,21 @@ void LocalSpeech::exchange(std::size_t b,double series) noexcept {
     }
 }
 void LocalSpeech::inject(double area,double lung,double h) noexcept {
-    // Midpoint compliance and Bernoulli pressure loss give one quadratic,
-    // evaluated with the cancellation-free positive root, including reversal.
-    const double flow=orifice_flow(area,lung-pressure(),.5*h*inverse_c_[0],air_);
-    charge[0]+=h*flow;glottal_flow_+=h*flow;
+    // The air crossing the folds has inertia as well as a separated-jet
+    // pressure drop. Store its momentum instead of treating the opening as
+    // an instantaneous resistor charging a tiny isolated inlet volume.
+    if(area<=1e-12){glottal_momentum_=0;glottal_conductance_=0;return;}
+    const double drop=lung-pressure();
+    const double g=area/(air_.density*glottal_length_);
+    glottal_conductance_=g;
+    const double denominator=1+.25*h*h*g*inverse_c_[0];
+    const double linear=g*(glottal_momentum_+.5*h*drop)/denominator;
+    const double beta=.5*air_.density/(area*area);
+    const double coefficient=.5*h*g*beta/denominator;
+    const double flow=2*linear/(1+std::sqrt(1+4*coefficient*std::abs(linear)));
+    glottal_momentum_=2*flow/g-glottal_momentum_;
+    const double transferred=h*flow;
+    charge[0]+=transferred;glottal_flow_+=transferred;
 }
 void LocalSpeech::advance(const AcousticNetwork& first,const AcousticNetwork& last,
                           double fraction,double increment,double dt,std::size_t substeps,
@@ -169,6 +181,6 @@ double LocalSpeech::energy() const noexcept {
     double sum=0;
     for(std::size_t n=0;n<charge.size();++n){sum+=charge[n]*charge[n]*inverse_c_[n];}
     for(std::size_t b=0;b<momentum.size();++b){sum+=g_[b]*momentum[b]*momentum[b]+wall_inverse_c_[b]*wall_charge[b]*wall_charge[b]+radiation_h_[b]*radiation_momentum[b]*radiation_momentum[b];}
-    return .5*sum;
+    return .5*sum+glottal_kinetic_energy();
 }
 }
