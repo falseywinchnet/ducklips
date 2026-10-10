@@ -81,6 +81,16 @@ add_executable(ducklips_tests tests/ducklips_tests.cpp)
 target_link_libraries(ducklips_tests PRIVATE ducklips)
 
 enable_testing()
+# Experimental deforming-tissue source. It is not selected by the speech
+# engine until its physical and perceptual behavior has been established.
+add_library(ducklips_tissue_source STATIC src/tissue_source.cpp)
+target_include_directories(ducklips_tissue_source PUBLIC include)
+target_compile_options(ducklips_tissue_source PRIVATE -Wall -Wextra -Wpedantic)
+add_executable(ducklips_tissue_source_study tools/render_tissue_source.cpp src/wav.cpp)
+target_link_libraries(ducklips_tissue_source_study PRIVATE ducklips_tissue_source)
+add_executable(ducklips_tissue_source_tests tests/tissue_source_tests.cpp)
+target_link_libraries(ducklips_tissue_source_tests PRIVATE ducklips_tissue_source)
+add_test(NAME ducklips_tissue_source COMMAND ducklips_tissue_source_tests)
 add_executable(ducklips_local_speech_tests tests/local_speech_tests.cpp)
 target_link_libraries(ducklips_local_speech_tests PRIVATE ducklips)
 add_test(NAME ducklips_local_speech COMMAND ducklips_local_speech_tests)
