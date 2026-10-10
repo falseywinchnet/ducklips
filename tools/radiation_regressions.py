@@ -3,7 +3,7 @@
 import argparse,hashlib,json,subprocess
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=ROOT/'out/radiation-regressions');parser.add_argument('--include-radiation',action='store_true');parser.add_argument('--include-thermal',action='store_true');parser.add_argument('--include-viscous',action='store_true');parser.add_argument('--include-lip-viscous',action='store_true');parser.add_argument('--include-outlet-viscous',action='store_true');options=parser.parse_args()
+parser=argparse.ArgumentParser();parser.add_argument('--binary',type=Path,default=ROOT/'build/ducklips_planar_inertive_motion_probe');parser.add_argument('--output',type=Path,default=ROOT/'out/radiation-regressions');parser.add_argument('--include-radiation',action='store_true');parser.add_argument('--include-thermal',action='store_true');parser.add_argument('--include-viscous',action='store_true');parser.add_argument('--include-lip-viscous',action='store_true');parser.add_argument('--include-outlet-viscous',action='store_true');options=parser.parse_args()
 OUT=options.output.resolve();OUT.mkdir(parents=True,exist_ok=True)
 cases=[('out/planar-lip-profile/audit/closing-0-16.txt',['--lip-profile']),('out/planar-lip-profile/audit/opening-0-16.txt',['--lip-profile']),
  ('out/articulated-lip/closure-128.txt',['--lip-tube']),('out/articulated-lip/release-128.txt',['--lip-tube']),('out/articulated-lip/lip-narrowing-128.txt',['--lip-tube']),
@@ -43,7 +43,7 @@ if options.include_outlet_viscous:
    command=['--lip-profile','--epilarynx','--continuous-folds',str(ROOT/'bodies/reference.body'),'--compact-geometry','--radiation','--thermal-slit-width','0.03','--viscous-slit-width','0.03','--lip-viscous-width','0.03','--outlet-viscous']
    if interval:command+=['--initial-state']
    cases.append((f'out/planar-outlet-viscous/{name}-{interval}-256.txt',command))
-records=[];binary=ROOT/'build/ducklips_planar_inertive_motion_probe'
+records=[];binary=options.binary.resolve()
 for i,(path,args) in enumerate(cases):
  p=ROOT/path
  result=subprocess.run([str(binary),*args],input=p.read_text(),capture_output=True,text=True)

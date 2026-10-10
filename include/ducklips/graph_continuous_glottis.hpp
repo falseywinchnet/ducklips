@@ -75,6 +75,7 @@ public:
     std::vector<SlitViscous> viscous{};
     GraphContinuousGlottalStep last{};
 private:
+    friend class JointAccuracy;
     bool joint_ready_{};
     std::size_t joint_radiation_branch_{ground_node};
     std::vector<TreeEdge> joint_edges_;

@@ -1,6 +1,15 @@
 # Research contract and next physical questions
 
-Current coupling gate: the [lip transient audit](reports/LIP_TRANSIENT_ACCURACY.md)
+Current coupling gate: the [coupled accuracy controller](reports/COUPLED_TIME_ACCURACY.md)
+now checks source and tract motion together. Tighter tolerances reduce the
+largest sampled source-pressure error against an independent fixed-geometry
+ODE from 3.83 to 1.32 to 0.55 Pa, although endpoint errors are not monotone.
+Four moving-airway intervals pass balance and continuation checks; finer
+moving refinements are still being collected. Continue this same system through
+source-contact changes and into utterances; conservation and component
+accuracy do not establish speech quality.
+
+The preceding [lip transient audit](reports/LIP_TRANSIENT_ACCURACY.md)
 now separates a real damped lip mode from artificial timestep damping. A
 three-stage passive solve preserves the same physical states and reduces the
 finest closing/opening endpoint differences to 0.0403/0.113 Pa at the tested

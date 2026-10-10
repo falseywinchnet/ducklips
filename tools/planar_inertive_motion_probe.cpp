@@ -14,6 +14,7 @@
 #include "ducklips/graph_orifice.hpp"
 #include "ducklips/graph_phonation.hpp"
 #include "ducklips/graph_continuous_glottis.hpp"
+#include "ducklips/joint_accuracy.hpp"
 #include "ducklips/body_config.hpp"
 #include <algorithm>
 #include <array>
@@ -215,7 +216,7 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
-    double thermal_width=0;
+    double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5;
     bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -241,6 +242,10 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(lip_viscous_width) || lip_viscous_width<=0){return 2;}
         }
+        else if((arg=="--joint-tolerance" || arg=="--joint-max-step") && i+1<argc){
+            double value;try{std::size_t used=0;const std::string token=argv[++i];value=std::stod(token,&used);if(used!=token.size()){return 2;}}catch(...){return 2;}
+            if(!std::isfinite(value) || value<=0){return 2;}if(arg=="--joint-tolerance"){joint_tolerance=value;}else{joint_maximum_step=value;}
+        }
         else if(arg=="--joint-fifth" && !joint_fifth){joint_fifth=true;}
         else if(arg=="--joint-relaxation" && !joint_relaxation){joint_relaxation=true;}
         else if(arg=="--outlet-viscous" && !outlet_viscous){outlet_viscous=true;}
@@ -254,7 +259,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
-    if((joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -534,6 +539,40 @@ int main(int argc,char** argv){
     std::printf(",\"initial\":{\"geometry\":");geometry_json(0,geometry,original_first);
     snapshot();if(continuous_mode && !continuous_state(continuous)){return 1;}if(orifice_mode && !continuous_mode){std::printf(",\"source_momentum\":%.17g",source.momentum);}if(fold_mode){fold_state(phonation.folds);}std::printf("},\"steps\":[");
     Polygons a=first;const auto va=views(a);
+    if(joint_tolerance>0){
+        ducklips::JointAccuracy controller;controller.prepare(continuous);
+        const ducklips::JointAccuracyOptions options{joint_tolerance,joint_maximum_step,1e-11,4096};
+        // Provider scratch is overwritten on every trial. Geometry is a
+        // function of the requested times, never the last attempted step.
+        auto provider=[&](double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {
+            const double t0=begin/duration,t1=finish/duration,mid=.5*(t0+t1),dt=finish-begin;
+            sample(first,last,t0,a);
+            if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip,epi) || !metrics(geometry,ports,loads,old_volume,old_compliance,old_conductance,lip,epi,t0)){return false;}
+            sample(first,last,mid,a);
+            if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip,epi) || !metrics(geometry,ports,loads,scratch,c1,g1,lip,epi,mid)){return false;}
+            for(std::size_t j=0;j<midpoint_thermal.size();++j){const auto& section=epi.sections[j];midpoint_thermal[j]={c1[thermal_base+j],std::lerp(section.first_area,section.last_area,mid)/(2*thermal_width)};}
+            if(viscous_mode && !set_viscous_geometry(mid,g1)){return false;}midpoint_viscous=viscous_geometry;
+            sample(first,last,t1,a);
+            if(!geometry.build_regions(a[0],std::span<const PlanarContour>(va).subspan(1),depth,selected) || !compatible(geometry,cells,ports,loads,lip,epi) || !metrics(geometry,ports,loads,volume,compliance,gend,lip,epi,t1)){return false;}
+            for(std::size_t j=0;j<total_nodes;++j){inflow[j]=-(volume[j]-old_volume[j])/dt;}
+            for(std::size_t j=0;j<thermal_geometry.size();++j){const auto& section=epi.sections[j];thermal_geometry[j]={compliance[thermal_base+j],std::lerp(section.first_area,section.last_area,t1)/(2*thermal_width)};}
+            if(viscous_mode && !set_viscous_geometry(t1,gend)){return false;}
+            request.geometry={old_compliance,c1,compliance,old_conductance,g1,gend,midpoint_thermal,thermal_geometry,midpoint_viscous,viscous_geometry,radiation_mode?radiation_area(mid):0.,radiation_mode?radiation_area(t1):0.};
+            const auto& section=epi.sections.back();request.outlet_inertance=ducklips::AirProperties{}.density*.5*std::lerp(section.first_length,section.last_length,t1)/std::lerp(section.first_area,section.last_area,t1);
+            request.reservoir_pressure=reservoir_pressure;request.nodal_flow=inflow;request.series_pressure=series;return true;
+        };
+        const auto callback=[](void* context,double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {return (*static_cast<decltype(provider)*>(context))(begin,finish,request);};
+        std::size_t accepted=0,rejected=0;
+        for(std::size_t step=1;step<cuts.size();++step){
+            const double begin=cuts[step-1]*duration,finish=cuts[step]*duration;
+            if(!controller.advance(continuous,begin,finish,callback,&provider,options)){std::fprintf(stderr,"joint accuracy failed at interval %zu reason=%d time=%.17g trial=%.17g difference=%.17g\n",step,static_cast<int>(controller.failure),controller.attempt_time,controller.attempt_step,controller.attempt_error);return 1;}
+            const auto& r=controller.last;accepted+=r.accepted_steps;rejected+=r.rejected;
+            std::printf("%s{\"dt\":%.17g,\"geometry\":",step>1?",":"",finish-begin);geometry_json(cuts[step],geometry,compact_geometry?std::span<const PlanarContour>{}:va);snapshot();if(!continuous_state(continuous)){return 1;}
+            std::printf(",\"accuracy\":{\"energy_change\":%.17g,\"external_work\":%.17g,\"physical_loss\":%.17g,\"numerical_loss\":%.17g,\"energy_residual\":%.17g,\"source_port_work\":%.17g,\"graph_port_work\":%.17g,\"reservoir_volume\":%.17g,\"maximum_accepted_error\":%.17g,\"minimum_step\":%.17g,\"trials\":%zu,\"rejected\":%zu,\"accepted_steps\":%zu",r.energy_change,r.external_work,r.physical_loss,r.numerical_loss,r.energy_residual,r.source_port_work,r.graph_port_work,r.reservoir_volume,r.maximum_accepted_error,r.minimum_step,r.trials,r.rejected,r.accepted_steps);
+            values("average_pressure",controller.average_pressure);values("average_flow",controller.average_flow);values("accepted_end_times",controller.accepted_end_times());std::printf("}}");
+        }
+        std::printf("]}\n");std::fprintf(stderr,"accepted_steps=%zu rejected=%zu; coupled accuracy control; no speech\n",accepted,rejected);return 0;
+    }
     const double offset=joint_relaxation?0.:.28867513459481288225;
     for(std::size_t step=1;step<cuts.size();++step){
         const double t0=cuts[step-1],t1=cuts[step],width=t1-t0,dt=duration*width;

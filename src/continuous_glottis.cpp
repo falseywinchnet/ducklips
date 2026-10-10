@@ -175,7 +175,16 @@ bool ContinuousGlottis::advance(double dt,double reservoir_pressure,double free_
         if(loss_configuration.active[2] && outlet_loss_>0){const double r=std::pow(1+(gamma_-1)*loss_configuration.gas.effort[1]/bulk_,1/(gamma_-1));beta=outlet_loss_*density_/(2*r*r*loss_configuration.flow.area[1]*loss_configuration.flow.area[1]);}
         const double load=load_slope*outflow+beta*outflow*std::abs(outflow);resistance_force[2]+=load*mass_scale/energy_scale;load_loss=load*outflow*dt;
         exit_loss=beta*outflow*outflow*std::abs(outflow)*dt;
-        norm=0;converged=true;for(std::size_t j=0;j<7;++j){residual[j]=(dissipative?c1.active[j]:active_[j])?(p1[j]-momentum_[j])/step+generalized[j]+resistance_force[j]-external[j]:trial[j]/step;norm=std::max(norm,std::abs(residual[j]));if(std::abs(residual[j])>2e-9+2e-11*(std::abs(generalized[j])+std::abs(resistance_force[j])+std::abs(external[j]))){converged=false;}}
+        norm=0;converged=true;
+        for(std::size_t j=0;j<7;++j){
+            residual[j]=(dissipative?c1.active[j]:active_[j])?(p1[j]-momentum_[j])/step+generalized[j]+resistance_force[j]-external[j]:trial[j]/step;
+            norm=std::max(norm,std::abs(residual[j]));
+            // Subtracting the two represented momenta limits the resolvable
+            // acceleration as dt approaches zero. Do not demand a residual
+            // below that arithmetic floor (the trajectory tolerance is
+            // checked separately by coupled step doubling).
+            const double momentum_roundoff=32*std::numeric_limits<double>::epsilon()*(std::abs(p1[j])+std::abs(momentum_[j]))/step;
+            if(std::abs(residual[j])>2e-9+2e-11*(std::abs(generalized[j])+std::abs(resistance_force[j])+std::abs(external[j]))+momentum_roundoff){converged=false;}}
         return finite(residual) && std::isfinite(norm);
     };
     std::size_t iteration=0;for(;iteration<24;++iteration){if(!evaluate(change)){if(iteration!=0){return false;}change.fill(0);if(!evaluate(change)){return false;}}if(converged){break;}

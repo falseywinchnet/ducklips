@@ -1,4 +1,5 @@
 #include "ducklips/graph_continuous_glottis.hpp"
+#include "ducklips/joint_accuracy.hpp"
 #include <algorithm>
 #include <atomic>
 #include <cmath>
@@ -42,7 +43,8 @@ void prepare(GraphContinuousGlottis& model,std::size_t nodes,std::span<const duc
     model.prepare(nodes,edges,port,{}, {},1.,folds(state),{state[0],state[1]},
         {state[4],state[5],state[6]},loss,ducklips::ContourPressureProfile::linear_span,column);
 }
-void fixture(bool column=false,bool radiation=false,bool thermal=false,bool viscosity=false,bool joint=false,bool fifth=false){
+bool fixed_joint_input(void* context,double,double,ducklips::JointAdvanceInputs& result) noexcept {result=*static_cast<ducklips::JointAdvanceInputs*>(context);return true;}
+void fixture(bool column=false,bool radiation=false,bool thermal=false,bool viscosity=false,bool joint=false,bool fifth=false,double tolerance=0.,double maximum_step=5e-6){
     unsigned n,m,steps,port;require(std::scanf("%u%u%u%u",&n,&m,&steps,&port)==4,"fixture dimensions");
     require(n>0 && n<=64 && m<=256 && steps<=1000000,"fixture size");
     std::vector<ducklips::TreeEdge> edges(m);
@@ -61,6 +63,8 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false,bool visc
         model.prepare_viscous({},sites);for(auto& site:model.viscous){for(double& z:site.momentum){z=number();}}
     }
     if(joint){model.prepare_joint(radiation?m-1:ducklips::ground_node,fifth?ducklips::RelaxationOrder::fifth:ducklips::RelaxationOrder::third);}
+    ducklips::JointAccuracy controller;if(tolerance>0){controller.prepare(model);}
+    double time=0;
     std::vector<double> c1(n),c2(n),g1(m),g2(m),nodal(n),series(m);
     for(unsigned step=0;step<steps;++step){
         const double dt=number(),pressure=number();const int mode=static_cast<int>(number());const double next_inertance=column?number():-1.;
@@ -73,13 +77,23 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false,bool visc
         const ducklips::ContinuousGlottalUpdate updates[]={ducklips::ContinuousGlottalUpdate::symmetric,ducklips::ContinuousGlottalUpdate::dissipative,ducklips::ContinuousGlottalUpdate::relaxation};
         if(joint){require(c1==c2 && g1==g2 && mode==2,"joint fixture uses fixed metrics and fitted source update");}
         const ducklips::JointGraphGeometry whole{c1,c1,c1,g1,g1,g1,thermal_geometry,thermal_geometry,viscous_geometry,viscous_geometry,boundary.midpoint_area,boundary.last_area};
-        const bool accepted=joint?model.advance_joint(whole,dt,pressure,{},nodal,series,next_inertance):
+        ducklips::JointAdvanceInputs request{whole,pressure,next_inertance,{},nodal,series};
+        const ducklips::JointAccuracyOptions options{tolerance,maximum_step,1e-15,4096};
+        const bool accepted=tolerance>0?controller.advance(model,time,time+dt,fixed_joint_input,&request,options):joint?model.advance_joint(whole,dt,pressure,{},nodal,series,next_inertance):
             model.advance(c1,c2,g1,g2,dt,pressure,{},nodal,series,updates[mode],next_inertance,radiation?&boundary:nullptr,thermal_geometry,viscous_geometry);
         if(!accepted){
-            std::fprintf(stderr,"coupled fixture failed at step %u\n",step);throw std::runtime_error("fixture advance");
+            std::fprintf(stderr,"coupled fixture failed at step %u\n",step);if(tolerance>0){std::fprintf(stderr,"accuracy failure=%d time=%.17g trial=%.17g difference=%.17g\n",static_cast<int>(controller.failure),controller.attempt_time,controller.attempt_step,controller.attempt_error);}throw std::runtime_error("fixture advance");
         }
         ducklips::ContinuousGlottalState state;require(model.source.state(state),"fixture state");
+        time+=dt;
         const auto y1=physical(state);print(y1);print(model.network.charge);print(model.network.momentum);
+        if(tolerance>0){
+            const double rad[]={model.radiation.momentum};print(rad);double energy=state.energy+graph_energy(model.network,c1,g1)+model.radiation.energy();double air=state.mass[0]+state.mass[1];
+            for(double q:model.network.charge){air+=q;}
+            for(const auto& site:model.thermal){print(site.charge);energy+=site.energy();air+=site.stored_air();}
+            for(const auto& site:model.viscous){print(site.momentum);energy+=site.energy();}
+            const auto& r=controller.last;const double receipt[]={energy,air,r.external_work,r.physical_loss,r.numerical_loss,r.energy_change,r.energy_residual,r.graph_port_work-r.source_port_work,r.reservoir_volume,dt*controller.average_flow.back(),static_cast<double>(r.accepted_steps),static_cast<double>(r.rejected),r.maximum_accepted_error,r.minimum_step};print(receipt);std::puts("");continue;
+        }
         print(model.network.average_pressure);print(model.network.average_flow);
         const auto& s=model.source.last;const auto& r=model.last;
         const double ledger[]={state.energy,state.mass[0],state.mass[1],s.reservoir_work,s.external_work,s.fluid_loss,s.tissue_loss,
@@ -91,6 +105,37 @@ void fixture(bool column=false,bool radiation=false,bool thermal=false,bool visc
             const double extra[]={energy,r.viscous_dissipation,r.viscous_geometry_work,r.viscous_energy_residual};print(extra);
         }if(joint){const double extra[]={r.passive_numerical_dissipation,r.passive_energy_residual};print(extra);}std::puts("");
     }
+}
+void accuracy_controls(){
+    const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
+    const std::array<double,3> c={1e-11,1.4e-11,8e-12};const std::array<double,4> g={.002,.003,.001,.0025};
+    GraphContinuousGlottis model;prepare(model,3,edges,1,initial,1.,80.);model.prepare_joint(ducklips::ground_node,ducklips::RelaxationOrder::fifth);
+    model.network.charge={1e-9,-2e-9,5e-10};model.network.momentum={.01,-.02,.015,.005};
+    ducklips::JointAdvanceInputs inputs;inputs.geometry={c,c,c,g,g,g};inputs.reservoir_pressure=1400.;inputs.outlet_inertance=80.;
+    ducklips::JointAccuracy controller;controller.prepare(model);const auto start=model;
+    ducklips::ContinuousGlottalState before,after;require(model.source.state(before),"accuracy initial state");
+    const auto count=allocations.load();const ducklips::JointAccuracyOptions options{1e-4,5e-6,1e-11,4096};
+    require(controller.advance(model,0.,1e-5,fixed_joint_input,&inputs,options),"accuracy advance");
+    require(allocations.load()==count,"accuracy allocated");require(controller.last.rejected>0 && controller.last.maximum_accepted_error<=options.tolerance,"accuracy rejected coarse motion");
+    require(model.source.state(after),"accuracy final state");
+    const double change=after.energy+graph_energy(model.network,c,g)-before.energy-graph_energy(start.network,c,g);
+    require(std::abs(change-controller.last.energy_change)<1e-15 && std::abs(controller.last.energy_residual)<1e-13,"accuracy whole interval work");
+    auto replay=start;double time=0;for(double end:controller.accepted_end_times()){
+        require(end>time && replay.advance_joint(inputs.geometry,end-time,inputs.reservoir_pressure,{},{},{},80.),"accuracy replay");time=end;}
+    ducklips::ContinuousGlottalState replay_state;require(replay.source.state(replay_state),"replay state");
+    require(time==1e-5 && physical(replay_state)==physical(after) && replay.network.charge==model.network.charge && replay.network.momentum==model.network.momentum,"accepted path replay");
+    const auto saved=model;const auto receipt=controller.last;const auto mean=controller.average_flow;const std::vector<double> times(controller.accepted_end_times().begin(),controller.accepted_end_times().end());
+    const ducklips::JointAccuracyOptions exhausted{1e6,5e-6,1e-11,2};
+    struct FailingProvider {ducklips::JointAdvanceInputs input;unsigned calls{};} failing{inputs};
+    const auto fail_after_first_trial=[](void* context,double,double,ducklips::JointAdvanceInputs& result) noexcept {
+        auto& provider=*static_cast<FailingProvider*>(context);result=provider.input;return ++provider.calls<=3;
+    };
+    require(!controller.advance(model,1e-5,2e-5,fail_after_first_trial,&failing,exhausted)
+        && controller.failure==ducklips::JointAccuracyFailure::trial_limit && controller.attempt_time>1e-5,"late budget exhaustion after accepted prefix");
+    require(model.source.state(after) && physical(after)==physical(replay_state) && model.network.charge==saved.network.charge && controller.last.energy_change==receipt.energy_change && controller.average_flow==mean && std::equal(times.begin(),times.end(),controller.accepted_end_times().begin()),"accuracy rollback including means and trace");
+    auto incompatible=model;incompatible.prepare_joint();const auto counter=allocations.load();
+    require(!controller.advance(incompatible,0.,1e-5,fixed_joint_input,&inputs,options) && allocations.load()==counter,"accuracy rejects different stage layout without allocation");
+    std::printf("PASS joint accuracy: %zu accepted, %zu rejected; maximum local difference %.17g; work %.17g J; no allocation, replay, late rollback\n",receipt.accepted_steps,receipt.rejected,receipt.maximum_accepted_error,receipt.energy_residual);
 }
 void radiation_controls(bool thermal=false,bool viscosity=false,bool joint=false,bool fifth=false){
     const std::array<ducklips::TreeEdge,4> edges={{{0,1},{1,2},{2,0},{2,ducklips::ground_node}}};
@@ -257,6 +302,8 @@ int main(int argc,char** argv){try{
     else if(argc==2 && std::string(argv[1])=="--column-fixture"){fixture(true);}
     else if(argc==2 && std::string(argv[1])=="--radiation-fixture"){fixture(true,true);}
     else if(argc==2 && std::string(argv[1])=="--thermal-fixture"){fixture(true,true,true);}
+    else if(argc==2 && std::string(argv[1])=="--joint-accuracy"){accuracy_controls();}
+    else if(argc==4 && std::string(argv[1])=="--joint-accuracy-fixture"){fixture(true,true,true,true,true,true,std::stod(argv[2]),std::stod(argv[3]));}
     else if(argc==2 && std::string(argv[1])=="--joint-fifth-fixture"){fixture(true,true,true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--joint-fifth"){radiation_controls(true,true,true,true);}
     else if(argc==2 && std::string(argv[1])=="--joint-fixture"){fixture(true,true,true,true,true);}

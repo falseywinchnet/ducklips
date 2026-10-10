@@ -28,6 +28,7 @@ add_library(ducklips STATIC
     src/glottal_contour.cpp
     src/continuous_glottis.cpp
     src/glottal_relaxation.cpp
+    src/joint_accuracy.cpp
     src/graph_joint_relaxation.cpp
     src/graph_continuous_glottis.cpp
     src/radiation_boundary.cpp
@@ -343,3 +344,5 @@ add_test(NAME ducklips_graph_joint_relaxation COMMAND ducklips_graph_continuous_
 
 add_test(NAME ducklips_relaxation_graph_fifth COMMAND ducklips_relaxation_graph_probe --fifth)
 add_test(NAME ducklips_graph_joint_fifth COMMAND ducklips_graph_continuous_glottis_probe --joint-fifth)
+
+add_test(NAME ducklips_joint_accuracy COMMAND ducklips_graph_continuous_glottis_probe --joint-accuracy)

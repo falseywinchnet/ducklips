@@ -1,0 +1,98 @@
+{
+  "scope": "Fresh native coupled adaptive trajectories compared with a reused, hash-verified independent 164-state continuous ODE. Fixed tract, source, thermal/viscous/radiation memories. Local tolerance is not a global error bound. No new speech.",
+  "runs": [
+    {
+      "tolerance": 0.0001,
+      "macro_steps": 200,
+      "accepted_steps": 1156,
+      "rejected_trials": 378,
+      "minimum_step_s": 1.5258789062499999e-10,
+      "maximum_accepted_local_difference": 9.93250373989838e-05,
+      "maximum_sampled_scaled_error": 0.0038256267818909118,
+      "endpoint_scaled_error": 8.174960208612303e-05,
+      "maximum_source_effort_error_Pa": 3.8256267818909118,
+      "maximum_tract_pressure_error_Pa": 0.0037353424420238923,
+      "work_residual_J": 2.629732369363591e-16,
+      "mass_residual_m3": 2.6966087969228702e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_continuous_glottis_probe",
+        "--joint-accuracy-fixture",
+        "0.0001",
+        "5e-6"
+      ],
+      "hashes": {
+        "out/continuous-joint/fixed-200.input": "141f98d40dacb84f44ed3c6ec7df913352bfc235c899b60c36e61285f279374e",
+        "out/joint-accuracy-reference/tol-0.0001.txt": "67a79ca824a175285b50414b3740636074d72374257cd59a147247bd35937ea0",
+        "out/joint-accuracy-reference/tol-0.0001.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "tolerance": 2.5e-05,
+      "macro_steps": 200,
+      "accepted_steps": 1880,
+      "rejected_trials": 740,
+      "minimum_step_s": 1.1920928955078027e-12,
+      "maximum_accepted_local_difference": 2.4992755588812086e-05,
+      "maximum_sampled_scaled_error": 0.001318421313513285,
+      "endpoint_scaled_error": 0.00010817984334351993,
+      "maximum_source_effort_error_Pa": 1.318421313513285,
+      "maximum_tract_pressure_error_Pa": 0.0016313818620201331,
+      "work_residual_J": 3.6965873070893274e-16,
+      "mass_residual_m3": 2.9182932010870816e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_continuous_glottis_probe",
+        "--joint-accuracy-fixture",
+        "2.5e-05",
+        "5e-6"
+      ],
+      "hashes": {
+        "out/continuous-joint/fixed-200.input": "141f98d40dacb84f44ed3c6ec7df913352bfc235c899b60c36e61285f279374e",
+        "out/joint-accuracy-reference/tol-2.5e-05.txt": "964dc28f0eabc7e2655b2f742aed62a26d06804c4a692d26a59c163c1e838a79",
+        "out/joint-accuracy-reference/tol-2.5e-05.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "tolerance": 6.25e-06,
+      "macro_steps": 200,
+      "accepted_steps": 3046,
+      "rejected_trials": 1323,
+      "minimum_step_s": 1.1920928955078027e-12,
+      "maximum_accepted_local_difference": 6.238283931793375e-06,
+      "maximum_sampled_scaled_error": 0.0005522527277060929,
+      "endpoint_scaled_error": 0.00019521965069543845,
+      "maximum_source_effort_error_Pa": 0.5522527277060929,
+      "maximum_tract_pressure_error_Pa": 0.0006925169470016281,
+      "work_residual_J": 4.097335535094282e-16,
+      "mass_residual_m3": 3.3583532869652924e-21,
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/build/ducklips_graph_continuous_glottis_probe",
+        "--joint-accuracy-fixture",
+        "6.25e-06",
+        "5e-6"
+      ],
+      "hashes": {
+        "out/continuous-joint/fixed-200.input": "141f98d40dacb84f44ed3c6ec7df913352bfc235c899b60c36e61285f279374e",
+        "out/joint-accuracy-reference/tol-6.25e-06.txt": "83e1bfcab9780ac0df7ba2aacdc480d7f4520896a70b198eebd1fa342501d8d2",
+        "out/joint-accuracy-reference/tol-6.25e-06.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "hashes": {
+    "tools/joint_accuracy_reference.py": "549877ed08007f42697d7c54f875937fe24aa741c3d207e5927bb6a4c86127e6",
+    "tools/continuous_joint_reference.py": "ca6193fad13c38130b00ff3f8b7d18e69ffa110ba3cbbbc7e70de9741afac324",
+    "reports/continuous_viscous_reference.json": "bd122cd25efc5f4a73051f74249a01383e242a308897114b58ebeb92fe0d2161",
+    "reports/continuous_joint_reference.json": "1af02fd009465acf1abd216d9fb440836858ea8a42d74edae5bc1257ab20e5c2",
+    "tools/continuous_viscous_reference.py": "684825c2932990220df8197a4e6e7d91d4754811987d0f6daa409fda8e91221b",
+    "tools/slit_viscous_reference.py": "bd3d4b83f30a7ae13fbe7f19501ca5122ad9ccaa0e4200e83350f04fa64a1e97",
+    "tools/slit_thermal_reference.py": "748841cab6b9affb37fabcf4dcf27ec844b276302e7dce639950e0c4b03b3a31",
+    "tools/continuous_outlet_column_reference.py": "ff9ffb4108d22f86b08510db0228c68261614c9d9cf4bdfc119d096d32e9b64e",
+    "tools/continuous_phonation_reference.py": "075b5ccefd66474c351c40917c7fd317443839b8f5a7dc49393b4db64913f24a",
+    "tools/graph_continuous_glottis_reference.py": "6a09b5e01297965cc4f1da84bb316aecc80a27c087ebacec6e36c946342c12ee",
+    "tools/radiation_boundary_reference.py": "c980d0c1611bafea4cd257084d68e1503901bc10c6e9622685c3dd42a4567594",
+    "out/continuous-viscous/continuous.npz": "c950a33c561c0e610f292bba9d12045a22cbd3bf2d4dd16cace0f1e9e5ef63c2",
+    "build/ducklips_graph_continuous_glottis_probe": "0bfd6b02838cf9b5185d7744f36f5c878afe6cfe1a13684f15b8fa29dad43990",
+    "src/joint_accuracy.cpp": "a284db5954509e12af81e75c01c8ce55cbf1e3a06c4ef241deac15c01702c716",
+    "include/ducklips/joint_accuracy.hpp": "2f056f3bd51bf2301379b3c4f0e5e5cf4d8e4e29d71af2d317584649363d48e4",
+    "tools/graph_continuous_glottis_probe.cpp": "8d7600658653a7a7d9f16f3cf683dc60cdbe434fd5a1a21f275fc3dbc19741f3"
+  }
+}

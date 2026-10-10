@@ -19,6 +19,7 @@ struct RelaxationGraphStep final {
 // Numerical damping is separately accounted, never called physical loss.
 class RelaxationGraphReference final {
 public:
+    [[nodiscard]] RelaxationOrder order() const noexcept {return stages_==3?RelaxationOrder::fifth:RelaxationOrder::third;}
     void prepare(std::size_t nodes,std::span<const TreeEdge> branches,
         std::span<const std::size_t> node_owners={},std::span<const std::size_t> branch_owners={},RelaxationOrder order=RelaxationOrder::third);
     [[nodiscard]] bool advance(std::span<const double> compliance,std::span<const double> conductance,
