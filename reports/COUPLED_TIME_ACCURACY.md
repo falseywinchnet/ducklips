@@ -105,9 +105,8 @@ The moving adapter supports `--joint-tolerance` and `--joint-max-step` with the
 joint passive update. `tools/joint_accuracy_moving_reference.py` checks direct
 work and air balance, actual accepted times, and state continuation over two
 closing and two reopening intervals. It verifies that its source files and
-executable remain unchanged during the run. These moving checks are still
-being refined across tolerances; the independent fixed-source result above
-does not substitute for them.
+executable remain unchanged during the run. The independent fixed-source
+result above does not substitute for these moving checks.
 
 The current executable has completed all four moving intervals at local
 tolerance 1e-4. The [current moving receipt](joint_accuracy_moving_current.json)
@@ -120,14 +119,25 @@ The full first closing interval also passes ASAN/UBSAN. It takes the same 3732
 accepted substeps as Release, with a maximum common-time pressure difference
 of 8.88e-9 Pa. Its independently accumulated work and air residuals are
 1.42e-16 J and 1.96e-20 m³. The [completed validation receipt](joint_accuracy_validation.json)
-binds 158 checked files to these results, including the unchanged speech WAV.
+binds the checked files to these results, including the unchanged speech WAV.
 
-An earlier, separately identified executable is still collecting the finer
-moving tolerances. Its coarse closing pressure samples match the current
-executable exactly. Its incomplete source snapshot prevents treating its
-later-file source hashes as build provenance; it is exploratory evidence until
-that provenance is explicitly recorded. It is not used as the current-build
-validation above.
+The earlier, separately identified executable completed all twelve moving
+intervals across the three tolerances. Its four coarse JSON outputs match the
+current executable exactly. Its incomplete source snapshot prevents treating
+later-file source hashes as build provenance. The preserved binary, inputs,
+outputs and this limitation are recorded in the
+[exploratory refinement receipt](joint_accuracy_moving_exploration.json).
+These finer results are not current-build validation or an independent ODE.
+
+| Compared local tolerances | Closing maximum sampled pressure change | Opening maximum sampled pressure change |
+|---|---:|---:|
+| 1e-4 → 2.5e-5 | 0.07956 Pa | 0.22047 Pa |
+| 2.5e-5 → 6.25e-6 | 0.02951 Pa | 0.05390 Pa |
+
+The closing endpoint differences decrease from 0.04056 to 0.00806 Pa. Opening
+endpoint differences increase from 0.01298 to 0.02460 Pa despite the decreasing
+maximum sampled discrepancy. This is another reason to inspect complete
+trajectories rather than infer accuracy from a final state alone.
 
 The source-contact transition rule and complete utterance integration remain
 unfinished. This controller provides an accuracy reference, not a production

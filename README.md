@@ -141,7 +141,8 @@ work and air receipts. Against the independent fixed-source ODE, tightening
 the local tolerance reduces the largest sampled pressure error from 3.83 to
 1.32 to 0.55 Pa. A small-step momentum-roundoff limit in the source solver is
 also addressed. Four moving-airway intervals pass work, air and continuation
-checks; finer moving refinements and utterance integration remain in progress.
+checks. Finer moving refinements from the preserved earlier executable are
+recorded separately as exploratory evidence. Utterance integration remains unfinished.
 This has not produced a new speech sample.
 
 Listening follow-up on the spatial-pressure recording: the user reports

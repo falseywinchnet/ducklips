@@ -47,6 +47,20 @@ def main():
         data = json.loads((ROOT / name).read_text())
         fresh_audits.append(dict(name=run['name'], **audit(data, run['tolerance'])))
 
+    exploration = read('reports/joint_accuracy_moving_exploration.json')
+    verify(exploration['hashes'])
+    verify(exploration['input_poses'])
+    assert len(exploration['runs']) == 12
+    assert not exploration['provenance']['source_snapshot_complete']
+    for run in exploration['runs']:
+        verify(run['files'])
+        name = next(n for n in run['files'] if n.endswith('.json'))
+        audit(json.loads((ROOT / name).read_text()), run['tolerance'])
+    for comparison in exploration['coarse_current_comparison']:
+        verify(comparison['hashes'])
+        names = list(comparison['hashes'])
+        assert json.loads((ROOT / names[0]).read_text()) == json.loads((ROOT / names[1]).read_text())
+
     sanitizer = read('out/joint-accuracy-moving-asan.json')
     sanitizer_audit = audit(sanitizer, 1e-4)
     native = read('out/joint-accuracy-moving-current/tol-0.0001/closing-0-64.json')
@@ -98,6 +112,8 @@ def main():
                   release_checks=15, sanitizer_checks=15, exact_historical_cases=31,
                   moving_audits=fresh_audits, moving_sanitizer_audit=sanitizer_audit,
                   moving_sanitizer_pressure_difference_Pa=pressure_difference,
+                  exploratory_refinement=exploration['comparisons'],
+                  exploratory_source_snapshot_complete=False,
                   cold_start_sanitizer=cold_start, hashes=verified)
     (ROOT / 'reports/joint_accuracy_validation.json').write_text(json.dumps(report, indent=2) + '\n')
     print('PASS coupled accuracy evidence:', len(verified), 'verified files')

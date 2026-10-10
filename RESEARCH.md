@@ -5,7 +5,8 @@ now checks source and tract motion together. Tighter tolerances reduce the
 largest sampled source-pressure error against an independent fixed-geometry
 ODE from 3.83 to 1.32 to 0.55 Pa, although endpoint errors are not monotone.
 Four moving-airway intervals pass balance and continuation checks; finer
-moving refinements are still being collected. Continue this same system through
+moving refinements from the preserved earlier executable remain exploratory.
+Continue this same system through
 source-contact changes and into utterances; conservation and component
 accuracy do not establish speech quality.
 
