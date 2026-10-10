@@ -1,0 +1,148 @@
+{
+  "scope": "Resolved four-microsecond continuation before the failed closure interval; no completed closing transition or speech.",
+  "run": {
+    "status": "complete",
+    "purpose": "Save a resolved state before the repeated closure failure; same physical seed, shorter target and observation intervals.",
+    "command": [
+      "/Users/joshuahkuttenkuler/ducklips/out/source-small-mass-retry/probe",
+      "phonation",
+      "4e-6",
+      "1e-6",
+      "1e-4",
+      "1e-7",
+      "--initial-state"
+    ],
+    "binary_sha256": "246be923272890c5a6a684d6c5e9886f6fe20ab0e83f71ab70754973ab744c4d",
+    "input_sha256": "bd0eea3054046d99f3d83a6eafd30aa74800019db7fdbf3a77626c986c92e19f",
+    "seed_total_time_s": 0.02895,
+    "active_pid": 40812,
+    "returncode": 0,
+    "wall_seconds": 169.08687979076058,
+    "join": {
+      "maximum_scaled_source_difference": 3.1086244689504383e-15,
+      "energy_difference_J": 0.0,
+      "gas_mass_difference_m3": 0.0
+    },
+    "final_time_s": 0.028954,
+    "files": {
+      "out/source-small-mass-4us/trace.jsonl": "937faaf971d463b7aff2bcfc55c7a237389ae0196fca5ae1d69e075c6f14f56f",
+      "out/source-small-mass-4us/trace.log": "fc8d1c85cdf461a067f53768e0e91bab16bc266bf216dff3a98ea14874f0229e"
+    }
+  },
+  "observations": [
+    {
+      "local_time_s": 0,
+      "area_m2": [
+        -3.4177644500179195e-06,
+        1.1681710715877762e-07
+      ],
+      "air_moments_m3": [
+        6.667419998369382e-14,
+        5.84359866915362e-12
+      ],
+      "occupied_length_m": 9.914930970110703e-05,
+      "effort_coefficients_Pa": [
+        606308.0440747216,
+        -3916.1939750845536
+      ],
+      "occupied_endpoint_pressure_Pa": [
+        17219.340816143107,
+        -3861.590754465414
+      ],
+      "accepted_substeps": 0
+    },
+    {
+      "local_time_s": 1e-06,
+      "area_m2": [
+        -3.4248044031118386e-06,
+        9.951498780406686e-08
+      ],
+      "air_moments_m3": [
+        4.1765903171552414e-14,
+        4.2775830663102425e-12
+      ],
+      "occupied_length_m": 8.470996249139985e-05,
+      "effort_coefficients_Pa": [
+        809650.5082471018,
+        -4290.102171604684
+      ],
+      "occupied_endpoint_pressure_Pa": [
+        19977.639295864137,
+        -4224.609622560448
+      ],
+      "accepted_substeps": 512
+    },
+    {
+      "local_time_s": 2e-06,
+      "area_m2": [
+        -3.43183174692762e-06,
+        8.224007442292307e-08
+      ],
+      "air_moments_m3": [
+        2.394377218255713e-14,
+        2.951009503243673e-12
+      ],
+      "occupied_length_m": 7.020921478319408e-05,
+      "effort_coefficients_Pa": [
+        1136205.2039673838,
+        -4769.050341151329
+      ],
+      "occupied_endpoint_pressure_Pa": [
+        23710.182144741004,
+        -4688.173985131031
+      ],
+      "accepted_substeps": 1024
+    },
+    {
+      "local_time_s": 3e-06,
+      "area_m2": [
+        -3.4388464870008807e-06,
+        6.499169128182392e-08
+      ],
+      "air_moments_m3": [
+        1.2051360556790542e-14,
+        1.8661174275969265e-12
+      ],
+      "occupied_length_m": 5.564614115285205e-05,
+      "effort_coefficients_Pa": [
+        1712903.7110040912,
+        -5406.846213849124
+      ],
+      "occupied_endpoint_pressure_Pa": [
+        29069.349720854625,
+        -5302.986372395884
+      ],
+      "accepted_substeps": 2024
+    },
+    {
+      "local_time_s": 4e-06,
+      "area_m2": [
+        -3.445848628225895e-06,
+        4.7768894764184584e-08
+      ],
+      "air_moments_m3": [
+        4.915317824794045e-15,
+        1.0252950993071493e-12
+      ],
+      "occupied_length_m": 4.101956878493729e-05,
+      "effort_coefficients_Pa": [
+        2891289.5017199535,
+        -6303.310707275461
+      ],
+      "occupied_endpoint_pressure_Pa": [
+        37481.95232567778,
+        -6162.337321405683
+      ],
+      "accepted_substeps": 3184
+    }
+  ],
+  "work_residual_J": 1.274906190715258e-15,
+  "mass_residual_m3": 9.467599098552247e-22,
+  "hashes": {
+    "out/source-small-mass-4us/run.json": "4270eb7ff80d6e86ce43c7e5ffebe6943795dab6266771ac41eb16137b9bd6ff",
+    "out/source-small-mass-4us/trace.jsonl": "937faaf971d463b7aff2bcfc55c7a237389ae0196fca5ae1d69e075c6f14f56f",
+    "out/source-small-mass-4us/trace.log": "fc8d1c85cdf461a067f53768e0e91bab16bc266bf216dff3a98ea14874f0229e",
+    "out/source-small-mass-retry/probe": "246be923272890c5a6a684d6c5e9886f6fe20ab0e83f71ab70754973ab744c4d",
+    "out/source-small-mass-retry/input.txt": "bd0eea3054046d99f3d83a6eafd30aa74800019db7fdbf3a77626c986c92e19f"
+  }
+}

@@ -80,10 +80,18 @@ instantaneous velocities would close the remaining upper opening in about
 The current gas storage requires positive occupied volume and positive gas
 moments. Its approach to simultaneous closure needs further investigation.
 
-A bounded four-microsecond continuation is running to save a state closer
-to the difficulty. Its observation intervals are explicitly shorter; its
-physical seed, source parameters, tolerance and per-interval trial budget
-are retained. Native files remain under `out/source-closure-checkpoint/`,
+A bounded [four-microsecond continuation](source_closure_approach.json) has
+completed, saving the full state at 28.954 ms. Its observation intervals are
+explicitly shorter; its physical seed, source parameters, tolerance and
+per-interval trial budget are retained. It takes 3,184 accepted substeps and
+1,587 rejected trials, with work residual 1.28e-15 J and air residual
+9.47e-22 m3. The occupied air length falls from 99.15 to 41.02 micrometres.
+Its contact-end pressure rises from 17.22 to 37.48 kPa, while the extrapolated
+coefficient rises from 0.606 to 2.891 MPa. The tissue continues closing.
+Both the physical pressure evolution and the coordinate conditioning matter;
+the rapid evolution cannot be dismissed solely as a large unused coefficient.
+
+Native files remain under `out/source-closure-checkpoint/`,
 `out/source-small-mass-retry/` and `out/source-small-mass-4us/`.
 No sustained phonation, speech render or intelligibility improvement is
 claimed yet.
