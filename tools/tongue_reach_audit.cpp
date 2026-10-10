@@ -1,5 +1,5 @@
 // Geometry-only replay of planner cues through the native articulators and tract.
-// Non-geometric cues are intentionally ignored; validate against a real speech probe.
+// Source targets may be exported separately; this tool does not render audio.
 #include "ducklips/body_config.hpp"
 #include "ducklips/planner.hpp"
 #include "ducklips/synthesizer.hpp"
@@ -11,10 +11,11 @@
 #include <iomanip>
 #include <string>
 int main(int argc,char** argv) {
- if(argc<4 || argc%2!=0){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] [--airway CSV] [--lip-profile CSV] > trajectory.csv\n");return 2;}
+ if(argc<4 || argc%2!=0){std::fprintf(stderr,"usage: ducklips_tongue_reach_audit BODY DICTIONARY TEXT [--partition SECTION] [--airway CSV] [--lip-profile CSV] [--source-cues JSON] > trajectory.csv\n");return 2;}
  std::size_t partition=0;
  std::ofstream airway_file;
  std::ofstream lip_file;
+ std::ofstream source_file;
  for(int arg=4;arg<argc;arg+=2){
   if(std::string(argv[arg])=="--partition"){
    const std::string value=argv[arg+1];const auto parsed=std::from_chars(value.data(),value.data()+value.size(),partition);
@@ -23,6 +24,8 @@ int main(int argc,char** argv) {
    airway_file.open(argv[arg+1]);if(!airway_file){std::fprintf(stderr,"cannot write airway CSV\n");return 2;}
   }else if(std::string(argv[arg])=="--lip-profile" && !lip_file.is_open()){
    lip_file.open(argv[arg+1]);if(!lip_file){return 2;}
+  }else if(std::string(argv[arg])=="--source-cues" && !source_file.is_open()){
+   source_file.open(argv[arg+1]);if(!source_file){return 2;}
   }else{std::fprintf(stderr,"unknown or repeated option\n");return 2;}
  }
  ducklips::VoiceProfile voice=ducklips::baritone_voice();std::string error;
@@ -33,6 +36,36 @@ int main(int argc,char** argv) {
  const std::string text=argv[3];
  const ducklips::UtterancePlan plan=planner.plan_text(text);
  if(plan.phones.empty()){std::fprintf(stderr,"text has no spoken phones\n");return 2;}
+ if(source_file.is_open()){
+  // Export the planner's physical targets, not the older renderer's source
+  // waveform, measured pitch, gain-shaped audio or smoothed state samples.
+  source_file<<std::setprecision(17)<<"{\"duration_s\":"<<plan.duration
+   <<",\"initial\":{\"glottal_rest_area_m2\":"<<voice.abducted_area
+   <<",\"lung_pressure_Pa\":0,\"pitch_Hz\":"<<voice.base_pitch
+   <<",\"effort\":1,\"loudness\":1,\"velum_area_m2\":0},\"cues\":[";
+  bool first=true;
+  for(const auto& c:plan.cues){
+   const char* kind=nullptr;
+   switch(c.kind){
+    case ducklips::CueKind::glottis:kind="glottal_rest_area_m2";break;
+    case ducklips::CueKind::lungs:kind="lung_pressure_Pa";break;
+    case ducklips::CueKind::pitch:kind="pitch_Hz";break;
+    case ducklips::CueKind::effort:kind="effort";break;
+    case ducklips::CueKind::loudness:kind="loudness";break;
+    case ducklips::CueKind::velum:kind="velum_area_m2";break;
+    default:break;
+   }
+   if(!kind){continue;}
+   source_file<<(first?"":",")<<"{\"time_s\":"<<ducklips::seconds_from_samples(options.rate,c.time)
+    <<",\"kind\":\""<<kind<<"\",\"value\":"<<c.value<<",\"angular_rate\":"<<c.angular_rate<<'}';first=false;
+  }
+  source_file<<"],\"phones\":[";first=true;
+  for(const auto& p:plan.phones){
+   source_file<<(first?"":",")<<"{\"name\":\""<<ducklips::phone_spec(p.phone).name
+    <<"\",\"stress\":"<<p.stress<<",\"start_s\":"<<p.start<<",\"end_s\":"<<p.end<<'}';first=false;
+  }
+  source_file<<"]}\n";
+ }
  const ducklips::SampleCount block=static_cast<ducklips::SampleCount>(options.control_block);
  const double block_seconds=ducklips::seconds_from_samples(options.rate,block);
  ducklips::ArticulatorState state;state.apply_speeds(voice.speeds);state.place_vowel(engine.vowels().shape(ducklips::Phone::AX));

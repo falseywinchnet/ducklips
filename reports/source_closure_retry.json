@@ -1,0 +1,23 @@
+{
+  "scope": "Exact original trajectory checkpoint and corrected-force retry at the previous failure. The force correction does not resolve sustained closure.",
+  "checkpoint_total_time_s": 0.02895,
+  "exact_original_observations": 396,
+  "physical_join": {
+    "maximum_scaled_source_difference": 3.1086244689504383e-15,
+    "energy_difference_J": 0.0,
+    "gas_mass_difference_m3": 0.0
+  },
+  "retry_status": "failed",
+  "retry_failure": "contact advance failed mode=phonation macro=1 reason=2 time=4.4921874999999999e-06 trial=9.7656249999996021e-09 error=0.069001091094221922",
+  "hashes": {
+    "out/source-closure-checkpoint/trace.jsonl": "2e925fa66c3ed51c07197ef4bd717f05e7284f3982ce74cb120d383f96926d8f",
+    "out/source-closure-checkpoint/trace.log": "89985727515bf36d563274905eebc82f3617fd81602bcb85b5ee00346abe7439",
+    "out/source-closure-checkpoint/build.json": "45f827038385ebd2fa7d50ea60165f0f5fa3e2baf8ee682baa162bdf85cbe0b7",
+    "out/source-closure-checkpoint/command.json": "aa86b7536befcad081e06a60436ea7837d73083dfa898ad63e95ef63e73af646",
+    "out/source-small-mass-retry/probe": "246be923272890c5a6a684d6c5e9886f6fe20ab0e83f71ab70754973ab744c4d",
+    "out/source-small-mass-retry/run.json": "58106748396ec0881e44951974b75cc9be8daa83a1995d2d7f2db1eabaaabf17",
+    "out/source-small-mass-retry/input.txt": "bd0eea3054046d99f3d83a6eafd30aa74800019db7fdbf3a77626c986c92e19f",
+    "out/source-small-mass-retry/trace.jsonl": "f49d21ded7a5c1c6168467ee4fffed11fb4c4eed72f467894018b8dbd066fea9",
+    "out/source-small-mass-retry/trace.log": "2c356a741947234a99e6177772bcd3e5ac53e04c60789b742877131c9122c7f7"
+  }
+}

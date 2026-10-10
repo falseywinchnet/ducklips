@@ -170,8 +170,11 @@ recordings and onset diagnostics do not satisfy that request.
 
 An [independent small-air-moment force check](reports/SMALL_SOURCE_MASS.md)
 has identified and corrected a derivative scale error near a partly closed
-source. The original failure is being replayed to test continuation from the
-same physical state. This correction has not yet established sustained speech.
+source. The original failure has been replayed exactly; the corrected-force
+continuation still reaches a trial limit near closure. This correction does
+not establish sustained speech. [Fresh Papa gestures and whole-word geometry checks](reports/PAPA_CURRENT_ENGINE_INPUTS.md)
+now expose the source actuation and nasal-path integration still needed before
+that word can be rendered through the coupled engine.
 
 Listening follow-up on the spatial-pressure recording: the user reports
 [November improved, with Foxtrot still jammed around /tr/](reports/LISTENING_SPATIAL_2026_10_09.md).

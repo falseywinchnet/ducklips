@@ -63,10 +63,27 @@ the reported failure. The new `joint_contact_probe --stop-after N` option
 stops at an existing observation index without changing earlier timesteps.
 The completed prefix matches the preserved old observations exactly.
 
-A separately frozen corrected executable is queued to continue that state
-for 50 microseconds. This is a targeted check of the actual failure location,
-not a fresh onset with different initial conditions. Both jobs retain their
-native files under `out/source-closure-checkpoint/` and
-`out/source-small-mass-retry/`. The retry result remains pending in this
-record. No sustained phonation, speech render or intelligibility improvement
-is claimed yet.
+The replay has now completed. All 396 observations match the original trace
+exactly, and the full endpoint permits physical continuation without replaying
+the preceding 28.95 ms. A separately frozen corrected executable attempted
+another 50 microseconds from that state. Its initial source, tract and loss
+memories pass the continuation check, but it also reaches the 4096-trial limit
+in the first observation interval, at a local attempted time of 4.4921875
+microseconds. The [retry receipt](source_closure_retry.json) binds both results.
+
+The derivative correction therefore does not resolve the sustained-source
+failure. It remains independently justified by the force check above. At the
+checkpoint the upper tissue pair is closing at about 0.618 m/s per side,
+while the lower opening is already closed. Straight extrapolation of those
+instantaneous velocities would close the remaining upper opening in about
+6.75 microseconds; this is a kinematic indicator, not a simulated event.
+The current gas storage requires positive occupied volume and positive gas
+moments. Its approach to simultaneous closure needs further investigation.
+
+A bounded four-microsecond continuation is running to save a state closer
+to the difficulty. Its observation intervals are explicitly shorter; its
+physical seed, source parameters, tolerance and per-interval trial budget
+are retained. Native files remain under `out/source-closure-checkpoint/`,
+`out/source-small-mass-retry/` and `out/source-small-mass-4us/`.
+No sustained phonation, speech render or intelligibility improvement is
+claimed yet.

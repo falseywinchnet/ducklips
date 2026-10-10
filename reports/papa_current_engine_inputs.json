@@ -1,0 +1,94 @@
+{
+  "scope": "Fresh Papa planner targets and current-mouth geometry preflight; no acoustic utterance or speech score.",
+  "preflight": {
+    "word": "Papa",
+    "scope": "Fresh planner/body articulation; every exported 1 ms frame checked with native geometry and independent region/cap quadrature. Endpoint preflight only; not a continuous-time topology proof, acoustic render or intelligibility result.",
+    "frames": 1366,
+    "last_frame_s": 1.365,
+    "minimum_storage_m3": 9.081920170408797e-09,
+    "minimum_cap_area_m2": 7.699999999999977e-05,
+    "lip_closure_events": [
+      {
+        "time": 0.0,
+        "closed": false
+      },
+      {
+        "time": 0.532,
+        "closed": true
+      },
+      {
+        "time": 0.67,
+        "closed": false
+      },
+      {
+        "time": 0.742,
+        "closed": true
+      },
+      {
+        "time": 0.795,
+        "closed": false
+      }
+    ],
+    "incompatible_frames": [],
+    "source_cues": {
+      "count": 77,
+      "consumed_by_acoustic_render": false,
+      "nonzero_velum_targets": [
+        {
+          "time_s": 0.1,
+          "kind": "velum_area_m2",
+          "value": 8e-05,
+          "angular_rate": 50
+        }
+      ],
+      "initial": {
+        "glottal_rest_area_m2": 2.5e-05,
+        "lung_pressure_Pa": 0,
+        "pitch_Hz": 110,
+        "effort": 1,
+        "loudness": 1,
+        "velum_area_m2": 0
+      }
+    }
+  },
+  "phones": [
+    {
+      "name": "P",
+      "stress": -1,
+      "start_s": 0.6,
+      "end_s": 0.6784352717863417
+    },
+    {
+      "name": "AX",
+      "stress": 0,
+      "start_s": 0.6784352717863417,
+      "end_s": 0.7310574339760989
+    },
+    {
+      "name": "P",
+      "stress": -1,
+      "start_s": 0.7310574339760989,
+      "end_s": 0.8039246287551715
+    },
+    {
+      "name": "AA",
+      "stress": 1,
+      "start_s": 0.8039246287551715,
+      "end_s": 1.0157198314216243
+    }
+  ],
+  "export_does_not_change_geometry_bytes": true,
+  "hashes": {
+    "out/papa-current-articulation/preflight.json": "863c7db1413aa7b7af766e454d99d33ac67ec1462b3623f57351ce8381c3e1fc",
+    "out/papa-current-articulation/source-cues.json": "f2c329fafe6302b31079e10031e56db3073b957802fd73a98039c1896d92bfa0",
+    "out/papa-current-articulation/geometry-with-cues.csv": "de0a9e893f57ddeb9e2782030e180bee67601a2b860167e010cf045404346afb",
+    "out/papa-current-articulation/airway-with-cues.csv": "e3b71fefa68b8789123bd17507215dd7398437046db9220294e9cc6b3462f47a",
+    "out/papa-current-articulation/lips-with-cues.csv": "e4c49a3c79f9aec888d88cdb573ac31788e21f1b52958a4b8aa56191fc15fede",
+    "out/papa-current-articulation/ah-load-1.json": "3b0b664e2eda54155ae1066885cf14552dae73c87dddcc2c99147554871d599d",
+    "out/papa-current-articulation/ah-load-receipt.json": "0579e06679b54031a3f5f4353956f5009a91210696e1e69eb01ee7150c25a00a",
+    "out/papa-current-articulation/ah-onset.json": "0d18f9755a2cc5e346f11a4c41e60583b5cc34f14bc2ef7500d8f098ad603ebf",
+    "out/papa-current-articulation/ah-tension-onset.json": "ba0dbc5af8494f57e7d47fb1b40f3ff2d7e23a5600c6743a62f53e4ebd5a347f",
+    "tools/word_geometry_preflight.py": "cd91f201d5eca60328816ef061c9fd7c6102b94a7d791d3bba3b0a2c21c6d56b",
+    "tools/tongue_reach_audit.cpp": "26eef3c0d4b65836c85cd39491b430b9bb5808dceb743f8946187eb6e11e9302"
+  }
+}
