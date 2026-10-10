@@ -29,9 +29,9 @@ bool JointAccuracy::compatible(const GraphContinuousGlottis& model) const noexce
 }
 double JointAccuracy::difference(const GraphContinuousGlottis& a,const GraphContinuousGlottis& b,const JointGraphGeometry& geometry) const noexcept {
     ContinuousGlottalState x,y;if(!a.source.state(x) || !b.source.state(y)){return infinity;}
-    double error=0;
+    double error=ContourPressureStorage::effort_difference(x.area,x.effort,y.area,y.effort)/1000.;
     for(std::size_t j=0;j<2;++j){
-        error=std::max(error,scaled(x.effort[j],y.effort[j],1000.));error=std::max(error,scaled(x.area[j],y.area[j],1e-6));
+        error=std::max(error,scaled(x.area[j],y.area[j],1e-6));
         error=std::max(error,scaled(x.mass[j],y.mass[j],1e-8));
         error=std::max(error,scaled(x.folds.lower_position[j],y.folds.lower_position[j],1e-4));
         error=std::max(error,scaled(x.folds.upper_position[j],y.folds.upper_position[j],1e-4));

@@ -1,0 +1,295 @@
+{
+  "scope": "Occupied affine effort norm, not new physical equations or speech",
+  "oracle": {
+    "cases": 2403,
+    "maximum_relative_error": 2.2180587406078287e-16,
+    "swapped_state_pairs": 1200,
+    "method": "80-digit Decimal affine endpoint supremum over both occupied supports",
+    "hashes": {
+      "tools/occupied_effort_reference.py": "2c6d529a80a46d1bcead8511a338b1add50eaf8072ab8df6906dc8a3e94418cd",
+      "build/ducklips_contour_pressure_probe": "05907d9ee70c4f057996cceb3eb9c3a43e27611a4f2ac5f586721c6fbfe00fd4",
+      "src/contour_pressure_storage.cpp": "7b0731b79d5f281b5564fd6c5dc1e4680c95df2f8d45647c9612ca6f707a4f7e",
+      "include/ducklips/contour_pressure_storage.hpp": "6a190189e5b39f276575a36729f29c1a601b95d7311dbefb3b5357e984079803",
+      "out/source-effort-error/norm-input.txt": "fb90ed2d5c1e29f8302ab6cf205c5f7f6da3d8e5fa92eb48f39bbc0a19e81d8f",
+      "out/source-effort-error/norm-output.txt": "015b70deaeb6af34bf952c13f435bfbcf3ca7312a8b843ae9d22a5d760eb1921"
+    }
+  },
+  "runs": [
+    {
+      "name": "short",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/source-occupied-effort/probe",
+        "phonation",
+        "1e-07",
+        "1e-07",
+        "0.0001",
+        "1e-7",
+        "--initial-state"
+      ],
+      "wall_s": 2.938066457863897,
+      "files": {
+        "out/source-occupied-effort/short.jsonl": "b6bd3660949a35e1482befb1a45b9c9f0b3d2248c05c5ece570bd4a03033cec8",
+        "out/source-occupied-effort/short.log": "9c9b19407a3acec513b97a0e9587f43e3e22256697cbe6b5dffc6c9e160ce14a"
+      },
+      "time": 1e-07,
+      "substeps": 32,
+      "rejected": 15,
+      "area": [
+        -3.446548149572858e-06,
+        4.60479747963386e-08
+      ],
+      "effort": [
+        3074187.2372844927,
+        -6413.520061159204
+      ],
+      "gas_mass": [
+        4.4176036302402515e-15,
+        9.54736427668314e-13
+      ],
+      "flow": [
+        0,
+        4.802824582402279e-09,
+        6.98051836901391e-07
+      ],
+      "work_residual": 1.9002386812407304e-17,
+      "mass_residual": 1.0937848013879898e-22,
+      "occupied_effort_difference_from_old_endpoint_Pa": 0.27882030508297234
+    },
+    {
+      "name": "short-fine",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/source-occupied-effort/probe",
+        "phonation",
+        "1e-07",
+        "1e-07",
+        "2.5e-05",
+        "1e-7",
+        "--initial-state"
+      ],
+      "wall_s": 4.269082709215581,
+      "files": {
+        "out/source-occupied-effort/short-fine.jsonl": "1141504e8160d2fbb302911be147cc1aaafd5600a47c221a4e531d561c806578",
+        "out/source-occupied-effort/short-fine.log": "ad3f8ec86e92a4ed8f76855067826a230531156823baa0b74fd1b4853ce7f696"
+      },
+      "time": 1e-07,
+      "substeps": 64,
+      "rejected": 31,
+      "area": [
+        -3.446548149572862e-06,
+        4.60479747960837e-08
+      ],
+      "effort": [
+        3074211.68651639,
+        -6413.620641539191
+      ],
+      "gas_mass": [
+        4.417605574561727e-15,
+        9.547364956209372e-13
+      ],
+      "flow": [
+        0,
+        4.802807130420771e-09,
+        6.980450111376056e-07
+      ],
+      "work_residual": 3.8028033728451767e-17,
+      "mass_residual": 1.0948995565103758e-22,
+      "occupied_effort_difference_from_old_endpoint_Pa": 0.05572480135671262
+    },
+    {
+      "name": "short-finer",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/source-occupied-effort/probe",
+        "phonation",
+        "1e-07",
+        "1e-07",
+        "6.25e-06",
+        "1e-7",
+        "--initial-state"
+      ],
+      "wall_s": 3.9865927919745445,
+      "files": {
+        "out/source-occupied-effort/short-finer.jsonl": "1141504e8160d2fbb302911be147cc1aaafd5600a47c221a4e531d561c806578",
+        "out/source-occupied-effort/short-finer.log": "ad3f8ec86e92a4ed8f76855067826a230531156823baa0b74fd1b4853ce7f696"
+      },
+      "time": 1e-07,
+      "substeps": 64,
+      "rejected": 31,
+      "area": [
+        -3.446548149572862e-06,
+        4.60479747960837e-08
+      ],
+      "effort": [
+        3074211.68651639,
+        -6413.620641539191
+      ],
+      "gas_mass": [
+        4.417605574561727e-15,
+        9.547364956209372e-13
+      ],
+      "flow": [
+        0,
+        4.802807130420771e-09,
+        6.980450111376056e-07
+      ],
+      "work_residual": 3.8028033728451767e-17,
+      "mass_residual": 1.0948995565103758e-22,
+      "occupied_effort_difference_from_old_endpoint_Pa": 0.05572480135671262
+    },
+    {
+      "name": "approach",
+      "command": [
+        "/Users/joshuahkuttenkuler/ducklips/out/source-occupied-effort/probe",
+        "phonation",
+        "2e-06",
+        "1e-07",
+        "0.0001",
+        "1e-7",
+        "--initial-state"
+      ],
+      "wall_s": 84.65818866668269,
+      "files": {
+        "out/source-occupied-effort/approach.jsonl": "2c2a31071678b0a36e497b4f42df8b04babad12355ef21c922a25c3671840738",
+        "out/source-occupied-effort/approach.log": "99ccfbc351422ba6b7dc8ad219f7ff1add24e60e4c3a4e3d3543eecdbd61c9e4"
+      },
+      "time": 2e-06,
+      "substeps": 1414,
+      "rejected": 680,
+      "area": [
+        -3.4598151280835722e-06,
+        1.3393822624846789e-08
+      ],
+      "effort": [
+        21110348.25972742,
+        -10015.776512722685
+      ],
+      "gas_mass": [
+        1.234861403927351e-16,
+        8.766298353190736e-14
+      ],
+      "flow": [
+        0,
+        4.57105413179445e-10,
+        2.168420614249996e-07
+      ],
+      "work_residual": 8.19148495001966e-16,
+      "mass_residual": 5.840412112507221e-22
+    },
+    {
+      "name": "short-finest",
+      "command": [
+        "out/source-occupied-effort/probe",
+        "phonation",
+        "1e-7",
+        "1e-7",
+        "1.5625e-6",
+        "1e-7",
+        "--initial-state"
+      ],
+      "wall_s": 7.361379500012845,
+      "files": {
+        "out/source-occupied-effort/short-finest.jsonl": "ecfceb0f4958ef757f0f0cb8581bdab3688b551ea01196f7886d1ec17f44d791",
+        "out/source-occupied-effort/short-finest.log": "c6dc1b2cf27ea5ee507447e5d957a17fe4005cfd914975e6c11e7ea2749090c5"
+      },
+      "time": 1e-07,
+      "substeps": 128,
+      "rejected": 63,
+      "area": [
+        -3.4465481495728607e-06,
+        4.604797479601904e-08
+      ],
+      "effort": [
+        3074217.792107632,
+        -6413.645746624804
+      ],
+      "gas_mass": [
+        4.417606060481551e-15,
+        9.547365126728848e-13
+      ],
+      "flow": [
+        0,
+        4.802802764092159e-09,
+        6.980433061118453e-07
+      ],
+      "work_residual": 3.6816152850268764e-17,
+      "mass_residual": 4.929802580359978e-23,
+      "occupied_effort_difference_from_old_endpoint_Pa": 0.0
+    }
+  ],
+  "frozen_binary_sha256": "3cf5ff893cd4484487213a240421caee85b71e6e634e47a442b175285ed063ee",
+  "seed_sha256": "db30c38a9cb3528c05b969078e13562c7272badc834a097972fb0341e3bdeff4",
+  "open_trajectory_exact_match": true,
+  "finest_exact_old_endpoint_match": true,
+  "trial_diagnostics": [
+    {
+      "path": "out/source-effort-error/trial-1e-7.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_sha256": "e4ef192a1804af1647103682b914a129ff5d26b347f92808e2e07d5bedcbadf0",
+      "status": "trial solve failed"
+    },
+    {
+      "path": "out/source-effort-error/trial-1e-8.json",
+      "sha256": "ba41a45bcbd6bf9d28bc671644325c32fa6b3c1f0e75599707472ca1593b7fcf",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_s": 1e-08,
+      "coefficient_difference_Pa": 31.11584241176024,
+      "occupied_effort_difference_Pa": 0.24243789417618108
+    },
+    {
+      "path": "out/source-effort-error/trial-1e-9.json",
+      "sha256": "3e44750777850a021a89638899589bb98b4fa91ad56fcf1404ff7d6f7874be17",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_s": 1e-09,
+      "coefficient_difference_Pa": 0.014248249121010303,
+      "occupied_effort_difference_Pa": 0.00011012974692665523
+    },
+    {
+      "path": "out/source-effort-error/trial-2.5e-8.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_sha256": "83014aff66d224025f89690cdf024e3d15ebb981d0bec95ab352997dac799be3",
+      "status": "trial solve failed"
+    },
+    {
+      "path": "out/source-effort-error/trial-2e-9.json",
+      "sha256": "ee7fd72bd87d81d6f2714870d751541233717c4bec16fc38731a64ac7f224f89",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_s": 2e-09,
+      "coefficient_difference_Pa": 0.1325467163696885,
+      "occupied_effort_difference_Pa": 0.0010268650545752645
+    },
+    {
+      "path": "out/source-effort-error/trial-5e-10.json",
+      "sha256": "d157319435d3848b1d76e96e0db10ff1692feaf7443907c9d70b4e414b654859",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_s": 5e-10,
+      "coefficient_difference_Pa": 0.0016292347572743893,
+      "occupied_effort_difference_Pa": 1.2575961581706691e-05
+    },
+    {
+      "path": "out/source-effort-error/trial-5e-7.json",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "log_sha256": "e4ef192a1804af1647103682b914a129ff5d26b347f92808e2e07d5bedcbadf0",
+      "status": "trial solve failed"
+    },
+    {
+      "path": "out/source-effort-error/trial-5e-9.json",
+      "sha256": "44795fa05559e8339bba77cbf779269f1c3caea2dc2b76450abb3956ca08f2e5",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "step_s": 5e-09,
+      "coefficient_difference_Pa": 2.861228977330029,
+      "occupied_effort_difference_Pa": 0.022237931645022347
+    }
+  ],
+  "hashes": {
+    "out/source-occupied-effort/run.json": "a64b8531e938aa58aab16322b5aead87bf572f8810b4060813b6c733fa1ddda8",
+    "out/source-occupied-effort/short-finest-run.json": "98c95ef78c3b3fe618292b4ea57dd21be8955d68161987c2ebb7440fa9d4529c",
+    "out/source-occupied-effort/release-tests.log": "c5439c66791fce904c906b751faaa7bdc190c534c2b30268bb56ade371ece3e5",
+    "out/source-occupied-effort/asan-tests.log": "9763ca6eb08cf436df7f28996a128247b5585ea86ad4b976a20132ebbcb0079e",
+    "out/source-occupied-effort/open-old.jsonl": "297e46922aa922595c8c50e6a233943619cf88dec43a58b14d19a4fd31d73c13",
+    "out/source-occupied-effort/open-new.jsonl": "297e46922aa922595c8c50e6a233943619cf88dec43a58b14d19a4fd31d73c13",
+    "src/contour_pressure_storage.cpp": "7b0731b79d5f281b5564fd6c5dc1e4680c95df2f8d45647c9612ca6f707a4f7e",
+    "src/joint_accuracy.cpp": "ea9183cecd26f978bed42621d55646a86ce6863bffb3114d759dc2e4f7cd0073",
+    "include/ducklips/contour_pressure_storage.hpp": "6a190189e5b39f276575a36729f29c1a601b95d7311dbefb3b5357e984079803",
+    "include/ducklips/joint_accuracy.hpp": "3c0fca2f6a7b3be03bc0f59b06a6a1f35eaa3fa59a0a6a723226c137a53e167f",
+    "tools/joint_contact_probe.cpp": "6ab8c33f3db60360eda36d3b15613e6d0ddcafec131ea889baba6fe2a0786341"
+  }
+}

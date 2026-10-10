@@ -19,6 +19,13 @@ struct ContourPressureState final {
 // This storage component does not yet supply momentum or a speech source.
 class ContourPressureStorage final {
 public:
+    // Supremum of the affine effort-field difference over the UNION of both
+    // occupied supports. Includes contact limits, not extrapolated values in
+    // tissue. The hat-coordinate interval is the same for both axial profiles.
+    // Returns infinity for invalid or empty supports. Units: Pa of effort.
+    [[nodiscard]] static double effort_difference(const std::array<double,2>& first_area,
+        const std::array<double,2>& first_effort,const std::array<double,2>& last_area,
+        const std::array<double,2>& last_effort) noexcept;
     [[nodiscard]] bool configure(const FoldParameters&,const AirProperties&,ContourPressureProfile=ContourPressureProfile::flat_caps) noexcept;
     [[nodiscard]] bool evaluate(const std::array<double,2>& area,
         const std::array<double,2>& effort,ContourPressureState&) const noexcept;

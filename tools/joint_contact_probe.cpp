@@ -35,10 +35,14 @@ void values(const char* key,std::span<const double> values){
 }
 }
 int main(int argc,char** argv){try{
-    require(argc>=6,"mode duration macro_step tolerance contact_step [--initial-state] [--stop-after count]");
-    bool restart=false;std::size_t stop_after=0;
+    require(argc>=6,"mode duration macro_step tolerance contact_step [--initial-state] [--stop-after count] [--compare-step seconds]");
+    bool restart=false;std::size_t stop_after=0;double compare_step=0;
     for(int i=6;i<argc;++i){const std::string option=argv[i];
         if(option=="--initial-state" && !restart){restart=true;}
+        else if(option=="--compare-step" && compare_step==0 && i+1<argc){
+            std::size_t used=0;const std::string value=argv[++i];compare_step=std::stod(value,&used);
+            require(used==value.size() && std::isfinite(compare_step) && compare_step>0,"positive comparison step");
+        }
         else if(option=="--stop-after" && !stop_after && i+1<argc){
             std::size_t used=0;const std::string value=argv[++i];stop_after=std::stoul(value,&used);
             require(used==value.size() && stop_after>0,"positive checkpoint index");
@@ -81,6 +85,22 @@ int main(int argc,char** argv){try{
     }
     model.prepare_joint(nodes-1,ducklips::RelaxationOrder::fifth);
     ducklips::JointAdvanceInputs input;input.geometry={c,c,c,g,g,g,thermal,thermal,viscous,viscous,area,area};input.reservoir_pressure=reservoir;
+    if(compare_step>0){
+        auto full=model,halves=model;
+        require(full.advance_joint(input.geometry,compare_step,reservoir),"comparison full step");
+        require(halves.advance_joint(input.geometry,.5*compare_step,reservoir)
+            && halves.advance_joint(input.geometry,.5*compare_step,reservoir),"comparison half steps");
+        std::printf("{\"step_s\":%.17g,\"states\":[",compare_step);bool comma=false;
+        for(const auto* m:{&full,&halves}){
+            ducklips::ContinuousGlottalState s;require(m->source.state(s),"comparison source");
+            std::printf("%s{\"energy\":%.17g",comma?",":"",s.energy);comma=true;
+            values("area",s.area);values("effort",s.effort);values("mass",s.mass);values("flow",s.flow);
+            values("lower_position",s.folds.lower_position);values("upper_position",s.folds.upper_position);
+            values("lower_velocity",s.folds.lower_velocity);values("upper_velocity",s.folds.upper_velocity);
+            values("charge",m->network.charge);values("momentum",m->network.momentum);std::putchar('}');
+        }
+        std::printf("]}\n");return 0;
+    }
     ducklips::JointAccuracy controller;controller.prepare(model);
     ducklips::JointAccuracyOptions options{tolerance,macro_step,1e-13,4096,contact_step};
     ducklips::ContinuousGlottalState first,state;require(model.source.state(first),"initial source");

@@ -1,6 +1,7 @@
 #include "ducklips/contour_pressure_storage.hpp"
 #include <algorithm>
 #include <cmath>
+#include <limits>
 namespace ducklips {
 namespace {
 using Values=std::array<double,13>;
@@ -38,6 +39,32 @@ struct Integrand final {
         for(std::size_t k=0;k<output.size();++k){output[k]=left[k]+right[k];}return true;
     }
 };
+}
+double ContourPressureStorage::effort_difference(const std::array<double,2>& first_area,
+    const std::array<double,2>& first_effort,const std::array<double,2>& last_area,
+    const std::array<double,2>& last_effort) noexcept {
+    constexpr double infinity=std::numeric_limits<double>::infinity();
+    for(const auto* values:{&first_area,&first_effort,&last_area,&last_effort}){
+        for(double v:*values){if(!std::isfinite(v)){return infinity;}}
+    }
+    const double d0=first_effort[0]-last_effort[0],d1=first_effort[1]-last_effort[1];
+    if(!std::isfinite(d0) || !std::isfinite(d1)){return infinity;}
+    double result=0;
+    for(const auto* area:{&first_area,&last_area}){
+        if((*area)[0]<=0 && (*area)[1]<=0){return infinity;}
+        const double scale=std::max(std::abs((*area)[0]),std::abs((*area)[1]));
+        const double a=(*area)[0]/scale,b=(*area)[1]/scale;
+        // The difference is affine in the hat coordinate. Its absolute
+        // maximum on each occupied interval occurs at an endpoint. Form both
+        // weights directly, avoiding 1-t cancellation in a small air pocket.
+        if(a>0){result=std::max(result,std::abs(d0));}
+        if(b>0){result=std::max(result,std::abs(d1));}
+        if(a<=0 || b<=0){
+            const double u=b/(b-a),t=-a/(b-a);
+            result=std::max(result,std::abs(std::fma(u,d0,t*d1)));
+        }
+    }
+    return result;
 }
 bool ContourPressureStorage::configure(const FoldParameters& folds,const AirProperties& air,ContourPressureProfile profile) noexcept {
     if(!std::isfinite(folds.lower_thickness) || folds.lower_thickness<=0 || !std::isfinite(folds.upper_thickness) || folds.upper_thickness<=0){return false;}

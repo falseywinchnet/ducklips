@@ -13,6 +13,9 @@ struct JointAdvanceInputs final {
 using JointGeometryProvider=bool (*)(void*,double,double,JointAdvanceInputs&) noexcept;
 struct JointAccuracyOptions final {
     // maximum_step bounds a trial; accepted leaves are its two half steps.
+    // Source effort error is the supremum on both occupied air supports,
+    // scaled by 1000 Pa. Coefficients extrapolated into tissue are not errors
+    // in the physical gas field. Other state components retain their scales.
     double tolerance{1e-5},maximum_step{1e-6},minimum_step{1e-10};
     std::size_t maximum_trials{4096};
     // Zero disables contact transitions. A positive bound permits a

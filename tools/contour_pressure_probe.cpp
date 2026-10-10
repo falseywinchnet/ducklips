@@ -15,6 +15,13 @@ void output(const ducklips::ContourPressureState& s){
 }
 int main(int argc,char** argv){try{
     ducklips::ContourPressureStorage model;require(model.configure({},{}),"configure");
+    if(argc==2 && std::string(argv[1])=="--effort-difference"){
+        std::array<double,2> a,u,b,v;
+        while(std::scanf("%lf%lf%lf%lf%lf%lf%lf%lf",&a[0],&a[1],&u[0],&u[1],&b[0],&b[1],&v[0],&v[1])==8){
+            std::printf("%.17g\n",ducklips::ContourPressureStorage::effort_difference(a,u,b,v));
+        }
+        return 0;
+    }
     if(argc==2 && std::string(argv[1])=="--batch"){
         std::array<double,2> a,u;while(std::scanf("%lf%lf%lf%lf",&a[0],&a[1],&u[0],&u[1])==4){ducklips::ContourPressureState s;require(model.evaluate(a,u,s),"batch evaluate");output(s);}return 0;
     }
@@ -35,6 +42,14 @@ int main(int argc,char** argv){try{
         std::printf("{\"steps\":%d,\"maximum_mass_error_m3\":%.17g,\"maximum_relative_density\":%.17g,\"work_J\":%.17g,\"work_residual_J\":%.17g,\"initial\":",steps,maximum_mass_error,maximum_density,work,error);output(initial);std::printf(",\"final\":");output(state);std::printf("}\n");return 0;
     }
     require(argc==1,"arguments");double maximum_mass=0,maximum_legendre=0,maximum_force=0;
+    const auto distance=ducklips::ContourPressureStorage::effort_difference;
+    require(distance({1.,2.},{1000.,-7.},{3.,4.},{0.,2.})==1000.,"open support retains coefficient maximum");
+    require(std::abs(distance({-99.,1.},{1000.,0.},{-99.,1.},{0.,0.})-10.)<1e-12,"narrow lower contact field");
+    require(std::abs(distance({1.,-99.},{0.,1000.},{1.,-99.},{0.,0.})-10.)<1e-12,"narrow upper contact field");
+    require(std::abs(distance({-99.,1.},{1000.,0.},{-9.,1.},{0.,0.})-100.)<1e-12,"union includes wider occupied support");
+    require(distance({-99.,1.},{1000.,0.},{1.,-99.},{0.,0.})==1000.,"opposite supports keep both endpoints");
+    require(distance({0.,1.},{1000.,0.},{0.,1.},{0.,0.})==1000.,"contact limit included");
+    require(std::isinf(distance({-1.,0.},{0.,0.},{1.,1.},{0.,0.})),"empty effort support rejected");
     for(double area:{-5.2e-6,-5.000001e-6,-5e-6,-4.999999e-6,-4.8e-6,0.,3e-6}){
         const std::array<double,2> a={area,1e-6};ducklips::ContourPressureState s,recovered;require(model.evaluate(a,{-100.,900.},s),"cross seam");
         require(model.recover(a,s.mass,{},recovered),"inverse moments");
