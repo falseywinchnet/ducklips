@@ -1,0 +1,405 @@
+{
+  "version": 4,
+  "system": "connected-speech",
+  "arrangement": "speech",
+  "pressure": 850,
+  "wander": 0.06,
+  "elasticityScale": 1,
+  "elasticityVariation": 0.1,
+  "monitor": 0.25,
+  "tubes": [
+    {
+      "id": "body",
+      "name": "Below-mouth",
+      "end": "connected",
+      "design": {
+        "version": 3,
+        "pressure": 850,
+        "wander": 0.06,
+        "monitor": 0.25,
+        "blocks": [],
+        "bands": [
+          {
+            "name": "01 · Inlet expansion",
+            "length": 0.05,
+            "radius": 0.009,
+            "material": "soft",
+            "mass": 1,
+            "elasticity": 1,
+            "offset": -0.0036271115257626475,
+            "anchor": 0.5401597282112418,
+            "support": 1,
+            "role": "inlet",
+            "points": 8
+          },
+          {
+            "name": "02 · Lower elastic adapter",
+            "length": 0.0175,
+            "radius": 0.008,
+            "material": "fold",
+            "mass": 0.2,
+            "elasticity": 3,
+            "offset": -0.005313555762881324,
+            "anchor": 0.5297026512131847,
+            "support": 0.2,
+            "role": "adapter",
+            "points": 4
+          },
+          {
+            "name": "03 · Lower firm support",
+            "length": 0.0225,
+            "radius": 0.011,
+            "material": "firm",
+            "mass": 4.7,
+            "elasticity": 0.2,
+            "offset": -0.008313555762881324,
+            "anchor": 0.5373209353580447,
+            "support": 3.2,
+            "role": "firm",
+            "points": 4
+          },
+          {
+            "name": "04 · Lower heavy tissue",
+            "length": 0.0175,
+            "radius": 0.007,
+            "material": "soft",
+            "mass": 3.5,
+            "elasticity": 1.5,
+            "offset": -0.004313555762881324,
+            "anchor": 0.5029170886660774,
+            "support": 0.2,
+            "role": "soft",
+            "points": 4
+          },
+          {
+            "name": "05 · Vocal cord",
+            "length": 0.016,
+            "radius": 0.00032,
+            "material": "fold",
+            "mass": 1.85,
+            "elasticity": 1.5,
+            "offset": 0.00027209617978050596,
+            "anchor": 0.549436346277014,
+            "support": 0.2,
+            "role": "cord",
+            "points": 8,
+            "slotWidth": 0.01
+          },
+          {
+            "name": "06 · Upper heavy tissue",
+            "length": 0.035,
+            "radius": 0.007,
+            "material": "soft",
+            "mass": 3.5,
+            "elasticity": 1.5,
+            "offset": -0.004313555762881324,
+            "anchor": 0.5029170886660774,
+            "support": 0.2,
+            "role": "soft",
+            "points": 8
+          },
+          {
+            "name": "07 · Upper firm support",
+            "length": 0.045,
+            "radius": 0.011,
+            "material": "firm",
+            "mass": 4.7,
+            "elasticity": 0.2,
+            "offset": -0.008313555762881324,
+            "anchor": 0.5373209353580447,
+            "support": 3.2,
+            "role": "firm",
+            "points": 8
+          },
+          {
+            "name": "08 · Upper elastic adapter",
+            "length": 0.035,
+            "radius": 0.008,
+            "material": "fold",
+            "mass": 0.2,
+            "elasticity": 3,
+            "offset": -0.005313555762881324,
+            "anchor": 0.5297026512131847,
+            "support": 0.2,
+            "role": "adapter",
+            "points": 8
+          },
+          {
+            "name": "09 · Throat expansion",
+            "length": 0.025,
+            "radius": 0.006,
+            "material": "soft",
+            "mass": 1,
+            "elasticity": 1,
+            "offset": -0.0006271115257626483,
+            "anchor": 0.5457723404525157,
+            "support": 1,
+            "role": "outlet",
+            "points": 8
+          }
+        ],
+        "system": "below-mouth",
+        "elasticityScale": 1,
+        "elasticityVariation": 0.1,
+        "noiseSeed": 73021
+      }
+    },
+    {
+      "id": "mouth",
+      "name": "Mouth",
+      "end": "connected",
+      "design": {
+        "version": 3,
+        "pressure": 0,
+        "wander": 0,
+        "monitor": 0.25,
+        "elasticityScale": 1,
+        "elasticityVariation": 0.1,
+        "noiseSeed": 3279216042,
+        "bands": [
+          {
+            "name": "01 · Rear mouth",
+            "role": "tract",
+            "length": 0.05,
+            "radius": 0.0056,
+            "material": "soft",
+            "mass": 2,
+            "elasticity": 1,
+            "support": 1,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "02 · Tongue body",
+            "role": "tract",
+            "length": 0.04,
+            "radius": 0.0056,
+            "material": "soft",
+            "mass": 3.5,
+            "elasticity": 1.5,
+            "support": 0.2,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "03 · Palate chamber",
+            "role": "tract",
+            "length": 0.035,
+            "radius": 0.02,
+            "material": "firm",
+            "mass": 3,
+            "elasticity": 0.8,
+            "support": 2,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "04 · Front tongue",
+            "role": "tract",
+            "length": 0.015,
+            "radius": 0.02,
+            "material": "soft",
+            "mass": 2.5,
+            "elasticity": 1.5,
+            "support": 0.3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "id": "lips",
+      "name": "Teeth and lips",
+      "end": "open",
+      "design": {
+        "version": 3,
+        "pressure": 0,
+        "wander": 0,
+        "monitor": 0.25,
+        "elasticityScale": 1,
+        "elasticityVariation": 0.1,
+        "noiseSeed": 3015239421,
+        "bands": [
+          {
+            "name": "01 · Lip vestibule",
+            "role": "tract",
+            "length": 0.008,
+            "radius": 0.02,
+            "material": "soft",
+            "mass": 1.5,
+            "elasticity": 1,
+            "support": 0.3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "02 · Teeth gap",
+            "role": "tract",
+            "length": 0.01,
+            "radius": 0.02,
+            "material": "firm",
+            "mass": 4,
+            "elasticity": 1,
+            "support": 4,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "03 · Lip tissue",
+            "role": "tract",
+            "length": 0.012,
+            "radius": 0.02,
+            "material": "fold",
+            "mass": 0.8,
+            "elasticity": 1.5,
+            "support": 0.3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "id": "sinus",
+      "name": "Velum and nasal tract",
+      "end": "closed",
+      "design": {
+        "version": 3,
+        "pressure": 0,
+        "wander": 0,
+        "monitor": 0.25,
+        "elasticityScale": 1,
+        "elasticityVariation": 0.1,
+        "noiseSeed": 3284571737,
+        "bands": [
+          {
+            "name": "01 · Velum opening",
+            "role": "tract",
+            "length": 0.02,
+            "radius": 0.004,
+            "material": "soft",
+            "mass": 1.5,
+            "elasticity": 1.5,
+            "support": 0.3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "02 · Nasal cavity",
+            "role": "tract",
+            "length": 0.1,
+            "radius": 0.0055,
+            "material": "firm",
+            "mass": 2,
+            "elasticity": 1,
+            "support": 3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          }
+        ],
+        "blocks": []
+      }
+    },
+    {
+      "id": "undertongue",
+      "name": "Under-tongue pocket",
+      "end": "closed",
+      "design": {
+        "version": 3,
+        "pressure": 0,
+        "wander": 0,
+        "monitor": 0.25,
+        "elasticityScale": 1,
+        "elasticityVariation": 0.1,
+        "noiseSeed": 3755857535,
+        "bands": [
+          {
+            "name": "01 · Under-tongue entry",
+            "role": "tract",
+            "length": 0.012,
+            "radius": 0.0025,
+            "material": "soft",
+            "mass": 2,
+            "elasticity": 1,
+            "support": 0.3,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          },
+          {
+            "name": "02 · Floor pocket",
+            "role": "tract",
+            "length": 0.025,
+            "radius": 0.0055,
+            "material": "soft",
+            "mass": 3,
+            "elasticity": 1.5,
+            "support": 0.2,
+            "offset": 0,
+            "anchor": 0.5,
+            "points": 4
+          }
+        ],
+        "blocks": []
+      }
+    }
+  ],
+  "connections": [
+    {
+      "a": {
+        "tube": "body",
+        "end": "outlet"
+      },
+      "b": {
+        "tube": "mouth",
+        "end": "inlet"
+      }
+    },
+    {
+      "a": {
+        "tube": "mouth",
+        "end": "outlet"
+      },
+      "b": {
+        "tube": "lips",
+        "end": "inlet"
+      }
+    },
+    {
+      "a": {
+        "tube": "mouth",
+        "section": 1,
+        "position": 1
+      },
+      "b": {
+        "tube": "sinus",
+        "end": "inlet"
+      }
+    },
+    {
+      "a": {
+        "tube": "mouth",
+        "section": 2,
+        "position": 0.35
+      },
+      "b": {
+        "tube": "undertongue",
+        "end": "inlet"
+      }
+    }
+  ],
+  "source": "body",
+  "output": "lips"
+}

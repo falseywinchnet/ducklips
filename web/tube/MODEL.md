@@ -289,3 +289,49 @@ inside AudioWorkletGlobalScope, where `atob` is unavailable. The current build u
 Homebrew Clang and the existing Rust wasm linker; environment overrides are
 `DUCKLIPS_CLANG` and `DUCKLIPS_WASM_LD`. No fast-math or fused floating-point
 reassociation is enabled.
+
+## Experimental articulated words (2026-10-10)
+
+Choose **Speech trial · papa / mama baseline**, type `papa mama`, and press
+**Speak**. This selects the geometry in `speechDesign()`. The user recognized
+both words in take 036, while describing its voice as a sheep/man rattling a
+marble in a jar. That is a two-word intelligibility milestone, not a realistic
+voice or validation of the larger experimental pronunciation dictionary.
+
+`articulation.mjs` turns phonemes into timed support targets: mouth cavity
+shape, local lip contact/release, cord opening, and velum opening. A damped
+support actuator moves the resting geometry without teleporting the actual
+wall. There is no stored speech PCM or independent periodic source waveform.
+A `SpeechSession` warms the same engine and forms the initial closure before
+recording. Browser Worklet, LAN worker, and command-line renders use that same
+session. Speaking records the raw output automatically; listening copies use
+one constant gain, while WAV downloads retain raw samples.
+
+The word air path is experimental and differs from **Start pressure**'s
+original serial network. A subglottal port feeds a nonlinear pressure/flow
+valve into the oral graph; the original below-mouth path remains a feedback
+load. The cord has a 10 mm fixed-width slit, whose half-opening is controlled
+by the support. Unlike a shrinking circular aperture, its pressure surface
+remains finite at closure. The material is still the periodic sheet, with
+all 832 modes across the five stages retained. This is a coarse generalized
+slit geometry, not a validated anatomical fold model.
+
+The oral graph uses acoustic junction spacing near sound-speed/sample-rate,
+separately from the material sampling. Mouth and lips share that path; the
+under-tongue branch is closed, and the velum/nasal branch has an open nostril
+termination. Nasal gestures open its neck, rather than opening its far end.
+Pressure and solid feedback are bidirectional. The valve retains fluid
+momentum as the opening changes. Narrow-aperture losses depend on flow and
+include bounded fluctuations; they produce no noise at exact rest.
+
+The aerodynamic pressure offset, hard separation transition in the recognized
+baseline, and split wall-contact update remain approximations. Global energy
+consistency and convergence are not established. Small arithmetic changes can
+change the rough cycle pattern substantially. Current source work targets
+that behavior; a smooth-separation experiment is opt-in through the render
+plan and has not replaced the listener-recognized baseline.
+
+The displayed speech benchmark measures preparation plus the word session,
+not the faster static manual network. The first browser measurement was
+9.1x realtime, below the 10x target. Passing transport/mechanical tests does
+not establish natural voice quality or recognition of other words.

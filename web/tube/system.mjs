@@ -55,16 +55,16 @@ class Coupling {
   if(capacity>this.mask+1){for(const key of ['airAB','airBA','solidAB','solidBA']){const old=this[key],next=new Float64Array(capacity);for(let lag=1;lag<=old.length;lag++)next[(capacity-lag)&(capacity-1)]=old[(this.pos-lag)&this.mask];this[key]=next;}this.pos=0;this.mask=capacity-1;}
  }
  filter(history,delay,taps){const whole=Math.floor(delay),f=delay-whole,p=this.pos-whole,m=this.mask;return (1-f)*(taps[0]*history[p&m]+taps[1]*history[(p-1)&m]+taps[2]*history[(p-2)&m])+f*(taps[0]*history[(p-1)&m]+taps[1]*history[(p-2)&m]+taps[2]*history[(p-3)&m]);}
- prepare(){
+ prepare(solidOnly=false){
   const {a,b,pa,pb}=this,ca=a.engine.c,cb=b.engine.c;
-  const radius=Math.max(.000025,Math.min(ca.r[a.index]+a.engine.displacement[a.index],cb.r[b.index]+b.engine.displacement[b.index]));
-  this.airScale=Math.sqrt(Math.PI/(C*RHO*SOUND))*radius;pa.airY=pb.airY=this.airScale*this.airScale;
+  if(!solidOnly){const radius=Math.max(.000025,Math.min(a.engine.restRadii[a.index]+a.engine.displacement[a.index],b.engine.restRadii[b.index]+b.engine.displacement[b.index]));
+  this.airScale=Math.sqrt(Math.PI/(C*RHO*SOUND))*radius;pa.airY=pb.airY=this.airScale*this.airScale;}else pa.airY=pb.airY=0;
   const fa=a.engine.variation.factors[ca.bandAt[a.index]],fb=b.engine.variation.factors[cb.bandAt[b.index]],factor=Math.sqrt(fa*fb);
   const z=Math.sqrt(ca.sheet.impedance[a.index]*cb.sheet.impedance[b.index])*Math.sqrt(factor);this.solidScale=Math.sqrt(z);pa.solidZ=pb.solidZ=z;
-  pa.airIn=this.filter(this.airBA,this.airDelay,AIR_TAPS)/this.airScale;pb.airIn=this.filter(this.airAB,this.airDelay,AIR_TAPS)/this.airScale;
+  if(!solidOnly){pa.airIn=this.filter(this.airBA,this.airDelay,AIR_TAPS)/this.airScale;pb.airIn=this.filter(this.airAB,this.airDelay,AIR_TAPS)/this.airScale;}
   const delay=Math.max(1,this.solidDelay/Math.sqrt(factor));pa.solidIn=this.filter(this.solidBA,delay,this.taps)/this.solidScale;pb.solidIn=this.filter(this.solidAB,delay,this.taps)/this.solidScale;
  }
- send(){this.airAB[this.pos]=this.pa.airOut*this.airScale;this.airBA[this.pos]=this.pb.airOut*this.airScale;this.solidAB[this.pos]=this.pa.solidOut*this.solidScale;this.solidBA[this.pos]=this.pb.solidOut*this.solidScale;this.pos=(this.pos+1)&this.mask;}
+ send(solidOnly=false){if(!solidOnly){this.airAB[this.pos]=this.pa.airOut*this.airScale;this.airBA[this.pos]=this.pb.airOut*this.airScale;}this.solidAB[this.pos]=this.pa.solidOut*this.solidScale;this.solidBA[this.pos]=this.pb.solidOut*this.solidScale;this.pos=(this.pos+1)&this.mask;}
 }
 const AIR_TAPS=[.985,.010,.003];
 export class SpeechSystem {

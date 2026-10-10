@@ -33,3 +33,13 @@ export function systemDesign(arrangement='balanced'){
    {a:{tube:'mouth',section:2,position:.35},b:{tube:'undertongue',end:'inlet'}}
   ],source:'body',output:'lips'};
 }
+
+// Articulation trial: the original body materials, with a finite-width fold
+// aperture, an open-vowel cavity pair, and a velum/nasal outlet branch.
+export function speechDesign(){
+ const d=systemDesign('open');d.arrangement='speech';d.tubes[0].design.bands.find(b=>b.role==='cord').slotWidth=.01;
+ [[.050,.0056],[.040,.0056],[.035,.020],[.015,.020]].forEach(([length,radius],i)=>Object.assign(d.tubes[1].design.bands[i],{length,radius}));
+ for(const b of d.tubes[2].design.bands)b.radius=.020;
+ d.tubes[3].name='Velum and nasal tract';Object.assign(d.tubes[3].design.bands[0],{name:'01 · Velum opening',length:.02,radius:.004,material:'soft',mass:1.5,elasticity:1.5,support:.3});Object.assign(d.tubes[3].design.bands[1],{name:'02 · Nasal cavity',length:.1,radius:.0055});
+ d.connections[2].a={tube:'mouth',section:1,position:1};return d;
+}

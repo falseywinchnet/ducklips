@@ -1,12 +1,13 @@
-import {systemDesign} from './system-presets.mjs';
+import {planSpeech} from './articulation.mjs';
+import {systemDesign,speechDesign} from './system-presets.mjs';
 import {compileSystem,validateSystem} from './system.mjs';
 import {referenceDesign} from './presets.mjs';
 import {initialDesign,compile,validateDesign,MATERIALS,C,modeShape,wav,clamp} from './engine.mjs';
 const $=id=>document.getElementById(id), svg=$('tube');
 let system=systemDesign('open');try{const saved=JSON.parse(localStorage.getItem('ducklips-connected-v4'));if(saved)system=validateSystem(saved);}catch{}
 let stage=0,design=system.tubes?.[stage].design??system,whole=compileSystem(system),compiled=whole.tubes?.[stage].compiled??whole,N=compiled.n,selected=compiled.cordIndex,history=[],context,node,running=false,state=null,systemState=null,drag=null,take=0,saveTimer,editTimer;
-$('monitor').value=system.version===4?8:.25;
-let captureContext=null,modeIndex=0,previewShape=modeShape(compiled.sheet,0);
+$('monitor').value=system.arrangement==='speech'?.025:system.version===4?8:.25;
+let speechContext=null,captureContext=null,modeIndex=0,previewShape=modeShape(compiled.sheet,0);
 let wave=new Float32Array(512),waveIndex=0,modeFrame=0;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const X=x=>60+x/compiled.length*880,Y=y=>225-y*geometryScale(), width=()=>compiled.length;
@@ -22,6 +23,7 @@ function edited(){clearTimeout(editTimer);editTimer=setTimeout(()=>refresh(),35)
 function panel(){
  const b=design.bands[selected];$('band-name').textContent=b.name.slice(5);
  $('band-description').textContent=(whole.kind!=='network'||stage===whole.source)&&selected===compiled.cordIndex?'The constricting elastic cord. Feedback arrives through connected tissue and air on both sides.':design.bands[selected].role==='adapter'?'A light elastic adapter with little support, open to the main tube diameter.':design.bands[selected].role==='soft'?'Heavy soft tissue with little external support; it responds to returning pressure.':'This section shapes returning pressure and carries material motion.';
+ if(b.slotWidth)$('band-description').textContent+=` Fixed-width slit: ${(b.slotWidth*1000).toFixed(1)} mm; the handle controls its half-opening.`;
  $('material').value=b.material;$('preset').value=system.version===4?system.arrangement:system.version===3?'below-mouth':'reference';$('bands').style.setProperty('--sections',design.bands.length);
  $('body-elasticity').value=system.elasticityScale??1;$('body-elasticity-value').textContent=(system.elasticityScale??1).toFixed(2)+' ×';
  $('elasticity-variation').value=system.elasticityVariation??0;$('elasticity-variation-value').textContent='±'+Math.round((system.elasticityVariation??0)*100)+'% maximum';
@@ -125,7 +127,7 @@ for(const k of ['mass','elasticity','support','pressure','wander']){
 for(const [id,key] of [['body-elasticity','elasticityScale'],['elasticity-variation','elasticityVariation']]){
  $(id).onpointerdown=checkpoint;$(id).onkeydown=e=>{if(e.key.startsWith('Arrow'))checkpoint();};$(id).oninput=()=>{system[key]=+$(id).value;refresh();};
 }
-function choosePreset(value){checkpoint();system=value==='reference'?referenceDesign():value==='below-mouth'?initialDesign():systemDesign(value);stage=0;systemState=state=null;selected=system.version===4?4:compile(system).cordIndex;modeIndex=0;refresh(false);if(node)node.port.postMessage({type:'reset',compiled:whole});benchmark();}
+function choosePreset(value){checkpoint();system=value==='speech'?speechDesign():value==='reference'?referenceDesign():value==='below-mouth'?initialDesign():systemDesign(value);if(value==='speech'){$('monitor').value=.025;if(node)node.port.postMessage({type:'level',value:.025});}stage=0;systemState=state=null;selected=system.version===4?4:compile(system).cordIndex;modeIndex=0;refresh(false);if(node)node.port.postMessage({type:'reset',compiled:whole});benchmark();}
 $('preset').onchange=()=>choosePreset($('preset').value);
 $('material').onchange=()=>{checkpoint();design.bands[selected].material=$('material').value;refresh();};
 $('monitor').oninput=()=>{if(node)node.port.postMessage({type:'level',value:+$('monitor').value});panel();};
@@ -148,16 +150,21 @@ async function audio(){
   node.connect(context.destination);
  }catch(error){await context.close();context=null;node=null;throw error;}
  node.port.postMessage({type:'configure',compiled:whole});node.port.postMessage({type:'level',value:+$('monitor').value});
- node.port.onmessage=({data:d})=>{if(d.type==='state'){systemState=d;state=d.tubes?.[stage]??d;$('elasticity-live').textContent=state.elasticityFactors?`Selected material: ${((state.elasticityFactors[selected]-1)*100).toFixed(2)}% from its set elasticity`:'';wave=d.scope;waveIndex=d.scopeIndex;$('pressure-reading').textContent=Math.round(d.drive)+' Pa inlet';if(d.fault){running=false;node.port.postMessage({type:'run',value:false});$('start').textContent='Restart pressure';$('status').textContent='Model stopped';notice(d.fault);}}
+ node.port.onmessage=({data:d})=>{if(d.type==='state'){if(d.speech){$('route').textContent='Speech: cord valve ↔ mouth ↔ teeth and lips · below-mouth return path open · velum opens for nasal gestures';$('speech-progress').textContent=d.speech.phase==='speaking'?`${d.speech.text} · ${d.speech.phone} · ${(d.speech.time??0).toFixed(2)} s`:d.speech.phase;}$('status').textContent=d.speech&&!d.speech.finished?'Speech · '+d.speech.phase:running?'Running · outlet connected':'Pressure off';systemState=d;state=d.tubes?.[stage]??d;$('elasticity-live').textContent=state.elasticityFactors?`Selected material: ${((state.elasticityFactors[selected]-1)*100).toFixed(2)}% from its set elasticity`:'';wave=d.scope;waveIndex=d.scopeIndex;$('pressure-reading').textContent=Math.round(d.drive)+' Pa inlet';if(d.fault){running=false;node.port.postMessage({type:'run',value:false});$('start').textContent='Restart pressure';$('status').textContent='Model stopped';notice(d.fault);}}
+ if(d.type==='speech-recording'){addTake(d.samples,d.rate,d.plan.text,speechContext);speechContext=null;}
+ if(d.type==='speech-finished'){running=false;$('start').textContent='Start pressure';$('stop-speech').disabled=true;}
  if(d.type==='recording'){addTake(d.samples,d.rate,'Live tube',captureContext);captureContext=null;$('record').disabled=false;$('record').textContent='Record 2 seconds';}
  };
  await context.resume();
 }
+$('speak').onclick=async()=>{try{const plan=planSpeech($('speech-text').value,{speed:+$('speech-speed').value});if(plan.seconds>6)throw Error('Use a short phrase of up to six seconds for this trial.');if(whole.kind!=='network')throw Error('Choose Speech trial to use the word baseline.');await audio();if(+$('monitor').value>.025){$('monitor').value=.025;node.port.postMessage({type:'level',value:.025});}panel();speechContext={date:new Date().toISOString(),design:JSON.parse(JSON.stringify(system)),plan,monitorGain:+$('monitor').value,airRoute:'Cord takeoff through a pressure/flow valve to the articulated mouth; body outlet matched; velum neck opens to a radiating nasal branch for nasal gestures.'};node.port.postMessage({type:'speak',compiled:whole,plan});running=true;$('start').textContent='Stop pressure';$('stop-speech').disabled=false;$('speech-phones').textContent=plan.events.filter(e=>e.phone!=='_').map(e=>e.phone).join(' · ');$('speech-progress').textContent='Preparing the pressure-driven source…';benchmark(plan);}catch(e){notice(e.message);}};
+$('speech-text').onkeydown=e=>{if(e.key==='Enter')$('speak').click();};
+$('stop-speech').onclick=()=>{node?.port.postMessage({type:'stop-speech'});$('stop-speech').disabled=true;running=false;$('start').textContent='Start pressure';$('speech-progress').textContent='Releasing pressure';};
 $('start').onclick=async()=>{try{await audio();if(systemState?.fault){node.port.postMessage({type:'reset',compiled:whole});state=null;}running=!running;node.port.postMessage({type:'run',value:running});$('start').textContent=running?'Stop pressure':'Start pressure';$('status').textContent=running?'Running · outlet connected':'Pressure off · releasing';}catch(e){notice('Audio could not start: '+e.message);}};
 $('record').onclick=async()=>{try{await audio();if(!running){running=true;node.port.postMessage({type:'run',value:true});$('start').textContent='Stop pressure';$('status').textContent='Running · recording outlet';}$('record').disabled=true;$('record').textContent='Recording…';captureContext={started:performance.now(),date:new Date().toISOString(),design:JSON.parse(JSON.stringify(system)),initialObservation:systemState,monitorGain:+$('monitor').value,changes:[]};node.port.postMessage({type:'capture',seconds:2});}catch(e){notice(e.message);$('record').disabled=false;}};
 function addTake(samples,rate,title,provenance){
  take++;const bytes=wav(samples,rate),blob=new Blob([bytes],{type:'audio/wav'}),url=URL.createObjectURL(blob);let peak=0;for(const x of samples)peak=Math.max(peak,Math.abs(x));
- const row=document.createElement('div');row.className='take';const label=document.createElement('span');label.textContent=`${String(take).padStart(2,'0')} · ${title}`;const player=document.createElement('audio');player.controls=true;player.src=url;const link=document.createElement('a');link.href=url;link.download=`ducklips-tube-${take}.wav`;link.textContent='WAV';const enhanced=document.createElement('button');enhanced.textContent='Depict enhanced';const receipt=document.createElement('small');receipt.textContent=`${(samples.length/rate).toFixed(2)} s · ${(rate/1000).toFixed(1)} kHz · peak ${peak.toFixed(4)}`;
+ const row=document.createElement('div');row.className='take';const label=document.createElement('span');label.textContent=`${String(take).padStart(2,'0')} · ${title}`;const player=document.createElement('audio');player.controls=true;const previewGain=peak?Math.min(100,.7/peak):1;player.src=URL.createObjectURL(new Blob([wav(Float32Array.from(samples,x=>x*previewGain),rate)],{type:'audio/wav'}));const link=document.createElement('a');link.href=url;link.download=`ducklips-tube-${take}.wav`;link.textContent='WAV';const enhanced=document.createElement('button');enhanced.textContent='Depict enhanced';const receipt=document.createElement('small');receipt.textContent=`${(samples.length/rate).toFixed(2)} s · ${(rate/1000).toFixed(1)} kHz · raw peak ${peak.toFixed(4)} · playback ×${previewGain.toFixed(2)}`;
  row.append(label,player,link,enhanced,receipt);if(take===1)$('recordings').textContent='';$('recordings').prepend(row);
  // Full wave, no decimation-by-selection: min/max bins preserve all extrema.
  wave=samples;waveIndex=0;
@@ -169,5 +176,5 @@ function scope(){const canvas=$('scope'),dpr=devicePixelRatio||1,w=canvas.client
 let last=0;function animate(time){if(time-last>40){last=time;modeFrame++;if(running||(state?.drive>0.1)||(state?.velocity.some(v=>Math.abs(v)>1e-6))||$('mode-view').checked)draw();scope();}requestAnimationFrame(animate);}refresh(false);requestAnimationFrame(animate);
 // Benchmark the actual core away from the UI thread. No device or spectral work included.
 let benchmarkWorker;
-function benchmark(){benchmarkWorker?.terminate();$('speed').textContent='Benchmarking…';const worker=benchmarkWorker=new Worker('./render-worker.mjs',{type:'module'});worker.onmessage=({data:d})=>{if(d.error){notice(d.error);return;}$('speed').textContent=d.realtime.toFixed(1)+'× core realtime';if(d.realtime<10)notice('Core is below the 10× target on this browser.');worker.terminate();};worker.postMessage({compiled:whole,seconds:3,rate:24000});}
+function benchmark(plan=system.arrangement==='speech'?planSpeech('papa mama'):null){benchmarkWorker?.terminate();$('speed').textContent='Benchmarking…';const worker=benchmarkWorker=new Worker('./render-worker.mjs',{type:'module'});worker.onmessage=({data:d})=>{if(d.error){notice(d.error);return;}$('speed').textContent=d.realtime.toFixed(1)+(plan?'× speech realtime':'× core realtime');if(d.realtime<10)notice('Core is below the 10× target on this browser.');worker.terminate();};worker.postMessage({compiled:whole,seconds:3,rate:24000,plan});}
 benchmark();

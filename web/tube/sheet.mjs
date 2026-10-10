@@ -23,24 +23,25 @@ export function eigen(matrix,n){
 export function compileSheet(c,bands,materials,pointsPerBand){
  const n=c.x.length,C=CIRCUMFERENCE,angle=2*Math.PI/C,mass=new Float64Array(n),rootMass=new Float64Array(n),surface=new Float64Array(n),tension=new Float64Array(n),hoop=new Float64Array(n),foundation=new Float64Array(n),loss=new Float64Array(n),axial=new Float64Array(n-1),fir=[],impedance=new Float64Array(n);
  for(let i=0;i<n;i++){
-  const b=bands[c.bandAt[i]],m=materials[b.material],circ=c.r[i]*angle;
+  const b=bands[c.bandAt[i]],m=materials[b.material],circ=c.slotWidth?.[i]?2*c.slotWidth[i]/C:c.r[i]*angle;
   const slope=i&&i<n-1?(c.r[i+1]-c.r[i-1])/(c.x[i+1]-c.x[i-1]):0;
   const area=circ*c.dx[i]*Math.hypot(1,slope);
   surface[i]=circ*c.dx[i];mass[i]=m.density*m.thickness*area*b.mass;rootMass[i]=Math.sqrt(mass[i]);
   tension[i]=m.modulus*m.thickness*b.elasticity*(.035+Math.abs(Math.log(c.r[i]/b.radius))*.02);
   hoop[i]=tension[i]*c.dx[i]/circ;
-  foundation[i]=tension[i]*surface[i]/(c.r[i]*c.r[i])+m.modulus*b.elasticity*surface[i]/.015;
-  loss[i]=m.loss;fir.push(m.fir);
+  const transverseSpan=c.slotWidth?.[i]?c.slotWidth[i]/2:c.r[i];
+  foundation[i]=tension[i]*surface[i]/(transverseSpan*transverseSpan)+m.modulus*b.elasticity*surface[i]/.015;
+  loss[i]=m.loss*(b.damping??1);fir.push(m.fir);
   impedance[i]=Math.sqrt(m.density*m.thickness*b.mass*tension[i])*circ*.08;
  }
- for(let i=0;i<n-1;i++)axial[i]=2*tension[i]*tension[i+1]/(tension[i]+tension[i+1]) * angle*(c.r[i]+c.r[i+1])/2 / Math.hypot(c.x[i+1]-c.x[i],c.r[i+1]-c.r[i]);
+ for(let i=0;i<n-1;i++){const faceWidth=c.slotWidth?.[i]||c.slotWidth?.[i+1]?((c.slotWidth[i]?2*c.slotWidth[i]:2*Math.PI*c.r[i])+(c.slotWidth[i+1]?2*c.slotWidth[i+1]:2*Math.PI*c.r[i+1]))/(2*C):angle*(c.r[i]+c.r[i+1])/2;axial[i]=2*tension[i]*tension[i+1]/(tension[i]+tension[i+1]) * faceWidth / Math.hypot(c.x[i+1]-c.x[i],c.r[i+1]-c.r[i]);}
  const base=new Float64Array(n*n),supportDiagonal=new Float64Array(n),supportOff=new Float64Array(n-1);
  for(let i=0;i<n;i++)base[i*n+i]=foundation[i];
  for(let i=0;i<n-1;i++){const k=axial[i];base[i*n+i]+=k;base[(i+1)*n+i+1]+=k;base[i*n+i+1]-=k;base[(i+1)*n+i]-=k;}
  // Each handle is a ring support. Its footprint moves continuously within a band.
  for(let b=0;b<bands.length;b++){
   const band=bands[b],count=c.counts[b],at=band.anchor*(count-1),weights=Array.from({length:count},(_,j)=>Math.max(0,1-Math.abs(j-at)));
-  const first=c.starts[b],k=band.support*(tension[first]*c.r[first]*angle/c.dx[first]+foundation[first]);
+  const first=c.starts[b],k=band.support*(tension[first]*(c.slotWidth?.[first]?2*c.slotWidth[first]/C:c.r[first]*angle)/c.dx[first]+foundation[first]);
   for(let i=0;i<count;i++)for(let j=0;j<count;j++){const value=k*weights[i]*weights[j];base[(first+i)*n+first+j]+=value;if(i===j)supportDiagonal[first+i]+=value;else if(j===i+1)supportOff[first+i]+=value;}
  }
  const channels=[],modes=[],families=[];

@@ -15,15 +15,21 @@ export class NativeCore {
    return copy(Uint32Array.from(fields));
   };
   const e=engine,c=e.c,s=c.sheet,ch=e.channels[0],response=e.variable?ch.variable:ch.kernel;
-  const fields=[e.n,...[c.r,c.dx,s.mass,s.rootMass,c.area].map(pointer)];
+  const fields=[e.n,bind(e,'restRadii'),...[c.dx,s.mass,s.rootMass,c.area].map(pointer)];
   for(const key of ['pressure','sum','admit','displacement','velocity','solidIncoming','solidAdmit','radii','areas','dv','force','viscous'])fields.push(bind(e,key));
   fields.push(bind(ch,'input'),pointer(response.rows),pointer(response.columns),bind(response,'values'),e.variable?bind(response,'delta'):0);
   this.air=bank(e.airBank);this.solid=bank(e.solidBank);fields.push(this.air.byteOffset,this.solid.byteOffset);
-  this.ports=copy(new Float64Array(32*7));fields.push(0,this.ports.byteOffset);this.core=copy(Uint32Array.from(fields));
+  this.ports=copy(new Float64Array(32*7));fields.push(0,this.ports.byteOffset,bind(e,'radiusTargets'),bind(e,'radiusVelocity'),bind(e,'wallPressureOffset'),pointer(c.slotWidth),bind(e,'airRadii'));this.core=copy(Uint32Array.from(fields));
  }
- step(h){
+ packPorts(){
   const e=this.engine;if(e.ports.length>32)throw Error('Too many sheet ports.');this.core[25]=e.ports.length;
   for(let k=0;k<e.ports.length;k++){const p=e.ports[k],i=k*7;this.ports[i]=p.index;this.ports[i+1]=p.airY;this.ports[i+2]=p.airIn;this.ports[i+3]=p.solidZ;this.ports[i+4]=p.solidIn;}
+ }
+ unpackPorts(){const e=this.engine;for(let k=0;k<e.ports.length;k++){e.ports[k].airOut=this.ports[k*7+5];e.ports[k].solidOut=this.ports[k*7+6];}}
+ prepareWalls(h){this.packPorts();const e=this.engine;this.wasm.walls_prepare(this.core.byteOffset,h,e.controlMix,+e.variable);}
+ finishWalls(){const contacts=this.wasm.walls_finish(this.core.byteOffset);this.unpackPorts();return contacts;}
+ step(h){
+  this.packPorts();const e=this.engine;
   const contacts=this.wasm.step(this.core.byteOffset,h,e.drive,e.controlMix,+(e.inletMode==='reservoir'),+(e.outletMode==='open'),+e.variable);
   e.airBank.unitPos=this.air[2];
   for(let k=0;k<e.ports.length;k++){e.ports[k].airOut=this.ports[k*7+5];e.ports[k].solidOut=this.ports[k*7+6];}
