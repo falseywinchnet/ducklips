@@ -13,7 +13,8 @@ struct SlitViscousStep final {double dissipated_energy{},energy_change{},energy_
 // The caller owns the branch's canonical momentum: at zero conductance it is
 // an unobservable gauge, left unchanged here and reset by the graph's closure
 // handling before reopening. This object owns only local profile memory.
-// The exact tuple (0,0,0) denotes an absent segment, not a finite inertance.
+// Zero segment inertia and gap denote an absent segment. Its owning branch
+// may remain open: branch conductance is still that of the complete branch.
 // Changing to absence retires its memory and returns its metric-energy change;
 // reopening starts that segment with no resurrected velocity profile.
 class SlitViscous final {

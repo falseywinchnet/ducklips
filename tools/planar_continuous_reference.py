@@ -37,7 +37,7 @@ def decay_exponential(matrix):
     for _ in range(scalings):increment=2*increment+increment@increment
     return np.eye(len(matrix))+increment
 
-def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.):
+def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,thermal_width=0.,viscous_width=0.,lip_viscous_width=0.,lip_viscous_order=8,outlet_viscous=False,joint_relaxation=False,joint_fifth=False,joint_tolerance=0.,joint_maximum_step=1e-5,source_contact_step=0.,reservoir_pressure=700.):
     path=out/f'{name}-{n}.txt'
     write_input(p,q,n,[pressure]*2,PORTS,path)
     mouth=p['boundary_edges']['mouth_end'];entry=p['boundary_edges']['supraglottal_entry']
@@ -48,7 +48,10 @@ def run(name,p,q,profiles,epi,n,pressure,previous,binary,out,radiation=False,the
         f.writelines(f'{mouth} {i} {md}\n' for i in range(2))
         f.write('8 1\n');f.writelines(' '.join(map(str,v))+'\n' for v in np.column_stack([epi[0,0],epi[0,1],epi[1,0],epi[1,1]]))
         f.write(' '.join(map(str,[pressure]*8))+'\n')
-        f.write(f'{entry} 0 {ed}\n3e-6 700\n1\n')
+        if not np.isfinite(reservoir_pressure):raise ValueError('finite lung pressure required')
+        # Retain the historical input bytes for the default control.
+        reservoir_token='700' if reservoir_pressure==700. else format(reservoir_pressure,'.17g')
+        f.write(f'{entry} 0 {ed}\n3e-6 {reservoir_token}\n1\n')
         if previous is not None:
             for k in ['charge','momentum']:f.write(' '.join(map(str,previous[k]))+'\n')
             f.write(' '.join(map(str,source_vector(previous['continuous_source'])))+'\n')
@@ -150,7 +153,7 @@ def audit(data,p,q,profiles,epi,geometry_check,radiation=False,thermal_width=0.,
     def viscous_exchange(primary,memory,site,dt):
         l=site['segment_inertance'];g=site['branch_conductance'];a=site['half_gap']
         if l==0:
-            assert g==a==0 and np.all(memory==0)
+            assert g>=0 and a==0 and np.all(memory==0)
             return primary,memory.copy(),0.
         time=dt*(1.86e-5/RHO)/a**2;ratio=l*g
         if g==0:

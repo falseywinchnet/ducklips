@@ -44,6 +44,14 @@ void controls(){double worst=0;std::size_t count=0;
     require(model.energy()==0 && model.advance(p,1.) && p==0,"absent path");
     for(double z:model.momentum){require(z==0,"absence retires history");}
     require(model.change_geometry(100.,.01,.001,work) && work==0 && model.advance(p,1e-4) && p==0,"reopening cannot resurrect history");
+    require(model.equilibrate(.001),"open branch profile");
+    const double before_absence=model.energy();
+    require(model.change_geometry(0.,.01,0.,work) && work==-before_absence,"zero-length site on open branch");
+    p=.1;require(model.advance(p,.001) && p==.1 && model.energy()==0 && model.branch_conductance()==.01,"absent site leaves branch momentum alone");
+    require(model.equilibrate(.001),"open flow needs no absent profile");
+    for(double z:model.momentum){require(z==0,"open absence retires history");}
+    require(model.change_geometry(100.,.01,.001,work) && work==0,"new site starts without old energy");
+    for(double z:model.momentum){require(z==0,"new shoulder has no resurrected profile");}
     std::printf("PASS finite-gap viscosity: %zu controls, relative energy %.17g; shared inertia, geometry work and rollback\n",count,worst);
 }
 }

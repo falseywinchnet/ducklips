@@ -38,7 +38,7 @@ bool lip_viscous_segments(const LipProfile& profile,double first,double last,dou
 bool lip_outlet_viscous_segments(const LipProfile& profile,double last,double width,double density,
     std::span<LipViscousSegment> segments,LipViscousMeasure& measure) noexcept {
     if(!profile.valid() || profile.place!=0 || profile.core<=0 || profile.base_area<=0
-        || !std::isfinite(last) || last<=profile.core || last>profile.length
+        || !std::isfinite(last) || last<=0 || last>profile.length
         || !std::isfinite(width) || width<=0 || !std::isfinite(density) || density<=0){return false;}
     std::span<const double> points,weights;
     switch(segments.size()){
@@ -47,6 +47,19 @@ bool lip_outlet_viscous_segments(const LipProfile& profile,double last,double wi
     }
     double g;if(!profile.conductance(0,last,density,g)){return false;}
     const double minimum=profile.minimum_area();std::array<LipViscousSegment,33> candidate{};
+    if(last<=profile.core){
+        // A wide opening can place the outlet cell centroid inside the flat
+        // core. Its path then has no shoulder: keep the existing site slots
+        // but make those zero-length loss elements explicitly absent.
+        const double inertia=minimum>0?density*last/minimum:0.;
+        const double gap=minimum/(2*width);
+        if(!std::isfinite(inertia) || !std::isfinite(gap)
+            || (minimum>0 && (inertia<=0 || gap<=0))){return false;}
+        candidate[0]={last*.5,inertia,gap};
+        for(std::size_t i=1;i<segments.size();++i){candidate[i]={last,0.,0.};}
+        for(std::size_t i=0;i<segments.size();++i){segments[i]=candidate[i];}
+        measure={g,inertia,0.};return true;
+    }
     candidate[0]={profile.core*.5,minimum>0?density*profile.core/minimum:0.,minimum/(2*width)};
     double approximate=candidate[0].inertance;
     const double half=(last-profile.core)*.5,middle=profile.core+half;

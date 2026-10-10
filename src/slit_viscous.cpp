@@ -46,10 +46,10 @@ double SlitViscous::energy() const noexcept {
     return .5*value/inertance_;
 }
 bool SlitViscous::change_geometry(double inertance,double conductance,double gap,double& work) noexcept {
-    if(inertance==0 && conductance==0 && gap==0 && viscosity_>0){
+    if(inertance==0 && std::isfinite(conductance) && conductance>=0 && gap==0 && viscosity_>0){
         for(double z:momentum){if(!std::isfinite(z)){return false;}}
         const double before=energy();if(!std::isfinite(before)){return false;}
-        momentum.fill(0.);inertance_=conductance_=half_gap_=0.;work=-before;return true;
+        momentum.fill(0.);inertance_=half_gap_=0.;conductance_=conductance;work=-before;return true;
     }
     if(!std::isfinite(inertance) || inertance<=0 || !std::isfinite(conductance) || conductance<0
         || !std::isfinite(gap) || gap<=0 || viscosity_<=0 || !std::isfinite(viscosity_/gap/gap)
@@ -66,6 +66,9 @@ bool SlitViscous::change_geometry(double inertance,double conductance,double gap
     work=after-before;inertance_=inertance;conductance_=conductance;half_gap_=gap;return true;
 }
 bool SlitViscous::equilibrate(double flow) noexcept {
+    if(inertance_==0 && conductance_>0 && viscosity_>0){
+        if(!std::isfinite(flow)){return false;}momentum.fill(0.);return true;
+    }
     if(conductance_==0 && viscosity_>0){if(flow!=0){return false;}momentum.fill(0.);return true;}
     if(!std::isfinite(flow) || inertance_<=0){return false;}std::array<double,modes> next;
     for(std::size_t i=0;i<modes;++i){next[i]=inertance_*viscous_spectrum::weight[i]/viscous_spectrum::pole[i]*flow;if(!std::isfinite(next[i])){return false;}}

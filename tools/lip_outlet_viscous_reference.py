@@ -16,7 +16,6 @@ def outlet_geometry(profile):
     end=length/4
     volume=quad(lambda x:float(area(x)),0,end,points=[core],epsabs=0,epsrel=2e-12)[0]
     centroid=quad(lambda x:x*float(area(x)),0,end,points=[core],epsabs=0,epsrel=2e-12)[0]/volume
-    assert centroid>core
     # Resolve the shrinking shoulder scale without sampling over it. This
     # coordinate is used only by the integration oracle, not state identities.
     scale=width*np.sqrt(minimum/base) if minimum>0 else 0.
@@ -25,7 +24,9 @@ def outlet_geometry(profile):
         u=(scale/width)*np.tan(theta)
         value=minimum+(base-minimum)*(-np.expm1(-u*u))
         return value,scale/np.cos(theta)**2
-    if minimum>0:
+    if centroid<=core:
+        conductance=minimum/(RHO*centroid)
+    elif minimum>0:
         shoulder=quad(lambda t:transform(t)[1]/transform(t)[0],0,angle,epsabs=0,epsrel=2e-11)[0]
         conductance=1/(RHO*(core/minimum+shoulder))
     else:conductance=0.
@@ -35,6 +36,10 @@ def outlet_segments(profile,order,width):
     area,minimum,last,g,_,_=outlet_geometry(profile);core=profile[4]
     x,w=leggauss(order);positive=x[order//2:];weights=w[order//2:]
     x=np.column_stack([-positive,positive]).ravel();w=np.repeat(weights,2)
+    if last<=core:
+        return [dict(branch=6,position=float(last/2),segment_inertance=float(RHO*last/minimum if minimum else 0.),
+                     branch_conductance=float(g),half_gap=float(minimum/(2*width))),
+                *[dict(branch=6,position=float(last),segment_inertance=0.,branch_conductance=float(g),half_gap=0.) for _ in range(order)]]
     positions=np.r_[core/2,(core+last)/2+(last-core)/2*x]
     areas=np.r_[minimum,area(positions[1:])]
     inertias=np.r_[RHO*core/minimum if minimum else 0.,RHO*(last-core)/2*w/areas[1:]]

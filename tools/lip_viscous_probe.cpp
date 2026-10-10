@@ -33,6 +33,15 @@ void controls(){
     require(ducklips::lip_outlet_viscous_segments(open,.003,.03,1.14,outlet,measure),"reopened outlet");
     double sum=0;for(const auto& site:outlet){sum+=site.inertance;}
     require(std::abs(sum*measure.conductance-1)<1e-14,"outlet integrated inertia");
+    for(double last:{.5*open.core,open.core}){
+        require(ducklips::lip_outlet_viscous_segments(open,last,.03,1.14,outlet,measure),"core-only outlet");
+        const double expected=1.14*last/open.minimum_area();
+        require(std::abs(outlet[0].inertance/expected-1)<1e-14 && std::abs(measure.conductance*expected-1)<1e-14,"exact shorter core inertia");
+        for(std::size_t i=1;i<outlet.size();++i){require(outlet[i].inertance==0 && outlet[i].half_gap==0,"zero-length shoulder absent");}
+        require(ducklips::lip_outlet_viscous_segments(p,last,.03,1.14,outlet,measure),"closed core-only outlet");
+        require(measure.conductance==0,"closed core-only conductance");
+        for(const auto& s:outlet){require(s.inertance==0 && s.half_gap==0,"closed core-only air absent");}
+    }
     std::printf("PASS lip viscous quadrature: four orders, shared integrated inertia, exact seal and rollback\n");
 }
 }

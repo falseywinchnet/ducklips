@@ -1,0 +1,212 @@
+{
+  "scope": "Independent actual lip geometry and exact constant-slit outlet; not a moving-wall fluid reference or speech quality check.",
+  "fixtures": [
+    {
+      "pose_index": 1284,
+      "order": 4,
+      "path_end_m": 0.002388754815573313,
+      "flat_core_m": 0.0015,
+      "active_sites": 5,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1284,
+      "order": 8,
+      "path_end_m": 0.002388754815573313,
+      "flat_core_m": 0.0015,
+      "active_sites": 9,
+      "maximum_relative_geometry_error": 1.1102230246251565e-16
+    },
+    {
+      "pose_index": 1284,
+      "order": 16,
+      "path_end_m": 0.002388754815573313,
+      "flat_core_m": 0.0015,
+      "active_sites": 17,
+      "maximum_relative_geometry_error": 1.3322676295501878e-15
+    },
+    {
+      "pose_index": 1284,
+      "order": 32,
+      "path_end_m": 0.002388754815573313,
+      "flat_core_m": 0.0015,
+      "active_sites": 33,
+      "maximum_relative_geometry_error": 1.4432899320127035e-15
+    },
+    {
+      "pose_index": 1285,
+      "order": 4,
+      "path_end_m": 0.002423469332686127,
+      "flat_core_m": 0.0015,
+      "active_sites": 4,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1285,
+      "order": 8,
+      "path_end_m": 0.002423469332686127,
+      "flat_core_m": 0.0015,
+      "active_sites": 8,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1285,
+      "order": 16,
+      "path_end_m": 0.002423469332686127,
+      "flat_core_m": 0.0015,
+      "active_sites": 16,
+      "maximum_relative_geometry_error": 1.9984014443252818e-15
+    },
+    {
+      "pose_index": 1285,
+      "order": 32,
+      "path_end_m": 0.002423469332686127,
+      "flat_core_m": 0.0015,
+      "active_sites": 32,
+      "maximum_relative_geometry_error": 3.431699369116359e-13
+    },
+    {
+      "pose_index": 1374,
+      "order": 4,
+      "path_end_m": 0.0024234693326861266,
+      "flat_core_m": 0.0015,
+      "active_sites": 4,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1374,
+      "order": 8,
+      "path_end_m": 0.0024234693326861266,
+      "flat_core_m": 0.0015,
+      "active_sites": 8,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1374,
+      "order": 16,
+      "path_end_m": 0.0024234693326861266,
+      "flat_core_m": 0.0015,
+      "active_sites": 16,
+      "maximum_relative_geometry_error": 1.9984014443252818e-15
+    },
+    {
+      "pose_index": 1374,
+      "order": 32,
+      "path_end_m": 0.0024234693326861266,
+      "flat_core_m": 0.0015,
+      "active_sites": 32,
+      "maximum_relative_geometry_error": 3.1086244689504383e-15
+    },
+    {
+      "pose_index": 1375,
+      "order": 4,
+      "path_end_m": 0.0023565906814544163,
+      "flat_core_m": 0.0015,
+      "active_sites": 5,
+      "maximum_relative_geometry_error": 4.440892098500626e-16
+    },
+    {
+      "pose_index": 1375,
+      "order": 8,
+      "path_end_m": 0.0023565906814544163,
+      "flat_core_m": 0.0015,
+      "active_sites": 9,
+      "maximum_relative_geometry_error": 2.220446049250313e-16
+    },
+    {
+      "pose_index": 1375,
+      "order": 16,
+      "path_end_m": 0.0023565906814544163,
+      "flat_core_m": 0.0015,
+      "active_sites": 17,
+      "maximum_relative_geometry_error": 2.220446049250313e-16
+    },
+    {
+      "pose_index": 1375,
+      "order": 32,
+      "path_end_m": 0.0023565906814544163,
+      "flat_core_m": 0.0015,
+      "active_sites": 33,
+      "maximum_relative_geometry_error": 1.7763568394002505e-15
+    },
+    {
+      "pose_index": 1500,
+      "order": 4,
+      "path_end_m": 0.0013711887913170095,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1500,
+      "order": 8,
+      "path_end_m": 0.0013711887913170095,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1500,
+      "order": 16,
+      "path_end_m": 0.0013711887913170095,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1500,
+      "order": 32,
+      "path_end_m": 0.0013711887913170095,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1501,
+      "order": 4,
+      "path_end_m": 0.0013707850460898876,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1501,
+      "order": 8,
+      "path_end_m": 0.0013707850460898876,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1501,
+      "order": 16,
+      "path_end_m": 0.0013707850460898876,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    },
+    {
+      "pose_index": 1501,
+      "order": 32,
+      "path_end_m": 0.0013707850460898876,
+      "flat_core_m": 0.0015,
+      "active_sites": 1,
+      "maximum_relative_geometry_error": 0.0
+    }
+  ],
+  "maximum_relative_geometry_error": 3.431699369116359e-13,
+  "hashes": {
+    "tools/lip_outlet_core_reference.py": "09cd8eef59b6011cbddb6294d2019c01a54362d94b4c613a858497391d541d4a",
+    "tools/lip_outlet_viscous_reference.py": "677438d220f80a7e881f125fcea4d2613c0b9f4639f8600bd6c3d083c0aed10b",
+    "src/lip_viscous.cpp": "058d0c5fb639c108c8ca040e93f3bc3f95f8628d79e86efd0baf78d7a8cc2fae",
+    "include/ducklips/lip_viscous.hpp": "f5912908f6619aae28b2330225b249f4ac9993ca5c0aa0184e3e268e02478937",
+    "src/slit_viscous.cpp": "ff4b76679921c601607f70995582a3c4ee1af2f2c46065c4a4b8acfeb26903d4",
+    "include/ducklips/slit_viscous.hpp": "7dd65f6a632294a5adeb21c7960b30c458e87ddc5d1933ddbeebc92ef9dd85d5",
+    "tools/slit_viscous_probe.cpp": "e09bd048753154a7a79a203231299efc7a9b7cb918972cf841b958a1d49bbae7",
+    "tools/lip_viscous_probe.cpp": "3dac7588e25ceb3c34d759ff1548e0f8b48aa549db06b30a2424c6afa8436452",
+    "out/lip-profile/nato.csv": "9c4786e21fb9ae0991ce8f140e05f4e83133a3a6e9af094babd04f72dcca6695",
+    "build/ducklips_lip_viscous_probe": "6cb62944f82368ce787e6df91e02f3676c27acdd2e486143829e8fd64e0ca0a0",
+    "out/lip-outlet-core-reference/fixtures.input": "045bc2a60c8c676bf5d1f6784fa40692b03dfff2e285fe40fa97ac8ee9745616",
+    "out/lip-outlet-core-reference/fixtures.txt": "1422e8a8fe6429894522174088cea49b4dace87d469be974b80547be21b59ff4"
+  }
+}
