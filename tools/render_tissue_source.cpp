@@ -12,11 +12,13 @@ int main(int argc,char** argv){
     if(argc!=2 && argc!=3){return 2;}
     const std::filesystem::path root=argv[1];std::filesystem::create_directories(root);
     ducklips::TissueMaterial material;
+    const bool apposed=argc==3 && std::string(argv[2])=="--apposed";
+    if(apposed){material.rest_gap=0;}
     ducklips::TissueSource source;source.reset(material);
     constexpr double fs=48000,dt=1/fs;
     constexpr std::size_t frames=48000,substeps=2;
     const bool adducted=argc==3 && std::string(argv[2])=="--adducted";
-    if(argc==3 && !adducted){return 2;}
+    if(argc==3 && !adducted && !apposed){return 2;}
     if(adducted){
         source.set_adduction(-.0006);
         // Initialize the prephonatory posture under zero breath. This is
@@ -24,7 +26,7 @@ int main(int argc,char** argv){
         for(std::size_t i=0;i<28800;++i){source.advance(0,0,dt/substeps);}
     }
     std::ofstream setup(root/"setup.json");
-    setup<<"{\"adducted\":"<<(adducted?"true":"false")
+    setup<<"{\"adducted\":"<<(adducted?"true":"false")<<",\"apposed\":"<<(apposed?"true":"false")
         <<",\"central_rest_gap_m\":"<<(adducted?-.0006:material.rest_gap)
         <<",\"initialization_seconds\":"<<(adducted?.3:0)
         <<",\"initial_kinetic_j\":"<<source.kinetic_energy()
@@ -60,5 +62,9 @@ int main(int argc,char** argv){
         }
     }
     if(!ducklips::write_wav_float((root/"source-raw.wav").string(),audio)){return 1;}
+    std::ofstream timing(root/"timing.json");
+    timing<<std::setprecision(17)<<"{\"source_computation_seconds\":"<<simulation_seconds
+        <<",\"audio_seconds\":1,\"realtime_factor\":"<<1/simulation_seconds
+        <<",\"scope\":\"source only; excludes diagnostic file writes and posture initialization\"}\n";
     std::cout<<std::setprecision(10)<<"simulation_seconds="<<simulation_seconds<<" realtime_factor="<<1/simulation_seconds<<'\n';
 }

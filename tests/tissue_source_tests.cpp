@@ -32,6 +32,22 @@ int main(){
         require(std::abs(source.gap()[i]-old_gap[i])<1e-15,"adduction must not teleport tissue");
         require(source.velocity()[i]==old_velocity[i],"adduction must preserve momentum");
     }
+    // A stationary open leak is not phonation. Require the configured,
+    // initially apposed body to develop recurring open/closed flow under
+    // constant pressure, without a periodic driver.
+    ducklips::TissueMaterial apposed;apposed.rest_gap=0;
+    source.reset(apposed);
+    double low=1,high=0,previous_flow=0;int openings=0;
+    for(int i=0;i<48000;++i){
+        const double flow=source.advance(600*(1-std::exp(-i*dt/.012)),0,dt);
+        if(i>=33600){
+            low=std::min(low,flow);high=std::max(high,flow);
+            if(previous_flow<1e-6 && flow>=1e-6){++openings;}
+        }
+        previous_flow=flow;
+    }
+    require(low<1e-8 && high>1e-4 && openings>=10,"apposed body must sustain pressure-driven phonation with closure");
     std::cout<<"zero-input rest, pressure-driven motion, unforced recoil and dissipation passed\n"
-        <<"energy initial="<<initial<<" maximum="<<maximum<<" final="<<final<<'\n';
+        <<"energy initial="<<initial<<" maximum="<<maximum<<" final="<<final<<'\n'
+        <<"constant-pressure opening cycles="<<openings<<" flow range="<<low<<" to "<<high<<'\n';
 }

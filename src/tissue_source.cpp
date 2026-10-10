@@ -19,19 +19,27 @@ double exposed_fraction(double gap,double u,double v) noexcept {
 }
 void TissueSource::reset(const TissueMaterial& material){
     material_=material;
-    for(double value:{material.length,material.height,material.cover_depth,material.body_depth,
-            material.density,material.cover_shear,material.body_shear,material.contact_depth}){
-        if(!std::isfinite(value)||value<=0){throw std::invalid_argument("invalid tissue material");}
+    // The mode basis belongs to one exact configured body. Never silently
+    // interpret a different material using these reference-body modes.
+    if(material.length!=compiled_tissue::length || material.height!=compiled_tissue::height
+        || material.cover_depth!=compiled_tissue::cover_depth || material.body_depth!=compiled_tissue::body_depth
+        || material.density!=compiled_tissue::density || material.cover_shear!=compiled_tissue::cover_shear
+        || material.body_shear!=compiled_tissue::body_shear || material.viscosity!=compiled_tissue::cover_viscosity
+        || material.body_viscosity!=compiled_tissue::body_viscosity
+        || material.longitudinal_stress!=compiled_tissue::longitudinal_stress
+        || material.body_longitudinal_stress!=compiled_tissue::body_longitudinal_stress){
+        throw std::invalid_argument("elastic body changed: recompile data/tissue_body.json");
     }
-    dx_=material.length/(nx-1);dz_=material.height/(nz-1);
-    cover_.fill(0);body_.fill(0);cover_v_.fill(0);body_v_.fill(0);
-    rotation_.fill(0);rotation_v_.fill(0);rotation_a_.fill(0);shear_.fill(0);
+    if(!std::isfinite(material.rest_gap)||!std::isfinite(material.convergence)
+        || !std::isfinite(material.contact_depth)||material.contact_depth<=0){
+        throw std::invalid_argument("invalid tissue posture/contact");
+    }
+    dx_=material.length/(nx-1);dz_=material.height/(nz-1);reference_gap_=material.rest_gap;
+    displacement_.fill(0);velocity_.fill(0);equilibrium_.fill(0);force_.fill(0);
     pressure_.fill(0);contact_.fill(0);flow_=0;
     for(std::size_t z=0;z<nz;++z){
         for(std::size_t x=0;x<nx;++x){
             const double along=double(x)/(nx-1);
-            // Adducted attachment points and a slightly convergent medial
-            // surface. This is a rest geometry, not a vibration mode shape.
             rest_[z*nx+x]=material.rest_gap*4*along*(1-along)
                 +2*material.convergence*(material.height-z*dz_);
         }
@@ -41,17 +49,11 @@ void TissueSource::reset(const TissueMaterial& material){
 
 void TissueSource::set_adduction(double central_rest_gap){
     if(!std::isfinite(central_rest_gap)){throw std::invalid_argument("nonfinite adduction");}
-    const double difference=material_.rest_gap-central_rest_gap;
-    for(std::size_t z=0;z<nz;++z){
-        for(std::size_t x=0;x<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double along=double(x)/(nx-1);
-            const double shift=.5*difference*4*along*(1-along);
-            rest_[i]-=2*shift;cover_[i]+=shift;body_[i]+=shift;
-        }
-    }
+    const double shift=.5*(central_rest_gap-reference_gap_);
+    for(std::size_t mode=0;mode<modes;++mode){equilibrium_[mode]=shift*compiled_tissue::posture[mode];}
     material_.rest_gap=central_rest_gap;
-    geometry();
+    // The actual displacement and velocity are untouched. Elastic stress
+    // performs the posturing work during subsequent physical time steps.
 }
 
 void TissueSource::geometry(){
@@ -60,7 +62,15 @@ void TissueSource::geometry(){
         area_[z]=0;
         for(std::size_t x=0;x<nx;++x){
             const std::size_t i=z*nx+x;
-            gap_[i]=rest_[i]+2*cover_[i];
+            double surface=0,inside=0,velocity=0;
+            for(std::size_t mode=0;mode<modes;++mode){
+                const double normal=compiled_tissue::surface_basis[i*modes+mode];
+                surface+=normal*displacement_[mode];velocity+=normal*velocity_[mode];
+                inside+=compiled_tissue::inside_basis[i*modes+mode]*displacement_[mode];
+            }
+            cover_[i]=surface;body_[i]=inside;cover_v_[i]=velocity;
+            gap_[i]=rest_[i]+2*surface;
+            if(!std::isfinite(surface)||std::abs(surface)>.01){throw std::runtime_error("tissue displacement outside experiment range");}
             const double weight=(x==0||x+1==nx)?.5:1;
             area_[z]+=weight*dx_*std::max(0.,gap_[i]);
         }
@@ -128,120 +138,48 @@ void TissueSource::aerodynamics(double lung,double outlet){
 
 double TissueSource::advance(double lung,double outlet,double dt){
     aerodynamics(lung,outlet);
-    const double cover_mass=material_.density*material_.cover_depth;
-    // Linear displacement across backing depth gives integral rho*(r/d)^2
-    // dr = rho*d/3. The attached lateral boundary has zero displacement.
-    const double body_mass=material_.density*material_.body_depth/3;
-    const double coupling=material_.cover_shear/material_.cover_depth;
-    const double support=material_.body_shear/material_.body_depth;
-    const double relative_drag=material_.viscosity/material_.cover_depth;
-    const double support_drag=material_.body_viscosity/material_.body_depth;
-    const double rotation_inertia=material_.density*material_.cover_depth*material_.cover_depth*material_.cover_depth/12;
-    for(std::size_t z=0;z+1<nz;++z){
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double strain=(cover_[i+nx]-cover_[i])/dz_-rotation_[i];
-            const double rate=(cover_v_[i+nx]-cover_v_[i])/dz_-rotation_v_[i];
-            shear_[i]=material_.cover_depth*(material_.cover_shear*strain+material_.viscosity*rate);
-            rotation_a_[i]=shear_[i]/rotation_inertia;
-        }
+    force_.fill(0);
+    for(std::size_t i=0;i<count;++i){
+        const double penetration=std::max(0.,-.5*gap_[i]);
+        const double strain=penetration/material_.contact_depth;
+        // Compliant contact is separate from bulk elasticity. The normal
+        // modulus 3G is the incompressible uniaxial small-strain limit.
+        contact_[i]=3*material_.cover_shear*strain*(1+strain*strain)
+            +3*material_.viscosity/material_.contact_depth*strain*std::max(0.,-cover_v_[i]);
+        const double force=(pressure_[i]+contact_[i])*compiled_tissue::surface_area[i];
+        for(std::size_t mode=0;mode<modes;++mode){force_[mode]+=compiled_tissue::surface_basis[i*modes+mode]*force;}
     }
-    for(std::size_t z=0;z<nz;++z){
-        const std::size_t below=z==0?1:z-1,above=z+1==nz?nz-2:z+1;
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double cxx=(cover_[i-1]-2*cover_[i]+cover_[i+1])/(dx_*dx_);
-            const double bxx=(body_[i-1]-2*body_[i]+body_[i+1])/(dx_*dx_);
-            const double bzz=(body_[below*nx+x]-2*body_[i]+body_[above*nx+x])/(dz_*dz_);
-            const double vxx=(cover_v_[i-1]-2*cover_v_[i]+cover_v_[i+1])/(dx_*dx_);
-            const double bvxx=(body_v_[i-1]-2*body_v_[i]+body_v_[i+1])/(dx_*dx_);
-            const double bvzz=(body_v_[below*nx+x]-2*body_v_[i]+body_v_[above*nx+x])/(dz_*dz_);
-            const double relative=cover_[i]-body_[i];
-            const double strain=relative/material_.cover_depth;
-            // Positive stored energy .5*k*r² + .25*k*r⁴/d²: strain stiffening
-            // of the compliant cover, not a waveform-shaping nonlinearity.
-            const double coupling_pressure=coupling*relative*(1+strain*strain)
-                +relative_drag*(cover_v_[i]-body_v_[i]);
-            const double penetration=std::max(0.,-.5*gap_[i]);
-            const double contact_strain=penetration/material_.contact_depth;
-            // Distributed compliant contact: pressure and damping approach
-            // zero with penetration; no binary damping jump at first touch.
-            contact_[i]=material_.cover_shear*contact_strain*(1+contact_strain*contact_strain)
-                +relative_drag*contact_strain*std::max(0.,-cover_v_[i]);
-            const double lower_shear=z==0?0:shear_[(z-1)*nx+x];
-            const double upper_shear=z+1==nz?0:shear_[i];
-            const double vertical_force=(upper_shear-lower_shear)/(dz_*((z==0||z+1==nz)?.5:1));
-            cover_a_[i]=(material_.cover_depth*material_.longitudinal_stress*cxx+vertical_force
-                +material_.viscosity*material_.cover_depth*vxx
-                -coupling_pressure+pressure_[i]+contact_[i])/cover_mass;
-            body_a_[i]=(material_.body_depth/3*(material_.body_longitudinal_stress*bxx+material_.body_shear*bzz)
-                +material_.body_viscosity*material_.body_depth/3*(bvxx+bvzz)
-                +coupling_pressure-support*body_[i]-support_drag*body_v_[i])/body_mass;
-        }
+    std::array<double,modes> acceleration{};
+    for(std::size_t mode=0;mode<modes;++mode){
+        double damping=0;
+        for(std::size_t other=0;other<modes;++other){damping+=compiled_tissue::damping[mode*modes+other]*velocity_[other];}
+        acceleration[mode]=force_[mode]-compiled_tissue::stiffness[mode]*(displacement_[mode]-equilibrium_[mode])-damping;
     }
-    // Local explicit mechanical update. Work scales with surface samples;
-    // there is no global matrix factorization or nonlinear root iteration.
-    for(std::size_t z=0;z<nz;++z){
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            cover_v_[i]+=dt*cover_a_[i];body_v_[i]+=dt*body_a_[i];
-            cover_[i]+=dt*cover_v_[i];body_[i]+=dt*body_v_[i];
-            if(z+1<nz){rotation_v_[i]+=dt*rotation_a_[i];rotation_[i]+=dt*rotation_v_[i];}
-            if(!std::isfinite(cover_[i])||std::abs(cover_[i])>.01){throw std::runtime_error("tissue experiment diverged");}
-        }
+    for(std::size_t mode=0;mode<modes;++mode){
+        velocity_[mode]+=dt*acceleration[mode];displacement_[mode]+=dt*velocity_[mode];
     }
-    // Keep observable geometry at the new tissue state. It also supplies
-    // the next step's aerodynamic geometry without a redundant evaluation.
     geometry();
     return flow_;
 }
 
 double TissueSource::kinetic_energy() const noexcept{
     double energy=0;
-    for(std::size_t z=0;z<nz;++z){
-        const double weight=(z==0||z+1==nz)?.5:1;
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            energy+=weight*dx_*dz_*material_.density*(material_.cover_depth*cover_v_[i]*cover_v_[i]
-                +material_.body_depth/3*body_v_[i]*body_v_[i]);
-            if(z+1<nz){energy+=dx_*dz_*material_.density*material_.cover_depth*material_.cover_depth*material_.cover_depth/12*rotation_v_[i]*rotation_v_[i];}
-        }
-    }
-    // .5 per fold, multiplied by the two symmetric folds.
+    for(double velocity:velocity_){energy+=velocity*velocity;}
+    // Unit modal masses, .5 per fold, two symmetric folds.
     return energy;
 }
 
 double TissueSource::elastic_energy() const noexcept{
     double energy=0;
-    const double coupling=material_.cover_shear/material_.cover_depth;
-    const double support=material_.body_shear/material_.body_depth;
-    for(std::size_t z=0;z<nz;++z){
-        const double wz=(z==0||z+1==nz)?.5:1;
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double r=cover_[i]-body_[i],strain=r/material_.cover_depth;
-            const double penetration=std::max(0.,-.5*(rest_[i]+2*cover_[i]));
-            const double contact_strain=penetration/material_.contact_depth;
-            energy+=dx_*dz_*wz*(.5*coupling*r*r+.25*coupling*r*r*strain*strain
-                +.5*support*body_[i]*body_[i]
-                +material_.cover_shear*material_.contact_depth*(.5*contact_strain*contact_strain
-                    +.25*contact_strain*contact_strain*contact_strain*contact_strain));
-        }
-        for(std::size_t x=0;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double c=(cover_[i+1]-cover_[i])/dx_,b=(body_[i+1]-body_[i])/dx_;
-            energy+=.5*dx_*dz_*wz*(material_.cover_depth*material_.longitudinal_stress*c*c
-                +material_.body_depth/3*material_.body_longitudinal_stress*b*b);
-        }
+    for(std::size_t mode=0;mode<modes;++mode){
+        const double offset=displacement_[mode]-equilibrium_[mode];
+        energy+=compiled_tissue::stiffness[mode]*offset*offset;
     }
-    for(std::size_t z=0;z+1<nz;++z){
-        for(std::size_t x=1;x+1<nx;++x){
-            const std::size_t i=z*nx+x;
-            const double c=(cover_[i+nx]-cover_[i])/dz_-rotation_[i],b=(body_[i+nx]-body_[i])/dz_;
-            energy+=.5*dx_*dz_*(material_.cover_depth*material_.cover_shear*c*c
-                +material_.body_depth/3*material_.body_shear*b*b);
-        }
+    for(std::size_t i=0;i<count;++i){
+        const double strain=std::max(0.,-.5*gap_[i])/material_.contact_depth;
+        energy+=6*compiled_tissue::surface_area[i]*material_.cover_shear*material_.contact_depth
+            *(.5*strain*strain+.25*strain*strain*strain*strain);
     }
-    return 2*energy;
+    return energy;
 }
 }

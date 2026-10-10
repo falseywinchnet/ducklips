@@ -1,0 +1,109 @@
+{
+  "current_source_round": 7,
+  "default_speech_engine_changed": false,
+  "body_compiler": {
+    "config": {
+      "length": 0.015,
+      "height": 0.004,
+      "cover_depth": 0.001,
+      "body_depth": 0.004,
+      "density": 1030.0,
+      "cover_shear": 878.0,
+      "body_shear": 1200.0,
+      "cover_viscosity": 0.52,
+      "body_viscosity": 0.16,
+      "poisson_ratio": 0.49,
+      "longitudinal_stress": 6000.0,
+      "body_longitudinal_stress": 10000.0,
+      "length_nodes": 9,
+      "height_nodes": 7,
+      "body_depth_cells": 4,
+      "cover_depth_cells": 1,
+      "retained_modes": 16
+    },
+    "config_sha256": "2f39009488d5edb34af7c6d2b07f83424d19fe62906e400ad6838776c0749b12",
+    "compiler_sha256": "be35d5c3c21c08270d9eb601f74c202c05ac049b6127fa849d9b83c48d809f89",
+    "free_degrees": 735,
+    "retained_modes": 16,
+    "frequencies_hz": [
+      101.45218515476813,
+      131.01960523072094,
+      141.79641906631076,
+      144.99033524213573,
+      167.83863556258964,
+      183.19311258899907,
+      184.87883399209332,
+      193.9268618127332,
+      202.66919367955572,
+      214.87596888129605,
+      217.54429937680365,
+      219.26535569862472,
+      220.1464612811252,
+      220.90145652943514,
+      225.68074342059265,
+      225.91686903498933
+    ],
+    "relative_eigen_residual": 1.5020584833513955e-13,
+    "mass_orthogonality_error": 4.107825191113079e-15,
+    "posture_surface_relative_error": 0.08396259496655645,
+    "method": "linear isotropic volume elasticity; nearly incompressible selective bulk integration; initial longitudinal stress; projected shear viscosity",
+    "limits": [
+      "linear strain about reference posture",
+      "symmetric folds",
+      "no moving fluid volume or acoustic feedback yet"
+    ]
+  },
+  "latest": {
+    "status": "sustained physical-source candidate; naturalness unaccepted",
+    "sample_rate": 48000,
+    "frames": 48000,
+    "gain": 315.98259903736243,
+    "processing": "one constant gain, no EQ, noise, cuts, or fades",
+    "raw_sha256": "043bee13a568b0fb8e3b22e0e1edb4fe1082467ae681dc960b9461ee17134b39",
+    "playback_sha256": "71eac58d7c263203ec25e570b1247d14c71af67d7d1e94c49f2c57bd42ea0ee5",
+    "sources": {
+      "include/ducklips/tissue_source.hpp": "e824bf162ec3d735f57a5ab3d53efadb361f854bb41cef6617cae4a1150f5c25",
+      "src/tissue_source.cpp": "6ae10060a0f014935d023a3add227c010eeff1a446a08d003f0e4e3019e978ff",
+      "tools/render_tissue_source.cpp": "1455fd0b0687e44b11ce5a6bc83adc4457d471dbf7f56ddaf5abd56512ac635b",
+      "tools/package_tissue_round.py": "6a22266d79c8a8bf36ab5037568f2e651a668193bf61240188d00927a6e114a5",
+      "include/ducklips/tissue_body_data.hpp": "fe74cb3b36acf79b3eff79908f317591bf0e92560dbbbc6af819ca75d4def97b",
+      "data/tissue_body.json": "2f39009488d5edb34af7c6d2b07f83424d19fe62906e400ad6838776c0749b12",
+      "tools/compile_tissue_body.py": "be35d5c3c21c08270d9eb601f74c202c05ac049b6127fa849d9b83c48d809f89"
+    },
+    "enhanced_inspected": true,
+    "setup": {
+      "adducted": false,
+      "apposed": true,
+      "central_rest_gap_m": 0,
+      "initialization_seconds": 0,
+      "initial_kinetic_j": 0,
+      "cover_shear_pa": 878,
+      "cover_viscosity_pa_s": 0.52
+    },
+    "timing": {
+      "source_computation_seconds": 0.07084165799997487,
+      "audio_seconds": 1,
+      "realtime_factor": 14.115988081481023,
+      "scope": "source only; excludes diagnostic file writes and posture initialization"
+    },
+    "enhanced_complete": true,
+    "visual_finding": "Complete enhanced field inspected at native cells: growing onset, sustained harmonics, zero-flow closure intervals and release. No naturalness acceptance.",
+    "executable_sha256": "6bee40a8ee8646779df4b503c20c754ec9b52ed19a7f28c319640956b3d81e05"
+  },
+  "rounds": {
+    "1": "Rejected: broadband vertical structure throughout active phonation, irregular cycles, large discrete airflow jumps.",
+    "2": "Continuous separation removes widespread staircase jumps, but an initial broadband episode and intermittent vertical streaks remain. Not accepted.",
+    "3": "Stable nearly sinusoidal motion. Full enhanced field has little upper harmonic structure; folds remain open. Not a voice success.",
+    "4": "Adducted posture settles to constant airflow; full enhanced field confirms no sustained voice. Rejected.",
+    "5": "Rotation changes the transient but still decays to static flow. Full enhanced field inspected; rejected.",
+    "6": "Elastic volume under excessive carried-over adduction produces a near-closed static leak. Full enhanced field inspected; rejected.",
+    "7": "Complete enhanced field inspected at native cells: growing onset, sustained harmonics, zero-flow closure intervals and release. No naturalness acceptance."
+  },
+  "tests": "zero-input rest, pressure-driven motion, unforced recoil and dissipation passed\nenergy initial=7.39164e-06 maximum=7.39164e-06 final=3.79235e-17\nconstant-pressure opening cycles=32 flow range=0 to 0.000231851\n",
+  "known_limits": [
+    "No accepted human timbre result",
+    "Linear elastic body and finite spatial basis",
+    "Quasi-steady flow, no displaced air volume or two-way acoustic coupling",
+    "No turbulence or physiological variability model"
+  ]
+}

@@ -5,7 +5,67 @@ directed development toward deformation and recoil governed by pressure and
 elasticity. This experiment is source work, not another pronunciation or speed
 tuning round. No naturalness result is accepted.
 
-## What changed in the representation
+## Current elastic volume representation (round 006 onward)
+
+The scalar support experiment below has been superseded in `TissueSource`.
+`tools/compile_tissue_body.py` constructs a two-layer elastic volume from
+`data/tissue_body.json`, with all three displacement components. The backing
+and anterior/posterior attachments are fixed; the other faces are free.
+Selective integration of bulk strain permits nearly incompressible material
+without locking the coarse hexahedral elements. Deviatoric strain is fully
+integrated. Longitudinal prestress contributes geometric stiffness.
+
+The compiler projects 735 free volume coordinates onto 16 mass-normalized
+elastic deformation modes. Projected viscosity remains a coupled matrix.
+The generated body contains the stiffness, damping, surface observation and
+pressure-force projection operators. The runtime evolves only the 16
+coordinates, driven by actual geometry-dependent pressure and contact. Mode
+frequencies are body properties, not prescribed voice frequencies or phases.
+The full tissue solve occurs only during body compilation (about 0.2 s here).
+
+This removes the scalar relation previously assumed between normal surface
+motion and interior shear. The internal displacement modes include vertical
+motion, bulging and rotation. A static volume solution supplies the posturing
+influence; changing its equilibrium coordinates preserves actual position and
+velocity. The 16-mode surface posture approximation has an 8.4% relative
+spatial error, which is a known truncation limit, not an acoustic quality score.
+
+The current volume model is linear-strain elasticity about a reference body.
+The aerodynamic approximation is still quasi-steady, with small-slope lateral
+tractions and fixed axial sampling. It does not yet account for displaced air
+volume or two-way airway acoustics. No claim of complete physiological accuracy
+or accepted voice quality follows from the body-operator checks.
+
+The tightly adducted round 006 did not sustain phonation. Its source-only
+computation took 0.0695 s per generated second (about 14.4x), excluding trace
+writes and posture initialization. This is a source observation, not a
+full-engine performance qualification.
+
+Round 007 uses the same elastic body with the superior edges just apposed at
+rest, rather than carrying the scalar model's -0.6 mm compression into a
+different body. Under constant 600 Pa breath, oscillation grows from rest,
+settles into recurring pulses and includes upper-edge contact and zero-flow
+intervals. The first 0.2 s is the onset transient; release starts at 0.8 s.
+The full enhanced field has sustained harmonic structure without the broad
+intermittent streaks of the rejected early surface runs. This is a sustained
+source result, not an accepted natural-human timbre result.
+
+Its measured source computation is 0.07084 s for one second of output
+(14.12x), excluding diagnostic writes and initialization. Playback is one
+constant gain, shared with the prior isolated-source diagnostic; there is no
+waveform shaping, EQ, added noise or imposed F0. The latest raw/source WAV,
+enhanced field, complete physical traces, snapshots and executable are at
+`out/tissue-round-007`. Inspection and provenance are summarized in
+`reports/tissue_source_reference.json`.
+
+The focused source checks now distinguish sustained phonation from static
+airflow: the initially apposed body must develop recurrent open/closed flow
+under constant pressure. Zero-pressure rest, unforced energy decay and
+adduction continuity are also checked. All pass. These checks cannot certify
+perceptual realism. The experiment remains separate from the default speech
+engine until source behavior and coupling are established.
+
+## Initial surface-only representation (rounds 001–005)
 
 `TissueSource` represents lateral displacement over two elastic layers. Each
 layer has a 13 by 13 surface lattice, with fixed anterior/posterior attachment

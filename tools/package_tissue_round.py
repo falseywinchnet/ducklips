@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Preserve a tissue-source experiment, depict its whole sound and deformation."""
 from pathlib import Path
-import hashlib,json,subprocess,sys
+import hashlib,json,subprocess,sys,shutil
 import numpy as np
 from scipy.io import wavfile
 import matplotlib
@@ -21,8 +21,15 @@ record={'status':'unaccepted source experiment','sample_rate':fs,'frames':len(au
  'playback_sha256':hashlib.sha256((root/'source.wav').read_bytes()).hexdigest(),
  'sources':{},'enhanced_inspected':False}
 if (root/'setup.json').exists():record['setup']=json.loads((root/'setup.json').read_text())
+if (root/'timing.json').exists():record['timing']=json.loads((root/'timing.json').read_text())
 snapshot=root/'snapshot';snapshot.mkdir(exist_ok=True)
-for path in ['include/ducklips/tissue_source.hpp','src/tissue_source.cpp','tools/render_tissue_source.cpp','tools/package_tissue_round.py']:
+executable=root/'render'
+if not executable.exists():
+    candidate=ROOT/'build/ducklips_tissue_source_study'
+    if candidate.exists():shutil.copy2(candidate,executable)
+if executable.exists():record['executable_sha256']=hashlib.sha256(executable.read_bytes()).hexdigest()
+for path in ['include/ducklips/tissue_source.hpp','src/tissue_source.cpp','tools/render_tissue_source.cpp','tools/package_tissue_round.py',
+             'include/ducklips/tissue_body_data.hpp','data/tissue_body.json','tools/compile_tissue_body.py']:
     data=(ROOT/path).read_bytes();(snapshot/Path(path).name).write_bytes(data)
     record['sources'][path]=hashlib.sha256(data).hexdigest()
 (root/'receipt.json').write_text(json.dumps(record,indent=2)+'\n')

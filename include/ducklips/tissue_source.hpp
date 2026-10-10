@@ -1,27 +1,30 @@
 #pragma once
 #include <array>
 #include <cstddef>
+#include "ducklips/tissue_body_data.hpp"
 
 namespace ducklips {
 
-// Experimental lateral-displacement continuum. Two elastic layers, attached
-// at the anterior/posterior ends; free inferior/superior edges. Material
-// constants and dimensions determine the motion. No prescribed period,
-// waveform, temporal phase, pitch servo, or random excitation.
+// Experimental reduced elastic volume. The body compiler derives coupled
+// three-dimensional displacement from geometry, density and material law.
+// Runtime pressure and contact evolve the deformation coordinates. No
+// prescribed period, waveform, temporal phase, pitch servo or random kick.
+// Recompile data/tissue_body.json to change the elastic body; rest posture,
+// contact and airflow parameters remain runtime controls.
 struct TissueMaterial final {
-    double length{.015};
-    double height{.004};
-    double cover_depth{.001};
-    double body_depth{.004};
-    double density{1030};
+    double length{compiled_tissue::length};
+    double height{compiled_tissue::height};
+    double cover_depth{compiled_tissue::cover_depth};
+    double body_depth{compiled_tissue::body_depth};
+    double density{compiled_tissue::density};
     // A paired human in-vivo Voigt estimate (subject 2, PMC3961822).
     // This grounds the cover's starting material, not the rest of the body.
-    double cover_shear{878};             // Pa, transverse shear modulus
-    double body_shear{1200};
-    double longitudinal_stress{6000};    // Pa, prestress
-    double body_longitudinal_stress{10000};
-    double viscosity{.52};              // Pa s, Kelvin-Voigt shear viscosity
-    double body_viscosity{.16};
+    double cover_shear{compiled_tissue::cover_shear}; // Pa
+    double body_shear{compiled_tissue::body_shear};
+    double longitudinal_stress{compiled_tissue::longitudinal_stress}; // Pa
+    double body_longitudinal_stress{compiled_tissue::body_longitudinal_stress};
+    double viscosity{compiled_tissue::cover_viscosity}; // Pa s
+    double body_viscosity{compiled_tissue::body_viscosity};
     double rest_gap{.00010};             // full central gap, m
     double convergence{.02};            // radians per medial surface
     double contact_depth{.0003};         // compliant contact layer depth, m
@@ -31,7 +34,8 @@ struct TissueMaterial final {
 
 class TissueSource final {
 public:
-    static constexpr std::size_t nx=13,nz=13,count=nx*nz;
+    static constexpr std::size_t nx=compiled_tissue::nx,nz=compiled_tissue::nz,count=nx*nz;
+    static constexpr std::size_t modes=compiled_tissue::modes;
     using Field=std::array<double,count>;
     void reset(const TissueMaterial& material={});
     // Muscle posture moves the elastic equilibrium. Absolute surface/body
@@ -55,12 +59,9 @@ private:
     void geometry();
     void aerodynamics(double lung,double outlet);
     TissueMaterial material_{};
-    Field cover_{},body_{},cover_v_{},body_v_{},gap_{},rest_{},pressure_{},contact_{};
-    Field cover_a_{},body_a_{};
-    // Rotation about the longitudinal axis, located between vertical nodes.
-    // The last z row is unused. Rotation is distinct from shear strain.
-    Field rotation_{},rotation_v_{},rotation_a_{},shear_{};
+    Field cover_{},body_{},cover_v_{},gap_{},rest_{},pressure_{},contact_{};
+    std::array<double,modes> displacement_{},velocity_{},equilibrium_{},force_{};
     std::array<double,nz> area_{},resistance_{};
-    double dx_{},dz_{},flow_{},minimum_area_{};
+    double dx_{},dz_{},flow_{},minimum_area_{},reference_gap_{};
 };
 }

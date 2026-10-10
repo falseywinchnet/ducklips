@@ -1,0 +1,19 @@
+{
+  "length": 0.015,
+  "height": 0.004,
+  "cover_depth": 0.001,
+  "body_depth": 0.004,
+  "density": 1030.0,
+  "cover_shear": 878.0,
+  "body_shear": 1200.0,
+  "cover_viscosity": 0.52,
+  "body_viscosity": 0.16,
+  "poisson_ratio": 0.49,
+  "longitudinal_stress": 6000.0,
+  "body_longitudinal_stress": 10000.0,
+  "length_nodes": 9,
+  "height_nodes": 7,
+  "body_depth_cells": 4,
+  "cover_depth_cells": 1,
+  "retained_modes": 16
+}
