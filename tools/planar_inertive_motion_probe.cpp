@@ -216,7 +216,7 @@ void state(const Acoustic& acoustic,std::span<const double> v,
 int main(int argc,char** argv){
     bool boundary_mode=false,lip_mode=false,profile_mode=false,initial_state=false,compact_geometry=false,epi_mode=false,orifice_mode=false,fold_mode=false,continuous_mode=false,radiation_mode=false;
     std::string fold_body;
-    double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5;
+    double thermal_width=0,joint_tolerance=0,joint_maximum_step=1e-5,source_contact_step=0;
     bool joint_fifth=false,joint_relaxation=false,outlet_viscous=false;double viscous_width=0,lip_viscous_width=0;std::size_t lip_viscous_order=8;
     for(int i=1;i<argc;++i){const std::string arg=argv[i];
         if(arg=="--boundary-loads" && !boundary_mode){boundary_mode=true;}
@@ -242,9 +242,9 @@ int main(int argc,char** argv){
             catch(...){return 2;}
             if(!std::isfinite(lip_viscous_width) || lip_viscous_width<=0){return 2;}
         }
-        else if((arg=="--joint-tolerance" || arg=="--joint-max-step") && i+1<argc){
+        else if((arg=="--joint-tolerance" || arg=="--joint-max-step" || arg=="--source-contact-step") && i+1<argc){
             double value;try{std::size_t used=0;const std::string token=argv[++i];value=std::stod(token,&used);if(used!=token.size()){return 2;}}catch(...){return 2;}
-            if(!std::isfinite(value) || value<=0){return 2;}if(arg=="--joint-tolerance"){joint_tolerance=value;}else{joint_maximum_step=value;}
+            if(!std::isfinite(value) || value<=0){return 2;}if(arg=="--joint-tolerance"){joint_tolerance=value;}else if(arg=="--joint-max-step"){joint_maximum_step=value;}else{source_contact_step=value;}
         }
         else if(arg=="--joint-fifth" && !joint_fifth){joint_fifth=true;}
         else if(arg=="--joint-relaxation" && !joint_relaxation){joint_relaxation=true;}
@@ -259,7 +259,7 @@ int main(int argc,char** argv){
         else{return 2;}
     }
     const bool viscous_mode=viscous_width>0 || lip_viscous_width>0;
-    if((joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
+    if((source_contact_step>0 && joint_tolerance<=0) || (joint_tolerance>0 && !joint_relaxation) || (joint_fifth && !joint_relaxation) || (joint_relaxation && !continuous_mode) || (outlet_viscous && lip_viscous_width<=0) || (lip_viscous_width>0 && !profile_mode) || ((radiation_mode || thermal_width>0 || viscous_mode) && !continuous_mode) || (epi_mode && !lip_mode) || (orifice_mode && !epi_mode)){return 2;}
     // Boundary loads append: count, then domain_edge region distance pressure.
     // These controls require independently established continuously open caps;
     // only the internal face-motion events are scheduled by this tool.
@@ -541,7 +541,7 @@ int main(int argc,char** argv){
     Polygons a=first;const auto va=views(a);
     if(joint_tolerance>0){
         ducklips::JointAccuracy controller;controller.prepare(continuous);
-        const ducklips::JointAccuracyOptions options{joint_tolerance,joint_maximum_step,1e-11,4096};
+        const ducklips::JointAccuracyOptions options{joint_tolerance,joint_maximum_step,1e-11,4096,source_contact_step};
         // Provider scratch is overwritten on every trial. Geometry is a
         // function of the requested times, never the last attempted step.
         auto provider=[&](double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {
@@ -562,16 +562,17 @@ int main(int argc,char** argv){
             request.reservoir_pressure=reservoir_pressure;request.nodal_flow=inflow;request.series_pressure=series;return true;
         };
         const auto callback=[](void* context,double begin,double finish,ducklips::JointAdvanceInputs& request) noexcept {return (*static_cast<decltype(provider)*>(context))(begin,finish,request);};
-        std::size_t accepted=0,rejected=0;
+        std::size_t accepted=0,rejected=0,closures=0,reopenings=0;
         for(std::size_t step=1;step<cuts.size();++step){
             const double begin=cuts[step-1]*duration,finish=cuts[step]*duration;
             if(!controller.advance(continuous,begin,finish,callback,&provider,options)){std::fprintf(stderr,"joint accuracy failed at interval %zu reason=%d time=%.17g trial=%.17g difference=%.17g\n",step,static_cast<int>(controller.failure),controller.attempt_time,controller.attempt_step,controller.attempt_error);return 1;}
-            const auto& r=controller.last;accepted+=r.accepted_steps;rejected+=r.rejected;
+            const auto& r=controller.last;accepted+=r.accepted_steps;rejected+=r.rejected;closures+=r.source_closures;reopenings+=r.source_reopenings;
             std::printf("%s{\"dt\":%.17g,\"geometry\":",step>1?",":"",finish-begin);geometry_json(cuts[step],geometry,compact_geometry?std::span<const PlanarContour>{}:va);snapshot();if(!continuous_state(continuous)){return 1;}
             std::printf(",\"accuracy\":{\"energy_change\":%.17g,\"external_work\":%.17g,\"physical_loss\":%.17g,\"numerical_loss\":%.17g,\"energy_residual\":%.17g,\"source_port_work\":%.17g,\"graph_port_work\":%.17g,\"reservoir_volume\":%.17g,\"maximum_accepted_error\":%.17g,\"minimum_step\":%.17g,\"trials\":%zu,\"rejected\":%zu,\"accepted_steps\":%zu",r.energy_change,r.external_work,r.physical_loss,r.numerical_loss,r.energy_residual,r.source_port_work,r.graph_port_work,r.reservoir_volume,r.maximum_accepted_error,r.minimum_step,r.trials,r.rejected,r.accepted_steps);
+            if(source_contact_step>0){std::printf(",\"source_closures\":%zu,\"source_reopenings\":%zu",r.source_closures,r.source_reopenings);}
             values("average_pressure",controller.average_pressure);values("average_flow",controller.average_flow);values("accepted_end_times",controller.accepted_end_times());std::printf("}}");
         }
-        std::printf("]}\n");std::fprintf(stderr,"accepted_steps=%zu rejected=%zu; coupled accuracy control; no speech\n",accepted,rejected);return 0;
+        std::printf("]}\n");std::fprintf(stderr,"accepted_steps=%zu rejected=%zu; coupled accuracy control; no speech\n",accepted,rejected);if(source_contact_step>0){std::fprintf(stderr,"source_closures=%zu source_reopenings=%zu\n",closures,reopenings);}return 0;
     }
     const double offset=joint_relaxation?0.:.28867513459481288225;
     for(std::size_t step=1;step<cuts.size();++step){
