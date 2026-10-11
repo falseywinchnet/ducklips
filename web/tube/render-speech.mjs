@@ -2,12 +2,16 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {speechDesign} from './system-presets.mjs';
 import {compileSystem} from './system.mjs';
+import {referenceScore} from './nato-score.mjs';
 import {planSpeech} from './articulation.mjs';
 import {TubeAudioRenderer} from './audio-renderer.mjs';
 import {wav} from './engine.mjs';
 const text=process.argv[2]||'papa',dir=process.argv[3]||'out/words-papa';
-const design=process.argv[4]?JSON.parse(fs.readFileSync(process.argv[4])):speechDesign(),plan=planSpeech(text);
+const design=process.argv[4]?JSON.parse(fs.readFileSync(process.argv[4])):speechDesign(),planFile=process.argv.indexOf('--plan'),plan=planFile>=0?JSON.parse(fs.readFileSync(process.argv[planFile+1])):process.argv[5]==='reference'?referenceScore(text):planSpeech(text);
 if(process.argv[5]==='smooth-separation')plan.smoothSeparation=true;
+if(process.argv[5]==='contact')plan.contactMode=true;
+if(process.argv[5]==='coupled')plan.coupledAir=true;
+if(process.argv.includes('--fold-volume'))plan.foldVolume=true;
 fs.mkdirSync(dir+'/source/native',{recursive:true});const hashes={};
 for(const file of [...fs.readdirSync('web/tube').filter(f=>f.endsWith('.mjs')),'native/core.c','native/build.sh']){const bytes=fs.readFileSync('web/tube/'+file);fs.writeFileSync(dir+'/source/'+file,bytes);hashes[file]=createHash('sha256').update(bytes).digest('hex');}
 let samples;const renderer=new TubeAudioRenderer(48000,message=>{if(message.type==='speech-recording')samples=message.samples;});

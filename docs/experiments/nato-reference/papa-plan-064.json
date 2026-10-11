@@ -1,0 +1,112 @@
+{
+  "text": "papa",
+  "speed": 1,
+  "events": [
+    {
+      "phone": "p",
+      "start": 0,
+      "end": 0.105,
+      "word": "papa",
+      "pressure": 0.45,
+      "effort": 1.2
+    },
+    {
+      "phone": "aa",
+      "start": 0.105,
+      "end": 0.2,
+      "word": "papa",
+      "pressure": 0.9,
+      "effort": 1.8
+    },
+    {
+      "phone": "p",
+      "start": 0.2,
+      "end": 0.245,
+      "word": "papa",
+      "effort": 3.2
+    },
+    {
+      "phone": "aa",
+      "start": 0.245,
+      "end": 0.555,
+      "word": "papa",
+      "pressure": 1,
+      "pressureEnd": 0.75,
+      "effort": 3.2,
+      "effortEnd": 1.1
+    },
+    {
+      "phone": "_",
+      "start": 0.555,
+      "end": 0.811,
+      "word": "papa"
+    }
+  ],
+  "seconds": 0.811,
+  "coupledAir": true,
+  "foldVolume": false,
+  "localClosures": true,
+  "honorOnsets": true,
+  "effortScope": "body",
+  "referenceTiming": "Full AA vowels following the working NATO transcription; gestural lead is estimated from the enhanced field.",
+  "releaseOnSilence": true,
+  "flowNoise": true,
+  "unvoicedGap": 0.0015,
+  "prephonationLead": 0.03,
+  "articulateFloor": true,
+  "apertureRadiation": true,
+  "vowelAreas": {
+    "aa": [
+      0.56,
+      0.62,
+      0.66,
+      0.78,
+      0.97,
+      1.16,
+      1.12,
+      0.82,
+      0.55,
+      0.45,
+      0.37,
+      0.29,
+      0.21,
+      0.15,
+      0.16,
+      0.25,
+      0.34,
+      0.43,
+      0.54,
+      0.61,
+      0.67,
+      0.98,
+      1.76,
+      2.75,
+      3.52,
+      4.08,
+      4.74,
+      5.61,
+      6.6,
+      7.61,
+      8.48,
+      9.06,
+      9.29,
+      9.26,
+      9.06,
+      8.64,
+      7.91,
+      6.98,
+      6.02,
+      5.13,
+      4.55,
+      4.52,
+      4.71,
+      4.72
+    ]
+  },
+  "areaProvenance": {
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2377017/",
+    "table": "I",
+    "resampling": "Linear cross-sectional-area interpolation onto the physical sheet positions; current total tract length retained."
+  },
+  "airLossFIR": true
+}

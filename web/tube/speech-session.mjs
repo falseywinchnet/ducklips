@@ -1,6 +1,6 @@
 import {Articulation} from './articulation.mjs';
 export class SpeechSession {
- constructor(engine,plan){if(engine.c.kind!=='network')throw Error('Choose a connected mouth arrangement to speak.');this.engine=engine;this.plan=plan;this.count=0;this.phase='preparing';this.audible=false;this.finished=false;this.speaker=null;engine.pressureTarget=engine.c.pressure;}
+ constructor(engine,plan){if(engine.c.kind!=='network')throw Error('Choose a connected mouth arrangement to speak.');this.engine=engine;if(plan.contactMode)for(const part of engine.engines)part.contactMode=true;this.plan=plan;this.count=0;this.phase='preparing';this.audible=false;this.finished=false;this.speaker=null;engine.pressureTarget=engine.c.pressure;if(plan.honorOnsets&&plan.coupledAir){this.speaker=new Articulation(engine,plan);this.phase='forming closure';this.count=-engine.rate;if(plan.preparePosture&&plan.events[0].start>0){this.speaker.update(plan.events[0].start);engine.pressureTarget=0;}}}
  cancel(){this.cancelled=true;this.finished=true;this.phase='stopped';this.engine.pressureTarget=0;}
  step(){
   if(this.cancelled)return this.speaker?this.speaker.air.step():this.engine.step();

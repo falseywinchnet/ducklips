@@ -6,7 +6,7 @@ TASK_LINKER=${DUCKLIPS_WASM_LD:-"$(rustc --print sysroot)/lib/rustlib/aarch64-ap
 TASK_TMP=$(mktemp -d)
 trap 'rm -rf "$TASK_TMP"' EXIT
 "$TASK_CLANG" --target=wasm32 -O3 -ffp-contract=off -fno-builtin -nostdlib -c web/tube/native/core.c -o "$TASK_TMP/core.o"
-DYLD_LIBRARY_PATH="$(rustc --print sysroot)/lib" "$TASK_LINKER" -flavor wasm --no-entry --export=step --export=walls_prepare --export=walls_finish --export=base --export-memory --initial-memory=16777216 --max-memory=16777216 "$TASK_TMP/core.o" -o "$TASK_TMP/core.wasm"
+DYLD_LIBRARY_PATH="$(rustc --print sysroot)/lib" "$TASK_LINKER" -flavor wasm --no-entry --export=step --export=walls_prepare --export=walls_finish --export=walls_prepare_batch --export=walls_finish_batch --export=base --export-memory --initial-memory=16777216 --max-memory=16777216 "$TASK_TMP/core.o" -o "$TASK_TMP/core.wasm"
 python3 - "$TASK_TMP/core.wasm" <<'PY'
 import pathlib,sys,hashlib
 b=pathlib.Path(sys.argv[1]).read_bytes()

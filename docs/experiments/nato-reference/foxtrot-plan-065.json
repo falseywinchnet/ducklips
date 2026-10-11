@@ -1,0 +1,98 @@
+{
+  "text": "foxtrot",
+  "speed": 1,
+  "events": [
+    {
+      "phone": "f",
+      "start": 0.08,
+      "end": 0.1825862068965517,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "aa",
+      "start": 0.1825862068965517,
+      "end": 0.3937931034482758,
+      "word": "foxtrot",
+      "stress": true,
+      "pressure": 1,
+      "effort": 2.5,
+      "effortEnd": 1.5
+    },
+    {
+      "phone": "k",
+      "start": 0.3937931034482758,
+      "end": 0.46620689655172404,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "s",
+      "start": 0.46620689655172404,
+      "end": 0.5748275862068964,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "t",
+      "start": 0.5748275862068964,
+      "end": 0.6351724137931033,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "r",
+      "start": 0.6351724137931033,
+      "end": 0.7256896551724136,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "aa",
+      "start": 0.7256896551724136,
+      "end": 0.8946551724137929,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "t",
+      "start": 0.8946551724137929,
+      "end": 0.9549999999999997,
+      "word": "foxtrot",
+      "stress": false,
+      "pressure": 0.65
+    },
+    {
+      "phone": "_",
+      "word": "foxtrot",
+      "start": 0.9549999999999997,
+      "end": 1.105
+    }
+  ],
+  "seconds": 1.105,
+  "coupledAir": true,
+  "foldVolume": false,
+  "localClosures": true,
+  "honorOnsets": true,
+  "effortScope": "body",
+  "referenceTiming": "Clip duration and working stress transcription; individual boundaries unverified.",
+  "flowNoise": true,
+  "prephonationLead": 0.03,
+  "releaseOnSilence": true,
+  "unvoicedGap": 0.0015,
+  "oralJetAreas": {
+    "lip": 2.5,
+    "tip": 4,
+    "blade": 5
+  },
+  "preparePosture": true,
+  "apertureRadiation": true,
+  "airLossFIR": true,
+  "geometricJetLoss": true
+}

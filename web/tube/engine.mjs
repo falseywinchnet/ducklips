@@ -21,7 +21,7 @@ export function validateDesign(d){
   for(const b of d.bands)if(!finite(b.upper,-.02,.02)||!finite(b.lower,-.02,.02)||!finite(b.upperAnchor??.5,0,1)||!finite(b.lowerAnchor??.5,0,1))throw Error('Invalid legacy support.');
   d={...d,version:2,bands:d.bands.map(({upper,lower,upperAnchor=.5,lowerAnchor=.5,...b})=>({...b,offset:(upper+lower)/2,anchor:(upperAnchor+lowerAnchor)/2}))};
  }
- for(const b of d.bands)if((b.damping!==undefined&&!finite(b.damping,.25,8))||(b.slotWidth!==undefined&&(!finite(b.slotWidth,.001,.04)))||typeof b.name!=='string'||b.name.length>80||!Number.isInteger(b.points??P)||!finite(b.points??P,4,12)||!finite(b.anchor,0,1)||!MATERIALS[b.material]||!finite(b.length,.008,.1)||!finite(b.radius,.00005,.025)||!finite(b.mass,.05,5)||!finite(b.elasticity,.2,5)||!finite(b.offset,-.02,.02)||!finite(b.support,.05,5))throw Error('Invalid section properties.');
+ for(const b of d.bands)if((b.damping!==undefined&&!finite(b.damping,.25,8))||(b.slotWidth!==undefined&&(!finite(b.slotWidth,.001,.04)))||typeof b.name!=='string'||b.name.length>80||!Number.isInteger(b.points??P)||!finite(b.points??P,4,12)||!finite(b.anchor,0,1)||!MATERIALS[b.material]||!finite(b.length,b.slotWidth?.001:.008,.1)||!finite(b.radius,.00005,.025)||!finite(b.mass,.05,5)||!finite(b.elasticity,.2,5)||!finite(b.offset,-.02,.02)||!finite(b.support,.05,5))throw Error('Invalid section properties.');
  for(const b of d.blocks)if(!finite(b.x,0,1)||!finite(b.volume,.01,8)||!finite(b.width,.02,.5))throw Error('Invalid volume block.');return d;
 }
 export function compile(input){
@@ -177,8 +177,8 @@ export class TubeEngine {
    const distance=e.angular?(c.slotWidth[a]?2*c.slotWidth[a]/C:c.r[a]*2*Math.PI/C):Math.hypot(c.x[a]-c.x[b],c.r[a]-c.r[b]);
    const speed=Math.sqrt((sheet.axial[Math.min(a,N-2)]*c.dx[a]**2/sheet.mass[a]+sheet.axial[Math.min(b,N-2)]*c.dx[b]**2/sheet.mass[b])/2);
    const delay=distance/Math.max(.1,speed)*this.rate,taps=sheet.fir[a].map((v,k)=>Math.sqrt(v*sheet.fir[b][k]));
-   // Reserve the full slowest-delay history at -10% elasticity before packing.
-   e.setFilter(delay/Math.sqrt(.9),taps);e.setFilter(delay,taps);
+   // Reserve history for 0.5 muscle effort with -10% elasticity variation.
+   e.setFilter(delay/Math.sqrt(.45),taps);e.setFilter(delay,taps);
   }
   this.airBank=new LinkBank(this.air);if(this.compactAir)this.airBank.useUnitAirHistory();this.solidBank=new LinkBank(this.solid);
   if(!this.variation||this.variation.states.length!==c.counts.length||this.variationSeed!==c.noiseSeed){this.variation=new ElasticityVariation(c.counts.length,c.noiseSeed);this.variationSeed=c.noiseSeed;}
@@ -193,6 +193,12 @@ export class TubeEngine {
   for(let i=this.c.starts[section];i<this.c.starts[section]+this.c.counts[section];i++){
    this.radiusTargets[i]=radius;
   }
+ }
+ setSectionElasticity(section,factor){
+  if(!this.elasticityEffort){this.elasticityEffort=new Float64Array(this.c.counts.length).fill(1);this.elasticityTargets=new Float64Array(this.c.counts.length).fill(1);}
+  if(!this.variable)throw Error('Elasticity effort requires the variable sheet response.');
+  if(!Number.isFinite(factor)||factor<.5||factor>4)throw Error('Elasticity effort must be 0.5–4.');
+  this.elasticityTargets[section]=factor;
  }
  // A diagnostic initial displacement can excite any of the computed sheet
  // modes; no modal waveform is ever imposed on the running pressure source.
@@ -237,6 +243,7 @@ export class TubeEngine {
  advanceVariation(){
   if(this.controlPhase===0){
    const factors=this.variation.advance(this.controlPeriod/this.rate,this.c.elasticityVariation);
+   if(this.elasticityEffort){for(let i=0;i<factors.length;i++){this.elasticityEffort[i]+=(this.elasticityTargets[i]-this.elasticityEffort[i])*(1-Math.exp(-this.controlPeriod/this.rate/.035));factors[i]*=this.elasticityEffort[i];}}
    for(const ch of this.channels)ch.variable.update(factors,this.tick===1?0:1);
    const response=this.channels[0].variable;this.viscous.set(response.viscous);this.solidAdmit.fill(0);
    // The same elasticity changes the impedance and delay of tissue paths.
@@ -252,13 +259,17 @@ export class TubeEngine {
   }
   this.controlMix=(this.controlPhase+1)/this.controlPeriod;this.controlPhase=(this.controlPhase+1)%this.controlPeriod;
  }
- step(){
-  if(this.fault)return 0;
-  const N=this.n,h=1/this.rate,c=this.c,sheet=c.sheet;
+ advanceControl(){
+  const c=this.c,h=1/this.rate;
   this.tick++;
   if(this.variable)this.advanceVariation();
   if(this.tick%96===0){this.random^=this.random<<13;this.random^=this.random>>>17;this.random^=this.random<<5;this.wander+=.018*((this.random>>>0)/2147483648-1)-.008*this.wander;}
   this.drive+=(this.pressureTarget*(1+c.wander*this.wander)-this.drive)*h/.035;
+ }
+ step(){
+  if(this.fault)return 0;
+  const N=this.n,h=1/this.rate,c=this.c,sheet=c.sheet;
+  this.advanceControl();
   if(this.native){const contacts=this.native.step(h);if(contacts<0){this.fault='Sheet motion exceeded the model domain. Stop and adjust support or pressure.';return 0;}this.contactCount+=contacts;}else{
   for(let i=0;i<N;i++){this.radiusVelocity[i]+=h*(6400*(this.radiusTargets[i]-this.restRadii[i])-160*this.radiusVelocity[i]);const dr=h*this.radiusVelocity[i];this.restRadii[i]+=dr;for(let t=0;t<this.sectors;t++)this.displacement[t*N+i]-=dr;}
   this.sum.fill(0);this.admit.fill(0);this.areas.fill(0);
@@ -277,17 +288,20 @@ export class TubeEngine {
   this.advanceSheet();
 
   for(let t=0;t<this.sectors;t++)for(let i=0;i<N;i++){
-   const j=t*N+i,surface=(c.slotWidth[i]?2*c.slotWidth[i]:2*Math.PI*this.radii[j])*c.dx[i]/C,mass=sheet.mass[i],v=this.velocity[j],admit=this.admit[j];
+   const j=t*N+i,floor=c.slotWidth[i]?.0000001:.000025,touching=this.contactMode&&this.restRadii[i]+this.displacement[j]<=floor;
+   if(touching){this.displacement[j]=floor-this.restRadii[i];this.velocity[j]=Math.max(0,this.velocity[j]);this.contactCount++;}
+   const surface=(c.slotWidth[i]?2*c.slotWidth[i]:2*Math.PI*this.radii[j])*c.dx[i]/C,mass=sheet.mass[i],v=this.velocity[j],admit=this.admit[j];
    // Passive, collocated pressure-volume and tissue-force/velocity exchange.
    // Solve this scalar port only; the sheet's modes already performed its
    // elastic propagation. No global per-sample matrix solve is needed.
    const resistance=surface*surface/admit+this.solidAdmit[j]+this.viscous[i];
    const drive=surface*2*this.sum[j]/admit+2*this.solidIncoming[j]+surface*this.wallPressureOffset[j];
-   const next=((mass-h*resistance/2)*v+h*drive)/(mass+h*resistance/2),mid=(v+next)/2;
+   let next=((mass-h*resistance/2)*v+h*drive)/(mass+h*resistance/2),mid=(v+next)/2;
+   if(touching&&next<0){next=0;mid=v/2;}
    this.pressure[j]=(2*this.sum[j]-surface*mid)/admit;
    this.dv[j]=next-v;this.velocity[j]=next;this.force[j]=mid;
    if(!Number.isFinite(next)||Math.abs(next)>60||Math.abs(this.displacement[j])>.03){this.fault='Sheet motion exceeded the model domain. Stop and adjust support or pressure.';return 0;}
-   const floor=c.slotWidth[i]?.0000001:.000025;if(this.restRadii[i]+this.displacement[j]<floor){this.displacement[j]=floor-this.restRadii[i];const bounded=Math.max(0,this.velocity[j]);this.dv[j]+=bounded-this.velocity[j];this.velocity[j]=bounded;this.force[j]=(v+bounded)/2;this.pressure[j]=(2*this.sum[j]-surface*this.force[j])/admit;this.contactCount++;}
+   if(this.restRadii[i]+this.displacement[j]<floor){this.displacement[j]=floor-this.restRadii[i];const bounded=Math.max(0,this.velocity[j]);this.dv[j]+=bounded-this.velocity[j];this.velocity[j]=bounded;this.force[j]=(v+bounded)/2;this.pressure[j]=(2*this.sum[j]-surface*this.force[j])/admit;this.contactCount++;}
   }
   this.airBank.send(this.pressure,true);
   this.solidBank.send(this.force,false);

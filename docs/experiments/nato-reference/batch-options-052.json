@@ -1,0 +1,6 @@
+{
+  "flowNoise": true,
+  "prephonationLead": 0.03,
+  "releaseOnSilence": true,
+  "unvoicedGap": 0.0015
+}

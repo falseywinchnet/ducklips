@@ -1,0 +1,268 @@
+{
+  "rendered": 26,
+  "inspected": 26,
+  "matched": 0,
+  "normalization": "Fixed gain 0.1614252377244924; 684 native rows; hop 128; magma 70 dB; full field; no time warp",
+  "words": [
+    {
+      "word": "alpha",
+      "reference_sha256": "4e712a7042447dc174b6499e0da638f557b1ad04cd156bd8fd62e34026439590",
+      "synthetic_sha256": "bb86ffeb7a98acd0f9265388e35d2a697ea4b93e55f71c4ee288fdaa32703510",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/alpha/comparison.png",
+      "comparison_sha256": "a96552f20a97b165f6c6129ae014efcfeab1f3ac6742c84128851be397283571",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands and fricative structure differ; no match."
+    },
+    {
+      "word": "bravo",
+      "reference_sha256": "710aa8755f09a9466b5ace9060f23e3275574b9d3b36788ebe6e44088e8b18f5",
+      "synthetic_sha256": "fe4e2df7beef9140cf8dccf5febb1807ecba70d62176e49daa1a128dd7d82762",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/bravo/comparison.png",
+      "comparison_sha256": "c73a4df0d35d35ce9a0cee97c2a226bf2f251bbb1c19164ff6d910997de5dfdd",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands, excitation, and consonant structure differ; no match."
+    },
+    {
+      "word": "charlie",
+      "reference_sha256": "11eb7806ede14fcd97c43dbed49ccf0de23462d146266972c0e9e9c6ed061b7f",
+      "synthetic_sha256": "a726f0f31fae889d4da64de626e29d57446939e4e9d9236e9186759e7e707e80",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/charlie/comparison.png",
+      "comparison_sha256": "2cd422b9d193e04cb1556474025d314cdc3903dd2daede7a05e0282ccdee3b03",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands and consonant energy differ; no match."
+    },
+    {
+      "word": "delta",
+      "reference_sha256": "925cdbb1cf75e14bbf74b7e5be5bf76ec073cdebaecc315484f260ef7d17b7f6",
+      "synthetic_sha256": "12134ba65b24158f11206994949e906f20740ab622243aeb17057b79ee1539b6",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/delta/comparison.png",
+      "comparison_sha256": "4ec4725ba186c54d6b70853d317683ecdf01a4dc896d713dfbf93742ac7242f4",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands and consonant transients differ; no match."
+    },
+    {
+      "word": "echo",
+      "reference_sha256": "329bb3d0bf2b786d7ddbba93e29fa888cf4619b491e865aa344f4030cf9f3d4c",
+      "synthetic_sha256": "983600be297a9f9902ca4918076b665d8ccc0e6b91ab2518b76098abcbdfb79d",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/echo/comparison.png",
+      "comparison_sha256": "89bf170b46111ef7acdee384e27b411fa75f6c28822c7b05eb2cb9fd2575c7fe",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands and release structure differ; no match."
+    },
+    {
+      "word": "foxtrot",
+      "reference_sha256": "2ae6a19b65f37f0de826b53ec8109a8242f8d1c1fc3af5c26359d9751beca4f4",
+      "synthetic_sha256": "605c481fbbb3821d62b38cde03cd8bb52ea7642df75349ecb747a3c21ae907de",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/foxtrot/comparison.png",
+      "comparison_sha256": "b605ca768ba8df98b2695ed7f1bbfa69edcf83b5c6dd29f217d38655a48f5c80",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "F/S broadband energy largely absent; oversized K/T release lines and late second vowel."
+    },
+    {
+      "word": "golf",
+      "reference_sha256": "1cd109f003740b7ca1e9434ad33e962ab4723fc5afbbb850da7687a846bac318",
+      "synthetic_sha256": "35a71bcfcd8f195a64df4f3d074b6697a90854020746940be3c13176c98b04a1",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/golf/comparison.png",
+      "comparison_sha256": "3f6048165ff6232148bf3c8fdb7cd7bf32eb6beba3b4a2ce5a9601d3570c575d",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands and consonant energy differ; no match."
+    },
+    {
+      "word": "hotel",
+      "reference_sha256": "b871fb328c83886999c11fc63d3c94c7de6434dbaa3a0c85ed1e58f6fafddf4e",
+      "synthetic_sha256": "f82ba9cbf9076a7855ac7608c6e1c9f925883a0e1d6d9b2b00093bdeb9bcf5bc",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/hotel/comparison.png",
+      "comparison_sha256": "ac93b98503b297e590b67bd41c30682f61058c29f2935dd23aba1a22fdc09799",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel bands, timing, and consonant structure differ; no match."
+    },
+    {
+      "word": "india",
+      "reference_sha256": "443aad105d676e5de04d49924251254e5ea53b2c041cfc0794dd776ef8d7b3ac",
+      "synthetic_sha256": "51bd2922e8254c44f2c95b9919a73fd6bfe79443ad31cad54ff80b19f8fdc4e8",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/india/comparison.png",
+      "comparison_sha256": "d69d7c47c6fd13af52d712e33bb0cee3ebd7a497191e673384709779c3e8ce7b",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Weak upper spectrum, wrong low harmonics, early setup transient and long low-frequency tail."
+    },
+    {
+      "word": "juliet",
+      "reference_sha256": "41df163326625bf06ed9bb88dff7b750eeba29aed5e9fd29f3f623ddfcf1bc50",
+      "synthetic_sha256": "f164da5016c28be6753f679b066a728880cb834b6d8f4c3036c967211da499ce",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/juliet/comparison.png",
+      "comparison_sha256": "50da34d5d6459e6aa6ded485aed1040b13568215378e1f2edc2948e2befd0356",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Initial affricate missing, first vowel too late/weak, large final transient, wrong formants."
+    },
+    {
+      "word": "kilo",
+      "reference_sha256": "5d6343c7d6024bf4dcd556de31e4a93ffe693d3aff5acfb7920edaaa13b70e03",
+      "synthetic_sha256": "a59e44da5c9292d94e95ef1fbb336f6279f1f20276b1f6d6ec370f667f604b71",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/kilo/comparison.png",
+      "comparison_sha256": "8eeb3acfc6f208f9dca35fa1d8a889c02c8bd2ca66a04b0c8b9af7863b93e9c0",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Oversized initial K line, wrong first-vowel bands and pitch, weak upper spectrum."
+    },
+    {
+      "word": "lima",
+      "reference_sha256": "fc312af61c3523d580d7555d813230b0431198b80d7c208017570ced1440bdfc",
+      "synthetic_sha256": "8c44b4d91382699374613e14f405c1ec416a11ff228339f52461eea6f506ef2d",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/lima/comparison.png",
+      "comparison_sha256": "7b364aec273f627e83370527c0762a8a9f19ae01fc83878546b6db34c4b6ff7d",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "First-vowel resonance too low; second vowel and upper energy do not follow reference."
+    },
+    {
+      "word": "mike",
+      "reference_sha256": "b39a7ecfb040c90b26ca78a3ae40461a159312428d86382749b2da4bb7c9f81b",
+      "synthetic_sha256": "b14183ce8e14fdad479c970fe458e6ed0e6b2d9204c1543877c437b4062f94be",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/mike/comparison.png",
+      "comparison_sha256": "7cc84ba1a7dfa2a9e2a92d421d463107cdef4e33cb6f8b615d9d6608090d9f6f",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Diphthong does not follow reference; oversized final K line and persistent tail."
+    },
+    {
+      "word": "november",
+      "reference_sha256": "dd732069d13a5a429ba6e9e7df5680e618c444729d6f5297d83119e35796501f",
+      "synthetic_sha256": "d60b66791331354654e4deb39a970ff7ea38fdb538d740864aac833308054fa9",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/november/comparison.png",
+      "comparison_sha256": "eba150e8076121aa7a06de18b47e1158dff589f9b34f8d8926371e973d02f92b",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Wrong multi-vowel timing and bands, intermittent sharp release lines, weak upper spectrum."
+    },
+    {
+      "word": "oscar",
+      "reference_sha256": "7c6f1c80efbcaf71b5e12e321657cc469266f85d89ac4e0b3397c68d12a525c8",
+      "synthetic_sha256": "3fbe17c123e7425aa786dac39ca29046a9b382260b0b359db4348c03c3ce371b",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/oscar/comparison.png",
+      "comparison_sha256": "e4042248836577e71c7b0c6fb104f3259c49e54e7b87c633314a8340f3929fe6",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Missing sustained S energy; several large release lines, wrong vowel bands."
+    },
+    {
+      "word": "papa",
+      "reference_sha256": "ee857286b951a9b8398804c338b1344c1c494c409c2098d580290afbd8d43f66",
+      "synthetic_sha256": "de8336aa64e0d9bfc81461f5465551d146ecac344797de38c84caf50eee03b42",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/papa/comparison.png",
+      "comparison_sha256": "dad9da98a7f81cd1808cde9dd4e4c3f23e1c12346c106a02608ddbe6ea0c8691",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "First vowel largely missing, wrong dominant second-vowel band and extended low tail."
+    },
+    {
+      "word": "quebec",
+      "reference_sha256": "e07333b5b75252032be4f6da21c42c097f0ff45b428987348aa643cdaabf7321",
+      "synthetic_sha256": "80f2166a4568e8b4bc081b13093ffb1ecd4560c6361c5583c58d1d7c45c57f1d",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/quebec/comparison.png",
+      "comparison_sha256": "a9ea78c3c981d5ffead72385680bdd57877437b873e111f5e971de897ce2721c",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Large initial/final release lines replace distributed consonant energy; vowel bands differ."
+    },
+    {
+      "word": "romeo",
+      "reference_sha256": "308c7c3094ab5a97e98b6183a54b6138766be4f5c79a8a897eb19564aa57f352",
+      "synthetic_sha256": "33cc356034f2e709312dbebbe42d521b5ebfa51514eacdbde49284d52dd73f85",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/romeo/comparison.png",
+      "comparison_sha256": "01a107c5418037814978bfa8a01ea8e1c4f23dac0334b44c4fd3023ec06515ce",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Wrong vowel transitions, weak high-frequency energy, sharp middle transient, long low tail."
+    },
+    {
+      "word": "sierra",
+      "reference_sha256": "b4867aeff12f40238fbb93c9564c75b743be48cbe76cacac4724ac207baadc0e",
+      "synthetic_sha256": "c3fc5238791163f2b063e3f34f09e92f34a8f397527d41ebf48ef87d15917aa2",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/sierra/comparison.png",
+      "comparison_sha256": "38a296520d54d8bf9a07cccd148b4db94b605b91c9599d85710eb6494ce14ab7",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Initial S energy missing; delayed vowel onset, wrong formants and low harmonic contour."
+    },
+    {
+      "word": "tango",
+      "reference_sha256": "0e3fc8b282c059ec54b9e8960d0e0b408f13d8bcfa868f613f57dd47ff1de85f",
+      "synthetic_sha256": "9f318321aea337585ac51771383197ea059abd5a18cf4cf90e0bb8238ffdc512",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/tango/comparison.png",
+      "comparison_sha256": "a6af64728be5efddeb105d5fb6548e097185cd59b6921388fe02c9bb8f9612a0",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Large consonant lines, wrong low-band structure and vowel transitions."
+    },
+    {
+      "word": "uniform",
+      "reference_sha256": "cf76f2bd099cad3329480038fde85e619f82d5ccaf943fc9a9072f52af615cee",
+      "synthetic_sha256": "7a4fd322b6c3da5b024132e7d9377c5af7cb9b9fed67078457050a012924a6be",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/uniform/comparison.png",
+      "comparison_sha256": "79923b6620dbb2e635d1e8fcdf3ec1573876ae59d8bfc251d92f4584a38383c1",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Wrong syllable timing and vowel transitions; weak upper spectrum and artificial sharp lines."
+    },
+    {
+      "word": "victor",
+      "reference_sha256": "5f05ddaae345b7bd64ccf9b90986b20bc2e582c2633f56522fe7749c3b4f0614",
+      "synthetic_sha256": "db3d965ef4af9a3c14331ba93858594f12809f934fb5a4659652c817ab784ee8",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/victor/comparison.png",
+      "comparison_sha256": "27a4073b6ecb4ecf5057662918bcaf8da90592b75dd13d87371e44ef2ec36313",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Vowel timing and bands differ; multiple large central release lines."
+    },
+    {
+      "word": "whiskey",
+      "reference_sha256": "f5de01cc47d67a591750e006d4e4fd3a044362237ac1254990a77f71a451cb5b",
+      "synthetic_sha256": "24d094b5b3e936ad0ed8cdff1a38aff7de4a29ad4f6de02bd31442c45418cbd1",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/whiskey/comparison.png",
+      "comparison_sha256": "7f1e402cf4763a62247fea800ef5202d0320932a21a4b7c4863f103aee03700a",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Missing broad S region, large central release lines, wrong vowel regions."
+    },
+    {
+      "word": "x-ray",
+      "reference_sha256": "7256ae4148cf4e068588806e5d92e8e42332dfe78d89912c36cb508d637494ed",
+      "synthetic_sha256": "c3981b2b3acc18d2b4b97c2767fac64d586b0dc04ff3c109aa9a2a4e9a6f9bcd",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/x-ray/comparison.png",
+      "comparison_sha256": "3aab0221f05ab9129d211a1869a869b5995a82225ddfe365e59024fe323b344a",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Large central lines replace broad consonant field; wrong initial and final vowel bands."
+    },
+    {
+      "word": "yankee",
+      "reference_sha256": "06b16ba9e5833b2e58b87b9c2e79b5a1eabbe2bbfa4c5235a724ae919ad5583d",
+      "synthetic_sha256": "236fbcaf87281080400e65675c2d48779487f3afaf89ebc2c41383c975789714",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/yankee/comparison.png",
+      "comparison_sha256": "6ca1a96b4d30d08affb9b2073d17d20695ce735ecfbeae4fc9a79c2db5c551bf",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Wrong initial vowel envelope, large central releases, oversized final vowel relative to reference."
+    },
+    {
+      "word": "zulu",
+      "reference_sha256": "f30a80947e61306febffbb0e1c66d4b2b9c835c396c62a3bd51a71979d81cab7",
+      "synthetic_sha256": "25f8df4be061e80f6ad57631018bfd766cf7560375bee997b604b43ffacba3cd",
+      "comparison": "/Users/joshuahkuttenkuler/ducklips/out/nato-visual-052/zulu/comparison.png",
+      "comparison_sha256": "5b76dc8c416cec2513e6905974ce959569142cae094728774506001e494d9feb",
+      "inspected_full_field": true,
+      "match": false,
+      "observation": "Missing voiced-fricative energy, wrong vowel resonances and pitch contour, extended tail."
+    }
+  ]
+}

@@ -50,7 +50,7 @@ class Coupling {
   const speed=Math.sqrt((sa.axial[Math.min(i,ca.n-2)]*ca.dx[i]**2/sa.mass[i]+sb.axial[Math.min(j,cb.n-2)]*cb.dx[j]**2/sb.mass[j])/2);
   this.solidDelay=Math.max(1,distance/Math.max(.1,speed)*rate);
   this.taps=sa.fir[i].map((v,k)=>Math.sqrt(v*sb.fir[j][k]));
-  const capacity=2**Math.ceil(Math.log2(Math.max(this.airDelay,this.solidDelay/Math.sqrt(.9))+5));
+  const capacity=2**Math.ceil(Math.log2(Math.max(this.airDelay,this.solidDelay/Math.sqrt(.45))+5));
   if(capacity>16384)throw Error('Connection exceeds available tissue history.');
   if(capacity>this.mask+1){for(const key of ['airAB','airBA','solidAB','solidBA']){const old=this[key],next=new Float64Array(capacity);for(let lag=1;lag<=old.length;lag++)next[(capacity-lag)&(capacity-1)]=old[(this.pos-lag)&this.mask];this[key]=next;}this.pos=0;this.mask=capacity-1;}
  }

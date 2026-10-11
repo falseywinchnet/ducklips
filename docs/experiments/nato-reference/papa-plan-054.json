@@ -1,0 +1,56 @@
+{
+  "text": "papa",
+  "speed": 1,
+  "events": [
+    {
+      "phone": "p",
+      "start": 0,
+      "end": 0.105,
+      "word": "papa",
+      "pressure": 0.45,
+      "effort": 1.2
+    },
+    {
+      "phone": "aa",
+      "start": 0.105,
+      "end": 0.2,
+      "word": "papa",
+      "pressure": 0.9,
+      "effort": 1.8
+    },
+    {
+      "phone": "p",
+      "start": 0.2,
+      "end": 0.245,
+      "word": "papa",
+      "effort": 3.2
+    },
+    {
+      "phone": "aa",
+      "start": 0.245,
+      "end": 0.555,
+      "word": "papa",
+      "pressure": 1,
+      "pressureEnd": 0.75,
+      "effort": 3.2,
+      "effortEnd": 1.1
+    },
+    {
+      "phone": "_",
+      "start": 0.555,
+      "end": 0.811,
+      "word": "papa"
+    }
+  ],
+  "seconds": 0.811,
+  "coupledAir": true,
+  "foldVolume": false,
+  "localClosures": true,
+  "honorOnsets": true,
+  "effortScope": "body",
+  "referenceTiming": "Full AA vowels following the working NATO transcription; gestural lead is estimated from the enhanced field.",
+  "releaseOnSilence": true,
+  "flowNoise": true,
+  "unvoicedGap": 0.0015,
+  "prephonationLead": 0.03
+}

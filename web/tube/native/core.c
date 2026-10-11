@@ -54,7 +54,7 @@ static __attribute__((always_inline)) inline void send(Bank *b,double *field,int
  }
  if(air&&b->unit)b->unitPos=(b->unitPos+1)&b->unitMask;
 }
-__attribute__((export_name("step"))) int step(Core *c,double h,double drive,double mix,int inlet,int outlet,int variable){
+__attribute__((export_name("step"))) int step(Core *c,double h,double drive,double mix,int inlet,int outlet,int variable,int contactMode){
  u32 n=c->n;int contacts=0;
  for(u32 i=0;i<n;i++){c->muscleVelocity[i]+=h*(6400*(c->targets[i]-c->radius[i])-160*c->muscleVelocity[i]);double dr=h*c->muscleVelocity[i];c->radius[i]+=dr;c->q[i]-=dr;c->sum[i]=0;c->admit[i]=0;c->solidIncoming[i]=0;c->radii[i]=MAX(c->slotWidth[i]>.0?.0000001:.000025,c->radius[i]+c->q[i]);c->areas[i]=c->slotWidth[i]>.0?2*c->slotWidth[i]*c->radii[i]:PI*c->radii[i]*c->radii[i];c->airRadii[i]=c->slotWidth[i]>.0?SQRT(c->areas[i]/PI):c->radii[i];}
  receive(c->air,c->sum,c->admit,c->airRadii,1);
@@ -68,13 +68,17 @@ __attribute__((export_name("step"))) int step(Core *c,double h,double drive,doub
   double old=c->q[i];response/=c->root[i];c->q[i]=response-old;c->v[i]=(2*response-4*old)/h-c->v[i];
  }
  for(u32 i=0;i<n;i++){
+  double floor=c->slotWidth[i]>.0?.0000001:.000025;
+  int touching=contactMode&&c->radius[i]+c->q[i]<=floor;
+  if(touching){c->q[i]=floor-c->radius[i];c->v[i]=MAX(0,c->v[i]);contacts++;}
   double surface=(c->slotWidth[i]>.0?2*c->slotWidth[i]:2*PI*c->radii[i])*c->dx[i]/8,mass=c->mass[i],v=c->v[i],admit=c->admit[i];
   double resistance=surface*surface/admit+c->solidAdmit[i]+c->viscous[i];
   double force=surface*2*c->sum[i]/admit+2*c->solidIncoming[i]+surface*c->wallPressureOffset[i];
   double next=((mass-h*resistance/2)*v+h*force)/(mass+h*resistance/2),mid=(v+next)/2;
+  if(touching&&next<0){next=0;mid=v/2;}
   c->pressure[i]=(2*c->sum[i]-surface*mid)/admit;c->dv[i]=next-v;c->v[i]=next;c->force[i]=mid;
   if(next!=next||ABS(next)>60||ABS(c->q[i])>.03)return -1;
-  double floor=c->slotWidth[i]>.0?.0000001:.000025;if(c->radius[i]+c->q[i]<floor){c->q[i]=floor-c->radius[i];double bounded=MAX(0,c->v[i]);c->dv[i]+=bounded-c->v[i];c->v[i]=bounded;c->force[i]=(v+bounded)/2;c->pressure[i]=(2*c->sum[i]-surface*c->force[i])/admit;contacts++;}
+  if(c->radius[i]+c->q[i]<floor){c->q[i]=floor-c->radius[i];double bounded=MAX(0,c->v[i]);c->dv[i]+=bounded-c->v[i];c->v[i]=bounded;c->force[i]=(v+bounded)/2;c->pressure[i]=(2*c->sum[i]-surface*c->force[i])/admit;contacts++;}
  }
  send(c->air,c->pressure,1);send(c->solid,c->force,0);
  for(u32 p=0;p<c->portCount;p++){double *port=c->ports+7*p;int i=(int)port[0];port[5]=c->pressure[i]-port[2];port[6]=c->force[i]-port[4];c->solidAdmit[i]-=port[3];}
@@ -85,7 +89,7 @@ __attribute__((export_name("base"))) u32 base(void){return (u32)&__heap_base;}
 // Oral sheets share pressure junctions on a coarser, physically spaced air grid.
 // First advance their material response; the air junction then solves its scalar
 // pressure from the summed wall-flow admittance, and finish applies that pressure.
-__attribute__((export_name("walls_prepare"))) void walls_prepare(Core *c,double h,double mix,int variable){
+__attribute__((export_name("walls_prepare"))) void walls_prepare(Core *c,double h,double mix,int variable,int contactMode){
  u32 n=c->n;
  for(u32 i=0;i<n;i++){
   c->muscleVelocity[i]+=h*(6400*(c->targets[i]-c->radius[i])-160*c->muscleVelocity[i]);double dr=h*c->muscleVelocity[i];c->radius[i]+=dr;c->q[i]-=dr;
@@ -97,19 +101,27 @@ __attribute__((export_name("walls_prepare"))) void walls_prepare(Core *c,double 
  for(u32 i=0;i<n;i++){
   double response=0;for(u32 k=c->rows[i];k<c->rows[i+1];k++)response+=(c->values[k]+(variable?mix*c->delta[k]:0))*c->input[c->columns[k]];
   double old=c->q[i];response/=c->root[i];c->q[i]=response-old;c->v[i]=(2*response-4*old)/h-c->v[i];
+  double floor=c->slotWidth[i]>.0?.0000001:.000025;if(contactMode&&c->radius[i]+c->q[i]<=floor){c->q[i]=floor-c->radius[i];c->v[i]=MAX(0,c->v[i]);}
   double surface=(c->slotWidth[i]>.0?2*c->slotWidth[i]:2*PI*c->radii[i])*c->dx[i]/8,den=c->mass[i]+h*(c->solidAdmit[i]+c->viscous[i])/2;
   c->force[i]=(c->mass[i]*c->v[i]+h*c->solidIncoming[i])/den;
   c->dv[i]=h*surface/(2*den);
   c->sum[i]=surface*c->force[i];c->admit[i]=surface*c->dv[i];
  }
 }
-__attribute__((export_name("walls_finish"))) int walls_finish(Core *c){
+__attribute__((export_name("walls_finish"))) int walls_finish(Core *c,int contactMode){
  int contacts=0;for(u32 i=0;i<c->n;i++){
   double mid=c->force[i]+c->dv[i]*c->pressure[i],next=2*mid-c->v[i];
-  double floor=c->slotWidth[i]>.0?.0000001:.000025;if(c->radius[i]+c->q[i]<floor){c->q[i]=floor-c->radius[i];next=MAX(0,next);mid=(c->v[i]+next)/2;contacts++;}
+  double floor=c->slotWidth[i]>.0?.0000001:.000025;if(c->radius[i]+c->q[i]<floor||(contactMode&&c->radius[i]+c->q[i]<=floor+1e-15)){c->q[i]=floor-c->radius[i];next=MAX(0,next);mid=(c->v[i]+next)/2;contacts++;}
   c->v[i]=next;c->force[i]=mid;if(next!=next||ABS(next)>60||ABS(c->q[i])>.03)return -1;
  }
  send(c->solid,c->force,0);
  for(u32 p=0;p<c->portCount;p++){double *port=c->ports+7*p;int i=(int)port[0];port[6]=c->force[i]-port[4];c->solidAdmit[i]-=port[3];}
  return contacts;
+}
+
+__attribute__((export_name("walls_prepare_batch"))) void walls_prepare_batch(u32 *cores,u32 count,double h,double *mix,u32 *flags){
+ for(u32 i=0;i<count;i++)walls_prepare((Core*)cores[i],h,mix[i],flags[i]&1,(flags[i]>>1)&1);
+}
+__attribute__((export_name("walls_finish_batch"))) int walls_finish_batch(u32 *cores,u32 count,u32 *flags,int *contacts){
+ for(u32 i=0;i<count;i++){contacts[i]=walls_finish((Core*)cores[i],(flags[i]>>1)&1);if(contacts[i]<0)return -(i+1);}return 0;
 }
