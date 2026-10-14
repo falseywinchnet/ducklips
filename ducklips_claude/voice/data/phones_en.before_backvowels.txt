@@ -1,0 +1,35 @@
+# phone overrides found by tools/tune_phones.py against CMU ARCTIC bdl
+AA inherent 288 varea 1.014 vlips 5 vplace 4.7
+AE inherent 230 varea 2.21 vlips 8.61 vplace 9.75
+AH inherent 168 varea 0.625 vlips 3 vplace 6.24
+AO inherent 288 varea 0.18 vlips 1.5 vplace 2.9
+AW inherent 221 varea 1.268 vlips 10 vplace 4
+AX inherent 77 varea 0.599 vlips 0.9 vplace 10.4
+AY inherent 250 varea 1.268 vlips 7.5 vplace 4
+CH inherent 60 place 15
+D inherent 75 place 15.8
+DH area 0.126 inherent 60 place 17.1
+EH varea 2.014 vlips 8.778 vplace 9.25
+ER area 0.42 inherent 216 place 12.6 varea 1.2 vlips 1.5 vplace 3.5
+EY inherent 162 varea 1.637 vlips 14 vplace 13
+G inherent 68 place 11.65
+HH inherent 68
+IH inherent 135 varea 1.464 vlips 3.375 vplace 13.15
+IY inherent 155 varea 0.495 vlips 9.566 vplace 13.1
+JH inherent 84 place 14.6
+K inherent 96 place 11.2
+L area 0.245 inherent 96 place 16.7
+M inherent 84
+N place 15
+NG inherent 95 place 12.05
+OW inherent 220 varea 0.466 vlips 0.71 vplace 7.75
+OY inherent 280 varea 0.532 vlips 1.125 vplace 5.6
+P inherent 90
+SH area 0.112 inherent 74 place 14.8
+T inherent 52 place 15
+TH area 0.16 inherent 76 place 17.1
+UH inherent 160 varea 0.501 vlips 1.317 vplace 8.75
+UW inherent 147 varea 1.473 vlips 0.21 vplace 14.6
+V area 0.098 inherent 60
+Y inherent 96 varea 0.387 vlips 12.116 vplace 12.4
+Z area 0.049 inherent 75 place 15.6

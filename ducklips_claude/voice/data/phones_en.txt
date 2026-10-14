@@ -1,0 +1,46 @@
+# Phone overrides. Consonant places: tools/tune_phones.py against CMU ARCTIC bdl.
+# Vowel postures live in src/planner.cpp (tools/vowel_fit bounded). Durations: scaled by the measured
+# human/ours ratio over ARCTIC a0001-a0060 (owner heard "sea shore" as "si-shooor").
+# Fricative areas and places: levels calibrated against ARCTIC bdl per phone
+# (dB re utterance) after the Borda-Carnot loss and lip exit-loss fixes.
+# Vowel v* and SH: tools/four_view_tune.py (four-view total a0001-a0020 29.60 -> 28.62;
+# hold-out a0021-a0040 29.11 -> 28.34). W, L, ER: tools/identify_tune.py (four-view identification
+# a0001-a0040 36.95 -> 39.04%, check a0041-a0060 32.88 -> 33.63%); AW AO AH the same (39.25%, check 35.59%).
+AA inherent 185 varea 0.724 vlips 5 vplace 7
+AE darea 0 inherent 205 varea 1.5 vlips 9 vplace 7.5
+AO inherent 200 varea 0.3 vlips 1 vplace 5
+AW garea 0.25 inherent 270
+AX inherent 97 vlips 1
+AY inherent 285
+CH inherent 130 place 15
+D inherent 61 place 15.2
+DH area 0 inherent 75 place 16.2
+ER area 0.25 floor 1 inherent 216 place 13 varea 2 vlips 0.6 vplace 6.5 vprotrusion 0.7
+EY inherent 225
+G inherent 85 place 11.65
+HH inherent 75
+IH inherent 135
+IY inherent 200 varea 0.179 vlips 4.9 vplace 13.75
+JH inherent 130 place 14.6
+K inherent 107 place 11.2
+L area 0.3 inherent 105 place 16.2 varea 0.7 vplace 7
+M inherent 105
+N inherent 77 place 15
+NG inherent 102 place 12.05
+OW inherent 240
+OY inherent 280
+P inherent 97
+S area 0.133 inherent 122 place 15.3
+SH area 0.1 inherent 140 place 14.4
+T inherent 68 place 15
+TH area 0.07 inherent 100 place 17
+UH inherent 112
+V area 0.12 inherent 68
+Y inherent 70
+Z area 0.05 inherent 97 place 15
+R area 0.25 floor 2.5 place 13 varea 2 vlips 1 vplace 6.5 vprotrusion 0.7
+ZH area 0.178
+F area 0.18
+AH varea 0.722 vlips 5.13 vplace 8.5
+EH darea 1 dplace 12 varea 1.4 vlips 6 vplace 9.5
+W varea 0.3 vplace 8

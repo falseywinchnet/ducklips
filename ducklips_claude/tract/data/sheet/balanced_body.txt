@@ -1,0 +1,11 @@
+# Sheet tube design, from Astra's web/tube (commit 42c7337). SI units.
+# band: name length_m radius_m material mass elasticity offset_m anchor support points role
+band 01_Inlet_expansion 0.05 0.009 soft 1 1 -0.0036271115257626475 0.5401597282112418 1 8 inlet
+band 02_Lower_elastic_adapter 0.0175 0.008 fold 0.2 3 -0.005313555762881324 0.5297026512131847 0.2 4 adapter
+band 03_Lower_firm_support 0.0225 0.011 firm 4.7 0.2 -0.008313555762881324 0.5373209353580447 3.2 4 firm
+band 04_Lower_heavy_tissue 0.0175 0.007 soft 3.5 1.5 -0.004313555762881324 0.5029170886660774 0.2 4 soft
+band 05_Vocal_cord 0.016 0.00032 fold 1.85 1.5 0.00027209617978050596 0.549436346277014 0.2 8 cord
+band 06_Upper_heavy_tissue 0.035 0.007 soft 3.5 1.5 -0.004313555762881324 0.5029170886660774 0.2 8 soft
+band 07_Upper_firm_support 0.045 0.011 firm 4.7 0.2 -0.008313555762881324 0.5373209353580447 3.2 8 firm
+band 08_Upper_elastic_adapter 0.035 0.008 fold 0.2 3 -0.005313555762881324 0.5297026512131847 0.2 8 adapter
+band 09_Throat_expansion 0.025 0.006 soft 1 1 -0.0006271115257626483 0.5457723404525157 1 8 outlet

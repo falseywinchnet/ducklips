@@ -1,0 +1,24 @@
+# learned vowel pitch factors, semitones re the sentence median
+intercept -0.2460
+factor accent 0.0761
+factor after:sonorant -0.1944
+factor after:start -0.1746
+factor after:voiced -0.1429
+factor after:voiceless 0.6557
+factor after:vowel -0.3898
+factor final:comma -0.9061
+factor final:comma:nuclear -0.1782
+factor final:end -3.4428
+factor final:end:nuclear -1.8411
+factor nuclear 0.4789
+factor phrase_first_vowel -0.7096
+factor phrase_number:0 0.4599
+factor phrase_number:1 -0.4122
+factor phrase_number:2 -0.2938
+factor phrase_progress:0 1.2167
+factor phrase_progress:1 0.3401
+factor phrase_progress:2 -0.4544
+factor phrase_progress:3 -1.3484
+factor stress:0 -0.2868
+factor stress:1 0.3879
+factor stress:2 -0.3471
