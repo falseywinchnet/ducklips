@@ -17,7 +17,8 @@ constexpr PartName kPartNames[] = {
     {Part::lungs, "lungs"},   {Part::pitch, "pitch"}, {Part::glottis, "glottis"},
     {Part::tongue, "tongue"}, {Part::tip, "tip"},     {Part::dorsum, "dorsum"},
     {Part::lips, "lips"},     {Part::velum, "velum"}, {Part::floor, "floor"},  {Part::jaw, "jaw"},
-    {Part::lateral, "lateral"},
+    {Part::lateral, "lateral"}, {Part::body, "body"},     {Part::apex, "apex"},     {Part::mouth, "mouth"},
+    {Part::spread, "spread"},   {Part::larynx, "larynx"}, {Part::angle, "angle"},   {Part::groove, "groove"},
 };
 
 struct MarkName {

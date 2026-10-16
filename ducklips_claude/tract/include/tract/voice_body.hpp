@@ -42,6 +42,11 @@ struct BodyLayout {
   // Turbulent flux through the glottis: rms share of the flow, times the
   // turbulence onset (Reynolds number), shaped like the jet noise.
   double jet_flux = 0.0;
+  // Its spectrum's corner (Hz; 0 leaves it shaped like the jet noise, which
+  // at the glottis's narrow slit is nearly white to 8 kHz: vowels' 6-8 kHz
+  // stood 11-16 dB over bdl's). Two low-pass stages of white noise,
+  // unity gain below the corner.
+  double flux_corner = 0.0;
   // Physiological tremor, 2-15 Hz, rms: of the stretching muscle (share of
   // cord tension), the adducting muscles (cm of fold rest gap) and the
   // breathing muscles (share of lung pressure).
@@ -80,6 +85,12 @@ struct BodyLayout {
   double labiodental = 1.2;            // (0.6 in the front end's body; with /f/ at 0.06 cm^2, 1.2 gives bdl's /f/ level)
   bool piriform = true;                // side branches (diagnostics can switch them off)
   double piriform_loss = 0.5;          // the piriform lining's loss (fraction of critical)
+  double piriform_port = 0.6;          // cm^2, both openings into the hypopharynx together
+  double piriform_scale = 1.0;         // the recesses' cross-sections (and volume) times this
+  // The recesses' frequency-growing loss (their hops' low-pass k, 0 off):
+  // narrow, mucosa-lined pockets lose to their boundary layers, so their
+  // zero is a dip, not a cut (lossless it took 17-23 dB at 4.6-5 kHz).
+  double piriform_smoothing = 0.0;
   bool under_tongue = true;
   bool sinuses = true;
   // Scales the sinus ostia's areas (Dang & Honda's 0.11-0.185 cm^2). At
@@ -89,6 +100,18 @@ struct BodyLayout {
   // sits within 2 dB of bdl in five bands (111 nasals, a0001-a0030).
   double sinus_neck_scale = 0.25;
   std::uint32_t seed = 73021U;
+  // The source: false, the self-oscillating triangular glottis; true, the
+  // kinematic folds (Cord::set_kinematic) with these settings.
+  bool kinematic_glottis = false;
+  // The fold tube (Cord::set_fold_tube): the folds as a short tube of the
+  // body's three pieces, blown by the lungs alone. Takes precedence over the
+  // kinematic folds.
+  bool fold_tube = false;
+  FoldTubeSettings fold;
+  double kinematic_amplitude = 0.0007;  // cm per sqrt(dyn/cm^2): 0.06 cm at 750 Pa
+  double kinematic_phase_lag = 1.22;    // rad, upper edge behind the lower
+  double kinematic_softness = 0.002;    // cm, width of the soft contact
+  double kinematic_jitter = 0.17;       // rad per sqrt(s) of phase random walk
 };
 
 // A rest layout for a vowel from an MRI area profile (sections of equal
@@ -106,6 +129,14 @@ class VoiceBody {
   // Opening of the space under the tongue blade, cm^2: only a raised tip
   // (/s sh r/) opens it; for vowels the tip rests behind the lower teeth.
   void set_under_tongue(double area) { under_tongue_area_ = std::max(area, 0.0); }
+  // Where the nasal port and the pocket under the tongue open (cm from the
+  // glottis), for a body whose geometry moves them.
+  void set_velum_place(double place);
+  // The node where the lip opening is (a body whose open end flares past the
+  // lips); jets there are lip jets. -1: the tube's last active node.
+  void set_lip_end(Index node) { lip_end_ = node; }
+  Index lip_end() const { return lip_end_; }
+  void set_under_tongue_place(double place);
   // Release a share of the walls' support stiffness over nodes first..last of
   // the vocal tube (muscles letting go), applied at the next control tick.
   void set_wall_release(Index first, Index last, double share) {
@@ -139,6 +170,7 @@ class VoiceBody {
   Tube& vocal() { return vocal_; }
   Tube& trachea() { return trachea_; }
   Tube& nose() { return branch_tubes_[static_cast<std::size_t>(nose_)]; }
+  double velum_port() const { return velum_now_; }  // cm^2, the nasal port as it is now
 
   // One state step; returns the radiated sound (arbitrary units) at the
   // step rate.
@@ -166,6 +198,7 @@ class VoiceBody {
   void hear_pitch();
   double aspiration_sample();
   double tremor_white();
+  void move_branch_group(int group, double place);
   void place_jet();
   void sound_jet();
   double jet_gauss();
@@ -218,6 +251,9 @@ class VoiceBody {
   double noise_lower_ = 0.0;
   double noise_z1_ = 0.0;     // and two low-pass stages at the corner
   double noise_z2_ = 0.0;
+  double flux_z1_ = 0.0;      // the flux noise's own two low-pass stages
+  double flux_z2_ = 0.0;
+  double area_floor_ = 1.0;   // running minimum of the glottal area (15 ms release), cm^2
   std::uint32_t noise_random_ = 0x9E3779B9U;
   // Pitch heard from the closure instants (contact onset).
   double intended_pitch_ = 120.0;
@@ -258,6 +294,7 @@ class VoiceBody {
   double from_cord_below_ = 0.0;
   double from_cord_above_ = 0.0;
   double previous_flow_ = 0.0;
+  Index lip_end_ = -1;
   double skin_low_ = 0.0;    // the lining's flow through the first of two skin low-pass poles
   double skin_lower_ = 0.0;  // and through the second
 };

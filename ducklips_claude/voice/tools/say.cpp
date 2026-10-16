@@ -90,6 +90,13 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
       arguments.plan.rate = std::strtod(values[++index], nullptr);
     } else if (value == "--pitch" && has_next) {
       arguments.plan.base_pitch = std::strtod(values[++index], nullptr);
+    } else if (value == "--organs" && has_next) {
+      if (!voice::load_organ_postures(values[++index], arguments.plan)) {
+        std::fprintf(stderr, "cannot read organ postures %s\n", values[index]);
+        return false;
+      }
+    } else if (value == "--pitch-median" && has_next) {
+      arguments.plan.pitch_median = std::strtod(values[++index], nullptr);
     } else if (value == "--seed" && has_next) {
       arguments.body.seed = static_cast<std::uint32_t>(std::strtoul(values[++index], nullptr, 10));
       arguments.plan.seed = arguments.body.seed;

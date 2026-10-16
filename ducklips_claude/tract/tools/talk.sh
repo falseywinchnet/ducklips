@@ -3,7 +3,7 @@
 # 750 Pa, the segment engine's phone table) and the segment-module engine
 # (speak, with its room). Run on the machine that holds the builds (the
 # Mini: ~/ducklips).
-# usage: talk.sh "text" OUT.wav [seed]
+# usage: talk.sh "text" OUT.wav [seed [say options...]]
 #   VOICE_ROOT overrides the ducklips root (default: this script's ../..).
 set -euo pipefail
 if [ $# -lt 2 ]; then
@@ -13,7 +13,10 @@ fi
 root="${VOICE_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
 seed="${3:-73021}"
 score="$(mktemp -t talk).score"
-"$root/voice/build/say" "$1" /dev/null --score "$score" --plan-only --pressure 750 \
-  --phones "$root/tract/data/phones_tract.txt" >/dev/null
+# say reads its learned pitch and duration models from data/ under the
+# directory it runs in: run it from voice/ (elsewhere it falls back to the
+# hand rules without a word).
+(cd "$root/voice" && ./build/say "$1" /dev/null --score "$score" --plan-only --pressure 750 \
+  --phones "$root/tract/data/phones_tract.txt" "${@:4}" >/dev/null)
 "$root/tract/build/speak" "$score" "$2" "$seed"
 rm -f "$score"

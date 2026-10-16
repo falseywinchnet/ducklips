@@ -12,10 +12,12 @@
 // arytenoid posture of the cord module, breath, velum, the opening under the
 // tongue and the intended pitch. Sound itself comes only from the body.
 
+#include "tract/articulation.hpp"
 #include "tract/voice_body.hpp"
 #include "voice/score.hpp"
 
 #include <array>
+#include <vector>
 #include <cstdint>
 
 namespace tract {
@@ -24,6 +26,13 @@ namespace tract {
 // lips (17.5 cm, the front end's oral grid), firm larynx walls for the first
 // 2 cm, soft pharynx and mouth, lips over the last 1 cm.
 BodyLayout speech_layout();
+// The layout for the articulatory body: 60 nodes (21.9 cm, room for a
+// lowered larynx and protruded lips), of which the open end uses as many as
+// the geometry's length needs.
+BodyLayout articulatory_layout();
+// Does the score place organs (body, apex, mouth, spread, larynx, angle,
+// groove)? Such a score is spoken by the articulatory body.
+bool uses_organs(const voice::Score& score);
 
 class Speaker {
  public:
@@ -43,6 +52,16 @@ class Speaker {
   void set_lung_follow(double seconds) { lung_follow_ = seconds; }
   // Scales every motor's wander (diagnostics; 1 as tuned, 0 holds steady).
   void set_wander_gain(double gain) { wander_gain_ = gain; }
+  // The posterior chink while voicing (cm^2).
+  void set_voicing_chink(double area) { voicing_chink_ = area; }
+  // The flared open end: growth per node past the lips and its widest area.
+  // Past the lip opening the articulatory body's tube is a near-closed
+  // sliver of this area (cm^2).
+  void set_sliver_area(double area) { sliver_area_ = area; }
+  void set_flare(double growth, double widest) {
+    flare_growth_ = growth;
+    flare_widest_ = widest;
+  }
   // The voicing posture: rest displacements of the folds' lower and upper
   // edges at the vocal processes (cm; VocalTractLab's modal 0.00495, 0.0004).
   void set_voicing_posture(double lower, double upper) {
@@ -62,6 +81,11 @@ class Speaker {
   double step();
   bool finished() const { return time_ >= score_.duration; }
   VoiceBody& body() { return body_; }
+  bool articulatory() const { return articulatory_; }
+  MidsagittalTract& anatomy() { return anatomy_; }
+  const TractProfile& profile() const { return profile_; }
+  // The organs where the motors hold them now.
+  Articulators organs();
 
  private:
   struct Motor {
@@ -85,6 +109,13 @@ class Speaker {
   void apply(const voice::PartEvent& event);
   void advance_motors();
   void shape_body();
+  // The tract's areas from the old area-profile parts (tongue, tip, dorsum,
+  // lips, jaw); returns the narrowest area in the mouth (a seal).
+  double shape_area_parts();
+  // The tract from organ positions through the midsagittal model; returns
+  // the narrowest area in the mouth.
+  double shape_organs();
+  void profile_to_nodes(std::vector<double>& areas, double length) const;
   double gauss();
 
   voice::Score score_;
@@ -111,7 +142,23 @@ class Speaker {
   // (+1.7, -20.1 dB). Pressing the edges harder closed less, not more.
   double voicing_lower_ = 0.008;
   double voicing_upper_ = -0.012;  // (-0.008 before the folds' damping was raised; see Speaker::Speaker)
+  // The articulatory body: geometry every kGeometryTicks control ticks, node
+  // areas and the open end's length interpolated between frames.
+  static constexpr int kGeometryTicks = 8;
+  bool articulatory_ = false;
+  double sliver_area_ = 0.02;
+  MidsagittalTract anatomy_;
+  TractProfile profile_;
+  int geometry_tick_ = 0;
+  std::vector<double> node_from_;
+  std::vector<double> node_to_;
+  std::vector<double> node_scratch_;
+  double length_from_ = 17.5;
+  double length_to_ = 17.5;
   double wander_gain_ = 1.0;
+  double voicing_chink_ = 0.0002;
+  double flare_growth_ = 1.6;
+  double flare_widest_ = 30.0;
   double relaxation_ = 0.0;  // 0..1, how far the pharyngeal walls have let go
 };
 

@@ -73,7 +73,16 @@ void Cord::advance_posture() {
   // as the breath dies the folds stop before their pitch falls further.
   double stretch = std::max((1.0 + elongation_ * deflection_) / (1.0 + elongation_ * elongation_reference_),
                             elongation_floor_);
-  double command = std::max(1.0 + (pitch_ - kNaturalPitch) / kPitchPerTension, 0.05) * tension_factor_ * stretch;
+  double natural = fold_tube_ ? fold_.natural_pitch : kNaturalPitch;
+  double per_tension = fold_tube_ ? fold_.pitch_per_tension : kPitchPerTension;
+  double anticipated = 1.0;
+  if (fold_tube_ && elongation_ > 0.0) {
+    double swing = std::max(fold_.swing_per_pascal * (expected_breath_ - fold_.swing_onset), 0.0);
+    anticipated = std::max((1.0 + elongation_ * swing) / (1.0 + elongation_ * elongation_reference_),
+                           elongation_floor_);
+  }
+  double command =
+      std::max(1.0 + (pitch_ - natural) / per_tension, 0.05) * tension_factor_ * stretch / anticipated;
   double tension_gain = 1.0 - std::exp(-kStepSeconds / 0.0015);
   tension_guide_ += tension_gain * (command - tension_guide_);
   tension_ += tension_gain * (tension_guide_ - tension_);
@@ -151,11 +160,262 @@ void Cord::advance_mechanics() {
   x_[1] = next1;
 }
 
+// Unit-variance noise (sum of four uniforms) for the kinematic jitter.
+double Cord::jitter_gauss() {
+  double sum = 0.0;
+  for (int draw = 0; draw < 4; ++draw) {
+    jitter_random_ ^= jitter_random_ << 13U;
+    jitter_random_ ^= jitter_random_ >> 17U;
+    jitter_random_ ^= jitter_random_ << 5U;
+    sum += static_cast<double>(jitter_random_) / 4294967296.0;
+  }
+  return (sum - 2.0) * std::sqrt(3.0);
+}
+
+// Kinematic folds: prescribed edge swings (see set_kinematic), the opening
+// integrated along the fold with a soft contact.
+void Cord::advance_kinematics() {
+  constexpr double kKinematicRestLength = 1.6;   // cm at kKinematicRestPitch
+  constexpr double kKinematicRestPitch = 120.0;  // Hz
+  constexpr double kKinematicThickness = 0.45;   // cm at rest length
+  constexpr int kSamples = 16;
+  double frequency = std::max(pitch_ * tension_factor_, 40.0);
+  length_ = kKinematicRestLength * std::sqrt(frequency / kKinematicRestPitch);
+  double thickness = kKinematicThickness * kKinematicRestLength / length_;
+  thickness_[0] = 0.5 * thickness;
+  thickness_[1] = 0.5 * thickness;
+  // The swing follows the transglottal pressure, smoothed (two poles, 25 Hz).
+  double pole = 1.0 - std::exp(-kTwoPi * 25.0 * kStepSeconds);
+  transglottal_low_ += pole * ((pressure_sub_ - pressure_supra_) - transglottal_low_);
+  transglottal_lower_ += pole * (transglottal_low_ - transglottal_lower_);
+  double drive = std::max(transglottal_lower_, 0.0);
+  double amplitude = amplitude_gain_ * std::sqrt(drive);
+  amplitude *= std::clamp((drive - 1000.0) / 1000.0, 0.0, 1.0);  // 100-200 Pa
+  phase_ += kTwoPi * frequency * kStepSeconds + jitter_ * std::sqrt(kStepSeconds) * jitter_gauss();
+  if (phase_ > kTwoPi) {
+    phase_ -= kTwoPi;
+  }
+  double rest[2] = {posture_.lower_rest + rest_offset_, posture_.upper_rest + rest_offset_};
+  double edge_phase[2] = {phase_, phase_ - phase_lag_};
+  double softness = std::max(contact_softness_, 1.0e-5);
+  double step = length_ / kSamples;
+  for (int edge = 0; edge < 2; ++edge) {
+    double swing = amplitude * std::cos(edge_phase[edge]);
+    x_[edge] = swing;
+    double open_sum = 0.0;
+    double closed = 0.0;
+    for (int sample = 0; sample < kSamples; ++sample) {
+      double z = (sample + 0.5) / kSamples;  // anterior commissure 0 .. vocal process 1
+      double half_gap = rest[edge] * z + swing * std::sin(kPi * z);
+      // Soft contact: the half gap passes smoothly through zero to zero
+      // (tissue compresses; no corner at closure).
+      double soft = softness * std::log1p(std::exp(std::min(half_gap / softness, 50.0)));
+      if (half_gap / softness > 50.0) {
+        soft = half_gap;
+      }
+      open_sum += 2.0 * soft * step;
+      if (half_gap <= 0.0) {
+        closed += 1.0;
+      }
+    }
+    alpha_[edge] = closed / kSamples;
+    open_length_[edge] = length_ * (1.0 - alpha_[edge]);
+    section_area_[edge] = open_sum + std::max(posture_.chink, 0.0);
+  }
+  area_ = std::max(std::min(section_area_[0], section_area_[1]), kMinimumArea);
+}
+
+// Each slice's opening along the fold on the wedge-shaped rest gap (zero at
+// the anterior commissure), interpolated from the lower edge's rest at the
+// bottom slice to the upper edge's at the top: as compute_geometry, per slice.
+void Cord::fold_geometry() {
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    double share = static_cast<double>(slice) / static_cast<double>(kFoldSlices - 1);
+    double rest = posture_.lower_rest + share * (posture_.upper_rest - posture_.lower_rest) + rest_offset_;
+    double x = cover_q_[slice];
+    double back = rest + x;
+    double front = rest >= 0.0 ? x : back;
+    double contact_length = 0.0;
+    double mean_contact_z = 0.5 * length_;
+    double open_length = 0.0;
+    double mean_width = 0.0;
+    if (back > 0.0 && front > 0.0) {
+      open_length = length_;
+      mean_width = back + front;
+    } else if (back <= 0.0 && front <= 0.0) {
+      contact_length = length_;
+    } else {
+      double apex = rest > 0.0 ? length_ * (1.0 + x / rest) : 0.0;
+      apex = std::clamp(apex, 0.0, length_);
+      open_length = apex;
+      mean_width = std::max(back, 0.0);
+      contact_length = length_ - apex;
+      mean_contact_z = 0.5 * (apex + length_);
+    }
+    slice_open_[slice] = open_length;
+    slice_alpha_[slice] = contact_length / length_;
+    slice_star_[slice] = rest >= 0.0 ? rest * (1.0 - mean_contact_z / length_) : rest;
+    slice_area_[slice] = open_length * mean_width + std::max(posture_.chink, 0.0);
+  }
+}
+
+double Cord::contact() const {
+  if (!fold_tube_) {
+    return alpha_[0];
+  }
+  double most = 0.0;
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    most = std::max(most, slice_alpha_[slice]);
+  }
+  return most;
+}
+
+// The slices' openings as the air sees them: the half gap along the fold
+// (the wedge rest plus the slice's displacement) through a soft contact,
+// summed over eight points along the length; once per step, after the
+// pieces have moved. (The pieces' contact forces use the plain geometry.)
+void Cord::fold_air_areas() {
+  constexpr int kPoints = 8;
+  double softness = std::max(fold_.contact_softness, 1.0e-6);
+  double step = length_ / static_cast<double>(kPoints);
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    double share = static_cast<double>(slice) / static_cast<double>(kFoldSlices - 1);
+    double rest = posture_.lower_rest + share * (posture_.upper_rest - posture_.lower_rest) + rest_offset_;
+    double x = cover_q_[slice];
+    double open_sum = 0.0;
+    for (int point = 0; point < kPoints; ++point) {
+      double z = (static_cast<double>(point) + 0.5) / static_cast<double>(kPoints);  // 0 front .. 1 vocal process
+      double half_gap = (rest >= 0.0 ? rest * z : rest) + x;
+      double ratio = half_gap / softness;
+      double soft = ratio > 30.0 ? half_gap : softness * std::log1p(std::exp(std::max(ratio, -30.0)));
+      open_sum += 2.0 * soft * step;
+    }
+    slice_area_[slice] = open_sum + std::max(posture_.chink, 0.0);
+  }
+}
+
+// The fold tube's pieces, eight steps per step (1.3 us), symplectic Euler
+// (every mode under 2 kHz: omega h < 0.02). Forces from the air's pressures
+// of the last step; contact and its damping where the slice is closed.
+void Cord::advance_fold_tube() {
+  double q = std::max(tension_, 0.05);
+  double slices = static_cast<double>(kFoldSlices);
+  double slice_depth = fold_.depth / std::sqrt(q) / slices;
+  double cover_mass = fold_.cover_mass / (slices * q);
+  double body_mass = fold_.body_mass / (slices * q);
+  double cover_k = fold_.cover_stiffness * q / slices;
+  double coupling_k = fold_.coupling_stiffness * q / slices;
+  double support_k = fold_.support_stiffness * q / slices;
+  double vertical_k = fold_.vertical_stiffness * q;
+  double contact_k = fold_.contact_stiffness * q / slices;
+  double cover_c = 2.0 * fold_.cover_loss * std::sqrt(cover_mass * (cover_k + coupling_k));
+  double support_c = 2.0 * fold_.support_loss * std::sqrt(body_mass * support_k);
+  double contact_c = 2.0 * std::sqrt(cover_mass * contact_k);
+  constexpr double h = kStepSeconds / static_cast<double>(kFoldSubsteps);
+  double pole = fold_.muscle_corner > 0.0 ? std::exp(-kTwoPi * fold_.muscle_corner * h) : 0.0;
+  double innovation = fold_.muscle_fluctuation * std::sqrt(1.0 - pole * pole);
+  double cover_force[kFoldSlices];
+  double body_force[kFoldSlices];
+  for (int substep = 0; substep < kFoldSubsteps; ++substep) {
+    if (fold_.muscle_fluctuation > 0.0) {
+      muscle_ = pole * muscle_ + innovation * jitter_gauss();
+    }
+    double muscle_k = support_k * (1.0 + muscle_);
+    fold_geometry();
+    for (int slice = 0; slice < kFoldSlices; ++slice) {
+      double x = cover_q_[slice];
+      double force = slice_pressure_[slice] * slice_open_[slice] * slice_depth;
+      if (slice == 0) {
+        force += 0.25 * (pressure_sub_ + slice_pressure_[0]) * kInletLength * length_;
+      }
+      if (slice == kFoldSlices - 1) {
+        force += 0.25 * (pressure_supra_ + slice_pressure_[slice]) * kOutletLength * length_ +
+                 surface_pressure_ * (slice_open_[slice] * slice_depth + 0.5 * kOutletLength * length_);
+      }
+      force -= cover_k * x + coupling_k * (x - body_q_[slice]);
+      if (slice > 0) {
+        force -= vertical_k * (x - cover_q_[slice - 1]);
+      }
+      if (slice + 1 < kFoldSlices) {
+        force -= vertical_k * (x - cover_q_[slice + 1]);
+      }
+      double alpha = slice_alpha_[slice];
+      if (alpha > 0.0) {
+        force -= contact_k * alpha * (x + slice_star_[slice]) + contact_c * alpha * cover_v_[slice];
+      }
+      double relative = cover_v_[slice] - body_v_[slice];
+      cover_force[slice] = force - cover_c * relative;
+      body_force[slice] = -muscle_k * body_q_[slice] - coupling_k * (body_q_[slice] - x) - support_c * body_v_[slice] +
+                          cover_c * relative;
+    }
+    for (int slice = 0; slice < kFoldSlices; ++slice) {
+      cover_v_[slice] += h * cover_force[slice] / cover_mass;
+      body_v_[slice] += h * body_force[slice] / body_mass;
+      cover_q_[slice] += h * cover_v_[slice];
+      body_q_[slice] += h * body_v_[slice];
+    }
+  }
+  fold_geometry();
+  fold_air_areas();
+  double narrowest = slice_area_[0];
+  double closed = 0.0;
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    narrowest = std::min(narrowest, slice_area_[slice]);
+    closed = std::max(closed, slice_alpha_[slice]);
+  }
+  x_[0] = cover_q_[0];
+  x_[1] = cover_q_[kFoldSlices - 1];
+  section_area_[0] = slice_area_[0];
+  section_area_[1] = slice_area_[kFoldSlices - 1];
+  alpha_[0] = closed;
+  alpha_[1] = slice_alpha_[kFoldSlices - 1];
+  open_length_[0] = slice_open_[0];
+  open_length_[1] = slice_open_[kFoldSlices - 1];
+  thickness_[0] = 0.5 * fold_.depth / std::sqrt(q);
+  thickness_[1] = thickness_[0];
+  area_ = std::max(narrowest, kMinimumArea);
+}
+
+// The air's pressure on each slice: Bernoulli's from the inlet while the
+// jet holds to the walls, the outlet's past the point where it separates
+// (the first slice beyond the narrowest that is 20% wider; none: the exit).
+// Suction is held to one transglottal drop below the outlet (in a gap of a
+// few microns the flow is viscous and Bernoulli's law no longer holds).
+void Cord::fold_pressures(double flow, double p_below, double p_above, double area_below) {
+  int narrowest = 0;
+  for (int slice = 1; slice < kFoldSlices; ++slice) {
+    if (slice_area_[slice] < slice_area_[narrowest]) {
+      narrowest = slice;
+    }
+  }
+  int separation = kFoldSlices;
+  for (int slice = narrowest + 1; slice < kFoldSlices; ++slice) {
+    if (slice_area_[slice] > 1.2 * slice_area_[narrowest]) {
+      separation = slice;
+      break;
+    }
+  }
+  double speed_term = flow * std::abs(flow);
+  double floor = p_above - std::abs(p_below - p_above);
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    double pressure = slice < separation
+                          ? p_below - speed_term * (half_rho_over(slice_area_[slice]) - half_rho_over(area_below))
+                          : p_above;
+    slice_pressure_[slice] = std::max(pressure, floor);
+  }
+}
+
 void Cord::step(double wave_below, double area_below, double wave_above, double area_above, double& out_below,
                 double& out_above) {
   advance_posture();
-  advance_mechanics();
-  compute_geometry();
+  if (fold_tube_) {
+    advance_fold_tube();
+  } else if (kinematic_) {
+    advance_kinematics();
+  } else {
+    advance_mechanics();
+    compute_geometry();
+  }
 
   // Flow through the glottis from the incident waves:
   //   2 (w_below - w_above) = (Z_below + Z_above + R_viscous) U + kinetic U|U|.
@@ -165,22 +425,50 @@ void Cord::step(double wave_below, double area_below, double wave_above, double 
   double z_above = kRhoC / std::max(area_above, kMinimumArea);
   double a0 = std::max(section_area_[0], kMinimumArea);
   double a1 = std::max(section_area_[1], kMinimumArea);
-  double kinetic = half_rho_over(a0) - half_rho_over(area_below);
-  if (a1 < a0) {
-    kinetic += half_rho_over(a1) - half_rho_over(a0);
+  double kinetic = 0.0;
+  double viscous = 0.0;
+  if (fold_tube_) {
+    // Into the narrowest slice without loss, out of it as a jet (20%
+    // recovered); Poiseuille along every slice.
+    kinetic = half_rho_over(area_) - half_rho_over(area_below) -
+              kExitRecovery * (half_rho_over(area_) - half_rho_over(area_above));
+    double slice_depth = 2.0 * thickness_[0] / static_cast<double>(kFoldSlices);
+    for (int slice = 0; slice < kFoldSlices; ++slice) {
+      double a = std::max(slice_area_[slice], kMinimumArea);
+      viscous += 12.0 * kAirViscosity * length_ * length_ * slice_depth / (a * a * a);
+    }
   } else {
-    kinetic -= kExitRecovery * (half_rho_over(a0) - half_rho_over(a1));
+    kinetic = half_rho_over(a0) - half_rho_over(area_below);
+    if (a1 < a0) {
+      kinetic += half_rho_over(a1) - half_rho_over(a0);
+    } else {
+      kinetic -= kExitRecovery * (half_rho_over(a0) - half_rho_over(a1));
+    }
+    kinetic -= kExitRecovery * (half_rho_over(a1) - half_rho_over(area_above));
+    // Viscous loss of the slit (Poiseuille between parallel plates).
+    viscous = 12.0 * kAirViscosity * length_ * length_ *
+              (thickness_[0] / (a0 * a0 * a0) + thickness_[1] / (a1 * a1 * a1));
   }
-  kinetic -= kExitRecovery * (half_rho_over(a1) - half_rho_over(area_above));
   kinetic = std::max(kinetic, 0.1 * half_rho_over(area_));
-  // Viscous loss of the slit (Poiseuille between parallel plates).
-  double viscous = 12.0 * kAirViscosity * length_ * length_ *
-                   (thickness_[0] / (a0 * a0 * a0) + thickness_[1] / (a1 * a1 * a1));
   // The air inside the glottis has mass: rho l / A for each edge's section
   // and the short inlet and outlet. Implicit in the flow, so the flow lags
   // the opening (the air column must be accelerated).
-  double inertance = kAirDensity * (thickness_[0] / a0 + thickness_[1] / a1 +
-                                    (kInletLength + kOutletLength) / area_);
+  // (The air mass is taken on areas of at least kInertanceFloor: as the
+  // folds shut, rho l / A grew without bound within a step and the
+  // trapezoidal step answered with a one-sample pressure spike at every
+  // closure, heard as a crackle through voiced closures and nasals.)
+  double inertance = 0.0;
+  if (fold_tube_) {
+    double slice_depth = 2.0 * thickness_[0] / static_cast<double>(kFoldSlices);
+    for (int slice = 0; slice < kFoldSlices; ++slice) {
+      inertance += kAirDensity * slice_depth / std::max(slice_area_[slice], inertance_floor_);
+    }
+    inertance += kAirDensity * (kInletLength + kOutletLength) / std::max(area_, inertance_floor_);
+  } else {
+    inertance = kAirDensity * (thickness_[0] / std::max(a0, inertance_floor_) +
+                               thickness_[1] / std::max(a1, inertance_floor_) +
+                               (kInletLength + kOutletLength) / std::max(area_, inertance_floor_));
+  }
   // Trapezoidal (lossless) step for the air mass: its pressure
   //   p_n = (2 L / h)(U_n - U_{n-1}) - g p_{n-1},
   // with g slightly below 1 so a shut glottis (huge L, U held at 0) cannot
@@ -209,6 +497,10 @@ void Cord::step(double wave_below, double area_below, double wave_above, double 
   double speed_term = flow * std::abs(flow);
   pressure_sub_ = p_below;
   pressure_supra_ = p_above;
+  if (fold_tube_) {
+    fold_pressures(flow, p_below, p_above, area_below);
+    return;
+  }
   pressure_lower_ = p_below - speed_term * (half_rho_over(a0) - half_rho_over(area_below));
   if (a1 < a0) {
     pressure_upper_ = pressure_lower_ - speed_term * (half_rho_over(a1) - half_rho_over(a0));

@@ -16,6 +16,7 @@ add_library(tract
   src/sheet_tube.cpp
   src/somatic_hold.cpp
   src/sheet_speaker.cpp
+  src/articulation.cpp
   ../voice/src/geometry.cpp
   ../voice/src/score.cpp)
 # The front end's body language (score) and tract geometry are shared with
@@ -71,3 +72,6 @@ target_link_libraries(sheet_stream PRIVATE tract)
 
 add_executable(sheet_voices tools/sheet_voices.cpp)
 target_link_libraries(sheet_voices PRIVATE tract)
+
+add_executable(geometry_probe tools/geometry_probe.cpp)
+target_link_libraries(geometry_probe PRIVATE tract)

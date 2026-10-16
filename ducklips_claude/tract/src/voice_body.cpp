@@ -129,16 +129,19 @@ VoiceBody::VoiceBody(const BodyLayout& layout)
       settings_(layout),
       variation_(kFirstWallChannel + static_cast<int>(layout.vocal_areas.size()), layout.seed) {
   vocal_.set_radiating_right(true);
+  cord_.set_kinematic(layout.kinematic_glottis, layout.kinematic_amplitude, layout.kinematic_phase_lag,
+                      layout.kinematic_softness, layout.kinematic_jitter, layout.seed ^ 0x5bd1e995U);
+  cord_.set_fold_tube(layout.fold_tube, layout.fold, layout.seed ^ 0x5bd1e995U);
   // Tremor band normalisation: the 2-15 Hz band (two poles at each corner)
-  // of unit-variance noise at the 1 kHz control rate, measured once on a
-  // separate generator (100 s of control ticks).
+  // of unit-variance noise at the control rate, measured once on a
+  // separate generator (100,000 control ticks).
   {
     double slow = 0.0;
     double slower = 0.0;
     double fast = 0.0;
     double faster = 0.0;
-    double slow_gain = 1.0 - std::exp(-kTwoPi * 2.0e-3);
-    double fast_gain = 1.0 - std::exp(-kTwoPi * 15.0e-3);
+    double slow_gain = 1.0 - std::exp(-kTwoPi * 2.0 * kControlSeconds);
+    double fast_gain = 1.0 - std::exp(-kTwoPi * 15.0 * kControlSeconds);
     std::uint32_t random = 0x9E3779B9U;
     double sum = 0.0;
     constexpr int kWarm = 5000;
@@ -213,11 +216,13 @@ VoiceBody::VoiceBody(const BodyLayout& layout)
     Index count = static_cast<Index>(std::lround(2.0 / kNodeLength));
     for (Index node = 0; node < count; ++node) {
       TubeNode piece;
-      piece.rest_area = 1.6 * (1.0 - (node + 0.5) / count) + 0.2;
+      piece.rest_area = settings_.piriform_scale * (1.6 * (1.0 - (node + 0.5) / count) + 0.2);
       nodes.push_back(piece);
     }
     Index entry = std::min(static_cast<Index>(std::lround(3.0 / kNodeLength)), vocal_.count() - 2);
-    add_branch(0, entry, 0.6, Tube(materials, nodes));
+    Tube recess(materials, nodes);
+    recess.set_wave_smoothing(settings_.piriform_smoothing);
+    add_branch(0, entry, settings_.piriform_port, recess);
   }
   // The pocket under the tongue: the tongue is an object over the mouth
   // floor, and the space beneath its front is a closed side cavity.
@@ -226,6 +231,23 @@ VoiceBody::VoiceBody(const BodyLayout& layout)
     add_branch(0, entry, -2.0, pocket(soft_wall(), 0.4, 1, 1.5, 3));
   }
 }
+
+// Moves the port of every branch of `group` (1 the nose at the velum, 2 the
+// pocket under the tongue) to the node at `place` cm from the glottis.
+void VoiceBody::move_branch_group(int group, double place) {
+  Index node = std::clamp(static_cast<Index>(std::lround(place / kNodeLength - 0.5)), static_cast<Index>(1),
+                          vocal_.active_count() - 2);
+  for (Branch& branch : branches_) {
+    if (branch.parent == 0 && branch.group == group) {
+      branch.node = node;
+      vocal_.move_side_port(branch.port, node);
+    }
+  }
+}
+
+void VoiceBody::set_velum_place(double place) { move_branch_group(1, place); }
+
+void VoiceBody::set_under_tongue_place(double place) { move_branch_group(2, place); }
 
 void VoiceBody::add_branch(int parent, Index node, double port_area, Tube tube) {
   Tube& owner = parent == 0 ? vocal_ : branch_tubes_[static_cast<std::size_t>(nose_)];
@@ -307,8 +329,8 @@ double VoiceBody::tremor_white() {
 // and VocalTractLab's synthesis show 0.23-0.6% (0.32% without the tremor).
 double VoiceBody::tremor_band(int channel) {
   double white = tremor_white();
-  double slow_gain = 1.0 - std::exp(-kTwoPi * 2.0e-3);
-  double fast_gain = 1.0 - std::exp(-kTwoPi * 15.0e-3);
+  double slow_gain = 1.0 - std::exp(-kTwoPi * 2.0 * kControlSeconds);
+  double fast_gain = 1.0 - std::exp(-kTwoPi * 15.0 * kControlSeconds);
   tremor_slow_[channel] += slow_gain * (white - tremor_slow_[channel]);
   tremor_slower_[channel] += slow_gain * (tremor_slow_[channel] - tremor_slower_[channel]);
   tremor_fast_[channel] += fast_gain * (white - tremor_fast_[channel]);
@@ -319,7 +341,7 @@ double VoiceBody::tremor_band(int channel) {
 // Slow causes, once per millisecond: breath, the stretching muscle, the
 // arytenoid hold, and every wall's support effort (shared plus local).
 void VoiceBody::control_tick() {
-  variation_.advance(1.0e-3);
+  variation_.advance(kControlSeconds);
   for (int channel = 0; channel < kTremorChannels; ++channel) {
     tremor_value_[channel] = tremor_band(channel);
   }
@@ -328,10 +350,14 @@ void VoiceBody::control_tick() {
     double local = variation_.value(kFirstWallChannel + node);
     double mix = settings_.wall_shared * shared + (1.0 - settings_.wall_shared) * local;
     double release = node >= release_first_ && node <= release_last_ ? 1.0 - release_share_ : 1.0;
-    vocal_.set_support_factor(node, release * (1.0 + settings_.wall_variation * mix));
+    // Past the lips the flared open end is air, not tissue: rigid. (As soft
+    // wall up to 30 cm^2, its huge compliance rang near 40 Hz at every change
+    // of the flow through the lips: thumps, "tapping the microphone".)
+    double outside = lip_end_ > 0 && node > lip_end_ + 1 ? 1000.0 : 1.0;
+    vocal_.set_support_factor(node, outside * release * (1.0 + settings_.wall_variation * mix));
     vocal_.set_support_offset(node, node >= pull_first_ && node <= pull_last_ ? pull_offset_ : 0.0);
   }
-  vocal_.update_rest_geometry(96);
+  vocal_.update_rest_geometry(static_cast<int>(kControlSteps));
   place_jet();
   // The muscles' causes for the next millisecond; each step interpolates
   // from the last tick's values to these (a staircase at 1 kHz, even
@@ -415,7 +441,25 @@ double VoiceBody::aspiration_sample() {
   double reynolds = velocity * 2.0 * slit_height * kAirDensity / kAirViscosity;
   double onset = 1200.0 / std::max(reynolds, 1.0);
   double turbulent = std::max(1.0 - onset * onset, 0.0);
-  cord_.set_flux_noise(settings_.jet_flux * turbulent * std::max(cord_.flow(), 0.0) * unit);
+  double flux_unit = unit;
+  if (settings_.flux_corner > 0.0) {
+    double flux_gain = 1.0 - std::exp(-kTwoPi * settings_.flux_corner / kStepRate);
+    flux_z1_ += flux_gain * (white - flux_z1_);
+    flux_z2_ += flux_gain * (flux_z1_ - flux_z2_);
+    flux_unit = flux_z2_;
+  }
+  // The flux belongs to the voice: it plays while the folds meet every
+  // cycle (the glottal area's running minimum under 0.02 cm^2) and fades out
+  // as they stay apart (0.06 cm^2; the aspiration source speaks for an open
+  // glottis). (Following the whole flow, every voiceless consonant, whose
+  // open glottis passes flow continuously, carried a loud low hiss: /hh/
+  // 11.7 dB from bdl's bands, 3.7 without the flux; /f s sh/ +10-28 dB at
+  // 0.5-2 kHz. Capping the flow at a voiced level changed nothing.)
+  double area_now = cord_.area();
+  area_floor_ = area_now < area_floor_ ? area_now
+                                       : area_floor_ + (1.0 - std::exp(-kStepSeconds / 0.015)) * (area_now - area_floor_);
+  double voiced_share = std::clamp((0.06 - area_floor_) / 0.04, 0.0, 1.0);
+  cord_.set_flux_noise(settings_.jet_flux * voiced_share * turbulent * std::max(cord_.flow(), 0.0) * flux_unit);
   return settings_.aspiration * gain * aspiration_root_ * aspiration_root_ * kSourceRms * unit;
 }
 
@@ -427,7 +471,8 @@ double VoiceBody::aspiration_sample() {
 // Ported from the front end's body, where these weights were tuned against
 // bdl and the owner's sibilants and bursts.
 void VoiceBody::place_jet() {
-  Index count = vocal_.count();
+  // (Up to the lips: past them, a flaring body's open end is outside air.)
+  Index count = lip_end_ > 0 ? std::min(lip_end_ + 1, vocal_.active_count()) : vocal_.active_count();
   Index narrowest = -1;
   double narrowest_area = 0.6;
   // (Search above the epilarynx, about 3.5 cm: its 0.45 cm^2 tube is not a
@@ -489,7 +534,7 @@ void VoiceBody::sound_jet() {
   if (jet_narrowest_ < 0) {
     return;
   }
-  Index count = vocal_.count();
+  Index count = lip_end_ > 0 ? std::min(lip_end_ + 1, vocal_.active_count()) : vocal_.active_count();
   Index narrowest = jet_narrowest_;
   double narrowest_area = vocal_.area(narrowest);
   for (Index node = std::max(narrowest - 3, kFirstOralNode); node <= std::min(narrowest + 3, count - 1);
@@ -569,12 +614,18 @@ double VoiceBody::shaped_jet_noise(JetNoise& state, double velocity, double widt
   return state.second / std::sqrt(passed);
 }
 
+// The ear: at each closure the heard period trims the stretching muscle.
+// Only cycles of a voice: lungs over 250 Pa and a period within half an
+// octave of the intended one (folds flickering shut for a breath, or the
+// first cycle after a stop, are not heard as pitch).
 void VoiceBody::hear_pitch() {
   bool closed = cord_.contact() > 0.0;
   if (closed && !was_closed_) {
     if (last_closure_ >= 0) {
       double heard = kStepRate / static_cast<double>(tick_ - last_closure_);
-      if (heard > 50.0 && heard < 500.0) {
+      double ratio = heard / intended_pitch_;
+      bool voiced = lung_ > 2500.0 && ratio > 0.707 && ratio < 1.414;
+      if (voiced) {
         pitch_correction_ += settings_.pitch_feedback * std::log(intended_pitch_ / heard);
         pitch_correction_ = std::clamp(pitch_correction_, -settings_.pitch_correction_limit,
                                        settings_.pitch_correction_limit);
@@ -591,19 +642,19 @@ void VoiceBody::set_lung_pressure(double pascal, double move_seconds) {
   // in the breath noise of an inhale), then by the first-order follow.
   lung_ramp_from_ = lung_ramp_;
   lung_target_ = pascal * kPascal;
-  lung_ramp_left_ = 96;
+  lung_ramp_left_ = static_cast<int>(kControlSteps);
   double tau = std::max(move_seconds / 3.0, kStepSeconds);
   lung_gain_ = 1.0 - std::exp(-kStepSeconds / tau);
 }
 
 double VoiceBody::step() {
-  if (tick_ % 96 == 0) {
+  if (tick_ % kControlSteps == 0) {
     control_tick();
   }
-  double share = static_cast<double>(tick_ % 96) / 96.0;
+  double share = static_cast<double>(tick_ % kControlSteps) / static_cast<double>(kControlSteps);
   ++tick_;
   if (lung_ramp_left_ > 0) {
-    lung_ramp_ += (lung_target_ - lung_ramp_from_) / 96.0;
+    lung_ramp_ += (lung_target_ - lung_ramp_from_) / static_cast<double>(kControlSteps);
     --lung_ramp_left_;
   } else {
     lung_ramp_ = lung_target_;
@@ -647,6 +698,7 @@ double VoiceBody::step() {
     }
     branch_tubes_[index].step();
   }
+  cord_.set_expected_breath(lung_ / kPascal);
   cord_.step(trachea_.outgoing_right(), trachea_.area(trachea_.count() - 1), vocal_.outgoing_left(), vocal_.area(0),
              from_cord_below_, from_cord_above_);
   hear_pitch();

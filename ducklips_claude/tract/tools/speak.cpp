@@ -67,9 +67,85 @@ int main(int count, char** values) {
   }
   std::uint32_t seed = count > 3 ? static_cast<std::uint32_t>(std::strtoul(values[3], nullptr, 10)) : 73021U;
   double trace_ms = std::getenv("TRACE") != nullptr ? std::strtod(std::getenv("TRACE"), nullptr) : 0.0;
-  tract::BodyLayout layout = tract::speech_layout();
+  // A score that places organs is spoken by the articulatory body.
+  tract::BodyLayout layout = tract::uses_organs(score) ? tract::articulatory_layout() : tract::speech_layout();
   layout.seed = seed;
   // Diagnostic switches: FRICATION, ASPIRATION, WALLVAR, TREMOR gains.
+  if (std::getenv("FOLDTUBE") != nullptr && std::strtod(std::getenv("FOLDTUBE"), nullptr) != 0.0) {
+    // FOLDTUBE=1: the folds as a tube of three pieces, blown (Cord::set_fold_tube).
+    // Its muscle's fluctuation is then the voice's one unsteadiness: the
+    // slow variations and tremors of tension, posture and breath are off.
+    layout.fold_tube = true;
+    layout.kinematic_glottis = false;
+    layout.tension_variation = 0.0;
+    layout.posture_variation = 0.0;
+    layout.breath_variation = 0.0;
+    layout.tremor = 0.0;
+    layout.adductor_tremor = 0.0;
+    layout.breath_tremor = 0.0;
+    // (The voicing-gated breath flux, added against "Perfect Paul", shook
+    // the blown folds: RAP 42 us against 3.6 without it.)
+    layout.jet_flux = 0.0;
+    // The ear trims its pitch, as for the blown two-mass folds.
+    layout.pitch_feedback = tract::BodyLayout().pitch_feedback;
+  }
+  // FOLD=key=value,...: the fold tube's tissue (FoldTubeSettings): depth mc mb
+  // kc kcb ks kv lossc losss contact soft muscle corner pitch per elong eref efloor.
+  if (std::getenv("FOLD") != nullptr) {
+    std::string list = std::getenv("FOLD");
+    std::size_t begin = 0;
+    while (begin < list.size()) {
+      std::size_t comma = list.find(',', begin);
+      std::string item = list.substr(begin, comma == std::string::npos ? std::string::npos : comma - begin);
+      std::size_t equals = item.find('=');
+      if (equals != std::string::npos) {
+        std::string key = item.substr(0, equals);
+        double number = std::strtod(item.c_str() + equals + 1, nullptr);
+        tract::FoldTubeSettings& fold = layout.fold;
+        if (key == "depth") {
+          fold.depth = number;
+        } else if (key == "mc") {
+          fold.cover_mass = number;
+        } else if (key == "mb") {
+          fold.body_mass = number;
+        } else if (key == "kc") {
+          fold.cover_stiffness = number;
+        } else if (key == "kcb") {
+          fold.coupling_stiffness = number;
+        } else if (key == "ks") {
+          fold.support_stiffness = number;
+        } else if (key == "kv") {
+          fold.vertical_stiffness = number;
+        } else if (key == "lossc") {
+          fold.cover_loss = number;
+        } else if (key == "losss") {
+          fold.support_loss = number;
+        } else if (key == "contact") {
+          fold.contact_stiffness = number;
+        } else if (key == "soft") {
+          fold.contact_softness = number;
+        } else if (key == "muscle") {
+          fold.muscle_fluctuation = number;
+        } else if (key == "corner") {
+          fold.muscle_corner = number;
+        } else if (key == "pitch") {
+          fold.natural_pitch = number;
+        } else if (key == "per") {
+          fold.pitch_per_tension = number;
+        } else if (key == "elong") {
+          fold.elongation = number;
+        } else if (key == "eref") {
+          fold.elongation_reference = number;
+        } else if (key == "efloor") {
+          fold.elongation_floor = number;
+        }
+      }
+      if (comma == std::string::npos) {
+        break;
+      }
+      begin = comma + 1;
+    }
+  }
   if (std::getenv("FRICATION") != nullptr) {
     layout.frication = std::strtod(std::getenv("FRICATION"), nullptr);
   }
@@ -78,6 +154,9 @@ int main(int count, char** values) {
   }
   if (std::getenv("ASPIRATION") != nullptr) {
     layout.aspiration = std::strtod(std::getenv("ASPIRATION"), nullptr);
+  }
+  if (std::getenv("FLUXCORNER") != nullptr) {
+    layout.flux_corner = std::strtod(std::getenv("FLUXCORNER"), nullptr);
   }
   if (std::getenv("FLUX") != nullptr) {
     layout.jet_flux = std::strtod(std::getenv("FLUX"), nullptr);
@@ -92,6 +171,27 @@ int main(int count, char** values) {
     layout.tremor = std::strtod(std::getenv("TREMOR"), nullptr);
     layout.adductor_tremor = 0.0;
     layout.breath_tremor = 0.0;
+  }
+  if (std::getenv("KINEMATIC") != nullptr) {
+    // KINEMATIC=1: moved folds (Cord::set_kinematic; the articulatory body's
+    // default); KINEMATIC=0: the self-oscillating folds. KAMP, KLAG, KSOFT,
+    // KJITTER set the moved folds' amplitude gain, phase lag, contact width
+    // and jitter.
+    bool kinematic = std::string(std::getenv("KINEMATIC")) == "1";
+    layout.kinematic_glottis = kinematic;
+    layout.pitch_feedback = kinematic ? 0.0 : tract::BodyLayout().pitch_feedback;
+  }
+  if (std::getenv("KAMP") != nullptr) {
+    layout.kinematic_amplitude = std::strtod(std::getenv("KAMP"), nullptr);
+  }
+  if (std::getenv("KLAG") != nullptr) {
+    layout.kinematic_phase_lag = std::strtod(std::getenv("KLAG"), nullptr);
+  }
+  if (std::getenv("KSOFT") != nullptr) {
+    layout.kinematic_softness = std::strtod(std::getenv("KSOFT"), nullptr);
+  }
+  if (std::getenv("KJITTER") != nullptr) {
+    layout.kinematic_jitter = std::strtod(std::getenv("KJITTER"), nullptr);
   }
   if (std::getenv("SINUSNECK") != nullptr) {
     layout.sinus_neck_scale = std::strtod(std::getenv("SINUSNECK"), nullptr);
@@ -144,6 +244,15 @@ int main(int count, char** values) {
   if (std::getenv("ROUNDJET") != nullptr) {
     layout.glottal_round_jet = std::string(std::getenv("ROUNDJET")) == "1";
   }
+  if (std::getenv("PIRISCALE") != nullptr) {
+    layout.piriform_scale = std::strtod(std::getenv("PIRISCALE"), nullptr);
+  }
+  if (std::getenv("PIRISMOOTH") != nullptr) {
+    layout.piriform_smoothing = std::strtod(std::getenv("PIRISMOOTH"), nullptr);
+  }
+  if (std::getenv("PIRIPORT") != nullptr) {
+    layout.piriform_port = std::strtod(std::getenv("PIRIPORT"), nullptr);
+  }
   if (std::getenv("PIRILOSS") != nullptr) {
     layout.piriform_loss = std::strtod(std::getenv("PIRILOSS"), nullptr);
   }
@@ -193,17 +302,88 @@ int main(int count, char** values) {
     // PRESS=cm: extra adduction during voiced closures.
     speaker.set_closure_press(std::strtod(std::getenv("PRESS"), nullptr));
   }
+  if (std::getenv("AREARULE") != nullptr) {
+    // AREARULE=region:alpha,beta[;region:alpha,beta...] overrides the
+    // articulatory body's area rules (regions larynx pharynx velar palatal
+    // alveolar teeth).
+    std::string rules = std::getenv("AREARULE");
+    std::size_t at = 0;
+    while (at < rules.size()) {
+      std::size_t end = rules.find(';', at);
+      std::string item = rules.substr(at, end == std::string::npos ? std::string::npos : end - at);
+      std::size_t colon = item.find(':');
+      std::size_t comma = item.find(',');
+      if (colon != std::string::npos && comma != std::string::npos) {
+        std::string name = item.substr(0, colon);
+        tract::CutRegion region = tract::CutRegion::teeth;
+        bool known = true;
+        if (name == "larynx") {
+          region = tract::CutRegion::larynx;
+        } else if (name == "pharynx") {
+          region = tract::CutRegion::pharynx;
+        } else if (name == "velar") {
+          region = tract::CutRegion::velar;
+        } else if (name == "palatal") {
+          region = tract::CutRegion::palatal;
+        } else if (name == "alveolar") {
+          region = tract::CutRegion::alveolar;
+        } else if (name != "teeth") {
+          known = false;
+        }
+        if (known) {
+          tract::AreaRule rule;
+          rule.alpha = std::strtod(item.c_str() + colon + 1, nullptr);
+          rule.beta = std::strtod(item.c_str() + comma + 1, nullptr);
+          speaker.anatomy().set_area_rule(region, rule);
+        }
+      }
+      if (end == std::string::npos) {
+        break;
+      }
+      at = end + 1;
+    }
+  }
+  if (std::getenv("EPILARYNX") != nullptr) {
+    // EPILARYNX=cm: the articulatory body's epilarynx length.
+    speaker.anatomy().set_larynx_height(std::strtod(std::getenv("EPILARYNX"), nullptr));
+  }
+  if (std::getenv("TRACTSCALE") != nullptr) {
+    // TRACTSCALE=s: the articulatory body's size (the model's lengths times s).
+    speaker.anatomy().set_scale(std::strtod(std::getenv("TRACTSCALE"), nullptr));
+  }
+  if (std::getenv("INERTFLOOR") != nullptr) {
+    speaker.body().cord().set_inertance_floor(std::strtod(std::getenv("INERTFLOOR"), nullptr));
+  }
+  if (std::getenv("FLARE") != nullptr) {
+    // FLARE=growth,widest: the articulatory body's open end past the lips.
+    speaker.set_flare(std::strtod(std::getenv("FLARE"), nullptr),
+                      std::strtod(std::strchr(std::getenv("FLARE"), ',') + 1, nullptr));
+  }
+  if (std::getenv("CHINK") != nullptr) {
+    // CHINK=cm^2: the posterior chink while voicing.
+    speaker.set_voicing_chink(std::strtod(std::getenv("CHINK"), nullptr));
+  }
   if (std::getenv("WANDER") != nullptr) {
     // WANDER=gain: scales every motor's wander (0 holds every part steady).
     speaker.set_wander_gain(std::strtod(std::getenv("WANDER"), nullptr));
+  }
+  if (std::getenv("SLIVER") != nullptr) {
+    // SLIVER=cm^2: the articulatory tube's area past the lip opening.
+    speaker.set_sliver_area(std::strtod(std::getenv("SLIVER"), nullptr));
   }
   if (std::getenv("RELAX") != nullptr) {
     // RELAX=share: pharyngeal wall release during voiced closures.
     speaker.set_closure_relaxation(std::strtod(std::getenv("RELAX"), nullptr));
   }
 
-  Biquad first = lowpass(18000.0, tract::kStepRate, 0.5412);
-  Biquad second = lowpass(18000.0, tract::kStepRate, 1.3066);
+  // Decimation to the audio rate: an eighth-order Butterworth at 16 kHz
+  // (-28 dB at 24 kHz, -48 at 32). (A fourth-order one at 18 kHz let the
+  // waveguide's 24-32 kHz fold back: the 16-20 kHz band of speech stood
+  // 20 dB over the owner's recordings.)
+  Biquad first = lowpass(16000.0, tract::kStepRate, 0.5098);
+  Biquad second = lowpass(16000.0, tract::kStepRate, 0.6013);
+  Biquad third = lowpass(16000.0, tract::kStepRate, 0.9000);
+  Biquad fourth = lowpass(16000.0, tract::kStepRate, 2.5629);
   long trace_every = trace_ms > 0.0 ? static_cast<long>(trace_ms * 1e-3 * tract::kStepRate) : 0;
   long total = static_cast<long>(std::ceil(score.duration * tract::kStepRate));
   std::vector<double> raw;
@@ -231,10 +411,20 @@ int main(int count, char** values) {
   double cycle_high = 0.0;
   double cycle_low = 0.0;
   double cycle_area = 1.0e9;
+  double wave_from = 0.0;
+  double wave_to = 0.0;
+  if (std::getenv("WAVEDUMP") != nullptr) {
+    wave_from = std::strtod(std::getenv("WAVEDUMP"), nullptr);
+    wave_to = std::strtod(std::strchr(std::getenv("WAVEDUMP"), ',') + 1, nullptr);
+  }
+  // ENDLOG=1: every change of the vocal tube's open end (active nodes).
+  bool end_log = std::getenv("ENDLOG") != nullptr;
+  tract::Index last_lip_end = -1;
+  tract::Index last_active = -1;
   std::chrono::steady_clock::time_point began = std::chrono::steady_clock::now();
   for (long step = 0; step < total; ++step) {
     double sound = speaker.step();
-    double filtered = run(second, run(first, sound));
+    double filtered = run(fourth, run(third, run(second, run(first, sound))));
     if (!std::isfinite(filtered)) {
       std::fprintf(stderr, "non-finite output at %.4f s\n", step / tract::kStepRate);
       return 1;
@@ -264,6 +454,26 @@ int main(int count, char** values) {
         cycle_area = 1.0e9;
       }
     }
+    if (wave_from < wave_to) {
+      // WAVEDUMP=from,to (s): the pressure at every vocal node, every step.
+      double now = step / tract::kStepRate;
+      if (now >= wave_from && now < wave_to) {
+        tract::Tube& vocal = speaker.body().vocal();
+        std::printf("wave %.6f", now);
+        for (tract::Index node = 0; node < vocal.count(); ++node) {
+          std::printf(" %.0f", vocal.pressure(node));
+        }
+        std::printf(" | cord %.3f\n", speaker.body().cord().flow());
+      }
+    }
+    if (end_log && speaker.body().lip_end() != last_lip_end) {
+      last_lip_end = speaker.body().lip_end();
+      std::printf("lipend %.4f %ld\n", step / tract::kStepRate, static_cast<long>(last_lip_end));
+    }
+    if (end_log && speaker.body().vocal().active_count() != last_active) {
+      last_active = speaker.body().vocal().active_count();
+      std::printf("end %.4f %ld\n", step / tract::kStepRate, static_cast<long>(last_active));
+    }
     if (step % 2 == 0) {
       raw.push_back(filtered);
       peak = std::fmax(peak, std::fabs(filtered));
@@ -289,6 +499,19 @@ int main(int count, char** values) {
                     body.nose().pressure(0), volume, frame_flow);
       }
     }
+    if (step == profile_step && speaker.articulatory()) {
+      // (With the articulatory body, PROFILE also prints the organs and cuts.)
+      tract::Articulators held = speaker.organs();
+      std::printf("organs jaw=%.3f tx=%.3f ty=%.3f tipx=%.3f tipy=%.3f ap=%.3f pro=%.3f lw=%.3f drop=%.3f lat=%.3f groove=%.3f\n",
+                  held.jaw_angle, held.tongue_x, held.tongue_y, held.tip_x, held.tip_y, held.lip_aperture,
+                  held.lip_protrusion, held.lip_width, held.larynx_drop, held.lateral, held.groove);
+      const tract::TractProfile& cuts = speaker.profile();
+      for (int cut = 0; cut < cuts.count; ++cut) {
+        std::size_t index = static_cast<std::size_t>(cut);
+        std::printf("cut %.3f area %.4f width %.4f at %.3f %.3f\n", cuts.arc[index], cuts.area[index],
+                    cuts.width[index], cuts.mid_x[index], cuts.mid_y[index]);
+      }
+    }
     if (step == profile_step) {
       // PROFILE=t: area, flow, pressure and frame speed along the vocal tube.
       tract::Tube& vocal = speaker.body().vocal();
@@ -302,16 +525,18 @@ int main(int count, char** values) {
       tract::VoiceBody& body = speaker.body();
       tract::Tube& vocal = body.vocal();
       tract::Index narrowest = 6;
-      for (tract::Index node = 6; node < vocal.count(); ++node) {
+      tract::Index trace_end = body.lip_end() > 0 ? std::min(body.lip_end() + 2, vocal.count()) : vocal.count();
+      for (tract::Index node = 6; node < trace_end; ++node) {
         if (vocal.area(node) < vocal.area(narrowest)) {
           narrowest = node;
         }
       }
-      std::printf("%.4f glottis %.4f flow %7.1f sub %7.0f supra %7.0f mouth %7.0f narrowest %5.3f at %4.1f lips %6.3f\n",
+      std::printf("%.4f glottis %.4f flow %7.1f sub %7.0f supra %7.0f narrowest %5.3f at %4.1f velum %6.4f "
+                  "oral %8.1f nasal %8.1f\n",
                   step / tract::kStepRate, body.cord().area(), body.cord().flow(),
-                  body.trachea().pressure(body.trachea().count() - 1), vocal.pressure(2), vocal.pressure(vocal.count() - 4),
-                  vocal.area(narrowest),
-                  (narrowest + 0.5) * tract::kNodeLength, vocal.area(vocal.count() - 1));
+                  body.trachea().pressure(body.trachea().count() - 1), vocal.pressure(2), vocal.area(narrowest),
+                  (narrowest + 0.5) * tract::kNodeLength, body.velum_port(), vocal.radiated_flow(),
+                  body.nose().radiated_flow());
     }
   }
   if (cycles != nullptr) {

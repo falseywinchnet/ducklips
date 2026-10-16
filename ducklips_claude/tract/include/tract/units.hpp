@@ -16,6 +16,12 @@ constexpr double kTwoPi = 2.0 * kPi;
 constexpr double kStepRate = 96000.0;              // state updates per second
 constexpr double kStepSeconds = 1.0 / kStepRate;
 constexpr double kAudioRate = 48000.0;             // written audio
+// The control tick: muscles, tract shape, breath, pitch command, variation
+// and jet placement update every kControlSteps state steps; the steps
+// between interpolate. 12 steps = 0.125 ms (2026-10-15, the owner: timing
+// resolution 8x; it was 96 steps, 1 ms).
+constexpr long kControlSteps = 12;
+constexpr double kControlSeconds = static_cast<double>(kControlSteps) * kStepSeconds;
 constexpr double kAirDensity = 1.14e-3;            // g/cm^3, warm moist air
 constexpr double kSoundSpeed = 35000.0;            // cm/s
 constexpr double kRhoC = kAirDensity * kSoundSpeed;

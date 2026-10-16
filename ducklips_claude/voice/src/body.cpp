@@ -453,6 +453,14 @@ void Body::apply(const PartEvent& event) {
       motors_[first].target = std::sqrt(std::max(static_cast<double>(event.a), 0.0));
       motors_[first].omega = omega;
       break;
+    case Part::body:
+    case Part::apex:
+    case Part::mouth:
+    case Part::spread:
+    case Part::larynx:
+    case Part::angle:
+    case Part::groove:
+      // (organ positions belong to the articulatory body)
     case Part::count:
       break;
   }

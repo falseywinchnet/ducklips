@@ -80,6 +80,13 @@ class Tube {
   Tube(std::vector<SegmentMaterial> materials, std::vector<TubeNode> nodes);
 
   Index count() const { return static_cast<Index>(nodes_.size()); }
+  // The moving open end (lips): only the first active_count() nodes carry
+  // air; the radiation load sits on the last of them, behind an air mass
+  // for the remaining fraction of a node, so the acoustic length follows
+  // `length_cm` continuously. Nodes past the end keep their lining (and are
+  // brought in quietly when the tube lengthens).
+  void set_active_length(double length_cm);
+  Index active_count() const { return active_count_; }
   double area(Index node) const { return area_[static_cast<std::size_t>(node)]; }
   double pressure(Index node) const { return pressure_[static_cast<std::size_t>(node)]; }
   double wall_flow(Index node) const { return wall_flow_[static_cast<std::size_t>(node)]; }
@@ -96,7 +103,9 @@ class Tube {
   double rest_area(Index node) const { return nodes_[static_cast<std::size_t>(node)].rest_area; }
   void set_support_offset(Index node, double offset_cm);
   // Holding effort varies the support piece's stiffness (1 = nominal).
-  void set_support_factor(Index node, double factor) { support_factor_[static_cast<std::size_t>(node)] = factor; }
+  // The support's holding factor glides to this (2 ms), recompiling the
+  // node's pieces every step on the way.
+  void set_support_factor(Index node, double factor) { support_target_[static_cast<std::size_t>(node)] = factor; }
   // Take new rest areas and support factors (control rate). The frame does
   // not jump there: each node's rest radius follows its target as a
   // critically damped mass (about 1 ms), and the pieces' masses and
@@ -112,6 +121,9 @@ class Tube {
   // Nodes first..last are bounded by an incompressible body (the tongue):
   // frame motion there moves air from node to node but its net volume over
   // the span is zero. (last < first: no such span.)
+  // Nodes from `node` on are outside air (a flaring open end): their area
+  // changes push no air. (Default: none.)
+  void set_quiet_from(Index node) { quiet_from_ = node; }
   void set_conserved_span(Index first, Index last) {
     conserved_first_ = first;
     conserved_last_ = last;
@@ -133,9 +145,23 @@ class Tube {
   // leaving into the branch is side_outgoing(). Returns the port's index.
   int add_side_port(Index node);
   void set_side_port(int port, double incoming, double port_area);
+  // Move a side port to another node (the articulatory body's velum and
+  // tongue tip move along the tract).
+  void move_side_port(int port, Index node) { side_node_[static_cast<std::size_t>(port)] = node; }
   double side_outgoing(int port) const { return side_outgoing_[static_cast<std::size_t>(port)]; }
   // A radiating right end (lips): parallel R-L radiation load.
   void set_radiating_right(bool radiating) { radiating_right_ = radiating; }
+  // A radiating opening inside the tube (the lips of a body whose length
+  // moves): the radiation load of an opening of `area` (R in parallel with L)
+  // at `position` (nodes, continuous), shared between the two nodes around
+  // it by its fraction, so it slides continuously along the tube. Commanded
+  // once per control tick; the place and area glide there every step
+  // (0.5 ms), and the node pair follows the glided place. (Stepped once per
+  // tick, the load's weights and size put lines at 8 and 16 kHz under the
+  // whole voice, the owner's "ringing"; gliding the share alone and clamping
+  // it at each node change jumped the load: spikes at voicing onsets.)
+  // position < 0: off.
+  void set_opening(double position, double area);
   double radiated_flow() const { return radiated_flow_; }
 
   // A series pressure source (dipole turbulence) on the air path between
@@ -151,6 +177,7 @@ class Tube {
   void refresh_geometry();
   void step_lining();
   void step_air();
+  void follow_opening();
   void scatter_links();
 
   std::vector<SegmentMaterial> materials_;
@@ -161,6 +188,8 @@ class Tube {
   std::vector<double> radius_goal_;    // the latest commanded radius
   std::vector<double> radius_ramp_;    // target change per step
   int ramp_left_ = 0;
+  Index active_count_ = 0;
+  double end_extra_ = 0.0;             // cm of tube past the last active node's centre
   std::vector<double> radius_rate_;    // cm/s, the frame's radial speed
   std::vector<double> frame_flow_;     // cm^3/s the frame draws from each node's air
   std::vector<double> forward_smooth_;   // each link's waves after the hop's low-pass
@@ -169,6 +198,7 @@ class Tube {
   std::vector<double> frame_low_;      // the frame's flow through the first of two 250 Hz poles
   std::vector<double> frame_lower_;    // and through the second
   double frame_gain_ = 1.0 - std::exp(-2.0 * 3.14159265358979323846 * 250.0 * kStepSeconds);
+  Index quiet_from_ = 1 << 30;
   Index conserved_first_ = 0;
   Index conserved_last_ = -1;
   std::vector<double> surface_;        // lining area of the node, cm^2
@@ -182,6 +212,7 @@ class Tube {
   std::vector<double> body_c_;
   std::vector<double> support_offset_; // cm, articulated frame displacement
   std::vector<double> support_factor_; // holding effort on the support stiffness
+  std::vector<double> support_target_; // where it is gliding
   // Lining state.
   std::vector<double> cover_q_;        // radial displacement, cm (outward +)
   std::vector<double> cover_v_;
@@ -205,8 +236,6 @@ class Tube {
   std::vector<double> link_resistance_; // viscous series resistance of link i
   std::vector<double> link_flow_;       // flow through link i, cm^3/s
   int resistance_countdown_ = 0;        // steps until the viscous law is refreshed
-  int compile_countdown_ = 0;           // steps until slowly moving nodes are recompiled
-  bool fast_link_ = false;              // a fast node was recompiled: links follow
   std::vector<double> resistance_step_; // viscous resistance glide per step
   std::vector<char> fast_node_;         // node's frame moving fast this step
   double total_wall_flow_ = 0.0;
@@ -226,6 +255,14 @@ class Tube {
   double radiation_inertance_flow_ = 0.0;
   double radiation_previous_pressure_ = 0.0;
   double radiated_flow_ = 0.0;
+  Index opening_node_ = -1;
+  double opening_share_ = 0.0;
+  double opening_area_ = 1.0;
+  double opening_position_ = -1.0;       // nodes, the load's glided place
+  double opening_position_target_ = -1.0;
+  double opening_area_target_ = 1.0;
+  double opening_flow_[2] = {0.0, 0.0};      // the full load's inertance flow at each of its two nodes
+  double opening_pressure_[2] = {0.0, 0.0};  // and the pressure there last step
 };
 
 }  // namespace tract

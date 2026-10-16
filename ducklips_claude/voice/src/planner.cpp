@@ -182,6 +182,15 @@ double post_burst_interval(Organ organ, bool voiced) {
 // costing identification (-0.004 and 0 did: 36.2 and 34.6%).
 constexpr double kConnectedVowelScale = 0.5;
 constexpr double kSealLead = 0.4;
+// The share of a vowel held before the tongue heads for the next one.
+constexpr double kVowelHold = 0.6;
+// The jaw's highest angle (degrees) under a lip closure.
+constexpr double kLabialJaw = 8.0;
+// After a fricative, the time a following closure takes to seal (s).
+constexpr double kSealSettle = 0.025;
+// A dark /l/'s tongue body (jaw frame, cm).
+constexpr double kDarkLateralX = 2.65;
+constexpr double kDarkLateralY = 6.5;
 
 double lung_pressure_for(double pitch, const PlanOptions& options) {
   double pressure = options.speech_pressure + 5.0 * (pitch - 125.0);
@@ -197,10 +206,24 @@ constexpr double kLabialRelease = 0.04;
 constexpr double kReleaseClear = 0.05;
 constexpr double kBreathGap = 0.45;
 
+bool is_area_part(Part part) {
+  return part == Part::tongue || part == Part::tip || part == Part::dorsum || part == Part::lips ||
+         part == Part::jaw || part == Part::lateral;
+}
+
 struct Emitter {
   Score* score = nullptr;
+  bool organs = false;  // the articulatory body: area-profile parts are not written
 
   void part(double time, Part part, double a, double b, double move) const {
+    if (organs && is_area_part(part)) {
+      return;
+    }
+    organ(time, part, a, b, move);
+  }
+
+  // Any part, written whatever the body (the organ planner's own events).
+  void organ(double time, Part part, double a, double b, double move) const {
     PartEvent event;
     event.time = std::max(time, 0.0);
     event.part = part;
@@ -647,6 +670,429 @@ double velar_place(const std::vector<TimedPhone>& phones, std::size_t index, std
 }
 
 // Writes the gestures of one phrase.
+
+// ---------------------------------------------------------------------------
+// The organ planner (the articulatory body). Vowels set every organ; a
+// consonant constrains only its own articulator, placed against the hull of
+// the midsagittal model, while the rest follows the vowel it is heading to
+// (or leaving). Closures aim a little past the hull, so contact comes from
+// the geometry, not from an area. Anatomy here matches tract/articulation.cpp
+// (unscaled model coordinates, cm).
+
+constexpr double kOrganJawPivotX = -0.5;
+constexpr double kOrganJawPivotY = 9.5;
+constexpr double kOrganTongueRadius = 2.0;
+constexpr double kDegrees = 3.14159265358979323846 / 180.0;
+// The hull's roof from the velum to the incisors (x, y), as the model's.
+constexpr int kRoofPoints = 12;
+constexpr double kRoofX[kRoofPoints] = {0.6, 1.4, 2.2, 2.9, 3.6, 4.4, 5.2, 5.9, 6.5, 6.9, 7.3, 7.6};
+constexpr double kRoofY[kRoofPoints] = {9.2, 9.55, 9.85, 10.1, 10.35, 10.5, 10.45, 10.2, 9.8, 9.3, 8.8, 8.3};
+
+double roof_height(double x) {
+  if (x <= kRoofX[0]) {
+    return kRoofY[0];
+  }
+  for (int point = 1; point < kRoofPoints; ++point) {
+    if (x <= kRoofX[point]) {
+      double share = (x - kRoofX[point - 1]) / (kRoofX[point] - kRoofX[point - 1]);
+      return kRoofY[point - 1] + share * (kRoofY[point] - kRoofY[point - 1]);
+    }
+  }
+  return kRoofY[kRoofPoints - 1];
+}
+
+// A point fixed to the skull, expressed in the jaw's frame for a jaw at
+// `angle` degrees (the inverse of the jaw's rotation).
+void skull_to_jaw(double x, double y, double angle, double& out_x, double& out_y) {
+  double turn = angle * kDegrees;
+  double dx = x - kOrganJawPivotX;
+  double dy = y - kOrganJawPivotY;
+  out_x = kOrganJawPivotX + dx * std::cos(turn) - dy * std::sin(turn);
+  out_y = kOrganJawPivotY + dx * std::sin(turn) + dy * std::cos(turn);
+}
+
+void jaw_to_skull(double x, double y, double angle, double& out_x, double& out_y) {
+  skull_to_jaw(x, y, -angle, out_x, out_y);
+}
+
+const OrganPosture& organ_posture(const PlanOptions& options, const std::string& name) {
+  static const OrganPosture kNeutral;
+  std::map<std::string, OrganPosture>::const_iterator found = options.organ_postures.find(name);
+  if (found != options.organ_postures.end()) {
+    return found->second;
+  }
+  // The reduced /ix/ is a schwa where the table has one (bdl's schwa sits
+  // at 549 / 1449 Hz, more central than /ah/: given /ah/'s open jaw every
+  // reduced syllable was spoken as a full open vowel).
+  if (name == "IX") {
+    found = options.organ_postures.find("AX");
+    if (found != options.organ_postures.end()) {
+      return found->second;
+    }
+  }
+  // Reduced and r-coloured vowels fall back on their nearest full vowels.
+  const char* fallback = name == "AX" || name == "IX" ? "AH" : name == "ER" || name == "AXR" ? "UH" : "AH";
+  found = options.organ_postures.find(fallback);
+  return found != options.organ_postures.end() ? found->second : kNeutral;
+}
+
+// The two postures of a vowel: where it starts and (diphthongs) where it glides.
+void vowel_organs(const PlanOptions& options, const std::string& name, OrganPosture& first, OrganPosture& second,
+                  bool& glides) {
+  glides = true;
+  if (name == "AY") {
+    first = organ_posture(options, "AA");
+    second = organ_posture(options, "IH");
+  } else if (name == "AW") {
+    first = organ_posture(options, "AA");
+    second = organ_posture(options, "UH");
+  } else if (name == "OY") {
+    first = organ_posture(options, "AO");
+    second = organ_posture(options, "IH");
+  } else if (name == "EY") {
+    first = organ_posture(options, "EY");
+    second = organ_posture(options, "IH");
+  } else if (name == "OW") {
+    first = organ_posture(options, "OW");
+    second = organ_posture(options, "UH");
+  } else {
+    first = organ_posture(options, name);
+    second = first;
+    glides = false;
+  }
+}
+
+// Organs a consonant can own (bit flags).
+constexpr unsigned kOwnBody = 1U;
+constexpr unsigned kOwnApex = 2U;
+constexpr unsigned kOwnMouth = 4U;
+constexpr unsigned kOwnSpread = 8U;
+constexpr unsigned kOwnJaw = 16U;
+
+// The organs a consonant constrains (the rest follow the vowels).
+unsigned owned_organs(const std::string& name) {
+  if (name == "P" || name == "B" || name == "M" || name == "F" || name == "V") {
+    return kOwnMouth | kOwnJaw;
+  }
+  if (name == "TH" || name == "DH" || name == "T" || name == "D" || name == "N") {
+    return kOwnApex | kOwnJaw;
+  }
+  if (name == "DX") {
+    return kOwnApex;
+  }
+  if (name == "S" || name == "Z" || name == "SH" || name == "ZH" || name == "CH" || name == "JH") {
+    return kOwnApex | kOwnJaw | kOwnMouth;
+  }
+  if (name == "L") {
+    return kOwnApex | kOwnBody;
+  }
+  if (name == "R") {
+    return kOwnApex | kOwnBody | kOwnMouth;
+  }
+  if (name == "K" || name == "G" || name == "NG") {
+    return kOwnBody;
+  }
+  if (name == "W") {
+    return kOwnMouth | kOwnSpread | kOwnBody;
+  }
+  if (name == "Y") {
+    return kOwnBody | kOwnApex;
+  }
+  return 0U;
+}
+
+// A posture, except the organs in `busy` (owned by a consonant meanwhile).
+void emit_organs_except(const Emitter& emit, double time, const OrganPosture& posture, double move, unsigned busy) {
+  if ((busy & kOwnBody) == 0U) {
+    emit.organ(time, Part::body, posture.body_x, posture.body_y, move);
+  }
+  if ((busy & kOwnApex) == 0U) {
+    emit.organ(time, Part::apex, posture.tip_x, posture.tip_y, move);
+  }
+  if ((busy & kOwnMouth) == 0U) {
+    emit.organ(time, Part::mouth, posture.aperture, posture.protrusion, move);
+  }
+  if ((busy & kOwnSpread) == 0U) {
+    emit.organ(time, Part::spread, posture.width, 0.0, move);
+  }
+  if ((busy & kOwnJaw) == 0U) {
+    emit.organ(time, Part::angle, posture.jaw, 0.0, move);
+  }
+  emit.organ(time, Part::larynx, posture.larynx, 0.0, move);
+}
+
+void emit_organs(const Emitter& emit, double time, const OrganPosture& posture, double move) {
+  emit_organs_except(emit, time, posture, move, 0U);
+}
+
+// A consonant hands its organs back to the vowel it heads to.
+void release_organs(const Emitter& emit, double time, const OrganPosture& context, double move, unsigned owned) {
+  emit_organs_except(emit, time, context, move, ~owned);
+}
+
+// The vowel a consonant is shaped toward: the next one in the phrase, else
+// the one before (its glide target), else schwa.
+OrganPosture organ_context(const std::vector<TimedPhone>& phones, std::size_t index, std::size_t first,
+                           std::size_t end, const PlanOptions& options) {
+  OrganPosture start;
+  OrganPosture glide;
+  bool glides = false;
+  double next = next_vowel_index(phones, index, end);
+  if (next >= 0.0) {
+    vowel_organs(options, phones[static_cast<std::size_t>(next)].name, start, glide, glides);
+    return start;
+  }
+  for (std::size_t earlier = index; earlier > first; --earlier) {
+    if (is_vowel_phone(phones[earlier - 1].name)) {
+      vowel_organs(options, phones[earlier - 1].name, start, glide, glides);
+      return glide;
+    }
+  }
+  return organ_posture(options, "AX");
+}
+
+// The tip against a point of the hull (skull frame), pressed `press` cm past
+// it (negative: a gap), for a jaw at `angle`: the apex target in the jaw's frame.
+void apex_at(double x, double y, double press, double angle, double& apex_x, double& apex_y) {
+  skull_to_jaw(x, y + press, angle, apex_x, apex_y);
+}
+
+// The tongue body lifted until its top meets the roof above `x` (skull
+// frame), pressed `press` cm past it: the body target in the jaw's frame.
+void body_against_roof(double x, double press, double angle, double& body_x, double& body_y) {
+  double centre_y = roof_height(x) - kOrganTongueRadius + press;
+  skull_to_jaw(x, centre_y, angle, body_x, body_y);
+}
+
+void gesture_organs(const std::vector<TimedPhone>& phones, std::size_t first, std::size_t end,
+                    const PlanOptions& options, const Emitter& emit) {
+  if (first >= end) {
+    return;
+  }
+  // The first vowel's shape is set up during the breath.
+  double phrase_start = phones[first].start;
+  OrganPosture opening = organ_context(phones, first, first, end, options);
+  emit_organs(emit, phrase_start - 0.15, opening, 0.10);
+  emit.organ(phrase_start - 0.15, Part::groove, 0.0, 0.0, 0.05);
+  emit.organ(phrase_start - 0.15, Part::lateral, 0.0, 0.0, 0.05);
+  for (std::size_t index = first; index < end; ++index) {
+    const TimedPhone& phone = phones[index];
+    const PhoneSpec& spec = spec_of(phone.name);
+    double start = phone.start;
+    double finish = phone.start + phone.duration;
+    bool next_exists = index + 1 < end;
+    const PhoneSpec& next_spec = next_exists ? spec_of(phones[index + 1].name) : spec_of("AX");
+    if (is_vowel_kind(spec.kind)) {
+      // Head for the vowel from the start of its onset; arrive late in it.
+      std::size_t onset = index;
+      while (onset > first && !is_vowel_phone(phones[onset - 1].name)) {
+        --onset;
+      }
+      double lead = phones[onset].name == "DX" ? 0.06 : 0.03;
+      double begin = phones[onset].start - lead;
+      // Not before the vowel before has held for most of its length: across
+      // a flap, "body"'s /aa/ (87 ms) turned toward /iy/ 27 ms in and was
+      // heard as "bady" (bdl's F2 rises only in the last third).
+      if (onset > first && is_vowel_phone(phones[onset - 1].name)) {
+        const TimedPhone& before = phones[onset - 1];
+        begin = std::max(begin, before.start + kVowelHold * before.duration);
+      }
+      double reach = std::clamp(start + options.vowel_arrival * phone.duration - begin, 0.06, options.vowel_reach);
+      OrganPosture target;
+      OrganPosture glide;
+      bool glides = false;
+      vowel_organs(options, phone.name, target, glide, glides);
+      if (phone.stress == 0) {
+        // Reduced: the jaw and lips open less.
+        target.jaw *= 0.8;
+        target.aperture *= 0.85;
+      }
+      unsigned busy = 0U;
+      for (std::size_t look = onset; look < index; ++look) {
+        busy |= owned_organs(phones[look].name);
+      }
+      emit_organs_except(emit, begin, target, reach, busy);
+      if (glides) {
+        double glide_begin = start + 0.35 * phone.duration;
+        emit_organs(emit, glide_begin, glide, std::max(0.6 * phone.duration, 0.08));
+      }
+      continue;
+    }
+    // Consonants: only their own articulator; the rest keeps the vowel's.
+    OrganPosture context = organ_context(phones, index, first, end, options);
+    bool sealing = spec.kind == Kind::stop || spec.kind == Kind::nasal || spec.kind == Kind::affricate;
+    // The tongue body is heavy and broad: it closes and opens more slowly.
+    // (At 40 ms in, 30 ms out and 0.15 cm into the dome, a /k/ squeezed
+    // 12 cm^3 out of the sealed space in 6 ms, the pressure behind it passed
+    // the lungs' and the release burst stood 17 dB over the speech.)
+    double close_move = spec.organ == Organ::dorsum ? 0.06 : 0.028;
+    if (phone.name == "DX") {
+      close_move = 0.012;
+    }
+    double close_time = start - (sealing ? kSealLead : 0.5) * close_move;
+    if (index == first) {
+      close_time = start - 0.12;
+    }
+    double release_move = phone.name == "DX" ? 0.015 : spec.organ == Organ::dorsum ? 0.05 : 0.03;
+    double opening = finish;
+    bool released_into_sonorant = spec.kind == Kind::stop && next_exists &&
+                                  (is_vowel_kind(next_spec.kind) || next_spec.kind == Kind::liquid ||
+                                   next_spec.kind == Kind::glide);
+    if (released_into_sonorant && phone.name != "DX") {
+      opening = finish - std::min(options.burst_scale * post_burst_interval(spec.organ, spec.voiced), 0.4 * phone.duration);
+    }
+    double release_time = opening - 0.25 * release_move;
+    if (spec.kind == Kind::stop && next_exists && (next_spec.kind == Kind::stop || next_spec.kind == Kind::affricate) &&
+        next_spec.organ != spec.organ) {
+      release_time = finish + kUnreleasedOverlap;  // unreleased before another closure
+    }
+    const std::string& name = phone.name;
+    double jaw = context.jaw;
+    double apex_x = 0.0;
+    double apex_y = 0.0;
+    if (name == "P" || name == "B" || name == "M") {
+      emit.organ(close_time, Part::mouth, -options.lip_press * 10.0, context.protrusion, close_move);
+      // The lips close the mouth; the jaw only helps. (Raised to 5 degrees
+      // before /aa/, the tongue rode up with it: F2 near 1500 Hz at the
+      // release of "body", bdl's 1100-1250.)
+      emit.organ(start - 0.04, Part::angle, std::min(jaw, kLabialJaw), 0.0, 0.06);
+    } else if (name == "F" || name == "V") {
+      emit.organ(close_time, Part::mouth, 0.03, 0.0, close_move);
+      emit.organ(start - 0.04, Part::angle, std::min(jaw, 4.0), 0.0, 0.06);
+    } else if (name == "TH" || name == "DH") {
+      jaw = std::min(jaw, 3.0);
+      // The tip against the upper incisors' edge, a hair short: a narrow
+      // dental slit. (0.05 cm short, /dh/ was a vowel: 18-40 dB over bdl
+      // below 3 kHz.)
+      // (Aimed at their edge, the tip stayed 0.15 cm under the incisors'
+      // back face: 0.35 cm^2.) Against the back face, just short.
+      // Lightly against it: English /dh/ is often a near-closure (bdl's
+      // sits 57-62 dB under the loudest vowel at 0.5-3 kHz).
+      apex_at(7.72, 8.25, 0.04, jaw, apex_x, apex_y);
+      emit.organ(close_time, Part::apex, apex_x, apex_y, close_move);
+      emit.organ(start - 0.04, Part::angle, jaw, 0.0, 0.06);
+    } else if (name == "T" || name == "D" || name == "N" || name == "DX") {
+      double press = 0.12;
+      if (name != "DX") {
+        jaw = std::min(jaw, 3.0);
+        emit.organ(start - 0.04, Part::angle, jaw, 0.0, 0.06);
+      } else {
+        // The jaw is gliding between the vowels around a tap: aim the tip
+        // for the jaw midway, and press further.
+        OrganPosture before = context;
+        for (std::size_t earlier = index; earlier > first; --earlier) {
+          if (is_vowel_phone(phones[earlier - 1].name)) {
+            OrganPosture unused;
+            bool glides = false;
+            vowel_organs(options, phones[earlier - 1].name, unused, before, glides);
+            break;
+          }
+        }
+        jaw = 0.5 * (before.jaw + context.jaw);
+        press = 0.3;
+      }
+      apex_at(6.75, 9.75, press, jaw, apex_x, apex_y);
+      emit.organ(close_time, Part::apex, apex_x, apex_y, close_move);
+    } else if (name == "S" || name == "Z") {
+      // The constriction about 1 cm behind the incisors' edge, so the jet
+      // still holds together when it strikes them. (At the ridge's crest,
+      // 1.3 cm back, /s/ was 25 dB short at 4-8 kHz and /z/ 34-41: a lisp.)
+      jaw = std::min(jaw, 1.5);
+      apex_at(7.05, 9.15, -0.08, jaw, apex_x, apex_y);
+      emit.organ(start - 0.04, Part::angle, jaw, 0.0, 0.06);
+      emit.organ(close_time, Part::apex, apex_x, apex_y, close_move);
+      emit.organ(close_time, Part::groove, 1.0, 0.0, close_move);
+      emit.organ(close_time, Part::mouth, std::max(context.aperture, 0.5), std::min(context.protrusion, 0.1), 0.05);
+      emit.organ(release_time, Part::groove, 0.0, 0.0, release_move);
+    } else if (name == "SH" || name == "ZH" || name == "CH" || name == "JH") {
+      jaw = std::min(jaw, 2.5);
+      bool stop_first = name == "CH" || name == "JH";
+      // (At 6.3 cm, 1.5 cm behind the incisors, /sh jh/ were 18-34 dB
+      // short above 4 kHz: forward to 6.65.)
+      // (Moved forward to 6.65 cm, /sh/ fell from 33 to 0% identified;
+      // kept at 6.3.)
+      apex_at(6.3, 9.95, stop_first ? 0.12 : -0.12, jaw, apex_x, apex_y);
+      emit.organ(start - 0.04, Part::angle, jaw, 0.0, 0.06);
+      emit.organ(close_time, Part::apex, apex_x, apex_y, close_move);
+      emit.organ(close_time, Part::mouth, 0.6, 0.4, 0.06);
+      if (stop_first) {
+        double fricative_x = 0.0;
+        double fricative_y = 0.0;
+        apex_at(6.3, 9.95, -0.12, jaw, fricative_x, fricative_y);
+        emit.organ(start + 0.35 * phone.duration, Part::apex, fricative_x, fricative_y, 0.02);
+      }
+      emit.organ(close_time, Part::groove, 0.6, 0.0, close_move);
+      emit.organ(release_time, Part::groove, 0.0, 0.0, release_move);
+    } else if (name == "L") {
+      apex_at(6.75, 9.75, 0.1, jaw, apex_x, apex_y);
+      emit.organ(start - 0.04, Part::apex, apex_x, apex_y, 0.05);
+      emit.organ(start - 0.04, Part::lateral, 1.0, 0.0, 0.04);
+      // The body draws back a little. (Drawn back 0.5 cm, F3 fell and /l/
+      // was heard as /r/ 26 times in 100.)
+      // Only from a forward body: before a back vowel the body is already
+      // back, and drawn further (0.5 cm before "hello"'s /ow/) it closed the
+      // pharynx and the voice stopped for 100 ms (the owner: "hello hiccups").
+      double retract = context.body_x > 3.4 ? 0.2 : 0.0;
+      double body_x = context.body_x - retract;
+      double body_y = context.body_y - 0.05 * retract / 0.2;
+      // Beside a central or back vowel the /l/ is dark: the body back and
+      // low, as for /ao/. (Left at /ow/'s body, "hello"'s /l/ had F2 1680
+      // Hz; at (2.65, 6.5), 1270. bdl's /l/ between vowels: F1 414, F2 957,
+      // F3 2784 Hz, median of 46.)
+      if (context.body_x <= 3.4) {
+        body_x = std::min(body_x, kDarkLateralX);
+        body_y = std::min(body_y, kDarkLateralY);
+      }
+      emit.organ(start - 0.04, Part::body, body_x, body_y, 0.07);
+      emit.organ(finish - 0.02, Part::lateral, 0.0, 0.0, 0.04);
+      emit.organ(finish - 0.02, Part::apex, context.tip_x, context.tip_y, 0.06);
+    } else if (name == "R") {
+      // Bunched /r/: the tip raised behind the ridge without contact, the
+      // body up and back, the lips rounded.
+      apex_at(6.0, 9.6, -0.35, jaw, apex_x, apex_y);
+      emit.organ(start - 0.04, Part::apex, apex_x, apex_y, 0.07);
+      emit.organ(start - 0.04, Part::body, context.body_x - 0.6, context.body_y + 0.3, 0.07);
+      emit.organ(start - 0.04, Part::mouth, 0.5, 0.35, 0.07);
+      emit.organ(finish - 0.03, Part::apex, context.tip_x, context.tip_y, 0.08);
+    } else if (name == "K" || name == "G" || name == "NG") {
+      // The body against the roof above where the vowel holds it (palatal
+      // beside front vowels, velar beside back ones).
+      double centre_x = 0.0;
+      double centre_y = 0.0;
+      jaw_to_skull(context.body_x, context.body_y, context.jaw, centre_x, centre_y);
+      double contact_x = std::clamp(centre_x, 2.4, 4.8);
+      double body_x = 0.0;
+      double body_y = 0.0;
+      body_against_roof(contact_x, 0.05, jaw, body_x, body_y);
+      emit.organ(close_time, Part::body, body_x, body_y, close_move);
+    } else if (name == "W") {
+      const OrganPosture& round = organ_posture(options, "UW");
+      emit.organ(start - 0.04, Part::mouth, 0.45, 0.6, 0.06);
+      emit.organ(start - 0.04, Part::spread, 2.2, 0.0, 0.06);
+      emit.organ(start - 0.04, Part::body, 0.5 * (round.body_x + context.body_x), round.body_y, 0.07);
+    } else if (name == "Y") {
+      const OrganPosture& front = organ_posture(options, "IY");
+      emit.organ(start - 0.04, Part::body, front.body_x, front.body_y + 0.1, 0.06);
+      emit.organ(start - 0.04, Part::apex, front.tip_x, front.tip_y, 0.06);
+    }
+    // Hand the organs back toward the vowel ahead at the release (the vowel
+    // itself leaves them to the consonant). After the last consonant before
+    // a vowel this is that vowel's posture; between consonants the next
+    // consonant takes over what it owns.
+    // (Not what a following consonant before the vowel owns: its closure
+    // comes first, and handing back after it reopened "is Papa"'s /p/.)
+    unsigned owned = owned_organs(name);
+    for (std::size_t look = index + 1; look < end && !is_vowel_phone(phones[look].name); ++look) {
+      owned &= ~owned_organs(phones[look].name);
+    }
+    if (owned != 0U) {
+      double hand_back = name == "L" || name == "R" || name == "W" || name == "Y" ? finish - 0.02 : release_time;
+      double reach = std::max(0.6 * release_move + 0.04, 0.05);
+      release_organs(emit, hand_back, context, reach, owned);
+    }
+  }
+}
+
 void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, std::size_t end, const Phrase& phrase,
                     const PlanOptions& options, const Emitter& emit) {
   if (first >= end) {
@@ -654,6 +1100,9 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
   }
   double phrase_start = phones[first].start;
   double phrase_end = phones[end - 1].start + phones[end - 1].duration;
+  if (options.organs) {
+    gesture_organs(phones, first, end, options, emit);
+  }
 
   // Breath support: pressure rises just before speech, carries stressed
   // syllables a little higher, and is released at the end.
@@ -750,7 +1199,12 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
       while (onset > first && !is_vowel_phone(phones[onset - 1].name)) {
         --onset;
       }
-      double begin = std::max(phones[onset].start - 0.02, tongue_free_at);
+      // Across a flap the body heads for this vowel well before the tap: a
+      // tap is too short to carry the transition, and begun 20 ms ahead
+      // the body was still back when the tip rose, so F2 fell into it as
+      // for a labial ("body" heard as "baldy").
+      double lead = phones[onset].name == "DX" ? 0.06 : 0.02;
+      double begin = std::max(phones[onset].start - lead, tongue_free_at);
       // A tip fricative in the onset keeps the body out of its way: heading
       // for /i/ during /sh/, the tongue made a second, palatal constriction
       // behind the hiss channel, the flow fell to about 200 cm^3/s, and the
@@ -910,7 +1364,11 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
     // Tip and lip gestures are fast (about 25-30 ms); the dorsum is heavier.
     // Each aims slightly past its target so the constriction is formed by
     // the phone's start, as real articulators overshoot onto contact.
-    double close_move = spec.organ == Organ::dorsum ? 0.04 : 0.028;
+    // The tongue body is heavy and broad: it closes and opens more slowly.
+    // (At 40 ms in, 30 ms out and 0.15 cm into the dome, a /k/ squeezed
+    // 12 cm^3 out of the sealed space in 6 ms, the pressure behind it passed
+    // the lungs' and the release burst stood 17 dB over the speech.)
+    double close_move = spec.organ == Organ::dorsum ? 0.06 : 0.028;
     double release_move = spec.kind == Kind::stop || spec.kind == Kind::affricate ? options.release_move : 0.04;
     // Voiced stops let go more gently: at the voiceless speed their bursts
     // stood 4-6.5 dB above bdl's and rms's (/b/ -0.3 dB re the vowel; theirs
@@ -935,6 +1393,13 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
     bool sealing = spec.kind == Kind::stop || spec.kind == Kind::nasal || spec.kind == Kind::affricate;
     double close_time = start - (sealing ? kSealLead : 0.5) * close_move;
     double aimed_area = spec.kind == Kind::fricative ? 0.6 * spec.constriction_area : spec.constriction_area;
+    // The lips seal by pressing together. Aimed only to touch, the soft
+    // lips and their holding wander left a 0.001-0.004 cm^2 leak through
+    // every /m/ (the tip's /n/ sealed fully), and "human"'s /m/ carried
+    // the vowel's 2-4.5 kHz energy: the owner heard it as odd.
+    if (sealing && spec.organ == Organ::lips) {
+      aimed_area = -options.lip_press;
+    }
     if (index == first) {
       // The first consonant of a phrase is in place before the air flows.
       close_time = start - 0.12;
@@ -1038,7 +1503,13 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
     bool alveolar = spec.organ == Organ::tip && spec.constriction_place >= 15.0 && spec.constriction_area <= 0.0 &&
                     (spec.kind == Kind::stop || spec.kind == Kind::nasal);
     Posture closure_body = alveolar ? kAlveolarLocus : context;
-    if (alveolar) {
+    // A flap is the tip alone; the tongue body keeps heading for the next
+    // vowel. (Sent to the alveolar locus and then widened for a voice bar,
+    // as for a /d/, it interrupted /a/ -> /i/ in "body": F2 stayed at
+    // 1240 Hz into the tap where an alveolar's rises toward 1700, a dark
+    // /l/; the owner heard "baldy".)
+    bool flap = phone.name == "DX";
+    if (alveolar && !flap) {
       emit.part(close_time, Part::tongue, closure_body.place, closure_body.area, close_move + 0.02);
       if (!(spec.kind == Kind::stop && spec.voiced)) {
         emit.part(opening + 0.005, Part::tongue, context.place, context.area, 0.06);
@@ -1056,7 +1527,7 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
       // through it, "dog." released into a puff of schwa.
       emit.part(opening - 0.01, Part::glottis, kVoicelessGap, 0.4, 0.03);
     }
-    if ((spec.kind == Kind::stop || spec.kind == Kind::affricate) && spec.voiced) {
+    if ((spec.kind == Kind::stop || spec.kind == Kind::affricate) && spec.voiced && !flap) {
       double expand_begin = std::max(close_time, opening - kVoiceBarLead);
       emit.part(expand_begin, Part::tongue, closure_body.place, std::min(closure_body.area * 1.8, 4.0),
                 std::max(opening - expand_begin, 0.03));
@@ -1106,7 +1577,11 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
       // little: fully raised 40 ms ahead, the /p/ of "Papa" closed the jaw
       // over the 86 ms /a/ (F1 431, F2 2104 Hz: an /I/; "body" reached
       // 737/1336), and the owner heard "bipple".
-      double jaw_raise = spec.organ == Organ::lips ? options.labial_jaw : 1.0;
+      // A flap is the tip alone, flicked against the ridge: the jaw stays
+      // open. (Raised 40 ms ahead as for a stop, it closed the /a/ of
+      // "body" to F1 490 Hz under F2 1400 and F3 2400, a dark /l/, and the
+      // owner heard "baldy".)
+      double jaw_raise = phone.name == "DX" ? 0.0 : spec.organ == Organ::lips ? options.labial_jaw : 1.0;
       emit.part(start - options.jaw_lead, Part::jaw, kReleased, jaw_raise, 0.06);
       if (!next_exists || is_vowel_kind(next_spec.kind)) {
         emit.part(opening - 0.01, Part::jaw, kReleased, 0.0, 0.08);
@@ -1242,11 +1717,21 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
           voice_onset = finish;
         } else if (spec.kind == Kind::fricative) {
           voice_onset = finish - 0.015;
+          // Before a closure the voice waits for the seal: begun 15 ms
+          // before the /s/ ended, it sounded through the still-open mouth
+          // for 25 ms before /dZ/'s tip closed, a short vowel between "fox"
+          // and "jumps". A voiced affricate re-closes the folds itself at
+          // its end.
+          bool closure_next = next_spec.kind == Kind::stop || next_spec.kind == Kind::affricate;
+          if (closure_next) {
+            voice_onset = finish + kSealSettle;
+          }
         }
+        bool affricate_voices_itself = spec.kind == Kind::fricative && next_spec.kind == Kind::affricate;
         // The folds close in quickly (20 ms). Over 70 ms the vowel after
         // every voiceless consonant began with chaotic, rough pulses
         // (jitter 5.8%, shimmer 35%; bdl 2.1%, 7%).
-        if (options.onset_gap > options.voicing_gap) {
+        if (!affricate_voices_itself && options.onset_gap > options.voicing_gap) {
           // Voicing starts with the folds still a little apart, so the
           // first cycles do not seal: driven straight to the pressed rest,
           // the first closure cut 300 cm^3/s of aspiration flow inside a
@@ -1256,7 +1741,7 @@ void gesture_phrase(const std::vector<TimedPhone>& phones, std::size_t first, st
           emit.part(voice_onset - options.adduction_lead, Part::glottis, options.onset_gap, 0.6, options.adduction_move);
           emit.part(voice_onset - options.adduction_lead + options.onset_hold, Part::glottis, options.voicing_gap, 0.6,
                     options.onset_settle);
-        } else {
+        } else if (!affricate_voices_itself) {
           emit.part(voice_onset - options.adduction_lead, Part::glottis, options.voicing_gap, 0.6, options.adduction_move);
         }
       }
@@ -1424,6 +1909,12 @@ Plan plan_speech(const std::vector<Phrase>& phrases, const PlanOptions& options)
   Plan plan;
   Emitter emit;
   emit.score = &plan.score;
+  emit.organs = options.organs;
+  if (options.organs) {
+    emit_organs(emit, 0.0, organ_posture(options, "AX"), 0.05);
+    emit.organ(0.0, Part::groove, 0.0, 0.0, 0.05);
+    emit.organ(0.0, Part::lateral, 0.0, 0.0, 0.05);
+  }
 
   // Rest posture before anything happens.
   emit.part(0.0, Part::lungs, 0.0, 0.0, 0.05);
@@ -1449,6 +1940,9 @@ Plan plan_speech(const std::vector<Phrase>& phrases, const PlanOptions& options)
       emit.part(time, Part::glottis, kBreathGap, 0.0, 0.08);
       emit.part(time, Part::lungs, -110.0, 0.0, 0.12);
       emit.part(time, Part::lips, 2.6, 0.0, 0.10);
+      if (options.organs) {
+        emit.organ(time, Part::mouth, 1.2, 0.0, 0.10);
+      }
       emit.part(time + phrase.breath_seconds - 0.12, Part::lungs, 0.0, 0.0, 0.08);
       time += phrase.breath_seconds;
     }
@@ -1487,6 +1981,60 @@ Plan plan_speech(const std::vector<Phrase>& phrases, const PlanOptions& options)
   plan.score.duration = time + 0.35;
   sort_score(plan.score);
   return plan;
+}
+
+bool load_organ_postures(const std::string& path, PlanOptions& options) {
+  std::ifstream input(path);
+  if (!input) {
+    return false;
+  }
+  std::string line;
+  while (std::getline(input, line)) {
+    std::size_t hash = line.find('#');
+    if (hash != std::string::npos) {
+      line = line.substr(0, hash);
+    }
+    std::istringstream fields(line);
+    std::string name;
+    if (!(fields >> name) || name.find('=') != std::string::npos) {
+      continue;
+    }
+    for (char& letter : name) {
+      letter = static_cast<char>(std::toupper(static_cast<unsigned char>(letter)));
+    }
+    OrganPosture posture;
+    std::string field;
+    while (fields >> field) {
+      std::size_t equals = field.find('=');
+      if (equals == std::string::npos) {
+        continue;
+      }
+      std::string key = field.substr(0, equals);
+      double value = std::strtod(field.c_str() + equals + 1, nullptr);
+      if (key == "jaw") {
+        posture.jaw = value;
+      } else if (key == "tx") {
+        posture.body_x = value;
+      } else if (key == "ty") {
+        posture.body_y = value;
+      } else if (key == "tipx") {
+        posture.tip_x = value;
+      } else if (key == "tipy") {
+        posture.tip_y = value;
+      } else if (key == "ap") {
+        posture.aperture = value;
+      } else if (key == "pro") {
+        posture.protrusion = value;
+      } else if (key == "lw") {
+        posture.width = value;
+      } else if (key == "drop") {
+        posture.larynx = value;
+      }
+    }
+    options.organ_postures[name] = posture;
+  }
+  options.organs = true;
+  return true;
 }
 
 }  // namespace voice

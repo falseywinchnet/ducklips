@@ -35,16 +35,17 @@ def cycles(y, sr):
             if len(run) >= 5: out.append(numpy.array(run))
         i = j
     return out
-for p in sys.argv[1:]:
-    y, sr = librosa.load(p, sr=None)
-    rs = cycles(y, sr); rap, cor = [], []
-    dump = []
-    for r in rs:
-        per = r[:, 1]; m = (per[:-2] + per[1:-1] + per[2:]) / 3
-        ok = (r[1:-1, 2] > 0.5)
-        rap.extend(list((numpy.abs(per[1:-1] - m) / m * 100)[ok])); cor.extend(list(r[:, 2]))
-        dump.extend(list(r))
-    rap = numpy.array(rap)
-    if os.environ.get("DUMP"): numpy.savetxt(os.environ["DUMP"], numpy.array(dump), fmt="%.5f")
-    print("%-32s sr %5d cycles %5d RAP median %.2f%% p90 %.2f%% jumps %.1f/100 corr %.3f" % (
-        p.split("/")[-1][:32], sr, len(rap), numpy.median(rap), numpy.percentile(rap, 90), 100 * numpy.mean(rap > 10 / 3), numpy.median(cor)))
+if __name__ == "__main__":
+    for p in sys.argv[1:]:
+        y, sr = librosa.load(p, sr=None)
+        rs = cycles(y, sr); rap, cor = [], []
+        dump = []
+        for r in rs:
+            per = r[:, 1]; m = (per[:-2] + per[1:-1] + per[2:]) / 3
+            ok = (r[1:-1, 2] > 0.5)
+            rap.extend(list((numpy.abs(per[1:-1] - m) / m * 100)[ok])); cor.extend(list(r[:, 2]))
+            dump.extend(list(r))
+        rap = numpy.array(rap)
+        if os.environ.get("DUMP"): numpy.savetxt(os.environ["DUMP"], numpy.array(dump), fmt="%.5f")
+        print("%-32s sr %5d cycles %5d RAP median %.2f%% p90 %.2f%% jumps %.1f/100 corr %.3f" % (
+            p.split("/")[-1][:32], sr, len(rap), numpy.median(rap), numpy.percentile(rap, 90), 100 * numpy.mean(rap > 10 / 3), numpy.median(cor)))

@@ -35,6 +35,16 @@ enum class Part : std::uint8_t {
   floor,    // a: sublingual space volume (cm^3) under the raised tip
   jaw,      // a: gap between the incisors (cm^2); >= kReleased leaves the teeth apart
   lateral,  // a: opening of the pocket over the blade behind a lateral contact (cm^2); 0 closed
+            //    (articulatory body: side channels past a tip contact, 0..1)
+  // The articulatory body (tract/articulation.hpp): organ positions, cm in
+  // the midsagittal plane (x forward, y up; tongue points in the jaw's frame).
+  body,     // a, b: tongue body centre x, y
+  apex,     // a, b: tongue tip x, y
+  mouth,    // a: lip aperture (cm; negative presses), b: protrusion (cm)
+  spread,   // a: lip opening width (cm)
+  larynx,   // a: how far the larynx is lowered (cm)
+  angle,    // a: jaw angle (degrees)
+  groove,   // a: midline channel along the blade, 0..1 (sibilants)
   count
 };
 

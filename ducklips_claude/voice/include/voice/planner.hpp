@@ -39,6 +39,21 @@ struct FactorModel {
 // the file is unreadable.
 bool load_factor_model(const std::string& path, FactorModel& model);
 
+// A posture of the articulatory body's organs (tract/articulation.hpp): jaw
+// angle (degrees), tongue body centre and tip (cm, the jaw's frame), lip
+// aperture, protrusion and width (cm), larynx drop (cm).
+struct OrganPosture {
+  double jaw = 6.0;
+  double body_x = 4.0;
+  double body_y = 6.6;
+  double tip_x = 6.9;
+  double tip_y = 7.4;
+  double aperture = 1.0;
+  double protrusion = 0.0;
+  double width = 3.2;
+  double larynx = 0.0;
+};
+
 struct PlanOptions {
   double rate = 1.0;          // >1 speaks faster
   // Token-to-token variation, as a fraction (0.1: about 10%). A speaker
@@ -85,7 +100,11 @@ struct PlanOptions {
   // Glottal settings of the noisy voiced and breathy sounds.
   double aspirate_gap = 0.06;          // /h/ fold rest gap (cm). 0.09 before: a quiet voiceless hiss (/hh/ 22%); the owner's "hello"
                                        // opens breathy and partly voiced. 0.06: /hh/ 49%, overall 36.3 -> 36.8% (one seed)
-  double voiced_fricative_gap = 0.012; // /v z zh/ fold rest gap (cm; z/v vs bdl+rms)
+  // /v z zh/ fold rest gap (cm). 0.04 (2026-10-15, articulatory body):
+  // at 0.012 the folds closed fully every cycle, the mean flow was about
+  // 50 cm^3/s and /z/ barely hissed (4-7.5 kHz 31 dB under its peak; 0.025:
+  // 22, 0.04: 17, 0.06: 14; bdl's hiss about level with its voicing).
+  double voiced_fricative_gap = 0.04;
   double vowel_reach = 0.35;           // longest tongue movement into a vowel (s). 0.15 (fitted to an F2-speed figure) left the
                                        // formants parked in blocks in the spectrogram; 0.35 with arrival 0.8 keeps them moving
   double vowel_arrival = 0.8;          // fraction of the vowel by which the tongue arrives (0.5 before)
@@ -139,12 +158,18 @@ struct PlanOptions {
   // targets rose and fell 5-7 semitones on nearly every syllable; the
   // owner heard a warble.)
   bool pitch_glide = true;
+  // The articulatory body: emit organ positions (body, apex, mouth, spread,
+  // larynx, angle, groove, lateral) from these vowel postures instead of
+  // the area-profile parts (`say --organs FILE`).
+  bool organs = false;
+  std::map<std::string, OrganPosture> organ_postures;
   // /s z/ are made with the lips open and unrounded: at least this lip area
   // (cm^2) and at most this protrusion through them, and a labial released
   // into one opens to it. (Released straight to the next vowel's rounding,
   // "jumps over" put /s/ behind 0.3 cm^2 protruded lips: its peak fell
   // from 6.5 to 5 kHz and the owner heard "jumpsh".)
   double sibilant_lips = 1.5;
+  double lip_press = 0.01;             // cm^2 (as a negative signed area) the lips press past touching in /p b m/
   double sibilant_protrusion = 0.1;
   double unstressed_dip = 0.5;
   double comma_vowel_scale = 2.4;      // last vowel before a minor boundary (continuation)
@@ -190,5 +215,8 @@ Plan plan_speech(const std::vector<Phrase>& phrases, const PlanOptions& options)
 //   NAME key value [key value ...]   keys: place area floor inherent minimum
 //                                          vplace varea vlips vprotrusion
 [[nodiscard]] bool load_phone_overrides(const std::string& path);
+// Vowel postures for the articulatory body: lines "PHONE jaw=.. tx=.. ty=..
+// tipx=.. tipy=.. ap=.. pro=.. lw=.. drop=..". Returns false if unreadable.
+bool load_organ_postures(const std::string& path, PlanOptions& options);
 
 }  // namespace voice

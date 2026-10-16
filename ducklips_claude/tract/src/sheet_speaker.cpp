@@ -409,6 +409,14 @@ void SheetSpeaker::apply(const voice::PartEvent& event) {
       hold_.set_target(first, signed_root(a), opening_rate);
       hold_.set_target(second, b, rate);
       break;
+    case voice::Part::body:
+    case voice::Part::apex:
+    case voice::Part::mouth:
+    case voice::Part::spread:
+    case voice::Part::larynx:
+    case voice::Part::angle:
+    case voice::Part::groove:
+      // (organ positions belong to the articulatory body)
     case voice::Part::count:
       break;
   }

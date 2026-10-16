@@ -1639,3 +1639,430 @@ Owner: VocalTractLab "sounds natural. what you have made doesnt even beat micros
   - Transitions: velar d(F3−F2) +25 → +3 Hz (bdl −46); labial dF2 +81, dF3 +205 (bdl −24, −22).
   - The measure may be confounded where our acoustic closure does not fall at the score's vowel end. OPEN: why our F2 and F3 rise into labial closures.
 - `listen/m44_body_quick_jumps.wav`: the "Hello…/fox" sentences first, then the two "more human today" sentences.
+
+### Owner (2026-10-15): "he still sounds sickly. body sounds like baldy. human sounds odd."
+
+- **Sickly: measured, not found.**
+  - Within-vowel pitch and level wobble (`analysis/vowel_wobble.py`, the ARCTIC set): bdl 4.0 cents / 0.26 dB, ours 5.2 / 0.25.
+  - Harmonics-to-noise by band (`analysis/bandhnr.py`, cycle-to-cycle coherence on the waveform-matched cycles). m44 is 20.9 / 9.1 / 4.3 / −7.0 dB at 0.08–1 / 1–2 / 2–4 / 4–7 kHz. Inside the range of the owner (16.9–18.8 / 3.9–8.6 / 3.4–6.4 / −5.3–0.2), bdl and VocalTractLab (originals and synthesis).
+  - H1−H2 stays near +2 dB (owner −3.5, bdl −2.7) under every source change tried:
+
+    | Change | H1−H2 | Vowel tilt |
+    |---|---|---|
+    | upper edge −0.016 / −0.020 | +2.2 | — |
+    | lower 0.010, upper −0.020 | +2.7 | — |
+    | damping 0.15, 0.8 | +1.1 | −16 |
+    | upper damping 0.6 | +2.5 | — |
+    | no skin | +2.1 | — |
+    | skin corner 1 kHz | +1.6 | — |
+    | 950 Pa | +1.9 | −14 |
+    | 1150 Pa | +2.1 | −13 |
+
+  - Each cycle is open about 60% of the period (open 5.2 ms of 8.7), peak area 0.105 cm², and the flow is skewed (peak late, sharp cut-off). A normal male open quotient. OPEN.
+  - A/B for the owner's ear (`listen/sickly_ab/`, `analysis/sickly_ab.sh`): the two sentences as heard (hand rules), with the learned models, firmer folds (damping 0.15), stronger breath (950 Pa), perfectly steady (all variation, tremor and wander off), and higher pitch (median 140 Hz).
+- **`talk.sh` never loaded the learned pitch and duration models.** `say` reads `data/pitch_en.txt`, `data/durations_en.txt` and `data/phones_en.txt` relative to its working directory. Run from anywhere else it silently falls back to the hand rules. Every listening file since `talk.sh` (m42–m44, and the `/tmp/es/abl` renders) used them, while identification (`render_arctic.py`, run from `voice/`) used the learned models. `talk.sh` now runs `say` from `voice/` and passes extra `say` options. Contour reversals: hand rules 1.10, learned 1.49 per voiced second.
+- **"baldy".** LPC tracks through "a body": F1 fell from 730 to 490 Hz over the last 15–20 ms of the /a/, under F2 1400 and F3 2400 (a dark /l/). Three causes in the planner's flap (DX):
+  - the jaw rose 40 ms ahead, as for a stop;
+  - the tongue body went to the alveolar locus and was then widened for a voice bar (area ×1.8), interrupting /a/ → /i/;
+  - the next vowel's tongue began only 20 ms before the tap, so the body was still back when the tip rose, and F2 fell into the tap (1240 → 1090) as for a labial.
+  - Now a flap keeps the jaw open, skips the locus and the voice-bar widening, and the next vowel's tongue starts 60 ms ahead. F2 rises into the tap (1320 → 1480), the closure reaches −25 dB (from −15), and /i/ reaches F2 2200 within 40 ms of the release.
+- **"human".** The lips never sealed for /m/: aimed only to touch, they left 0.001–0.004 cm² open (the tip's /n/ sealed fully). `PlanOptions::lip_press` 0.01: /p b m/ aim at a slightly pressed seal (0.000 throughout). The /m/'s spectrum barely changed: its peak is still near 2 kHz with strong 1–2.5 kHz. The word's timing (/uw/ 113 ms, /m/ 111, /ax/ 40, /n/ 85) gives a long nasal against a clipped /ax/. OPEN, and now planned by the learned durations.
+- `say --pitch-median` (the learned model's reference pitch).
+- Identification with the flap, jaw and lip-press changes (seed 1): **38.6%** (39.3% before them). /b/ 57%, /m/ 27% (21), /p/ 43% (37); /d/ 30% (33); /dh/ 4% (6). Within a seed's spread; recorded.
+- Owner on the A/B: "they sound exactly as sickly. all of them. they all sound just like a 1998 tts model". None of the five changes (learned models, firmer folds, stronger breath, all variation off, higher pitch) moved it.
+- Control tick 1 ms → 0.125 ms (`kControlSteps` 12 in `units.hpp`; the owner: "timing resolution 8x", meaning the intermodulation behind the warble). Same speed (4.2× real time).
+  - Inter-harmonic energy (`analysis/interharm.py`: cycles time-warped to 256 samples, 8 per FFT, harmonics on every 8th bin, ±2 bins counted harmonic), nine sentences:
+    - noise and variation off: 1 ms −24.3 / −16.0 / −13.3 dB at harmonics 1–8 / 8–24 / 24–48; 0.125 ms −23.0 / −14.0 / −12.3;
+    - full: 1 ms −23.4 / −11.7 / −8.0; 0.125 ms −23.5 / −14.2 / −9.0;
+    - people and VTL: −17 to −28 / −9 to −19 / −1 to −11.
+  - A held /a/ is 40–50 dB clean between its low harmonics. The tick was not the intermodulation; kept.
+- Owner: "we need better articulation, and more consistent articulation ... our engine is possibly a tiny demo and not a real engine. we need to study their engine as well to figure out how many finite elements they use and think about their budget compared to ours". Study in `learned/vtl_budget_vs_ours.md`:
+  - VTL 2.4 (Dec 2025): its articulation geometry is 12,605 lines and about 90% of its compute (ESTIMATE): 3D surfaces, a 407-vertex tongue, 129 cut planes × 96 lateral samples, rebuilt at 400 Hz, with section lengths from the anatomy. Ours is a 109-line parabola with two notches, a fixed 17.5 cm tract and about 1% of our compute. The budgets are inverted.
+  - Proposal: a midsagittal articulatory model (one tongue, the jaw as a carrier, larynx height, lips with length), a variable-length tube (B1 waves with a fractional lip end, or B2 a lumped line), and gestures in physical parameter space with context consonant prototypes.
+  - Redone on **VTL 2.4** (December 2025, the owner's choice; it was VTL3D 1.0.2 first). Its speakers select the **"Geometric glottis 2025"**, a kinematic valve:
+    - cosine edges at exactly the commanded F0, the upper lagging 1.22 rad;
+    - amplitude ∝ √(transglottal pressure);
+    - exponential contact and a pulse-shape skew;
+    - a 0.03 cm² chink;
+    - Klatt flutter and phase-random-walk jitter.
+  - It is not the self-oscillating triangular glottis we ported. Owner's decision: keep our cord or try a kinematic valve (A/B).
+
+### Kinematic folds, an A/B (2026-10-15; owner: "yes and lets try b1")
+
+- `Cord::set_kinematic` (`BodyLayout::kinematic_glottis`; `speak` `KINEMATIC=1`, `KAMP`, `KLAG`, `KSOFT`, `KJITTER`, and `CHINK` for the voicing chink). Our own design after Titze's four-parameter glottis, as VTL 2.4's default source; nothing copied:
+  - each edge a cosine at the intended pitch × the holding factor, the upper lagging 1.22 rad;
+  - amplitude 0.0007 cm per √(dyn/cm²) × √(transglottal pressure, two 25 Hz poles), fading out between 200 and 100 Pa;
+  - the opening integrated over 16 points along the fold (rest gap linear to the vocal process, swing a half sine), with a softplus contact 0.002 cm wide;
+  - jitter a phase random walk, 0.17 rad per √s;
+  - the flow, trachea and tract unchanged; the ear's correction off.
+- Owner's sentence: |deviation from the plan| 8 cents (self-oscillating 33); RAP 0.26% by audio (0.32; owner 0.23–0.42); 276 voiced cycles (242).
+- H1−H2 and vowel tilt (the four m39 scores):
+
+  | Source | H1−H2 | Tilt |
+  |---|---|---|
+  | self-oscillating | +2.2 | −20.3 |
+  | kinematic | −5.0 | −14.5 |
+  | kinematic, chink 0.03 (VTL's default) | −1.3 | −20.8 |
+  | kinematic, chink 0.01 | −4.1 | −24.2 |
+  | kinematic, chink 0.005 | −4.7 | −19.3 |
+  | kinematic, softness 0.003 | −4.9 | −18.1 |
+  | kinematic, rest 0.015 / 0.01 | **−4.0** | **−19.0** |
+  | kinematic, rest 0.02 / 0.02 | −3.2 | −24.4 |
+  | owner | −3.5 | −22 |
+  | bdl | −2.7 | −18 |
+
+  - H1−H2, stuck near +2 under every self-oscillating setting, reaches the human range at once.
+- `listen/source_ab/` (`analysis/source_ab.sh`; "Hello … body", the fox, "I hope … today"; learned models, room):
+  - A: self-oscillating;
+  - B: kinematic, rest 0.015 / 0.01;
+  - C: B with chink 0.03.
+  PENDING the owner's ear.
+
+### The articulatory body: A (midsagittal model), B1 (moving open end), C (organ planner) (2026-10-15)
+
+Owner: "yes and lets try b1".
+
+- **A. `tract/articulation.{hpp,cpp}` (`MidsagittalTract`).** Our own model after Mermelstein's and Maeda's semipolar grids and Heinz & Stevens's area rules. Unscaled coordinates in cm, x forward, y up, the glottis at (1, 0).
+  - A fixed hull: larynx back wall, posterior pharyngeal wall, velum, palate, alveolar ridge, upper incisors; the upper lip added per shape.
+  - The organs as one closed outline: the larynx front wall; the root, from the epiglottis base (following the hyoid and, 17%, the tongue body) tangent to a 2 cm body circle; the blade tangent to the tip; the tip's underside; the floor; the lower incisors and lower lip (carried by the jaw's rotation about the condyle); the chin.
+  - Cuts: horizontal through the larynx and pharynx (every 0.3 cm), a fan from (3.4, 5.6) through the mouth (5.5°), vertical at the front (every 0.3 cm).
+    - Width = the hull crossing minus the nearest organ crossing below it. Zero where the hull point lies inside the organs (a contact).
+    - Area = α·d^β by region (larynx, pharynx, velar, palatal, alveolar, teeth); the lips an ellipse, width × aperture.
+    - Lengths = distances between successive midpoints, so the tract lengthens with a lowered larynx and protruded lips.
+  - Floors: side channels past a tip contact (lateral, 0.2 cm²) and a groove along the blade (0.12 cm² at the tip, widening to 0.5 two cm back), applied even where the midline is closed.
+  - Fitted to Story's (2008) eleven MRI vowels together (`analysis/geofit.py`, `geofitplot.py`): rms log-area error 0.36. Lengths within 0.3 cm except /ae/ +0.9 and /iy/ −0.5 (Story 16.1–19.6 cm). Fitted speaker scale 0.953, root follow 0.17.
+  - Bugs fixed on the way:
+    - an organ pressed past the hull made a fan cut take the tongue's underside: an 8 cm "gap", the length jumping to 25 cm and the tube blowing up at the first /k/;
+    - a zero-width cut skipped the groove floor, so /s/ became a stop.
+  - `tools/geometry_probe` (key=value lines → cuts and outlines).
+- **Vowel postures** (`tract/data/organs.txt`): the MRI postures tuned to bdl's F1–F3 by coordinate search (`analysis/organ_vopt.py`, held vowels through `speak`, kinematic source, penalised 0.5 semitone per cm of tongue movement). Before → after:
+  - /aa/ 5.96 → 0.53 st (717 / 1127 / 2506 Hz);
+  - /ah/ 6.65 → 0.43;
+  - /uw/ 9.54 → 1.94 (340 / 1273);
+  - /ey/ 2.81 → 0.64;
+  - /ih/ 0.76; /eh/ 0.98; /ae/ 0.84; /ow/ 1.73; /uh/ 2.44; /iy/ 2.10 (F2 1975 against bdl's 2213); /ao/ 2.63 (stuck).
+- **B1. `Tube::set_active_length`.** Only the first `active_count()` nodes carry air. The radiation load sits on the last, behind an extra air mass ρ·(remaining length)/A, so the acoustic length is continuous. Lengthening waits a quarter node past each boundary (hysteresis), and newly joined links start silent.
+  - Side ports move (`Tube::move_side_port`; `VoiceBody::set_velum_place`, `set_under_tongue_place`).
+  - The jets use the moving lip end.
+  - `articulatory_layout()`: 60 nodes (21.9 cm).
+- **Speaker.** A score holding organ parts (`body`, `apex`, `mouth`, `spread`, `larynx`, `angle`, `groove`, with `lateral` as 0..1) is spoken by the articulatory body (`uses_organs`).
+  - The geometry runs every 8 control ticks (1 ms); node areas (`profile_to_nodes`: the centre's interpolated area, or a narrower cut inside the node) and the length glide linearly between frames.
+  - 3.2–3.6× real time.
+  - `PROFILE=t` also prints the held organs and cuts.
+- **C. The organ planner** (`say --organs FILE`; `PlanOptions::organs`; `gesture_organs`):
+  - Vowels set every organ, from their onset's start, arriving late in the vowel; diphthongs glide (AY = AA→IH, AW = AA→UH, OY = AO→IH, EY→IH, OW→UH); reduced vowels open the jaw and lips less.
+  - A consonant constrains only its own articulator, placed against the hull; everything else follows the vowel it heads to (or leaves):
+    - /p b m/ press the lips;
+    - /f v/ a 0.06 cm lip slit;
+    - /th dh/ the tip at the incisors' edge;
+    - /t d n/ (and the flap) the tip 0.12 cm past the ridge;
+    - /s z/ the tip 0.1 cm short of the ridge, with groove;
+    - /sh zh ch jh/ further back, with groove and lips rounded;
+    - /l/ a tip contact with side channels and the body drawn back;
+    - /r/ bunched;
+    - /k g ng/ the body raised against the roof above where the vowel holds it (palatal beside front vowels, velar beside back ones);
+    - /w/ lips rounded, the body toward /uw/;
+    - /y/ the body toward /iy/.
+  - The area-profile parts are no longer written.
+- **First tuning of the articulatory body.** Identification, one seed (own folds / moved folds):
+  - first planner: 22.1 / 18.1%.
+    - Almost every failing phone was heard as /r/: vowel F3 150–830 Hz under bdl (`analysis/f123.py`, running-speech medians). The vowel tuning had weighted F3 a quarter, against rough targets.
+    - Retuned to bdl's measured F1–F3 with full weight at speaker scale 0.90 (Story's 0.953 is a larger speaker: mean distance over six vowels 3.49 / 3.09 / 2.87 st at 0.953 / 0.92 / 0.89). Identification 21.9 / 18.6%, nearly unchanged.
+  - **Leaking closures** (`analysis/phoneband.py`, closure middles re the loudest vowel): /b d m z v/ carried −23 to −31 dB at 0.5–4 kHz where bdl's are −42 to −70.
+    - A pressed lip aperture put the lower lip *below* the upper (a 0.1 cm slit, about 0.25 cm²): fixed.
+    - The planner's vowel events re-set every organ just before the onset consonant's closure, and a consonant's hand-back reopened the next consonant's closure ("is Papa", "and"). Now each consonant owns its organs (`owned_organs`): a vowel leaves them to its onset consonants, a consonant hands back only what the consonants after it do not own, and the flap aims for the jaw midway between its vowels.
+    - No cut passed through a tip contact: the fan ended at 52° (5.5° steps) and the vertical cuts began at 6.7 cm. Now the fan runs to 38° in 2.5° steps over the ridge, and the vertical cuts begin at the teeth. /t d n/ and the flap close; /s z/ hold their 0.12 cm² groove.
+    - The area rules refitted to the MRI on the new grid (rms 0.39, root follow 0.22) and the vowels retuned: most within 0.2–1.5 st of bdl; /uw/ 2.7, /uh/ 2.6, /ao/ 3.3, /iy/ 2.0.
+  - Now **25.2 / 24.7%** (old body 38–39%). Per phone (moved folds): p 48, t 44, b 33, d 22, m 23; still near 0: th v dh jh z y ng uw uh ow g w. /w/ is heard as /b/ (its lips too closed), /z/ as /n/, /v/ and /uw/ as /r/.
+- `listen/m45_new_body_{moved,own}_folds.wav`: the three test sentences through the articulatory body (organ planner, learned models, room).
+- Owner on m45: "he warbles less, but his voice is far weaker and there's some clicking as if going into overload".
+  - `analysis/clicks.py` (largest samples re the 99th percentile, with the phone): the new body's peaks stood **20.8 dB** over the speech (the old body's 7.1). Every click fell exactly when the tube **joined a node** to its open end (`speak` `ENDLOG=1`: 0.7531, 1.8865, 2.1411, 3.4784, 4.6475, 6.0230 s …); dropping nodes was quiet.
+  - The joined link started silent, so the old end's pressure collapsed for a step. The output normalisation then scaled the speech about 14 dB down: the "far weaker" voice.
+  - Now a joined link starts with the waves that carry the old end's pressure and radiated flow, the new nodes at that pressure. The tube does not lengthen while its end is shut (lips sealed: the huge impedance made a click in "jumps"'s /p/); the length waits on the end's air mass (up to 2.5 nodes).
+  - Peak re 99th: moved folds 20.8 → 8.0 dB; own folds 11.2 (a real /jh/ release against 600 Pa, probably too loud). Listening renders (room): 7.5 / 8.4 dB (old body 7.9).
+- `listen/m46_new_body_{moved,own}_folds.wav`: m45 without the clicks.
+
+### Owner on m46 (2026-10-15): "he sounds like he has a lisp or a fork in his mouth, but he isnt warbling. hello hiccups. papa clips. i speak with a body has a lolipop in his mouth. the quick brown fox ... is barely articulable. but this is progress. lets move forward."
+
+- `analysis/phonebands.py`: every phone's median spectrum in 7 bands (0–0.5 … 6–8 kHz) re the loudest vowel, ours minus bdl over a0001–a0060, sorted by mean |difference|. Tuning on the moved folds.
+- **Lisp.** /s/ was 25 dB short at 4–8 kHz, /z/ and /jh/ 34–41. The constriction sat at the ridge's crest, 1.3 cm behind the incisors, past the jet's coherence (0.8 cm).
+  - /s z/ now 1 cm behind the incisors' edge, jaw 1.5°; /s/ 4–8 kHz short by 9–11 dB.
+  - The groove is narrowest at the tip (0.06 cm², widening to 0.4 two cm back); 0.12 let /z/'s air through too slowly to hiss.
+  - `voiced_fricative_gap` 0.012 → **0.04**: at 0.012 the folds shut every cycle, the mean flow was about 50 cm³/s and the pressure behind the /z/ channel about 28 Pa. /z/ 4–7.5 kHz re its peak: −31 / −22 / −17 / −14 dB at 0.012 / 0.025 / 0.04 / 0.06.
+  - /sh/ moved forward to 6.65 cm fell from 33 to 0% identified; kept at 6.3.
+- /th dh/ against the incisors' back face (aimed at their edge, the tip stayed 0.15 cm under: 0.35 cm²); /dh/ pressed lightly (0.04). /f v/ slit 0.03 cm. /w/ aperture 0.45.
+- **"hello hiccups".** /l/ drew the body 0.5 cm back from /ow/'s already-back posture; the body reached its limit and closed the pharynx from 6 to 7.7 cm, and the voice stopped for 100 ms.
+  - /l/ now retracts 0.2 only from a forward body (x > 3.4).
+  - The geometry keeps the pharynx region at least 0.15 cm² open (English never seals it).
+  - Side channels 0.35 cm².
+- **"lollipop".** Vowels averaged +4.5 dB at 1–2 kHz and −6 to −7 at 3–8 kHz against bdl (the old body: +2.4 at 1–2, −1.7 at 3–4, −11 at 4–6).
+  - Not the teeth passage (doubled: no change). Not the epilarynx (2.9 / 3.4 cm: worse). Not bandwidths: B1–B4 ours 149 / 106 / 116 / 126 Hz, bdl 99 / 112 / 159 / 142.
+  - F3 is low in the back vowels (running speech: /ah/ −199, /ow/ −204, /uh/ −402, /uw/ −302 Hz) and /er/ had no r-colouring (+396).
+  - Powell's method (`analysis/organ_vopt2.py`) where coordinate search stuck:
+    - /er/ 417 / 1433 / 1923 Hz (bdl 419 / 1438 / 1853), with the pocket under the tongue open;
+    - /uh/ F3 2615;
+    - /uw/ 335 / 1237 / 2468 (an odd posture: open jaw, low body);
+    - /ah/ 2633.
+- Identification (moved folds): 24.7 → 27.9 (sibilants, voiced fricatives) → 27.1 → **26.5%**.
+  - s 69, p 59, aa 56, ay 75, t 40, b 33;
+  - still 0: th v dh jh y uw uh ow (the rounded vowels too, though their held formants now match).
+- `listen/m47_new_body.wav`: the three sentences with these fixes (moved folds).
+- Owner on m47: "he's stil clicking like audio overload."
+  - `analysis/clicks2.py`: local clicks, samples of the 5 kHz high-pass above K× its rms over the surrounding 20 ms (K 8), per second. `clickphones.py`: per phone.
+    - Owner 5.6/s; bdl a0001 5.6/s (K 5); VTL synthesis 10.3/s.
+    - m47 12.3/s (K 8), many of them exactly at the open end's node changes, removals as well as joins.
+  - **The open end no longer moves node by node.** All 60 nodes always carry air. Past the lips the area flares 1.6× per node from the lip opening to 30 cm² (the room), and the node the opening crosses blends by how much of it lies inside. The lips move without any switching; `VoiceBody::set_lip_end` tells the jets where the lips are.
+  - The remaining clicks recur every glottal cycle, densest through /dh/ (84/s), /ao/, /n/, /d/, /iy/: closures and narrow tracts, where nothing else is high.
+    - A per-node pressure dump (`speak WAVEDUMP=from,to`) traced one from node 0 (the glottis, at closure) up the tube one node per step: the closure's own excitation.
+    - Two changes on the way, neither the cause of that excitation:
+      - the lining's contact with the opposite wall is now a critically damped 1.5 kHz spring, not a hard stop (no change in the count);
+      - the glottal air mass is taken on areas of at least 0.01 cm² (rho l / A blew up at closure in the trapezoidal step), which brings the own folds to 5.6/s.
+  - m48: moved folds **10.1/s** (VTL synthesis 10.3), own folds **4.6/s** (owner 5.6). Peak re 99th 8.9 / 10.4 dB.
+- `listen/m48_new_body_{moved,own}_folds.wav`.
+- Owner on m48: "sounds like he's tapping the microphone while speaking. both sound the same."
+  - `analysis/thumps.py` (bumps of the 0–120 Hz envelope 6 dB over its local median, and the band's share of energy):
+    - m45–m47: none, −19 dB; m48: 3.5/s, **−8.8 dB**;
+    - old body 0.2/s, −18.3; owner 0.0/s, −17.4; VTL synthesis −9.4.
+  - Bisected over the saved renders: it came with the flared open end. Not its walls (made rigid: no change), not its shape (FLARE=growth,widest: no change), not the noise sources or branches.
+  - A step dump (`speak STEPS`) showed the frame pumping −3300 cm³/s within 2 ms in /z/: a contact regrouped the cuts, the length jumped by a node or more within a frame, and the lips' nodes swapped with the room's, whose large area changes counted as moving walls.
+  - Now:
+    - the room's nodes push no air (`Tube::set_quiet_from`, masked before the frame's two 250 Hz poles; masked after them, each switch was a two-sample spike);
+    - the length follows the geometry through an 8 ms one-pole (and starts at the opening posture's length: a default 17.5 cm popped at the first sample);
+    - the room's areas no longer follow the lips (2 cm² growing 1.6× per node to 30).
+  - /k g/ squeezed 12 cm³ out of the sealed space in 6 ms (body 0.15 cm into the dome, 40 ms in, 30 out): the pressure behind passed the lungs' and the burst stood 17 dB over the speech. Now 0.05 cm, 60 ms in, 50 ms out.
+  - Result (owner's sentence set, moved folds): thumps 0/s, 0–120 Hz share −21 dB; peak re 99th 8.8 dB, in vowels; local clicks 12.4/s.
+- `listen/m49_new_body_{moved,own}_folds.wav`.
+- Owner on m49: "sounds a bit muffled. own folds still clicks a little. both voices seem to sound like a classic TTS model."
+  - **Muffled.** Vowel bands (mean over 10 vowels, ours − bdl, 0–0.5 … 6–8 kHz), moved folds:
+
+    | Setting | 0–0.5 | 0.5–1 | 1–2 | 2–3 | 3–4 | 4–6 | 6–8 |
+    |---|---|---|---|---|---|---|---|
+    | rest 0.015 / 0.010, hop loss 0.05 | −3.9 | +1.3 | +7.6 | −2.1 | −6.8 | −8.1 | −3.8 |
+    | loss 0.02 | −4.2 | +1.6 | +7.5 | −2.0 | −6.4 | −5.8 | −2.0 |
+    | loss 0 | −4.0 | +1.7 | +7.6 | −1.6 | −6.3 | −4.4 | −0.7 |
+    | walls ×3 / ×10 support, or loss 0.4 | (no change) | | | | | | |
+    | own folds | −2.8 | +0.9 | +5.7 | −1.9 | −3.7 | +0.6 | +11.9 |
+    | rest 0.008 / 0.004 | −4.2 | +1.5 | +8.0 | +1.0 | −1.0 | 0.0 | +5.7 |
+    | **rest 0.011 / 0.006, loss 0.02** | −4.2 | +1.3 | +7.9 | +0.2 | **−2.8** | **−2.2** | **+2.0** |
+
+  - Adopted the last as the articulatory body's defaults (`articulatory_layout()` and `Speaker`): the kinematic folds, rests 0.011 / 0.006, hop loss 0.02. `speak KINEMATIC=0` restores the self-oscillating folds.
+  - The 1–2 kHz excess (+6 to +8, with 0–0.5 kHz −3 to −4) is in every source variant: the body's vowels, not the source. B1 146–149 Hz against bdl's 99. OPEN.
+  - **Classic TTS.** `listen/prosody_ab_new_body.wav`: for a0001, a0003, a0008 in turn — bdl himself, ours as planned, ours with bdl's durations, vowel pitches and pauses (`tools/prosody_transplant.py`, `ENGINE=tract`, organs). PENDING the owner's ear: if ours with bdl's prosody still sounds like TTS, the fault is the body; if not, the planner.
+- `listen/m50_new_body.wav` (new defaults).
+- Owner on m50 and the prosody A/B: "this thing STILL sounds like perfect paul. in both cases" (bdl's prosody did not help: the fault is the body), then "it sounds like im listening to a merman, gurgling his words".
+  - **Perfect Paul.** Band HNR (`analysis/bandhnr.py`, dB, 0.08–1 / 1–2 / 2–4 / 4–7 kHz):
+    - m50: 20 / 15 / 8.0 / +3.5;
+    - bdl: 5.5–9 at 1–2, 3–4.5 at 2–4, −1 to −4.6 at 4–7;
+    - owner: 3.9 / 3.4 / −5.3 at 1–2 / 2–4 / 4–7.
+    - Ours is too periodic above 1 kHz.
+  - **Merman.** LTAS (`analysis/ltas.py`) of the same sentences: ours +7–10 dB at 1–2 kHz and −4 to −7 dB below 300 Hz against bdl. Held /aa/ F1 654, F2 1097; FLARE=1.0,1.5 dropped F1 to 380. The flared exterior acted as part of the tract.
+  - **The lips radiate from the opening** (`Tube::set_opening`): a Flanagan R‖L load (R = 128ρc/9π²A, L = 8ρ/3π√(πA), A the last cut's area) shared between the two nodes around the opening by its fractional position. Each slot keeps the full load's inertance flow and the node draws its share, so the load slides with no switching. Past the opening the tube is a 0.02 cm² sliver; the right end no longer radiates.
+    - Held /aa/: F1 704–716, F2 1211. LPC B1 reads 170–186, but with the kinematic pulse (open quotient 0.32) that estimate follows the harmonic spacing (KINEMATIC=0, open quotient 0.80, reads 94). Not a valid damping measure here.
+    - k1 LTAS 0–300 / 300–600 Hz: m50 −12.5 / −7.5, now −9.4 / −6.4 (bdl −4 to −7 / −3 to −4.6).
+    - No thumps (0–120 Hz share −19 dB). Local clicks 4.5/s, mostly at /dh/ contact.
+    - ARCTIC F1–F3 per vowel now within about 100 Hz of bdl's (F3 too), ao/uh/ow F1 +50–90.
+      - (Beware stale renders: the voice/out/arctic set from before this had every front vowel's F2 near 1100 Hz.)
+  - **Breath noise.** `jet_flux` (FLUX) adds the noise the folds lack, but shaped like the jet noise it is nearly white at the glottis.
+    - FLUX 0.04: vowels' 6–8 kHz +16 dB over bdl.
+    - New `flux_corner` (FLUXCORNER, Hz): two low-pass stages of white noise at unity gain below the corner. (Keeping the rms instead piled the noise into the passband: 4–6 kHz rose.)
+    - Vowel means (ours − bdl, the seven bands):
+      - FLUX 0.08, corner 1500, KJITTER 0.5: −1.5 +2.4 +4.7 +0.7 −5.0 −0.2 +6.3;
+      - plain: −1.6 +2.5 +4.2 +0.2 −5.7 −5.4 −2.4.
+    - k1 band HNR with it: 18.9 / 10.9 / 5.6 / −1.3 (m51b); plain 20.9 / 13.4 / 8.6 / 4.0 (m51a).
+  - **Fixed spectral structure** in every vowel (60 ARCTIC sentences, fixed scores, pooled main vowels, 250 Hz bands, `/tmp/es/ub/ab.sh`):
+    - a notch at 3.0–3.5 kHz (−6 to −8) that moves with the epilarynx length: 1.8 cm deepens it to −12 at 3.0–3.25; 3.0 cm moves it to 3.5–3.75 and sinks 4.5–5.5 kHz by 6–12;
+    - the piriform zero at 5.25–5.75 kHz (−7 to −8; without the piriform branch, 4.25–5 kHz stands +10–12);
+    - the broad +5 at 0.75–2.25 kHz, with 0–250 Hz −3, in every source variant (KINEMATIC=0 included).
+    - The under-tongue branch is not involved (371 vowels, median 0.0 dB at 3.25–3.5). An earlier render_arctic.py variant table that said it was is wrong; it is not reproducible.
+    - OPEN: the 1–2 kHz excess and the missing 3–3.5 kHz (F4 region).
+- `listen/m51_lip_radiation.wav` (lip-opening radiation, defaults) and `listen/m51_lip_radiation_breath.wav` (plus FLUX 0.08, FLUXCORNER 1500, KJITTER 0.5), owner's sentence.
+- Owner on m51: "the second one sounds a little less, but perfect paul/the merman is still audible in both."
+  - **Reference check.** Full-band LTAS (48 kHz) against the owner's own recordings (user_three, user_nato, 44.1 kHz):
+    - m51b 4–6 kHz −29 against −19.7, 6–8 kHz −33 against −26 to −29 (bdl's 16 kHz recordings are dull there and hid it);
+    - 1–2 kHz −6.7 against −9 to −14.
+    - FLUX 0.04 with no corner gives 4–6 kHz −23, 6–8 kHz −25: the corner removed the breath the owner needs. FLUXCORNER stays available, default off.
+  - **Decimation** (speak): now an eighth-order Butterworth at 16 kHz (was fourth-order at 18). The 8–20 kHz content did not change: it is the fricatives' own (a held /aa/ falls smoothly to −64 dB at 16–18 kHz), not aliasing.
+  - **Measured equal to bdl, so not the cause:**
+    - H1−H2: −3.6 against −3.3 (`/tmp/h1h2.py`);
+    - shimmer: 6.6% against 5.5% (`analysis/shim.py`);
+    - formant flutter: median |second difference| F1–F3 5 / 8 / 12 Hz against 4 / 7 / 10 (`analysis/fflut.py`);
+    - vowel level spread: 4.8 against 4.2 dB (`analysis/vlev.py`).
+  - **Formant amplitudes** (`analysis/famp.py`; mean ours − bdl: H1−A1, A1−A2, A2−A3, A3−A4 | B1–B4):
+    - old (FLUX 0.08, corner 1500, rest 0.015 / 0.010): −2.3 −1.3 +4.3 +3.4 | +34 −25 −16 +25. Front vowels' F2 too strong and sharp (B2 60–80 against 85–145); F3 and F4 weak; F4 200–270 Hz high.
+    - **FLUX 0.04, no corner, KJITTER 0.5, KSOFT 0.0005, rests 0.011 / 0.006:** −3.6 −3.9 +1.3 −0.7 | +22 −20 −13 −35. The 3.0–3.5 kHz hole fills (pooled bands −1.7 / +1.6, was −8 / −6). The hole was missing noise, not geometry.
+    - Plus KLAG 0.5: +0.5 −4.6 +1.4 −0.6 | +58 −14 −10 −18.
+      - The edges' 1.22 rad lag is what keeps the open quotient at 0.32: the opening is the narrower edge's, and two cosines 70° apart are both open about 30% of the cycle. KLAG 0.8 gives 0.38 and 0.5 gives 0.43 (mean flow 43 → 73 cm³/s). KAMP and VOICEPOST hardly move it.
+    - KAMP up only adds mid and high energy.
+  - **Piriform.**
+    - Lossless, its zero cuts 17–23 dB at 4.6–5.0 kHz (noise-excited transfer, folds still). Without it, 4–6 kHz matches the owner, but over ARCTIC 4.25–5 kHz stands +10–12 over bdl.
+    - New PIRIPORT (default 0.6 cm²): at 0.3 the zero falls to about 3.6 kHz and digs −8 to −14 into the F4 region. REJECTED.
+    - New PIRISMOOTH (hop loss in the recesses, default 0): it shifted the pole-zero pair and dug −7 to −9 at 3.0–3.5 kHz. REJECTED.
+  - **Epilarynx.**
+    - 2.6–3.0 cm puts F4 within 50–75 Hz of bdl's, but deepens 4.5–5.5 kHz by 2–12 dB.
+    - Not adopted; with the full breath noise the 3 kHz region no longer needs it.
+  - **Still OPEN:** the 0.75–2.25 kHz excess (+5 to +8 against bdl, +3 to +8 against the owner). It persists under every source variant tried (lag, amplitude, rest, contact, KINEMATIC=0) and with the walls ×3 or lossier.
+  - **Identification** (phone_test, FLUX 0.04, KJITTER 0.5, KSOFT 0.0005): 21.2%, human ceiling 52.1%.
+    - Liquids and glides 10%, nasals 19%.
+    - Frequent n→r, ah→r and l→r: an r-colouring, consistent with the mid excess. Possibly the "merman".
+- `listen/m52_breath_full.wav` (FLUX 0.04 no corner, KJITTER 0.5, KSOFT 0.0005) and `listen/m52_breath_full_longer_pulse.wav` (plus KLAG 0.5).
+- Owner on m52: "full sounds a bit more like talking through a tube. full longer pulse - a bit more like through a tube AND like he has a bit of a lisp. but its the same merman, except you cant hear his roboty-ness behind the lisp and tuby".
+  - Breath noise excites every resonance the tract has, so a fixed "tube" colouring became more audible.
+  - Ruled out:
+    - the trachea: its lung end is matched, so it does not ring;
+    - the sliver past the lips (new SLIVER switch, 0.02 / 0.002 / 0.0002 cm²): no change.
+  - **The tube.** Our tuned vowel shapes are compressed toward a uniform tube against Story's MRI area functions (10 positions, glottis to lips):
+    - /aa/: pharynx 0.58–0.82 cm² against 0.25–0.29; mouth 5.6 against 9.3;
+    - /ah/: mouth 2.3 against 6.6;
+    - /iy/: pharynx 1–3 against 3.3–5.2.
+    - The model can reach Story's shapes (the geofit postures: /aa/ mouth 7.4, pharynx 0.15). The formant tuning flattened them.
+  - **Why** (`analysis/tlcheck.py`: an ideal transmission line, chain matrices with piston radiation, through the model's own profile, against the engine speaking the same posture):
+    - the engine's formants came out lower: /aa/ F1 632 against 770, /ah/ 552 against 650, front vowels' F2 6–10% low;
+    - without the piriform branch the engine matches the line (/aa/ 773 / 1038 against 770 / 1020);
+    - the ideal line with the same recess agrees (`analysis/tlpiri.py`: /aa/ F1 590), so the engine is right and the recess is too big.
+    - At full size (1.8 cm³ beside a back cavity of a few cm³) it pulled F1 down 18%. Story's MRI shapes, which have no recesses, already give real formants, so that cannot be a real speaker's. The tuner flattened every shape to win F1 back.
+  - **Now.**
+    - Piriform cross-sections ×0.25 in the articulatory layout (new `piriform_scale`, PIRISCALE): the depth and 4.5 kHz zero stay; /aa/ F1 −9%.
+    - Vowels retuned by `analysis/organ_vopt3.py`: cost = formant distance to bdl (semitones) + 10 × rms log-area error against Story at 16 positions, Powell from the geofit postures.
+  - A first run's monitor waited on an output file while the script had crashed at import (it ran organ_vopt.py's main); five hours lost. The tuner now carries its own formant routine and the wait watches the process.
+  - Mini disk reached 320 MB free. Freed my scratch, then, on the owner's direction, deleted `~/ducklips/out` (13 GB of the October 9–11 DuckLips outputs, including snapshot copies of experiment code). Now 14 GB free.
+  - **Result of the retune.**
+    - Formant error 0.2–0.9 semitones for iy ih ey eh ae aa uw; ah 1.35, ow 1.6, uh 0.26 (but its shape is rms 0.82 from Story's), ao 4.1 (F2 784 against 918).
+    - Odd features: AA's lips protrude 0.69 cm; AH's jaw is 13°. To watch.
+    - ARCTIC with FLUX 0.04, KJITTER 0.5, KSOFT 0.0005:
+      - F1–F3 within about 100 Hz except ao and ow F1 (+170, +120) and er F3 (+228);
+      - famp −4.1 −4.6 +1.8 +0.5 | +24 −14 −30 −4;
+      - pooled bands still +4 to +7 at 0.75–2.25 kHz;
+      - 4–5 kHz now +13 to +17 over bdl (smaller recesses, shallower zero), but owner's sentence 4–6 kHz −18.7 against his −19.7;
+      - identification 21.5% (unchanged); ah→eh rose from 45 to 115 (the AH posture also serves unstressed vowels).
+- `listen/m53_story_shapes.wav` (vowel shapes near Story's, piriform ×0.25, m52a's breath settings).
+- Owner on m53: "it has a faint ringing. and he has a bad lisp."
+  - Then: "a lisp doesnt mean that in this context. it just means he sounds like he has a serious speech impediment".
+  - **Tongue tip.** The free tuner had lifted the tip toward the ridge in vowels (AH 9.0, IY 8.4, IH 8.0) and protruded AA's lips 0.69 cm.
+    - organ_vopt3 now bounds the tip behind the lower incisors (x 6.7–7.4, y 6.6–7.4, jaw frame) and unrounded vowels' protrusion to 0.15 cm.
+    - Retuned from the m53 postures: most vowels within about 1 semitone; ao 4.4.
+  - **Schwa.** AX and IX used AH's posture (jaw 10–13°), so every reduced syllable was a full open vowel. bdl's schwa ("ax", his most frequent phone, 158 in a0001–a0060) is at 549 / 1449 / 2660.
+    - New AX posture tuned on formants only, jaw 3–8°, lips 0.6–1.3 cm: 556 / 1434 / 2648 alone, 567 / 1487 / 2624 in ARCTIC.
+    - The planner gives IX the AX posture.
+  - **Breath noise gated to voicing.** It followed the whole glottal flow, so every voiceless consonant's continuous open-glottis flow carried a loud low hiss:
+    - FLUX 0.04 against 0, mean |d| from bdl's bands: /hh/ 11.7 against 3.7; /f/ +16–28 dB at 0–2 kHz;
+    - capping the flow at 150–250 cm³/s changed nothing.
+    - Now it follows the glottal area's running minimum (15 ms release): full under 0.02 cm², none over 0.06. Vowel HNR unchanged.
+  - **Frication 2.0** (was 0.8). Bands (mean |d|), before → after: /f/ 10.6 → 3.1, /s/ 8.5 → 6.9, /sh/ 13.4 → 6.5, /v/ 8.7 → 4.4.
+  - Made articulatory defaults (`articulatory_layout()`): jet_flux 0.04, kinematic_jitter 0.5, kinematic_softness 0.0005, frication 2.0, piriform_scale 0.25.
+  - **/dh/** closes fully for about 30 ms (a dental stop). Its +20 dB at 0.5–4 kHz is the release and voicing. Not pursued.
+  - **Identification** (phone_test): 21.5 → **28.6%**. Fricatives 27 → 37%, nasals 18 → 30%, stops 25 → 33%, vowels 21 → 28%. Still 0%: ao, jh, y, w, uw, uh, ow.
+  - m54 against the owner's recording at 8–11 kHz: −19.4 against −29 (stronger frication; his microphone may roll off). Watch for hiss.
+  - The "faint ringing" is not yet located.
+- `listen/m54_tip_at_rest_schwa.wav`.
+- Owner on m54: "he sounds like perfect paul exactly", then: "it literally does not matter how you change the mouth. how are you generating the sound to begin with".
+  - The answer: the kinematic glottis, a cosine wound at the score's pitch. Structurally DECtalk's source.
+  - Owner: "the problem is diagnosed. and you dont know how to make an organic sounding system". Then: "the tube idea that i talked about. repeatedly. ... that has to be the vocal cord", the owner's own spec in GOAL.md (three pieces per section, air on every surface, energy only through feedback, no driven mass-springs).
+  - Then: "it's meant to have a small random fluctuation in exactly one component of this — the sort that it shifts the fundamental lines. that adds the organic quality. the shift is muscle-related. on the scale of microseconds and a fraction."
+  - **The fold tube** (`Cord::set_fold_tube`, `FoldTubeSettings`; speak `FOLDTUBE=1`, `FOLD=key=value,...`):
+    - **Pieces.** Six slices along the flow, each the body's three pieces: an elastic cover (own longitudinal restoring, plus vertical tension to its neighbours: the mucosal wave), a mass body coupled under it, and the support, the vocalis.
+    - **Muscles set material and rest, never motion.** Tension Q divides masses and depth and multiplies stiffness and length. The rest gap is a wedge (zero at the anterior commissure) from the lower edge's rest to the upper's.
+    - **Stepping.** Eight steps per engine step (1.3 µs), symplectic Euler.
+    - **Air.** Bernoulli pressure on each slice up to where the jet separates (the first slice beyond the narrowest that is 20% wider), the outlet's pressure above that; suction bounded at one transglottal drop. The flow is solved with the trachea and tract loads as before, with Poiseuille along every slice and the slices' air mass.
+    - **The one fluctuation.** The muscle's support stiffness, rms 1%, drawn every fold step through one pole at 100 Hz.
+    - In fold mode the tension, posture and breath variations, the three tremors and the breath flux are off.
+  - **Measured** (held /aa/, 750 Pa; periods from interpolated flow crossings, to about 0.1 µs; `analysis/periods.py`):
+    - It self-oscillates from the lungs alone, closes fully every cycle, peak flow about 400 cm³/s.
+    - Pitch is 198 Q Hz, so the open-loop map is natural 198, per 198.
+    - The physics alone repeats to a RAP of 1.8 µs. The muscle term (0.01, 100 Hz) adds about 1.4 µs (mean |dT| 4.3 → 6.2 µs). White at the fold step, even at 30% rms, it averages away.
+    - The breath flux shook the folds (RAP 42 µs), hence off.
+  - **Closure.** At the kinematic body's rests (0.011 / 0.006 cm) the flow fell to zero within 60 µs (MFDR 1.9e6 cm³/s²): a click every cycle in the vowels, 56/s held. At 0.030 / 0.015 the closure zips along the wedge: MFDR 8.6e5, 1.5/s held. Now the fold tube's voicing rests.
+  - **Owner's sentence.** F0 median 124 against an intended 119 (range 98–145). Clicks 4.7/s, no thumps. Band HNR 20.9 / 14.4 / 8.9 / 5.5 (no breath flux).
+- `listen/m55_blown_fold_tube.wav`.
+- Owner on m55: "well, he does sound different. not so much perfect paul. there is still that bit of ringing, and some warbling - but not as much as before."
+  - **The ringing.** A time-resolved narrow-line detector (`analysis/ring2.py`: 21 ms frames, bins above 3 kHz standing 12 dB over ±400 Hz) found steady lines at 8 kHz and 16 kHz. They were in m54 and m55, in about 40% of all frames, silences included; none in the owner's recordings.
+    - With a 10-step control tick they moved to 9.6 and 19.2 kHz: a control-tick artifact (96 kHz / 12).
+    - The cause: the lip radiation load's place and area were set once per tick and held (Speaker → `Tube::set_opening`).
+    - Gliding the share alone and clamping it at each node change jumped the load: spikes at voicing onsets (max second difference 0.45 against 0.14).
+    - Now `set_opening(position, area)`: the continuous place and the area glide every step (0.5 ms), and the node pair follows the glided place.
+    - Also: wall pieces are recompiled every step while a node or its support moves (they were recompiled every 8 steps and once per tick, and held between), and the support's holding factor glides (2 ms).
+    - Result (owner's sentence, fold tube): the 16 kHz line in 68 frames (was 662), 8 kHz gone from the top lines. A faint remainder (dry: 16 kHz 95, 8 kHz 59 of 1322 frames) from other per-tick setters.
+    - Onset spikes 0.071 (m55 0.135), largest spike as m55. Clicks 6.0/s, no thumps.
+  - **The warble.** Not located.
+    - Measured: the fold vibrates down to 200 Pa lung pressure and at rest gaps up to 0.07 cm. In the vowels where a 5 ms autocorrelation pitch tracker lost the voice ("with", "quick", "jumps", "over the"), the cycle log shows regular cycles. The tracker's failure was not the voice's.
+    - Fast pitch wobble (3–8 Hz, cents) was not discriminating between m54, bdl and the owner.
+- `listen/m56_fold_tube_no_ringing.wav`.
+- Owner, with a spectrogram of ours beside the owner's own: "see how in the word hello, on the left, yours has 5 vertical lines? figure out what causes them."
+  - The lines were in "my name is": five internal boundaries (m|ay, ay|n, n|ey, ey|m, m|ih), every one a nasal closure or release, where our harmonics broke.
+  - **Ruled out:**
+    - lip-section crossings: no dips (mean +0.7 dB) with the outside rigidity or the quiet mask disabled;
+    - dropouts: the 1 ms energy envelope moves at most 3 dB;
+    - overall spectral change at nasal boundaries: 1.94 against bdl's 1.81 (`analysis/seams.py`).
+  - **The cause: pitch steps.** The blown fold's pitch jumped 2.5–3% within one or two cycles at each nasal closure and release, as the tract's load changed. Every harmonic moved at once: a seam.
+    - ARCTIC, at nasal boundaries, the largest change between frames 10 ms apart (`analysis/f0seam.py`), median / p90:
+
+      | Voice | Median | p90 |
+      |---|---|---|
+      | bdl | 2.4% | 4.3% (vowel middles 1.4%) |
+      | fold tube | 4.0% | 7.1% |
+      | kinematic | 1.4% | 3.8% (vowel middles 0.97%) |
+
+  - **Heavier tissue** (masses and stiffnesses scaled together, same pitch):
+    - ×2: 2.8% (5.8%); ×2 with cover loss 0.2: 3.8% (8.3%); ×2 with vertical ×2: 3.6%;
+    - **×3: 2.4% (5.4%), vowel middles 1.0%.** Adopted: cover 0.09 g, body 0.30 g, kc 36000, kcb 90000, ks 150000, kv 60000, contact 9e5 dyn/cm.
+    - Pitch map recalibrated to 217 (99.5 / 115.0 / 139.2 Hz for 100 / 115 / 140).
+  - **Closure.** At the wide rests (0.030 / 0.015) the heavier fold closed gently (2.7e5 cm³/s², open 75%): weak highs, band HNR 4–7 kHz −13 dB.
+    - Back to 0.011 / 0.006: 4.3e5, open 0.65. Its kinked closures spread spikes, so the air's opening now closes through a soft contact 5 µm wide (`contact_softness`; the pieces' contact forces keep the plain geometry). Held /aa/ clicks 10 → 6/s, no bounce.
+    - On the clicks2 detector, real voices give 0–1.1/s (owner 0.5–1.1, bdl 0–0.6); m54 (kinematic) 3.8.
+  - **m58** (owner's sentence):
+    - boundary steps 1.1 / 1.2 / 2.8 / 1.8%; F0 median 117 against intended 119; clicks 5.4/s (3.1 with aspiration 0); no thumps; ringing lines faint (16 kHz in 56 frames of 1551);
+    - band HNR 20.1 / 12.4 / 6.9 / 0.7;
+    - 6–11 kHz 10–15 dB over the owner's recording, from frication 2.0 (FRICATION=0 gives −32: but the owner's recording is another sentence with fewer sibilants);
+    - aspiration 0 lifts 4–7 kHz HNR to 4.5 and halves the clicks.
+- `listen/m58_heavier_fold.wav`.
+- Owner on m58: "he's essentially irish. sounds irish. sounds like he has a terrible accent, or a speech impedement."
+  - **Pitch against the plan, per vowel** (owner's sentence, CYCLES; `/tmp/es/pv.py`, `/tmp/es/reg.py`):
+    - kinematic: mean +5 cents, sd 18;
+    - m58: mean −39, sd 42. Stressed vowels −47 against unstressed −24, so stress lost 23 cents of its rise. The high accents fell short: IY1 −77, IH1 −66, AH1 −92 cents.
+  - **Cause: the blown tube's pitch fell with breath.** Held /aa/ at 115 Hz, ear off: 116.0 Hz at 400 Pa, 110.7 at 1000 (−0.8 Hz per cmH2O; people rise 2–6). Stressed syllables carry more breath, so their pitch was pulled down: the melody's stress pattern was inverted. The elongation by swing (`Cord::set_elongation`, which fixed the same fault in the two-mass folds) was never set for the articulatory body. The calibration had also drifted to −45 cents at 750 Pa since the rests and soft contact changed.
+  - **The fixes:**
+    - `FoldTubeSettings::elongation` 70 /cm², reference 0.0026 cm². Held /aa/, 400 → 1000 Pa: 3.7 / 3.6 / 3.2 Hz per cmH2O at 100 / 115 / 140 Hz. The swing (cover's lowest slice, peak squared) was 1.3e-3 cm² at 400 Pa and 4.3e-3 at 1000.
+    - The pitch map was recalibrated at 650 Pa: natural 197, per 171 (99.9 / 115.1 / 140.4 Hz).
+    - **The muscle anticipates its breath** (`swing_per_pascal` 4.9e-6, `swing_onset` 130 Pa). The open-loop tension is divided by the stretch the lungs' pressure (`lung_`, the reservoir, not the pressure across the folds) will bring. Without this the planned contour, which already contains the stress rise, overshot: mean +5, sd 58, stressed +17 over unstressed, error against lungs r = +0.71. With it, held /aa/ at 115 Hz runs 114.4 → 120.7 Hz from 400 to 1000 Pa, the remainder being what the tract does to the pressure.
+    - **The ear in fold mode** (`speak` FOLDTUBE sets `pitch_feedback` 0.08). `Cord::contact()` now reports the fold tube's most closed slice; it had read the unused two-mass edge. The ear hears only lungs over 250 Pa and periods within half an octave of the intended one.
+  - **m59** (owner's sentence): pitch error mean −2, sd 40; stressed +1 against unstressed −8 cents; F0 median 119 (intended 119). Band HNR 19.7 / 12.9 / 6.7 / 0.9; clicks 5.4/s (as m58).
+    - Nasal-boundary steps 5.9 / 1.2 / 2.2 / 3.0 / 2.0%. The first is the voicing onset after the pause (107 → 111 → 118 Hz as the swing builds).
+    - Not addressed: the "speech impediment" part (articulation; heard since m54's freed tongue tip).
+- `listen/m59_breath_raises_pitch.wav`.
+- Owner on m59: "okay. lets fix body. because he sounds like he's saying bady".
+  - **"body" /aa/ F2** (LPC, `analysis/ftrack.py`):
+    - bdl, five ARCTIC tokens (a0178, a0256, b0104, a0260, b0195): F1 about 700–780 Hz; F2 1100–1250 from the /b/ release, rising toward 1300–1450 only in the last third.
+    - m59: F1 745 Hz; F2 1500 at the release, 1413 at best, then 1870 by the /d/. Toward /ae/.
+    - The tuned /aa/ posture held alone gives F2 1243: the posture is right, the motion is not.
+  - **Cause 1: the closure's pharynx pull lingered.** A held /aa/ with one lip closure and nothing else moving: F2 1420 after the release, back to 1240 only 150 ms later. PROFILE: 30 ms after the release the 2–10 cm areas were 1.5–2.3× their rest; 100 ms after, still +30–40%.
+    - The source is `Speaker::shape_body`'s voiced-closure pull (0.25 cm outward on 3.5–10 cm), restored with a 40 ms time constant (its comment said about 30 ms).
+    - Now 10 ms. Held test: F2 1311 at 45 ms (was 1377); in "body", F2 at best 1346.
+  - **Cause 2: the jaw under the /b/.** Capped at 5 degrees (the /aa/ jaw is 12.8), it lifted the tongue: F2 near 1500 at the release. The lips seal at any jaw angle (tested at 12.8). Cap now 8 (`kLabialJaw`).
+  - **Cause 3: across the flap the next vowel began 60 ms ahead.** Here that was 27 ms into the 87 ms /aa/: jaw, lips and body turned toward /iy/ before the /aa/ arrived. A vowel now holds for 60% of its length before the tongue heads for the next (`kVowelHold`); the flap's own lead still applies.
+  - **m60** (score regenerated: `say ... --organs ../tract/data/organs.txt`, identical to k4 apart from these timings):
+    - "body" /aa/ F2 1465 → 1274 → 1600 (bdl 1100–1250 → 1300–1450). The release is still about 200 Hz high.
+    - clicks 5.0/s; band HNR 19.7 / 12.8 / 6.9 / 1.0; F0 median 119; boundary steps 4.8 / 1.2 / 2.4 / 1.0 / 1.5%.
+- `listen/m60_body.wav`.
+- Owner on m60: "the warble is greatly diminished. lets work on hello. it doesnt sound like hello. it sounds like halting- hetlo".
+  - **The /l/ was a stop.** TRACE: 0.80–0.845 s the narrowest area 0.006–0.015 cm² at 13 cm, flow through the lips near 0; the level fell 38–43 dB.
+    - PROFILE at 0.815: the side channels (0.35 cm² × lateral) covered only cuts within 0.8 cm of the tip. The blade 0.81 cm behind it lay 0.09 cm from the palate: 0.0057 cm².
+    - Now the channels run from 2 cm behind the tip contact to 0.8 cm ahead (`MidsagittalTract::area_of`).
+  - **Then the /l/ was a vowel** (F1 525 Hz, no dip, F2 1600).
+    - bdl's /l/ between vowels (a0001–a0100, 46 tokens, `/tmp/es/lstat.py`): F1 414, F2 957, F3 2784 Hz, 2.8 dB under the next vowel (p25 −7.7).
+    - A grid at "hello"'s /l/ (side channels × body), F at 0.80–0.85 s:
+      - channels 0.35, 0.21 and 0.12 cm² (lateral 1, 0.6, 0.35);
+      - body at /ow/'s (2.97, 7.29): F2 1610–1690;
+      - body at (2.65, 6.48): F2 1250–1270;
+      - F1 jumps from about 290 to 525–600 between 0.12 and 0.21 cm².
+    - Adopted: channels 0.12 cm² (`kLateralArea`). Beside a central or back vowel the planner's /l/ body goes to (2.65, 6.5) (`kDarkLateralX/Y`); beside front vowels it keeps the 0.2 cm retraction.
+    - Delaying /ow/'s lip rounding to the /l/'s end lifted F3 from 2140 to 2310; not adopted.
+  - **m62:**
+    - "hello" /l/: 9 dB under the vowel, F1 260–310, F2 1450 → 1185, F3 2400 → 1900 as the rounding arrives. F3 sits well under bdl's: an /r/ colour is possible.
+    - "lazy" /l/ (front context): 8–11 dB down (was 5, a vowel), F2 about 2000–2100 (clear; bdl's 957 is dark).
+    - clicks 5.6/s; band HNR 19.8 / 13.5 / 5.9 / 0.2.
+- `listen/m62_hello.wav`.
+- Owner on m62: "between fox and jumps there's a weird vocalization".
+  - **The cause: a voiced vocoid between /s/ and /dZ/.** The spectrogram shows voicing pulses with vowel formants at 5.69–5.715 s, after the /s/ hiss and before /dZ/'s closure.
+    - The planner voices 15 ms before a fricative's end (right before a vowel). Here the glottis closed at 5.687 while the tip only sealed for /dZ/ at about 5.716: 25 ms of voice through an open mouth.
+  - **The fix.** After a fricative, a following closure gets the voice only once it has sealed (`kSealSettle` 25 ms after the fricative's end). Before an affricate the fricative emits no voicing at all: a voiced /dZ/ opens for its hiss and re-closes the folds at its own end, so it is devoiced across "fox jumps" as in English.
+  - In this sentence only that one glottis event changed. The glottis now stays at 0.19–0.21 cm² from the /s/ through the /dZ/ closure.
+- `listen/m63_fox_jumps.wav`.

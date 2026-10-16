@@ -1,0 +1,28 @@
+# Vowel postures of the articulatory body (tract/articulation.hpp), for
+# `say --organs`: jaw angle (deg), tongue body centre tx ty and tip tipx tipy
+# (cm, the jaw's frame), lip aperture ap, protrusion pro, width lw (cm),
+# larynx drop (cm).
+# Tuned by analysis/organ_vopt3.py (Powell, bounded): cost = distance to
+# bdl's running-speech F1-F3 medians (semitones, analysis/f123.py) + 10 x the
+# rms log-area error against Story's (2008) MRI area function at 16 positions;
+# piriform recesses x0.25. The tip rests behind the lower incisors (x 6.7-7.4,
+# y 6.6-7.4) and unrounded vowels protrude the lips at most 0.15 cm. (Earlier:
+# formants + 0.5 per cm the tongue moved flattened every vowel toward a
+# uniform tube, "talking through a tube"; then, the tip free, the tuner lifted
+# it toward the ridge in AH, IY, IH and protruded AA's lips, "a bad lisp".)
+# AX: bdl's schwa (549 1449 2660), formants only, jaw 3-8 deg, lips 0.6-1.3 cm.
+# AO misses F2 (789 against 918); UH's shape is far from Story's (rms 0.71).
+# ER (not in Story) keeps its formant-only posture.
+AA jaw=12.817 tx=3.339 ty=6.459 tipx=6.708 tipy=6.610 ap=1.679 pro=0.143 lw=2.706 drop=0.164  # cost 5.66 (formants 0.90 st, shape rms 0.476) F 730 1194 2708
+AE jaw=4.494 tx=3.805 ty=7.286 tipx=7.392 tipy=7.390 ap=1.320 pro=0.014 lw=4.443 drop=0.276  # cost 5.47 (formants 0.79 st, shape rms 0.468) F 656 1823 2528
+AH jaw=10.570 tx=2.732 ty=7.267 tipx=7.393 tipy=7.390 ap=1.545 pro=0.099 lw=3.316 drop=0.987  # cost 6.84 (formants 1.72 st, shape rms 0.511) F 609 1144 2765
+AO jaw=9.556 tx=2.649 ty=6.478 tipx=6.739 tipy=6.944 ap=0.587 pro=0.002 lw=2.113 drop=0.748  # cost 8.12 (formants 4.40 st, shape rms 0.372) F 541 789 2882
+EH jaw=2.034 tx=3.794 ty=6.704 tipx=7.374 tipy=7.390 ap=0.539 pro=0.078 lw=2.992 drop=0.043  # cost 3.67 (formants 0.18 st, shape rms 0.349) F 598 1674 2613
+EY jaw=2.114 tx=4.553 ty=7.512 tipx=6.875 tipy=7.279 ap=0.561 pro=0.150 lw=3.264 drop=0.011  # cost 3.65 (formants 0.64 st, shape rms 0.301) F 489 2059 2571
+IH jaw=0.650 tx=4.665 ty=7.426 tipx=7.216 tipy=7.384 ap=0.582 pro=0.145 lw=3.635 drop=0.326  # cost 4.44 (formants 0.72 st, shape rms 0.372) F 428 2101 2663
+IY jaw=0.743 tx=5.171 ty=7.656 tipx=7.196 tipy=7.160 ap=0.399 pro=0.150 lw=3.354 drop=0.012  # cost 5.24 (formants 0.49 st, shape rms 0.475) F 318 2268 2836
+OW jaw=8.979 tx=2.974 ty=7.286 tipx=6.708 tipy=6.610 ap=0.199 pro=0.443 lw=2.044 drop=0.299  # cost 5.71 (formants 0.82 st, shape rms 0.489) F 468 962 2506
+UH jaw=4.970 tx=2.555 ty=7.875 tipx=6.712 tipy=6.806 ap=0.860 pro=0.099 lw=3.130 drop=0.254  # cost 8.83 (formants 1.72 st, shape rms 0.710) F 434 1187 2472
+UW jaw=7.556 tx=4.345 ty=7.919 tipx=7.133 tipy=7.094 ap=0.176 pro=0.839 lw=2.186 drop=0.067  # cost 6.64 (formants 1.07 st, shape rms 0.557) F 348 1212 2378
+ER jaw=5.284 tx=3.457 ty=8.140 tipx=6.473 tipy=9.130 ap=0.652 pro=0.249 lw=2.326 drop=1.085  # cost 0.93 F 417 1433 1923
+AX jaw=3.009 tx=3.510 ty=6.104 tipx=6.841 tipy=7.226 ap=0.608 pro=0.143 lw=2.067 drop=0.555  # cost 0.31 (formants 0.31 st, shape rms 0.000) F 556 1434 2648

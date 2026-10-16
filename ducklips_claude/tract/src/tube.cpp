@@ -17,6 +17,7 @@ constexpr double kFastFrame = 0.5;
 
 // Radius below which the lining is in contact with the opposite wall.
 constexpr double kContactRadius = 0.0025;  // cm
+constexpr double kContactFrequency = 1500.0;  // Hz, the contact spring on the lining's mass
 
 }  // namespace
 
@@ -110,13 +111,95 @@ Tube::Tube(std::vector<SegmentMaterial> materials, std::vector<TubeNode> nodes)
     field->assign(n, 0.0);
   }
   support_factor_.assign(n, 1.0);
+  support_target_.assign(n, 1.0);
   fast_node_.assign(n, 0);
   for (std::vector<double>* field : {&axial_k_, &link_area_, &forward_, &backward_, &forward_next_, &backward_next_, &forward_smooth_, &backward_smooth_,
                                      &series_, &link_resistance_, &link_flow_, &resistance_step_}) {
     field->assign(links, 0.0);
   }
+  active_count_ = static_cast<Index>(n);
   compile_materials();
   refresh_geometry();
+}
+
+void Tube::set_opening(double position, double area) {
+  if (position < 0.0) {
+    opening_node_ = -1;
+    opening_position_ = -1.0;
+    opening_position_target_ = -1.0;
+    return;
+  }
+  if (opening_position_ < 0.0) {
+    opening_position_ = position;
+    opening_area_ = std::max(area, kMinimumArea);
+  }
+  opening_position_target_ = position;
+  opening_area_target_ = std::max(area, kMinimumArea);
+}
+
+// The load's node pair from its glided place; its state moves along with
+// it when the pair moves by one node.
+void Tube::follow_opening() {
+  const double glide = 1.0 - std::exp(-kStepSeconds / 0.0005);
+  opening_position_ += glide * (opening_position_target_ - opening_position_);
+  opening_area_ += glide * (opening_area_target_ - opening_area_);
+  Index last = count() - 2;
+  Index node = std::clamp(static_cast<Index>(std::floor(opening_position_)), static_cast<Index>(0), last);
+  if (node != opening_node_ && opening_node_ >= 0) {
+    if (node == opening_node_ + 1) {
+      opening_flow_[0] = opening_flow_[1];
+      opening_pressure_[0] = opening_pressure_[1];
+      opening_flow_[1] = 0.0;
+      opening_pressure_[1] = pressure_[static_cast<std::size_t>(std::min(node + 1, count() - 1))];
+    } else if (node == opening_node_ - 1) {
+      opening_flow_[1] = opening_flow_[0];
+      opening_pressure_[1] = opening_pressure_[0];
+      opening_flow_[0] = 0.0;
+      opening_pressure_[0] = pressure_[static_cast<std::size_t>(node)];
+    } else {
+      opening_flow_[0] = 0.0;
+      opening_flow_[1] = 0.0;
+    }
+  }
+  opening_node_ = node;
+  opening_share_ = std::clamp(opening_position_ - static_cast<double>(node), 0.0, 1.0);
+}
+
+void Tube::set_active_length(double length_cm) {
+  Index total = static_cast<Index>(nodes_.size());
+  double nodes = std::max(length_cm, 2.0 * kNodeLength) / kNodeLength;
+  Index whole = std::clamp(static_cast<Index>(std::floor(nodes)), static_cast<Index>(2), total);
+  // Hysteresis: lengthen only once a quarter node past the next whole node,
+  // so a length dithering at a boundary does not toggle a node.
+  // Nor while the open end is shut (lips sealed): a node joined behind a
+  // closure carried its huge impedance into the new waves (a click in the
+  // /p/ of "jumps"); the length waits on the end's air mass meanwhile.
+  bool end_open = area_[static_cast<std::size_t>(active_count_ - 1)] > 0.05;
+  bool lengthen = nodes >= static_cast<double>(active_count_) + 1.25 && end_open;
+  if (whole < active_count_ || lengthen) {
+    Index previous = active_count_;
+    active_count_ = whole;
+    // Links newly joined carry the old open end's state on: waves that give
+    // the old end's pressure and the flow it was radiating, and the new nodes
+    // start at that pressure. (Joined silent, every lengthening dropped the
+    // end's pressure for a step: a click 10-21 dB over the speech, which the
+    // output normalisation then took as the peak.)
+    if (previous >= 1 && active_count_ > previous) {
+      std::size_t end = static_cast<std::size_t>(previous - 1);
+      double pressure = pressure_[end];
+      double flow = radiated_flow_;
+      for (Index link = previous - 1; link + 1 < active_count_; ++link) {
+        std::size_t index = static_cast<std::size_t>(link);
+        double z = kRhoC / std::max(link_area_[index], kMinimumArea);
+        forward_[index] = 0.5 * (pressure + z * flow);
+        backward_[index] = 0.5 * (pressure - z * flow);
+        forward_smooth_[index] = forward_[index];
+        backward_smooth_[index] = backward_[index];
+        pressure_[index + 1] = pressure;
+      }
+    }
+  }
+  end_extra_ = std::clamp(nodes - static_cast<double>(active_count_), 0.0, 2.5) * kNodeLength;
 }
 
 void Tube::update_rest_geometry(int ramp_steps) {
@@ -124,8 +207,11 @@ void Tube::update_rest_geometry(int ramp_steps) {
   for (std::size_t i = 0; i < nodes_.size(); ++i) {
     radius_goal_[i] = std::sqrt(std::max(nodes_[i].rest_area, kMinimumArea) / kPi);
     radius_ramp_[i] = (radius_goal_[i] - radius_target_[i]) / steps;
-    // Support factors take effect here; masses follow the radius each step.
-    compile_node(i);
+    // (Pieces are recompiled in refresh_geometry, every step while the node
+    // or its support moves. Recompiled here, once per control tick, and
+    // held between, every moving wall's masses and stiffnesses changed in a
+    // staircase: lines at 8 and 16 kHz, 12 dB over the spectrum around them
+    // in 40% of the frames, the owner's "faint ringing".)
   }
   ramp_left_ = steps;
 }
@@ -248,32 +334,33 @@ void Tube::refresh_geometry() {
       radius_target_ = radius_goal_;
     }
   }
+  const double support_glide = 1.0 - std::exp(-kStepSeconds / 0.002);
   for (std::size_t i = 0; i < n; ++i) {
+    double factor_gap = support_target_[i] - support_factor_[i];
+    bool support_moving = std::abs(factor_gap) > 1.0e-7;
+    if (support_moving) {
+      support_factor_[i] += support_glide * factor_gap;
+    }
     double offset = radius_target_[i] - rest_radius_[i];
-    if (std::abs(offset) < 1.0e-9 && std::abs(radius_rate_[i]) < 1.0e-6) {
+    bool radius_moving = std::abs(offset) >= 1.0e-9 || std::abs(radius_rate_[i]) >= 1.0e-6;
+    if (radius_moving) {
+      radius_rate_[i] += kStepSeconds * (omega * omega * offset - 2.0 * omega * radius_rate_[i]);
+      rest_radius_[i] = std::max(rest_radius_[i] + kStepSeconds * radius_rate_[i], 1.0e-4);
+      fast_node_[i] = std::abs(radius_rate_[i]) > kFastFrame;
+      moved = true;
+    } else {
       radius_rate_[i] = 0.0;
       fast_node_[i] = 0;
-      continue;
     }
-    radius_rate_[i] += kStepSeconds * (omega * omega * offset - 2.0 * omega * radius_rate_[i]);
-    rest_radius_[i] = std::max(rest_radius_[i] + kStepSeconds * radius_rate_[i], 1.0e-4);
-    // A slowly moving node's pieces are recompiled every 8 steps; a fast one
-    // (a closure or release) every step. (Every 8 steps for all, its pieces
-    // jumped at 12 kHz while the lips or tongue moved fast: a 12 kHz ring,
-    // decaying over 15 ms, at every closure and release — the owner heard
-    // "a high pitched faint ringing about twice a second".)
-    bool fast = std::abs(radius_rate_[i]) > kFastFrame;
-    fast_node_[i] = fast;
-    if (fast || compile_countdown_ == 0) {
+    // A moving node's pieces follow it every step. (Every 8 steps they
+    // jumped at 12 kHz while the lips or tongue moved: a 12 kHz ring at
+    // every closure and release, "a high pitched faint ringing about twice a
+    // second"; once per control tick, lines at 8 and 16 kHz.)
+    if (radius_moving || support_moving) {
       compile_node(i);
-      fast_link_ = fast_link_ || fast;
     }
-    moved = true;
   }
-  bool recompiled = compile_countdown_ == 0 || fast_link_;
-  fast_link_ = false;
-  compile_countdown_ = compile_countdown_ == 0 ? 7 : compile_countdown_ - 1;
-  if (moved && recompiled) {
+  if (moved) {
     for (std::size_t i = 0; i + 1 < n; ++i) {
       compile_link(i);
     }
@@ -289,7 +376,13 @@ void Tube::refresh_geometry() {
   // their neighbourhood, out of a sealed mouth through the nose while the
   // tongue moved during "my"'s /m/.)
   for (std::size_t i = 0; i < n; ++i) {
-    frame_low_[i] += frame_gain_ * (surface_[i] * radius_rate_[i] - frame_low_[i]);
+    // (Nodes past quiet_from_ are outside air: their changing area moves
+    // no wall and pushes no air. Masked before the two poles, so a node
+    // turning quiet or not fades in or out; switched after them, the step
+    // in the pushed air came out as a two-sample spike 20 times the /f/
+    // around it.)
+    double pushed = static_cast<Index>(i) >= quiet_from_ ? 0.0 : surface_[i] * radius_rate_[i];
+    frame_low_[i] += frame_gain_ * (pushed - frame_low_[i]);
     frame_lower_[i] += frame_gain_ * (frame_low_[i] - frame_lower_[i]);
     frame_flow_[i] = frame_lower_[i];
     if (static_cast<Index>(i) >= conserved_first_ && static_cast<Index>(i) <= conserved_last_) {
@@ -387,9 +480,19 @@ void Tube::step_lining() {
 // motion, solved as one scalar implicit exchange per node (no global solve):
 // the lining's velocity and the air pressure it sees are found together.
 void Tube::step_air() {
-  std::size_t n = nodes_.size();
+  std::size_t n = static_cast<std::size_t>(active_count_);
   constexpr double h = kStepSeconds;
   total_wall_flow_ = 0.0;
+  if (opening_node_ >= 0) {
+    radiated_flow_ = 0.0;
+  }
+  if (opening_position_ >= 0.0) {
+    follow_opening();
+  }
+  double share_now = opening_share_;
+  // The opening's load (R parallel L for its area), at full weight.
+  double opening_resistance = 128.0 * kRhoC / (9.0 * kPi * kPi * opening_area_);
+  double opening_inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * opening_area_));
   for (std::size_t i = 0; i < n; ++i) {
     double admittance = 0.0;
     double twice_sum = 0.0;
@@ -416,7 +519,8 @@ void Tube::step_air() {
       // discretized by the trapezoid rule for the inertance's flow.
       double a = std::max(area_[i], kMinimumArea);
       double resistance = 128.0 * kRhoC / (9.0 * kPi * kPi * a);
-      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a));
+      // The end correction's air mass, plus the tube past the last node.
+      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) + kAirDensity * end_extra_ / a;
       double gain = 0.5 * h / inertance;
       admittance += 1.0 / resistance + gain;
       twice_sum -= radiation_inertance_flow_ + gain * radiation_previous_pressure_;
@@ -425,6 +529,25 @@ void Tube::step_air() {
       from_right = right_incoming_;
       admittance += y;
       twice_sum += 2.0 * y * from_right;
+    }
+    // The opening's share at this node: R / w in parallel with L / w.
+    int slot = -1;
+    double weight = 0.0;
+    if (opening_node_ >= 0) {
+      if (static_cast<Index>(i) == opening_node_) {
+        slot = 0;
+        weight = 1.0 - share_now;
+      } else if (static_cast<Index>(i) == opening_node_ + 1) {
+        slot = 1;
+        weight = share_now;
+      }
+    }
+    // (Each slot keeps the full load's inertance flow; the node draws its
+    // share of it, so a share shrinking to nothing fades out, no step.)
+    double slot_gain = 0.5 * h / opening_inertance;
+    if (slot >= 0) {
+      admittance += weight * (1.0 / opening_resistance + slot_gain);
+      twice_sum -= weight * (opening_flow_[slot] + slot_gain * opening_pressure_[slot]);
     }
     // Side branches joined at this node.
     for (std::size_t port = 0; port < side_node_.size(); ++port) {
@@ -443,19 +566,35 @@ void Tube::step_air() {
     twice_sum -= frame_flow_[i];
     double resistance = surface * surface / admittance + cover_c_[i];
     double drive = surface * twice_sum / admittance + cover_c_[i] * body_v_[i];
+    // Contact with the opposite wall: tissue meeting tissue, a stiff,
+    // critically damped spring (about 1.5 kHz on the lining's mass) past the
+    // contact radius. (A hard stop zeroed the lining's velocity in one step:
+    // at every closure each glottal pulse pushed the walls apart and they
+    // slammed back, a click every cycle, 84 a second through /dh/.)
+    double penetration = kContactRadius - (rest_radius_[i] + cover_q_[i]);
+    if (penetration > 0.0) {
+      double omega = kTwoPi * kContactFrequency;
+      drive += cover_mass_[i] * omega * omega * penetration;
+      resistance += 2.0 * cover_mass_[i] * omega;
+    }
     double velocity = cover_v_[i];
     double next = ((cover_mass_[i] - 0.5 * h * resistance) * velocity + h * drive) /
                   (cover_mass_[i] + 0.5 * h * resistance);
     double middle = 0.5 * (velocity + next);
-    // Contact with the opposite wall: the lining cannot pass its axis.
-    if (rest_radius_[i] + cover_q_[i] < kContactRadius && next < 0.0) {
-      cover_q_[i] = kContactRadius - rest_radius_[i];
+    // (Never through the axis.)
+    if (rest_radius_[i] + cover_q_[i] < -kContactRadius && next < 0.0) {
+      cover_q_[i] = -kContactRadius - rest_radius_[i];
       next = 0.0;
       middle = 0.5 * velocity;
     }
     cover_v_[i] = next;
     double p = (twice_sum - surface * middle) / admittance;
     pressure_[i] = p;
+    if (slot >= 0) {
+      opening_flow_[slot] += slot_gain * (p + opening_pressure_[slot]);
+      radiated_flow_ += weight * (p / opening_resistance + opening_flow_[slot]);
+      opening_pressure_[slot] = p;
+    }
     for (std::size_t port = 0; port < side_node_.size(); ++port) {
       if (side_node_[port] == static_cast<Index>(i)) {
         side_outgoing_[port] = side_area_[port] > 0.0 ? p - side_incoming_[port] : 0.0;
@@ -481,7 +620,7 @@ void Tube::step_air() {
     } else if (radiating_right_) {
       double a = std::max(area_[i], kMinimumArea);
       double resistance_r = 128.0 * kRhoC / (9.0 * kPi * kPi * a);
-      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a));
+      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) + kAirDensity * end_extra_ / a;
       radiation_inertance_flow_ += 0.5 * h / inertance * (p + radiation_previous_pressure_);
       radiation_previous_pressure_ = p;
       radiated_flow_ = p / resistance_r + radiation_inertance_flow_;
@@ -507,7 +646,7 @@ void Tube::step_air() {
 // wave attenuation, as before, absorb energy but never reflect it: no
 // pressure builds behind a closure.)
 void Tube::scatter_links() {
-  std::size_t n = nodes_.size();
+  std::size_t n = static_cast<std::size_t>(active_count_);
   for (std::size_t i = 0; i + 1 < n; ++i) {
     double to_right = 0.0;
     double to_left = 0.0;

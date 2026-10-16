@@ -91,3 +91,8 @@ from bdl is not used to steer.
   - nasal murmurs: sinus ostia ×0.25, nose loss 0.4 (within 2 dB of bdl in five bands).
 - **Validated transform:** `analysis/wmatch.py` (cycle periods from audio by waveform matching; agrees with the engine's true closures).
 - `listen/m43_steady_voice.wav` sent. Identification 38.0%.
+
+## State (2026-10-15)
+
+- Owner: every variant "exactly as sickly ... a 1998 tts model"; the engine may be "a tiny demo". The fault is articulation: its quality and consistency.
+- Study `learned/vtl_budget_vs_ours.md`: VTL puts about 90% of its effort into articulatory geometry (12.6k lines in VTL 2.4, 3D anatomy, variable section lengths, one tongue, the jaw carrying teeth, lips and tongue, context consonant shapes). We put about 1% (a 109-line parabola, fixed length). Next: a real articulatory model and a variable-length tube (owner to choose B1 waves or B2 a lumped line). VTL 2.4's default source is a kinematic glottis ("Geometric glottis 2025"), not the self-oscillating triangular glottis we use (owner to decide whether to A/B one).
