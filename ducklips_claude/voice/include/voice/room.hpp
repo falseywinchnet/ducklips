@@ -27,6 +27,7 @@ struct RoomOptions {
   double proximity_hz = 250.0;
   double presence_db = 0.0;       // peak gain at presence_hz (about two octaves wide; was 6)
   double presence_hz = 3500.0;
+  double presence_q = 0.7;        // 0.7: about two octaves between half-gain points
   std::uint32_t seed = 7U;
 };
 

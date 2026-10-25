@@ -86,6 +86,11 @@ void apply(const std::string& key, const std::string& value, tract::Articulators
     model.set_scale(number);
   } else if (key == "anat.root") {
     model.set_root_follow(number);
+  } else if (key == "anat.vtl") {
+    // The VocalTractLab-style tongue (tract/articulation.hpp VtlTongueShape).
+    tract::VtlTongueShape shape = model.vtl_tongue();
+    shape.on = number > 0.5;
+    model.set_vtl_tongue(shape);
   } else if (key.rfind("rule.", 0) == 0) {
     tract::CutRegion region = tract::CutRegion::pharynx;
     std::size_t comma = value.find(',');
@@ -114,6 +119,11 @@ int main(int count, char** values) {
       if (equals != std::string::npos) {
         apply(field.substr(0, equals), field.substr(equals + 1), organs, model);
       }
+    }
+    tract::TongueContour vtl_contour;
+    if (model.vtl_tongue().on) {
+      model.vtl_tongue_outline(organs, vtl_contour);
+      organs.contour = &vtl_contour;
     }
     model.compute(organs, profile);
     std::printf("length %.3f teeth %.3f lips %.3f velum %.3f tip %.3f\n", profile.length, profile.teeth_arc,

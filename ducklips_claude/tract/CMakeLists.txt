@@ -17,8 +17,14 @@ add_library(tract
   src/somatic_hold.cpp
   src/sheet_speaker.cpp
   src/articulation.cpp
+  src/parameter_tree.cpp
+  src/tongue.cpp
+  src/tongue_roles.cpp
+  src/tongue_skeleton.cpp
+  src/pinch_tube.cpp
   ../voice/src/geometry.cpp
-  ../voice/src/score.cpp)
+  ../voice/src/score.cpp
+  ../voice/src/block_file.cpp)
 # The front end's body language (score) and tract geometry are shared with
 # ../voice; its planner writes the scores this engine speaks.
 target_include_directories(tract PUBLIC include ../voice/include)
@@ -75,3 +81,6 @@ target_link_libraries(sheet_voices PRIVATE tract)
 
 add_executable(geometry_probe tools/geometry_probe.cpp)
 target_link_libraries(geometry_probe PRIVATE tract)
+
+add_executable(tongue_probe tools/tongue_probe.cpp)
+target_link_libraries(tongue_probe PRIVATE tract)

@@ -7,6 +7,7 @@
 // receives each event when its time arrives, as a stream.
 
 #include "voice/body.hpp"
+#include "voice/plan_parameters.hpp"
 #include "voice/planner.hpp"
 #include "voice/room.hpp"
 #include "voice/text.hpp"
@@ -32,6 +33,7 @@ struct Arguments {
   voice::BodyOptions body;
   voice::RoomOptions room;
   std::string features_path;  // per-phone planning features, for prosody fitting
+  std::string plan_params_out;  // the planner's parameter tree as planned (voice/plan_parameters.hpp)
   std::string audit_path;     // the body's realized state at 4 kHz, for tools/audit.py
   bool plan_only = false;      // stop after planning (no synthesis)
   bool rule_pitch = false;     // ignore data/pitch_en.txt and use the hand rules
@@ -90,6 +92,17 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
       arguments.plan.rate = std::strtod(values[++index], nullptr);
     } else if (value == "--pitch" && has_next) {
       arguments.plan.base_pitch = std::strtod(values[++index], nullptr);
+    } else if (value == "--plan-params" && has_next) {
+      // The planner's parameter tree over the defaults and the flags before it.
+      std::vector<voice::ParameterEntry> entries;
+      std::string error;
+      if (!voice::read_parameter_file(values[++index], entries, error) ||
+          !voice::apply_plan_parameters(entries, arguments.plan, error)) {
+        std::fprintf(stderr, "--plan-params: %s\n", error.c_str());
+        return false;
+      }
+    } else if (value == "--plan-params-out" && has_next) {
+      arguments.plan_params_out = values[++index];
     } else if (value == "--organs" && has_next) {
       if (!voice::load_organ_postures(values[++index], arguments.plan)) {
         std::fprintf(stderr, "cannot read organ postures %s\n", values[index]);
@@ -176,8 +189,8 @@ bool parse_arguments(int count, char** values, Arguments& arguments) {
       arguments.body.obstacle_reach = std::strtod(values[++index], nullptr);
     } else if (value == "--affricate-hiss-at" && has_next) {
       arguments.plan.affricate_hiss_at = std::strtod(values[++index], nullptr);
-    } else if (value == "--affricate-hiss-gap" && has_next) {
-      arguments.plan.affricate_hiss_gap = std::strtod(values[++index], nullptr);
+    } else if (value == "--affricate-voicing-move" && has_next) {
+      arguments.plan.affricate_voicing_move = std::strtod(values[++index], nullptr);
     } else if (value == "--strouhal" && has_next) {
       arguments.body.strouhal = std::strtod(values[++index], nullptr);
     } else if (value == "--corner-ceiling" && has_next) {
@@ -376,6 +389,12 @@ int main(int count, char** values) {
       !voice::load_factor_model("data/durations_en.txt", arguments.plan.duration_model)) {
     std::fprintf(stderr, "cannot read data/durations_en.txt\n");
     return 1;
+  }
+  if (!arguments.plan_params_out.empty()) {
+    std::vector<voice::ParameterEntry> entries;
+    voice::collect_plan_parameters(arguments.plan, entries);
+    std::ofstream file(arguments.plan_params_out);
+    voice::write_parameters(file, entries);
   }
   if (!arguments.phones_loaded) {
     // The tuned phone inventory, when present next to the working directory.

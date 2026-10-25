@@ -1,0 +1,14 @@
+# engine_net.py: the network's vowel postures (from organs.txt)
+AA jaw=13.8015 tx=3.2170 ty=6.4389 tipx=7.1570 tipy=6.9281 ap=2.3902 pro=0.0736 lw=2.2912 drop=0.5495  # cost 4.17 (formants 0.68 st, shape rms 0.582) F 773 1263 2746
+AE jaw=15.0210 tx=4.6820 ty=7.6987 tipx=7.4240 tipy=6.6979 ap=2.8030 pro=0.0170 lw=4.7849 drop=0.5879  # cost 4.45 (formants 1.05 st, shape rms 0.568) F 665 1764 2562
+AH jaw=14.7912 tx=3.2113 ty=7.5613 tipx=7.0031 tipy=7.0865 ap=2.0756 pro=0.1880 lw=1.7671 drop=0.3062  # cost 4.11 (formants 0.12 st, shape rms 0.666) F 581 1226 2645
+AO jaw=11.7042 tx=2.6900 ty=7.6102 tipx=7.8908 tipy=7.6403 ap=1.3298 pro=0.7586 lw=1.8557 drop=0.7993  # cost 4.69 (formants 2.43 st, shape rms 0.377) F 499 882 2837
+EH jaw=13.1830 tx=3.9025 ty=7.3067 tipx=7.3028 tipy=7.0262 ap=2.1677 pro=0.0653 lw=3.6668 drop=0.2618  # cost 6.19 (formants 1.77 st, shape rms 0.736) F 718 1649 2553
+EY jaw=5.6653 tx=4.6548 ty=7.7352 tipx=7.5448 tipy=6.7430 ap=1.4929 pro=0.0541 lw=4.2361 drop=0.5388  # cost 6.15 (formants 3.19 st, shape rms 0.494) F 558 1897 2437
+IH jaw=11.6325 tx=4.5474 ty=8.0651 tipx=7.4011 tipy=6.8016 ap=1.8150 pro=0.2844 lw=4.7570 drop=0.3695  # cost 7.55 (formants 3.27 st, shape rms 0.713) F 452 2115 2557
+IY jaw=4.5168 tx=5.6057 ty=7.8184 tipx=7.3115 tipy=6.9486 ap=1.1857 pro=0.3442 lw=4.1616 drop=0.3400  # cost 7.98 (formants 3.61 st, shape rms 0.729) F 419 2062 2814
+OW jaw=5.8816 tx=3.7449 ty=7.1649 tipx=6.7747 tipy=6.4182 ap=0.2425 pro=0.5572 lw=4.3247 drop=1.3024  # cost 5.45 (formants 0.49 st, shape rms 0.827) F 570 1271 2424
+UH jaw=11.6569 tx=3.5582 ty=7.1841 tipx=6.8296 tipy=7.0740 ap=0.5459 pro=0.5433 lw=4.5390 drop=0.1013  # cost 5.66 (formants 1.17 st, shape rms 0.747) F 441 1204 2559
+UW jaw=4.2389 tx=4.1629 ty=7.9192 tipx=7.2073 tipy=6.6777 ap=0.3813 pro=0.6312 lw=3.1488 drop=0.0867  # cost 5.90 (formants 1.08 st, shape rms 0.803) F 439 1896 2449
+ER jaw=8.0845 tx=3.3414 ty=7.7161 tipx=6.4085 tipy=8.6496 ap=0.7248 pro=0.0739 lw=3.2734 drop=1.4547
+AX jaw=4.8718 tx=2.3943 ty=7.3331 tipx=7.0438 tipy=6.9046 ap=0.3022 pro=0.1226 lw=5.5589 drop=0.6565  # cost 0.37 (formants 0.37 st, shape rms 0.000) F 554 1423 2638

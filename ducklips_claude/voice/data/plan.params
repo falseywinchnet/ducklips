@@ -1,0 +1,186 @@
+# The planner's parameter tree as m69 plans the NATO words (say --pressure 750,
+# the articulatory body): the start of the timing and articulation fit
+# (tract/analysis/engine_net.py). Format: voice/include/voice/plan_parameters.hpp.
+timing {
+  rate 1
+  variation 0.1
+  lead_in 0.1
+  seal_lead 0.4
+  vowel_hold 0.6
+  seal_settle 0.025
+  affricate_hiss_max 0.06
+  affricate_hiss_at 0.3
+  release_move 0.03
+  voiced_release_move 0.05
+  burst_scale 1
+  release_peel_time 0.015
+  voice_lag 0.02
+  vowel_reach 0.35
+  vowel_arrival 0.8
+  jaw_lead 0.04
+  fricative_hold 0
+  final_vowel_scale 1.8
+  final_consonant_scale 1.6
+  final_vowel_floor_ms 110
+  comma_vowel_scale 2.4
+  sonorant_devoicing 0.5
+}
+glottis {
+  voicing_gap -0.006
+  voiced_fricative_gap 0.04
+  aspirate_gap 0.06
+  unstressed_gap 0
+  stress_press 0
+  final_relax_gap -0.008
+  vowel_compression 0.6
+  unstressed_compression 0.6
+  onset_gap -1
+  onset_hold 0.02
+  onset_settle 0.03
+  fricative_abduct_lead 0.03
+  abduction_move 0.05
+  adduction_move 0.02
+  adduction_lead 0
+  affricate_voicing_move 0.06
+  final_devoicing 0
+}
+breath {
+  speech_pressure 750
+  voiceless_pressure 0.85
+  unstressed_pressure 1
+  pause_pressure 0
+  breath_lead 0.04
+  breath_rise 0.11
+  vowel_breath_lead 0.12
+  phrase_fade_tail 0.06
+  phrase_fade_from 0.7
+  phrase_open_delay 0.03
+}
+release {
+  release_channel 0.6
+  release_peel_area 0
+}
+pitch {
+  base_pitch 120
+  pitch_floor 100
+  accent 22
+  accent_peak 0.05
+  accent_fall 0.25
+  unstressed_drift 0.06
+  unstressed_dip 0.5
+  pitch_spread 1.5
+  pitch_median 122
+  lowest_pitch 80
+  final_fall 0.9
+  comma_pitch 0.93
+}
+mouth {
+  postalveolar_lips 3
+  postalveolar_protrusion 0
+  sibilant_lips 1.5
+  sibilant_protrusion 0.1
+  lip_press 0.01
+  labial_jaw 1
+  velar_front 1.8
+  fricative_body_area 0.9
+}
+articulation {
+  labial_jaw 8
+  labiodental_aperture 0.03
+  labiodental_jaw 4
+  dental_x 7.72
+  dental_y 8.25
+  dental_press 0.04
+  dental_jaw 3
+  alveolar_x 6.75
+  alveolar_y 9.75
+  alveolar_press 0.12
+  alveolar_jaw 3
+  tap_press 0.3
+  sibilant_x 7.05
+  sibilant_y 9.15
+  sibilant_press -0.08
+  sibilant_jaw 1.5
+  sibilant_aperture 0.5
+  sibilant_protrusion 0.1
+  sibilant_groove 1
+  postalveolar_x 6.3
+  postalveolar_y 9.95
+  postalveolar_press 0.12
+  postalveolar_hiss_press -0.12
+  postalveolar_jaw 2.5
+  postalveolar_aperture 0.6
+  postalveolar_protrusion 0.4
+  postalveolar_groove 0.6
+  affricate_closure 0.35
+  lateral_x 6.75
+  lateral_y 9.75
+  lateral_press 0.1
+  lateral_retract 0.2
+  dark_lateral_x 2.65
+  dark_lateral_y 6.5
+  rhotic_x 6
+  rhotic_y 9.6
+  rhotic_press -0.35
+  rhotic_back 0.6
+  rhotic_up 0.3
+  rhotic_aperture 0.5
+  rhotic_protrusion 0.35
+  velar_front 2.4
+  velar_back 4.8
+  velar_press 0.05
+  w_aperture 0.45
+  w_protrusion 0.6
+  w_spread 2.2
+  w_round_share 0.5
+  y_raise 0.1
+  lead 0.04
+  tip_close_move 0.028
+  dorsum_close_move 0.06
+  tip_release_move 0.03
+  dorsum_release_move 0.05
+  liquid_move 0.07
+}
+duration {
+  IY 1
+  IH 1
+  EY 1
+  EH 1
+  AE 1
+  AA 1
+  AO 1
+  OW 1
+  UH 1
+  UW 1
+  AH 1
+  AX 1
+  ER 1
+  AY 1
+  AW 1
+  OY 1
+  P 1
+  B 1
+  T 1
+  D 1
+  DX 1
+  K 1
+  G 1
+  M 1
+  N 1
+  NG 1
+  F 1
+  V 1
+  TH 1
+  DH 1
+  S 1
+  Z 1
+  SH 1
+  ZH 1
+  CH 1
+  JH 1
+  L 1
+  R 1
+  W 1
+  Y 1
+  HH 1
+}

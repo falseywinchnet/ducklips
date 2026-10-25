@@ -19,7 +19,6 @@ constexpr double kTongueRadius = 2.0;    // body circle
 constexpr double kLipAxisY = 7.85;       // height of the lip opening's centre
 constexpr double kLipBack = 8.1;         // where the lips begin, unprotruded
 constexpr double kLipLength = 1.0;       // front to back, unprotruded
-constexpr double kLateralArea = 0.12;    // cm^2, an /l/'s two side channels together
 // The grid.
 constexpr double kStep = 0.3;            // cm between parallel cuts
 constexpr double kFanX = 3.4;            // centre of the fan through the mouth
@@ -94,6 +93,253 @@ void MidsagittalTract::jaw_point(const Articulators& organs, double x, double y,
   out_y = kJawPivotY + dx * std::sin(angle) + dy * std::cos(angle);
 }
 
+void MidsagittalTract::to_jaw_frame(const Articulators& organs, double x, double y, double& out_x,
+                                    double& out_y) const {
+  double angle = organs.jaw_angle * kDegree;
+  double dx = x - kJawPivotX;
+  double dy = y - kJawPivotY;
+  out_x = kJawPivotX + dx * std::cos(angle) - dy * std::sin(angle);
+  out_y = kJawPivotY + dx * std::sin(angle) + dy * std::cos(angle);
+}
+
+// The tongue root's base, beside the epiglottis: it follows the hyoid part
+// of the way down, and (root_follow) the body forward and back.
+void MidsagittalTract::root_base(const Articulators& organs, double& x, double& y) const {
+  double drop = std::clamp(organs.larynx_drop, 0.0, 2.0);
+  x = 1.35 + root_follow_ * (organs.tongue_x - 4.0);
+  y = 2.6 - 0.7 * drop;
+}
+
+void MidsagittalTract::tongue_outline(const Articulators& organs, TongueContour& out) const {
+  // The outline in the jaw's frame: the root's base (converted), the
+  // tangent to the back of the body circle, the arc over its top, the
+  // tangent to the tip; then even spacing along it.
+  constexpr int kDense = 120;
+  std::array<double, kDense + 4> xs{};
+  std::array<double, kDense + 4> ys{};
+  int dense = 0;
+  double root_x = 0.0;
+  double root_y = 0.0;
+  root_base(organs, root_x, root_y);
+  double jaw_root_x = 0.0;
+  double jaw_root_y = 0.0;
+  to_jaw_frame(organs, root_x, root_y, jaw_root_x, jaw_root_y);
+  xs[static_cast<std::size_t>(dense)] = jaw_root_x;
+  ys[static_cast<std::size_t>(dense)] = jaw_root_y;
+  ++dense;
+  double centre_x = organs.tongue_x;
+  double centre_y = organs.tongue_y;
+  double to_x = centre_x - jaw_root_x;
+  double to_y = centre_y - jaw_root_y;
+  double reach = std::sqrt(to_x * to_x + to_y * to_y);
+  double back_angle = std::atan2(to_y, to_x) + kPi;
+  if (reach > kTongueRadius) {
+    back_angle = std::atan2(-to_y, -to_x) - std::acos(kTongueRadius / reach);
+  }
+  double from_x = organs.tip_x - centre_x;
+  double from_y = organs.tip_y - centre_y;
+  double tip_reach = std::sqrt(from_x * from_x + from_y * from_y);
+  double front_angle = std::atan2(from_y, from_x);
+  if (tip_reach > kTongueRadius) {
+    front_angle += std::acos(kTongueRadius / tip_reach);
+  }
+  double start = back_angle;
+  while (start < front_angle) {
+    start += 2.0 * kPi;
+  }
+  constexpr int kArc = kDense - 2;
+  for (int point = 0; point <= kArc; ++point) {
+    double angle = start + (front_angle - start) * static_cast<double>(point) / kArc;
+    xs[static_cast<std::size_t>(dense)] = centre_x + kTongueRadius * std::cos(angle);
+    ys[static_cast<std::size_t>(dense)] = centre_y + kTongueRadius * std::sin(angle);
+    ++dense;
+  }
+  xs[static_cast<std::size_t>(dense)] = organs.tip_x;
+  ys[static_cast<std::size_t>(dense)] = organs.tip_y;
+  ++dense;
+  // Even spacing by arc length.
+  std::array<double, kDense + 4> along{};
+  for (int point = 1; point < dense; ++point) {
+    std::size_t i = static_cast<std::size_t>(point);
+    along[i] = along[i - 1] + distance(xs[i - 1], ys[i - 1], xs[i], ys[i]);
+  }
+  double total = along[static_cast<std::size_t>(dense - 1)];
+  out.count = kTongueContourPoints;
+  int segment = 1;
+  for (int point = 0; point < kTongueContourPoints; ++point) {
+    double wanted = total * static_cast<double>(point) / static_cast<double>(kTongueContourPoints - 1);
+    while (segment < dense - 1 && along[static_cast<std::size_t>(segment)] < wanted) {
+      ++segment;
+    }
+    std::size_t b = static_cast<std::size_t>(segment);
+    double span = std::max(along[b] - along[b - 1], 1.0e-9);
+    double share = std::clamp((wanted - along[b - 1]) / span, 0.0, 1.0);
+    out.x[static_cast<std::size_t>(point)] = xs[b - 1] + share * (xs[b] - xs[b - 1]);
+    out.y[static_cast<std::size_t>(point)] = ys[b - 1] + share * (ys[b] - ys[b - 1]);
+  }
+}
+
+namespace {
+
+// The angle on an ellipse (centre cx, cy; half axes a, b) of the point whose
+// tangent passes through (hx, hy); `clockwise` picks which of the two
+// (VocalTractLab's getEllipseTangent).
+double ellipse_tangent(double hx, double hy, double cx, double cy, double a, double b, bool clockwise) {
+  double rx = cx - hx;
+  double ry = cy - hy;
+  double radicand = std::max(rx * rx * b * b - b * b * a * a + ry * ry * a * a, 0.0);
+  double root = std::sqrt(radicand);
+  double denominator = rx * rx * b * b + ry * ry * a * a;
+  if (std::abs(denominator) < 1.0e-6) {
+    denominator = 1.0e-6;
+  }
+  double alpha0 = std::atan2(-b * (ry * a * a + rx * root) / denominator, -a * (rx * b * b - ry * root) / denominator);
+  double alpha1 = std::atan2(-b * (ry * a * a - rx * root) / denominator, -a * (rx * b * b + ry * root) / denominator);
+  double cosine = std::cos(alpha0);
+  double sine = std::sin(alpha0);
+  double v1x = cx + a * cosine - hx;
+  double v1y = cy + b * sine - hy;
+  double test = v1x * (-a * sine) + v1y * (b * cosine);
+  if ((test >= 0.0 && clockwise) || (test < 0.0 && !clockwise)) {
+    return alpha1;
+  }
+  return alpha0;
+}
+
+// The angle on a circle (centre cx, cy, radius r) of the tangent point from
+// (hx, hy) (VocalTractLab's getCircleTangent).
+double circle_tangent(double hx, double hy, double cx, double cy, double r, bool clockwise) {
+  double p = hx - cx;
+  double q = hy - cy;
+  double radicand = p * p + q * q - r * r;
+  if (radicand < 0.0) {
+    return 0.0;
+  }
+  double n = std::sqrt(radicand);
+  if (clockwise) {
+    n = -n;
+  }
+  return std::atan2(p * n + q * r, p * r - q * n);
+}
+
+// A rational quadratic Bezier with weights 1, 2, 1 at t.
+void bezier_point(double x0, double y0, double x1, double y1, double x2, double y2, double t, double& x, double& y) {
+  double b0 = (1.0 - t) * (1.0 - t);
+  double b1 = 2.0 * t * (1.0 - t) * 2.0;
+  double b2 = t * t;
+  double sum = b0 + b1 + b2;
+  x = (b0 * x0 + b1 * x1 + b2 * x2) / sum;
+  y = (b0 * y0 + b1 * y1 + b2 * y2) / sum;
+}
+
+}  // namespace
+
+void MidsagittalTract::vtl_tongue_outline(const Articulators& organs, TongueContour& out) const {
+  constexpr int kPieces = 32;
+  constexpr int kDense = 3 * kPieces + 9;
+  std::array<double, kDense> xs{};
+  std::array<double, kDense> ys{};
+  int dense = 0;
+  const VtlTongueShape& shape = vtl_tongue_;
+  double base_x = 0.0;
+  double base_y = 0.0;
+  double skull_x = 0.0;
+  double skull_y = 0.0;
+  root_base(organs, skull_x, skull_y);
+  to_jaw_frame(organs, skull_x, skull_y, base_x, base_y);
+  double cx = organs.tongue_x;
+  double cy = organs.tongue_y;
+  double a = shape.body_rx;
+  double b = shape.body_ry;
+  double r = shape.tip_radius;
+  double tx = organs.tip_x - r;  // the tip circle's centre: its front on the planned tip
+  double ty = organs.tip_y;
+  // The root: base -> control -> tangent on the ellipse.
+  double back = ellipse_tangent(base_x, base_y, cx, cy, a, b, true);
+  double touch_x = cx + a * std::cos(back);
+  double touch_y = cy + b * std::sin(back);
+  double along_x = touch_x - base_x;
+  double along_y = touch_y - base_y;
+  double length = std::max(std::sqrt(along_x * along_x + along_y * along_y), 1.0e-6);
+  // Behind the base-to-ellipse line: its right-hand normal (the line runs up
+  // and forward; behind is toward the pharynx).
+  double root_cx = base_x + 0.5 * along_x + shape.root_bulge * along_y / length;
+  double root_cy = base_y + 0.5 * along_y - shape.root_bulge * along_x / length;
+  double alpha0 = ellipse_tangent(root_cx, root_cy, cx, cy, a, b, true);
+  double end_x = cx + a * std::cos(alpha0);
+  double end_y = cy + b * std::sin(alpha0);
+  for (int i = 0; i < kPieces; ++i) {
+    bezier_point(base_x, base_y, root_cx, root_cy, end_x, end_y, static_cast<double>(i) / kPieces,
+                 xs[static_cast<std::size_t>(dense)], ys[static_cast<std::size_t>(dense)]);
+    ++dense;
+  }
+  // The blade's control point.
+  double to_tip_x = tx - cx;
+  double to_tip_y = ty - cy;
+  double span = std::max(std::sqrt(to_tip_x * to_tip_x + to_tip_y * to_tip_y), 1.0e-6);
+  double blade_x = cx + shape.blade_along * to_tip_x - shape.blade_lift * to_tip_y / span;
+  double blade_y = cy + shape.blade_along * to_tip_y + shape.blade_lift * to_tip_x / span;
+  double alpha1 = ellipse_tangent(blade_x, blade_y, cx, cy, a, b, false);
+  if (alpha1 > alpha0 && alpha1 - alpha0 < 0.25 * kPi) {
+    alpha1 = alpha0;
+  }
+  // The arc over the top, from the root's tangent to the blade's (angles falling).
+  double first = alpha0 < 0.0 ? alpha0 + 2.0 * kPi : alpha0;
+  double delta = alpha1 - first;
+  if (delta > -1.0e-6) {
+    delta = -1.0e-6;
+  }
+  for (int i = 0; i < kPieces; ++i) {
+    double angle = first + delta * static_cast<double>(i) / kPieces;
+    xs[static_cast<std::size_t>(dense)] = cx + a * std::cos(angle);
+    ys[static_cast<std::size_t>(dense)] = cy + b * std::sin(angle);
+    ++dense;
+  }
+  // The blade: ellipse -> control -> tangent on the tip circle.
+  double start_x = cx + a * std::cos(alpha1);
+  double start_y = cy + b * std::sin(alpha1);
+  double alpha2 = circle_tangent(blade_x, blade_y, tx, ty, r, true);
+  double tip_in_x = tx + r * std::cos(alpha2);
+  double tip_in_y = ty + r * std::sin(alpha2);
+  for (int i = 0; i < kPieces; ++i) {
+    bezier_point(start_x, start_y, blade_x, blade_y, tip_in_x, tip_in_y, static_cast<double>(i) / kPieces,
+                 xs[static_cast<std::size_t>(dense)], ys[static_cast<std::size_t>(dense)]);
+    ++dense;
+  }
+  // The tip's arc to its front (angle 0).
+  double from = alpha2 < 0.0 ? alpha2 + 2.0 * kPi : alpha2;
+  double to = 0.0 - from;
+  if (to > -1.0e-6) {
+    to = -1.0e-6;
+  }
+  for (int i = 0; i < 8; ++i) {
+    double angle = from + to * static_cast<double>(i) / 7.0;
+    xs[static_cast<std::size_t>(dense)] = tx + r * std::cos(angle);
+    ys[static_cast<std::size_t>(dense)] = ty + r * std::sin(angle);
+    ++dense;
+  }
+  // Even spacing by arc length.
+  std::array<double, kDense> along{};
+  for (int point = 1; point < dense; ++point) {
+    std::size_t i = static_cast<std::size_t>(point);
+    along[i] = along[i - 1] + distance(xs[i - 1], ys[i - 1], xs[i], ys[i]);
+  }
+  double total = along[static_cast<std::size_t>(dense - 1)];
+  out.count = kTongueContourPoints;
+  int segment = 1;
+  for (int point = 0; point < kTongueContourPoints; ++point) {
+    double wanted = total * static_cast<double>(point) / static_cast<double>(kTongueContourPoints - 1);
+    while (segment < dense - 1 && along[static_cast<std::size_t>(segment)] < wanted) {
+      ++segment;
+    }
+    std::size_t s1 = static_cast<std::size_t>(segment);
+    double piece = std::max(along[s1] - along[s1 - 1], 1.0e-9);
+    double share = std::clamp((wanted - along[s1 - 1]) / piece, 0.0, 1.0);
+    out.x[static_cast<std::size_t>(point)] = xs[s1 - 1] + share * (xs[s1] - xs[s1 - 1]);
+    out.y[static_cast<std::size_t>(point)] = ys[s1 - 1] + share * (ys[s1] - ys[s1 - 1]);
+  }
+}
+
 // The hull: the larynx's back wall (moving with the larynx), the posterior
 // pharyngeal wall, velum, palate, ridge, upper incisors, then the upper lip.
 void MidsagittalTract::build_hull(const Articulators& organs) {
@@ -122,21 +368,71 @@ void MidsagittalTract::build_hull(const Articulators& organs) {
 // incisors, the lower incisors, the lower lip, and back under the chin.
 void MidsagittalTract::build_organs(const Articulators& organs) {
   organ_count_ = 0;
-  double drop = std::clamp(organs.larynx_drop, 0.0, 2.0);
   double centre_x = 0.0;
   double centre_y = 0.0;
   jaw_point(organs, organs.tongue_x, organs.tongue_y, centre_x, centre_y);
   double tip_x = 0.0;
   double tip_y = 0.0;
-  jaw_point(organs, organs.tip_x, organs.tip_y, tip_x, tip_y);
+  const TongueContour* contour = organs.contour;
+  if (contour != nullptr && contour->count >= 2 && organs.underside != nullptr && organs.underside->count > 1) {
+    // A thick tongue's tip is its cap's front (the groove and the side
+    // channels are placed from it; from the cap's top, the cap sealed where
+    // the /s/ groove should run).
+    jaw_point(organs, organs.underside->x[1], organs.underside->y[1], tip_x, tip_y);
+  } else if (contour != nullptr && contour->count >= 2) {
+    std::size_t last = static_cast<std::size_t>(contour->count - 1);
+    jaw_point(organs, contour->x[last], contour->y[last], tip_x, tip_y);
+  } else {
+    jaw_point(organs, organs.tip_x, organs.tip_y, tip_x, tip_y);
+  }
   tip_abs_x_ = tip_x;
   tip_abs_y_ = tip_y;
   // Larynx front wall, then the epiglottis base, which follows the hyoid
   // part of the way down.
   add_organ(kLarynxFront, glottis_y_ - 0.2);
   add_organ(kLarynxFront, glottis_y_ + larynx_height_);
-  double root_x = 1.35 + root_follow_ * (organs.tongue_x - 4.0);
-  double root_y = 2.6 - 0.7 * drop;
+  double root_x = 0.0;
+  double root_y = 0.0;
+  root_base(organs, root_x, root_y);
+  if (contour != nullptr && contour->count >= 2) {
+    // A physical tongue: its surface from the root's base to the tip.
+    add_organ(root_x, root_y);
+    for (int point = 1; point < contour->count; ++point) {
+      double x = 0.0;
+      double y = 0.0;
+      jaw_point(organs, contour->x[static_cast<std::size_t>(point)], contour->y[static_cast<std::size_t>(point)], x, y);
+      add_organ(x, y);
+    }
+    std::size_t last = static_cast<std::size_t>(contour->count - 1);
+    double under_x = 0.0;
+    double under_y = 0.0;
+    if (organs.underside != nullptr && organs.underside->count > 0) {
+      // A thick tongue: the cap, the underside back to the frenulum.
+      for (int point = 0; point < organs.underside->count; ++point) {
+        std::size_t p = static_cast<std::size_t>(point);
+        jaw_point(organs, organs.underside->x[p], organs.underside->y[p], under_x, under_y);
+        add_organ(under_x, under_y);
+      }
+      // The floor of the mouth forward from the frenulum (jaw frame), to
+      // the floor behind the lower incisors.
+      std::size_t frenulum = static_cast<std::size_t>(organs.underside->count - 1);
+      constexpr int kFloorPoints = 3;
+      constexpr double kFloorX[kFloorPoints] = {4.5, 6.0, 6.5};
+      constexpr double kFloorY[kFloorPoints] = {5.0, 6.0, 6.3};
+      for (int point = 0; point < kFloorPoints; ++point) {
+        if (kFloorX[point] > organs.underside->x[frenulum] + 0.05) {
+          jaw_point(organs, kFloorX[point], kFloorY[point], under_x, under_y);
+          add_organ(under_x, under_y);
+        }
+      }
+      build_front_organs(organs, under_x, under_y);
+      return;
+    }
+    jaw_point(organs, contour->x[last] - 0.2, contour->y[last] - 0.6, under_x, under_y);
+    add_organ(under_x, under_y);
+    build_front_organs(organs, under_x, under_y);
+    return;
+  }
   add_organ(root_x, root_y);
   // Tangent from the root base to the back of the body circle.
   double to_x = centre_x - root_x;
@@ -173,6 +469,13 @@ void MidsagittalTract::build_organs(const Articulators& organs) {
   double under_y = 0.0;
   jaw_point(organs, organs.tip_x - 0.2, organs.tip_y - 0.6, under_x, under_y);
   add_organ(under_x, under_y);
+  build_front_organs(organs, under_x, under_y);
+}
+
+// The organs' outline past the tongue: the floor behind the lower incisors,
+// the incisors, the lower lip, the chin and the floor back to the larynx.
+void MidsagittalTract::build_front_organs(const Articulators& organs, double under_x, double under_y) {
+  double drop = std::clamp(organs.larynx_drop, 0.0, 2.0);
   // Floor behind the lower incisors, the incisors, the lower lip.
   double floor_x = 0.0;
   double floor_y = 0.0;
@@ -254,6 +557,20 @@ bool MidsagittalTract::inside_organs(double x, double y) const {
   return inside;
 }
 
+double MidsagittalTract::organ_distance(double x, double y) const {
+  double nearest = 1.0e9;
+  for (int point = 0; point < organ_count_; ++point) {
+    std::size_t a = static_cast<std::size_t>(point);
+    std::size_t b = static_cast<std::size_t>((point + 1) % organ_count_);
+    double dx = organ_x_[b] - organ_x_[a];
+    double dy = organ_y_[b] - organ_y_[a];
+    double span = dx * dx + dy * dy;
+    double t = span > 0.0 ? std::clamp(((x - organ_x_[a]) * dx + (y - organ_y_[a]) * dy) / span, 0.0, 1.0) : 0.0;
+    nearest = std::min(nearest, distance(x, y, organ_x_[a] + t * dx, organ_y_[a] + t * dy));
+  }
+  return nearest;
+}
+
 double MidsagittalTract::area_of(const Articulators& organs, CutRegion region, double width, double mid_x) const {
   if (region == CutRegion::lips) {
     // An elliptical opening: width across, the aperture between the lips.
@@ -268,6 +585,9 @@ double MidsagittalTract::area_of(const Articulators& organs, CutRegion region, d
   if (region == CutRegion::pharynx) {
     area = std::max(area, 0.15);
   }
+  if (region == CutRegion::larynx && larynx_area_scale_ != 1.0) {
+    area *= larynx_area_scale_;
+  }
   // Side channels past a tip contact (a lateral) keep a passage open where
   // the midline closes at the tip. A sibilant's groove runs along the whole
   // blade, from about 2 cm behind the tip to the tip: with the jaw raised
@@ -278,11 +598,11 @@ double MidsagittalTract::area_of(const Articulators& organs, CutRegion region, d
   // the tip only, the blade sealed 0.81 cm back, 0.006 cm^2, the flow
   // through the mouth stopped for 40 ms: "hello" heard as "hetlo".)
   bool palatal_or_front = region == CutRegion::alveolar || region == CutRegion::palatal || region == CutRegion::teeth;
-  if (palatal_or_front && mid_x > tip_abs_x_ - 2.0 && mid_x < tip_abs_x_ + 0.8) {
+  if (palatal_or_front && mid_x > tip_abs_x_ - lateral_reach_ && mid_x < tip_abs_x_ + 0.8) {
     // Both channels together 0.12 cm^2. (At 0.35, with the window now
     // reaching back along the blade, the /l/ was a vowel: F1 525 Hz, no
     // dip; at 0.175 still F1 526; at 0.12, F1 about 290, 9 dB down.)
-    area = std::max(area, kLateralArea * std::clamp(organs.lateral, 0.0, 1.0));
+    area = std::max(area, lateral_area_ * std::clamp(organs.lateral, 0.0, 1.0));
   }
   if (palatal_or_front && mid_x > tip_abs_x_ - 2.2 && mid_x < tip_abs_x_ + 0.5) {
     // Narrowest at the tip (0.06 cm^2), widening to 0.5 two centimetres
@@ -323,6 +643,16 @@ void MidsagittalTract::add_cut(const Articulators& organs, double origin_x, doub
   }
   double width = std::max(outer - inner, 0.0);
   double middle = width > 0.0 ? 0.5 * (inner + outer) : outer;
+  if (organs.contour != nullptr && organs.nearest_width && region != CutRegion::lips && width > 0.0) {
+    // With the physical tongue the passage is as wide as the hull's distance
+    // to the nearest organ surface, which moves continuously with the
+    // tongue. (Along the fixed ray alone, a sharp tip sliding past the ray
+    // switched its crossing from the tongue's top to its underside: in /dh/
+    // the narrowest area jumped 0.005-0.15 cm^2 from one millisecond to the
+    // next while the tip moved smoothly.)
+    width = std::min(width, organ_distance(origin_x + direction_x * outer, origin_y + direction_y * outer));
+    middle = outer - 0.5 * width;
+  }
   std::size_t index = static_cast<std::size_t>(profile.count);
   profile.width[index] = width;
   profile.mid_x[index] = origin_x + direction_x * middle;

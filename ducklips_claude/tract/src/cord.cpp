@@ -172,6 +172,149 @@ double Cord::jitter_gauss() {
   return (sum - 2.0) * std::sqrt(3.0);
 }
 
+// One edge's swing (share of the amplitude) under VocalTractLab 2019's skew
+// and double pulsing, from its phase in the cosine convention (peak at 0)
+// over the phase's 4 pi: their phase alpha = cosine phase + pi / 2, taken
+// from the trough at 1.5 pi; each cycle warped at its knee; the first cycle
+// (1.5 pi to 3.5 pi) the double-pulsed one.
+double Cord::shaped_swing(double cosine_phase) const {
+  constexpr double kFourPi = 2.0 * kTwoPi;
+  double from_trough = std::fmod(cosine_phase + 0.5 * kPi - 1.5 * kPi, kFourPi);
+  if (from_trough < 0.0) {
+    from_trough += kFourPi;
+  }
+  int cycle = from_trough < kTwoPi ? 0 : 1;
+  double within = from_trough - static_cast<double>(cycle) * kTwoPi;
+  double knee = kPi * (1.0 + skew_);
+  double warped = within < knee ? within * kPi / knee : kPi + (within - knee) * kPi / (kTwoPi - knee);
+  double phase = 1.5 * kPi + static_cast<double>(cycle) * kTwoPi + warped;
+  double swing = std::sin(phase);
+  if (cycle == 0) {
+    swing = (1.0 - 0.5 * double_pulsing_) * (swing + 1.0) - 1.0;
+  }
+  return swing;
+}
+
+// Geometric glottis 2025: one edge's displacement (cm) at its phase (cosine
+// convention, peak at 0), with the exponential collision and pulse shape
+// (see set_geometric_2025).
+double Cord::collided_swing(double cosine_phase, double amplitude, double rest) const {
+  constexpr double kEpsilon = 1.0e-6;
+  double t = std::fmod(cosine_phase, kTwoPi);
+  if (t < 0.0) {
+    t += kTwoPi;
+  }
+  t /= kTwoPi;
+  double value = amplitude * std::cos(kTwoPi * t);
+  if (amplitude <= 0.0) {
+    return value;
+  }
+  double touch = -std::max(rest, 0.0) / kPi;  // A2: where the folds begin to touch
+  double settle = touch - 0.2 * amplitude;    // A3
+  double pulse_shape = std::clamp(pulse_shape_ + cycle_now_[0], -1.0, 1.0);
+  double t2 = 0.5 - kEpsilon;
+  double t3 = 0.5 + kEpsilon;
+  if (touch > -amplitude) {
+    t2 = std::acos(touch / amplitude) / kTwoPi;
+    t3 = 1.0 - t2;
+  }
+  double t1 = t2;
+  double t4 = t3;
+  if (pulse_shape < 0.0) {
+    t1 = t2 + 0.1 * pulse_shape;
+  } else {
+    t4 = t3 + 0.1 * pulse_shape;
+  }
+  if (t < t1 || t >= t4) {
+    return value;
+  }
+  double value_t1 = amplitude * std::cos(kTwoPi * t1);
+  double slope_t1 = -amplitude * kTwoPi * std::sin(kTwoPi * t1);
+  double tau_t1 = -(value_t1 - settle) / slope_t1;
+  double value_t4 = amplitude * std::cos(kTwoPi * t4);
+  double slope_t4 = -amplitude * kTwoPi * std::sin(kTwoPi * t4);
+  double tau_t4 = (value_t4 - settle) / slope_t4;
+  double closing = settle + (value_t1 - settle) * std::exp(-(t - t1) / tau_t1);
+  double opening = settle + (value_t4 - settle) * std::exp(-(t4 - t) / tau_t4);
+  return std::max(value, std::max(closing, opening));
+}
+
+// The pressure above the glottis through two second-order Butterworth
+// low-pass sections at 25 Hz (bilinear, prewarped), for the swing.
+double Cord::supraglottal_low(double pressure) {
+  double k = std::tan(kPi * 25.0 * kStepSeconds);
+  double norm = 1.0 / (1.0 + std::sqrt(2.0) * k + k * k);
+  double b0 = k * k * norm;
+  double a1 = 2.0 * (k * k - 1.0) * norm;
+  double a2 = (1.0 - std::sqrt(2.0) * k + k * k) * norm;
+  double x = pressure;
+  for (int section = 0; section < 2; ++section) {
+    // Transposed direct form II: y = b0 x + s0; s0 = 2 b0 x - a1 y + s1; s1 = b0 x - a2 y.
+    double y = b0 * x + supra_filter_[section][0];
+    supra_filter_[section][0] = 2.0 * b0 * x - a1 * y + supra_filter_[section][1];
+    supra_filter_[section][1] = b0 * x - a2 * y;
+    x = y;
+  }
+  return x;
+}
+
+// Geometric glottis 2025: length, thickness and swing; each edge's collided
+// displacement; the areas along the fold at 32 points cut at the midline.
+void Cord::advance_geometric_2025(double frequency) {
+  const double kRestLength2025 = rest_length_2025_;        // cm (JD2, M01: 1.6; W02: 1.2)
+  const double kRestThickness2025 = rest_thickness_2025_;  // cm (0.45; 0.40)
+  const double kRestPitch2025 = rest_pitch_2025_;          // Hz (120; 220)
+  constexpr int kSamples = 32;
+  length_ = kRestLength2025 * std::sqrt(frequency / kRestPitch2025);
+  double thickness = kRestThickness2025 * kRestLength2025 / length_;
+  thickness_[0] = 0.5 * thickness;
+  thickness_[1] = 0.5 * thickness;
+  double supra = supraglottal_low(pressure_supra_);
+  double transglottal = std::max(expected_breath_ * kPascal - supra, 0.0);
+  double amplitude = amplitude_gain_ * (kRestLength2025 / 1.6) * std::sqrt(transglottal);
+  if (transglottal < 1000.0) {
+    amplitude = 0.0;
+  } else if (transglottal < 2000.0) {
+    amplitude *= (transglottal - 1000.0) / 1000.0;
+  }
+  amplitude *= relative_amplitude_ * abduction_scale_;
+  // This cycle's variation, gliding across the cycle (cycle_now_[0], the
+  // pulse shape's, is read by collided_swing).
+  double progress = std::clamp(phase_ / kTwoPi, 0.0, 1.0);
+  for (int k = 0; k < 4; ++k) {
+    cycle_now_[k] = cycle_from_[k] + progress * (cycle_to_[k] - cycle_from_[k]);
+  }
+  amplitude *= std::max(1.0 + cycle_now_[2], 0.0);
+  double rest[2] = {posture_.lower_rest + rest_offset_ + cycle_now_[3], posture_.upper_rest + rest_offset_ + cycle_now_[3]};
+  double edge_phase[2] = {phase_, phase_ + kTwoPi - (phase_lag_ + cycle_now_[1])};
+  double step = length_ / static_cast<double>(kSamples - 1);
+  for (int edge = 0; edge < 2; ++edge) {
+    double displacement = collided_swing(edge_phase[edge], amplitude, rest[edge]);
+    x_[edge] = displacement;
+    double area = std::max(posture_.chink, 0.0);
+    double previous = 0.0;
+    int closed = 0;
+    for (int sample = 1; sample <= kSamples; ++sample) {
+      double z = static_cast<double>(sample) / static_cast<double>(kSamples);
+      double x = rest[edge] * z + displacement * std::sin(kPi * z);
+      if (x < 0.0) {
+        ++closed;
+      }
+      if (softness_2025_ > 0.0) {
+        x = x / softness_2025_ > 50.0 ? x : softness_2025_ * std::log1p(std::exp(x / softness_2025_));
+      } else if (x < 0.0) {
+        x = 0.0;
+      }
+      area += step * (previous + x);
+      previous = x;
+    }
+    alpha_[edge] = static_cast<double>(closed) / static_cast<double>(kSamples);
+    open_length_[edge] = length_ * (1.0 - alpha_[edge]);
+    section_area_[edge] = area;
+  }
+  area_ = std::max(std::min(section_area_[0], section_area_[1]), kMinimumArea);
+}
+
 // Kinematic folds: prescribed edge swings (see set_kinematic), the opening
 // integrated along the fold with a soft contact.
 void Cord::advance_kinematics() {
@@ -180,6 +323,12 @@ void Cord::advance_kinematics() {
   constexpr double kKinematicThickness = 0.45;   // cm at rest length
   constexpr int kSamples = 16;
   double frequency = std::max(pitch_ * tension_factor_, 40.0);
+  if (flutter_ > 0.0) {
+    flutter_time_ += kStepSeconds;
+    double waves = std::sin(kTwoPi * 12.7 * flutter_time_) + std::sin(kTwoPi * 7.1 * flutter_time_) +
+                   std::sin(kTwoPi * 4.7 * flutter_time_);
+    frequency = std::max(frequency + (flutter_ / 50.0) * (frequency / 100.0) * waves, 40.0);
+  }
   length_ = kKinematicRestLength * std::sqrt(frequency / kKinematicRestPitch);
   double thickness = kKinematicThickness * kKinematicRestLength / length_;
   thickness_[0] = 0.5 * thickness;
@@ -191,9 +340,23 @@ void Cord::advance_kinematics() {
   double drive = std::max(transglottal_lower_, 0.0);
   double amplitude = amplitude_gain_ * std::sqrt(drive);
   amplitude *= std::clamp((drive - 1000.0) / 1000.0, 0.0, 1.0);  // 100-200 Pa
+  if (length_scaling_ != 0.0) {
+    amplitude *= std::pow(kKinematicRestLength / length_, length_scaling_);
+  }
   phase_ += kTwoPi * frequency * kStepSeconds + jitter_ * std::sqrt(kStepSeconds) * jitter_gauss();
   if (phase_ > kTwoPi) {
     phase_ -= kTwoPi;
+    second_cycle_ = !second_cycle_;
+    if (cycle_sd_[0] > 0.0 || cycle_sd_[1] > 0.0 || cycle_sd_[2] > 0.0 || cycle_sd_[3] > 0.0) {
+      for (int k = 0; k < 4; ++k) {
+        cycle_from_[k] = cycle_to_[k];
+        cycle_to_[k] = cycle_sd_[k] > 0.0 ? cycle_sd_[k] * jitter_gauss() : 0.0;
+      }
+    }
+  }
+  if (geometric_2025_) {
+    advance_geometric_2025(frequency);
+    return;
   }
   double rest[2] = {posture_.lower_rest + rest_offset_, posture_.upper_rest + rest_offset_};
   double edge_phase[2] = {phase_, phase_ - phase_lag_};
@@ -201,6 +364,9 @@ void Cord::advance_kinematics() {
   double step = length_ / kSamples;
   for (int edge = 0; edge < 2; ++edge) {
     double swing = amplitude * std::cos(edge_phase[edge]);
+    if (skew_ != 0.0 || double_pulsing_ > 0.0) {
+      swing = amplitude * shaped_swing(edge_phase[edge] + (second_cycle_ ? kTwoPi : 0.0));
+    }
     x_[edge] = swing;
     double open_sum = 0.0;
     double closed = 0.0;
@@ -225,41 +391,93 @@ void Cord::advance_kinematics() {
   area_ = std::max(std::min(section_area_[0], section_area_[1]), kMinimumArea);
 }
 
-// Each slice's opening along the fold on the wedge-shaped rest gap (zero at
-// the anterior commissure), interpolated from the lower edge's rest at the
-// bottom slice to the upper edge's at the top: as compute_geometry, per slice.
+// The fold's parallel strips along its length (fold_.strips: 1 to
+// kMaxStrips, front first), each with its share of the length and its own
+// stiffness and mass factors (FoldTubeSettings::strip*_stiffness, _mass).
+int Cord::strip_count() const {
+  return std::clamp(static_cast<int>(std::lround(fold_.strips)), 1, kMaxStrips);
+}
+
+double Cord::strip_stiffness(int strip) const {
+  if (strip_count() == 1) {
+    return 1.0;
+  }
+  return strip == 0 ? fold_.strip1_stiffness : strip == 1 ? fold_.strip2_stiffness : fold_.strip3_stiffness;
+}
+
+void Cord::slice_factors(int slice, double& mass, double& elasticity, double& support) const {
+  const double masses[kFoldSlices] = {fold_.slice1_mass, fold_.slice2_mass, fold_.slice3_mass,
+                                      fold_.slice4_mass, fold_.slice5_mass, fold_.slice6_mass};
+  const double elasticities[kFoldSlices] = {fold_.slice1_elasticity, fold_.slice2_elasticity, fold_.slice3_elasticity,
+                                            fold_.slice4_elasticity, fold_.slice5_elasticity, fold_.slice6_elasticity};
+  const double supports[kFoldSlices] = {fold_.slice1_support, fold_.slice2_support, fold_.slice3_support,
+                                        fold_.slice4_support, fold_.slice5_support, fold_.slice6_support};
+  mass = masses[slice];
+  elasticity = elasticities[slice];
+  support = supports[slice];
+}
+
+double Cord::strip_mass(int strip) const {
+  if (strip_count() == 1) {
+    return 1.0;
+  }
+  return strip == 0 ? fold_.strip1_mass : strip == 1 ? fold_.strip2_mass : fold_.strip3_mass;
+}
+
+// Each strip's opening at each slice on the wedge-shaped rest gap (zero at
+// the anterior commissure, front coordinate z 0..1), interpolated from the
+// lower edge's rest at the bottom slice to the upper edge's at the top: the
+// half gap rest z + x along the strip's part of the length [z0, z1]. A
+// slice's open length, closed share and area are its strips' sums.
 void Cord::fold_geometry() {
+  int strips = strip_count();
   for (int slice = 0; slice < kFoldSlices; ++slice) {
     double share = static_cast<double>(slice) / static_cast<double>(kFoldSlices - 1);
     double rest = posture_.lower_rest + share * (posture_.upper_rest - posture_.lower_rest) + rest_offset_;
-    double x = cover_q_[slice];
-    double back = rest + x;
-    double front = rest >= 0.0 ? x : back;
-    double contact_length = 0.0;
-    double mean_contact_z = 0.5 * length_;
-    double open_length = 0.0;
-    double mean_width = 0.0;
-    if (back > 0.0 && front > 0.0) {
-      open_length = length_;
-      mean_width = back + front;
-    } else if (back <= 0.0 && front <= 0.0) {
-      contact_length = length_;
-    } else {
-      double apex = rest > 0.0 ? length_ * (1.0 + x / rest) : 0.0;
-      apex = std::clamp(apex, 0.0, length_);
-      open_length = apex;
-      mean_width = std::max(back, 0.0);
-      contact_length = length_ - apex;
-      mean_contact_z = 0.5 * (apex + length_);
+    double slice_open = 0.0;
+    double slice_closed = 0.0;
+    double slice_area = 0.0;
+    for (int strip = 0; strip < strips; ++strip) {
+      double z0 = static_cast<double>(strip) / static_cast<double>(strips);
+      double z1 = static_cast<double>(strip + 1) / static_cast<double>(strips);
+      double strip_length = (z1 - z0) * length_;
+      double x = cover_q_[strip][slice];
+      double back = rest >= 0.0 ? rest * z1 + x : rest + x;
+      double front = rest >= 0.0 ? rest * z0 + x : rest + x;
+      double open_length = 0.0;
+      double mean_width = 0.0;
+      // The contact's centre, measured from the back (vocal process).
+      double contact_from_back = 0.5 * ((1.0 - z0) + (1.0 - z1)) * length_;
+      if (back > 0.0 && front > 0.0) {
+        open_length = strip_length;
+        mean_width = back + front;
+      } else if (back <= 0.0 && front <= 0.0) {
+        open_length = 0.0;
+      } else {
+        // Open from where the gap closes to the strip's back end.
+        double apex = rest > 0.0 ? length_ * (1.0 + x / rest) : 0.0;
+        apex = std::clamp(apex, (1.0 - z1) * length_, (1.0 - z0) * length_);
+        open_length = apex - (1.0 - z1) * length_;
+        mean_width = std::max(back, 0.0);
+        contact_from_back = 0.5 * (apex + (1.0 - z0) * length_);
+      }
+      strip_open_[strip][slice] = open_length;
+      strip_alpha_[strip][slice] = (strip_length - open_length) / strip_length;
+      strip_star_[strip][slice] = rest >= 0.0 ? rest * (1.0 - contact_from_back / length_) : rest;
+      slice_open += open_length;
+      slice_closed += strip_length - open_length;
+      slice_area += open_length * mean_width;
     }
-    slice_open_[slice] = open_length;
-    slice_alpha_[slice] = contact_length / length_;
-    slice_star_[slice] = rest >= 0.0 ? rest * (1.0 - mean_contact_z / length_) : rest;
-    slice_area_[slice] = open_length * mean_width + std::max(posture_.chink, 0.0);
+    slice_open_[slice] = slice_open;
+    slice_alpha_[slice] = slice_closed / length_;
+    slice_area_[slice] = slice_area + std::max(posture_.chink, 0.0);
   }
 }
 
 double Cord::contact() const {
+  if (pinch_on_) {
+    return pinch_.contact();
+  }
   if (!fold_tube_) {
     return alpha_[0];
   }
@@ -271,21 +489,29 @@ double Cord::contact() const {
 }
 
 // The slices' openings as the air sees them: the half gap along the fold
-// (the wedge rest plus the slice's displacement) through a soft contact,
-// summed over eight points along the length; once per step, after the
-// pieces have moved. (The pieces' contact forces use the plain geometry.)
+// (the wedge rest plus the displacement of the strip there) through a soft
+// contact, summed over eight points along the length per strip; once per
+// step, after the pieces have moved. (The pieces' contact forces use the
+// plain geometry.)
 void Cord::fold_air_areas() {
-  constexpr int kPoints = 8;
+  constexpr int kPointsPerStrip = 8;
+  int strips = strip_count();
+  int points = kPointsPerStrip * strips;
   double softness = std::max(fold_.contact_softness, 1.0e-6);
-  double step = length_ / static_cast<double>(kPoints);
+  double step = length_ / static_cast<double>(points);
   for (int slice = 0; slice < kFoldSlices; ++slice) {
     double share = static_cast<double>(slice) / static_cast<double>(kFoldSlices - 1);
     double rest = posture_.lower_rest + share * (posture_.upper_rest - posture_.lower_rest) + rest_offset_;
-    double x = cover_q_[slice];
     double open_sum = 0.0;
-    for (int point = 0; point < kPoints; ++point) {
-      double z = (static_cast<double>(point) + 0.5) / static_cast<double>(kPoints);  // 0 front .. 1 vocal process
-      double half_gap = (rest >= 0.0 ? rest * z : rest) + x;
+    for (int point = 0; point < points; ++point) {
+      double z = (static_cast<double>(point) + 0.5) / static_cast<double>(points);  // 0 front .. 1 vocal process
+      double x = cover_q_[point / kPointsPerStrip][slice];
+      // With fold_.string_mode on, the displacement follows a string's first
+      // mode along the fold, (pi/2) sin(pi z) (fixed at the commissure and
+      // the vocal process, the same mean): it closes progressively, not
+      // all along its length at once.
+      double shape = fold_.string_mode > 0.5 ? kHalfPi * std::sin(kPi * z) : 1.0;
+      double half_gap = (rest >= 0.0 ? rest * z : rest) + x * shape;
       double ratio = half_gap / softness;
       double soft = ratio > 30.0 ? half_gap : softness * std::log1p(std::exp(std::max(ratio, -30.0)));
       open_sum += 2.0 * soft * step;
@@ -294,12 +520,20 @@ void Cord::fold_air_areas() {
   }
 }
 
+// The penetration at which a nonlinear contact equals the linear spring (cm).
+constexpr double kContactDepth = 0.01;
+
 // The fold tube's pieces, eight steps per step (1.3 us), symplectic Euler
 // (every mode under 2 kHz: omega h < 0.02). Forces from the air's pressures
-// of the last step; contact and its damping where the slice is closed.
+// of the last step; contact and its damping where the slice is closed. Each
+// strip is a column of slices of cover, body and support with its share of
+// the length (so of the mass, the stiffness and the air's force) times its
+// own factors; neighbouring strips pull on each other's cover and body
+// along the fold (fold_.strip_coupling).
 void Cord::advance_fold_tube() {
   double q = std::max(tension_, 0.05);
   double slices = static_cast<double>(kFoldSlices);
+  int strips = strip_count();
   double slice_depth = fold_.depth / std::sqrt(q) / slices;
   double cover_mass = fold_.cover_mass / (slices * q);
   double body_mass = fold_.body_mass / (slices * q);
@@ -308,51 +542,119 @@ void Cord::advance_fold_tube() {
   double support_k = fold_.support_stiffness * q / slices;
   double vertical_k = fold_.vertical_stiffness * q;
   double contact_k = fold_.contact_stiffness * q / slices;
-  double cover_c = 2.0 * fold_.cover_loss * std::sqrt(cover_mass * (cover_k + coupling_k));
-  double support_c = 2.0 * fold_.support_loss * std::sqrt(body_mass * support_k);
-  double contact_c = 2.0 * std::sqrt(cover_mass * contact_k);
+  double along_k = fold_.strip_coupling * q / slices;
   constexpr double h = kStepSeconds / static_cast<double>(kFoldSubsteps);
   double pole = fold_.muscle_corner > 0.0 ? std::exp(-kTwoPi * fold_.muscle_corner * h) : 0.0;
   double innovation = fold_.muscle_fluctuation * std::sqrt(1.0 - pole * pole);
-  double cover_force[kFoldSlices];
-  double body_force[kFoldSlices];
+  double eta = fold_.strain_stiffening;
+  double eta_vertical = fold_.vertical_stiffening;
+  // Per strip: its share of the length, masses and stiffnesses.
+  double length_share[kMaxStrips];
+  double strip_cover_mass[kMaxStrips];
+  double strip_body_mass[kMaxStrips];
+  double strip_k[kMaxStrips];
+  double strip_cover_c[kMaxStrips];
+  double strip_support_c[kMaxStrips];
+  double strip_contact_c[kMaxStrips];
+  for (int strip = 0; strip < strips; ++strip) {
+    length_share[strip] = 1.0 / static_cast<double>(strips);
+    double mass = length_share[strip] * strip_mass(strip);
+    strip_cover_mass[strip] = cover_mass * mass;
+    strip_body_mass[strip] = body_mass * mass;
+    strip_k[strip] = length_share[strip] * strip_stiffness(strip);
+    strip_cover_c[strip] =
+        2.0 * fold_.cover_loss * std::sqrt(strip_cover_mass[strip] * (cover_k + coupling_k) * strip_k[strip]);
+    strip_support_c[strip] = 2.0 * fold_.support_loss * std::sqrt(strip_body_mass[strip] * support_k * strip_k[strip]);
+    strip_contact_c[strip] = 2.0 * std::sqrt(strip_cover_mass[strip] * contact_k * length_share[strip]);
+  }
+  // Each slice's own pieces (fold_.slice*_mass, _elasticity, _support) and
+  // its wandering elasticity, advanced once per step.
+  double slice_mass[kFoldSlices];
+  double slice_elastic[kFoldSlices];
+  double slice_support[kFoldSlices];
+  double wander_pole = std::exp(-kTwoPi * fold_.elasticity_corner * kStepSeconds);
+  double wander_innovation = fold_.elasticity_wander * std::sqrt(1.0 - wander_pole * wander_pole);
+  for (int slice = 0; slice < kFoldSlices; ++slice) {
+    slice_factors(slice, slice_mass[slice], slice_elastic[slice], slice_support[slice]);
+    if (fold_.elasticity_wander > 0.0) {
+      double tamp = std::exp(-fold_.elasticity_tamping * (slice_support[slice] - 1.0));
+      elasticity_drift_[slice] = wander_pole * elasticity_drift_[slice] + wander_innovation * tamp * jitter_gauss();
+      slice_elastic[slice] *= std::max(1.0 + elasticity_drift_[slice], 0.05);
+    }
+  }
+  double cover_force[kMaxStrips][kFoldSlices];
+  double body_force[kMaxStrips][kFoldSlices];
   for (int substep = 0; substep < kFoldSubsteps; ++substep) {
     if (fold_.muscle_fluctuation > 0.0) {
       muscle_ = pole * muscle_ + innovation * jitter_gauss();
     }
     double muscle_k = support_k * (1.0 + muscle_);
     fold_geometry();
-    for (int slice = 0; slice < kFoldSlices; ++slice) {
-      double x = cover_q_[slice];
-      double force = slice_pressure_[slice] * slice_open_[slice] * slice_depth;
-      if (slice == 0) {
-        force += 0.25 * (pressure_sub_ + slice_pressure_[0]) * kInletLength * length_;
+    for (int strip = 0; strip < strips; ++strip) {
+      double k_share = strip_k[strip];
+      double air_share = length_share[strip];
+      for (int slice = 0; slice < kFoldSlices; ++slice) {
+        double x = cover_q_[strip][slice];
+        double force = slice_pressure_[slice] * strip_open_[strip][slice] * slice_depth;
+        if (slice == 0) {
+          force += air_share * 0.25 * (pressure_sub_ + slice_pressure_[0]) * kInletLength * length_;
+        }
+        if (slice == kFoldSlices - 1) {
+          force += air_share * 0.25 * (pressure_supra_ + slice_pressure_[slice]) * kOutletLength * length_ +
+                   surface_pressure_ * (strip_open_[strip][slice] * slice_depth + air_share * 0.5 * kOutletLength * length_);
+        }
+        // Tissue stiffens with strain (fold_.strain_stiffening, eta: k (1 +
+        // eta x^2), as in Story & Titze's body-cover springs).
+        double stretch = x - body_q_[strip][slice];
+        double elastic = k_share * slice_elastic[slice];
+        force -= elastic * (cover_k * x * (1.0 + eta * x * x) + coupling_k * stretch * (1.0 + eta * stretch * stretch));
+        if (slice > 0) {
+          double shear = x - cover_q_[strip][slice - 1];
+          force -= k_share * vertical_k * shear * (1.0 + eta_vertical * shear * shear);
+        }
+        if (slice + 1 < kFoldSlices) {
+          double shear = x - cover_q_[strip][slice + 1];
+          force -= k_share * vertical_k * shear * (1.0 + eta_vertical * shear * shear);
+        }
+        double body_x = body_q_[strip][slice];
+        double body_along = 0.0;
+        if (strip > 0) {
+          force -= along_k * (x - cover_q_[strip - 1][slice]);
+          body_along -= along_k * (body_x - body_q_[strip - 1][slice]);
+        }
+        if (strip + 1 < strips) {
+          force -= along_k * (x - cover_q_[strip + 1][slice]);
+          body_along -= along_k * (body_x - body_q_[strip + 1][slice]);
+        }
+        double alpha = strip_alpha_[strip][slice];
+        if (alpha > 0.0) {
+          // Tissue pressed on tissue (fold_.contact_exponent: 1 a linear
+          // spring; 1.5 Hertzian, soft bodies in contact), equal to the linear
+          // spring at kContactDepth of penetration.
+          double penetration = x + strip_star_[strip][slice];
+          double pressed = fold_.contact_exponent == 1.0
+                               ? penetration
+                               : (penetration < 0.0 ? -1.0 : 1.0) * kContactDepth *
+                                     std::pow(std::abs(penetration) / kContactDepth, fold_.contact_exponent);
+          force -= air_share * contact_k * alpha * pressed + strip_contact_c[strip] * alpha * cover_v_[strip][slice];
+        }
+        double relative = cover_v_[strip][slice] - body_v_[strip][slice];
+        // Damping follows each slice's own pieces (critical share fixed).
+        double cover_c = strip_cover_c[strip] * std::sqrt(slice_elastic[slice]);
+        double support_c = strip_support_c[strip] * std::sqrt(slice_mass[slice] * slice_support[slice]);
+        cover_force[strip][slice] = force - cover_c * relative;
+        body_force[strip][slice] = -k_share * slice_support[slice] * muscle_k * body_x * (1.0 + eta * body_x * body_x) +
+                                   elastic * coupling_k * stretch * (1.0 + eta * stretch * stretch) + body_along -
+                                   support_c * body_v_[strip][slice] + cover_c * relative;
       }
-      if (slice == kFoldSlices - 1) {
-        force += 0.25 * (pressure_supra_ + slice_pressure_[slice]) * kOutletLength * length_ +
-                 surface_pressure_ * (slice_open_[slice] * slice_depth + 0.5 * kOutletLength * length_);
-      }
-      force -= cover_k * x + coupling_k * (x - body_q_[slice]);
-      if (slice > 0) {
-        force -= vertical_k * (x - cover_q_[slice - 1]);
-      }
-      if (slice + 1 < kFoldSlices) {
-        force -= vertical_k * (x - cover_q_[slice + 1]);
-      }
-      double alpha = slice_alpha_[slice];
-      if (alpha > 0.0) {
-        force -= contact_k * alpha * (x + slice_star_[slice]) + contact_c * alpha * cover_v_[slice];
-      }
-      double relative = cover_v_[slice] - body_v_[slice];
-      cover_force[slice] = force - cover_c * relative;
-      body_force[slice] = -muscle_k * body_q_[slice] - coupling_k * (body_q_[slice] - x) - support_c * body_v_[slice] +
-                          cover_c * relative;
     }
-    for (int slice = 0; slice < kFoldSlices; ++slice) {
-      cover_v_[slice] += h * cover_force[slice] / cover_mass;
-      body_v_[slice] += h * body_force[slice] / body_mass;
-      cover_q_[slice] += h * cover_v_[slice];
-      body_q_[slice] += h * body_v_[slice];
+    for (int strip = 0; strip < strips; ++strip) {
+      for (int slice = 0; slice < kFoldSlices; ++slice) {
+        cover_v_[strip][slice] += h * cover_force[strip][slice] / strip_cover_mass[strip];
+        body_v_[strip][slice] += h * body_force[strip][slice] / (strip_body_mass[strip] * slice_mass[slice]);
+        cover_q_[strip][slice] += h * cover_v_[strip][slice];
+        body_q_[strip][slice] += h * body_v_[strip][slice];
+      }
     }
   }
   fold_geometry();
@@ -363,8 +665,13 @@ void Cord::advance_fold_tube() {
     narrowest = std::min(narrowest, slice_area_[slice]);
     closed = std::max(closed, slice_alpha_[slice]);
   }
-  x_[0] = cover_q_[0];
-  x_[1] = cover_q_[kFoldSlices - 1];
+  // The edges' displacement: the strips' mean, weighted by their length.
+  x_[0] = 0.0;
+  x_[1] = 0.0;
+  for (int strip = 0; strip < strips; ++strip) {
+    x_[0] += length_share[strip] * cover_q_[strip][0];
+    x_[1] += length_share[strip] * cover_q_[strip][kFoldSlices - 1];
+  }
   section_area_[0] = slice_area_[0];
   section_area_[1] = slice_area_[kFoldSlices - 1];
   alpha_[0] = closed;
@@ -408,6 +715,19 @@ void Cord::fold_pressures(double flow, double p_below, double p_above, double ar
 void Cord::step(double wave_below, double area_below, double wave_above, double area_above, double& out_below,
                 double& out_above) {
   advance_posture();
+  if (pinch_on_) {
+    // The posture's rest positions (each side's) are the pinch sections'
+    // rest gaps; its chink, the leak beside them.
+    pinch_.set_rest(2.0 * posture_.lower_rest, 2.0 * posture_.upper_rest, posture_.chink);
+    pinch_.set_pitch(pitch_);
+    pinch_.step(wave_below, area_below, wave_above, area_above, out_below, out_above);
+    flow_ = pinch_.flow();
+    area_ = pinch_.area();
+    pressure_sub_ = pinch_.pressure_below();
+    pressure_supra_ = pinch_.pressure_above();
+    tension_ = pinch_.tension();
+    return;
+  }
   if (fold_tube_) {
     advance_fold_tube();
   } else if (kinematic_) {
@@ -448,6 +768,17 @@ void Cord::step(double wave_below, double area_below, double wave_above, double 
     // Viscous loss of the slit (Poiseuille between parallel plates).
     viscous = 12.0 * kAirViscosity * length_ * length_ *
               (thickness_[0] / (a0 * a0 * a0) + thickness_[1] / (a1 * a1 * a1));
+    if (vtl_flow_) {
+      // VocalTractLab's empirical loss: the larger of a steady-flow law and
+      // an acoustic one at 2250 Hz, per cm of each section.
+      double sections[2] = {a0, a1};
+      viscous = 0.0;
+      for (int edge = 0; edge < 2; ++edge) {
+        double steady = 0.03 * std::pow(1.0 / sections[edge], 2.6);
+        double acoustic = 0.0065 * std::sqrt(2250.0) / sections[edge];
+        viscous += thickness_[edge] * std::max(steady, acoustic);
+      }
+    }
   }
   kinetic = std::max(kinetic, 0.1 * half_rho_over(area_));
   // The air inside the glottis has mass: rho l / A for each edge's section
@@ -464,6 +795,9 @@ void Cord::step(double wave_below, double area_below, double wave_above, double 
       inertance += kAirDensity * slice_depth / std::max(slice_area_[slice], inertance_floor_);
     }
     inertance += kAirDensity * (kInletLength + kOutletLength) / std::max(area_, inertance_floor_);
+  } else if (vtl_flow_) {
+    inertance = kAirDensity * (thickness_[0] / std::max(a0, vtl_inertance_floor_) +
+                               thickness_[1] / std::max(a1, vtl_inertance_floor_));
   } else {
     inertance = kAirDensity * (thickness_[0] / std::max(a0, inertance_floor_) +
                                thickness_[1] / std::max(a1, inertance_floor_) +

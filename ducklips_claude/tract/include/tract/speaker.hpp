@@ -13,6 +13,7 @@
 // tongue and the intended pitch. Sound itself comes only from the body.
 
 #include "tract/articulation.hpp"
+#include "tract/tongue_roles.hpp"
 #include "tract/voice_body.hpp"
 #include "voice/score.hpp"
 
@@ -52,12 +53,49 @@ class Speaker {
   void set_lung_follow(double seconds) { lung_follow_ = seconds; }
   // Scales every motor's wander (diagnostics; 1 as tuned, 0 holds steady).
   void set_wander_gain(double gain) { wander_gain_ = gain; }
+  // Each motor's target first passes a first-order lag at this multiple of
+  // the motor's own rate (0: none, as before), so the motion's acceleration
+  // has no steps. Measured 2026-10-18 (bdl profile, a0101's /k/): the
+  // articulators' pushed air, moving in steps of acceleration at every new
+  // command, radiated low thumps -8 to -16 dB re the vowel peak through a
+  // voiceless closure; real articulators move smoothly.
+  void set_motor_smoothing(double ratio) { motor_smoothing_ = ratio; }
+  // Every articulator's move time times this (not the lungs, pitch or
+  // glottis). (bdl's transitions are sharp at the phone boundaries: his /s/
+  // loses its voicing band by 34 dB within the token's first quarter; ours
+  // decayed through half of it, 2026-10-18.)
+  void set_move_scale(double scale) { move_scale_ = scale; }
   // The posterior chink while voicing (cm^2).
   void set_voicing_chink(double area) { voicing_chink_ = area; }
+  // The tongue's pull on the larynx: lifting the tongue's body (the floor
+  // of the mouth and the suprahyoid muscles push it up) pulls the hyoid and
+  // the larynx with it: per cm of lift the folds' tension rises by
+  // tongue_pull_tension (a share of the intended pitch), their rest gaps
+  // close by tongue_pull_adduction (cm), and the larynx rises by
+  // tongue_pull_raise (cm). (High vowels' higher, more pressed voice.)
+  void set_tongue_pull_tension(double share) { tongue_pull_tension_ = share; }
+  void set_tongue_pull_adduction(double gap) { tongue_pull_adduction_ = gap; }
+  void set_tongue_pull_raise(double lift) { tongue_pull_raise_ = lift; }
+  double tongue_pull_tension() const { return tongue_pull_tension_; }
+  double tongue_pull_adduction() const { return tongue_pull_adduction_; }
+  double tongue_pull_raise() const { return tongue_pull_raise_; }
+  double tongue_lift() const { return tongue_lift_; }
   // The flared open end: growth per node past the lips and its widest area.
   // Past the lip opening the articulatory body's tube is a near-closed
   // sliver of this area (cm^2).
   void set_sliver_area(double area) { sliver_area_ = area; }
+  // Nonzero: the node the lip opening crosses holds the lips' area by the
+  // share of it inside the lips over its whole span. (Off, the node took the
+  // full area until its centre passed the opening, then half: a step of
+  // about 1.1 cm^2 at every crossing, an air pulse of 150 cm^3/s that came
+  // out as thumps level with the vowels inside sealed /t k/, 2026-10-18.)
+  void set_continuous_opening(double on) { continuous_opening_ = on; }
+  // Nonzero: a node's narrowest also counts the profile at its span's two
+  // ends. (Off, it took the centre and the cuts inside the span, so a narrow
+  // cut sliding out of a node jumped its area: the front cavity's volume
+  // moved in 1 ms steps of up to 0.14 cm^3 while the organs moved smoothly,
+  // pushing low thumps through every consonant, 2026-10-18.)
+  void set_continuous_cuts(double on) { continuous_cuts_ = on; }
   void set_flare(double growth, double widest) {
     flare_growth_ = growth;
     flare_widest_ = widest;
@@ -68,6 +106,27 @@ class Speaker {
     voicing_lower_ = lower;
     voicing_upper_ = upper;
   }
+  // One piece at a time, for the parameter tree (tract/parameter_tree.hpp).
+  void set_voicing_lower(double lower) { voicing_lower_ = lower; }
+  void set_voicing_upper(double upper) { voicing_upper_ = upper; }
+  void set_flare_growth(double growth) { flare_growth_ = growth; }
+  void set_flare_widest(double widest) { flare_widest_ = widest; }
+  double closure_relaxation() const { return relaxation_depth_; }
+  double closure_pull() const { return pull_depth_; }
+  double closure_press() const { return press_depth_; }
+  double release_speed() const { return release_speed_; }
+  double lung_follow() const { return lung_follow_; }
+  double wander_gain() const { return wander_gain_; }
+  double motor_smoothing() const { return motor_smoothing_; }
+  double move_scale() const { return move_scale_; }
+  double voicing_chink() const { return voicing_chink_; }
+  double sliver_area() const { return sliver_area_; }
+  double continuous_opening() const { return continuous_opening_; }
+  double continuous_cuts() const { return continuous_cuts_; }
+  double flare_growth() const { return flare_growth_; }
+  double flare_widest() const { return flare_widest_; }
+  double voicing_lower() const { return voicing_lower_; }
+  double voicing_upper() const { return voicing_upper_; }
 
   // Streaming: a further event of the body language, arriving while the
   // body speaks. It is placed in time order among the events not yet
@@ -84,6 +143,18 @@ class Speaker {
   bool articulatory() const { return articulatory_; }
   MidsagittalTract& anatomy() { return anatomy_; }
   const TractProfile& profile() const { return profile_; }
+  const Tongue& tongue() const { return tongue_; }
+  bool physical_tongue() const { return physical_tongue_; }
+  const TongueSettings& tongue_settings() const { return tongue_settings_; }
+  // A tongue-frame point (jaw frame) in the skull frame, as the tongue last moved.
+  void tongue_point_to_skull(double x, double y, double& out_x, double& out_y) const {
+    anatomy_.from_jaw_frame(tongue_frame_, x, y, out_x, out_y);
+  }
+  // The score's phones (time order), for the tongue's roles (tongue_roles.hpp).
+  void set_phones(const std::vector<PhoneSpan>& phones) {
+    phones_ = phones;
+    phone_cursor_ = 0;
+  }
   // The organs where the motors hold them now.
   Articulators organs();
 
@@ -92,6 +163,7 @@ class Speaker {
     double position = 0.0;
     double velocity = 0.0;
     double target = 0.0;
+    double aim = 0.0;             // the target through the smoothing lag (motor_smoothing_)
     double omega = 40.0;          // 1/s; reaches the target in about 4.5 / omega
     double rest = 0.0;            // posture held without effort
     double span = 1.0;            // distance from rest that costs one unit of effort
@@ -116,6 +188,8 @@ class Speaker {
   // the narrowest area in the mouth.
   double shape_organs();
   void profile_to_nodes(std::vector<double>& areas, double length) const;
+  // The profile's area at an arc position, linear between cuts.
+  double profile_area_at(double arc) const;
   double gauss();
 
   voice::Score score_;
@@ -147,7 +221,30 @@ class Speaker {
   static constexpr int kGeometryTicks = 8;
   bool articulatory_ = false;
   double sliver_area_ = 0.02;
+  double continuous_opening_ = 0.0;
+  double continuous_cuts_ = 0.0;
   MidsagittalTract anatomy_;
+  // The physical tongue (BodyLayout::physical_tongue): its body and the
+  // shape the planner's targets ask of it.
+  bool physical_tongue_ = false;
+  TongueSettings tongue_settings_;
+  Tongue tongue_;
+  TongueContour tongue_target_;
+  TongueContour vtl_contour_;
+  double motor_smoothing_ = 0.0;
+  double move_scale_ = 1.0;
+  double lateral_pocket_ = 0.0;       // BodyLayout::lateral_pocket
+  double lateral_pocket_back_ = 3.0;
+  double abduction_fade_start_ = 0.0;  // BodyLayout::abduction_fade_*
+  double abduction_fade_end_ = 0.0;  // the VocalTractLab-style tongue's outline (BodyLayout::vtl_tongue)
+  TongueContour tongue_geometric_;
+  std::vector<PhoneSpan> phones_;
+  std::size_t phone_cursor_ = 0;
+  RoleState tongue_roles_;
+  Articulators tongue_frame_;  // the articulators the tongue last moved with (frame conversions)
+  // The tongue's step: the planner's raw targets for body and tip as the
+  // target shape, one geometry frame forward; `held` then carries its shape.
+  void move_tongue(Articulators& held, double seconds);
   TractProfile profile_;
   int geometry_tick_ = 0;
   std::vector<double> node_from_;
@@ -157,6 +254,10 @@ class Speaker {
   double length_to_ = 17.5;
   double wander_gain_ = 1.0;
   double voicing_chink_ = 0.0002;
+  double tongue_pull_tension_ = 0.0;
+  double tongue_pull_adduction_ = 0.0;
+  double tongue_pull_raise_ = 0.0;
+  double tongue_lift_ = 0.0;  // the tongue's body above rest (cm), followed over 20 ms
   double flare_growth_ = 1.6;
   double flare_widest_ = 30.0;
   double relaxation_ = 0.0;  // 0..1, how far the pharyngeal walls have let go

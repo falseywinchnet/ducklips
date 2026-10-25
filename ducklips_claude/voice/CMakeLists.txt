@@ -8,7 +8,9 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 add_library(voice
+  src/block_file.cpp
   src/body.cpp
+  src/plan_parameters.cpp
   src/geometry.cpp
   src/lexicon.cpp
   src/planner.cpp

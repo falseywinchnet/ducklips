@@ -1,0 +1,227 @@
+# source_calibrate.py against arctic_bdl_full a0021-a0593/25
+# profile_fit.py bdl5_r1_tree: train spectrum 8.5 dynamics 6.9 phase 18.6 pitch 9.8 timing 11.7 combined 9.8 | heldout spectrum 8.2 dynamics 6.4 phase 22.0 pitch 12.6 timing 8.3 combined 9.3
+# source_calibrate.py against arctic_bdl_full a0021-a0593/25
+# profile_fit.py bdl4_r1_tree: train spectrum 7.6 dynamics 4.6 phase 11.5 pitch 13.4 timing 12.2 combined 8.6 | heldout spectrum 7.8 dynamics 5.2 phase 10.0 pitch 10.3 timing 5.7 combined 7.3
+# profile_fit.py bdlc_r1_tree: train spectrum 5.1 dynamics 2.6 phase 4.3 pitch 14.5 timing 8.0 combined 5.5 | heldout spectrum 4.0 dynamics 2.4 phase -2.9 pitch 10.0 timing 5.9 combined 1.8
+# profile_fit.py bdl: train spectrum 3.8 dynamics 1.6 phase 5.6 pitch 14.9 timing 8.3 combined 5.0 | heldout spectrum 4.3 dynamics 1.7 phase -2.0 pitch 7.0 timing 7.1 combined 2.2
+# the VocalTractLab-style tongue (tongue.vtl 1, physical off) on the NATO-fitted voice (2026-10-18)
+# voice_vtl2025_nato_fric + tongue.skeleton_stretch 0.8 (the l reaches the ridge; 2026-10-18)
+# NATO fit + 6 ms port glide + frication 0.5, jet corner ceiling 6 kHz (harsh ch/f/s 7-9 dB loud, peaking at 10 kHz)
+# NATO fit + side ports cross-fading over 6 ms (branches.glide)
+# cord_fit_sentences.py: VTL-2025 glottis and variation fitted to the owner's sentences, cost 3.126
+# VTL 2.4 glottis 2025 (JD2 modal) + full, on V1's body; speak KINEMATIC=1
+# VTL 2.4 Geometric glottis 2025, JD2 modal shape, on V1's body; speak KINEMATIC=1
+# The engine's parameter tree as m64 speaks it (FOLDTUBE=1, the articulatory
+# body): the start of the behavioural fit (analysis/fit_blocks.py). Format and
+# paths: include/tract/parameter_tree.hpp. Dumped with PARAMS_OUT.
+breath {
+  lung_follow 0.006
+}
+fold {
+  depth 0.3
+  cover_mass 0.09
+  body_mass 0.3
+  cover_stiffness 36000
+  coupling_stiffness 90000
+  support_stiffness 150000
+  vertical_stiffness 60000
+  cover_loss 0.1
+  support_loss 0.4
+  contact_stiffness 900000
+  contact_softness 0.0005
+  muscle_fluctuation 0.005
+  muscle_corner 100
+  natural_pitch 197
+  pitch_per_tension 171
+  elongation 70
+  elongation_reference 0.0026
+  elongation_release 0.01
+  elongation_floor 0.9
+  swing_per_pascal 4.9e-06
+  swing_onset 130
+}
+posture {
+  voicing_lower 0.003528691264
+  voicing_upper 0.03075198473
+  voicing_chink 0.01019711
+  closure_press 0.007786424155
+}
+ear {
+  pitch_feedback 0.08
+  pitch_correction_limit 0.3
+}
+variation {
+  breath 0.15
+  tension 0.04554838229
+  posture 0
+  wall 0.05
+  wall_shared 0.3
+  tremor 0
+  adductor_tremor 0
+  breath_tremor 0.2246738864
+  wander_gain 1
+}
+glottal_noise {
+  aspiration 8
+  closing_turbulence 0
+  jet_flux 0
+  flux_corner 0
+  fold_turbulence 1
+}
+oral_noise {
+  frication 1.018292487
+  jet_attack 0.008
+  strouhal 0.2
+  frication_band 3
+  jet_growth 0.4
+  jet_spread 0
+  jet_corner_ceiling 9405.21057
+  lip_slit_width 2.5
+  jet_decay 1.2
+  obstacle_reach 0.2364157646
+  labiodental 1.185363756
+}
+walls {
+  skin_gain 0.4958358047
+  skin_corner 154.2264955
+  stiffness_scale 1
+  loss_scale 0.5991206504
+  closure_pull 0.7507389387
+  closure_relaxation 0.1834909252
+}
+branches {
+  piriform_loss 0.5
+  piriform_port 0.6
+  piriform_scale 1
+  piriform_smoothing 0
+  sinus_neck_scale 1.476594179
+  glide 0.006
+  nose_smoothing 0.4734364281
+}
+tract {
+  hop_loss 0.02
+  nose_hop_loss 0.4
+}
+mouth {
+  release_speed 1
+  sliver_area 0.02
+  flare_growth 1.6
+  flare_widest 30
+  continuous_opening 1
+  continuous_cuts 1
+}
+kinematic {
+  amplitude 0.000403250956
+  phase_lag 2
+  softness 0.0005
+  jitter 0.8754581688
+  flutter 60
+  geometric_2025 1
+  pulse_shape 0.4125650574
+  relative_amplitude 1
+  cycle_shape 0.35
+  cycle_lag 0.6243559689
+  cycle_amplitude 0.02958994944
+  abduction_fade_start 0.04600491094
+  abduction_fade_end 0.04521408072
+}
+fold {
+  slice1_mass 1
+  slice1_elasticity 2
+  slice1_support 1
+  slice2_mass 2
+  slice2_elasticity 4
+  slice2_support 0.1
+  slice3_mass 2
+  slice3_elasticity 1
+  slice3_support 0.3
+  slice4_mass 4
+  slice4_elasticity 0.1
+  slice4_support 3
+  slice5_mass 0.1
+  slice5_elasticity 3
+  slice5_support 0.1
+  slice6_mass 1
+  slice6_elasticity 2
+  slice6_support 1
+  elasticity_wander 0.025
+  elasticity_corner 4
+  strain_stiffening 1000
+  natural_pitch 198.94398720969056
+  pitch_per_tension 172.68742036983292
+}
+ear {
+  pitch_feedback 0
+}
+tongue {
+  physical 0
+  smooth_airway 1
+  lead 0
+  skeleton 1
+  skeleton_curve 1
+  skeleton_anchor_move 1.0
+  skeleton_smoothness 0
+  skeleton_stretch 0.8
+  skeleton_minimal_contact 1
+  skeleton_restart 0.01
+  skeleton_rise 2.5
+  skeleton_tip_weight 6
+  skeleton_stiffness 0.005
+  solid_hull 1
+  contact_depth 0
+  tip_pliancy 1
+  guard 1
+  feedback_aim 2
+  shaper_stiffness 0
+  lateral_from_posture 1
+  roles 1
+  role_anchor 1
+  lateral_spread 0.3
+  lateral_narrow 0.6
+  shaper_damping 1.0
+  valve_stiffness 40000
+  nozzle_stiffness 40000
+  gain 3
+  integral_rate 10
+  muscle_force 16000
+  support 1440
+  elasticity 80000
+  bending 8000
+  activation_time 0.015
+  damping_gain 0.08
+  vtl 1
+  vtl_body_radius 1.961594717
+  vtl_blade_along 0.6978934172
+  vtl_blade_lift 0.6163716506
+  vtl_root_bulge 0.3129901108
+}
+subglottal {
+  bronchial_length 8
+  bronchial_area 40
+  lung_port_scale 3
+}
+tract {
+  viscous_scale 1.262352558
+  radiation_mass_scale 0.6893270661
+  radiation_resistance_scale 1.5
+  hop_loss 0.004328867649
+}
+vtl {
+  glottal_flow 1
+  aspiration 1
+  aspiration_gain 0.3
+  aspiration_corner 3513.575577
+}
+recording {
+  highpass 50.61122732
+  presence_db 0.5080127536
+  presence_hz 4294.393661
+  presence_q 0.6650154126
+}
+tongue {
+  vtl_smooth_airway 1
+}
+anatomy {
+  epilarynx_height 1.987632567
+  epilarynx_area 1.195069446
+}

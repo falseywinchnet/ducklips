@@ -1,0 +1,99 @@
+# fit_blocks.py: sweep 3, turn 11
+breath {
+  lung_follow 0.005998898552
+}
+fold {
+  depth 0.296530716
+  cover_mass 0.09063147888
+  body_mass 0.3050348508
+  cover_stiffness 35540.2079
+  coupling_stiffness 89692.48241
+  support_stiffness 149795.165
+  vertical_stiffness 59565.75567
+  cover_loss 0.1014084158
+  support_loss 0.4097595966
+  contact_stiffness 898047.3222
+  contact_softness 0.0005321243222
+  muscle_fluctuation 0.01059996058
+  muscle_corner 96.07733631
+  natural_pitch 196.4890871
+  pitch_per_tension 171.7430091
+  elongation 71.22336377
+  elongation_reference 0.0026
+  elongation_release 0.01
+  elongation_floor 0.9
+  swing_per_pascal 4.89151576e-06
+  swing_onset 130
+}
+posture {
+  voicing_lower 0.01140508506
+  voicing_upper 0.005917931872
+  voicing_chink 0.0002057737631
+  closure_press 0.004222888894
+}
+ear {
+  pitch_feedback 0.07966197963
+  pitch_correction_limit 0.3
+}
+variation {
+  breath 0
+  tension 0
+  posture 0
+  wall 0.1046964217
+  wall_shared 0.3
+  tremor 0
+  adductor_tremor 0
+  breath_tremor 0
+  wander_gain 1.019400554
+}
+glottal_noise {
+  aspiration 6.531956049
+  closing_turbulence 0
+  jet_flux 0
+  flux_corner 0
+  fold_turbulence 0.8687682437
+}
+oral_noise {
+  frication 2.017829905
+  jet_attack 0.007914726361
+  strouhal 0.2
+  frication_band 3
+  jet_growth 0.4
+  jet_spread 0
+  jet_corner_ceiling 12000
+  lip_slit_width 2.5
+  jet_decay 1.2
+  obstacle_reach 0.8
+  labiodental 1.2
+}
+walls {
+  skin_gain 0.9550337598
+  skin_corner 323.599873
+  stiffness_scale 0.9378853589
+  loss_scale 0.8128474577
+  closure_pull 0.2497494648
+  closure_relaxation 0
+}
+branches {
+  piriform_loss 0.4257993854
+  piriform_port 0.4245340248
+  piriform_scale 1.106854592
+  piriform_smoothing 0
+  sinus_neck_scale 0.2044802011
+}
+tract {
+  hop_loss 0.01539549539
+  nose_hop_loss 0.4234174767
+}
+mouth {
+  release_speed 0.9906987546
+  sliver_area 0.02
+  flare_growth 1.6
+  flare_widest 30
+}
+kinematic {
+  amplitude 0.0007
+  phase_lag 1.22
+  softness 0.0005
+  jitter 0.5
+}

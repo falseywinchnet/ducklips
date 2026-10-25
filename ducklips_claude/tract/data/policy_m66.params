@@ -1,0 +1,99 @@
+# engine_net.py: the network's parameter tree
+breath {
+  lung_follow 0.006751619992
+}
+fold {
+  depth 0.2564527961
+  cover_mass 0.1026397451
+  body_mass 0.4472108635
+  cover_stiffness 40363.02658
+  coupling_stiffness 67585.06167
+  support_stiffness 167946.4762
+  vertical_stiffness 45567.76446
+  cover_loss 0.07255340444
+  support_loss 0.3876687662
+  contact_stiffness 972491.5575
+  contact_softness 0.0004927168524
+  muscle_fluctuation 0.01108100249
+  muscle_corner 93.2008103
+  natural_pitch 186.6485214
+  pitch_per_tension 184.6895083
+  elongation 51.21198113
+  elongation_reference 0.003181035348
+  elongation_release 0.00881373942
+  elongation_floor 0.8971396336
+  swing_per_pascal 5.572287301e-06
+  swing_onset 110.5729449
+}
+posture {
+  voicing_lower 0.01833253556
+  voicing_upper 0.01020576039
+  voicing_chink 0.0002237810716
+  closure_press 0.00427335625
+}
+ear {
+  pitch_feedback 0.100055308
+  pitch_correction_limit 0.2997193831
+}
+variation {
+  breath 0.006006406574
+  tension 0.01274485676
+  posture 0
+  wall 0.1059383962
+  wall_shared 0.2692215274
+  tremor 0.001454615145
+  adductor_tremor 0
+  breath_tremor 0.005206190983
+  wander_gain 0.7284323608
+}
+glottal_noise {
+  aspiration 6.721111981
+  closing_turbulence 0
+  jet_flux 0
+  flux_corner 0
+  fold_turbulence 1.070261834
+}
+oral_noise {
+  frication 2.374929259
+  jet_attack 0.0093601148
+  strouhal 0.1823252837
+  frication_band 3.310695339
+  jet_growth 0.3607275225
+  jet_spread 0
+  jet_corner_ceiling 11574.35829
+  lip_slit_width 2.401170332
+  jet_decay 1.16428303
+  obstacle_reach 0.7258884375
+  labiodental 1.067364609
+}
+walls {
+  skin_gain 0.7935351203
+  skin_corner 288.466283
+  stiffness_scale 0.8761677863
+  loss_scale 0.868547146
+  closure_pull 0.2741865176
+  closure_relaxation 0.007469679231
+}
+branches {
+  piriform_loss 0.4579088078
+  piriform_port 0.5029760271
+  piriform_scale 1.026841943
+  piriform_smoothing 0.1270302755
+  sinus_neck_scale 0.2131504522
+}
+tract {
+  hop_loss 0.0171458986
+  nose_hop_loss 0.4665182556
+}
+mouth {
+  release_speed 1.003091233
+  sliver_area 0.02422052583
+  flare_growth 1.526725882
+  flare_widest 38.60741444
+}
+kinematic {
+  amplitude 0.0007
+  phase_lag 1.22
+  softness 0.0005
+  jitter 0.5
+}

@@ -100,7 +100,64 @@ class Tube {
   void set_rest_area(Index node, double area);
   // A one-pole low-pass on every hop (k; 0 off): a loss growing with frequency.
   void set_wave_smoothing(double k) { wave_smoothing_ = k; }
+  // The hop filter as a shelf, g (x - b x') + k y' with g = (1 - k) / (1 - b):
+  // its loss capped at high frequency (b 0: the one-pole low-pass). For the
+  // reversible engine's nose: a one-pole loss strong enough to keep its
+  // split stable lost ~106 dB at the half step rate over the nose, which
+  // the peel must then undo.
+  void set_wave_shelf(double b) { wave_shelf_ = b; }
+  // True: the air's cross-sections are the rest geometry's; the linings act
+  // on the air only through their flow. (So the tube can be driven backward
+  // node by node: a node's wall-displaced area changed both its links'
+  // admittances, tying it to the next node inward; the replica with this
+  // left the engine's lip flow at 40.9 dB, 2026-10-19.)
+  void set_static_admittance(bool on) { static_admittance_ = on; }
+  // Scales every material's axial tension and recompiles the links (0: each
+  // node's lining moves on its own, for the reversible engine).
+  void scale_axial(double scale);
+  // A node whose area is at or under this (cm^2; 0: off) seals: both its
+  // links carry no flow and reflect every wave (lips or tongue shut, with
+  // no leak; the area floor alone left a closure leaking at -61 dB).
+  void set_seal_area(double area) { seal_area_ = area; }
+  double viscous_scale() const { return viscous_scale_; }
+  // A factor on the links' viscous resistance (viscous_resistance_per_cm).
+  void set_viscous_scale(double scale) { viscous_scale_ = scale; }
+  double wave_smoothing() const { return wave_smoothing_; }
+  // The hop loss follows each link's cross-section, as the boundary layers'
+  // (perimeter over area): k at 3 cm^2, more in narrow parts, less in wide.
+  void set_smoothing_by_area(bool on) { smoothing_by_area_ = on; }
+  // The radiating end's load (R parallel L): the end correction's air mass and
+  // the resistance, times these (1, 1: a piston in an infinite baffle).
+  void set_radiation_scales(double mass, double resistance) {
+    radiation_mass_scale_ = mass;
+    radiation_resistance_scale_ = resistance;
+  }
   double rest_area(Index node) const { return nodes_[static_cast<std::size_t>(node)].rest_area; }
+  // The air the frame draws from a node this step (cm^3/s) and a link's
+  // viscous resistance (diagnostic, for a replica of a moving tube).
+  double frame_flow(Index node) const { return frame_flow_[static_cast<std::size_t>(node)]; }
+  // The wave arriving at a node from its outer link next step, and the wave
+  // a side port sends into its node (diagnostic, for the reversible engine).
+  double backward_wave(Index link) const { return backward_[static_cast<std::size_t>(link)]; }
+  double side_incoming(int port) const { return side_incoming_[static_cast<std::size_t>(port)]; }
+  double left_incoming() const { return left_incoming_; }
+  double link_resistance(Index link) const { return link_resistance_[static_cast<std::size_t>(link)]; }
+  // A node's lining as compiled (diagnostic, for a replica of the tube): its
+  // surface (cm^2), cover and body masses (g), hoop, coupling and support
+  // stiffnesses (dyn/cm), cover and body damping (dyn s/cm), rest radius (cm).
+  void lining(Index node, double& surface, double& cover_mass, double& body_mass, double& hoop_k, double& coupling_k,
+              double& support_k, double& cover_c, double& body_c, double& rest_radius) const {
+    std::size_t i = static_cast<std::size_t>(node);
+    surface = surface_[i];
+    cover_mass = cover_mass_[i];
+    body_mass = body_mass_[i];
+    hoop_k = hoop_k_[i];
+    coupling_k = coupling_k_[i];
+    support_k = support_k_[i];
+    cover_c = cover_c_[i];
+    body_c = body_c_[i];
+    rest_radius = rest_radius_[i];
+  }
   void set_support_offset(Index node, double offset_cm);
   // Holding effort varies the support piece's stiffness (1 = nominal).
   // The support's holding factor glides to this (2 ms), recompiling the
@@ -123,6 +180,28 @@ class Tube {
   // the span is zero. (last < first: no such span.)
   // Nodes from `node` on are outside air (a flaring open end): their area
   // changes push no air. (Default: none.)
+  // The support factor's glide: 0 is linear with a 2 ms time constant (as
+  // before); otherwise in its logarithm over this many seconds. (Measured
+  // 2026-10-18: as the lips' end moved by a node, the next node's support
+  // went from 1 to 1000 times; linear, it reached 50 times within 0.1 ms
+  // and the wall snapped, a one-sample click at the same instants in every
+  // voice, up to -1 dB re peak.)
+  void set_support_log_glide(double seconds) { support_log_glide_ = seconds; }
+  // VocalTractLab 2.4's limit on how fast the areas the air sees may change
+  // (TdsModel::setTube, GPL: mathematics only): at most 400 cm^2/s, and an
+  // area may move from A only as far as the curve c t^4 would carry it in
+  // one step from where it sits on that curve (c 480e6 cm^2/s^4 opening, 40e6
+  // closing): an opening from closure grows as t^4, gently at first (0.1 cm^2
+  // after 3.8 ms; closing, 7.1 ms). Theirs, tuned "to avoid click
+  // artifacts" at releases and "chirp artifacts at closures". Off: none.
+  void set_area_limit(bool on) { area_limit_ = on; }
+  // The corner (Hz) of the two poles the articulators' pushed air passes
+  // (250 as before: chosen to kill the 1 kHz control-rate steps). Measured
+  // 2026-10-18 (bdl profile, a0101's /k/): the jaw and lips squeezing the front
+  // cavity pushed 30 cm^3/s out of the lips in steps of acceleration, heard
+  // as low thumps -8 to -16 dB re the vowel peak through a voiceless closure;
+  // real articulators move air below about 20 Hz.
+  void set_frame_corner(double hz) { frame_gain_ = 1.0 - std::exp(-2.0 * 3.14159265358979323846 * hz * kStepSeconds); }
   void set_quiet_from(Index node) { quiet_from_ = node; }
   void set_conserved_span(Index first, Index last) {
     conserved_first_ = first;
@@ -176,6 +255,7 @@ class Tube {
   void compile_link(std::size_t i);
   void refresh_geometry();
   void step_lining();
+  double hop_smoothing(double area) const;
   void step_air();
   void follow_opening();
   void scatter_links();
@@ -194,11 +274,24 @@ class Tube {
   std::vector<double> frame_flow_;     // cm^3/s the frame draws from each node's air
   std::vector<double> forward_smooth_;   // each link's waves after the hop's low-pass
   std::vector<double> backward_smooth_;
+  std::vector<double> forward_raw_;      // each link's last unsmoothed waves (the shelf's)
+  std::vector<double> backward_raw_;
   double wave_smoothing_ = 0.0;           // the hop low-pass's k (0: lossless hops)
+  double wave_shelf_ = 0.0;               // the hop filter's zero (0: a one-pole low-pass)
+  bool static_admittance_ = false;
+  double viscous_scale_ = 1.0;
+  double seal_area_ = 0.0;               // a node this narrow seals (0: off)
+  bool smoothing_by_area_ = false;
+  std::vector<double> hop_k_;             // per link, when the hop loss follows the area
+  double radiation_mass_scale_ = 1.0;
+  double radiation_resistance_scale_ = 1.0;
   std::vector<double> frame_low_;      // the frame's flow through the first of two 250 Hz poles
   std::vector<double> frame_lower_;    // and through the second
   double frame_gain_ = 1.0 - std::exp(-2.0 * 3.14159265358979323846 * 250.0 * kStepSeconds);
   Index quiet_from_ = 1 << 30;
+  double support_log_glide_ = 0.0;
+  bool area_limit_ = false;
+  std::vector<double> limited_area_;  // the areas as last limited (empty: not yet)
   Index conserved_first_ = 0;
   Index conserved_last_ = -1;
   std::vector<double> surface_;        // lining area of the node, cm^2

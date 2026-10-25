@@ -3,8 +3,11 @@
 //   SCORE is the body language written by the front end:
 //     say "text" x.wav --score SCORE --plan-only      (in ../voice)
 // Environment: TRACE=ms prints the cord, breath and narrowest place;
-// BRANCHES=pus keeps only the named side branches.
+// BRANCHES=pus keeps only the named side branches. PARAMS=file sets the
+// parameter tree (tract/parameter_tree.hpp) over the defaults and FOLDTUBE,
+// under the other switches; PARAMS_OUT=file writes the tree as spoken.
 
+#include "tract/parameter_tree.hpp"
 #include "tract/speaker.hpp"
 #include "voice/room.hpp"
 #include "voice/score.hpp"
@@ -14,6 +17,7 @@
 #include <cmath>
 #include <cstdint>
 #include <cstdio>
+#include <algorithm>
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
@@ -22,7 +26,7 @@
 
 namespace {
 
-bool read_score(const char* path, voice::Score& score) {
+bool read_score(const char* path, voice::Score& score, std::vector<tract::PhoneSpan>& phones) {
   std::ifstream input(path);
   if (!input) {
     return false;
@@ -30,6 +34,11 @@ bool read_score(const char* path, voice::Score& score) {
   std::string line;
   while (std::getline(input, line)) {
     if (line.empty() || line[0] == '#') {
+      // The planner's phone comments: the tongue's roles follow them.
+      tract::PhoneSpan span;
+      if (!line.empty() && tract::phone_span_from_comment(line, span)) {
+        phones.push_back(span);
+      }
       continue;
     }
     if (!voice::parse_score_line(line, score)) {
@@ -41,10 +50,100 @@ bool read_score(const char* path, voice::Score& score) {
   return true;
 }
 
+// The guard's fields of a GEOLOG frame: the planned tongue surface and the
+// guard surface (skull frame), then each section's intrusion (cm); empty
+// without the guard.
+void write_guard(std::FILE* log, const tract::Speaker& speaker, int tongue_points) {
+  bool guarded = tongue_points > 0 && speaker.tongue_settings().guard > 0.5;
+  for (int field = 0; field < 3; ++field) {
+    for (int point = 0; guarded && point < tongue_points; ++point) {
+      std::size_t p = static_cast<std::size_t>(point);
+      double x = 0.0;
+      double y = 0.0;
+      if (field == 0) {
+        speaker.tongue_point_to_skull(speaker.tongue().geometric().x[p], speaker.tongue().geometric().y[p], x, y);
+        std::fprintf(log, " %.4f %.4f", x, y);
+      } else if (field == 1) {
+        speaker.tongue_point_to_skull(speaker.tongue().guard_surface().x[p], speaker.tongue().guard_surface().y[p], x,
+                                      y);
+        std::fprintf(log, " %.4f %.4f", x, y);
+      } else {
+        std::fprintf(log, " %.4f", speaker.tongue().intrusion(point));
+      }
+    }
+    std::fprintf(log, " |");
+  }
+}
+
+// One GEOLOG frame (see GEOLOG below).
+void write_geometry(std::FILE* log, double now, tract::Speaker& speaker) {
+  tract::MidsagittalTract& anatomy = speaker.anatomy();
+  std::fprintf(log, "%.4f |", now);
+  for (int point = 0; point < anatomy.hull_points(); ++point) {
+    std::fprintf(log, " %.4f %.4f", anatomy.hull_x(point), anatomy.hull_y(point));
+  }
+  std::fprintf(log, " |");
+  for (int point = 0; point < anatomy.organ_points(); ++point) {
+    std::fprintf(log, " %.4f %.4f", anatomy.organ_x(point), anatomy.organ_y(point));
+  }
+  int tongue_points = speaker.physical_tongue() && speaker.tongue().ready() ? speaker.tongue().contour().count : 0;
+  const tract::TongueSettings& tongue_settings = speaker.tongue_settings();
+  bool thick = tongue_settings.blade_body > 0.5 || tongue_settings.spine > 0.5 || tongue_settings.skeleton > 0.5;
+  int underside_points = tongue_points > 0 && thick ? speaker.tongue().underside().count : 0;
+  std::fprintf(log, " | %d %d |", tongue_points, underside_points);
+  write_guard(log, speaker, tongue_points);
+  for (int point = 0; point < tongue_points; ++point) {
+    std::fprintf(log, " %.4f", speaker.tongue().penetration(point));
+  }
+  std::fprintf(log, " |");
+  // The skeleton tongue's supports (skull frame): the base's points, then the tip's.
+  for (int bone = 0; tongue_points > 0 && tongue_settings.skeleton > 0.5 && bone < 2; ++bone) {
+    for (int point = 0; point <= tract::Tongue::kBoneSegments; ++point) {
+      double x = 0.0;
+      double y = 0.0;
+      speaker.tongue_point_to_skull(speaker.tongue().bone_x(bone, point), speaker.tongue().bone_y(bone, point), x, y);
+      std::fprintf(log, " %.4f %.4f", x, y);
+    }
+  }
+  std::fprintf(log, " |");
+  tract::Tube& vocal = speaker.body().vocal();
+  tract::Index last = speaker.body().lip_end() > 0 ? speaker.body().lip_end() : vocal.active_count() - 1;
+  for (tract::Index node = 0; node <= last; ++node) {
+    std::fprintf(log, " %.5f", vocal.rest_area(node));
+  }
+  std::fprintf(log, "\n");
+}
+
 }  // namespace
 
 // Flush subnormal numbers to zero: decaying states (silent tubes, a released
 // breath) otherwise pass through subnormals, which are slow on every CPU.
+// The recording chain's low cut: a two-pole Butterworth high-pass at
+// `corner` Hz (bilinear transform, prewarped), in place.
+void high_pass(std::vector<float>& samples, double corner, double rate) {
+  double warped = std::tan(3.14159265358979323846 * corner / rate);
+  double root_two = std::sqrt(2.0);
+  double norm = 1.0 / (1.0 + root_two * warped + warped * warped);
+  double b0 = norm;
+  double b1 = -2.0 * norm;
+  double b2 = norm;
+  double a1 = 2.0 * (warped * warped - 1.0) * norm;
+  double a2 = (1.0 - root_two * warped + warped * warped) * norm;
+  double x1 = 0.0;
+  double x2 = 0.0;
+  double y1 = 0.0;
+  double y2 = 0.0;
+  for (float& sample : samples) {
+    double x0 = static_cast<double>(sample);
+    double y0 = b0 * x0 + b1 * x1 + b2 * x2 - a1 * y1 - a2 * y2;
+    x2 = x1;
+    x1 = x0;
+    y2 = y1;
+    y1 = y0;
+    sample = static_cast<float>(y0);
+  }
+}
+
 void flush_subnormals() {
 #if defined(__aarch64__)
   std::uint64_t control = 0;
@@ -61,7 +160,8 @@ int main(int count, char** values) {
     return 2;
   }
   voice::Score score;
-  if (!read_score(values[1], score)) {
+  std::vector<tract::PhoneSpan> phones;
+  if (!read_score(values[1], score, phones)) {
     std::fprintf(stderr, "cannot read %s\n", values[1]);
     return 1;
   }
@@ -88,6 +188,21 @@ int main(int count, char** values) {
     layout.jet_flux = 0.0;
     // The ear trims its pitch, as for the blown two-mass folds.
     layout.pitch_feedback = tract::BodyLayout().pitch_feedback;
+  }
+  std::vector<tract::ParameterEntry> parameters;
+  if (std::getenv("PARAMS") != nullptr) {
+    std::ifstream file(std::getenv("PARAMS"));
+    tract::ParameterNode tree;
+    std::string error;
+    if (!file || !tract::parse_parameters(file, tree, error)) {
+      std::fprintf(stderr, "PARAMS %s: %s\n", std::getenv("PARAMS"), file ? error.c_str() : "cannot read");
+      return 2;
+    }
+    tract::flatten_parameters(tree, parameters);
+    if (!tract::apply_layout_parameters(parameters, layout, error)) {
+      std::fprintf(stderr, "PARAMS %s: %s\n", std::getenv("PARAMS"), error.c_str());
+      return 2;
+    }
   }
   // FOLD=key=value,...: the fold tube's tissue (FoldTubeSettings): depth mc mb
   // kc kcb ks kv lossc losss contact soft muscle corner pitch per elong eref efloor.
@@ -264,6 +379,14 @@ int main(int count, char** values) {
     layout.sinuses = keep.find('s') != std::string::npos;
   }
   tract::Speaker speaker(layout, score, seed);
+  speaker.set_phones(phones);
+  {
+    std::string error;
+    if (!tract::apply_speaker_parameters(parameters, speaker, error)) {
+      std::fprintf(stderr, "PARAMS: %s\n", error.c_str());
+      return 2;
+    }
+  }
   if (std::getenv("PULL") != nullptr) {
     // PULL=cm: outward pull on the pharyngeal walls during voiced closures.
     speaker.set_closure_pull(std::strtod(std::getenv("PULL"), nullptr));
@@ -375,6 +498,12 @@ int main(int count, char** values) {
     // RELAX=share: pharyngeal wall release during voiced closures.
     speaker.set_closure_relaxation(std::strtod(std::getenv("RELAX"), nullptr));
   }
+  if (std::getenv("PARAMS_OUT") != nullptr) {
+    std::vector<tract::ParameterEntry> spoken;
+    tract::collect_parameters(layout, speaker, spoken);
+    std::ofstream file(std::getenv("PARAMS_OUT"));
+    tract::write_parameters(file, spoken);
+  }
 
   // Decimation to the audio rate: an eighth-order Butterworth at 16 kHz
   // (-28 dB at 24 kHz, -48 at 32). (A fourth-order one at 18 kHz let the
@@ -392,6 +521,12 @@ int main(int count, char** values) {
   // Diagnostics read once, not per step (getenv was 2% of the running time).
   double steps_from = 0.0;
   double steps_to = 0.0;
+  double ports_from = 0.0;
+  double ports_to = 0.0;
+  if (std::getenv("PORTLOG") != nullptr) {
+    ports_from = std::strtod(std::getenv("PORTLOG"), nullptr);
+    ports_to = std::strtod(std::strchr(std::getenv("PORTLOG"), ',') + 1, nullptr);
+  }
   if (std::getenv("STEPS") != nullptr) {
     steps_from = std::strtod(std::getenv("STEPS"), nullptr);
     steps_to = std::strtod(std::strchr(std::getenv("STEPS"), ',') + 1, nullptr);
@@ -417,6 +552,29 @@ int main(int count, char** values) {
     wave_from = std::strtod(std::getenv("WAVEDUMP"), nullptr);
     wave_to = std::strtod(std::strchr(std::getenv("WAVEDUMP"), ',') + 1, nullptr);
   }
+  // AREALOG=path: every millisecond, the time and every vocal node's rest
+  // area (cm^2) up to the lip opening (the geometry as articulated).
+  std::FILE* area_log = std::getenv("AREALOG") != nullptr ? std::fopen(std::getenv("AREALOG"), "w") : nullptr;
+  const long area_every = static_cast<long>(std::lround(1.0e-3 * tract::kStepRate));
+  // TONGUELOG=path: every millisecond with the physical tongue, its distance
+  // from the target (rms and largest, cm) and its muscles' activations
+  // (genioglossus posterior, anterior, styloglossus, hyoglossus, superior and
+  // inferior longitudinal, floor), then the tip and the target's tip.
+  std::FILE* tongue_log = std::getenv("TONGUELOG") != nullptr ? std::fopen(std::getenv("TONGUELOG"), "w") : nullptr;
+  // GEOLOG=path: every GEOEVERY ms (default 20: 50 frames a second), the midsagittal geometry
+  // the body speaks through (skull frame, cm): the time, the hull outline
+  // (pharyngeal wall, velum, palate, upper teeth, upper lip), the organ
+  // outline (larynx front, tongue, lower teeth, lower lip, floor), how many
+  // leading organ points are the tongue's surface (2 before it) and, for a
+  // thick tongue, how many follow it as its cap, underside and frenulum, with the
+  // guard (tongue.guard) the planned tongue surface, the guard surface and
+  // each section's intrusion (empty fields without it), each section's
+  // depth inside the hull (cm), the skeleton tongue's supports (empty
+  // without it), and the vocal tube's
+  // node areas (cm^2) to the lip opening. Fields are separated by " | ".
+  std::FILE* geometry_log = std::getenv("GEOLOG") != nullptr ? std::fopen(std::getenv("GEOLOG"), "w") : nullptr;
+  double geometry_ms = std::getenv("GEOEVERY") != nullptr ? std::atof(std::getenv("GEOEVERY")) : 20.0;
+  const long geometry_every = std::max(1L, static_cast<long>(std::lround(geometry_ms * 1.0e-3 * tract::kStepRate)));
   // ENDLOG=1: every change of the vocal tube's open end (active nodes).
   bool end_log = std::getenv("ENDLOG") != nullptr;
   tract::Index last_lip_end = -1;
@@ -463,8 +621,37 @@ int main(int count, char** values) {
         for (tract::Index node = 0; node < vocal.count(); ++node) {
           std::printf(" %.0f", vocal.pressure(node));
         }
-        std::printf(" | cord %.3f\n", speaker.body().cord().flow());
+        std::printf(" | cord %.3f %.6f\n", speaker.body().cord().flow(), speaker.body().cord().area());
       }
+    }
+    if (tongue_log != nullptr && step % area_every == 0 && speaker.physical_tongue() && speaker.tongue().ready()) {
+      double rms = 0.0;
+      double largest = 0.0;
+      speaker.tongue().target_error(rms, largest);
+      std::fprintf(tongue_log, "%.4f %.4f %.4f %.3f %.3f %.3f", step / tract::kStepRate, rms, largest,
+                   speaker.tongue().target_area(), speaker.tongue().current_area(), speaker.tongue().reach_error());
+      for (int muscle = 0; muscle < tract::Tongue::kMuscles; ++muscle) {
+        std::fprintf(tongue_log, " %.3f", speaker.tongue().activation(muscle));
+      }
+      // Then the tip (jaw frame, cm) and the tip the target aims at, and the
+      // planner's target area before the hydrostat's shift (cm^2).
+      std::size_t tip = static_cast<std::size_t>(speaker.tongue().contour().count - 1);
+      std::fprintf(tongue_log, " | %.4f %.4f %.4f %.4f %.3f %.4f %.4f %.4f\n", speaker.tongue().contour().x[tip],
+                   speaker.tongue().contour().y[tip], speaker.tongue().target().x[tip],
+                   speaker.tongue().target().y[tip], speaker.tongue().planned_area(), speaker.tongue().goal_tip_miss(),
+                   speaker.tongue().goal_miss(), speaker.tongue_lift());
+    }
+    if (area_log != nullptr && step % area_every == 0) {
+      tract::Tube& vocal = speaker.body().vocal();
+      tract::Index last = speaker.body().lip_end() > 0 ? speaker.body().lip_end() : vocal.active_count() - 1;
+      std::fprintf(area_log, "%.4f", step / tract::kStepRate);
+      for (tract::Index node = 0; node <= last; ++node) {
+        std::fprintf(area_log, " %.5f", vocal.rest_area(node));
+      }
+      std::fprintf(area_log, "\n");
+    }
+    if (geometry_log != nullptr && step % geometry_every == 0) {
+      write_geometry(geometry_log, step / tract::kStepRate, speaker);
     }
     if (end_log && speaker.body().lip_end() != last_lip_end) {
       last_lip_end = speaker.body().lip_end();
@@ -477,6 +664,13 @@ int main(int count, char** values) {
     if (step % 2 == 0) {
       raw.push_back(filtered);
       peak = std::fmax(peak, std::fabs(filtered));
+    }
+    if (ports_from < ports_to) {
+      // PORTLOG=from,to (seconds): every step's side ports (cm^2), velum and under the tongue.
+      double now = step / tract::kStepRate;
+      if (now >= ports_from && now < ports_to) {
+        std::printf("ports %.6f %.6g %.6g\n", now, speaker.body().velum_port(), speaker.body().under_tongue_port());
+      }
     }
     if (steps_from < steps_to) {
       // STEPS=from,to (seconds): every step's flows, for hunting artefacts.
@@ -506,6 +700,7 @@ int main(int count, char** values) {
                   held.jaw_angle, held.tongue_x, held.tongue_y, held.tip_x, held.tip_y, held.lip_aperture,
                   held.lip_protrusion, held.lip_width, held.larynx_drop, held.lateral, held.groove);
       const tract::TractProfile& cuts = speaker.profile();
+      std::printf("teeth arc %.3f cm\n", cuts.teeth_arc);
       for (int cut = 0; cut < cuts.count; ++cut) {
         std::size_t index = static_cast<std::size_t>(cut);
         std::printf("cut %.3f area %.4f width %.4f at %.3f %.3f\n", cuts.arc[index], cuts.area[index],
@@ -542,6 +737,12 @@ int main(int count, char** values) {
   if (cycles != nullptr) {
     std::fclose(cycles);
   }
+  if (area_log != nullptr) {
+    std::fclose(area_log);
+  }
+  if (tongue_log != nullptr) {
+    std::fclose(tongue_log);
+  }
   double elapsed = std::chrono::duration<double>(std::chrono::steady_clock::now() - began).count();
   std::vector<float> samples;
   samples.reserve(raw.size());
@@ -555,7 +756,13 @@ int main(int count, char** values) {
   if (std::getenv("ROOM") == nullptr || std::strtod(std::getenv("ROOM"), nullptr) != 0.0) {
     voice::RoomOptions room;
     room.seed = seed;
+    room.presence_db = layout.recording_presence_db;
+    room.presence_hz = layout.recording_presence_hz;
+    room.presence_q = layout.recording_presence_q;
     voice::apply_room(samples, tract::kAudioRate, room);
+  }
+  if (layout.recording_highpass > 0.0) {
+    high_pass(samples, layout.recording_highpass, tract::kAudioRate);
   }
   write_wave(values[2], samples, static_cast<int>(tract::kAudioRate));
   std::fprintf(stderr, "%s: %.2f s of speech in %.2f s (%.1fx real time)\n", values[2], score.duration, elapsed,

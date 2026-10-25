@@ -1,0 +1,16 @@
+# Connected speech system 'open' (Astra 42c7337 system-presets.mjs).
+pressure 850
+wander 0.06
+variation 0.1
+elasticity_scale 1
+source body
+output lips
+tube body open_body.txt connected 73021
+tube mouth open_mouth.txt connected 3279216042
+tube lips open_lips.txt open 3015239421
+tube sinus open_sinus.txt closed 3284571737
+tube undertongue open_undertongue.txt closed 3755857535
+connect body:outlet mouth:inlet
+connect mouth:outlet lips:inlet
+connect mouth:0:0.65 sinus:inlet
+connect mouth:2:0.35 undertongue:inlet

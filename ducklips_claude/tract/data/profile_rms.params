@@ -1,0 +1,196 @@
+# rms profile start: VTL-tongue voice, anatomy 1.05 (rms F3 about 8% under bdl)
+# the VocalTractLab-style tongue (tongue.vtl 1, physical off) on the NATO-fitted voice (2026-10-18)
+# voice_vtl2025_nato_fric + tongue.skeleton_stretch 0.8 (the l reaches the ridge; 2026-10-18)
+# NATO fit + 6 ms port glide + frication 0.5, jet corner ceiling 6 kHz (harsh ch/f/s 7-9 dB loud, peaking at 10 kHz)
+# NATO fit + side ports cross-fading over 6 ms (branches.glide)
+# cord_fit_sentences.py: VTL-2025 glottis and variation fitted to the owner's sentences, cost 3.126
+# VTL 2.4 glottis 2025 (JD2 modal) + full, on V1's body; speak KINEMATIC=1
+# VTL 2.4 Geometric glottis 2025, JD2 modal shape, on V1's body; speak KINEMATIC=1
+# The engine's parameter tree as m64 speaks it (FOLDTUBE=1, the articulatory
+# body): the start of the behavioural fit (analysis/fit_blocks.py). Format and
+# paths: include/tract/parameter_tree.hpp. Dumped with PARAMS_OUT.
+breath {
+  lung_follow 0.006
+}
+fold {
+  depth 0.3
+  cover_mass 0.09
+  body_mass 0.3
+  cover_stiffness 36000
+  coupling_stiffness 90000
+  support_stiffness 150000
+  vertical_stiffness 60000
+  cover_loss 0.1
+  support_loss 0.4
+  contact_stiffness 900000
+  contact_softness 0.0005
+  muscle_fluctuation 0.005
+  muscle_corner 100
+  natural_pitch 197
+  pitch_per_tension 171
+  elongation 70
+  elongation_reference 0.0026
+  elongation_release 0.01
+  elongation_floor 0.9
+  swing_per_pascal 4.9e-06
+  swing_onset 130
+}
+posture {
+  voicing_lower 0.008603763936
+  voicing_upper 0.004063432696
+  voicing_chink 0
+  closure_press 0.004
+}
+ear {
+  pitch_feedback 0.08
+  pitch_correction_limit 0.3
+}
+variation {
+  breath 0.01025418098
+  tension 0.01870866405
+  posture 0
+  wall 0.05
+  wall_shared 0.3
+  tremor 0.002545518788
+  adductor_tremor 0
+  breath_tremor 0.1140229365
+  wander_gain 1
+}
+glottal_noise {
+  aspiration 8
+  closing_turbulence 0
+  jet_flux 0
+  flux_corner 0
+  fold_turbulence 1
+}
+oral_noise {
+  frication 0.5
+  jet_attack 0.008
+  strouhal 0.2
+  frication_band 3
+  jet_growth 0.4
+  jet_spread 0
+  jet_corner_ceiling 6000
+  lip_slit_width 2.5
+  jet_decay 1.2
+  obstacle_reach 0.8
+  labiodental 1.2
+}
+walls {
+  skin_gain 1
+  skin_corner 250
+  stiffness_scale 1
+  loss_scale 1
+  closure_pull 0.25
+  closure_relaxation 0
+}
+branches {
+  piriform_loss 0.5
+  piriform_port 0.6
+  piriform_scale 1
+  piriform_smoothing 0
+  sinus_neck_scale 0.25
+  glide 0.006
+}
+tract {
+  hop_loss 0.02
+  nose_hop_loss 0.4
+}
+mouth {
+  release_speed 1
+  sliver_area 0.02
+  flare_growth 1.6
+  flare_widest 30
+}
+kinematic {
+  amplitude 0.0003837277308
+  phase_lag 0.9003369709
+  softness 0.0005
+  jitter 0.5582099664
+  flutter 30.46639972
+  geometric_2025 1
+  pulse_shape -0.4885573489
+  relative_amplitude 1
+}
+fold {
+  slice1_mass 1
+  slice1_elasticity 2
+  slice1_support 1
+  slice2_mass 2
+  slice2_elasticity 4
+  slice2_support 0.1
+  slice3_mass 2
+  slice3_elasticity 1
+  slice3_support 0.3
+  slice4_mass 4
+  slice4_elasticity 0.1
+  slice4_support 3
+  slice5_mass 0.1
+  slice5_elasticity 3
+  slice5_support 0.1
+  slice6_mass 1
+  slice6_elasticity 2
+  slice6_support 1
+  elasticity_wander 0.025
+  elasticity_corner 4
+  strain_stiffening 1000
+  natural_pitch 198.94398720969056
+  pitch_per_tension 172.68742036983292
+}
+ear {
+  pitch_feedback 0
+}
+tongue {
+  physical 0
+  smooth_airway 1
+  lead 0
+  skeleton 1
+  skeleton_curve 1
+  skeleton_anchor_move 1.0
+  skeleton_smoothness 0
+  skeleton_stretch 0.8
+  skeleton_minimal_contact 1
+  skeleton_restart 0.01
+  skeleton_rise 2.5
+  skeleton_tip_weight 6
+  skeleton_stiffness 0.005
+  solid_hull 1
+  contact_depth 0
+  tip_pliancy 1
+  guard 1
+  feedback_aim 2
+  shaper_stiffness 0
+  lateral_from_posture 1
+  roles 1
+  role_anchor 1
+  lateral_spread 0.3
+  lateral_narrow 0.6
+  shaper_damping 1.0
+  valve_stiffness 40000
+  nozzle_stiffness 40000
+  gain 3
+  integral_rate 10
+  muscle_force 16000
+  support 1440
+  elasticity 80000
+  bending 8000
+  activation_time 0.015
+  damping_gain 0.08
+  vtl 1
+}
+subglottal {
+  bronchial_length 8
+  bronchial_area 40
+  lung_port_scale 3
+}
+tract {
+  viscous_scale 0.2
+}
+vtl {
+  glottal_flow 1
+  aspiration 1
+  aspiration_gain 13.35265496
+}
+anatomy {
+  scale 1.05
+}

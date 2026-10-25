@@ -1,3 +1,5 @@
+> **OWNER RULE (2026-10-20): NO CALIBRATION, EVER.** No fine-tuning, fitting, per-word patches, per-speaker profile fits, or tuned constants. For the past week fit was substituted for understanding. Progress comes only from structure: the physics, the direct inverse, and knowing why something works or breaks. Search scaffolding added since 2026-10-19 (arrival grids, time sweeps, joint guards, sane clamps, block polishes, vowel revisits) is labelled REJECTED as a method: it is fit, not understanding. Round-trip dB numbers from it show only that the model can be inverted; they are not progress.
+
 # Segment-module tract — notes
 
 Design: `../learned/segment_design.md`. Sources of the ideas: `../learned/`.
@@ -2066,3 +2068,1712 @@ Owner: "yes and lets try b1".
   - **The fix.** After a fricative, a following closure gets the voice only once it has sealed (`kSealSettle` 25 ms after the fricative's end). Before an affricate the fricative emits no voicing at all: a voiced /dZ/ opens for its hiss and re-closes the folds at its own end, so it is devoiced across "fox jumps" as in English.
   - In this sentence only that one glottis event changed. The glottis now stays at 0.19–0.21 cm² from the /s/ through the /dZ/ closure.
 - `listen/m63_fox_jumps.wav`.
+- Owner: "you can commit these changes. okay. lets do the SNR comparison to NATO and work to refine." Committed and pushed 0f9b6fe (`claude/segment-voice`, `ducklips_claude/`).
+- **Band signal-to-noise against NATO** (`analysis/nato_snr.py`). The 26 NATO words, rendered by the main line (say --organs, speak FOLDTUBE=1), against the NATO reading (`ref/nato/`) and the owner's two passes (`ref/user_nato.wav`).
+  - **The method.** Every glottal cycle in the loud stretches (within 20 dB of the word's peak) is found by waveform matching, with none dropped for irregularity. Each is compared with the next band by band: HNR = 10 log10(r / (1 − r)). Medians per word.
+    - Gated to clean cycles (match > 0.9, as `bandhnr.py`), ours scored 2–10 dB over both references: the gate kept only our best cycles. pyin-based cycle finding (wmatch) found no voice at all in 6 of our words (Delta, Kilo ...), though the fold log shows cycles.
+  - **Recording floors.** The owner's recording is 63 dB under the speech in every band but 4–7 kHz (49): not limiting.
+  - **Jitter.** Over clean cycles, RAP median 0.34% (NATO 0.29, owner 0.26), p90 1.78% (0.97, 0.84); shimmer 0.56 dB (0.56, 0.60). Our tail is onsets: about 3% for the first two cycles after each voice onset, under 1% from the third.
+  - **Energy-weighted parts** (`/tmp/es/hn.py`): per band, harmonic r·E and noise (1 − r)·E summed over loud cycles, dB re the lowest band's total, median over words. At 1–4 kHz ours matched within 0.5 dB. At 4–7 kHz ours had 7 dB too much of both parts:
+
+    | 4–7 kHz | Harmonic | Noise |
+    |---|---|---|
+    | ours | −23.9 | −22.0 |
+    | owner | −30.9 | −28.2 |
+    | NATO | −33.4 | −27.6 |
+
+  - **Levers, at 4–7 kHz:**
+    - closure softness (FOLD soft 0.002–0.004) tilts all bands: 2–4 kHz under the owner before 4–7 matches;
+    - aspiration moves only the noise;
+    - cover loss 0.3 is worse;
+    - **piriform recesses at full size** (their 4.5 kHz zero): harmonic −29.6, noise −26.4.
+  - **Adopted: piriform ×1, vowels retuned** (organ_vopt3, W 10, PIRISCALE=1, then a second pass for iy uw ao ah, MAXFEV 700). Formant errors at full size before retuning:
+    - most F1 and F2 down 0.5–2 st; /aa/ F2 −2.0, /ao/ F2 −4.5.
+  - Retuned: within 0.5 st: ih eh ae aa uh ey ax; ah 1.4, ow 1.2, iy 1.4 (F2 2150, stuck), uw 2.0 (F3 2244), ao 2.9.
+    - Shape errors: aa 0.50 → 0.57, uh 0.42 → 0.69, others within about 0.05.
+  - **Now, against the owner** (per-cycle medians, ours minus owner): +1.8 / +3.1 / +0.6 / +0.6 dB (was +2.1 / +4.0 / +2.0 / +1.5). Clean cycles 61% (owner 66). Energy-weighted harmonic within 1.7 dB in every band; noise at 4–7 kHz −24.5 against −28.2.
+  - **Aspiration kept at 8.** The breath noise is concentrated in the loudest, highest-flow cycles (v³), the owner's more evenly; lowering the gain cannot fix that.
+    - At 5: energy-weighted noise within 0.7 dB in every band, but the typical cycle too clean (per-cycle +3.3 / +4.1 / +3.4 / +3.2).
+    - /hh/ above 2 kHz re the loudest 20 ms (`/tmp/es/hhlev.py`): bdl −30.5 (186 tokens; p25 −35.9). Ours ("hello"): m63 −28.0; piriform ×1 −31.3 at aspiration 8, −33.7 at 6, −35.3 at 5.
+  - **m64** (owner's sentence): "body" /aa/ F2 now reaches 1172 Hz (m60 1274; bdl 1100–1250). Band HNR 19.4 / 12.8 / 6.4 / −0.9. Clicks 6.9/s (m62 5.6): OPEN, possibly the weaker steady sound above 4 kHz exposing transients.
+  - **Next:** the 1–2 kHz per-cycle excess (+3 dB); the noise's dependence on flow (more even through the cycle and from cycle to cycle).
+- `listen/m64_full_piriform.wav`.
+- Owner: "lets try turning this into an blockwise AST system and finetuning to match the human voice generations, ie, a gradient descent behavioral finetune ... we want to dampen shifting or make it so massive shifts take a long time, too, so it doesnt explode."
+- **The parameter tree** (`include/tract/parameter_tree.hpp`, `src/parameter_tree.cpp`). The engine's tunable settings are declared once as a tree of named blocks: breath, fold, posture, ear, variation, glottal_noise, oral_noise, walls, branches, tract, mouth, kinematic (74 leaves; 42 are free in the fit).
+  - Each leaf is bound to a field of the body's layout (applied before the body is built) or a setting of the speaker (applied after). An undeclared path is an error.
+  - `speak` reads a block file with `PARAMS=file` (over the defaults and FOLDTUBE, under the other switches); `PARAMS_OUT=file` writes the tree as spoken.
+  - New layout fields `wall_stiffness_scale` and `wall_loss_scale` scale every vocal wall's support. The speaker gained single-value setters and getters.
+  - `data/voice.params` is m64's tree. **MEASURED:** dumped and read back, Alfa renders bit-identical.
+- **The fit** (`analysis/fit_blocks.py`). Block-coordinate SPSA in normalized units (log or linear per leaf, bounded): two renders of all 26 NATO words per gradient (same seed), Adam-like moments.
+  - **Damping.** Each step is capped by its block's trust radius (≤ 0.1 units). A spring pulls every leaf back toward its start (ANCHOR). A step is rendered before it is kept: if the loss does not fall (or a render fails, goes non-finite or loses its voice) it is undone, the radius halved and the momentum cleared.
+  - A second seed checks for overfitting every 10 iterations. One evaluation (26 words, rendered and measured) takes about 4 s on the Mini.
+- **The behavioural loss failed validation; nothing was fitted.** The loss: per word, band HNR medians and spreads, RAP and shimmer, voiced band balance, pitch span, clicks and DTW level contours, each z-scored by how much the three human readings differ, through a Huber function. The test: the human readings scored against the other two (leave one out) must beat our sources.
+
+  | Scored against | Loss |
+  |---|---|
+  | humans, leave one out | owner 1: 0.77, owner 2: 0.87, NATO: 0.76 |
+  | m64 fold tube, same references | 1.17–1.23 |
+  | no aspiration, same references | 1.09–1.15 |
+  | **kinematic source (Perfect Paul, rejected)**, same references | **0.72–0.78** |
+
+  - Against all three readings: kinematic 0.66, m64 1.09.
+  - The rejected formula source scores like a person, better on hnr, perturbation, contour and span. Those statistics were matched onto the kinematic source in m51–m52. Scoring distance from the humans' mean also rewards averageness: a voice at the mean of three readings beats any one real reading (span: humans 1.07–1.32, kinematic 0.58–0.87).
+  - **REJECTED as a steering loss.** It would steer toward Perfect Paul.
+- **Exploration** (13 per-word candidates, scratch `explore.py`): high-band level against low-band level per cycle (slopes 1–2, 2–4, 4–7 kHz), pitch–level correlation and slope, lag-1 correlation of period and amplitude changes, onset cycles and onset/offset pitch, cycle-to-cycle tilt flicker, level and tilt ranges.
+  - For every one, a human reading falls outside the other two readings' range (widened by half) at least as often (6–18 of 26 words) as the kinematic source falls outside all three (2–9). No summary statistic of 26 words separates people from the formula source.
+- **OPEN:** a steering signal that does separate them. CANDIDATE: a pretrained audio critic (AudioSet's Audio Spectrogram Transformer has "Speech synthesizer" beside "Male speech"); it must first rate the owner, NATO and bdl human and the kinematic source synthetic. Needs a model download (owner's permission).
+- Owner: "alternating least squares, is what i meant. blockwise." (not an abstract syntax tree; the parameter tree stays as the fit's address space).
+- **The ALS fit** (`analysis/fit_blocks.py`; the SPSA version is kept as `analysis/fit_spsa_summary.py`, REJECTED; block files in `analysis/parameter_files.py`).
+  - **Residuals, paired.** For each NATO word, each of the owner's loud frames (10 ms hop, 25 ms window, within 35 dB of the word's loudest) has eight features: four band levels (dB re the loudest frame) and four band periodicities (HNR one period apart).
+    - Our frames are aligned to the owner's by DTW on the band levels. Each owner frame is met by the mean of our frames aligned to it.
+    - Residual = (ours − owner) / scale, plus one per word: the median |cents| between heard and intended pitch, divided by 20.
+  - **Blocks, alternated.** The alignment is its own block: solved by DTW at the start of each parameter block's turn, then held, so the residual vector keeps its length.
+    - Each parameter block in turn: a forward-difference Jacobian (k + 1 renders of 26 words), then a Levenberg–Marquardt step on mean(r²) + ANCHOR·Σu².
+  - **Dampers:**
+    - λ per block (×4 per rejected step, ½ per kept one, floor 0.05);
+    - each |d| capped at the block's radius (≤ 0.1 units);
+    - the anchor's spring toward the start;
+    - render-before-keep;
+    - a second seed is scored after each sweep.
+  - **Smoke test** (one sweep, stopped after two blocks): breath 1.1152 → 1.1137 kept. Fold: the first step (λ 1) raised the cost to 1.1208 and was undone; at λ 4, radius 0.025, 1.1153 kept. The mechanics work; gains of 0.1% are at noise level.
+- **Data fault: the second half of `ref/user_nato.wav` is not the alphabet in order.**
+  - `nato_compare.OWNER_SPANS[1]` (31.9–62.3 s) labels its 26 segments Alfa…Zulu, and the segment boundaries are right. But matched by MFCC DTW against the owner's own pass 1, only "Charlie" lands on its label.
+  - The same matcher puts the NATO reader's words (a different speaker) on the right owner word 12 of 26 times.
+  - The recording has 39 segments after 31.9 s. Before this fault was found, per-frame band levels differed 10–17 dB rms between the two "passes" in the loud frames.
+  - The m64 "owner" SNR column (`nato_snr.py`) averaged both passes, so half of it is other words. OPEN: what the owner read there.
+- **Validation, against pass 1 only** (scales from the faulty pass 2, which scales every row alike; mean squared residual):
+
+  | Candidate | Loss |
+  |---|---|
+  | NATO reader (another person) | 1.024 |
+  | no aspiration | 1.009 |
+  | m64 | 0.856 |
+  | kinematic (Perfect Paul) | 0.802 |
+
+  - The rejected source again lands nearest the owner, on periodicity: 0.857 against m64's 0.960. The fit would chase the same per-frame noise statistics that made Perfect Paul.
+  - **Not run beyond the smoke test.**
+- Owner: "listen. what you're doing is tuning the model to make samples that are closely matched to the real samples. okay?" then "no. not my voice. real reference samples."
+  - **GIVEN:** the objective is closeness to real reference recordings; no human-versus-rejected-source gate.
+- **The fit retargeted to the NATO reference reader** (`ref/nato`, 26 words; the owner's recording is no longer a target).
+  - **Frame features (17).** Spectral shape: twelve log-spaced bands, 200 Hz–7 kHz, re the frame's own level, floored at −40 dB. The frame's level re the word's loudest, floored at −50. Periodicity of four bands.
+  - **Why the floors.** The reference is a processed recording: noise-gated to −120 dB in pauses, with quiet bands emptied to −100 dB as a lossy coder does (Alfa's "fa": 3.9–5.2 kHz at −94 to −113 dB). Unfloored, those frames dominated: 15–20 dB rms per band.
+  - **Why the trim.** Both sides are trimmed to their loud span (35 dB, 3-frame margin) before DTW. Our renders carry about 0.6 s of silence the reference words do not, and DTW, forced end to end, paired reference speech with it.
+  - Scale 3 dB for every feature.
+  - **m64 against the reference (MEASURED):** ours minus reference, mean per band 200 Hz → 7 kHz:
+    - +12.6 / +11.2 dB at 200–360 Hz;
+    - −3 to +4 dB at 0.5–2 kHz;
+    - +6.3 / +9.5 / +8.0 dB at 2.1–5.2 kHz;
+    - per-frame scatter about 10 dB per band (vowel formants of two speakers).
+  - **Costs:** m64 14.96 (shape 18.0, level 12.4, periodicity 6.7, pitch 1.9); kinematic 15.50.
+- **Render noise against the residual** (MEASURED, segment-pooled):
+  - m64's rms residual against the reference: 2.93 units (3 dB each);
+  - the same tree at another seed changes it by 0.54;
+  - fold.cover_mass × 1.001 changes it by 0.12.
+  - Frame by frame (before pooling) every step of the first ALS run was undone: a nudged parameter re-draws the folds' cycle-to-cycle course, so per-frame differences were mostly chance. Residuals are now averaged over each third of a word's loud frames, with a 0.3-unit difference step.
+- **Trust radius widened, 0.05 → 0.2 units (max 0.4).** At 0.05 the gain per step (about 0.005) sat under the chance in the cost (0.01–0.03), and the dampers stalled the fit. With unit 0.2 on a log scale, 0.2 units is 4% per turn.
+  - The linear model then predicted the kept steps: fold 8.511 predicted against 8.560 rendered; posture 8.530 against 8.518.
+- Owner: "can try adam instead if desired. blockwise ASL is just my 'safe bet' when working with unknown problems". ALS kept: it converged.
+- **The fit: four sweeps (MEASURED).** The training cost fell 8.578 → 8.048 over four sweeps; the untrained seed 51117 was scored after each.
+
+  | Cost | m64 | Fitted |
+  |---|---|---|
+  | seed 73021 (fitted on) | 8.578 | 7.990 (−6.9%) |
+  | seed 51117 (never fitted) | 8.905 | 8.246 (−7.4%) |
+
+  - Groups at 73021: shape 11.19 → 10.36, level 4.94 → 4.63, periodicity 2.22 → 2.25, pitch 1.93 → 1.70.
+  - The branches block gave the largest gain (−0.09 per sweep).
+- **What moved** (`data/fitted_m65.params`):
+  - piriform port 0.6 → 0.42 cm², piriform scale 1.0 → 1.11, piriform loss 0.5 → 0.43, sinus necks 0.25 → 0.20;
+  - aspiration 8 → 6.5, fold turbulence 1.0 → 0.87;
+  - tract hop loss 0.02 → 0.015;
+  - walls: support loss × 0.81, stiffness × 0.94, skin corner 250 → 324 Hz;
+  - fold tissue within 1–2% of its start (λ climbed to 2000 there: its steps did not pay).
+- **The PARAMS round trip** is bit-identical on the sentence (data/voice.params against no PARAMS).
+- **m65, the owner's sentence:**
+  - band HNR 19.6 / 12.2 / 6.5 / −2.7 (m64 now: 18.8 / 12.3 / 6.3 / −1.3);
+  - clicks 7.1/s (6.2).
+- `listen/m65_als_fit.wav`; `listen/m65_before_m64.wav` (m64 rendered by today's code, for A/B).
+- **Next:** more sweeps, with the organs (vowel postures, organs.txt) as blocks. Shape, where the remaining cost lies, is mostly formants, which only the organs can move. Then sentences as well as words.
+- Owner on m65: "honestly? it sounds completely the same."
+  - The fit moved few parameters, by a few percent, on a coarse measure. The fold tissue never moved: its λ climbed to 2000.
+- Owner: "build a simple neural network where the neurons track parameters. all of them. and we design it so that it doesnt explode too fast anywhere. then we can try ALS or adamw on it. we're not training a neural network- we're running a policy optimizer to finetune an engine."
+- **The engine network** (`analysis/engine_net.py`). 186 neurons in 24 blocks: 69 tree leaves, plus 13 vowels × 9 posture coordinates.
+  - **Left out (5):** the four kinematic.* leaves, which act only on the kinematic source, and glottal_noise.flux_corner, whose 0 is a switch.
+  - **Activation.** Each neuron has a latent z (0 at the start) and a bounded, saturating activation:
+    - log or linear: sigmoid between bounds, biased so z = 0 gives the start;
+    - "onset": high·tanh(max(z, 0)), for causes that start off (the variations, closing turbulence, jet flux ...).
+  - **Bounds:**
+    - tree leaves ×/÷2.5 by default, explicit ranges for 22;
+    - vowels: jaw ±4°, tongue body and tip ±0.6 cm, aperture ×/÷2, protrusion −0.1 to +0.5, width ±1, larynx −0.2 to +0.5.
+  - Every candidate is re-planned by `say` with its own postures (under 10 ms a word).
+  - **MEASURED:** at z = 0 the network reproduces m64's cost exactly (8.5776).
+- **The policy optimizer** (`analysis/policy_fit.py`).
+  - **adamw:** antithetic ES over all neurons. 6 pairs per step, σ 0.2; the same seed within a pair, rotating over 8 seeds across pairs. Rank-shaped costs feed AdamW (rate 0.03, β 0.9 / 0.99).
+    - Dampers: each latent's step clipped at 0.05; decoupled decay 0.01 toward the start; saturating activations; the policy rendered at two seeds every 5 steps, rolled back to the best if 3% worse (rate halved, moments cleared).
+  - **als:** the blockwise Levenberg–Marquardt of fit_blocks.py in latent space, over the 24 blocks.
+  - **First adamw steps:** population mean 9.85 → 9.30 in 5 steps. The policy (mean of seeds 73021 and 51117) went 8.741 → 8.546, not yet at the four-sweep ALS fit on the body (8.118 on the same two seeds).
+- **adamw, 80 steps (MEASURED):** policy cost (mean of seeds 73021 and 51117) 8.741 → 7.219 (best, step 70; −17%). The body-only ALS fit reached 8.118. Still falling: population 9.85 → 7.43. The rms latent 0.32; no rollbacks.
+  - **Largest moves:**
+    - fold rest gaps lower 0.011 → 0.018 cm (+67%), upper 0.006 → 0.010 (+70%);
+    - fold body mass +49%; cover loss −27%; coupling and vertical stiffness −25%; elongation −27%;
+    - motor wander −27%; skin gain −21%; pitch feedback +25%;
+    - tension variation switched on (0.013); piriform smoothing on (0.13);
+    - flare widest +29%; ER jaw +26%; vowel tongue shifts up to 0.2 cm.
+  - **m66** (owner's sentence, `listen/m66_adamw_policy.wav`; `data/policy_m66.params`, `data/policy_m66.organs`):
+    - band HNR 20.7 / 12.5 / 5.0 / −7.9 (m64: 18.8 / 12.3 / 6.3 / −1.3);
+    - clicks 9.8/s (6.2);
+    - pitch against intended: median +16 cents, sd 56 (m59: −2, 40).
+    - The fit's measure does not see clicks; they rose.
+  - Resumed for 120 more steps.
+- **adamw continued** (killed at step 95 for the listener work): policy 7.061 at step 95.
+- Owner on m66: "funny. he sounds about the same."
+  - The cost fell 17%, but it is twelve band levels, a level and four periodicities per word third: not what the ear hears.
+  - Owner approved downloading listener models ("yes").
+- **Pretrained listeners, validated before steering** (`analysis/listeners.py`, `analysis/listener_check.py`).
+  - The AASIST clone was refused by the session's safety policy (it would bring in and run the repository's code). Only stock-transformers classifiers were taken: config plus safetensors, in `~/models` on the Mini.
+  - `transformers` must be kept off the Mini's broken jax (USE_FLAX=0).
+
+  | Listener | Result (REJECTED) |
+  |---|---|
+  | AST ASVspoof5, AST ASVspoof2019 (MattyB95) | P(synthetic) 1.000 for every set, people included (NATO reader, owner, bdl) |
+  | wav2vec2 mo-thecreator | the NATO reader and bdl "fake" (1.000); kinematic words "real" (0.000) |
+  | wav2vec2 MelodyMachine V2 | ARCTIC sentences: bdl −11 log-odds, ours above (AUC 1.00), kinematic +7.7, m64 −4.1. But six of seven owner phrases come out "fake" (+10.6; the owner's whole sentence −11), one rms sentence +10.7, the NATO reader's words "fake" |
+
+  - Each is keyed to its training recordings: ASVspoof and ARCTIC conditions, not people.
+- **WavLM paired distance** (`analysis/wavlm_objective.py`; microsoft/wavlm-base-plus). Our ARCTIC sentence against bdl's real recording of the same sentence: trimmed, normalized, layers 6 and 9 (unit frames), DTW on cosine distance, mean along the path.
+  - **MEASURED (a0001–a0010), layer 6 / 9:**
+
+    | Candidate | Distance to bdl |
+    |---|---|
+    | rms (another person) | 0.283 / 0.156 |
+    | m64 | 0.588 / 0.489 |
+    | kinematic | 0.564 / 0.469 |
+    | m66 | 0.571 / 0.473 |
+
+  - rms is nearer bdl than each of ours in 10 of 10 sentences. Kinematic is nearer than m64 in 9 of 10: the measure sees real speech against ours, not the source specifically.
+  - Adopted as the policy's cost (GIVEN: match real samples): `policy_fit.py WORKDIR wavlm`. Sentences a0001–a0010 steer; a0011–a0020 are held out. About 35 s a step.
+  - Start: 0.5385 fit, 0.5539 held.
+- **WavLM policy, 60 steps (MEASURED).** Distance to bdl: fit sentences 0.5385 → 0.4935 (−8.4%); held-out a0011–a0020 0.5539 → 0.5224 (−5.7%). Still falling. A person (rms) sits at about 0.22.
+  - **Largest moves:**
+    - jet decay +52%;
+    - fold cover loss 0.10 → 0.068; vertical stiffness −23%;
+    - turbulent glottal flux switched on (jet_flux 0.056; off since m50, when it shook the blown folds);
+    - tremor 0.005, tension variation 0.015, posture variation 0.0014 switched on;
+    - wander −20%;
+    - ER tongue body −0.24 cm and forward 0.2; UW aperture +25%.
+  - `listen/m67_wavlm_policy.wav`; `data/policy_m67.params`, `data/policy_m67.organs`.
+  - **m67 (owner's sentence):** band HNR 20.8 / 1.5 / −1.3 / −13.9 (m64: 18.8 / 12.3 / 6.3 / −1.3): much noisier above 1 kHz, the turbulent flux. Clicks 2.2/s (m64 6.2).
+- **WavLM's m67, for the owner's sentence:** "dog sounds as irish as ever". The owner asked for the real comparison, NATO against NATO, interleaved (`listen/nato_interleaved_m67.wav`). The owner flagged ten words: Charlie, Foxtrot, Golf, Juliett, Lima, Sierra, Uniform, Whiskey, X-ray, Zulu (`listen/nato_focus_m67.wav`).
+  - In the owner's words: "ch-charlie (stutters). foxtrot warble. golf is most damaged of all. juliet stutters. llima. sierra sounds shierra. uniform reads oohnihform. whiskey reads wuiskey. xray reads like a boxer said it ie ekh-rahy".
+- **Spectrograms against the reference** (`/tmp/es/specpairs.py`):
+  - m67's vowels are filled with noise to 7 kHz (the policy's jet flux), where the reference's harmonics are clean. The work below runs on m64's tree.
+  - Our starting consonants are 0.15–0.2 s; the reference's 0.05–0.1.
+  - "Golf" opens with 0.25 s of near-silence: the /g/ closure with prevoicing blips.
+- **Fixed: affricates never sealed** (planner.cpp, the organ branch for SH ZH CH JH).
+  - The groove (0.6) was set at the closure's start; the area rule's groove floor (0.06 × 0.6 = 0.036 cm²) kept the tip open. The hiss leaked from the start, and the release burst inside it: a transient at 0.74 s as loud as the vowel in "Juliett".
+  - Now the groove forms with the hiss (at 35% of the phone). **MEASURED:** the tip is sealed (0.000 cm²) 0.675–0.725 s, then releases once into the hiss.
+- **Fixed: /k/ held through /s/** (planner.cpp, the hand-back).
+  - A consonant handed its organs back to the vowel only if no later consonant before the vowel owned them. In "X-ray" (K S R) and "Foxtrot" (K S T R) the /r/ owns the body, so the /k/ never released: the tract was shut 0.805–0.885 s through the whole /s/.
+  - Now a closure (stop, nasal, affricate) is kept only by the consonant right after it. **MEASURED:** frames of 4–8 kHz hiss within 20 dB of the word's peak: X-ray 0 → 4, Foxtrot 0 → 10.
+- **OPEN: /s/ too low ("shierra").** Peak against the NATO reference:
+
+  | Word | NATO | Ours |
+  |---|---|---|
+  | Sierra | 7.5 kHz | 3.1 kHz |
+  | Whiskey | 6.7 kHz | 3.6 kHz |
+  | X-ray | 5.8 kHz | 3.9 kHz |
+  | Foxtrot | 5.3 kHz | 7.3 kHz |
+
+  - **Ruled out:**
+    - lip aperture floor 0.5 → 1.4 cm (centroid +1 kHz, peak unmoved);
+    - groove taper 2.2 → 0.7 cm;
+    - body lowered 0.4–1.2 cm during /s/;
+    - constriction-to-teeth distance (1.4 cm in both Sierra and Foxtrot).
+  - `speak` PROFILE now prints the teeth arc.
+- `listen/nato_focus_m68.wav`: the ten words, NATO then ours (m64 tree, both fixes).
+- Owner on m68: "they have a gravely seal. its still not fixed really".
+  - **The seal itself is clean** (TRACE 0.5 ms): the tip closes smoothly to 0.000 cm², with no chatter.
+  - **The fault is after it.** At the hiss-to-vowel transition one spike, the word's largest sample, then full-strength voice at once. The NATO reader's "Charlie": burst, about 40 ms of hiss, voice swelling over about 70 ms; "Juliett" voiced through the hiss.
+  - **Cause** (TRACE 0.25 ms, Juliett 0.826–0.833 s): the folds swing from apart (0.08 cm²) to shut in about 6 ms under 200 cm³/s while the hiss channel opens. The oral pressure collapses 430 Pa → 0, a hard glottal attack.
+  - Phrase-initial voiced closures wait with the folds apart (kWaitingGap), and the affricate parted them further for its hiss (affricate_hiss_gap 0.04), so the whole breath stood behind the channel.
+- **Fixed (planner.cpp):**
+  - An affricate's hiss lasts at most 60 ms (`kAffricateHiss`, `affricate_hiss_start()`): hiss 125 → 65 ms (Charlie), 90 → 45 (Juliett); NATO 40–60.
+  - A voiced affricate closes the folds in from its hiss over 60 ms (`affricate_voicing_move`, replacing `affricate_hiss_gap`; say `--affricate-voicing-move`). Juliett's largest sample went from 1.30× the vowel's following peaks to 1.13×; crest 3.9 → 3.3 (NATO 2.3).
+- **Not fixed: Charlie's hard onset after voiceless /tS/** (crest 4.1, NATO 2.0). Re-tested on the fold tube, crest per word:
+  - adduction move 0.05 s: worse or equal in 7 of 8 words;
+  - two-stage onset (`--onset-gap` 0.015): worse or equal;
+  - both: worse.
+  - Our crest is 3.1–4.1 in every word with a voiceless onset (NATO 2.0–2.8). OPEN, the old "hard voice onsets after /p t k/".
+- `listen/nato_focus_m69.wav`.
+- Owner: "let's do a timing and articulation gradient descent pass, just as we did a body shape finetune."
+- **The planner's parameter tree** (`voice/include/voice/plan_parameters.hpp`, `voice/src/plan_parameters.cpp`; `say --plan-params FILE`, `--plan-params-out FILE`). 167 leaves:
+  - timing (22), glottis (17), breath (10), release (2), pitch (12), mouth (8, the area planner's);
+  - articulation (55): `ConsonantShapes`, the organ planner's consonant shapes, until now literals in `gesture_organs`;
+  - duration (41): a factor on each phone's planned length, new: `PlanOptions::duration_scale`.
+  - The constants kSealLead, kVowelHold, kSealSettle, kLabialJaw, kDarkLateral*, kAffricateHiss became options and shapes.
+  - The block-file parser moved to `voice/block_file.hpp`, shared by `say` and `speak`.
+  - **MEASURED:** after the refactor, the ten flagged words' scores and audio are byte-identical to m69. A dumped plan tree read back gives an identical score. `voice/data/plan.params` is the start.
+- **engine_net.py, groups.** The network is built over the groups being fitted: body (69), organs (117), plan (144; left out: pitch.*, mouth.*, onset_gap, lead_in, pause_pressure). `GROUPS=organs,plan` fits timing and articulation with the body at m64.
+  - Plan ranges: durations ×/÷2; tongue positions ±0.4 cm; presses ±0.15; jaw ceilings ±2°; moves ×/÷2.
+- **The cost gained timing.** DTW forgives timing, so each word adds its length (log of our loud span over the reference's, / 0.1) and its inner timing (at 5 reference frames, the aligned position against the reference's, s / 0.03). Frame features are pooled over 6 runs per word.
+  - **Start (MEASURED):** cost 10.40; shape 13.5, level 7.2, periodicity 3.4, duration 9.6, timing 4.5, pitch 1.9.
+  - Word lengths, ours over NATO: Golf 2.56, Victor 1.73, Kilo 1.58, November 1.55, Charlie 1.50, Uniform 1.43, Mike 1.40, Quebec 1.39; the rest 0.89–1.32.
+- AdamW, organs + plan (261 neurons), 80 steps: running.
+- **Timing and articulation pass, adamw, 80 steps (MEASURED).** Policy cost (two seeds) 10.503 → 9.815 at best (step 40, −6.6%); flat within the seeds' chance (±0.3) after.
+  - **Largest moves** (rms latent 0.30): durations /uw/ ×1.28, /w/ ×1.21, /ah/ ×1.13; /w/ body share of /uw/ 0.5 → 0.62; vowel postures within 0.2 cm (EY aperture +25%, ER jaw +0.7°); adduction lead +4.6 ms.
+  - **Word lengths, trimmed** (NATO / m69 / m70):
+
+    | Word | NATO | m69 | m70 |
+    |---|---|---|---|
+    | Charlie | 0.45 | 0.70 | 0.68 |
+    | Golf | 0.39 | 0.74 | 0.71 |
+    | Lima | 0.44 | 0.66 | 0.51 |
+    | Sierra | 0.53 | 0.60 | 0.50 |
+    | Juliett | 0.61 | 0.76 | 0.89 |
+    | Uniform | 0.59 | 0.98 | 0.97 |
+    | Zulu | 0.46 | 0.69 | 0.73 |
+
+  - **The systematic part, about 1.4× too long, barely moved.** With 261 neurons, 6 pairs per step give a noisy gradient. With the step cap (0.05 latent) and decay, a 40% change in rate (latent ≈ 1.5) needs dozens of consistent steps.
+  - `listen/nato_focus_m70_timing_pass.wav`; `voice/data/policy_m70.plan`, `tract/data/policy_m70.organs`.
+- Owner on m70: "sounds like he has a fork in his mouth." Then: "timing and shape. we'll alternate. B-ALS on each, to converge. thus by alternation we will gradually move into shape. run it."
+- **Alternating block ALS** (`policy_fit.py als`, `ORDER=alternate`, `START_FROM=` m70's best).
+  - A timing block (duration, then timing, in turn) before each shape block (consonant shapes, each vowel's posture).
+  - **Views.** Re-aligning every render, all residuals together, the linear model failed (duration: 9.68 predicted, 9.90 rendered): changed durations make the DTW path, and so the frame residuals, jump.
+    - A timing block is now solved against the timing residuals alone (re-aligned each render).
+    - A shape block is solved against the frame residuals and pitch, the alignment held at its start.
+    - A step is kept if its view's cost falls and the whole cost rises at most 1%.
+  - **First turns:** the timing view 5.80 → 5.50 (duration) → 5.15 (timing). The vowel blocks predict gains under 0.01, not realized: undone.
+- **Alternating ALS, 3 sweeps (MEASURED).** Policy cost (seeds 73021 / 51117): start 9.745 / 9.885; after sweeps 9.649 / 10.085, 9.618 / 10.329, 9.606 / 10.299.
+  - The fitted seed improved and the held-out seed worsened: the shape steps learned one seed's chance. By the two-seed mean, m70 stays best.
+  - **Timing converged:** duration residual 7.9 → 5.2 (words about 28% → 23% too long); rate 1.00 → 1.16.
+  - **Durations:** /uw/ 1.30, /ah/ 1.19, /w/ 1.18, /ow/ 1.16; /l/ /f/ /z/ 0.89–0.90.
+  - The spectral shape barely moved (12.66 → 12.59). The consonant-shape block kept one step in three sweeps.
+  - **Word lengths (s; NATO / m70 / m71):** Charlie 0.45 / 0.68 / 0.61; Golf 0.39 / 0.71 / 0.64; Juliett 0.61 / 0.89 / 0.81; Uniform 0.59 / 0.97 / 0.89; X-ray 0.51 / 0.69 / 0.63; Zulu 0.46 / 0.73 / 0.66; Lima 0.44 / 0.51 / 0.47; Sierra 0.53 / 0.50 / 0.46.
+  - `listen/nato_focus_m71_alternating_als.wav` (the last state, not the two-seed best); `voice/data/policy_m71.plan`, `tract/data/policy_m71.organs`.
+- Owner on m71: "the stuttering did not improve. lets work on charlie."
+- **Charlie's stutter: two /tS/.** Envelope (m71): noise 0.680–0.710 s, silence, the real hiss 0.760–0.810, a crack at 0.815, a puff, voice from 0.845.
+  - TRACE: the breath rises from 0.63 s, but the tip seals only at 0.73. It is 0.35 → 0.02 cm² open while 100–190 cm³/s hiss through: the first "ch".
+  - **Cause:** a phrase's first consonant aimed its tip 120 ms early (close_time), but its jaw (and lips, body) only `shape.lead` (40 ms) early. The tip rides on the jaw and could not seal until the jaw rose.
+  - **Fixed (planner.cpp, gesture_organs, `shape_time`):** a phrase-initial consonant's whole shape starts with its closure. **MEASURED:** before the release Charlie is silent (rms ≤ 0.001, was 0.01–0.02).
+- **The crack at the hiss-to-vowel opening** (TRACE 0.5 ms): the pressure behind the channel fell 125 Pa within 1 ms as the tip left the palate, the folds still apart (0.20 cm²), closing in 20 ms.
+  - **Fixed:** after a voiceless affricate the folds close over 80 ms (`glottis.affricate_adduction_move`), and its hiss channel and groove open over 0.1 s (`articulation.affricate_release_move`). Both are new tree leaves.
+  - **MEASURED (three seeds; crack = the loudest 5 ms at the opening):** against the hiss 8.6 → 4.1, against the vowel 1.23 → 0.65.
+  - Slower still (0.12 / 0.15): no further gain. Earlier fold closing (adduction_lead 0.03) or a wider channel (hiss press −0.2): within the seeds' spread.
+  - (A first test, editing the plan with sed, showed 0.9× the hiss. m71's plan file had no lines for the new leaves, and the global tip_release_move it used also moved the release earlier. Re-tested on a full tree.)
+- `listen/nato_focus_m72_charlie.wav`: the ten words on m71's plan and organs with both fixes. Lima's and Whiskey's first 150 ms dropped from 0.39 and 0.45 of the word's peak to 0.07 and 0.04 (their phrase-initial /l/ /w/ now in place before the air). Not yet heard.
+- Owner on m72: "ooniform."
+  - **LPC F2 of the /y/:** ours 1550 Hz, falling to /uw/'s 1270–1340. The NATO reader's "you": F2 2300–2700 throughout (a fronted /uw/).
+  - **Organs during the /y/** (PROFILE): the body at /iy/'s (5.10, 7.57), but /uw/'s jaw (5.9° against /iy/'s 1.0; the body rides on it) and full rounding (aperture 0.18, protrusion 0.92). The /y/ owned only body and tip.
+  - **Fixed (planner.cpp):** /y/ owns jaw, mouth and spread too. It takes /iy/'s jaw, and lips that keep `y_round_share` (0.3, new leaf) of the next vowel's shape; it hands them back at its end.
+  - **MEASURED:** Uniform's /y/ F2 2150–2200 Hz for about 50 ms, gliding to 1300 by 0.79 s. Yankee's /y/ 2170–2340.
+- `listen/nato_focus_m73_uniform.wav`.
+- Owner on m73: "they all sound like the nato-words, but still more like a old tts. make four principled experimental changes to the vocal tube and read 'there is always money in the banana stand' with all four candidates."
+- **Four tube experiments** (body tree leaves; defaults off, **MEASURED** bit-identical with them off):
+  - **A. Boundary-layer loss by cross-section** (`tract.hop_loss_by_area`; Tube::set_smoothing_by_area). Friction and heat conduction at the walls go per length as perimeter over area (2√(π/A) for a round duct). Each link's hop k = k·√(3 cm² / A), at most 0.6: narrow passages lossier, wide ones less. Until now one k for every link.
+  - **B. Cheek pockets** (`branches.buccal_scale`): the buccal vestibules between the teeth and cheeks, both sides as one closed side branch. 3 cm deep (canines to molars), 0.8 cm², port 0.4 cm², soft wall; it moves with the teeth (branch group 3, VoiceBody::set_teeth).
+  - **C. Velopharyngeal leak** (`branches.velum_leak`, 0.03 cm²): the velum's least opening while the mouth is open. It fades as a constriction narrows from 0.35 to 0.05 cm² (the velopharynx seals under an obstruent's oral pressure).
+  - **D. Head radiation** (`tract.radiation_mass_scale` 0.72, `radiation_resistance_scale` 1.04): the lip load of an unflanged end (end correction 0.61a against the baffled 0.85a; low-frequency radiation resistance about half), where a head stands between a baffle and none. Until now a piston in an infinite baffle.
+- **"There is always money in the banana stand."** (m71 plan and organs with today's planner; body m64 plus each change alone; `listen/m74_tube/banana_*.wav`):
+
+  | Variant | LTAS 0.5–1.5 / 1.5–3 / 3–5 / 5–7.5 kHz (dB re 80–500 Hz) | Band HNR (dB) | Clicks/s |
+  |---|---|---|---|
+  | base | −1.8 / −6.5 / −7.1 / −9.2 | 21.0 / 11.3 / 7.1 / −0.8 | 7.3 |
+  | A boundary | −1.9 / −6.4 / −7.1 / −9.2 | 21.1 / 10.9 / 6.8 / −0.8 | 8.0 |
+  | B cheeks | −1.5 / −7.2 / −9.4 / −9.2 | 21.9 / 11.1 / 7.3 / −0.6 | 8.0 |
+  | C velum leak | −2.9 / −7.0 / −7.1 / −9.2 | 21.6 / 10.0 / 6.7 / +0.3 | 5.4 |
+  | D head | −1.7 / −5.7 / −4.6 / −8.4 | 20.9 / 11.1 / 6.7 / −0.1 | 8.3 |
+- Owner on the tube variants: "c and d maybe slightly better? but ALL still with the problem. dig deeper into changing how it makes the vocal sound".
+- **The glottal pulse** (`/tmp/es/pulse.py` on STEPS at 96 kHz, "stand" /ae/, 9 cycles). Open quotient 0.65, speed quotient 1.96, peak flow 231 cm³/s, least area 0.0002 cm².
+  - **Return phase 0.06 ms**: from the flow's steepest fall to closure, six samples. A human modal pulse: about 0.2–1 ms.
+  - The flow itself is smooth (H2 −17 dB re H1; 2 kHz −56, 4 kHz −65). Almost all excitation above 1 kHz comes from one sharp corner per cycle: an impulse train's character (old formant synthesis), and the 5–9 local clicks per second (people 0–1).
+- **Source experiments** (body tree; `listen/m74_tube/banana_e*.wav`; return phase, least area, clicks/s, band HNR):
+
+  | Experiment | Return phase | Least area (cm²) | Clicks/s | Band HNR (dB) |
+  |---|---|---|---|---|
+  | base | 0.06 ms | 0.0002 | 7.3 | 21.0 / 11.3 / 7.1 / −0.8 |
+  | **E1** string mode (`fold.string_mode`, new: displacement along the fold as a string's first mode, (π/2) sin(πz)) | 0.04 ms | 0.0009 | 6.7 | |
+  | **E2** posterior chink 0.03 cm² | **1.0 ms** | 0.030 | **2.9** | 15.8 / −1.0 / −8.4 / −30 |
+  | E6 chink 0.01 cm² | 0.48 ms | 0.010 | 4.8 | 21.3 / 6.4 / −3.5 / −12.9 |
+  | E3 contact softness 20 µm | 0.09 ms | | 8.9 | |
+  | E3 contact softness 50 µm | 0.36 ms | | 7.0 | 20.9 / 7.0 / −1.0 / −14.4 (2 kHz −70: dull) |
+  | E5 chink 0.02 + softness 20 µm | 0.73 ms | | 2.2 | 17.7 / −7.5 / −4.4 / −12.9 |
+  | E4 chink 0.03 + velum leak + head radiation | 0.97 ms | | 3.5 | 20.0 / −3.4 / −5.5 / −30 |
+
+  - E1: closure is abrupt because the slices reach contact fast (a 0.01 cm rest gap swept in about 0.1 ms), not because of the shape along the length.
+  - E2: with a chink, flow never stops and the pulse's end rounds off over about 1 ms. But the aspiration source (∝ v³√A) hisses continuously through it: much breathier.
+- Owner on the source experiments: "softer, but the same mechanical tone underneath from the vocal cords."
+  - The flow's H2 is 17 dB under H1: near a sine (human pulses about 6–12 dB).
+  - Every spring of the fold tube is linear (cover, coupling, support, vertical). Real fold tissue stiffens with strain; body-cover models give the springs k(1 + ηx²), η = 100 cm⁻² (Story & Titze 1995).
+- **E7 strain stiffening** (`fold.strain_stiffening`, new; cover, coupling and support springs; 0 bit-identical):
+
+  | η (cm⁻²) | Flow H2 (dB re H1) | OQ | Peak flow (cm³/s) | Clicks/s | F0 (Hz) |
+  |---|---|---|---|---|---|
+  | 0 | −17.4 | 0.65 | 231 | 7.3 | 107 |
+  | 100 | −14.6 | 0.60 | 221 | 7.3 | 106 |
+  | 300 | −10.9 | 0.56 | 200 | 6.4 | 106 |
+  | 1000 | −8.0 | 0.49 | 156 | 5.8 | 109 |
+
+  - With chink 0.01: η 300 return phase 0.59 ms, H2 −12.4, clicks 4.8/s; η 1000 return phase 1.0 ms, H2 −9.0, clicks 3.5/s.
+  - `listen/m74_tube/banana_e7_eta300.wav`, `_e7_eta1000`, `_e8_eta300_chink10`, `_e9_eta1000_chink10`.
+- Owner on η 1000: "a little bit more human".
+  - **Pitch: stiffening raises it** (amplitude-dependent stiffness): η 1000 +56 cents, 2000 +200, 3000 +295 uncalibrated; spread 42 → 85 cents.
+  - Calibrated (`/tmp/es/caleta.sh`: natural_pitch and pitch_per_tension ×1.056 / ×1.159 / ×1.233), H2 re H1 −6.3 / −4.7 / −4.8 dB; OQ 0.48 / 0.45 / 0.45; peak flow 156 / 124 / 107 cm³/s.
+  - Also new: `fold.vertical_stiffening` (vertical shear springs k(1 + ηx²)) and `fold.contact_exponent` (1.5: Hertzian contact).
+- Owner: "for the vocal tube experiment, there were multiple segments. one was stiff, one was elastic, and one was i forget, and slightly adjusted. we never got beyond a more organic sounding 'aaaahh' sound, but we did get something like that. the parallel pieces allowed adding body because they responded differently, they also responded to each other, and they culmunatively shaped the resonant tone itself".
+- **Parallel strips along the fold** (`fold.strips`, 1–3; Cord::fold_geometry, fold_air_areas, advance_fold_tube rewritten over [strip][slice]).
+  - Each strip is a column of the slices' cover, body and support. It has its share of the length (so of the mass, stiffness and air force) times its own factors:
+    - front (stiff): k ×1.6, m ×1.0;
+    - middle (elastic): k ×0.6, m ×0.9;
+    - back (adjusted): k ×1.0, m ×1.1.
+  - Neighbours are joined by longitudinal tension (`fold.strip_coupling`, 20000 dyn/cm, cover and body). Every strip feels the same slice pressures through its own open length; the glottis is their sum.
+  - **MEASURED:** one strip renders the sentence bit-identical to before.
+- **Strip variants** (banana sentence, pitch-calibrated; `listen/m74_tube/banana_p*.wav`):
+
+  | Variant | Return phase | OQ | Flow H2 (dB re H1) | Clicks/s | Pitch sd |
+  |---|---|---|---|---|---|
+  | P1 three strips | 0.24 ms | 0.64 | −18.0 | 6.1 | 44 cents |
+  | P2 + η 1000 | 0.46 ms | 0.58 | −9.0 | 5.1 | 80 |
+  | P3 + η 1000, coupling 5000 | 1.0 ms | 0.75 | −12.3 | 2.9 | 77 |
+  | P4 + η 1000, contrast 2.5 / 0.4 / 1.2 | 1.25 ms | 0.84 | −16.8 | 3.2 | 64 |
+
+  - The strips close at different times, which gives the return phase a chink gave, without a standing gap.
+- Owner: "not parallel. sequential. but yea. parallel in a sense." Then the tube config:
+  - section 1: mass 1.0, elasticity 2, stiffness 1;
+  - section 2: extremely low stiffness, very high elasticity, mass half the elasticity;
+  - section 3: mass twice the elasticity, low stiffness;
+  - section 4: mass 4, almost no elasticity, stiffness 3;
+  - section 5: almost no mass or stiffness, high elasticity;
+  - outlet: mass 1, elasticity 2, stiffness 1.
+  - Also: "letting the elasticity itself wander in a few places proportionally or maybe exponentially tamped by stiffness, gave organic character".
+- **Per-slice pieces** (`fold.slice{1..6}_{mass,elasticity,support}`, new). The fold tube's six slices run inlet to outlet: the sequential sections.
+  - Mass scales the body (the mass piece), elasticity the cover's stiffness and its coupling (the elastic piece), support the body's spring to the muscle. Damping follows each slice's pieces at a fixed critical share.
+  - **Elasticity wander** (`fold.elasticity_wander`, rms share; `elasticity_corner` 20 Hz; `elasticity_tamping`): per slice, through one pole, times exp(−tamping (support − 1)).
+  - **MEASURED:** all 1 and no wander, bit-identical.
+- **The owner's config as factors** (m/e/s): 1/2/1, 2/4/0.1, 2/1/0.3, 4/0.1/3, 0.1/3/0.1, 1/2/1. Banana sentence, pitch-calibrated (`listen/m74_tube/banana_t*.wav`):
+
+  | Variant | OQ | Return phase | Flow re H1: H2 / 1 / 2 / 4 / 6 kHz (dB) | Clicks/s | RAP | Pitch sd |
+  |---|---|---|---|---|---|---|
+  | base | 0.65 | 0.06 ms | −17.4 / −40.8 / −55.7 / −65.3 / −82.7 | 7.3 | 0.24% | 42 cents |
+  | T1 sections | 0.67 | 0.04 ms | −23.9 / −37.7 / −47.4 / −57.4 / −73.1 | 4.8 | 0.30% | 43 |
+  | T2 + wander 0.05 | 0.65 | 0.04 ms | −24.3 / −38.3 / −48.6 / −61.7 / −72.9 | 7.0 | 0.91% | 50 |
+  | T3 + wander 0.05, η 1000 | 0.57 | 0.06 ms | −10.5 / −35.5 / −48.8 / −60.4 / −70.6 | 7.3 | 0.79% | 84 |
+  | T4 + wander 0.15 | 0.63 | 0.04 ms | −20.8 / −38.1 / −51.2 / −61.7 / −74.6 | 9.6 | 2.59% | 97 |
+
+  - The sections put 8–10 dB more into the flow pulse itself at 2–6 kHz: structure inside each pulse, not only its corner. The wander roughens the period (RAP 0.9–2.6%; the owner 0.26%, NATO 0.29%).
+- Owner: "banana_t3_sections_wander_eta sounds a bit more organic. he has an organic sense of body, at least. it warbles on top of that, but that's mouth warble."
+  - T3 saved as `data/voice_t3.params`: m64, the six sections, elasticity wander 0.05, η 1000, pitch map ×1.015.
+- **Wobble in voiced stretches** (`/tmp/es/mwobble.py`: rms about a 120 ms average):
+
+  | Recording | Level | Spectral balance (1–3 kHz re total) | Pitch, audio tracker |
+  |---|---|---|---|
+  | owner (user_three) | 1.13 dB | 1.86 dB | 16 cents |
+  | bdl a0001–3 | 0.61–1.22 | 1.73–2.52 | 11–94 |
+  | base | 1.53 | 2.57 | 77 |
+  | T3 | 1.63 | 1.56 | 253 |
+
+  - The audio tracker's pitch jumps octaves. From the engine's CYCLES, cycle-level pitch wobble is base 15, T1 14, T3 20 cents; cycles jumping >5%: 6, 11, 11%; no period doubling (sign alternation 0.36–0.53).
+  - Motor wander off, wall variation off, both: level 1.49 / 1.65 / 1.75 dB (T3 1.63). On one sentence (2–4 stretches) not separable. `listen/m74_tube/banana_t3_w{1,2,3}_*.wav` for the owner's ear.
+- Owner on the motor and wall variants: "they all sound the same. lets remove the tongue entirely and see how he sounds".
+  - **Frozen** (`banana_t3_tongue_frozen.wav`): every tongue command after t = 0 removed (body, apex, groove, lateral); the tongue holds the opening schwa (AX: body 3.71, 5.96; tip 6.64, 6.85). Jaw, lips, velum, larynx, glottis and breath still move.
+  - **Lowered** (`banana_t3_tongue_lowered.wav`): the same, with the body 1 cm and the tip 0.5 cm lower (PROFILE: ty 4.93, tipy 6.34).
+  - Wobble (level / balance): T3 1.63 / 1.56 dB; frozen 1.48 / 1.14; lowered 1.27 / 1.22.
+- Owner: "lowered is best, and no warble. almost human. frozen, a bit of clicky/wet sounds, but no warbling".
+  - **The warble is the tongue's movement.** The voice without it is close: the T3 body.
+- **The area function as articulated** (`speak AREALOG=path`, new: every millisecond, every vocal node's rest area to the lip opening; `/tmp/es/arearough.py`).
+  - Fast fluctuation (rms log area about a 10 ms average, oral nodes): moving 0.117, frozen 0.045, lowered 0.033. Worst at 12.6–14.0 cm (the blade under the ridge).
+  - But that is the consonants' closures. Inside the vowels the areas glide smoothly ("stand" /ae/: 12.9 cm 1.50 → 2.27 cm² over 40 ms, then slowly back): no geometric jitter.
+  - The tongue never settles: moves up to `vowel_reach` 0.35 s, arriving `vowel_arrival` 0.88 into the vowel (from the timing fit). The formants slide through every vowel.
+- **Timing variants on T3** (`listen/m74_tube/banana_t3_v*.wav`):
+  - V1: vowel_arrival 0.5;
+  - V2: also vowel_reach 0.12;
+  - V3: also vowel_hold 0.8.
+  - The wobble measure has too few voiced stretches here (1–2); for the owner's ear.
+- Owner: "banana_t3_v3_arrive50_fast_hold subjectively maybe?"
+- **What couples tongue movement into the sound.** Frozen and lowered both lost the warble, so it is the movement, not the posture. On V3 (`listen/m74_tube/banana_v3_x*.wav`):
+  - X1: the ear off (`ear.pitch_feedback` 0): moving formants shift the heard period it corrects each cycle;
+  - X2: walls ×3 stiffer (`walls.stiffness_scale` 3);
+  - X3: no pharyngeal pull in voiced closures (`walls.closure_pull` 0);
+  - X4: no motor wander (`variation.wander_gain` 0).
+- Owner: "i think we need to re-articulate hte tongue itself maybe.. noear is better".
+  - The ear off raised the pitch 260 cents: T3's map had been calibrated with the cycle-by-cycle ear running.
+  - **A listening ear** (`ear.latency`, `ear.smoothing`, `ear.rate`, new): the log error smoothed, delayed, integrated; latency 0 keeps the old ear, bit-identical.
+- **Calibrated on the V3 banana score** (`/tmp/es/earcal.sh`):
+
+  | Ear | Pitch error (median) | Spread | Pitch map |
+  |---|---|---|---|
+  | per cycle | +3 cents | 64 | ×1.021 |
+  | none | +4 | **51** | ×1.151 |
+  | listening (latency 0.12 s, rate 3/s) | +22 | 93 (it hunts) | ×1.049 |
+
+  - Without the ear the pitch is steadier than with either.
+  - `data/voice_t3_noear.params`; `listen/m74_tube/banana_v3_no_ear_calibrated.wav`.
+- Owner: "build it." (the physical tongue)
+- **The physical tongue** (`include/tract/tongue.hpp`, `src/tongue.cpp`; `tongue.physical` 1; `speak TONGUELOG=path`).
+  - **Body.** 24 sections of the tongue's surface from the root's base (held beside the epiglottis) over the dorsum to the tip, in the jaw's frame. Each has mass, elasticity (stretch and bending to its neighbours) and support (to the rest shape). Support and bending fall toward the tip (`tip_pliancy` 0.2).
+  - **Constraints.** A hydrostat (the midsagittal area, surface closed through the floor, held at rest); contact (the hull stops it, `contact_depth` 0.04 cm past).
+  - **Muscles.** Genioglossus posterior and anterior from the genial tubercle; styloglossus from the styloid; hyoglossus from the hyoid. Superior and inferior longitudinal curl the blade along its own normal (×3); the floor's lift.
+  - **Control.** Activations follow their drive over 15 ms. The drive is feedback: the planner's raw targets for body and tip as a target shape, given the tongue's own volume, the error less 0.08 s of velocity, projected on each muscle's pull, plus an integral.
+  - **Geometry.** `MidsagittalTract` takes an explicit tongue contour (`Articulators::contour`); `tongue_outline()` samples the geometric tongue as targets.
+  - **MEASURED:** off, the sentence is bit-identical.
+- **Findings on the way:**
+  - **The geometric tongue does not conserve volume:** its area ran 16.4–30.0 cm² over the sentence (rest 18.65). Targets are now shifted along their normals to the rest area; median shape error 0.59 → 0.52 cm.
+  - **The error does not fall with gain** (×1 to ×30): seven muscles cannot draw every circle-and-tip shape. The vowels are to be refit in the new body.
+  - **Closures** (least oral area in the phone; geometric → physical, f4k):
+    - DH (phrase-initial) 0 → 1.40 cm²; DH 0 → 0.008;
+    - N 0 → 0.01–0.18; T 0.001 → 0.078; D 0 → 0;
+    - S 0.055 → 0.060; Z 0.055 → 0.11–0.17;
+    - L 0.09 → 0.35; R 0.45 → 0.10.
+    - With uniform stiffness and a fixed up-and-back longitudinal pull, no /t d n/ sealed (0.16–0.97).
+- `listen/m74_tube/banana_physical_tongue_1.wav` (T3, no ear, V3 timing; `data/voice_physical_tongue_1.params`).
+- Owner on physical tongue 1: "it's golden ... This thing is garbage. It sounds terrible ... like he's got a very serious speech impediment, like his tongue has been mangled. But here's the most magical, wonderful thing about it. He sounds like he has a real physical tongue."
+- **Control and reach of the physical tongue** (`tools/tongue_probe`: the tongue alone, holding rest then a target):
+  - **Feedforward.** Each muscle's influence is measured at reset (alone, activation 0.1, scaled; settled 0.6 s, no contact). For each target, bounded least squares by coordinate descent gives the activations (0..1); feedback works on top.
+    - The first solver (step 1/trace) barely moved: activations ≤ 0.33.
+    - Influences measured at full activation superposed badly: held 0.9 cm from a target predicted to 0.2.
+  - **Reach: 20 muscles.** Genioglossus 3 bands, styloglossus 2, hyoglossus 2, longitudinals 2, floor lift, transversus and verticalis at 5 places each, along the normal.
+    - With 7 the least-squares hold of sentence targets left about 0.8 cm; with 20, median 0.13–0.20 cm.
+  - **Probe (an /aa/-like target):** feedforward alone 0.46 → 0.09 cm in 260 ms; with feedback (gain 3) 0.18 at 80 ms, 0.10 at 140, 0.06 at 260.
+  - **Speed.** Support, elasticity, bending and muscle force ×4 (support about 6 Hz): sentence error median 0.46 → 0.40 cm (×9: 0.35, closures worse).
+  - **Look-ahead** (`tongue.lead`): it aims at the next body and tip targets due within the lead. Aiming at the last one skipped consonants for the following vowel.
+- **Closures, lead 0.03** (least oral area in the phone, cm²):
+
+  | Consonant | Geometric | Physical |
+  |---|---|---|
+  | N | 0 | 0, 0, 0, 0.06, 0.28 |
+  | D | 0 | 0 |
+  | DH (second) | 0 | 0.001 |
+  | DH (first) | 0 | 0.52 |
+  | T | 0.001 | 0.018 |
+  | S | 0.055 | 0.044 |
+  | Z | 0.055 | 0.32–0.72 |
+  | L | 0.09 | 0.96 |
+  | R | 0.45 | 0.82 |
+
+  - Shape error median 0.40 cm.
+- `listen/m74_tube/banana_physical_tongue_2.wav`; `data/voice_physical_tongue_2.params`.
+- Owner on physical tongue 2: "He does still sound like his tongue has been injured. But we can work".
+- **Consonants of the physical tongue** (`tools/tongue_probe`: hold a consonant target alone, the narrowest oral opening over time):
+  - **Speed.** /l/ and /t/ closed only after about 180 ms (a consonant lasts 50–80 ms).
+    - Lighter or tapered sections (`section_mass`, `tip_mass`) changed nothing.
+    - The controller's velocity term (`damping_gain` 0.08 s: 1.6 cm of "error" at 20 cm/s) braked every move. At 0.02: /l/ 0.020 cm² at 40 ms, /t/ 0.017 and /z/ 0.058 at 80 ms.
+    - Higher gains overshot and sprang open again.
+  - **Contact at corners.** The tongue's hull now ends at the upper incisors' edge, and a vertex's side is judged by the bisecting normal. A point below and behind the edge had read as inside the tooth.
+  - **Protrusion.** Nothing could push the tip forward: the genioglossus pulls toward the chin, the longitudinals along the normal, the support back, the hydrostat along normals. The tip stopped at x 7.34, 0.4 cm short of the incisors for /dh/, whatever the stretch stiffness (`tip_stretch`, new).
+    - New 21st actuator: **elongation** (transversus and verticalis squeezing the hydrostat lengthen it), on the blade along the surface toward the tip, ×2. /dh/ in the probe 1.20 → 0.34 cm², now at the teeth.
+  - The geometric /dh/ target lies inside the upper incisors (x 7.78, y 8.51; the back face at y ≈ 8.1 there). The old tongue had no contact and "closed" through the tooth.
+- **Sentence, physical tongue 3** (damping_gain 0.02, no lead; `data/voice_physical_tongue_3.params`, `listen/m74_tube/banana_physical_tongue_3.wav`):
+  - shape error median 0.25 cm (2: 0.29–0.40);
+  - least oral area (cm²): N 0 / 0.0001 / 0 / 0.0002 / 0; DH 0 (second), 0.40 (first); T 0.005; D 0; S 0.027; L 0.12; Z 0.10 and 0.87 (the first, "is"); R 0.51 (geometric 0.45).
+- Owner on physical tongue 3: "Massive regression. He's now warbling pretty badly,".
+- **A warble measure that follows the owner** (`analysis/tongue_ringing.py`): from AREALOG, the oral nodes' log areas inside vowels, the rms of their 5–30 Hz part, median over vowels.
+
+  | Version | Ringing | Owner |
+  |---|---|---|
+  | geometric tongue | 0.111 | warble |
+  | physical tongue 2 | 0.041 | "injured", no warble |
+  | physical tongue 3 | 0.116 | "warbling pretty badly" |
+
+  - **The cause:** the controller's velocity braking cut to 0.02 s (for speed), with the 30 ms look-ahead dropped. The tongue overshot and rang around its targets (probe: the tip 0.5 cm past at 40 ms).
+
+  | Variant (protrusion and contact fixes kept) | Ringing |
+  |---|---|
+  | braking 0.08, no lead | 0.058 |
+  | braking 0.04 | 0.064 |
+  | tissue viscosity (support_loss 2, elastic_loss 1), braking 0.02 | 0.095 |
+  | **braking 0.08, lead 0.03** | **0.041** |
+  | braking 0.06, lead 0.03 | 0.051 |
+  | braking 0.04, lead 0.03 | 0.078 |
+  | braking 0.08, lead 0.05 | 0.039, closures worse |
+
+- **Physical tongue 4** = braking 0.08, lead 0.03, with elongation and the contact fix (`data/voice_physical_tongue_4.params`, `listen/m74_tube/banana_physical_tongue_4.wav`).
+  - Closures (cm²): N 0.0001 / 0 / 0.029 / 0.0015 / 0; T 0.016; D 0; S 0.046; L 0.10 (tongue 2: 0.96); R 0.40 (0.82); Z 0.28, 1.10; DH 0.62, 0.18.
+- **Rule from here:** every tongue change is checked against the ringing (≤ 0.04) before the owner hears it.
+- Owner on tongue 4: "doesn't actually sound better than version 2. And we could probably refine it from this point with a bit more ML. But you be the judge of what to do next, and refine towards what you want to".
+  - Judgement: the vowels (postures fit for the geometric tongue), not the last consonant closures.
+- **Vowels refit through the physical tongue** (organ_vopt3, SPEAK_ENV FOLDTUBE=1 PARAMS=tongue 4, W 10, MAXFEV 260; from m71's postures; `data/organs_physical.txt`).
+  - Formant distance to bdl (st), before → after: uh 7.00 → 1.44, ao 5.60 → 1.62, ah 2.98 → 1.41, iy 2.58 → 1.20, ow 2.57 → 0.18, ih 2.01 → 0.26, ax 1.96 → 0.15, uw 1.64 → 0.72, eh 1.07 → 0.15, aa 0.94 → 0.82, ae 0.88 → 0.35, ey 0.80 → 0.04.
+  - Shape rms 0.31–0.48.
+  - The jaw rose to 14° for aa, ow (the bound).
+- **Physical tongue 5** (`listen/m74_tube/banana_physical_tongue_5_vowels.wav`): ringing median 0.046 (tongue 4: 0.041), largest vowel 0.42.
+  - Closures (cm²): N 0 / 0 / 0.03 / 0.37 / 0.05; DH 0.63, 0; T 0.08; D 0.016; S 0.09; L 0.12; Z 0.42, 0.25; R 0.36.
+- **Prepared for the ML refinement** (engine_net.py):
+  - `ENGINE_TREE`, `ENGINE_ORGANS`, `ENGINE_PLAN` set the start;
+  - group "tongue" (the physical tongue's settings, ×/÷2; not its switch);
+  - the NATO residual gains each word's vowel ringing as a hinge (free to 0.035, then 1 per 0.002).
+  - `data/voice_tongue4.params`: tongue 4's canonical tree.
+- Owner on tongue 5: "it trades a nonphysical garble at 2.5 seconds for a click and a more physically plausible garble. thats positive."
+- **ML refinement** (policy_fit.py adamw, GROUPS tongue,organs,plan, from tongue 5; /tmp/es/tml): policy 17.47 → 13.82 by step 15. MEASURED: nearly all of it is the ringing hinge (624 → 206); shape 14.17 → 14.10, duration 5.8 → 7.1. The tongue settings moved little (braking 0.08 → 0.091, muscle force −9%). It quiets the warble by slowing, not by better articulation.
+- **Two faults behind the garble** (AREALOG plus the tip in TONGUELOG):
+  - "the" (1.70 s): the tip moved smoothly while the narrowest area jumped 0.005 ↔ 0.15 cm² from one millisecond to the next. The cause was the fixed ray cuts: as the sharp tip slid past a ray, its crossing switched from the tongue's top to its underside.
+  - "stand" (2.47–2.52 s): the tip rose toward the ridge at about 5 cm/s and never sealed /n d/ (0.016 cm²).
+- **Why the tongue is slow** (tongue_probe, /æ/ → /n/ target):
+  - It sealed at 160 ms; at braking 0.04 it seals at 82 ms; at 0.02 the tip overshot past the ridge.
+  - With feedback off, the influence-based feedforward barely moved it (tip 1.25 cm off). The feedback did all the work, and the braking capped its speed at error / 0.08 s.
+- **Inverse statics feedforward** (`tongue.statics 1`): at the target shape, the activations (0..1) plus the hydrostat's pressure (free sign) that balance the tissue's passive forces there. Bounded least squares by coordinate descent, warm-started, solved every control tick.
+  - Feedforward alone now seals in 96 ms with the tip on its aim (6.75, 10.25).
+  - Off is bit-identical.
+- **Continuous passage width** (physical tongue only): each cut's width is min(ray width, the hull point's distance to the nearest organ segment); the midpoint follows.
+  - Large flicker events (second difference of log narrowest area > 0.5) fell 46 → 20.
+  - The geometric tongue is bit-identical.
+- **Soft mucosal contact** (`tongue.contact_stiffness`, dyn/cm^1.5; `contact_loss` 600 dyn s/cm): Hertzian p^1.5 push, lossy while pressed, with a hard stop at 4× contact_depth.
+  - It did not change the remaining flicker (C 40, G 39). That flicker is the tip sliding forward and down the ridge, sealed, as /n/ releases into /iy/ (about 80 cm/s; the contact crosses tube sections).
+  - Off is bit-identical.
+- Variants on the banana sentence (seed 73021; ringing median/max; closures as sealed ms / smallest cm²):
+
+  | | statics | braking | soft | ringing | vowels closed | final N D |
+  |---|---|---|---|---|---|---|
+  | tongue 5 | 0 | 0.08 | – | 0.046 / 0.42 | IY, IH of "money in" (0.00) | 0 / 0.016 |
+  | 6 = width fix | 0 | 0.08 | – | 0.050 / 0.26 | IY, IH (0.00) | 0 / 0.013 |
+  | C | 1 | 0.04 | – | 0.057 / 0.19 | none | 73 / 28 ms |
+  | G | 1 | 0.04 | 600000 | 0.056 / 0.25 | IH of "is" (0.00, two bursts) | 71 / 26 ms |
+  | **7 = H** | 1 | 0.06 | 600000 | 0.056 / **0.094** | none (≥ 0.16) | 36 ms / 0.007 |
+
+  - The statics feedforward reaches its targets, exposing targets the volume shift inflates into the palate (G's "is").
+  - Tongue 5 already sealed the tract in the vowels of "money in".
+- Sent: `listen/m74_tube/banana_physical_tongue_6_smooth_airway.wav`, `banana_physical_tongue_7_statics_soft.wav` (`data/voice_physical_tongue_7.params`).
+- Owner on 6 and 7: "6 doesnt click, but is slightly muffled where we clicked before and is more tongue-tied and 7 does not sound better. none of these do. lets walk it back. we're trying too hard."
+  - Walked back: statics, soft contact and the smooth airway are switches, all off by default (`tongue.smooth_airway`); tongue 5 and the geometric tongue reproduce bit-identically.
+- Owner: "critically think about the mouth as a musical instrument, identify the role of the tongue in each sound ... and enable or disable or transition between states that we believe represent these roles."
+- **The tongue's roles** (`include/tract/tongue_roles.hpp`, `src/tongue_roles.cpp`; speak reads the score's phone comments):
+  - **shaper**, the resonator (vowels, glides, /r/, /h/, rest): it sets the cavities, slowly and stably;
+  - **valve**, the occluder (/t d n l th dh/ and the flap with blade and tip; /k g ng/ with the dorsum): it strikes, seals and releases;
+  - **nozzle**, the jet's aperture (/s z sh zh ch jh/, blade and tip): it holds a still, precise channel.
+  - Each piece (root 1–5, dorsum 6–14, blade 15–20, tip 21–23) takes the role of the phone sounding. A role comes into force over role_ramp (25 ms), from role_lead (20 ms) before its phone to role_hold (10 ms) after.
+- **Representation 1: pinned to the geometric outline** (spring 1e6 dyn/cm, critically damped; the hydrostat moves only the free sections). REJECTED for now:
+  - R1 (valves and nozzles pinned) sealed every closure exactly as the geometric tongue does.
+  - But the body wobbled back and forth inside the vowels (node 20 in /ao/, every 10 ms: 1.75 2.16 1.76 1.98 2.25 1.55 2.08). At each handover the pinned shape and the body's own disagree, and the body springs back.
+- **The ringing measure is confounded.** Turning off the motors' wander left geometric's 5–30 Hz value unchanged (0.113 → 0.116). Inside the vowels the geometric tongue sweeps large and monotonically (/ao/ node 20: 0.84 → 0.19 → 1.58), with one reversal per node.
+  - A 50 ms vowel between consonants is itself a 10 Hz movement. The band partly scores how much the tongue moves, so the ≤ 0.04 gate favoured a sluggish tongue.
+  - Added `/tmp/es/bands.py`: slow (5–30 Hz), mid (30–100 Hz) and jitter (> 100 Hz) motion of the oral log areas in vowels. Wobble shows in mid and jitter.
+- **Representation 2: impedance** (co-contraction; the equilibrium-point view). The role sets the piece's stiffness toward its posture (dyn/cm per section) and its damping ratio.
+  - Anchored on the feedback's target (role_anchor 0), the stiff valves jittered (40000: jitter 0.0155). The target steps as planner events enter the look-ahead.
+  - Anchored on the motors' smooth posture (role_anchor 1: the geometric outline as the motors hold it, shifted to the tongue's own area):
+
+  | | valve / nozzle stiffness | shaper | slow | mid | jitter | sealed ms (N N N N N, final D) | /s t/ |
+  |---|---|---|---|---|---|---|---|
+  | tongue 5 | – | – | 0.046 | 0.016 | 0.0065 | 44 84 0 0 0, 0 | 0.08 |
+  | geometric | – | – | 0.113 | 0.017 | 0.0053 | 55 50 67 51 90, 58 | sealed |
+  | **A1** | 16000 | free | 0.082 | 0.011 | 0.0035 | 40 48 59 50 55, 13 | 4, 8 ms |
+  | A2 | 40000 | free | 0.087 | 0.011 | 0.0035 | 42 43 41 45 15, 13 | 0.013 |
+  | A4 | 80000 | free | 0.092 | 0.015 | 0.0059 | 36 7 25 34 6, 13 | 12, 13 ms |
+  | **A5** | 40000 | 10000, ζ 1.5 | 0.081 | 0.010 | 0.0028 | 39 44 39 38 12, 14 | 0.011 |
+
+  - A1 and A5 open the vowels of "money in" (/iy/ 0.04–0.07 and /ih/ 0.56–0.64; tongue 5 sealed both).
+  - The sentence-initial /dh/ and the /z/ of "is" stay open.
+- Sent: `listen/m74_tube/banana_roles_1_valves.wav` (A1, `data/voice_roles_A1.params`) and `banana_roles_2_valves_soft_vowels.wav` (A5, `data/voice_roles_A5.params`).
+- Owner on roles 1 and 2: "still sounds like he got stung by a bee."
+- **The swollen tongue, measured:**
+  - The hydrostat held the midline area at rest (18.5 cm²) while the planner's shapes asked 14.4–29.6 cm² (TONGUELOG now logs the planned area). "the banana", AH and AE wanted 14.5–17.7 and were inflated.
+  - The schwas left 8.7–11.7 cm³ of oral cavity against the geometric tongue's 13–15.
+  - Formants (LPC at mid-vowel, `/tmp/es/fmt.py`, against the fitted targets): back and central vowels fronted. AO F2 1203 (target 924), AH 1383 (1158), schwas 1650–1740 (1452). Front vowels near target.
+  - All-pinned R5 gave AH 1054 (geometric 1033): the outline path is right, and the fixed area is what fronts AH.
+  - Stiffening the resonator alone (S1–S4, up to 60000) left AO at 1142 and AH at 1358, so speed was not the cause.
+- **Volume kept by width** (`tongue.lateral_spread`, `lateral_narrow`, `lateral_time`; `lateral_from_posture`): a tongue keeps its volume, not its midline area. Flattened it spreads toward the teeth; bunched it narrows. The midline area held follows the plan's within rest × (1 − spread) .. (1 + narrow) over lateral_time. Off is bit-identical.
+- Results (tongue 5 score, seed 73021):
+
+  | | F1 / F2 median error (st) | AO, AH F2 | mid / jitter | sealed N N N N N, D |
+  |---|---|---|---|---|
+  | geometric | 1.36 / 1.11 | –, 1033 | 0.017 / 0.0053 | 55 50 67 51 90, 58 |
+  | tongue 5 | 2.04 / 2.36 | 1203, 1383 | 0.016 / 0.0065 | 44 84 0 0 0, 0 |
+  | roles A1 | 1.90 / 1.54 | 1214, 1377 | 0.011 / 0.0035 | 40 48 59 50 55, 13 |
+  | **L3** (roles 40000/30000, spread 0.3, narrow 0.6) | 1.09 / 1.29 | 1025, 1268 | 0.024 / 0.0077 | 39 35 47 45 75, 40 |
+  | **L3m** (L3, area from the motors' posture) | 1.54 / 0.96 | 967, 1230 | 0.016 / 0.0057 | 51 18 17 14 9, 8 |
+
+  - L3 has a click at 1.889 s (the /n/ of "banana"; transient ratio 42); L3m has none.
+- Sent: `listen/m74_tube/banana_roles_3_unswollen.wav` (L3, `data/voice_roles_L3.params`) and `banana_roles_4_unswollen_smooth.wav` (L3m: the same file plus `lateral_from_posture 1`).
+- Owner on roles 3 and 4: "he still has a bee sting, but it's coming down in inflation."
+- What was left (L3m against the geometric tongue, oral cavity split pharynx / mid 10.5–14 cm / front):
+  - Mid-mouth volume was short in every non-high vowel: AO 10.2/13.7, AH 11.3/14.0, schwas 8.4–12.3/11.9–14.6 cm³.
+  - IH and IY were not raised enough (F2 1770–2070 against 2073–2177).
+  - The body's range was compressed.
+- A pliable surface (P1–P5: stretch 80000 → 8000–20000, bending 8000 → 800–2000, support ÷4) changed nothing (F2 0.96–1.01 st): the shape follows its anchor.
+- **The inflator was the muscle feedback aiming at the look-ahead target** (the next consonant's raised tongue):
+
+  | | F1 / F2 error (st) | AH, IY, IH F2 | slow / mid / jitter | sealed N N N N N, D |
+  |---|---|---|---|---|
+  | L3m | 1.54 / 0.96 | 1230, 2070, 1980 | 0.075 / 0.016 / 0.0057 | 51 18 17 14 9, 8 |
+  | lead 0 | 1.80 / 0.99 | 1142, 2046, 2020 | 0.080 / 0.016 / 0.0071 | 31 18 26 11 16, 0 |
+  | **P7**, gain 1 | 1.40 / **0.81** | 1220, 2104, 1997 | 0.076 / 0.013 / 0.0051 | 48 17 23 23 10, 11 |
+  | **P8**, feedback off | **0.95** / 1.00 | 1067, 2225, 2129 | 0.097 / 0.018 / 0.0058 | 52 47 42 47 86, 57 |
+  | geometric | 1.36 / 1.11 | 1033, 2205, 2122 | 0.113 / 0.017 / 0.0053 | 55 50 67 51 90, 58 |
+
+  - P8: the body moves by its roles' stiffness toward the motors' posture (with passive tissue, volume by width, contact). Its vowels are the nearest to target, its closures like the geometric tongue's, and its slow motion approaches the geometric tongue's. Its 2.566 s transient is the final /d/'s release burst.
+- Sent: `listen/m74_tube/banana_roles_5_less_anticipation.wav` (P7, `data/voice_roles_P7.params`) and `banana_roles_6_no_feedback.wav` (P8, `data/voice_roles_P8.params`).
+- Owner on roles 5 and 6: "5 is less swollen, but more of the robot gets through."
+  - Reading: the feedback carries the organic part; its look-ahead aim carried the swelling.
+- **Feedback aimed by role** (`tongue.feedback_aim`: 0 look-ahead, 1 the motors' posture, 2 by role, from the role schedule's shaper share per piece): full feedback (gain 3), but vowel-shaping pieces correct toward the posture now while valves and nozzles aim ahead.
+
+  | | F1 / F2 (st) | AH, IY F2 | slow / mid / jitter | sealed N N N N N, D |
+  |---|---|---|---|---|
+  | L3m (aim ahead) | 1.54 / 0.96 | 1230, 2070 | 0.075 / 0.016 / 0.0057 | 51 18 17 14 9, 8 |
+  | P7 (gain 1) | 1.40 / 0.81 | 1220, 2104 | 0.076 / 0.013 / 0.0051 | 48 17 23 23 10, 11 |
+  | **G1** (aim 2) | 1.33 / 0.87 | 1192, 1975 | 0.075 / 0.016 / 0.0058 | 32 23 19 13 12, 7 |
+  | G2 (aim 1) | 2.50 / 1.28 | 1198, 1989 | 0.079 / 0.016 / 0.0077 | 38 21 32 15 22, 1 |
+  | **G3** (aim 2, no resonator stiffness) | 1.66 / 0.87 | 1182, 1951 | 0.078 / 0.012 / 0.0045 | 32 20 23 10 15, 3 |
+  | G4 (aim 2, resonator 10000) | 1.48 / 0.84 | 1188, 1954 | 0.076 / 0.013 / 0.0048 | 33 21 20 11 15, 3 |
+
+- Sent: `listen/m74_tube/banana_roles_7_aim_by_role.wav` (G1) and `banana_roles_8_aim_by_role_muscle_vowels.wav` (G3); `data/voice_roles_G1.params`, `voice_roles_G3.params`.
+- Owner: "this is endless tweaking but still a nonphysical mouth that doesnt actually work. can you turn this into a video i can see where a physical 2d mouth articulates equivalently to the model while the model talks?"
+- **The mouth video:**
+  - `speak` GEOLOG=path (GEOEVERY ms, default 20) logs each frame's midsagittal geometry (hull, organ outline, the tongue's section count) and the vocal node areas.
+  - `analysis/mouth_video.py` draws it beside the tube areas and the waveform with phone labels, and muxes the audio (ffmpeg; SLOW stretches the audio, pitch kept).
+  - Sent `listen/video/mouth_realtime.mp4` and `mouth_slow4.mp4` (roles 8 = G3, banana sentence, seed 73021; the audio is identical to the render's).
+- OBSERVED in frames:
+  - At /ao/ (0.98 s) the tongue fills most of the mouth and its root narrows the pharynx to about 0.2 cm² at 4–6 cm.
+  - At /n/ (1.50 s) the tip presses past the hull into the incisors' corner.
+  - The jaw, lower teeth and lips are coarse polygons.
+- Owner on the video: "that's not a tongue. that's a lump of flesh that is mostly attached to the base. thats our first problem ... we can add guards that epistemically protect the space for airflow we know should be present and guard them from contracting too far. imagine- like an inverse tongue."
+- **The airway guard** (`tongue.guard`, `guard_keep`, `guard_stiffness`, `guard_loss`; tongue.cpp build_guard, guard_forces, measure_intrusion):
+  - The planned shape (the geometric outline as the motors hold it) says where air should be. At each section, guard_keep (0.7) of the planned gap to the hull is protected.
+  - A section pressing into it is pushed back (200000 dyn/cm, loss 400 on its intruding speed). Where the plan closes the gap, the guard lies on the hull. With the roles it yields on valves and nozzles (weighted by the resonator's share).
+  - guard_stiffness 0 only measures. Off is bit-identical.
+  - GEOLOG gains the planned surface, the guard surface and the intrusions. mouth_video.py draws the guard (blue), the plan (dashed) and intruding sections (yellow), and prints intrusion statistics. `/tmp/es/intrusion.py` lists them by phone.
+- Intrusion into the guarded airway (5 ms frames; deepest per frame):
+
+  | | median | 90th | largest | over 0.1 cm |
+  |---|---|---|---|---|
+  | tongue 5, measured only | 0 | 0.215 | **1.60** | IY 1.29, IH 1.60, AX 0.87, B 0.56, AE 0.57, R 0.39, N 0.37, W 0.30, L 0.23 |
+  | roles 8, measured only | 0 | 0.060 | 0.32 | R 0.32, AO 0.31, L 0.25, IH 0.20 … |
+  | roles 8 + guard | 0 | 0.006 | 0.066 | none |
+  | tongue 5 + guard (no roles) | 0 | 0.001 | 0.145 | AX, AE; but its closures fail (N 0.40, 0.11, final 0.15): without roles the guard does not yield for valves |
+
+- OBSERVED in the videos:
+  - Tongue 5 at /iy/ of "money" (1.57 s): the tip stays stuck up on the ridge after /n/ while the plan has it down behind the lower teeth (intrusion 1.29 cm). The vowels of "money in" are near-silent in the waveform.
+  - Roles 8 + guard at the same moment: the vowel is open, but the tip curls back under itself (the last three sections hook down and back).
+  - Roles 8 + guard sounds nearly unchanged (formants F2 0.89 against 0.87 st): roles 8 mostly kept to the domain already.
+- Sent `listen/video/guard_tongue5_detect_slow4.mp4` and `guard_roles8_enforced_slow4.mp4` (`data/voice_roles_G3_guard.params`).
+- Owner on the guard video: "does not protect. tongue still penetrates top of mouth."
+  - The guard yields on valves (the /n/), so it never stood between the tip and the palate.
+  - MEASURED (`/tmp/es/penetration.py`, GEOLOG field 8 = each section's depth inside the closed hull): sections never went deeper than contact_depth (0.04 cm).
+  - What showed was the tip as a needle. At 1.65 s the last section stood 0.4 cm straight up off the blade (sections 24 → 25) and jabbed the ridge. The planner aims the tip about 1 cm inside the palate for /n/, and the tip was pliant (0.2 of the root's support and bending).
+- **The solid hull** (`tongue.solid_hull`): ray-casting inside test on the closed hull (to the incisors' edge, closed far above). A section inside returns to its nearest hull point less contact_depth, whichever face that is, and loses its speed into the solid. Off is bit-identical.
+- Tip bend during tip consonants (`/tmp/es/spike.py`: degrees between the blade, sections 20 → 22, and the last segment 22 → 23) and the deepest section inside:
+
+  | | contact_depth | tip_pliancy | tip bend (N N N N N, D) | inside | sealed N N N N N, D |
+  |---|---|---|---|---|---|
+  | roles 8 + guard | 0.04 | 0.2 | 45 73 60 69 71, 68° | 0.04 | 32 20 21 10 15, 4 |
+  | H2 | 0 | 0.2 | 61 80 67 54 82, 77° | 0 | 23 16 21 19 11, 4 |
+  | H3 | 0 | 0.5 | 38 72 59 54 72, 71° | 0 | 24 13 15 18 12, 3 |
+  | **H4** | 0 | 1.0 | 19 49 45 39 27, 26° | 0 | 25 4 9 10 64, 38 |
+
+  - Formants unchanged (H4: F1 1.49, F2 0.83 st).
+- Sent `listen/video/solid_hull_slow4.mp4` (H4, `data/voice_roles_solid_hull.params`). At /n/ (1.65 s) the blade meets the ridge at the hull with no spike.
+- Still open: the tongue's front is a slab dropping from the tip to the floor (no free blade, no sublingual space).
+- Owner on the solid hull: "It's a terrible tongue, and the geometry of it is not very good. We should rework it. Be more like a physical tongue. Obviously, it needs a fat tip. But his n are at least physical now."
+- **The thick tongue** (`tongue.blade_body`, tip_radius, blade_thickness):
+  - The underside follows the upper surface as the lower face of a thick beam: a cap of three points, a four-section underside, and a frenulum dropping onto the floor. Articulators::underside puts it in the organ outline, so the air beneath the blade is outside the organs, and the floor is drawn along its line.
+  - Contact: hull contact on the cap moves the tip. The floor solid (floor plus the lower incisors' inner face, jaw frame) only squashes the blade. Pushing sections from the floor lifted a resting tip 1.3 cm per substep and the body crumpled.
+  - The body's area closes from the frenulum straight to the floor's back; through the floor's front corner the outline crossed itself.
+  - The profile's tip (groove and side channels) is the cap's front.
+  - K1 (radius 0.4, thickness 1.5): N sealed 61 52 83 64 97 ms, D 58; nothing inside the palate; F1 / F2 1.91 / 1.00 st. K2 (radius 0.5) stopped the /z/ of "is" and clicked.
+  - Sent `listen/video/thick_tongue_slow4.mp4`; `data/voice_thick_tongue_K1.params`.
+- Owner: "we need to flex a support beam from within. several that overlap- one for the tip curling/molding, one for the base. its an interpolant problem with a spine around which the rest of the tongue moves. the base one can bend back like a fishing pole while keeping its forward end from raising up too much."
+- **The spine tongue** (`tongue.spine` and spine_*; tongue.cpp spine_*):
+  - Two beams of bends. The base beam is clamped at the root (anchor = root base plus its rest offset), stations 0 to spine_base_end (16), with butt pull toward the rest bends (spine_butt, fading forward) and a forward-end rise limit (spine_rise). The tip beam roots on the base beam at spine_tip_start (12); the spine blends linearly between the beams over 12–16.
+  - Bends follow the shape's spine (its surface less spine_up along its normals) as damped second-order systems (base 10 Hz, tip 18 Hz, critical).
+  - Segment lengths follow the shape's within ±spine_stretch over 20 ms.
+  - spine_reach: damped least squares on the goal bends toward the shape's spine at the base end and at the tip.
+  - The surface is the spine plus spine_up: 0.6 at the root, body_thickness 1.6 over the body, thinning to tip_radius. The cap is a half circle about the spine's end; the underside is spine_down below the blade.
+  - The solid hull turns the joints behind a point inside (least-norm over the beams carrying it).
+  - Off is bit-identical.
+- Results (H4 base, tongue 5 score):
+
+  | | F1 / F2 (st) | AO, AH F2 | mid / jitter | sealed N N N N N, D | target error rms |
+  |---|---|---|---|---|---|
+  | K1 thick | 2.15 / 0.98 | 924, 1159 | 0.014 / 0.0048 | 61 52 83 64 97, 58 | 0.535 |
+  | spine, butt 2, rise 0.5 | 1.45 / 1.91 | 1421, 1542 | 0.024 / 0.0089 | none | – |
+  | spine, butt 0, rise 1.5, stretch 0.4 (SR0) | 1.31 / 1.16 | 1220, 1219 | 0.025 / 0.0090 | 0 0 36 0 67, 31 | 0.616 |
+  | reach both beams, 3 steps | broken (EH F2 3439; slow 0.22–0.30) | | | | 0.73 |
+  | **SR5g**: reach tip only, damping 0.5, 1 step | 1.53 / 1.07 | 1214, 1215 | 0.028 / 0.0106 | 0.11 0.09 57 0.23 75, 36 | 0.625 |
+
+  - The fishing-pole butt (spine_butt 2) held the root to a third of the plan's turn: back vowels fronted and no seals.
+  - SR5g's /s/ is open (0.018); its /t/ after it is not sealed (0.018). Nothing is inside the palate (0.062 largest, 2 frames).
+- Sent `listen/video/spine_tongue_slow4.mp4`, `spine_tongue_realtime.mp4`, `listen/m74_tube/banana_spine_tongue.wav`; `data/voice_spine_tongue.params`.
+  - OBSERVED: the shapes are smooth with a fat tip and a free blade. At /n/ of "money" the spine tongue stays below the palate (the plan's dashed outline is above it); the body sits lower than the plan in /iy/.
+- Owner on the spine tongue: "lol. terrible! show me your two articulating supports." Their sketch: a base support rising from the tongue's base low in the body up and forward through its core; a tip support from its end out to the tip; the base flexing back, the tip curling.
+  - My "spine" had been the surface moved inward by a thickness, parallel to the dorsum.
+- **The skeleton tongue** (`tongue.skeleton`, skeleton_*; `src/tongue_skeleton.cpp`):
+  - Rest supports: the base from 0.35 of the way from the root base to the body's centroid, to the centroid plus 0.3 toward the tip cap's centre. The tip support from the base support's last quarter to the tip cap's centre. Four segments each.
+  - Parameters: each support's four bends (cumulative) and a stretch (log, ±0.35). The tip support turns with the base support at its root.
+  - Skin: linear blend skinning of the rest upper surface and the thick tongue's rest underside. Each point attaches to its nearest point on each support (segment, share, offset along and across). The tip share rises with smoothstep from section 11 to 17 (underside 1). The first point is the root base.
+  - Goals: Gauss–Newton (forward-difference Jacobian, Levenberg 1e-3, steps clamped ±0.3) of the skin's upper points onto the planner's shape (points inside the hull held on it; tip weight 2), plus each parameter pulled toward rest (0.02) and the base end's rise limit. Two warm iterations per tick.
+  - Parameters follow their goals critically damped (base 10 Hz, tip 16 Hz). Hull contact refits the parameters themselves toward the nearest hull points.
+  - GEOLOG field 9 holds the supports; mouth_video draws them (base red, tip green).
+  - Off is bit-identical.
+- SK1 (H4 base): target error rms 0.444 cm (K1 0.535, spine 0.62). Nothing inside the palate. F1 / F2 1.58 / 1.64 st (AO 1327, AH 1446: back vowels fronted). N sealed 10, 0 (0.027), 17, 0 (0.012), 64 ms; D 22. Mid / jitter 0.030 / 0.0082. The root surface kinks in some frames.
+- Sent `listen/video/skeleton_tongue_slow4.mp4` (`data/voice_skeleton_tongue.params`).
+- Owner on the skeleton tongue: "its better. it needs careful finetuning. but it's better. in the is positioned especially wrong."
+- Rise limit and tip weight (SK2–SK5: rise 2.5, tip weight 6, stiffness 0.005) changed little.
+  - Measured against the motors' posture (GEOLOG "planned"), the tip missed about 0.9 cm in every variant. Faster supports (40/60 Hz) made it worse (1.29), and more fit iterations changed nothing.
+  - The goal fit itself is good: the goal pose's tip lies 0.18 cm from its goals and 0.30 cm rms (TONGUELOG now logs both, after the planned area).
+- **The cause in "in the": the targets run a phone early.** With the tongue's look-ahead (lead 0.03) on top of the planner's own leads (set for 28 ms motors):
+  - the /n/'s apex target (6.75, 10.27) was held only from 1.575 to 1.625 s (the /n/ sounds 1.613–1.668);
+  - the /dh/'s (7.80, 8.69) from 1.625 (mid-/n/) to 1.680;
+  - the schwa's from 1.680 (11 ms into the /dh/).
+- **SK9 = lead 0:**
+  - F1 / F2 1.18 / 1.41 st (AO 1131, AH 1279).
+  - Mid / jitter 0.013 / 0.0046 (SK5: 0.039 / 0.0138).
+  - N sealed 46, 1 (0.010), 56, 45, 83 ms; S 12, T 19, D 52.
+  - Frames in "in the": /ih/ tip curled down behind the lower teeth; /n/ blade to the teeth and ridge (dental before /dh/); /dh/ fat tip at the upper incisors' back; schwa lowered.
+  - Slower supports (7/10 Hz, SK10) smoother in the slow band (0.046) but sealed less. Lead 0.01 (SK11) in between.
+- Sent `listen/video/skeleton_tongue_2_slow4.mp4`, `_realtime.mp4`, `listen/m74_tube/banana_skeleton_tongue_2.wav` (`data/voice_skeleton_tongue_2.params`).
+- Owner on skeleton tongue 2: "issue just after one second. harsh click."
+  - At 1.049 s (the /l/ of "always"; transient ratio 13.9, slope 0.20) the tip moved 0.01 cm and the narrowest area held at the /l/'s side-channel floor (0.119 cm²).
+  - Between 1.044 and 1.046 s the cavity in front of the contact jumped (one node 2.97 → 5.66 cm², the lip-side nodes 0.69 → 2.97). The vertical cuts in front of the raised fat tip switched their organ crossing from the cap to the floor beneath the blade as the cap's front passed them.
+- **SK12 = SK9 + smooth_airway 1** (width bounded by the hull point's distance to the nearest organ, continuous as the cap passes):
+  - Transients over 8: SK9 1.049 (13.9), 1.478, 1.950, 2.265 (22.3), 2.444. SK12: only 2.436 (9.0).
+  - F1 / F2 1.61 / 1.59 st (AO 1250, AH 1331; SK9 1131, 1279).
+  - N sealed 46, 4 (0.006), 57, 48, 83 ms; D 53.
+  - Mid / jitter 0.0135 / 0.0045.
+- Sent `listen/m74_tube/banana_skeleton_tongue_3_no_click.wav`, `listen/video/skeleton_tongue_3_realtime.mp4` (`data/voice_skeleton_tongue_3.params`).
+- Owner: "playing faster than realtime?"
+  - The video and audio are real time (3.12 s at 50 fps; 3.13 s at 48 kHz).
+  - The speech is fast: the plan (v3_arrive50_fast_hold) speaks the banana sentence at 6.3 syllables/s, 65 ms per phone (read speech about 4–5).
+  - With `say --rate 0.75`: 4.1 syllables/s (speech 2.93 s). Skeleton tongue 3 then seals every closure: N 83 58 100 62 122 ms, D 85, T 54, DH 12. Transients over 8: 1.655 (8.7), 2.533, 2.779, 3.150 (12.7), 3.413.
+  - Sent `listen/m74_tube/banana_skeleton_tongue_3_rate75.wav`, `listen/video/skeleton_tongue_3_rate75.mp4` (score /tmp/es/banana/pt5_r75.score).
+- Owner on the 0.75-rate banana: "its our best result so far."
+- **Sustained vowels** (owner: "sustain and hold aaaaaa, eeeee,,,ooooo"):
+  - `say "ah." / "ee." / "oh."` (rate 0.75) with the plan's duration scales AA 5.4, IY 6.4, OW 5.0 (/tmp/es/sustain/hold.plan): each about 1.6 s. Spoken by skeleton tongue 3 (SK12.params).
+  - LPC every 100 ms through the hold:
+    - ah: F1 704–753 (target 732), F2 1396–1423 (target 1188).
+    - ee: F1 363–381 (321), F2 2044–2074 (2177).
+    - oh: F1 454–515 (465), F2 877 → 1031 (983; glides up over the hold).
+  - Pitch 137 → 127 Hz. No wobble in the formant tracks.
+  - Sent `listen/m74_tube/sustained_vowels.wav` (the three, 2 s each) and `listen/video/sustained_vowels.mp4`.
+- Owner on the sustained vowels, with a spectrogram of their own aaa / eee / ooo: "notice how it is harder to hold eee. also- for all three. he sounds like a sick ship. this is a vocal cord optimization problem."
+  - Their spectrogram: strong low harmonics; formant bands above them separated by dark valleys; fine noise speckle; the /iy/ harmonics waver.
+  - Ours at the same scale: energy nearly even to 8 kHz, valleys filled, a fine regular ripple through the upper harmonics.
+  - (`voice/ref/user_three.wav` is not those three vowels.)
+- **Source measures** (`analysis/source_measures.py`; ours on the held vowels, bdl on 400 ARCTIC files' stressed aa / iy / ow, middle 60% of tokens ≥ 120 ms):
+
+  | | tilt dB/oct | valley dB | H1–H2 dB | HNR dB | jitter % |
+  |---|---|---|---|---|---|
+  | ours aa / iy / ow | −9.1 / +0.3 / −7.8 | 20 / 15 / 25 | +5.3 / +3.0 / +5.4 | 30 / 30 / 27 | 0.21–0.27 |
+  | bdl aa / iy / ow | −8.9 / +9.5 / −8.8 | 21 / 22 / 25 | −2.7 / −6.9 / −3.3 | 19 / 16 / 20 | 0.37–0.65 |
+
+- **Source fit** (`analysis/sourcefit.py`, /tmp/es/srcfit): blockwise Levenberg–Marquardt (damping, step radius, kept only if the cost falls) over four blocks: posture (voicing_lower / upper / chink), fold cover (mass, stiffness, loss, contact_softness), glottal noise (aspiration, fold_turbulence, closing_turbulence), variation (tension, posture). 1 s holds of /aa iy ow/; residuals scaled per measure against bdl's medians.
+  - Cost 7.84 → 5.12 in 6 sweeps. HNR 29 → 23–26; H1–H2 stuck at +2.5 to +4.5; jitter about 0.27.
+  - The fit chose aspiration 5.3, fold_turbulence 1.9, closing_turbulence 0.6, cover_mass 0.071, cover_stiffness 44000, contact_softness 0.00052, voicing_lower 0.0085, upper 0.0052, chink 0.00018.
+- The folds close every cycle (minimum area = the 0.0002 cm² chink). They vibrate near 138 Hz against an intended 118.6 (the ear is off in this tree).
+  - Glottal flow (WAVEDUMP now prints the flow and area): open quotient 0.54. The flow rises steadily, sags slightly and cuts off abruptly. Flow H1–H2 = 10.6 dB (ordinary); the radiated +4.5 follows.
+  - The flow already includes the glottis's air mass and the tract's wave impedance (cord.cpp). H1–H2 may partly reflect bdl's recording chain; men's H1–H2 commonly runs 0 to +5.
+- Candidates (1 s holds; HNR and jitter on two windows, noisy):
+  - aspiration ×3–6 and fold_turbulence ×3–6 lowered HNR only about 3 dB (25.5–28). The glottal noise is weak.
+  - variation.tension 0.06 with posture 0.05 brought jitter to 0.33–0.47% (bdl's range) but raised pitch to about 157 Hz and H1–H2 to 6–11.5.
+- Sent `listen/m74_tube/sustain_0_before.wav`, `sustain_1_source_fit.wav`, `sustain_2_breathier.wav` (aspiration 32, fold_turbulence 12), `sustain_3_breathier_irregular.wav` (plus tension 0.06, posture 0.05); params `data/voice_source_best/B2/B4.params`.
+- Owner on /ee/: "holding this is actually bending the lower lip down a little bit, closing the mouth partially, so that the tongue has a narrower gap above it but is not itself tilted up. the effort here is in pushing the tongue up exercising the lower neck muscles, which in turn increases the feedback to the vocal cords."
+  - OBSERVED (held /ee/, skeleton tongue 3): jaw 0.77°, tongue body high under the palate (narrowest 0.21 cm²), tip curled down behind the lower incisors. The articulation matches; no coupling to the larynx existed.
+  - Also OBSERVED: the held /oh/ is malformed. The base support stands nearly vertical and the front of the tongue kinks.
+- **The tongue's pull on the larynx** (speaker; `larynx.tongue_pull_tension`, `_adduction`, `_raise`): Tongue::lift() = mean height of sections 8–16 above rest (jaw frame), followed over 20 ms. Per cm of lift: the intended pitch × (1 + tension), the folds' rest gaps − adduction, larynx_drop − raise (not above rest). Off is bit-identical.
+  - Lift in the held vowels: ah 0.00, ee 0.78, oh 0.52 cm.
+  - TP3 (tension 0.08, adduction 0.01, raise 0.4), 1 s holds: pitch ah / ee / oh 152 / 159 / 156 Hz (without: 152 / 150 / 149); H1–H2 +4.5 / −1.4 / +0.8 (without: +4.5 / +2.5 / +3.2). bdl's aa / iy / ow: −2.7 / −6.9 / −3.3, the same ordering.
+  - The larynx block must be appended as a block (cand.sh edits only existing blocks; the first TP renders were identical to the source fit).
+- Sent `listen/m74_tube/sustained_tongue_pull.wav`, `listen/video/sustained_tongue_pull.mp4`, `listen/m74_tube/banana_tongue_pull_rate75.wav` (`data/voice_tongue_pull.params`). Banana transients over 8: 2.533, 2.653, 3.366, 3.404, 3.599 (22.9, the final /d/'s release).
+- Owner: "fix the oh."
+  - OBSERVED (held /oh/, TP3): the base support stood nearly vertical and section 16 spiked out of the dorsum, with a notch in front. Linear blend skinning: a point in the overlap (tip share rising over sections 11–17) averaged two places when the supports diverged (base up, tip forward and down).
+- **Curve skinning** (`tongue.skeleton_curve`): the supports are blended as curves. The central curve is the base support to the tip support's root (15 points), an overlap where the base support's last quarter fades into the tip support's start (10 points, smoothstep), then the tip support (21 points). Each skin point rides that one curve by its rest offset along and across it, with tangents blended across vertices.
+  - `skeleton_bend_limit`: a fit residual on the base support's whole turn beyond the limit (no effect at 0.5–0.8 here).
+  - Smooth shapes, no spike. But /oh/ could not retract its back (F2 4.54 st; TP3's 0.31 came from its distorted shape).
+- **The anchor rides the hyoid** (`skeleton_anchor_move` cm each way, `skeleton_anchor_stiffness` per cm). Two more parameters move the base support's anchor; they follow at the base support's rate.
+  - `skeleton_smoothness`: fit residuals against a bend differing from its neighbour's (the tip support zigzagged).
+  - Off, both are bit-identical (zero Jacobian columns and zero rows).
+  - AM2 (move 1.0, smoothness 0.1), held vowels: shapes hug the plan in /ah iy ow/. F2 AA 1247 (1188), IY 2170 (2177), OW 1099 (983). F1 errors IY 3.2 st and OW 4.1 st; /ee/ closes to 0.07 cm².
+  - The vowel postures were fitted through tongue 5, whose swelling is baked into them. Refitting them through this tongue: `organ_vopt3.py` (now takes SPEAK from the environment) with build_x speak and AM2.params, W 10, MAXFEV 260, all twelve vowels → /tmp/es/vskel/organs_skeleton.txt.
+- **Vowels refit through the skeleton tongue** (`data/organs_skeleton.txt`): formant error before → after:
+  - aa 1.34 → 0.07; iy 10.4 → 1.20; ow 2.94 → 1.79 (F 514 990); ae 0.85 → 0.13; ah 3.75 → 0.61; ao 4.89 → 0.80;
+  - eh 0.60 → 0.22; ey 3.80 → 0.50; ih 2.90 → 0.11; uh 6.05 → 0.92; uw 2.97 → 1.61; ax 2.88 → 0.10.
+- **Regression found and fixed: contact bounce.**
+  - With the moving anchor and the new vowels, each /n/ sealed, sprang off the palate to 0.7–0.8 cm² and came back about every 30 ms (N sealed only 9–23 ms; transients 39–53 at 2.6–3.1 s).
+  - At contact (1.924 → 1.928 s) the base support's end dropped 1.2 cm in one millisecond: the contact refit carried the full regularization (rest pull, smoothness, rise limit) against a weak hold.
+  - Keeping the anchor out of the contact refit alone did not help.
+  - **`skeleton_minimal_contact`**: the correction holds each parameter to its present value (0.2), drops smoothness, rise and bend limit, leaves the anchor, and turns each bend at most 0.1 rad.
+  - Banana: N sealed 78 115 103 64 113 ms, D 86, T 55, DH 69. One transient over 12 (2.534, ratio 14). Nothing inside the palate.
+- **The held /oh/:**
+  - The planner's OW glide (toward UH) took 60% of the vowel from 35% in: a 1.6 s /oh/ slid for a second. Now `timing.diphthong_glide_max` (0.18 s) caps it, ending at 95% of the vowel. Diphthongs under 0.3 s are unchanged (the banana plan is bit-identical).
+  - Path dependence: /ow/ held from rest gave F 491–525 / 956–999 Hz; arriving from a schwa, 529–558 / 977–1062; the planned word, 587 / 1150. **`skeleton_restart`**: every 10 ms the goals are also fitted afresh from rest (6 iterations), keeping the lower cost.
+- **Skeleton tongue 4** (`data/voice_skeleton_tongue_4.params`, organs_skeleton), held vowels (F1-F2 every 0.3 s):
+  - ah 719–742 / 1219–1235; ee 332–338 / 2073–2096; oh 517–559 / 981–1059, gliding only at its end.
+  - Motion in the holds: slow 0.003–0.013, mid 0.001–0.006.
+  - Banana: F2 0.81 st; N 78 115 106 70 120 ms, D 86; transients over 12 at 2.532 (23.9) and 3.602 (the final /d/).
+- Sent `listen/m74_tube/sustained_fixed_oh.wav`, `listen/video/sustained_fixed_oh.mp4`, `listen/m74_tube/banana_skeleton_refit_vowels.wav`.
+- Owner on skeleton tongue 4: "he still sounds somewhat like a sick sheep. ooo does not need to pull the tongue back. the banana stand has completely collapsed." Then: "stand is the only word that actually articulates in this recording."
+- **The collapse, traced** (banana at rate 0.75, the "banana stand" stretch):
+
+  | | voiced | median f0 | 10th-percentile level |
+  |---|---|---|---|
+  | best take's tree (L0) | 77% | 131 Hz | −38.5 dB |
+  | + source fit | 76% | 146 Hz | −39.4 |
+  | + tongue pull | 73% | 148 Hz | −43.2 |
+  | + tongue changes | 75% | 151 Hz | −39.0 |
+  | + new vowels (sent) | 67% | 149 Hz | −49.2 |
+
+  - Closures and formants did not show it.
+  - Per phone, the sent take was 2–4 dB quieter in every vowel and voiced consonant while /s/ held its level: only "stand" stood out.
+  - The source fit raised f0 about 15 Hz (the fit held no pitch; the ear is off).
+  - L0's render no longer matches SK12r bit for bit (diverges at 1.24 s; not traced).
+- **Skeleton tongue 5** = the best take's source (SK12) + the skeleton tongue 4 mechanics + the refit vowels (`data/voice_skeleton_tongue_5.params`). Banana: levels back to L0's; F1 / F2 1.19 / 0.62 st; N 75 109 104 71 121 ms, D 86, T 54, DH 66; transients over 12 at 3.152 (23) and 3.599 (the final /d/, 75).
+- **"Ooo" with the tongue forward:** organ_vopt3 bounds for uw and ow (owner's rule): tx ≥ 3.6, jaw ≤ 8°, protrusion ≥ 0.6, aperture ≤ 0.6.
+  - UW: jaw 4.26, tx 4.14, pro 1.00, ap 0.17 → F 338 / 1222 / 2269 (bdl 337 / 1238 / 2496).
+  - OW cannot reach its F2 without retraction (1193 vs 974, 4.0 st) and keeps its earlier posture.
+  - `data/organs_skeleton.txt` now holds the new UW.
+  - Held (F1-F2): ah 715–728 / 1201–1211; ee 335–362 / 2079–2103; oo 326–349 / 1207–1246. Motion in the holds below 0.003.
+- **The sheep:** not found yet. Ruled out on the held vowels:
+  - slow tremor: pitch 0.6–0.8% rms (6 Hz), loudness 0.4 dB (`analysis/tremor.py`);
+  - roughness: pulse-picked from the audio the same way (`analysis/pulses.py`), ours jitter 0.9–1.1%, shimmer 2–4%; bdl's vowels 1.1–1.5%, 5–7%;
+  - nasality: the velum closes (velum_leak 0);
+  - period doubling: successive period changes correlate −0.50, as independent jitter does; the half-pitch subharmonic is 23–31 dB down.
+- Sent `listen/m74_tube/sustained_ah_ee_oo.wav`, `listen/video/sustained_ah_ee_oo.mp4`, `listen/m74_tube/banana_skeleton_5.wav`, `listen/video/banana_skeleton_5.mp4`.
+- Owner on skeleton tongue 5: "still a bit of a gurgle/death rattle. but better. the mouth is at least correct, its vocal cords that need tuning for the sustained. for the banana stand: stand sounds clear. there is always sounds like he has something in his mouth. the z especially at 1.62 is unable to reach his proper position correctly."
+- **The /z/s:** neither narrowed (core narrowest 0.43 and 0.61 cm²); the goal fit itself missed the tip by 0.68 and 1.00 cm.
+  - `skeleton_smoothness` 0.1 resisted the tip support's curl. Off: the second /z/'s miss fell to 0.23 cm and its core to 0.060.
+  - The first /z/ ("is") needed the tongue longer: `tongue.skeleton_stretch` (was the constant ±0.35) at 0.5 → misses 0.09 / 0.10 cm, cores 0.060 / 0.062 (the groove). At 0.7, 0.05 / 0.11.
+- **Skeleton tongue 6** (`data/voice_skeleton_tongue_6.params`; smoothness 0, stretch 0.5):
+  - Banana F1 / F2 1.14 / 0.47 st; DH (sentence start) 0.035 cm²; Z 0.054 cm²; N 76 109 105 68 123 ms; D 86; nothing inside the palate.
+  - Transients over 12 at 3.151 (19.6) and 3.598 (the final /d/, 90).
+  - Held vowels unchanged (ah 718–727 / 1200–1218, ee 333–369 / 2097–2116, oo 330–344 / 1194–1219).
+- Sent `listen/m74_tube/banana_skeleton_6_z.wav`, `listen/video/banana_skeleton_6.mp4`.
+- **The rattle** (`analysis/rattle.py`: 10–60 Hz flutter of 1 ms log envelopes, whole band and 2–5 kHz, with pulse jitter and shimmer), held /ah/, one source off at a time:
+  - all on: 0.42 / 0.72 dB, jitter 0.96%, shimmer 4.1%;
+  - walls off: 0.41 / 0.73; muscle fluctuation off: 0.31 / 0.65; glottal noise off: 0.40 / 0.67;
+  - **elasticity wander off: 0.13 / 0.46, jitter 0.16%, shimmer 0.7%**; everything off: 0.10 / 0.14.
+  - The wander was noise low-passed at fold.elasticity_corner = 20 Hz, so its energy sat in the rattle band.
+  - Corner 2 / 4 / 8 Hz (wander 0.05): flutter 0.20 / 0.21 / 0.34 dB, jitter 0.38 / 0.56 / 0.67%, shimmer 1.7 / 2.2 / 3.1%. Wander 0.1 at 4 Hz: 0.37 dB, 1.09%, 4.6%.
+  - Adopted corner 4 Hz (pitch tremor 0.68%, 6 Hz).
+- Owner: "always has a weird behavior still. and after that- we can finetune on nato. this is getting better. on teh vocal cords: adding more tube sections below to add resonant feedback from the lungs may be important here."
+  - OBSERVED: in "always" the /w/ sealed the mouth (oral minimum 0.00–0.02 cm², 1.33–1.42 s); the plan itself had the dorsum on the palate.
+  - The planner gives /w/ the /uw/ body height, and banana.score had been planned with the earlier UW (ty 8.59, jaw 12.5).
+  - Re-planned with the refit UW (`banana6.score`): /w/ 0.259 cm², /l/ 0.087, AO 0.43, EY 0.43. F1 / F2 1.07 / 0.43 st. Closures unchanged; nothing inside the palate.
+- **Skeleton tongue 7** (`data/voice_skeleton_tongue_7.params`, organs_skeleton with the new UW). Sent `listen/m74_tube/banana_skeleton_7.wav`, `listen/video/banana_skeleton_7.mp4`, `listen/m74_tube/sustained_slow_wander.wav`.
+- **The subglottal system** (owner's suggestion), `subglottal.bronchial_length`, `bronchial_area`, `lung_port_scale` (BodyLayout):
+  - The trachea (12 cm, 2.5 cm², wider at the top) gains a bronchial tube below it whose total area grows geometrically to bronchial_area at the lungs. The lungs' end is a port lung_port_scale times wider than the last section.
+  - Before: a matched (absorbing) end, so no subglottal resonances.
+  - Transmission-line estimate of the impedance peaks at the glottis (/tmp/es/ladder): trachea alone with an open end 568 / 2144 Hz; bronchi 6 cm to 40 cm², ×3: 496 / 1728; 10 cm: 456 / 1414 / 2058. Adult men measure about 550–650 / 1350–1550 / 2200; our first sits low with the 12 cm trachea.
+  - With the lung port ×3 at 40 cm² the voice died within 0.9 s. The steady-flow correction (impedance − airway resistance) × flow went negative (port impedance 0.35 < 1.5) with a loop gain above 1. Now clamped at zero; the existing setups (port impedance about 16) are bit-identical.
+  - SG8 (8 cm, 40 cm², ×3), banana: F1 / F2 0.98 / 0.52 st; closures unchanged; the final /d/'s transient 98 → 31.
+  - Held /ah/: H1–H2 5.5 → 4.7, HNR 35.5 → 31.8, rattle flutter 0.21 → 0.26 dB, jitter 0.56 → 0.57%, shimmer 2.2 → 5.6% (bdl 5–7%).
+- **Skeleton tongue 8** (`data/voice_skeleton_tongue_8.params`). Sent `listen/m74_tube/sustained_subglottal.wav`, `banana_subglottal.wav`.
+- Owner: "always still has a sort of wrong sound to it. the nato finetunes should help ferret it out im sure."
+- Owner on the subglottal renders: "sounds the same- still with a death rattle."
+- **Rattle isolation** (held /ah/, SG8): `listen/m74_tube/rattle_isolation.wav`, four in a row:
+
+  | | flutter 10–60 Hz (whole / 2–5 kHz) | jitter | shimmer |
+  |---|---|---|---|
+  | 1 current | 0.26 / 0.76 dB | 0.57% | 5.6% |
+  | 2 steady (wall, wander, muscle off) | 0.12 / 0.62 | 0.16% | 1.0% |
+  | 3 quiet (aspiration, fold and closing turbulence, frication off) | 0.26 / 0.48 | 0.61% | 5.5% |
+  | 4 both | 0.09 / 0.16 | 0.16% | 0.3% |
+
+  Asked the owner which still rattle.
+- **NATO fine-tune launched** (/tmp/es/nato): policy_fit als, 2 sweeps, ORDER=alternate. Groups organs, plan, tongue (`ENGINE_TONGUE_KEYS` "tongue.skeleton_,tongue.tip_radius"), `ENGINE_RINGING=0` (the hinge is now switchable). From SG8.params, organs_final (= organs_skeleton), the v3 plan. 269 neurons in 20 blocks; start cost 12.65.
+  - The main tract/build was rebuilt to current source and reproduces SG8 bit for bit.
+- Owner on the four rattle takes: "it smoothly shifts from raspy zombie robot to squeezed chicken toy, with no sign of a human at any stage."
+  - So the variation sources supply the rasp; the bare fold oscillation is the squeezed toy.
+- Third-octave spectra (dB re 500 Hz) against bdl's tokens (`analysis/thirds.py`):
+  - /ah/ within ±4 dB to 4 kHz (no twang peak at 2.5–4 kHz; 5 kHz −10).
+  - /ee/ 630–2000 Hz +4 to +13 dB (the F1–F2 valley too full).
+  - /oo/ 1–2 kHz +5 to +12.
+  - (The 314 Hz band falls between our steady harmonics.)
+  - With every side branch off (`BRANCHES`), the excess stays (+3 to +11); the piriform shapes only 5 kHz.
+- **NAQ by inverse filtering** (`analysis/naq.py`: IAIF at 16 kHz; per cycle (flow peak-to-peak / largest closing rate) / period; the closed share):
+
+  | | ours | bdl (quartiles) | closed share ours / bdl |
+  |---|---|---|---|
+  | ah | 0.080 (both off 0.079) | 0.098 (0.089–0.103) | 0.15 / 0.15 |
+  | ee | 0.105 | 0.125 (0.110–0.142) | 0.11 / 0.11 |
+  | oo | 0.133 | 0.123 (0.110–0.145) | 0.11 / 0.10 |
+
+  - The direct-flow estimate (0.04) is not comparable: it is not inverse-filtered.
+- Less pressed (rest gaps voicing_lower / upper 0.011 / 0.006 →):
+  - 0.015 / 0.009: NAQ 0.085 / 0.118 / 0.140.
+  - **0.019 / 0.012 (open2): NAQ 0.092 / 0.132 / 0.149**; /ah/ flutter 0.29 / 1.09 dB, jitter 0.64%, shimmer 4.2%.
+  - **open2g** (+ wall 0.05, muscle fluctuation 0.005, elasticity wander 0.025): NAQ the same; jitter 0.33%, shimmer 2.2%.
+- Sent `listen/m74_tube/sustained_less_pressed.wav` (open2) and `sustained_less_pressed_gentle.wav` (open2g); params `data/voice_source_less_pressed*.params`.
+- NATO fine-tune: block 2 of 20 after about 20 minutes (plan.duration 12.81 → 12.34; organs.AA unchanged).
+- Owner on the less-pressed takes: "the gentle sounds a faint bit more human. but its still massively missing what makes a voice human. which is that it is way more resonant with a lot more layered sound."
+- **Formant bandwidths** (`analysis/bandwidths.py`: LPC at 10 kHz, order 12, 25 ms frames; F1–F3 the three lowest poles above 150 Hz with bandwidth under 700):
+
+  | | ours (open2g) | bdl |
+  |---|---|---|
+  | ah | 119 / 91 / 97 Hz | 153 / 100 / 120 |
+  | ee | **185** / 74 / 120 | **40** / 73 / 174 |
+  | oo | **215** / 54 / 96 | **59** / 180 / 123 |
+
+  - Ruled out as the cause of the broad F1:
+    - pitch (110 / 120 / 150 Hz: 195 / 185 / 218);
+    - walls.loss_scale 0.1–0.3 and tract.hop_loss 0.005;
+    - wall stiffness ×3 to ×100 (lowers F1, bandwidth 164–227);
+    - subglottal off (204) and skin off (171);
+    - the oral jet (frication, jet_growth: identical).
+  - The pressed source narrowed it a little (151 / 197).
+- **Tube alone** (`tools/transfer`, closed glottis, Story's shapes; now VISCOUS and HOPLOSS):
+  - iy / uw / aa F1 bandwidth 110 / 140 / 120 Hz; rigid walls 50 / 60 / 60.
+  - The links' viscous resistance (`viscous_resistance_per_cm`: max(0.03 A^−2.6, 0.31 / A) per cm) is a steady-flow law. A boundary layer at a formant frequency in 0.2 cm² gives about 0.4 per cm against its 1.97.
+  - VISCOUS 0.2: rigid F1 bandwidth 20–30 Hz (the radiation and boundary-layer floor); with walls 90 / 110 / 70 Hz. Walls still add 60–80 Hz.
+- **`tract.viscous_scale`** (BodyLayout → Tube::set_viscous_scale; default 1, bit-identical).
+  - V1 = open2g + 0.2: held F1 / F2 / F3 bandwidths ee 130 / 45 / 84, oo 170 / 52 / 53, ah 91 / 87 / 77. Wall loss ×0.5 on top changed nothing.
+  - V3 = the pressed source + 0.2: ee 113, oo 146, ah 97.
+  - Banana (V1): F1 / F2 0.58 / 0.52 st; closures unchanged; one transient over 12 (3.598, the final /d/).
+- Sent `listen/m74_tube/sustained_resonant_gentle.wav` (V1), `sustained_resonant_pressed.wav` (V3), `banana_resonant.wav` (V1); params `data/voice_resonant_gentle.params`, `voice_resonant_pressed.params`.
+- Owner on the resonance takes: "its about the same. a bleating sheep." Then, interrupting a three-strip fold trial: "stop trying to make a fold oscillator. make a tube that has a pinched section, with multiple resonant sections before and after that follow our design pattern. the fold doesnt exist. there is no fold. there is only resonance interacting with elasticity."
+- History: the sheet tube's elastic section (milestone 3) never closed, a balloon neck at ±13% of an open ring. The slit cord and heavy walls followed, then folds inside the sheet.
+- **The pinch tube** (`include/tract/pinch_tube.hpp`, `src/pinch_tube.cpp`; `pinch.*`; Cord delegates to it when pinch.on; off is bit-identical):
+  - Six wall sections (slit 1.3 cm across, 0.4 cm each) in the owner's pattern (m / e / s: 1/2/1, 2/4/0.1, 2/1/0.3, 4/0.1/3, 0.1/3/0.1, 1/2/1). Rest gaps 0.8, 0.25, then 2 × the posture's lower and upper rest (the pinch), then 0.25, 0.8; the chink a parallel leak.
+  - Each wall: mass, support to rest, elasticity to its neighbours (both times the tension, (pitch / natural_pitch)²; elasticity wanders, corner 4 Hz, tamped by support), loss, contact where the walls cross.
+  - Air: one flow through the chain from the arriving waves (the sections' air mass, slit friction, the kinetic pressure into the narrowest, 20% recovered past it). Each wall feels Bernoulli's pressure up to the narrowest section and the outlet's past it.
+- First render (support 30000, elasticity 30000, density 0.1): blown open, a balloon again: area 0.12–0.17 cm², flow 365–475 cm³/s, a slow 70 Hz wobble.
+- Sweeps (`analysis/pinch_sweep.py`; held /ah/, WAVEDUMP 1.00–1.10 s):
+  - Support 100000, elasticity 30000, density 0.1: self-oscillation at 189 Hz, flow 43–194, strength 0.94.
+  - Support 60000, elasticity 10000, density 0.15: 128 Hz, area 0.014–0.091, flow 15–280, not closing. Through the hold the flow was nearly sinusoidal (24–264 cm³/s), never shut.
+  - Pressing the rest gaps (posture 0.004/0 down to −0.004/−0.008) shrank the swing and raised the pitch.
+  - **Loss 0.2 → 0.1 closes it:** rest 0.004/0, area down to 0.0002 (the chink), flow 0–308 cm³/s, 129 Hz, strength 0.91. Loss 0.05 overshoots (negative flow).
+- **Pinch tube 1** (`data/voice_pinch_1.params`):
+  - Held vowels voiced 100%: f0 119 / 116 / 109 Hz; F1-F2 ah 726–732 / 1206–1211, ee 393–408 / 2094–2111, oo 382–391 / 1215–1240.
+  - NAQ 0.119 / 0.150 / 0.138 (bdl 0.098 / 0.125 / 0.123); H1–H2 10.0 / 6.8 / 6.5; HNR 22 / 25 / 23 dB (the fold 32–35; bdl 16–20).
+  - Banana: voiced 80%, f0 131 (102–148), F1 / F2 1.44 / 0.76 st.
+- Sent `listen/m74_tube/sustained_pinch.wav`, `banana_pinch.wav`.
+- NATO fine-tune stopped (organs.ER, sweep 0, cost 12.06) once the source was to be replaced.
+- Owner on pinch tube 1: "so sickly. maybe a bit better. give me some sliders! lemme finetune for you."
+- **Sliders** (`analysis/slider_server.py`, on the Mini, bound to 127.0.0.1:8765; the laptop reaches it through `ssh -N -L 8765:127.0.0.1:8765 m4mini`; opened in the app's browser pane):
+  - One slider per pinch setting (walls, geometry, the six sections' three pieces, wander), the pinch's rest posture and chink, breath noise, turbulence on the walls, tract friction and tract wall loss. Log scales where the range spans decades.
+  - Utterances: held ah / ee / oo and the banana sentence (`data/slider_scores/`). Render on release, about 1 s; the last six takes are kept to A/B.
+  - The base is the engine's whole tree for `data/voice_pinch_1.params` (speak PARAMS_OUT), so the sliders start at the engine's own values. Its default render is bit-identical to pinch tube 1.
+  - Presets: `tract/data/sliders/NAME.params` (full tree) and `NAME.json` (the values) on the Mini. Every render's values are appended to `render_log.jsonl` there.
+- Owner, after 216 slider renders (all held ah): "saved ee. disregard section settings. no matter what i do i cant disentangle oscillatory rattle from frequency- higher frequency voices, no rattle. and yes, real voices have a sort of rattle, but its more complicated than what i hear here".
+- **OBSERVED — the saved ee does not phonate** (`analysis/rattle_pitch.py`; flow and opening dumped over 1.0–2.0 s):
+  - The pinch is blown open: 0.97 cm², 900 cm³/s, no cycles. Along the render log (every 12th render re-rendered) it phonated with closure every cycle through render ~132. The last section moves (renders 144, 156, 215) blew it open.
+  - ee's non-section values with the default sections ("ee-ns") phonate with closure.
+- **MEASURED — the rattle against pitch** (ee-ns, held ah, tension anchor varied):
+  - F0 75 / 93 / 111 / 128 Hz: 10–60 Hz flow flutter 1.27 / 0.49 / 0.25 / 0.13 dB, between-pulse drop 34 / 24 / 22 / 14 dB.
+  - Flow jitter stays 0.2–0.3%, shimmer 0.5–0.7%.
+  - Pitch: anchor 120 gives 93 Hz against the intended 119. Anchor 92 gives 119.5.
+- **MEASURED — real voices drop as deep between pulses but vary far more** (`analysis/envelope_depth.py`, the 80 Hz–6 kHz Hilbert envelope; pulses.py jitter and shimmer):
+  - bdl, 120 files: median drop 21–23 dB at F0 95–130 Hz. Owner (`voice/ref/user_three.wav`): 17–26 dB. Ours at matched F0: 22–24 dB. Depth alone is not the rattle.
+  - Ours is too uniform: median 22, 90th percentile 24 dB. bdl: 23 and 28.
+  - Wav level, owner's held vowels at 96–116 Hz: jitter 9–14%, shimmer 12–19%, 1 ms envelope flutter 0.6–1.4 dB. ee-ns at 93–128 Hz: 0.4–1.2%, 3.6–5.3%, 0.2–0.4 dB.
+  - HYPOTHESIS: the "oscillatory rattle" is a strictly periodic pulse train. Below about 100 Hz it is heard as a mechanical buzz; higher, it fuses into a tone. Real voices are rattly too, but irregularly from cycle to cycle ("more complicated").
+- **`pinch.jet_turbulence`, `pinch.turbulence_corner`** (default 0, bit-identical, verified with cmp):
+  - The separated jet's eddies press on the walls past the narrowest section: rms share × ½ρv² (v = flow / pinch area), one-pole noise per section at the corner (1 kHz).
+  - The walls are shaken hardest while the jet runs fastest and not at all while shut: a body-driven cycle-to-cycle variation, not a prescribed jitter.
+  - Sweep, ee-ns at anchor 92 (F0 119.5): share 0 / 0.1 / 0.2 / 0.4 / 0.8 gives flow jitter 0.18 / 0.37 / 0.58 / 1.05 / 1.92%. Wav level at 0 / 0.2 / 0.4: jitter 1.2 / 1.6 / 2.9%, shimmer 3.7 / 7.1 / 19.5%, flutter 0.24 / 0.37 / 0.95 dB.
+  - HYPOTHESIS, unheard. A share of 0.3–0.4 is at the high end of plausible near-jet pressure fluctuation.
+- Sliders restarted on `data/sliders/ee_ns.params` (ee, default sections, anchor 92, jet eddies 0.3), with a new Jet group (eddies, eddy speed). "turbulence on the walls" relabelled "turbulence noise in the sound": it is the acoustic glottal noise, not a force on the walls.
+- Owner: "feedback and resonance loops. pretend this is a musical instrument like a harp. 1/n2 type stuff."
+- **String walls** (`pinch.string_modes`, `string_tension`, `string_loss_growth`, `string_taper`; 0 modes = pistons, bit-identical, verified with cmp):
+  - Each section's wall is a string across the slit, fixed at both ends, as K standing waves sin(nπx/W), K ≤ 12. The opening and contact are evaluated at 16 points; the opening is a lens.
+  - Per mode: half the wall's mass, support and neighbour elasticity, plus the string's T(nπ/W)²(W/2), growing as n² (harmonic frequencies). T is multiplied by the pitch tension.
+  - Uniform pressure drives the odd modes. Contact at each point drives every mode by its shape there (the pluck, about 1/n² displacement). Taper (an additive wedge in the rest gap) breaks the symmetry so even modes can sound.
+  - Render about 2.4 s for the held ah (pistons 0.5 s).
+- **MEASURED** (ee-ns, jet 0.2, 8 modes; held ah):
+  - The phonation window is narrow: T 1000 → static (opening 0.073); 3000 → 81 Hz, irregular, rarely closing; 10000 → 177 Hz at anchor 92; 30000 and above → shut. Anchors for about 119 Hz: T 6000 / 110, 10000 / 137, 15000 / 160, 20000 / 185.
+  - Flow harmonic slope (n = 1..16): pistons −15.9 dB/oct; T 6000 −14.1, 10000 −14.3, 20000 −12.9 (1/n² = −12). Flow H2: −17 → −16 / −13 / −9 dB.
+  - Sound H2..H8 come up 3–15 dB (more layered). Flow jitter 0.4–1.1%, subharmonic −40 to −27 dB.
+  - OBSERVED, unexplained: ear.pitch_feedback 0.08 changed nothing (output identical).
+- Sliders restarted on `data/sliders/ee_harp.params` (ee_ns, 8 modes, T 10000, anchor 137, jet 0.2), with a Harp strings group. A/B with pistons: modes 0 and anchor 92.
+- Owner on the string walls: "its the same. when i adjust them, it adjusts the entire voice. every slider does the same thing. throw out the entire tube. the harp point was that vocal cords are a string instrument - it is the output that needs harmonics. not an extra component. figure out what vocallab does for their vocal cords". The pinch tube is abandoned (code kept behind pinch.on = 0).
+- **OBSERVED — VocalTractLab's vocal folds** (Birkholz, Drechsel & Stone 2019, Interspeech, vocaltractlab.de/publications/birkholz-2019-interspeech.pdf; VTL 2.4 manual §2.1 and the glottis dialog; math only, no code read):
+  - Three models: "Geometric glottis 2025" (the default; unpublished; the 2019 model plus a jitter parameter after Fraj, Schoentgen & Grenez 2012), "Geometric glottis 2019", and the self-oscillating "Triangular glottis" (Birkholz, Kröger & Neuschaefer-Rube 2011). The classical two-mass model was removed. The "aspiration strength" parameter was removed as unnecessary.
+  - The geometric glottis is kinematic: the motion is prescribed. The lower (i = 1) and upper (i = 2) edges: x_i(y, t) = x_rest,i (1 − y / L) + x_max sin(πy / L) sin(φ_i(t)), y along the fold. The paper's words: like "ideal strings that are fixed at their two ends", but only the first mode in space and in time.
+  - x_max = c · x_rel · sqrt(P_trans) · L0 / L, with c set so x_max = 1 mm at 800 Pa.
+  - Phases α1 = 2π∫f0 dt, α2 = α1 − φ (upper edge lag), taken mod 4π. A piecewise-linear warp (s ∈ [−1, 1]) skews the pulse. Double pulsing d ∈ [0, 1] shrinks every second cycle's opening: x_dyn = x_max sin(πy / L)[(1 − d / 2)(sin φ + 1) − 1] for 1.5π < φ < 3.5π.
+  - A_i = 2∫max(x_i, 0) dy + A_chink. The glottis is two tube sections of length T / 2 with areas A1 and A2. The flow comes from the tube's aerodynamics, so the harmonics come from the clipped area pulse and the tract's air mass, not from the folds.
+  - f0 carries small quasi-random flutter after Klatt & Klatt 1990. Eqs. 1–2 (L and T from f0, f_nat) did not survive my text extraction of page 1.
+  - Most natural male setting (30 listeners, 4050 stimuli): x_rest,1 0.3 mm, x_rest,2 0.6 mm (slightly divergent), φ 70°, s 0, d 0.05, chink 2 · x_rest,1 · 4 mm = 2.4 mm², L0 16 mm, T0 4.5 mm, f_nat 120 Hz, P_sub 800 Pa. It scored 2.2 of 3: "rather natural", not natural.
+  - Ours: `Cord::set_kinematic` (2026-10-15) is this model without skew, double pulsing or flutter; the owner called it "Perfect Paul". The Cord's self-oscillating mechanics are a port of VTL's triangular glottis.
+- Owner: "study what we did for waterfall over on the playsuite /games/ repo, specifically what sibling instance called waterfall did for voice b. when you make this voice, add those effects." Then: "its the 1/n² bridge force".
+- **OBSERVED — the Canopy Falls harp** (`~/Developer/playsuite-games-falls`, `src/music/styles/heavenly_harp.cpp`, commit 912b87f; the "waterfall" session's transcript, 2026-10-18):
+  - Tuning B (D4–B5) beat A, but the owner found it "brighter, so its more audible, but its also colder". The session traced the cold to the output: bridge force, with harmonics falling as 1/n. W2: 85% the strings' own displacement (1/n², round and warm) and 15% bridge force, plus a fuller soundboard (lowest resonance 200 Hz instead of 230). Owner: "w2 is nice. really nice. that's a commit."
+  - Its other parts: Karplus-Strong waveguides with an all-pass for the fractional period; two planes 0.022–0.045% apart, the second ringing 0.6× as long; a finger-pad pluck at 0.40–0.50 of the length (harmonics to about the 8th); a shared passive bridge (coupling 0.0005) for sympathetic ringing; a 1.5 ms slip-off onset; soundboard band-passes 200/480/1050 Hz (widths 110/160/420 Hz, gains 0.9/0.45/0.14); an 8-line FDN hall, 3.8 s; a soft saturator x/(1 + 0.3|x|).
+- **`harp.warmth`, `harp.warmth_corner`** (BodyLayout → VoiceBody::step; default 0, gated):
+  - Sound = (1 − w) · d(flow)/dt + w · 2πf · (flow less its steady stream). f is the intended pitch followed over 20 ms, so the two match at the fundamental. The steady stream is removed by two one-pole high-passes at 50 Hz.
+  - V1 (`voice_resonant_gentle`), held ah / ee / oo, harmonics 1–24: at warmth 0 / 0.5 / 0.85 / 1, slope ah −7.6 / −8.2 / −10.2 / −13.4 dB/oct, ee −5.3 / −5.9 / −7.9 / −11.1, oo −13.0 / −13.6 / −15.6 / −18.8. H1–H2 ah 7.9 → 12.7 at 0.85. Banana energy below 60 Hz −34.8 → −27.6 dB of the total.
+  - Sent `listen/harp_warmth/sustained_w0_before.wav`, `sustained_w0.85_harp.wav`, `sustained_w1.wav`, `banana_w0_before.wav`, `banana_w0.85_harp.wav`, `banana_w1.wav`.
+- Owner on the output warmth: "he sounds better but muffled. like he's speaking behind a wall. it muffles out the warbling. that bridge is only supposed to work on the vocal cord, which needs harmonics." Output warmth stays at 0.
+- **MEASURED — the folds' own harmonic series** (V1, cord flow by WAVEDUMP over 1.0–1.5 s, harmonics 1–40):
+  - Slope −14.9 / −15.9 / −15.8 dB/oct (ah / ee / oo).
+  - Against 1/n² at n = 2, 4, 8, 16, 32: ah −2 +1 +3 −6 −9; ee 0 +1 −1 −1 −10; oo −1 +1 −1 −6 −8. On the line to the 8th harmonic, short above it.
+  - Harmonics above the floor between them at n = 2, 4, 8, 16, 32: 57–59, 45–48, 32–40, 16–23, 9–15 dB. The upper series is buried.
+- **`harp.bridge`** (BodyLayout → Cord::set_bridge; default 0, off path verified identical with cmp):
+  - The flux the airways receive becomes flow + b · (d(flow)/dt / 2πf − swing). Swing is the flow less its steady stream (one pole, 50 Hz); f is the intended pitch over 20 ms; the rate of change passes two poles at 5 kHz.
+  - Unbounded, it blew up at share 0.05 (held oo, 2.468 s, glottis open): its gain rose toward Nyquist and fed back through the tract's echo into the flow solve. With the 5 kHz poles, 0.05 and 0.1 are stable; 0.15 (the harp's W2) still blows up (held oo, 2.216 s).
+  - Source against 1/n² (the bridged flow rebuilt offline from the dumped flow), n = 2, 4, 8, 16, 32:
+    - 0.05: ah −2 +1 +4 −4 −3; ee 0 +1 0 −1 −5; oo −2 +2 0 −3 −4.
+    - 0.1: ah −3 +1 +7 −2 +12; ee 0 +3 +3 +1 +5; oo −2 +2 +4 0 +11.
+  - Sent `listen/harp_bridge/sustained_before.wav`, `sustained_bridge_0.05.wav`, `banana_before.wav`, `banana_bridge_0.05.wav`.
+- Owner on the bridge: "terrible noise between words. bridge is broken, inaduble, no words. retract. implement more of vocallab math". **The bridge is retracted** (code, slot and member removed; the flow line is back to `flow + flux_noise_`). REJECTED: it amplified the flow's rate of change, breath noise included, between words.
+- **VTL 2019 additions on the kinematic folds** (`Cord::set_kinematic_shape`; `kinematic.skew`, `double_pulsing`, `flutter`, `length_scaling`; all 0 → identical, verified with cmp):
+  - The skew knee is our reading of the text: the opening takes π(1 + s) of each 2π. Area pulses checked: s 0.5 opens slowly and shuts fast; d 0.5 makes every second pulse 0.16 against 0.25 cm².
+  - `data/voice_vtl2019_male.params` (their most natural male on V1's body, KINEMATIC=1): F0 114.5, jitter 1.06%, shimmer 3–5%. Sent `listen/vtl2019/`.
+- Owner: "the provided samples from their 2019 model do not sound natural. only their 2.4 version sounds natural, so if they updated that we will need to figure it out."
+- **OBSERVED — VTL 2.4's "Geometric glottis 2025"** (`~/Downloads/VTL2.4/API/Developer/Sources/GeometricGlottis2025.cpp` on the laptop; the speakers JD2 and M01 select it; GPL, math only):
+  - L = L0 √(f0 / f_rest), T = T0 L0 / L (L0 1.6, T0 0.45 cm, f_rest 120 Hz).
+  - Amplitude 0.0007 (L0 / 1.6) √P_trans. P_trans is the commanded lung pressure less the supraglottal pressure through a 4th-order Chebyshev at 25 Hz. Faded to 0 between 2000 and 1000 dPa, times the relative amplitude. The 2019 L0 / L scaling is commented out.
+  - Edges: cosine phases, the upper lagging 1.22 rad.
+  - Collision: A2 = −rest / π, A3 = A2 − 0.2 A. t2 = acos(A2 / A)/2π and t3 = 1 − t2. Pulse shape p moves t4 = t3 + 0.1p (p > 0) or t1 = t2 + 0.1p (p < 0). Between t1 and t4 the displacement is the largest of the cosine and two exponentials toward A3, slope-matched at t1 and t4.
+  - Area: 32 points along the fold, x = rest · z + d · sin(πz) cut at 0, summed as 2∫x plus the chink.
+  - Flutter: Klatt, 25%. Jitter: Schoentgen model I, phase += 2π · 0.28 · (jitter / 100) · (±1) · √dt; at 10% that is 0.176 rad/√s.
+  - The glottis is two tube sections, T/2 each.
+  - Modal shape: JD2 rests 0.0403 / 0.03995 cm, chink 0.02 cm², pulse shape 0.5, 800 Pa; M01 0.054 / 0.0718, chink 0, pulse shape 0.502.
+- **`kinematic.geometric_2025`, `pulse_shape`, `relative_amplitude`** (`Cord::set_geometric_2025`; off → kinematic identical, verified with cmp):
+  - Our code from that math. The supraglottal low-pass is two Butterworth sections (theirs Chebyshev). The commanded pressure is our lung pressure (`expected_breath_`).
+  - `data/voice_vtl2025_jd2.params` (JD2 modal on V1's body, flutter 25, jitter 0.176): area 0.044–0.188 cm², flow 128–447 cm³/s, smooth closure; held ah F0 114, jitter 0.53%, shimmer 4.0%.
+  - Sent `listen/vtl2025/sustained_vtl2025_jd2.wav`, `banana_vtl2025_jd2.wav`.
+- Owner: "implement their glottal flow and aspiration too".
+- **OBSERVED — VTL 2.4's glottal flow** (TdsModel.cpp prepareTimeStep; Constants.h):
+  - Each section has L = ρ (len / 2) / A per half and R per half = (len / 2) · max(0.03 · A^−2.6, 0.0065 · A^−1 · √2250). Areas are floored at 1e-4. The glottis sections have no soft walls.
+  - Kinetic terms are linearized on the previous flow: k = 1 into a contraction, 0.2 out of a glottal section expanding, 0.5 elsewhere.
+  - The glottis is two sections of T/2. Their rate is 48 kHz, Crank–Nicolson (θ 0.5).
+- **OBSERVED — VTL 2.4's aspiration** (calcNoiseSources, calcNoiseSample):
+  - The constriction is the upper glottis section. Flow is its outgoing current through one pole at 500 Hz, outflow only; v = flow / A.
+  - Gain 0.2e-6, f_c 1000 Hz, tapered between 0.5 and 1 cm². Amplitude gain · |v|v² · √A.
+  - The rise is a 3 ms one-pole on the square root and the fall is instant; the source is silent under 0.001.
+  - Noise: N(0, 1/√12) cut at ±1, through a 2nd-order low-pass (Q 1/√2) at f_c, times amplitude · (1000 / f_c)^1.5 · 0.6.
+  - A dipole (series pressure source) at 1.5 cm above the glottis, split linearly between the section there and the next.
+- **`vtl.glottal_flow`, `vtl.inertance_floor`** (Cord::set_vtl_flow; off → identical, verified with cmp for the kinematic, fold-tube and 2025 sources):
+  - Their viscous law per edge section and their inertance (no inlet or outlet, floor 1e-4). Our kinetic terms already were theirs. Our quadratic solve is kept (they linearize).
+- **`vtl.aspiration`, `vtl.aspiration_gain`** (VoiceBody::vtl_aspiration_sample):
+  - Their source as above, in place of ours, the flux noise and the fold turbulence.
+  - Bilinear Butterworth at 1 kHz. Noise raised √2 for our 96 kHz.
+  - It is about 12× quieter than V1's aspiration (gain 12.12 on the same normalization).
+- **MEASURED** (2025 JD2 on V1's body, held ah 1–2 s):
+  - 2025 alone: jitter 0.53%, shimmer 4.0%, fuzz −14.7 dB.
+  - + their flow: flow 110–433 cm³/s (min was 128), jitter 0.49%, shimmer 3.6%, fuzz −16.1 dB.
+  - + their aspiration: jitter 0.43%, shimmer 1.9%, fuzz −19.2 dB, 2–5 kHz flutter 1.49 → 0.71 dB.
+  - Banana clicks (clicks2): 2025 5, + flow 7, + aspiration 23 (V1 29). The added clicks spread through the voiced stretches: the amplitude follows the 500 Hz flow over the instantaneous area and falls at once, so it jumps within each cycle. That is their formula.
+  - `data/voice_vtl2025_flow.params` (flow; our aspiration still on at V1's gain) and `voice_vtl2025_full.params` (flow and their aspiration).
+  - Sent `listen/vtl2025/sustained|banana_vtl2025_flow.wav` and `sustained|banana_vtl2025_flow_aspiration.wav`.
+- Owner: "lets finetune what can be finetuned against our human reference recordings for pure vocal cord sounds? and lets finetune against taking the angle on the specgram". Then: "For 'the angle on the spectrogram' i meant and now do taking np.angle ie the phase. if you want a different phase representation you can take irfft twice in time which unwinds the representation and places everything in the real domain."
+- **`analysis/cord_features.py`**:
+  - tilt (0.3–5 kHz, dB/oct), H1–H2, harmonic peaks over troughs in 0–1 / 1–2 / 2–4 / 4–6 kHz;
+  - pitch drift / tremor / flutter (cents, 0.5–3 / 3–8 / 8–20 Hz) and level wobble;
+  - **phase from np.angle**: per 5 ms frame, three periods (Hann), each harmonic's np.angle at k·f0; phase distortion PD_k = φ_(k+1) − φ_k − φ_1 (Degottex); per harmonic over time the deviation √(−2 ln R) (scatter, rad) and the mean angle, medians per band.
+  - The double-irfft representation is not built yet.
+- **Mistake, corrected by the owner**: "my recordings are not aaa eee or ooh". `voice/ref/user_three.wav` is 21.75 s of connected speech, "hello my name is ducklips, the fox jumped over the laazy dog. she sells seashells by the seashore", then the same whispered (the normal pass is 0–9.8 s). I had treated its voiced runs as held vowels. It also carries steady 400 and 800 Hz lines through the silences (hum).
+- **The held-vowel fit is withdrawn** (`analysis/cord_fit.py`; `data/voice_vtl2025_fit.params` cost 0.324, `fit2` 0.175). Its owner-derived targets (drift, tremor, wobble) came from speech. Its glottis went fully adducted (rests 0) and the banana clicked 107 times (25.7/s). Not from the aspiration or the inertance floor: gain 1, gain 1e-4 and floor 0.01 all left 108–137.
+- **MEASURED, same words** (voiced runs of at least 0.12 s, medians):
+  - Owner's normal pass (14 runs): tilt −11.1, H1–H2 −0.4, HNR 17.5 / 8.8 / 7.3 / 6.8, phase scatter 0.88 / 1.16 / 1.09, PD mean +0.8 to +1.0, flutter 9.1, clicks 1.4/s.
+  - V1 saying the same sentences: HNR 29.9 / 20.2 / 11.5 / 6.8, scatter 0.58 / 0.74 / 0.70, PD mean +2.6 to +2.9.
+  - VTL 2025: HNR 29.1 / 18.8 / 9.7 / 6.2, scatter 0.29 / 0.49 / 0.62, PD mean −2.6 to −2.7.
+  - bdl's vowel nuclei: PD mean +2.6 to +3.0. The PD mean differs between owner and bdl (speaker or recording), so it is not a target.
+- Owner: "id rather you fit to the nato voice".
+- **MEASURED, NATO words** (the reader's 26 clips against `say` of the 26 words, `/tmp/es/ref/nato.score`):
+  - Reader (28 runs): tilt −13.4, H1–H2 −9.6, HNR 26.4 / 12.9 / 8.6 / 6.0, scatter 0.89 / 1.43 / 1.59, flutter 12.8, clicks 0.2/s.
+  - V1: H1–H2 +6.0, HNR 22.8 / 12.9 / 7.9 / 6.8, scatter 0.50 / 0.65 / 0.77, flutter 8.1, clicks 5.0/s.
+  - VTL 2025: H1–H2 +3.4, HNR 19.8 / 9.1 / 7.3 / 6.3, scatter 0.37 / 0.57 / 0.74, flutter 7.2, clicks 4.9/s.
+  - Both humans' phase scatter is about twice ours in every band.
+- **`analysis/cord_fit_sentences.py`**:
+  - Fits the 13 settings to a human reading of the same words: tilt, H1–H2, HNR per band, phase scatter per band and flutter, plus a squared penalty for clicks above the reference's rate.
+  - Workers get the base through a pool initializer. macOS spawns them fresh; the first held-vowel run rendered over engine defaults until fixed.
+  - Running against NATO (30 generations, from `voice_vtl2025_full`): start cost 12.56.
+- Owner: "double-irfft means instead of specgram which is abs of fft, take the irfft, then slice the top half. you wind up with a phase unrolled representation."
+- **`analysis/real_spectrogram.py`**: per Hann frame (1024 samples, hop 128), numpy.fft.irfft of the frame, top half (Nyquist → 0, flipped). That is the frame's cosine transform: magnitude × cos(phase), signed. Shown on a signed log scale.
+  - `listen/reference/real_alfa_bravo.png`: the NATO reader against VTL 2025 and V1 on "alfa" and "bravo".
+  - OBSERVED by eye: the reader's harmonics bend with the falling pitch, with tilted fringes; ours run flat, with near-vertical fringes. Ours is a dense saturated mass under 1 kHz, the reader's troughs stay clean. The reader's words are about 0.4 s against our 0.65 (rate 0.75). Not yet a measure.
+- **NATO fit** (`data/voice_vtl2025_nato.params`, 30 generations, cost 12.56 → 3.13):
+  - Settings: rests 0.0086 / 0.0041 cm, chink 0, lag 0.90 rad, pulse shape −0.49, amplitude 0.00038, flutter 30, jitter 0.56, aspiration gain 13.4, variation breath 0.010, tension 0.019, tremor 0.0025, breath tremor 0.11.
+  - Features against the reader: scatter 0.61 / 1.13 / 1.31 (0.89 / 1.43 / 1.59); H1–H2 −2.5 (−9.6); HNR 17.5 / 8.5 / 7.0 / 6.3 (26.4 / 12.9 / 8.6 / 6.0); flutter 10.8 (12.8); tilt −13.2 (−13.4); clicks 1.8/s (0.2). Banana: 13 clicks (3.1/s).
+  - HYPOTHESIS: the reader's harmonics are clean under 1 kHz yet their phases scatter. Ours buy scatter only with noise (phase jitter, 13× aspiration), which fouls the low band: HNR 0–1 kHz fell from 19.8 to 17.5 against a target of 26.4. The largest remaining terms are HNR 0–1 kHz 8.7, H1–H2 8.2 and scatter 3.5–4.1.
+  - Sent `listen/nato_fit/nato_words_fitted.wav`, `nato_words_before.wav`, `banana_fitted.wav`, `banana_before.wav`.
+- Owner on the NATO fit: "much more human. some clicks, tho."
+- **Click hunt** (fitted voice; `clicks2` K 8: NATO 51 = 1.8/s, banana 13 = 3.1/s; reader 0.2/s):
+  - REJECTED as causes (counts unchanged or higher): VTL aspiration (gain 1e-4 or 1), our glottal flow instead of theirs, no phase jitter, no body variation, no oral frication, no skin, jet attack 0.02.
+  - Pulse shape matters for the K 8 count: 0 → 6.1/s, −0.49 (the fit) → 1.8, −1.0 → 1.6. Phase lag 1.3–1.8 → 2.2–2.3.
+  - These K 8 events are glottal closures ringing the formants above 5 kHz wherever little else sounds there (nasals, voicing onsets).
+  - REJECTED: soft contact in the 2025 glottis (`kinematic.contact_softness_2025`, 0.0002–0.004 cm). Counts 1.8–2.1/s NATO, 3.4–4.1 banana; features unchanged.
+  - Strong clicks (K 16, `/tmp/es/strong.py`): NATO 11.026, 11.053 (juliett's /t/), 11.128, 14.299 (pauses), 22.323 (/uw/ → /n/), 22.919 (/m/ → /v/); banana 1.890 (/ah/ → /n/). The same instants (to 0.1 ms and 0.1 dB) in V1, VTL 2025 and the fit, so they are not from the folds. Each is a one-sample spike with brief ringing.
+  - Three coincide within 1–2 ms with the lip end moving a node (ENDLOG). Two follow score commands within a millisecond: 14.2986 `glottis`, 22.9187 `lungs 0`. The commands drive second-order motors, so nothing steps.
+  - REJECTED for the strong clicks:
+    - logarithmic support glide (`walls.support_log_glide` 5–20 ms; the outside-the-lips node's support jumps ×1000);
+    - VTL's area-rate limit on the vocal tube and nose (`vtl.area_limit`: 400 cm²/s, and the t⁴ curve, c 480e6 opening and 40e6 closing; TdsModel::setTube);
+    - the room (ROOM=0).
+  - All new switches default off and leave the outputs identical (verified with cmp).
+  - Sent `listen/nato_fit/click_candidates.wav` (the seven strong candidates, 0.6 s each) to learn which clicks the owner hears.
+- Owner on the candidates: "5 clicks, the rest dont seem to actually be clicking". Candidate 5 is NATO 22.323 s, "uniform" /uw/ → /n/.
+- **FOUND — click 5**:
+  - Every-step pressures (WAVEDUMP) put its source at node 20–21 (7.5 cm), at 22.322875 s, spreading one node per step both ways.
+  - The node's link flow jumped from 12.4 to 41.0 cm³/s in one step while a geometry update arrived. The velum's side port follows the articulation (`set_velum_place` → `move_branch_group`, the nearest node) and stepped from node 21 to 20 as the velum lowered for /n/. The nasal flow (about 25 cm³/s) landed on another node at once.
+  - It is in both VTL voices but not V1: the kinematic folds drive more flow through the nose there.
+  - REJECTED on the way: the trace's "narrowest" jump at 22.3243 (the lip end moving, a reporting artefact), the wall motion kink (STEPS sums the walls' motion before its two 250 Hz poles), and the under-tongue port waking (it opened smoothly at 22.3112).
+- **`branches.glide`** (BodyLayout::branch_glide; 0 = the port jumps, as before; outputs identical, verified with cmp for the NATO fit and V1):
+  - A moving side port on the vocal tube (velum, under the tongue, cheeks) keeps a shadow port at the node it left, holding a share of the area that fades with this time constant.
+  - The two act as parallel ducts. The branch hears their waves weighted by area.
+  - Strong clicks (K 16): fit 6 NATO, 1 banana → glide 3 ms: 0 and 0; 6 ms: 0 and 0; 12 ms: 1 ("yankee" 26.903) and 0. K 8 counts: NATO 51 → 49, banana 13 → 11 at 6 ms.
+  - NATO features unchanged: H1–H2 −2.6, HNR 17.8 / 8.4 / 6.9 / 6.6, scatter 0.63 / 1.16 / 1.31, flutter 10.8.
+  - `data/voice_vtl2025_nato_glide.params` (glide 6 ms). Sent `listen/nato_fit/nato_words_fitted_glide.wav`, `banana_fitted_glide.wav`.
+- `speak PORTLOG=from,to`: every step's velum and under-tongue port areas (`VoiceBody::under_tongue_port()` added).
+- Owner on the glide takes: "charlie, foxtrot, xray have harsh sounds. alpha, golf, mike, qeuebec, yankee sound wrong or are essentially misshapen. the rest are closer to reasonable than they have been before."
+- **MEASURED — harsh frication** (`/tmp/es/fric.py`: unvoiced frames with 2–10 kHz energy within 20 dB of the word's highest; level re the word's loudest frame; third octaves 0.5–10 kHz):
+  - Reader: charlie −15.4 dB, peak 3.15 kHz; foxtrot −13.3, peak 5 kHz; x-ray −11.7, peak 6.3 kHz. All fall off by 8–10 kHz.
+  - Ours (fit + glide): −6.9 / −4.7 / −4.7 dB, peaking at 10 / 10 / 5–6.3 kHz, 8–10 kHz near the top. V1 is −9.1 / −7.2 / −7.8.
+  - The VTL aspiration gain (1, 4, 13) changes nothing here; the oral frication does it.
+  - Sweep over `oral_noise.frication` and `jet_corner_ceiling`. At 0.5 / 6000: −11.4 / −14.5 / −13.5 dB; charlie peaks at 3.15 kHz; foxtrot still flat to 10 kHz (its /f/ seems not to obey the ceiling; OPEN).
+  - `data/voice_vtl2025_nato_fric.params`. Strong clicks: 2, both in pauses after a final /t/ (6.669 and 11.128 s; the second is candidate 3, which the owner did not hear as a click).
+  - Sent `listen/nato_fit/nato_words_frication_fixed.wav`, `banana_frication_fixed.wav`.
+- **MEASURED — misshapen words** (`/tmp/es/wordform.py`: LPC F1–F3, voiced frames, medians per fifth of the voiced stretch):
+  - Our open vowels are too closed. F1, reader against ours: alfa ~1000 vs 650; golf 740–875 vs 450–600; delta ~840 vs 390–560; bravo 700–870 vs 580–700.
+  - The postures were fitted to bdl; the NATO reader opens wider.
+  - The reader's "mike" and "quebec" gave no LPC rows (OPEN: voicing or level gate).
+- **NATO fine-tune relaunched** (/tmp/es/nato2): `policy_fit.py als 2`, ORDER=alternate, GROUPS organs,plan,tongue, ENGINE_TONGUE_KEYS "tongue.skeleton_,tongue.tip_radius", ENGINE_RINGING=0, from `voice_vtl2025_nato_fric.params` and organs_skeleton.
+  - New switch `ENGINE_SOURCE=kinematic` in policy_fit.py and engine_net.py renders with KINEMATIC=1 instead of FOLDTUBE=1.
+  - 267 neurons in 20 blocks; start cost 11.97 (the fold-tube run started at 12.65).
+- Owner on the frication fix: "hasnt fixed them. lets show the tongue behavior."
+- Sent `listen/video/problem_words_slow2.mp4` (alfa, golf, mike, quebec, yankee, charlie, foxtrot, x-ray at half speed; `voice_vtl2025_nato_fric.params`) and `problem_words_frames.png` (stills at the key vowels).
+- OBSERVED in the stills:
+  - The jaw barely moves between /ae/, /eh/, /y/ and /ng/.
+  - For /ae/ the tongue body fills the oral cavity under a nearly closed jaw.
+  - /ao/ (golf) holds a 0.2 cm² pharyngeal constriction over about 4.5 cm.
+  - organs_skeleton jaw angles: EH 1.05, IY 1.95, EY 3.2, UW 4.3, AH 5.0, AE 6.5, AO 10.7, AA 12.8. The bdl formant fit reached /ae/ (F1 637) and /eh/ (595) with an almost shut jaw and tongue shape. The NATO reader's /ae/ F1 is about 1000.
+  - "quebec" is planned K EH B EH K (no /w/), which matches the ICAO "keh-BECK".
+- Owner on refitting the vowels with a working jaw: "yes, do that."
+- NATO fine-tune (/tmp/es/nato2) stopped before it finished its first block; it started from the shut-jaw postures.
+- **`organ_vopt3.py` jaw minimums** (`JAW_MIN`, degrees): aa 14, ae 13, ao 11, ah 9, eh 8, ey 6, ow 6, ih 5, uh 5, ax 4, iy 3, uw 2. The jaw's ceiling is raised from 14 to 20. The uw/ow rules (jaw ≤ 8, lips rounded, body forward) and the tip-behind-the-incisors rule stay.
+  - Running: START = CURRENT = organs_skeleton, W 10, MAXFEV 260, SPEAK_ENV KINEMATIC=1 with `voice_vtl2025_nato_fric.params`, out `data/organs_jaw.txt`. ER keeps its posture (no bdl target).
+- **Jaw refit** (`data/organs_jaw.txt`, bdl targets): jaws open (AA 14.2, AE 13.05, AO 14.9, AH 9.2, EH 8.2, IH 9.8, OW 8.0, UH 8.4, UW 4.7, AX 6.1, IY 3.0). Formants within 0.35–2.3 st of bdl's (OW 3.7).
+  - It changes almost nothing in sound. The fit raised the tongue to hold bdl's F1 (AE ty 7.32 → 7.71, F1 632): the tube is almost as before and the tongue still fills the mouth (stills `/tmp/es/ref/frames_jaw_sheet.png`).
+  - The target, not the jaw, held the vowels closed: bdl's formants are connected speech; the reader speaks stressed single words.
+- **The reader's stressed vowels** (`/tmp/es/readervowels.py`: our score's phone timing mapped proportionally onto each clip's speech span, LPC over the middle half; 1–7 frames a word, noisy, e.g. charlie 1284 / 2554 / 4287):
+  - Medians: aa 887 / 1457 / 3044, eh 881 / 1930 / 2900, ih 459 / 2707 / 3138, iy 472 / 2831 / 3303, uw 496 / 2202 / 2884 (fronted), ow 656 / 1413 / 2731, ae 605 / 2668 / 3372 (only "tango" and "yankee", before nasals, raised).
+  - Scaled by 1 / 1.12 for his shorter tract (the F3s) into `data/reader_vowel_targets.json` (aa, eh, ih, iy, uw, ow; ae, ao, ah, uh, ax, ey stay bdl). `organ_vopt3.py` takes `TARGETS=file.json`.
+- **Lexicon** (voice/src/lexicon.cpp): alfa AE1 → AA1 L F AH0 (the reader's "AHL-fah", F1 990); golf G AO1 → G AA1 L F (as CMUdict).
+- **Reader-vowel refit** (`data/organs_reader.txt`, W 10, from organs_jaw, then `organs_reader2.txt`: eh and iy again at W 4, MAXFEV 400):
+  - aa jaw 14.2, F1 763; eh jaw 11.7, F 708 / 1621 / 2501 (target 787 / 1723 / 2589); ih 385 / 2068; uw 443 / 1940 (jaw 7.8, fronted); ow 569 / 1264.
+  - iy did not move at either weight (F2 2078 against 2528).
+- **MEASURED (NATO words, `/tmp/es/ref/nato3.score`)**: F1 alfa 723–805 (was 546–660; reader 723–1001), golf 757 (was 449–609; reader 736–875), quebec /eh/ 600–660 (was 406–579), delta partly.
+  - Strong clicks 4: 6.675 (pause after foxtrot), 10.461 (juliett /jh/), 18.959 (romeo /ow/ → /m/), 22.819 (uniform /r/ → /m/, −10.5 dB re peak). The last three are new closures; HYPOTHESIS: the wider jaw makes the lips travel and seal harder.
+  - Sent `listen/nato_fit/nato_words_reader_vowels.wav`, `banana_reader_vowels.wav`, `listen/video/problem_words_reader_slow2.mp4`.
+- Owner on the reader-vowel takes: "most are wrong. alpha is down up lips. golf is up down lips. mike is lips back front upper. charlie is up down back up down. foxtrot is lips up down up. xray is up down up-ish. xray and alpha are kind of kay." (The articulators' sequence each word needs; the video showed them missing.)
+- **MEASURED — gestures** (`/tmp/es/gestures.py`: AREALOG every ms; per phone, the tightest node past 4 cm over the phone and when):
+  - With organs_reader2, the velars no longer seal: mike /k/ 0.11 cm² (old postures 0.00), quebec 0.03–0.09 (0.00), x-ray 0.11 (0.00), yankee /ng/ 0.21 (0.01), golf /g/ 0.08 (0.05), foxtrot /k/ 0.13 (0.10).
+  - alfa's /l/ was narrowest in the pharynx (4.6 cm). charlie's /r/ and /l/ made no oral constriction, with the old postures as well.
+- **FOUND in the planner** (voice/src/planner.cpp):
+  1. /k g ng/ send only a body target; the jaw stays at the vowel's (now 13–14 degrees) and the body aimed from it cannot reach the roof.
+  2. /l/ and /r/ send no jaw command either.
+  3. /r/ hands the tip back to the vowel at finish − 0.03 s, 10 ms after charlie's /l/ aims it (shape_time = start − lead), and undoes it.
+  - New ConsonantShapes (defaults leave the plans identical; verified with cmp on the problem-word score): `articulation.velar_jaw`, `lateral_jaw`, `rhotic_jaw` (default 90, no ceiling), `articulation.liquid_yields_tip` (default 0). At 1, /l/ and /r/ skip the tip hand-back when the next phone aims the tip.
+  - `voice/data/plan_jawcaps.params`: velar_jaw 6, lateral_jaw 6, rhotic_jaw 8, liquid_yields_tip 1.
+- **Tongue reach**: TONGUELOG through alfa's /l/: the tip target (6.67, 10.61) in the jaw frame, the tip reaching (6.12, 9.72), goal_tip_miss 0.7–0.9 cm. `tongue.skeleton_stretch` 0.5 → 0.8 lets it reach; 1.2 changes nothing more. `data/voice_vtl2025_nato_stretch.params`.
+- Velar timing: dorsum_close_move 0.06 → 0.04 and seal_lead 0.4 → 0.8 changed the score (moves 40 ms, 8 ms earlier) but not when the tongue arrives. The skeleton tongue's own dynamics set the pace (OPEN).
+- **MEASURED (plan_jawcaps + stretch 0.8)**:
+  - Tightest per phone: alfa /l/ 14.4 cm, 0.093; golf /g/ 0.011; mike /k/ 0.014 at 90%; quebec /k/ 0.011 at 82%; foxtrot /k/ 0.002 at 77%; x-ray /k/ 0.000 at 87%; charlie /l/ 13.7 cm, 0.079, /r/ 0.109.
+  - yankee /ng/ 0.114 at the phone's end, unchanged (OPEN).
+  - NATO words strong clicks 1 (x-ray /r/ 22.241), K 8 42.
+  - Sent `listen/video/problem_words_gestures_slow2.mp4`, `listen/nato_fit/nato_words_gestures.wav`.
+- Owner: "this need a lot more work. your base is basically.. a bad tongue. real tongues dont look like this." Asked how to rebuild, the owner chose "VTL-style tongue only" (keep our hull and jaw).
+- **OBSERVED — VTL 2.4's tongue contour** (VocalTract::calcTongue 3806–3990; Geometry.cpp getEllipseTangent, getCircleTangent; GPL, math only):
+  - The root is a rational quadratic Bezier (weights 1, 2, 1) from the hyoid through (TRX, TRY) to its tangent on the body ellipse (JD2: 1.8 × 1.8 cm).
+  - Then the ellipse's arc (angles falling from the root's tangent to the blade's). The blade is a Bezier from the ellipse through (TBX, TBY) to its tangent on the tip circle (r 0.2). Then the tip arc to angle 0.
+  - Automatic root: TRX = 0.938 |C − H| − 5.11, TRY = 0.831 TCX − 3.03 (constants in VTL's own frame).
+  - JD2's 80 shapes put the blade control point at a median 0.61 of the way from body centre to tip (0.39–0.94), 1.15 cm above that line (0.35–2.15).
+- **`tongue.vtl`** (+ vtl_body_radius 1.8, vtl_tip_radius 0.2, vtl_blade_along 0.61, vtl_blade_lift 1.15, vtl_root_bulge 0.3; `MidsagittalTract::vtl_tongue_outline`, VtlTongueShape):
+  - With tongue.physical 0 the speaker hands this contour to the geometry (jaw frame, 24 points root to tip). The body ellipse is centred on the body's position; the tip circle's front lands on the planned tip.
+  - Root control point: midway from our root base to the ellipse, 0.3 cm behind that line. Blade control point by the JD2 medians.
+  - Off by default (the current voice is identical, verified with cmp). `geometry_probe` takes `anat.vtl=1`; `organ_vopt3.py` passes `PROBE_EXTRA`.
+  - `data/voice_vtl_tongue.params` (stretch voice, physical 0, vtl 1).
+  - OBSERVED with organs_reader2 (fitted for the old tongue): a smooth dome on a root, a sloping blade, a small tip. /g/ and /k/ press the dome on the roof (area 0 at 9–11 cm). /l/ raises the tip to the ridge.
+  - Sent `listen/video/vtl_tongue_frames.png`, `vtl_tongue_slow2.mp4`.
+  - Vowel refit for it running: reader targets, jaw minimums, W 6, MAXFEV 300 → `data/organs_vtl_tongue.txt`.
+- **New-tongue vowel refit** (`data/organs_vtl_tongue.txt`: PROBE_EXTRA anat.vtl=1, reader targets, jaw minimums, W 6, MAXFEV 300). Formants within: aa 0.68 st, ah 0.12, ax 0.37, ow 0.49, ae 1.05, uw 1.08, uh 1.17, eh 1.77, ao 2.43, ey 3.19, ih 3.27, iy 3.61.
+- Owner (2026-10-18): "we now have multiple measures- phase specgrams, wavelets, other transforms- and ample reference material- and ample design material. set a goal for yourself and seek to work carefully until you get to 50 db. timing and behavior may have to be adjusted ... if you need to download some more reference audio or another small model or two, that's fine ... don't ask me to check audio- use technical measures only ... use profiles and then to refine the profiles ... so that you can fit genders and depths ... go far and go long."
+- **`analysis/fidelity.py`**: fidelity of a reading to a reference of the same text, in dB.
+  - Phones from labels (ARCTIC), from our score, or carried by DTW on MFCCs (NATO).
+  - Groups per phone class: spectrum (24 ERB bands, middle 60%, dB re the utterance's speech level); dynamics (std of six octave-band levels within a token); phase (np.angle phase-distortion deviation in 3 bands, at frame-wise pitch, pooled over front / central / back vowels); pitch (F0 percentiles 5 / 25 / 50 / 75 / 95, semitones); timing (mean ln duration).
+  - Per group: 10 log10(spread of the reference's features / our squared error). Combined: 10 log10(groups / Σ error / spread).
+  - Per-vowel pitch and per-vowel phase were tried first and failed calibration (bdl against himself −6.1 and 4.0 dB).
+- **Calibration** (a0001–a0030; the first row against a0031–a0060):
+
+  | | combined | spectrum | dynamics | phase | pitch | timing |
+  |---|---|---|---|---|---|---|
+  | bdl vs bdl (other sentences) | 8.5 | 13.2 | 10.1 | 4.5 | 20.4 | 7.2 |
+  | bdl vs rms (same sentences) | −0.4 | 5.7 | 3.9 | −2.5 | −4.6 | 7.6 |
+  | bdl vs slt | −5.0 | 7.5 | 6.0 | −5.8 | −10.6 | 10.2 |
+  | ours (VTL tongue) vs bdl | −3.2 | 4.5 | 1.9 | −9.6 | 11.7 | 8.5 |
+  | ours (skeleton) vs bdl, fixed-pitch phase | −2.4 | 4.4 | 2.1 | −8.7 | 11.8 | 8.5 |
+
+  - bdl a0001–a0100 against a0101–a0200 (fixed-pitch phase version): combined 11.8, spectrum 18.6. The same-speaker ceiling grows with data.
+  - 50 dB is far past what these statistics resolve. Working goals per profile: above the different-speaker floor (−0.4 dB), then toward the same-speaker figure (8.5–12 dB), then as far as the data allows.
+- `analysis/render_set.py` (parallel ARCTIC renders) and `analysis/profile_fit.py` (diagonal ES over 24 tree leaves in groups source, noise, variation, tract, tongue; train and held-out ARCTIC ids; reference features cached).
+- Downloaded slt (CMU ARCTIC female, festvox `cmu_arctic/cmu_arctic/packed/cmu_us_slt_arctic-0.95-release.tar.bz2`, 120 MB) to `voice/ref/arctic_slt_dl/`, linked as `voice/ref/arctic_slt/{wav,lab}`.
+- New slot `anatomy.scale` (BodyLayout::anatomy_scale → MidsagittalTract::set_scale; 1 leaves it alone). Not yet built on the Mini: the bdl fit runs on the current binary.
+- bdl profile fit running (/tmp/es/profile/bdl): train a0001–a0020, held out a0021–a0030, 40 generations, from voice_vtl_tongue + organs_vtl_tongue + plan_jawcaps.
+- **bdl tree fit, first run** (/tmp/es/profile/bdl): train −2.8 → 5.0 dB (spectrum 3.8, dynamics 1.6, phase 5.6, pitch 14.9, timing 8.3), held out −0.2 → 2.2 (spectrum 4.3, dynamics 1.7, phase −2.0, pitch 7.0, timing 7.1). Plateau from generation 1 to 5; stopped.
+- **Phase is speaker-specific**: in ARCTIC sentences bdl's phase scatter is low (0.33–0.77 rad by band and vowel group). Ours sat higher at 1–4 kHz (0.95–1.11) and lower under 1 kHz. The NATO reader's is high (0.9–1.6).
+  - Cycle-to-cycle variation (`kinematic.cycle_shape/lag/amplitude/rest`, new) made bdl's phase worse (−6.5 → −9.7 dB, 10 sentences). It is kept for scattered voices.
+  - `vtl.aspiration_corner` (new; their filter corner and gain (1000 / f_c)^1.5; 1000 leaves it alone). At 3000 it changed little for bdl.
+- **Vowel targets** (`analysis/vowel_targets.py`, f123.py's method: 10 kHz, order 12, a0001–a0060): bdl reproduces f123's table exactly; rms deeper (F3 about 2400); slt higher (F3 about 2950).
+  - slt /iy/ (F2 670, a picking error) and /uh/ (too few tokens) are replaced by Peterson & Barney's women's 310 / 2790 / 3310 and 470 / 1160 / 2680.
+  - `data/targets_bdl.json`, `targets_rms.json`, `targets_slt.json`. The first version at 16 kHz and order 12 had too few poles (bdl /aa/ F2 2825); discarded.
+- F0 percentiles 5 / 50 / 95 (a0001–a0020): bdl 98 / 122 / 149, rms 74 / 95 / 123, slt 167 / 188 / 223 Hz.
+- New slots (dev build; defaults leave outputs identical, verified with cmp): `kinematic.fold_length_2025`, `fold_thickness_2025`, `fold_rest_pitch_2025` (JD2 1.6 / 0.45 / 120; VTL W02 1.2 / 0.40 / 220); `anatomy.scale`.
+  - `build_dev/` holds the newest speak while fits run on `build/`. `render_set.py` takes SPEAK_BIN; `organ_vopt3.py` takes VOWEL_PITCH.
+- Profiles: `data/profile_rms.{params,plan}` (anatomy 1.05, pitch about 95 Hz); `data/profile_slt.{params,plan}` (anatomy 0.87, W02 folds and modal shape: rests 0.0515, chink 0.01, lag 0.52, pulse shape −0.2; pitch about 188 Hz).
+- **`analysis/profile_cycle.sh`**: rounds of tree (source, noise, variation, tract, tongue, cycle) → vowels to the speaker's targets → plan (pitch, timing, consonants). Single-threaded workers, build_dev.
+  - bdl cycle running (/tmp/es/profile/bdlc.log): from the first run's best, train a0001–a0016, held out a0017–a0024, 3 rounds × 8 generations.
+- **Spectral error by class** (bdl first-run best, a0001–a0010; bias low / mid / high thirds of the ERB bands):
+  - f 14% of the error, +27.7 / +16.4 / −5.3 dB; hh 8.7%, +17.9 / +16.9 / +11.1; jh 7.3%, high −22.6; y and w +15 to +18 mid; ow +16.5 mid; z, th high −15 to −16; r −7 to −11.
+  - HYPOTHESIS 1, the folds swinging through voiceless sounds (the 2025 swing follows the commanded breath, which an open glottis does not lower). New `kinematic.abduction_fade_start/end` (the planner's gap; off by default, identical with cmp). Fade 0.04 → 0.10: spectrum 3.3 → 3.4, not the cause.
+  - HYPOTHESIS 2 (open): the constrictions form late (alfa /f/ tightest only at 53%), so a consonant's middle still holds the vowel. `articulation.lead`, `tip_close_move`, `dorsum_close_move`, `timing.seal_lead` added to the plan_consonants group; the fade to the source group.
+- **Dynamics** (a0001–a0010): ours moves 1.7 dB less within a token than bdl (4.56 against 6.28 dB). Most in the low bands (−2.5 to −3.0 at 125–250 Hz) and in consonants (f −5.7, jh −5.3, w −5.0, hh −4.9, sh −4.6): smooth where bdl switches sharply.
+- Profile starts (8 sentences): rms start against rms 2.3 dB combined (the bdl voice against rms −1.0); slt start against slt 0.5 (pitch 11.4).
+- `profile_fit.py` NATO mode (REFDIR "nato"): the 26 words as one render, the reader's clips cut by our phones through DTW each evaluation; even words train, odd words are held out.
+- **`analysis/duration_calibrate.py`** (closed-form timing): plan the reference's sentences (say --plan-only), compare each phone's planned durations with the labels, scale `duration.X` by the geometric mean ratio, 3–4 passes. a0001–a0100, organs_vtl_tongue:
+  - bdl: rms log ratio 0.133 → 0.001 over 38 phones (factors AA 0.67, AE 0.67, AO 0.70, UH 0.73, AH 0.85, Y 0.85, T 1.10, D 1.12).
+  - rms: 0.226 → 0.001 (AA 0.56, AO 0.54, UH 0.52, HH 0.59, G 0.75).
+  - slt: 0.211 → 0.001 (AA 0.60, AE 0.64, UH 0.55, Y 0.65).
+  - At render_set's rate 0.75 the open vowels ran about 1.5× long.
+  - `data/profile_{bdl,rms,slt}_durations.plan`.
+- `analysis/profile_cycle2.sh`: profile_cycle.sh plus a duration stage after each plan fit (DURATION_IDS, default a0001–a0100). Kept separate because bash reads a running script as it goes.
+- **bdl cycle round 1** (bdlc; train a0001–a0016, held out a0017–a0024):
+  - Tree: train 4.4 → 5.46. Held out 2.5 → 2.0 at the best.
+  - Vowels to bdl's targets: all within 0.01–2.25 st (ow 2.25, uw 1.58, iy 1.36).
+  - Plan: train 4.43, held out 0.5 (phase −4.8).
+  - Bound-pinned: kinematic.amplitude 0.0003 (floor), tract.viscous_scale 2 (ceiling), radiation_mass_scale 0.5 (floor). Widened to 0.0001, 5, 0.2.
+- **Held-out noise floor**: bdl's training references (16) against his held-out ones (8) score combined 6.1 (spectrum 11.9, dynamics 8.1, phase 3.1, pitch 9.6, timing 3.8). With 8 held-out sentences the measure resolves about 6 dB.
+  - Sets enlarged: train a0001–a0030, held out a0101–a0120 (bdld, profile_cycle2: 4 rounds × 8 generations, with the duration stage).
+- **Slip, fixed**: widening the bounds put each comment before its tuple's comma. That is valid syntax (a tuple called as a function), so ast.parse passed and the fitter crashed at import. The cycle's stderr went to /dev/null, so the first bdld run silently skipped every fit stage. Check by importing, not parsing.
+- **bdld round 1** (train a0001–a0030, held out a0101–a0120): the tree stage did not improve on the start (train 5.46, held out 3.9: spectrum 6.3, dynamics 4.3, phase −0.3, pitch 10.5, timing 5.7).
+  - bdl's own ceiling on these sets (train references against held-out references): combined 7.3 (spectrum 12.6, dynamics 8.9, phase 3.3, pitch 16.7, timing 5.7). Our timing equals it.
+- **Held-out error by class** (bdld start, a0101–a0120): the voiceless obstruents carry +8 to +16 dB of low bands.
+  - f +15.5 low; th +16.0; voiceless stops +14.8; ch +11.4; jh +11.0; sh +8.4. Also high-band deficits: th −7.9, ch −10.9, jh −9.9, sh −11.1.
+  - Spectra (dB re speech level, 144 / 317 Hz): bdl's s −41 / −44 against ours −30 / −36; voiceless stops −38 / −46 against −20 / −26; f −47 / −50 against −26 / −39.
+  - REJECTED as the cause (10 held-out sentences): VTL aspiration gain 1 (no change); fold fade 0.03 → 0.08 (no change); ROOM=0 (low excess +18 → +14 only, everything else worse: combined 4.9 → −0.1, phase 1.5 → −5.4; the room stays).
+  - Not mainly late closures either: constrictions first reached at 2–16% of the phone, held 54–98% (closure_timing.py over 6 sentences: CH 0.92, F 0.84, K 0.54, P 0.66, S 0.98, SH 0.98, T 0.83).
+  - FOUND in one /t/ (a0101, 1.519 s): the seal came 28% into the phone; the glottis stayed at 0.03–0.16 cm² and kept vibrating through the closure. The planner's voiceless gap (0.14, a constant) opens it too little for the 2025 folds.
+- `PlanOptions::voiceless_gap` (`glottis.voiceless_gap`, default 0.14, plans identical with cmp) in voice/build_dev. New plan_glottis group in profile_fit: voiceless, aspirate and voiced-fricative gaps, abduction lead and moves, adduction lead.
+  - render_set / duration_calibrate take SAY_BIN. `profile_cycle3.sh`: dev say and speak, plan_glottis in the plan stage, stage errors kept.
+- **REJECTED (10 held-out sentences, mean-phase measure; combined / phase)**: the start voice 4.9 / 1.5.
+  - `motors.smoothing` 1, 2, 4: 2.8, 1.9, 0.7 (phase −2.2, −3.6, −5.3).
+  - `walls.frame_corner` 60 Hz: −0.6 (phase −6.4). It stays at 250.
+  - voiceless gap 0.14 alone, raised: no gain.
+- **Vowel refit can degrade the whole voice.** organ_vopt3 against bdl's targets brought every vowel within 2.3 st, yet held-out combined fell 4.9 → 0.7. So profile_cycle3 now checks the vowel stage: it renders the held-out set before and after and keeps the refit only if the score holds.
+- **Phase group, recalibrated** (OBSERVED; the reference against itself):
+  - With the mean of the PD deviations, the phase group scored 3.3 dB for bdl train vs held out, but −1.3 for held out vs a second held-out set (a0121–a0140). It was noise, and it dominated the combined score.
+  - With the median over frames: 2.4 and −0.4. Not more stable.
+  - The cause is the signal term. The phase features are absolute scatters (0.3–0.8 rad); their spread about their own mean is tiny. Taking the signal as their sum of squares (fidelity_v3, deployed as fidelity.py on the Mini 2026-10-18 05:40 EDT; fidelity_v1.py keeps the old one):
+
+    | pair (bdl reference sets) | spectrum | dynamics | phase | pitch | timing | combined |
+    |---|---|---|---|---|---|---|
+    | bdl30 vs bdl20 | 12.6 | 8.9 | 14.8 | 16.7 | 5.7 | 9.9 |
+    | bdl20 vs bdl20b | 13.2 | 8.7 | 11.8 | 14.5 | 6.9 | 10.1 |
+    | bdl20 vs rms20 | 5.3 | 3.8 | 0.7 | −5.6 | 6.5 | −0.3 |
+    | bdl20 vs slt20 | 7.1 | 6.4 | 2.6 | −10.4 | 8.1 | −3.9 |
+    | ours (start) vs bdl a0101–10 | 6.1 | 4.0 | 10.5 | 13.9 | 6.2 | 6.9 |
+
+  - The same speaker now sits at about 10 dB, and another speaker at 0 dB or below. The ranking of the rejected variants holds (frame_corner 60: 4.5; smoothing 1, 2, 4: 6.5, 6.9, 6.6).
+  - The goal is still 50 dB. At these set sizes the measure's same-speaker ceiling is about 10 dB, so beyond 10 the score stops distinguishing a better voice from bdl himself. More dB needs larger sets or a finer measure.
+- bdle (profile_cycle3, 4 rounds × 8 generations, train a0001–a0030, held out a0101–a0120) restarted with fidelity_v3.
+- **Phase pooled over all vowels** (fidelity v4, deployed 2026-10-18 06:05 EDT; `FIDELITY_PHASE_GROUPS=1` restores front/central/back).
+  - Our own voice, rendered with four seeds (a0101–a0120), front/central/back: phase 5.0–11.2 dB, back-vowel scatter 0.41–0.93 rad. Too few tokens per group, so the fitter chased seed noise.
+  - The running bdle cycle's held-out phase went −0.8, 2.9, −3.3 over near-identical candidates; even profile_fit's `%.10g` rewrite of the start voice moved it 11 dB.
+  - Pooled (OBSERVED): bdl30 vs bdl20 phase 19.7 (combined 10.1); bdl20 vs bdl20b 26.7 (10.7); vs rms 0.9 (−0.3); vs slt 3.2 (−3.8). Ours over the 4 seeds: phase 11.3–16.0, combined 6.1–6.7.
+  - The phase scatter in the 0–1 / 1–2 / 2–4 kHz bands (rad): bdl 0.37 / 0.49 / 0.57; rms 0.55 / 0.86 / 1.20; slt 0.39 / 0.73 / 1.09; ours 0.35–0.50 / 0.42–0.51 / 0.68–0.75 (ours is noisier at 2–4 kHz).
+  - bdle stopped.
+- **Low thumps in obstruents: the geometry, not the source** (a0101 "You, you would not keep the truth from me.", TRACE / AREALOG / PROFILE):
+  - Inside sealed /t k/ (1.52–1.72 s) the 90–350 Hz band jumped to vowel level (−1 to +1 dB re speech) in single 10 ms frames, with nothing above 2 kHz. bdl's closures sit near −40.
+  - Not the skin (the profile's skin_gain is 0.037), not voicing (periodicity 0.0–0.3), not the geometry frame (1 ms; the control tick is 0.125 ms).
+  - CAUSE 1, the lip opening. `profile_to_nodes` gave the node the opening crosses the full area until its centre passed the opening, then half: 2.32 → 1.17 cm² within a frame. Its wall closed at −95, an air pulse to 153 cm³/s out of the lips (1.589 s). New `mouth.continuous_opening` (Speaker; default 0, output identical with cmp) blends by the share inside over the whole node: peak 59 cm³/s, that frame −1 → −16 dB.
+  - CAUSE 2, cuts sliding between nodes. A node's area was the min of its centre and the cuts inside its span, so a narrow cut leaving the span jumped it. The front cavity's volume moved in 1 ms steps of −98, −136, +50 cm³/s while the organs moved smoothly. New `mouth.continuous_cuts` (default 0, identical) adds the profile at the span's two ends to the min (continuous in the cuts' positions; closures still never stepped over): the same window's volume rate runs −13 … +5 smoothly, some ±20 jitter left later in /k/.
+  - The TRACE line's "narrowest 0.020" in every fricative was the sliver past the lips (TRACE scans two nodes past them). `analysis/constriction_probe.py` reads AREALOG up to the lips.
+- **Narrowest areas per phone** (constriction_probe, a0101–a0120, bdl_start), median cm²: TH 0.000 and DH 0.000 (sealed: stops, not fricatives); IY 0.036; Y 0.022; W 0.063; F 0.082; V 0.089; S 0.060; Z 0.060; SH 0.046; R 0.150; L 0.120; UW 0.100; ER 0.187.
+  - Typical values in the literature (approximate, HYPOTHESIS as targets): fricatives 0.05–0.2; glides about 0.15–0.3; /i/ about 0.2–0.3.
+- **Variants against bdl a0101–a0120** (fidelity v4, two render seeds pooled), rms class error change in dB:
+
+  | variant | spectrum | dynamics | phase | combined | moved |
+  |---|---|---|---|---|---|
+  | bdl_start | 5.3 | 3.8 | 14.0 | 6.5 | worst classes: f 14.1, iy 14.0, th 11.5, voiceless stops 11.1, y 10.7 |
+  | + continuous_opening + continuous_cuts | 5.4 | 4.0 | 8.9 | 6.3 | voiceless stops −4.1, sh −3.6, th −3.4, ch −3.3, dh −2.7; m n w +1.6–2.2 |
+  | + IY ty 8.282 → 8.12 | 5.9 | 4.9 | 9.8 | 6.8 | iy −7.3, y −5.2; hh +4.2 |
+  | IY ty 8.06 | 5.8 | 4.6 | 9.6 | 6.6 | iy −8.5; hh +6.6 |
+  | y_raise −0.1 | — | — | — | — | y −4.9 alone, nothing with IY lowered |
+  | dental_press −0.05 / −0.10 (one seed) | 5.1 / 4.9 | | | 6.4 / 6.3 | dh +5.9 / +7.7: bdl's /dh/ is a near-closure |
+
+  - The phase loss with continuous cuts is not added noise. The vowels became too regular: scatter at 0–1 / 1–2 / 2–4 kHz 0.435 / 0.476 / 0.721 → 0.125 / 0.325 / 0.596 rad (bdl 0.373 / 0.490 / 0.567). Part of our low-band irregularity was the geometry jolting the flow. The source's variation is to be refitted.
+  - New start `data/profile_bdl_s2.*` (both switches, IY ty 8.12): held out 6.8 (spectrum 5.9, dynamics 5.1, phase 10.0, pitch 10.0, timing 5.7).
+- **`analysis/class_fit.py`** (separable fit): the 13 vowel postures' organ fields and 26 consonant plan shapes (143 settings), each ranked by its own phone classes' cost.
+  - A class's cost is its spectrum, dynamics and timing squared errors over each group's reference spread, so the classes' costs add up to the combined objective's error.
+  - Antithetic pairs (10 renders per generation, a new seed each generation); the mean is scored on held-out every 3 generations.
+  - Run bdl_c1 from profile_bdl_s2 (18 generations).
+- **Where the class errors sit** (profile_bdl_s2, a0101–a0120, two seeds; ours − bdl, dB re speech level, 24 ERB bands 144 Hz – 6.7 kHz):
+  - f: +10 to +18 in every band. A level error: bdl's /f/ sits 15–20 dB under his /s/, ours about level with our /s/. The tree's `oral_noise.frication` had been raised to 2.5 (from 0.5) to lift weak sibilants (still −3 to −8 at 4.5–6.7 kHz), and with `labiodental` 1.2 it carries /f/ up too. class_fit now also fits `oral_noise.labiodental`, `frication` and `obstacle_reach` by class.
+  - th: low bands +11 to +15, high −5 to −14. voiceless stops +5 to +11 throughout; hh +5 to +17.
+  - iy: −7 to −12 at 144–317 Hz and −10 to −13 at 2.3–3.4 kHz (weak F1 and F2/F3 regions). ae +8 to +16 at 0.4–2.6 kHz.
+  - m: +8 to +16 at 0.4–3 kHz. w: −12 to −20 below 400 Hz, +11 to +13 at 1.5–2 kHz.
+- **Pitch** (same renders, semitones re 100 Hz, p5/25/50/75/95): bdl −0.14 / 2.26 / 3.56 / 4.86 / 6.26; ours −1.64 / 1.96 / 3.56 / 4.66 / 6.46. The median is right; our low tail sinks 1.5 st (91 Hz against 99), the final falls.
+- `analysis/profile_cycle4.sh`: class_fit (best held-out mean) → profile_fit on source, noise, variation, cycle, plan_pitch (kept only if its held-out beats its start's) → duration_calibrate. Starts `data/profile_{bdl,rms,slt}_s2.*`; rms and slt carry both continuous switches, organs_vtl_tongue and their duration plans.
+- **class_fit bdl_c2** (146 settings, 18 generations, from profile_bdl_s2): held-out combined 6.8 → 7.0 (spectrum 5.9 → 7.0, dynamics 5.1 → 5.0, phase 10.0 → 10.6, pitch 10.0 → 9.4). Training class cost 1.09 → 0.66 median. `data/profile_bdl_c2.*`.
+  - Largest moves: IY drop 0.02 → 0.43; dental_jaw 3 → 0.4; labiodental_jaw 4 → 0.8; postalveolar aperture 0.6 → 1.23; rhotic_press −0.35 → −0.01, rhotic_up 0.3 → 0.03; w_aperture 0.45 → 0.05 (its floor); frication 2.5 → 1.5.
+  - The labiodental obstacle weight wandered (0.84–1.41) rather than falling.
+- **/f/ diagnosed** ("Before the fifth of February, a few fine fish were found far off."; a0101):
+  - In the class-fitted voice /f/ seals (labiodental jaw 0.8°): oral flow 0–2 cm³/s, mouth pressure at lung pressure. Its low band is release and squeeze transients; its highs are silent (−61 dB). The fit preferred a sealed /f/ to an open one, because:
+  - Open (profile_bdl_s2, 0.06–0.14 cm²), two faults:
+    - (1) The folds keep swinging: glottal area 0.17–0.22 cm² at f0 with about 2200 dPa across them (the 2025 amplitude fades only from 2000 to 1000 dPa). That gives voicing at 100–500 Hz. The broadband periodicity check (0.05–0.45) missed it under the frication. `kinematic.abduction_fade_start/end` 0.04/0.10 stops the swing.
+    - (2) The bulk flow (300 cm³/s) ramps. With every noise source off, the /f/ band levels are 0–50 Hz −18 to −22, 50–100 −20 to −28, 100–200 −24 to −52 dB re speech level. bdl: −42 to −47, −43 to −67, −41 to −64, with his energy at 4–8 kHz (−27 to −40). The glottis closes 0.17 → 0.03 cm² in 16 ms after /f/ (adduction_move 0.02 s): flow 330 → 62 cm³/s.
+  - The highs of an open /f/ are the labiodental obstacle source: −12 to −17 dB above 3 kHz, −33 to −44 without it. bdl's are about 10–15 dB under ours, so roughly labiodental 0.3. With it off, the VTL aspiration (gain 12.7) is what remains up there. Jet frication contributes almost nothing to /f/.
+  - Long-term spectrum (a0101–a0120) re the 150–300 Hz band: bdl 10–90 Hz −14 to −19 dB, ours 0 to −5.
+- New, all off by default:
+  - `recording.highpass` (BodyLayout; speak applies a two-pole Butterworth after the room; speak output identical with cmp): at 60/80/100 Hz the /f/ 0–50 Hz band falls 10/14/18 dB, 100+ Hz unchanged.
+  - Plan `breath.syllable_rise` and `syllable_decay` (the vowel's breath pulse, 0.35 / 0.88; plans identical with cmp).
+  - profile_fit: groups plan_breath (unstressed and voiceless pressure, syllable rise and decay) and recording.highpass in noise. class_fit TREE: the abduction fade (credited to the voiceless classes) and sinus_neck_scale (nasals).
+- **Dynamics** (profile_bdl_s2, two seeds; std of octave levels within a token, bdl / ours dB): nasals 4–7 / 1.5–3.3; l 5–8 / 3.5–4.5; ae 3.6–5.5 / 1.1–2.4; uh 2.5–6.8 / 0.5–3.0; z low bands 11–14 / 6.7–7.8. Ours holds too steady within tokens.
+- Chain `bdl4 → rms4 → slt4` (profile_cycle4: 3 rounds, class 9 generations, tree 10) started 06:45 EDT.
+- **Vowel loudness envelope** (total level over each vowel token, median re its peak, at 0, 0.1 … 1 of the token; a0101–a0120):
+  - bdl: −2.0 −1.2 −1.0 −0.9 −0.8 −0.9 −0.8 −1.2 −1.5 −2.3 −3.2 (flat-topped).
+  - ours: −2.9 −2.6 −2.0 −1.5 −0.9 −0.7 −1.3 −1.8 −2.5 −3.6 −4.4 (already more peaked).
+  - So the dynamics shortfall is spectral change within tokens (formant transitions, articulator speed), not the breath pulse. New profile_fit group plan_motion: vowel_hold, release_move, jaw_lead, tip and dorsum release moves, liquid_move, adduction_move.
+  - `profile_cycle5.sh` = cycle 4 + plan_motion + line-buffered logs. rms5 and slt5 follow bdl4 (`/tmp/es/run_profiles5.sh`).
+- class_fit: NATO mode (REFDIR "nato": the 26 words in one render, the reader's clips re-cut per render by DTW, even words train, odd held out).
+- **bdl4 round 1** (class 9 generations, then tree 10): held-out 7.0 → 7.2 (class) → 7.3 (tree, kept; training 8.30 → 8.58, one improvement in 10 generations; pulse_shape at its bound 1). Snapshot /tmp/es/snap/bdl4r1.*: two seeds, held-out spectrum 7.9, dynamics 5.2, phase 10.0, pitch 9.6, timing 5.6, combined 7.2.
+  - Class costs (sum 0.745) led by timing: uh 0.089, ae 0.057, ow 0.017, y 0.016.
+- **Our phones and bdl's labels are different words.**
+  - Our planner gives function words weak forms (AX) where ARCTIC's labels keep the citation vowel: 16 of 319 phones in a0101–a0110 ("that", "and", "would", "the"). bdl's held-out /ae/ class held 14 tokens, ours 6.
+  - So the pooled duration calibration shortened our stressed /aa ae/ by 0.67 to match bdl's mix of stressed vowels and short function words (held out after it: ae 0.63, uh 0.57, ow 0.78 of bdl).
+  - bdl does reduce them (his weak-form /ae ah/ last 45–65 ms, our AX 44); our full vowels were the short ones (aa 0.068 against 0.110 s, ae 0.063 against 0.095).
+  - FIX (measure v5, deployed 07:30 EDT): `fidelity.aligned_names` renames our phones to the reference's labels where the sequences align one to one (difflib; equal-length replacements position by position). `ours_set(dir, ids, ref_dir)`; profile_fit, class_fit and variant_test pass it. On the bdl4r1 renders: timing 5.6 → 4.6, combined 7.2 → 6.9 (same words now compared).
+  - `duration_calibrate.py` now pairs aligned tokens (keyed by our phone). On bdl4r1 it starts at rms log ratio 0.098 and settles: AA 0.95, AE 0.94, AH 1.07, UH 0.74, Y 0.85, T 1.10, P 0.89 (the pooled method had AA and AE at 0.67).
+- **Nasal boundaries** (500–2000 Hz level re the utterance's loud frames, medians around the labelled boundary, bdl4r1 renders against bdl a0101–a0120):
+  - Into a nasal: bdl's vowel +2 to +3 dB, falling to −7 within 25 ms; ours 0 → −5 within 5 ms (a smaller drop, the murmur too bright).
+  - Nasal → vowel: bdl −8 → +8 to +9 within 10–15 ms; ours −5 → +3 to +5 (the vowel stays 4–5 dB weak).
+  - Nasal → stop: bdl −6 → −19; ours dips to −30 at +30 ms.
+  - The planner closes the velum from 10 ms before a nasal's end over 70 ms (open to 0.45, port 0.2 cm²), so the vowel after it is nasalised. New plan options `nasal.velum`, `open_lead`, `open_move`, `close_lead`, `close_move`, `anticipation`, `anticipation_move` (defaults the old constants; plans identical with cmp) and a profile_fit group plan_nasal.
+  - class_fit TREE: `vtl.aspiration_gain` (hh +13/+6/+7/+15 dB by quarters of the band; credited to hh and the voiceless stops).
+- `profile_cycle5.sh` splits the shared fit in two (source: source, noise, variation, cycle; plan: plan_pitch, plan_breath, plan_motion, plan_nasal). 49 settings in one ES of 9 candidates was too thin.
+- **Stops** (bdl4r1 renders, level re speech over each token at 0, 0.1 … 1, medians):
+  - p t k under 500 Hz: bdl −6 −10 −16 −28 −34 −40 −40 −34 −32 −30 −28; ours −7 −11 −17 −22 −26 −29 −27 −24 −17 −15 −13 (the closure 11–13 dB too loud). Above 2 kHz mid-closure: bdl −58 to −64, ours −53 to −56.
+  - b d g under 500 Hz: bdl −4 … −16 (a strong voice bar all through); ours falls to −29 (voiced closures devoice).
+  - class_fit TREE adds `walls.closure_pull`, `walls.closure_relaxation` and `posture.closure_press`, credited to the voiced stops and (half) the voiced fricatives.
+- **bdl4 round 2**: class held-out flat at 7.2 (v4). The tree stage (v5 measure; start held-out 7.0, timing 4.6) found nothing in 10 generations, all candidates 6.8–8.0 against the start's 8.27. The ES is not elitist and its first step (0.15 in unit space over about 40 settings) is too wide near an optimum. `PROFILE_SIGMA` (profile_fit; default 0.15), set to 0.08 in cycle 5.
+  - The aligned duration calibration then moved the plan (0.098 → 0.001).
+- **Voiced closures** ("A big dog dug a bigger bag, and Bob added a good deed.", bdl4r1):
+  - The folds swing all through a /b/ closure (glottal area 0.027–0.052 cm² at 0.25 ms resolution; a 4 ms trace had aliased it to a dying swing).
+  - The mean mouth pressure goes negative (−1500 to −2200 dPa) under closure_pull 0.25 while the lips are sealed.
+  - The voice bar radiates only through the skin, and the tree fit had cut `walls.skin_gain` to 0.037. Under 500 Hz at mid-closure, median re speech: skin 0.037 −27.9; 0.3 −21.3; 1.0 −12.1; 3.0 −3.9 (bdl −9 to −16).
+  - Held out (two seeds): base 6.9; skin 0.3 6.8; skin 1.0 6.7 (stop_voiced not better; affricate_voiced +3.3, dh +1.8). The skin radiates every wall motion up to its 250 Hz corner, not just the voice bar.
+  - closure_pull 0.7, closure_relaxation 0.6 and closure_press 0.012, singly or together: no change to the voice bar (−34 … −36 for /b/).
+  - class_fit TREE: skin_gain and skin_corner, credited to the voiced closures.
+- **bdl4 done** (3 rounds; aligned measure from round 2's tree stage on): final held-out 7.1–7.2.
+  - Round 3: the class stage peaked at its start (its held-out fell to 6.7 by generation 9 while its training cost kept falling: 147 settings over 30 sentences fit noise in rare classes; uh has 3 tokens). The tree stage found nothing.
+  - Normalized error by group (two seeds): dynamics 0.33, timing 0.29, spectrum 0.16, pitch 0.11, phase 0.09.
+  - Phase scatter: bdl 0.37 / 0.49 / 0.57, ours 0.19 / 0.34 / 0.67. Pitch: our p5/25/50/75/95 run 0.3–1.3 st low.
+  - bdl5 (cycle 5, from bdl4) will train on a0001–a0060.
+- **Weak forms' length**: `timing.function_vowel_scale` (PlanOptions, default 1; TimedPhone::function_word from Word::function; plans identical with cmp). duration_calibrate fits it from our AX aligned to bdl's full-vowel labels (key "weak forms"): bdl4 → 1.23 (rms log ratio 0.019 → 0.011 in 3 passes). Held out (two seeds): timing 5.3 → 6.1 (bdl against himself 5.7–6.9), combined 7.1 → 7.5. `data/profile_bdl4.*`.
+- **`analysis/pitch_calibrate.py`** (closed form): render the training sentences, compare F0 percentiles. pitch_median moves by the median's gap, pitch_spread by the interquartile ratio, lowest_pitch by the rest of the 5th percentile's gap.
+  - bdl4 on a0001–a0030: gaps (st, p5/25/50/75/95) −0.72 +0.40 +0.20 −0.10 −0.80 → −0.10 +0.00 +0.10 +0.00 −0.40 in 2 passes (rms 0.52 → 0.19). pitch_median 122 → 117.5, spread 1.5 → 1.76, lowest_pitch 80 → 94.7.
+  - Held out (two seeds): pitch 10.2 → 11.3, combined 7.5 → 7.5 (phase 11.7 → 10.4, inside its seed range).
+  - `profile_cycle6.sh` = cycle 5 + this stage after the durations (not for NATO). slt5, nato5 and bdl5 run through it (same-length in-place launcher edit). bdl5 starts from bdl4 with the weak-form and pitch plans (`data/profile_bdl4.*`).
+- `branches.nose_smoothing` (the nose's hop loss, fixed at 0.4 in Speaker) and `tract.hop_loss` (the vocal tube's; below 0 keeps the Speaker's 0.02) as layout settings; speak output identical with cmp. class_fit TREE: nose_smoothing credited to the nasals. profile_fit tract group: hop_loss. Cycle 6's source stage now includes the tract group.
+- **/z/ devoicing** (under 400 Hz re speech at 0, 0.2 … 1 of the token; /z/ before no vowel): bdl −5 −5 −13 −22 −33 −34 (14 tokens); ours −7 −13 −17 −19 −19 −18 (voicing held). The plan's `glottis.final_devoicing` (open the folds from 40% of the token) was 0. class_fit consonants now include it (credited to /z v/).
+- **Closure energy, still open** ("keep" in a0101, bdl4w): inside the /k/ closure the oral flow swings −11 … +42 cm³/s with a period of about 10 ms while the velum seal holds; under 500 Hz −15 to −19 dB re speech (bdl about −40). The start of /t/ /p/ closures also carries 20–30 ms of voicing tail (−4 → −24 dB).
+  - Not motor step targets: motors.smoothing 1 / 2 (two seeds) 7.5 / 7.6 against 7.5.
+  - Not motor wander: wander_gain 0 / 0.3 → 7.6 / 7.5 (voiceless stops −0.5 dB).
+  - Suspected: the yielding walls ringing after the pressure step.
+- Cycle 6 calibrates (durations, pitch) once before round 1 too: rms5 sat at held-out timing 1.1 through a whole round on old pooled durations.
+  - walls.loss_scale 2 / 4 (the fit had it at 0.40): 7.5 / 7.6 against 7.5. Not the walls either.
+  - What the /k/ shows: sealed only 33 of its 91 ms (closing 15 ms, the contact sliding from node 29 to 33 toward /iy/, released at 60%). The token's last 40% is burst and aspiration with the release flow rising (to 245 cm³/s). bdl's stops hold closure to about 70%, and their aspiration has almost nothing under 500 Hz.
+  - The planner releases a stop `burst_scale × post_burst_interval` (capped at 40% of the phone) before its end. class_fit consonants now include burst_scale, seal_lead, aspirate_gap, and the tip and dorsum close moves (credited to the stops, nasals and affricates).
+  - My "under 500 Hz" probes include sub-100 Hz flow ramps, which the fidelity bands (from 100 Hz) do not count. The class errors place the voiceless stops' excess at 144 Hz–1.3 kHz (+9, +9 dB by quarters).
+- **Level normalisation exposes out-of-phone sound** (bdl4p renders against bdl a0101–a0120, 10 ms frames within 40 dB of each utterance's loudest):
+  - Frames outside every phone: ours 16% of the window at −13.5 dB re speech level; bdl 1% at −22. They pull our speech level about 2.5 dB down, so nearly every class reads too loud: vowels +1.7 dB on average, consonants +3.1 (ae +7.3, hh +9.4).
+  - Silence before the first phone: bdl −58.6 dB re the loudest frame, ours −41.2.
+  - The room is not the cause (dry ROOM=0: lead-in −53.5 / −43.1 against −50.8 / −42.8).
+  - In a0101: bursts up to +9 dB re speech level just before the first phone, and after the last, single-millisecond spikes at +3 to +4 every ~145 ms.
+- **The spikes: a geometry flip at the tongue tip.** At 3.062 s nodes 37–40 lost 0.4 cm³ in 2 ms (node 38 1.758 → 1.367 cm²), and at 3.206 s got it back. The organs moved by jaw 5.699 → 5.700°, tongue y 8.010 → 8.011.
+  - The cut at x 7.35 switched its lower wall: arc 14.079 → 13.730, area 2.455 → 1.017 cm², every later arc −0.093 cm (teeth arc 14.644 → 14.551). The motor wander pushes the tip back and forth across it.
+  - The physical tongue already avoided this with `smooth_airway` (Articulators::nearest_width: width = the hull point's distance to the nearest organ). The VTL-tongue branch never set it.
+  - New `tongue.vtl_smooth_airway` (default 0; speak identical with cmp). On: no spike after speech (all ≤ −27 dB re speech level), the +9 dB pre-speech burst gone (+3 left at the breath's onset).
+  - Held out, unrefitted: 7.5 → 7.0 (spectrum 7.9 → 7.2, dynamics 4.9 → 4.0; affricate_voiced −1.5, th −1.4, dh −1.3, f −1.0; s +4.5, sh +2.7, w +1.6: nearer-distance widths narrow the sibilant channels the fit was tuned for). Testing with a class refit (bdl_sa, chain paused with SIGSTOP).
+  - Still open: the 0.67 s lead-in carries inhalation and breath-onset noise at −13 to −25 dB re speech level (bdl's lead-in is silent).
+  - Refit (bdl_sa: class_fit 9 generations from bdl4 with the switch on; one seed): held-out 7.1 → 7.3 → 7.4 → 7.3 (spectrum 7.2 → 8.3, dynamics 4.2 → 4.4). Without the switch, bdl4 scores 7.5 (two seeds), so the measure is neutral to slightly negative.
+  - Dynamics fell with continuity again (4.9 → 4.4): the jolts had padded it. Adopted anyway (vowel-loud clicks outside phones are real artifacts the measure barely sees): bdl5 starts from bdl_sa (`data/profile_bdl_sa.*`); slt5 and nato5 starts carry the switch. rms5 (running) does not.
+- `breath.inhale_pressure` (plan; default −110 Pa, the old constant; plans identical with cmp), in profile_fit's plan_breath group (−150 … 0).
+- **Phase scatter fixed by per-cycle lag and less aspiration** (bdl4w with bdl4p plan, held-out a0101–a0120):
+  - Scatter in the 0–1 / 1–2 / 2–4 kHz bands, rad (bdl 0.37 / 0.49 / 0.57), one seed:
+    - base 0.201 / 0.354 / 0.675
+    - cycle_shape 0.15: 0.215 / 0.351 / 0.689; 0.35: 0.235 / 0.364 / 0.681
+    - cycle_lag 0.15: 0.250 / 0.416 / 0.745; 0.3: 0.269 / 0.426 / 0.703; 0.6: 0.299 / 0.457 / 0.760
+    - lag 0.6 + shape 0.35: 0.348 / 0.453 / 0.771
+    - + aspiration gain 6 (from 11.8): 0.347 / 0.455 / 0.634; gain 3: 0.349 / 0.457 / 0.612
+  - Two seeds: base phase 10.4, combined 7.5. Lag 0.6, shape 0.35, aspiration 3: phase 24.6, spectrum 8.3, combined 8.0 (hh −2.6 dB, ih −1.8). Lag 0.7, shape 0.4, aspiration 2: phase 23.5, combined 8.0.
+  - bdl against himself: phase 19.7–26.7. Ours is now inside that range.
+  - The tree ES never moved cycle_lag from 0, and its bound (0.4) was below what bdl needed. Bounds widened (lag 1.2, shape 0.8).
+  - `analysis/source_calibrate.py`: pitch as pitch_calibrate, plus cycle_lag toward the 0–2 kHz scatter and aspiration_gain toward the 2–4 kHz scatter. Replaces the pitch stage in cycle 6.
+  - bdl5's start carries lag 0.6, shape 0.35, aspiration 3.
+- **100-sentence sets** (measure v5):
+  - bdl a0201–a0300 vs a0301–a0400: spectrum 18.7, dynamics 13.6, phase 21.9, pitch 19.2, timing 13.8, combined 16.3. Against rms: −0.6; slt: 0.2. Larger sets raise the ceiling from about 10 to 16 dB.
+  - Ours (the bdl5 start: bdl_sa with lag 0.6, shape 0.35, aspiration 3) on a0201–a0300, one seed: spectrum 7.8, dynamics 4.8, phase 14.3, pitch 5.3, timing 12.4, combined 7.5.
+  - Pitch fell there because bdl's F0 moves between sessions: a0201–a0300 p5/25/50/75/95 = 0.86 / 2.76 / 4.26 / 5.86 / 7.86 st, a0101–a0120 −0.14 / 2.26 / 3.56 / 4.86 / 6.26; ours −0.54 / 1.66 / 3.16 / 4.46 / 6.36.
+  - id ranges take a step ("a0001-a0593/20"; fidelity and render_set). Cycle 6 calibrates durations on a0001-a0593/3 and the source on a0021-a0593/25 (which misses the held-out a0101–a0120).
+- **Dynamics is the sound, not the boundaries** (bdl5 start against bdl a0101–a0120, two seeds):
+  - Transitions through tokens, a0201–a0300, median level re speech level at 0, 1/8 … 1 of the token:
+    - /s/ 250–500 Hz: bdl −6 −23 −34 −38 −40; ours −10 −18 −25 −31 −34. 4–8 kHz: bdl −20 −11 −5 −3; ours −17 −14 −9 −5.
+    - /f/ 250–500 Hz: bdl down to −51 by 0.4; ours −25 … −35. 4–8 kHz: bdl flat about −25; ours −34 → −16.
+    - Nasals: our murmur 5 dB high at 250–500 Hz; its highs start vowel-like (−21 against −29) and end too dark (−43 against −37).
+  - The abduction fade the class fit had left inactive (start 0.036 > end 0.008). With 0.03 / 0.08: f −2.3, sh −2.0, s −1.2 dB, but dynamics 4.5 → 4.2 and combined 7.8 → 7.7.
+  - `motors.move_scale` (Speaker; every articulator's move time, not lungs, pitch or glottis; default 1, identical with cmp): 0.6 → combined 7.5 (dynamics 3.7); 0.8 → 7.9 (dynamics 4.4).
+  - `FIDELITY_BOUNDARIES=mapped` (bdl's labels carried onto our audio by MFCC DTW): base 7.8 → 6.6, dynamics 4.5 → 4.4, timing 6.1 → 3.7, phase 21.3 → 14.0. The cross-voice DTW jitters the boundaries, and dynamics stays the same, so planned boundaries stay.
+  - New fit settings: profile_fit plan_motion `motors.move_scale` (0.3–1.5); class_fit `glottis.abduction_move` and `fricative_abduct_lead` (credited to the voiceless obstruents).
+- **The vowels' upper spectrum** (bdl5 start against bdl, ERB bands, mean over vowel classes, ours − bdl, dB):
+  - Every second band from 144 Hz: +5 +1 +2 0 +6 +5 +5 +2 −4 −10 +4 0. At 2.0 / 2.3 / 2.6 / 3.0 / 3.4 / 3.9 / 4.5 / 5.1 / 5.8 kHz: +2 0 −4 −8 −10 −3 +4 0 0.
+  - Fine spectra (a0201–a0300, vowel middles): bdl carries an F3–F4 cluster at 2.3–3.6 kHz (−1 to −4 dB re his peak) and falls off above 3.7 kHz. Ours is 10–15 dB weaker at 1.8–3.7 kHz, with peaks at 2.65–2.85 and 4.15–4.6 kHz.
+  - Not the source: pulse_shape 0.5 / 0, phase_lag 0.8 / 2.0 leave the 3.4 kHz band at −10 or −11.
+  - Not the losses: viscous_scale 1 / 0.5 and hop_loss 0 / 0.005 (−11). radiation_resistance_scale 0.7 changed nothing at all (to check: the slot may not reach the articulatory body).
+  - Piriform sinuses (the zero near 4–5 kHz): scale 0.6 → 4.5 kHz +11; 1.4 → 3.4 kHz −13; smoothing 0.3 → −17.
+  - New `anatomy.epilarynx_height` and `anatomy.epilarynx_area` (Speaker → MidsagittalTract; defaults identical with cmp):
+    - area 0.6 / 0.4 → 3.4 kHz −14 / −17, 4.5 kHz +7 / +6
+    - height 2.8 / 3.3 / 3.8 → 3.4 kHz −10 / −10 / −11, 3.9 kHz −8 / −7 / −7, 4.5 kHz −1 / −2 / −6 (combined 7.7 / 7.6 / 6.3)
+  - New `recording.presence_db`, `presence_hz`, `presence_q` (speak's room; RoomOptions::presence_q; default 0 dB, identical). 8 dB at 3.3 kHz, Q 1.5: 2.6–3.9 kHz +0 −2 −4 +2, but 4.5 kHz +8; combined 7.6 against 7.7.
+  - These go to a profile_fit group "shape" (presence dB, Hz, Q; epilarynx height and area), in cycle 6's source stage.
+  - The 0.8–2 kHz excess (+5) is common to every vowel too.
+- Held-out checks in class_fit and profile_fit now average each group's dB over two render seeds (73021, 11); class_fit renders them in parallel. One seed's phase group alone ranged 11.3–16.0 dB over a fixed voice, and the stages' acceptance compares these numbers.
+- rms5 (cycle 5): round 1 class 2.5 → 4.5; tree and plan rejected (the plan stage had held-out pitch 10.3 → 15.2 at one point, but combined did not rise); the aligned durations took timing 1.1 → 4.0, held-out 5.7. Round 2's class and tree stages: no gain.
+- **Status, 2026-10-18 11:15 EDT** (measure v5: aligned labels, pooled absolute phase):
+  - Ceilings, the speaker against himself or herself: 20-sentence sets about 10 dB; 100-sentence sets bdl 16.3, rms 13.6, slt 13.0. Another speaker scores about 0.
+  - bdl (the bdl5 start: VTL tongue with smooth airway, continuous geometry, class-fitted organs and consonants, aligned durations with weak-form scale, calibrated pitch, per-cycle lag 0.6 / shape 0.35, aspiration 3):
+    - held out a0101–a0120, two seeds: about 7.7–8.0 (spectrum 8.0, dynamics 4.4, phase 21, pitch 11.6, timing 6.1)
+    - a0201–a0300, one seed: 7.5 (spectrum 7.8, dynamics 4.8, phase 14.3, pitch 5.3 (session drift), timing 12.4)
+  - rms (rms5 after 2 rounds): held-out 5.8.
+  - The largest remaining gaps against the 100-sentence ceiling: dynamics (4.8 / 13.6), spectrum (7.8 / 18.7: vowels short at 2.6–3.9 kHz and over at 0.8–2 kHz; voiceless obstruents +12 to +20 dB at 144–400 Hz), pitch across sessions.
+- **Affricates** (bdl5 start, a0201–a0300; level re speech at 0, 1/8 … 1 of the token):
+  - ch 250–500 Hz: bdl −11 −31 −47 −44 −41 −41 −34 −33 −28; ours −20 −13 −29 −36 −36 −37 −37 −38 −35. 2–4 kHz: bdl −31 −40 −38 −18 −9 −4 −4 −7 −10; ours −20 −13 −28 −34 −37 −31 −16 −14 −19. bdl hisses from about 40%; ours from 75%, and 10 dB weaker.
+  - jh 250–500 Hz: bdl −3 … −40 (devoiced through the hiss); ours −2 −5 −19 −31 −21 −14 −13 −14 −12 (re-voiced). 2–4 kHz: bdl −15 to −7 in the hiss; ours −28 to −19.
+  - b d g: bdl's voice bar −8 … −22; ours −2 … −26 (the closure's middle deeper than his).
+  - The hiss starts at max(start + share × duration, end − affricate_hiss_max), and affricate_hiss_max was 0.06 s, so a long /ch/ hissed only its last 60 ms. New plan option `glottis.affricate_hiss_gap` (below 0: the voicing gap; plans identical with cmp).
+  - class_fit consonants now include affricate_hiss_max, affricate_closure and affricate_hiss_gap.
+- **Nasal murmurs** (mid-phone spectra, a0201–a0300, dB re bdl's peak):
+  - m: ours 0–450 Hz +3 to +8 over bdl. 0.6–2 kHz 5–8 dB under: bdl has a second resonance near 0.9–1.1 kHz (−23/−24), ours −31 to −34. 2.3–3.9 kHz 5–10 dB over.
+  - n: low +5 and highs +2 to +10 alike.
+  - class_fit covers the highs (nose_smoothing) and the sinuses. The missing 1 kHz resonance is the nasal tube's own geometry. Open.
+- **rms5 done** (3 rounds, cycle 5): held-out (two seeds) spectrum 4.1, dynamics 3.5, phase 11.8, pitch 20.5, timing 3.8, combined 5.8 (start 2.5). `data/profile_rms5.*`. A source calibration afterwards gave 5.7 (rejected). rms6 (cycle 6, 2 rounds, from rms5) queued last.
+- **slt's phase**: our scatter 0.63 / 1.38 / 1.10 against her 0.39 / 0.73 / 1.09.
+  - jitter 0.56 → 0.2 and flutter 30 → 10: no change.
+  - Aspiration 13.4 → 3: 0.35 / 1.04 / 1.21; phase 5.9 → 12.0, spectrum 3.5 → 5.5, combined 3.5 → 4.2. Her aspiration was too loud across 1–2 kHz.
+  - source_calibrate now sets aspiration by the 1–4 kHz bands together and lag by 0–1 kHz alone. Lag steps halved, pitch steps damped 0.6: on rms, lag went 0 → 0.24 → 0.08 and the median overshot.
+  - slt5 restarted with the fixed rule (`/tmp/es/run_profiles6.sh`: slt5, nato5, bdl5, rms6).
+- Samples sent to the owner (12:34 EDT, `out/samples_2026-10-18/`): bdl_morning (profile bdl_start), bdl_now (the bdl5 start), rms_now (rms5), slt_now (the slt start after round-0 calibration only), three sentences each.
+- **slt5** (cycle 6): round 0 calibration (durations 0.144 → 0.030; aspiration 13.4 → 3.3) took held-out 3.5 → 5.2. Round 1: class 6.1, tree 6.5 (kept), plan 6.9 (kept; phase 20.4). Held-out pitch stays about 5.5: her a0101–a0120 block's F0 differs from the spread set (her own 20 against 100 sentences: pitch 1.3).
+- **Fitting speed** (the owner, 14:20: "optimize that code if you didnt plan for it to take an hour"):
+  - Per sentence, speak 2.25 s for 3.6 s of speech (1.6× real time); say --plan-only under 0.01 s; describe 0.5 s (pyin 0.48).
+  - speak's profile (sample, 4 s): Tube::step_air 562, step_lining 475, refresh_geometry 393, pow 125 (the viscous law, each step next to fast nodes), add_cut 48, the 2025 folds 34. The physics at 96 kHz is the cost.
+  - Compiler flags: -mcpu=native and -flto both give identical output (cmp), but CPU time is within noise (6.0–6.8 s against 6.0–6.5). Not adopted.
+  - The waste was in the pipeline. profile_fit's start evaluation and held-out checks (30 and 40 renders) ran one by one in one pool worker while the others waited, about 100 s each and several times a stage. class_fit's two-seed held-out used 2 of 10 cores.
+  - `render_set.render_many(jobs, threads)` (threaded subprocess renders): profile_fit renders those at WORKERS (10) at once, class_fit's held-out seeds at 5 each. Takes effect from each next stage.
+- slt5 round 2: class 6.9; tree kept 7.3; plan rejected. Source calibration (spread set): pitch gap rms 0.18 st; phase 0.339 / 0.738 / 1.039 against 0.363 / 0.616 / 1.044.
+- **slt5 done** (3 rounds, cycle 6): held-out 3.5 → 7.1 (round 3's plan stage 6.1 → 7.1). `data/profile_slt5.*`. Her held-out pitch swings (3.3–7.4): the source calibration matches the spread set, and her a0101–a0120 block's F0 differs from it.
+- **The NATO reader is in the female range**: F0 p5/25/50/75/95 = 8.96 / 10.86 / 12.76 / 14.16 / 16.06 st re 100 Hz (median 209 Hz); ours, from the male VTL start, −3.14 … 6.86 (held-out pitch −12.7, combined −6.3). Phase scatter 0.66 / 1.21 / 1.30 (breathy).
+  - Formants between bdl's and slt's: iy 421 / 2528 / 2949, aa 792 / 1301 / 2718, uw 443 / 1966 / 2575, eh 787 / 1723 / 2589.
+  - nato5 restarted from slt5 with anatomy scale 0.94 (slt 0.87) and pitch +2.3 st (lowest_pitch 155): held-out at its first class generation 2.7 (pitch 4.7). `data/profile_nato_s3.*`. Chain `/tmp/es/run_profiles7.sh`: nato5, bdl5, rms6.
+- **nato5 done** (3 rounds from the female start; ~15 min a round, one render per candidate): held-out about 3.7–3.8 (start 2.7 on the female base, −6.3 on the male). Round 1 tree and plan kept; later stages rejected; spectrum about 2, dynamics about 0. The measure is limited by 13-word halves (one take of 26 words, DTW-cut). `data/profile_nato5.*`.
+- bdl5 started 16:12 (cycle 6, train a0001–a0060, 2 rounds, from bdl_sa with lag 0.6, shape 0.35, aspiration 3).
+- **bdl5** round 0 calibration (durations a0001-a0593/3: 0.074 → 0.011; source on a0021-a0593/25: pitch gap rms 0.46 st, phase 0.377 / 0.471 / 0.567 against 0.362 / 0.542 / 0.569): held-out (two seeds) 8.4 (timing 8.3, phase 20.0, pitch 11.9). Round 1 class stage (60 training sentences): 8.7 (dynamics 5.5).
+- **bdl5 round 1**: tree kept, held-out 8.7 → 9.3 (spectrum 8.2, dynamics 6.4, phase 22.0, pitch 12.6, timing 8.3). Plan rejected (9.2). `data/profile_bdl5r1.*`.
+  - Settings moved: presence 0.5 dB at 4.3 kHz (unused); epilarynx height 2.3 → 1.99, area 1.20; highpass 18 → 51 Hz; hop_loss 0.02 → 0.004; viscous 2 → 1.26; wall loss 0.40 → 0.60; skin 0.15 → 0.50 (the voice bar); aspiration 3 → 0.3; jitter 0.45 → 0.88; flutter 46 → 60 (its bound, widened to 120); pulse_shape 1 → 0.41; frication 1.8 → 1.0; fade 0.046 / 0.045 (still inactive).
+  - Then source calibration: phase 0.360 / 0.577 / 0.643 against 0.362 / 0.542 / 0.569.
+- **bdl5 done** (round 2: tree 9.2 and plan 9.3 both rejected; final source calibration pitch rms 0.26 st, phase 0.392 / 0.537 / 0.558 against 0.362 / 0.542 / 0.569): held-out 9.3 (two seeds). `data/profile_bdl5.*`.
+  - **a0201–a0300 (100 sentences, one seed): spectrum 9.1, dynamics 6.5, phase 18.2, pitch 12.9, timing 14.8, combined 10.5.** The bdl5 start had 7.5. Ceiling (bdl against himself): 18.7 / 13.6 / 21.9 / 19.2 / 13.8 / 16.3. Timing is above the ceiling.
+  - Worst classes now: z 8.2, uw 7.8, ch 7.7, l 7.1, v 6.9, b d g 6.9 (rms dB).
+  - bdl6 queued after rms6: cycle 6, 2 rounds, training on a0001-a0593/10, held out a0006-a0593/30 (60 and 20 sentences spread across the sessions, disjoint; every step of 20 or less hits a0101–a0120).
+- **rms6 done** (cycle 6, 2 rounds from rms5): held-out 6.4 (rms5 5.8). `data/profile_rms6.*`. a0201–a0300 (one seed): spectrum 4.8, dynamics 4.3, phase 23.2, pitch 15.8, timing 6.5, combined 7.2 (his ceiling 13.6).
+  - Worst: z 17.9 dB. rms's /z/ hisses like his /s/ (−5 to −10 dB re speech at 3.4–5.8 kHz); ours is 21–30 dB short there (no hiss: voiced_fricative_gap 0.04). jh likewise −17 to −22 above 2.6 kHz. class_fit consonants now include `glottis.voiced_fricative_gap`.
+- **slt5 on a0201–a0300**: spectrum 7.2, dynamics 5.7, phase 17.4, pitch 4.1 (her F0 drifts between sessions), timing 12.4, combined 7.3 (her ceiling 13.0).
+- rms7 and slt6 queued after bdl6 (cycle 6, 2 rounds, train a0001-a0593/10, held out a0006-a0593/30).
+- **bdl6 done** (train a0001-a0593/10, held out a0006-a0593/30, from bdl5): held-out stayed about 9.5 (pitch 24–26 on the spread set: the spread calibration generalises). No stage improved: bdl has plateaued on the present structure.
+- **What is left for bdl** (bdl5, a0201–a0300): normalized error spectrum 0.124, dynamics 0.221, timing 0.033.
+  - Top class costs, dynamics first: dh 0.028, th 0.025, ch 0.019, m 0.019, z 0.018, v 0.016, n 0.015, oy 0.015, ng 0.015.
+  - Octave spreads, bdl / ours (dB):
+    - dh 11.2 14.2 14.5 13.1 13.1 11.1 / 6.6 9.3 9.8 9.5 11.8 10.3 (bdl's /dh/ is a near stop)
+    - th 14.3 15.3 12.1 11.5 10.3 8.4 / 11.8 10.4 8.2 8.1 9.6 11.5
+    - m 3.2 4.2 7.2 6.4 7.1 4.5 / 3.0 3.1 3.5 6.9 4.3 8.8
+    - oy 1.7 2.3 5.6 8.0 6.1 4.4 / 5.7 6.5 8.8 8.9 6.6 5.4
+  - Mean spread error by octave −0.23 −0.52 −0.74 −0.84 −0.94 +0.46.
+  - New plan option `articulation.dh_press` (above −1 overrides dental_press for /dh/; plans identical with cmp). class_fit: dh_press credited to dh, dental_press to th only.
+  - bdl7 queued after slt6 (from bdl5, spread sets).
+- **rms7 done** (cycle 6, spread sets, from rms6): spread held-out 6.1 → 6.9 (round 2's tree kept). **a0201–a0300: spectrum 6.3, dynamics 5.8, phase 20.8, pitch 16.9, timing 6.5, combined 8.2** (rms6 7.2; his ceiling 13.6). /z/ is no longer among the worst (v 11.0, l 10.5, f 9.2, w 8.7, y 8.7, ng 8.4). `data/profile_rms7.*`.
+- **slt6 done** (cycle 6, spread sets, from slt5): spread held-out 7.6 → 8.5 (both trees kept). **a0201–a0300: spectrum 8.0, dynamics 6.7, phase 22.7, pitch 13.5, timing 12.4, combined 10.2** (slt5 7.3; her ceiling 13.0). Training on the spread set fixed her session pitch (4.1 → 13.5). Worst: l 10.1, v 8.4, hh 6.9. `data/profile_slt6.*`.
+- Summary at 06:5x EDT 2026-10-19, a0201–a0300 combined against each speaker's own 100-sentence ceiling: bdl5 10.5 / 16.3; rms7 8.2 / 13.6; slt6 10.2 / 13.0; nato5 about 3.8 (13-word halves).
+- **/l/** (a0201–a0300, ours − reference, every second ERB band): bdl −2 −7 −6 −12 −10 −8 +3 +11 −1 +3 −3 −2; rms −10 −9 −12 −19 −18 −15 −1 +5 +5 +6 −5 +3; slt −5 −7 −8 −16 −13 −17 −13 −3 +4 +1 −5 −8. Our /l/ is weak from 250 Hz to 1.3 kHz for all three.
+  - The lateral channels' area was a constant (0.12 cm²). New `anatomy.lateral_area` and `anatomy.lateral_reach` (MidsagittalTract; defaults identical with cmp). 0.2 / 0.3: /l/ −0.3 / +0.1 dB; held-out unchanged. Reach 3 / 4.5 cm: no change.
+  - In "Please let all little lambs loll lazily" three of ten /l/ sealed (0.001 cm²): an /l/ released its side channels 20 ms before its end, after the next /l/ had opened them. New plan switch `articulation.lateral_hold` (default 0, plans identical): all ten open. No held-out effect (a0101–a0120 has no /l/ pairs).
+  - So the weakness is elsewhere. Open. class_fit TREE: lateral_area, credited to /l/.
+- **/l/ spectrum** (mid-phone, a0201–a0300, dB re bdl's peak):
+  - bdl prevocalic: strong below 600 Hz (−1 to −4), a resonance at 0.8–1.25 kHz (−13 to −23), a deep trough at 1.4–2.5 kHz (−39 to −49), F3 2.75–3.4 kHz.
+  - Ours: −7 to −10 below 600 Hz, −18 to −32 at 0.6–1.25 kHz, no trough (−28 to −35).
+  - New **lateral pocket**: VoiceBody branch group 4, a closed tube (`branches.lateral_pocket` port cm² at full lateral, `_length` 4 cm, `_area` 0.6 cm², `_back` 3 cm behind the tip contact). Port = lateral flag × lateral_pocket; it glides and is skipped when shut, like the under-tongue pocket. Off by default; output identical with cmp.
+  - In "Lily will feel well, little Ella, all alone in the hall." (band levels dB): port 0.3: 1.6–2.0 kHz 6.6 → −9.3; 0.6: the trough at 2–2.5 kHz; 0.6 and 5 cm: 1.3–2.0 kHz 7.7 / 6.6 → 0.3 / −12.3.
+  - Held out (two seeds): /l/ −0.3 to −0.5 dB rms, combined 9.2 → 9.2–9.3. The low band's weakness remains (open).
+  - class_fit TREE: lateral_pocket (0–0.8) and its length, credited to /l/.
+  - /l/ against its preceding vowel, 100–600 Hz (a0201–a0300 medians): bdl −0.1 dB (79), ours −5.6 dB (84).
+  - The source is not the cause ("Lily will feel well…", TRACE 0.25 ms): glottal swing 0.06–0.08 cm² and flow AC 31–59 cm³/s in /l/, the same as the vowels beside it; mouth pressure 520–910 dPa in /l/ against −34 to 970 in the vowels.
+  - So the tract damps or misplaces /l/'s F1. A 0.3 cm² channel did not lift it. Open.
+- Samples sent 2026-10-19 (out/samples_2026-10-19/): profiles bdl5, rms7, slt6, nato5, three sentences each.
+- **Owner's verdict on the 2026-10-19 samples**: "really terrible"; "half the words cant even be understood"; "worse than it was before"; only slt gets most words right; "You, you would not keep the truth from me" is illegible in every voice but slt.
+  - The fidelity measure rose (bdl 7.5 → 10.5, rms 7.2 → 8.2, slt 7.3 → 10.2) while intelligibility fell.
+  - The measure compares phone-class averages (mean spectra, spreads, durations, pitch percentiles). It never asks whether a word can be recognised, so the class fit was free to trade articulation for average spectra (for example labiodental_jaw 4 → 0.8, w_aperture to its floor, rhotic_up 0.3 → 0.03).
+  - This repeats [[organic-comes-from-bodies]]: fits and statistics did not move the owner.
+  - Chain stopped 2026-10-19.
+
+## Reversibility (2026-10-19, owner's /goal: "start with the known-answer round trip. go long until you have it going both ways")
+- The owner: an epistemic utility understands the inside of the box. The engine must be **reversible end to end**: excited by sound, it performs the mouth shapes (hinted by the NATO codewords); driven forward by our folds, it gives the sound back, in = out.
+- **`analysis/reverse_core.py`** (the reversible acoustic core):
+  - Forward, a replica of Tube::step_air: waves hop one node per 96 kHz step; junctions at the nodes; link areas the mean of their nodes; the glottis end driven by the flow entering; the lips loaded R ‖ L; each link's Borda-Carnot kinetic loss (series_element with no viscous resistance).
+  - Backward, `peel`: the tube driven by the sound, node by node from the lips to the glottis. At the lips the load gives the pressure step by step. On each link the arriving wave and the wave that left the far node fix the link's flow (U = (f' − b)/Z); from it, the entering wave (a = b + Z U + K U|U|/2) and so the near node's pressure; that junction gives the next link's arriving wave. One step per node.
+  - Tool support: sustain has `VISCOUS=` (viscous scale), `HOPLOSS=` (the per-hop low-pass) and `AREAS=path` (node areas after the first step). Its `RAW=` gives the flow entering the vocal tube and the radiated flow, per step.
+- **Known answer 1, a static tube** (sustain aa, Story 2008; walls ×1e6, no branches, no noise sources, viscous 0, hop loss 0; 120 Hz, 800 Pa, 0.6 s; 47 nodes, 17.14 cm):
+  - Forward replica against the engine's lip flow: 29.2 dB linear; **47.3 dB with the kinetic loss** (band SNRs 44–98 dB).
+  - Backward by inverting the transfer with an FFT: REJECTED. Synthetic linear round trip 4–36 dB by band: the nearly lossless tube rings past the signal's end, and the truncation smears the inverse.
+  - **Backward by peeling: synthetic round trip 297.6 dB linear, 296.8 dB with the kinetic loss (exact). The engine's glottal flow recovered from its lip flow: 71.2 dB (swing 68.6 dB).**
+- **Known answer 2: posture from sound** (`analysis/posture_recover.py`; geometry_probe with the VTL tongue → node areas, the narrowest of the cut profile over each node; sustain `AREAFILE=` renders exactly that tube; rigid lossless tube):
+  - Choosing among the 11 Story vowels from the sound alone: by the peeled flow's energy 6 of 11 (REJECTED); twice-differenced 1 of 11 (REJECTED); **by ringing in the closed phases, 11 of 11**.
+  - Continuous postures (true bdl5 /aa/, hint organs_vtl_tongue /aa/). Ringing alone found a posture equally still but wrong, a tube 0.73 cm² rms off: the true source is never fully still (its stillest 35% reads −17 dB, chink or not). Spectral ripple rated the impostor (4.79 dB) above the truth (5.80): REJECTED.
+  - **Consistency with our own folds** (the owner's loop: the glottal flow a tube implies, the sound peeled back through it, against the flow our folds make driving that tube forward): truth −73 dB waveform mismatch, hint +4 dB, the ringing impostor 9.5 dB worse by harmonic levels.
+  - The rigid lossless tube's landscape is a narrow well: 90% of the way from the hint −15 dB, the truth −73. Global search (differential evolution, 4428 evaluations, then Powell) stopped at −29.8 dB in another basin (tube 0.87 cm² rms off; re-rendered sound 15.9 dB waveform, 4.85 dB harmonic levels). The rigid tube's resonances are needle-sharp (radiation-damped only), so any F1 error rings strongly.
+  - Tract length now continuous (whole nodes plus the rest as the open end's air mass, Tube::set_active_length; sustain `ACTIVELENGTH=`). The period finder takes the shortest lag within 90% of the peak (it had chosen 60 Hz for 120).
+- **The reversible core with real losses**:
+  - Viscous resistance (2(a − b) = (2Z + R)U + K U|U|) and the per-hop one-pole low-pass, both undone in the peel. Synthetic round trips 293–297 dB. Engine (rigid walls, viscous 1, hop 0.02): forward 55.7 dB, peel 74.9 dB.
+  - Yielding walls matter: against the rigid replica the engine's lip flow sat at 10.7 dB (5 dB at 300–1000 Hz).
+  - The walls' axial tension couples neighbouring nodes (an implicit tridiagonal solve), which a node-by-node peel cannot follow. Without it (sustain `AXIAL=0`) the sound changes by 31.9 dB (lip flow; glottal 42.3). For the reversible engine, local linings.
+  - The walls' random support variation (wall_variation 0.10) is hidden state: `WALLVAR=0`.
+  - numba versions `forward_tube` / `peel_tube`: each node's lining (cover on hoop and coupling springs, body on coupling and support) driven by that node's pressure; in reverse, by its known pressure history. Tube::lining(...) exposes each node's compiled lining; sustain `WALLDUMP=` writes it.
+    - Synthetic walled round trip: 280.6 dB. Engine: forward 40.9 dB, peel 57.5 dB.
+    - The wall-displaced area changed both links' admittances. New `Tube::set_static_admittance` (the air sees the rest geometry; the linings act through their flow; default off; sustain `STATICAREA=1`).
+  - **With it, the engine and the reversible core are the same machine: forward 147.7 dB, peel 141.4 dB** (float32 logging). Local walls, viscous loss, kinetic loss, hop low-pass, radiation, continuous length: the tube runs both ways.
+- **Known answer 3: posture from sound through the walled engine** (local steady linings, static admittance, viscous 1, hop 0.02; true bdl5 /aa/, hint organs_vtl_tongue /aa/; consistency over 15 periods from 0.1 s):
+  - Truth −138.9 dB, hint +5.5 dB. Along the straight line from the hint to the truth the landscape falls smoothly (90% of the way: −14.2 dB).
+  - An impostor posture scores −30.2 dB consistency and −21.4 dB lip-waveform mismatch. By the lip waveform alone the landscape is a needle (about −3 dB everywhere but at the truth, −386): REJECTED as a search measure.
+  - Powell from the hint: −29.3 dB (754 evaluations), tube 1.64 cm² rms off, sound round trip 21.3 dB.
+  - Twenty random starts of Powell over the nine organs: best −34.6 dB; ten land near −25 to −35 dB, ten near 0 dB. None reached the truth. The posture landscape has many shallow wrong basins: it is the wrong space to search in first.
+  - Fault found: `render` left its temporary folder behind; 36236 folders filled the Mini's disk. It now cleans up.
+- **Known answer 4: the tube from sound** (`analysis/tube_recover.py`; Levenberg–Marquardt on the residual driven − implied glottal flow, parameters the node log areas and the length past the last whole node, columns by finite differences in parallel):
+  - From the true tube with 2% log-area noise: −95.0 dB consistency, **sound round trip 88.6 dB**. 10% noise: −81.0 dB. 30% noise: −24.2 dB (a wrong basin).
+  - The tube it reached differs from the truth by 0.37 cm² rms, all of it a node-to-node zigzag in the wide front cavity (7.10 8.20 6.57 8.93 6.17 against 7.5 flat), left over from the starting noise. A ripple at the grid's own spacing moves the sound only near the half step rate: the grid's null space, not a second mouth. OBSERVED.
+  - So sound → tube closes locally; what is open is reaching the true basin from the hint. The first run from the hint (16 smooth control points, bounded trust region) stopped at −27.9 dB with 47 nodes where the truth has 46: the residual jumps when the count of whole nodes changes. Now the count is fixed per run and several counts are tried.
+  - From the posture basins, Levenberg–Marquardt over the nodes (trust-region with bounds stalled where it began; LM, the shape clipping the log areas, moved): seed 14 −33.0 → **−119.8 dB, tube 0.057 cm² rms off**; seed 2 stopped at −45.7, seed 9 at −34.8. Starting smooth (16 control points) from the hint, LM blew the areas up to the clip (tube 13–14 cm² rms off): REJECTED.
+  - **Pipeline** (`tube_recover.recover`): 512 Sobol postures about the hint, each scored by consistency; the best 6 → LM over the nine organs (band 1.5 kHz, then whole); the best 3 → LM over every node (1.5 kHz, 3 kHz, whole ×2).
+  - **bdl5 /aa/ from the hint alone: −94.2 dB consistency, tube 0.059 cm² rms off (46 of 46 nodes), sound → tube → sound round trip 91.4 dB.** Survey best −28.8; its posture search −40.8 (tube 0.77 off); the other two carried basins stopped at −40.6 and −51.3. MEASURED (one vowel; the other twelve running).
+- **Known answer 5: a moving tube, both ways.** sustain `AREAFILE2=` with `GLIDE=start,duration` glides the rest areas linearly at each 1 ms tick; `GEODUMP=` writes per step and node the area, the air the frame draws (`Tube::frame_flow`), the link's viscous resistance (`Tube::link_resistance`) and the lining (float64). New accessors only; nothing else changes.
+  - `reverse_core.forward_moving` / `peel_moving`: the walled core with per-step geometry, in Tube::step's order (the linings step on the last step's constants, the geometry recompiles, the air steps on the new one; each link scatters on the geometry of the step that made its waves; the frame's drawn air enters every junction).
+  - bdl5 /aa/ gliding to /iy/ (resampled to /aa/'s 46 nodes) over 0.12–0.22 s, 0.35 s: **forward 150.0 dB, peel 137.8 dB; during the glide 150.9 / 136.7 dB.** The static peel through /aa/'s tube over the same stretch: −1.6 dB. MEASURED.
+  - Frame motion (rest radius at 160 Hz critically damped, the displaced air through two poles at 250 Hz, linings recompiled every step, the viscous law gliding every 16 steps) depends only on the geometry's targets, so the peel takes it as known: the moving engine is reversible given its trajectory.
+- **Robustness of the tube from sound** (bdl5 vowels, hints organs_vtl_tongue):
+  - First pipeline on /ae/: −32.4 dB, round trip 21.8 dB; /ah/ −35.1. Every /ae/ posture basin had 47–50 nodes where the truth has 44, and the node search keeps its count. Several truths lie outside the hint spans (/ey/ tipx −1.49 spans, /ih/ drop +1.71): survey widened 1.5×.
+  - Over 1024 surveyed postures, rank correlation with the tube's distance from the truth: closed-phase ringing 0.15–0.38, waveform consistency 0.02–0.14. Both are exact only near the truth. **Our own sound's harmonic levels against the sound's** (rms dB): 0.70 / 0.82 / 0.40 (/ae/ /ah/ /aa/) against the log-area shape's distance. MEASURED.
+  - Why the levels are the same test: the peel is the forward pass's exact inverse, so our folds' flow equals the flow the sound implies exactly when our sound equals the sound. Per harmonic, log(ours / the sound's) is that test: the real part the levels, the imaginary part the phases. The waveform form is exact but rugged; the spectral form varies smoothly with geometry.
+  - Our folds settle at a pitch the tube's load moves (period 761 against 769 steps, 0.05 spans from the true /ae/). Read at the sound's period, our upper harmonics were misread; each sound is now read at its own period, phases relative to the fundamental. The same drift over 15 periods is part of why the waveform test is rugged away from the truth.
+  - **The node count was the cliff**: free, the posture → tube map jumps when the length crosses a whole node. From 0.05 spans off the true /ae/, a start rounding to 43 nodes (truth 44) never came back (+3.0 → +0.5 dB). `posture_recover.nodes(posture, count)` holds the count (the length past it carried by the open end's air mass, 0–2.5 nodes, as the engine clamps it). At a fixed count, the posture ladder (levels; spectrum with phase to 5, then 10 kHz; waveform) reached −52 to −72 dB from 5 of 6 starts within 0.1 spans; the posture itself ends 0.3–0.4 spans off at −70 dB (many postures, one tube).
+  - A count-sweep by stretching the profile: REJECTED (it never chose another count; a basin 0.36 cm² rms off over the true 48 nodes had its 2 extra nodes at the lips, which a stretch cannot remove).
+  - Spectrum rungs then waveform rungs over the nodes made near-exact posture tubes worse (/ae/ −63.3 → −44.7 dB). The node stage now runs the exact test only and keeps the best tube: **/ae/ −86.2 dB, tube 0.020 cm² rms off, sound round trip 82.0 dB** (first pipeline: 21.8 dB). /ah/ 40.1 dB, /aa/ 30.7 dB (stuck node searches; next items).
+  - A posture tube with the length clamped at the most air mass started the node search on the fraction's bound: its difference column read zero, the length never moved. Started inside the bounds now.
+  - **float32 was the floor**: from the true /aa/ tube with 10% log-area noise, the node search stopped at −70 dB on `xtol` (rejected steps): sustain's RAW is float32, and a 1e-3 step in a log area left ~1e-4 relative noise in each difference column, the size of the residual itself. sustain `RAWDOUBLE=1` writes float64 (default unchanged); the same search then fell −71.7 → −92.2 → −100.4 → −103.9 dB over four runs of 30. MEASURED.
+- **Output error against equation error** (the decisive change):
+  - With float64, all four free-running (output-error) results: /aa/ **123.2 dB** round trip (tube 0.058 cm² rms off); /ae/ 42.3, /ah/ 44.0, /ao/ 32.6. The last three stalled over the nodes from tubes 0.15–0.65 cm² off.
+  - Cause: the free test runs our folds against their own candidate tube; a slightly wrong tube moves their pitch, and over 15 periods the flow drifts in phase: an output-error landscape, rugged.
+  - **Equation error**: drive our folds with the tract the sound implies. The peel gives the first node's pressure and flow, hence the wave the tube returns toward the glottis, (p − U ρc / A0) / 2. `VoiceBody::force_return(on, wave)` has the folds read it in place of their tube's (`forced_flow()` the flow they pass; off by default); sustain `FORCEWAVE=path` (float64 per step). Default output bit-identical (cmp, two renders). The residual is the forced flow less the implied flow, step by step.
+  - /ae/ at the truth: equation −247.2 dB, waveform −230.1. From the true tube with 10% log-area noise: **equation −44.3 → −113.9 → −133.1 → −142.4 dB, tube 0.005 cm² rms off**; the waveform test from the same start never moved (−19.4). From 30% / 50% jagged noise the equation error also stalls (−38 dB): it needs a smooth start, which the posture stage gives. MEASURED.
+  - The equation error is now the test of the posture stage's last rung and of the node stage.
+  - **With the equation error, from the hint alone: /ae/ −247.5 dB, tube exact (0.000 cm² rms), sound round trip 216.6 dB; /ah/ −129.5 dB, tube 0.015 cm² rms off, round trip 119.2 dB.** All three carried basins of each converged to the same tube (from −40 to −70 dB posture tubes). Before it: 42.3 and 44.0 dB. MEASURED.
+- **All 13 bdl5 vowels from the hint alone** (equation error; survey 1024, 6 posture basins, 3 node searches): round trip /aa/ 224.5, /ae/ 216.6, /eh/ 232.2, /ey/ 246.3, /ax/ 188.1, /ih/ 132.2, /iy/ 127.7, /ah/ 119.2 dB: **8 of 13 exact** (tubes ≤ 0.019 cm² rms off). Not closed: /ao/ 47.4, /uw/ 44.7 (equation −79.3, tube 0.085 off, stalled), /uh/ 33.5, /er/ 12.4, /ow/ 2.1 dB. MEASURED.
+  - All five are rounded or rhotic: a small lip opening (0.2–0.7 cm² at the last nodes), where the open end's air mass trades against the lip area. The count was wrong in the carried basins (/ow/: 45–50 nodes, none at the true 48; /er/: 46–47 against 44). Not an area clip (smallest true area 0.15 cm²).
+  - The node stage now changes its count when no count is given: past 1.2 nodes of air mass it becomes nodes (the last area continued), and pinned at none, a node is given back; it runs until two runs gain under 1 dB (at most 10).
+  - With the adaptive count: /ow/ 47 → 48 nodes (the truth's) and −33.1 → −97.1 dB over ten runs, still gaining ~1 dB a run; **round trip 2.1 → 67.7 dB**. /er/ unchanged (12.7 dB): its carried basins were at 46–47 nodes with 0.45–0.8 nodes of air mass, never pinned; the 43-node basin 0.17 cm² off was left behind (lower posture score). Next: carry all six basins.
+  - Jacobian of the equation error at the true tube: the weakest directions are node-to-node zigzags in the wide regions (the grid's null space) for /aa/, /ow/ and /er/ alike (smallest singular values 0.015–0.022). /ow/'s strongest is 15× stronger than /aa/'s (condition 9.5e5 against 6.0e4): the small lip end, its resistance and kinetic terms going as 1/A and 1/A². A curved, steep valley, not a missing direction. Column scaling (x_scale "jac") from a smooth 15% perturbation of /ow/: −63.8 against −52.7 dB unscaled; neither converged. MEASURED.
+- **/uw/'s floor**: from the true tube with 2% or 5% noise, the node search stops at −79.6 dB both times (truth −249.6). Near the truth the equation error is exactly linear in a random direction (|r| ∝ t from 1e-7 to 1e-2). The stopping point differs from the truth by a node-to-node zigzag (the near-null subspace), and along the line from it to the truth the error is bumpy at −80 dB (−79.6, −81.2, −77.6, −79.6, −85.8) before −246.9 at the truth. With the profile's bend penalized in the first runs (weights 1, 0.1, 0.01 on the second difference of log area, then none): −112.6 dB, tube 0.025 cm² off (3, 1, 0.3, 0.1: −106.0). A floor remains. The node stage now runs that schedule and carries all six posture basins. MEASURED.
+  - Rerun (bend schedule, six basins): **/uh/ round trip 223.5 dB (tube exact), /er/ 71.3, /ao/ 63.6**; /ow/ 53.4 (67.7 in the previous run), /uw/ 44.7 (stopped at −79.3 again from its basin). Each winner was the 4th or 5th basin carried. **Vowels from the hint alone: 11 of 13 past 60 dB round trip, 9 exact.** MEASURED.
+- **Known answer 6: a sequence of held tubes** (`analysis/sequence_recover.py`; sustain `AREASEQ=` keyframes, each phone held 70 ms, transitions 50–80 ms; `reverse_core.keyframe_schedule`). Four vowels keyframed (/aa/ /iy/ /uw/ /ae/, 0.45 s): through the geometry replica, forward 161.0 dB, peel 163.6 dB. The truth's equation error, /aa/ /iy/ /ae/ /uh/: −138.7 dB; one arrival 1 ms late: −21.3 dB.
+  - First run: /aa/ (the first phone) exact (−247.7 dB); every later phone failed (−13 dB), the joint search with it (round trip 1.1 dB). Searched alone, a later phone's candidate is peeled from the sound's start through one static tube, and our forced folds (an oscillator with memory) reach the hold carrying that wrong history. Now each later phone is searched in its sequence (`PrefixContext`: the phones before as recovered, the candidate held from its hinted arrival); `tube_recover.recover(..., context=)` hears every rung that way.
+  - Second run, each later phone heard in its sequence but at the hinted times (8 ms off): /iy/ still −12.9 dB. **Our folds are an oscillator whose phase is neutral**: an earlier mismatch (here the transition's timing) leaves them out of phase for good, so the equation error after it never recovers. In the first run the timing grid had found transition 1 within 1 ms with /iy/'s tube still wrong. Now: each transition's times first (with the hint's tube for the phone it reaches), then the phone's tube in its sequence, then the times again.
+  - Timing first, then the tube in its sequence: transition 1 found at 103.0 / 147.6 ms (true 100 / 150) with the hint's /iy/ tube; /iy/ then −42.9 dB (0.275 cm² off); with it the times came to 100.2 / 150.0 ms. **Then rounds of times and the tube again (`tube_recover.node_search` in context): /iy/ −77.0, then −96.4 dB, tube 0.061 cm² off, transition 1 exact on the 0.2 ms grid**; transition 2 within 0.4 ms. MEASURED.
+  - Phone by phone the errors piled up through the folds' phase: /aa/ exact, /iy/ −96.4, /ae/ −57.4 (its polish rounds went to −52.9), /uh/ −23.5 and its transition drifted (319 / 446 ms against 360 / 420). Now after each phone, a joint search over every phone so far and the times between (`prefix_joint`; bend weights 1, 0.1, then none), so the next phone is heard after a near-exact history.
+- Owner, 2026-10-19 evening: changing the geometry or the scaffold (more pieces, bifurcations) is fair when a behaviour is painfully hard to reach; the test is whether the tuned behaviour looks nonphysical. Ideas to carry: per-piece viscosity in motion so that only the triggers to switch are sent (targets and switch times: what the sequence search already estimates); "picking up a voice" by replaying a person speaking. Wants to hear the results after the batch.
+  - **With the joint after each phone: /aa/ /iy/ /ae/ /uh/ recovered from the sound alone (hints: organs_vtl_tongue postures, times 8 ms off): all six transition times exact (≤ 0.01 ms), tubes 0.28 / 0.05 / 0.14 / 0.04 cm² rms off; sound round trip 72.1 dB over the radiated flow (0.02–0.53 s).** Joints: 2 phones −99.2 dB, 3 phones −84.6, 4 phones −84.5 (against the sound's swing); the final joint over all could not go further (−79.8 dB, four runs unchanged). The engine's own wave files (each normalised to its peak, onset included, the rate of change of the flow) differ by 51.0 dB. MEASURED.
+  - Listening files: out/reversible/ (original, recovered, and both with their difference ×100). Sent to the owner 2026-10-19.
+- **Known answer 7: closures.** /aa/ → shut → /aa/ (keyframes 0.10/0.13/0.20/0.23 s). The forward replica is exact through every closure (155–164 dB).
+  - Three shut nodes at the lips: peel 83.0 dB (3e-3 cm²), 56.8 (2e-3), −1.1 (1e-3); at 5e-4 and 1e-4 it overflows (NaN). Behind a long closure the links themselves are narrow, and the peel divides by each narrow link's admittance at every node behind it (about 1e4 a node, times the viscous resistance's ratio): three nodes amplify the last rounding by ~1e17. The sound carries almost nothing about a sealed cavity.
+  - **One shut node** (inside the tract): peel 189–243 dB at 1e-3, 1e-4 and 1e-5 cm², the lip flow down 40–57 dB during the closure. A link's area is the mean of its two nodes, so the links beside a single shut node stay half open. **A closure one node long is a full closure and exactly reversible**: the reversible geometry closes in one node. MEASURED.
+- **Known answer 8: frication, reversible.** The engine's jet (sound_jet) drives each source from the narrowest link's flow and the pressure two nodes upstream: in a peel from the lips those come after the source links. New `VoiceBody::reversible_jet` (layout `reversible_jet` = gain, default 0; sustain `REVJET=`): from the narrowest node (under 0.6 cm², from node 10) to the open end, each link's source = gain · (ρ/2)v² · turbulent · fade² · (v/2000) · √A · exp(−distance/1 cm), v = |U_link| / A from **the link's own flow the step before** (the jet passing it), the noise hashed per link and step (SplitMix64, so any link and step can be drawn again) and shaped per link as shaped_jet_noise. Default output bit-identical (cmp).
+  - `reverse_core`: the same source in the forward replica and in the peel (each link's wave entered less S/2, S from that link's flow one step earlier, known by then).
+  - /aa/ → one constricted node → /aa/, gain 0.8: near the teeth (0.08 cm²) noise −23.2 dB of the voice, **forward 201.8 dB, peel 206.8 dB (203.4 during the constriction)**; at the lips (0.15 cm²) noise −30.1 dB, peel 211.0 (213.3). A peel ignoring the jet: 19.5 / 29.5 dB. A mid-tract constriction (node 30, 0.1 cm²) stopped the render on a non-finite sample (open). MEASURED.
+- **Known answer 9: the nose.** sustain `REVNOSE=1` (the nose's linings without axial tension, its air on the rest geometry; `Tube::scale_axial`), `VELUMSEQ=` (port area over time), `NOSEDUMP=` (port node, the nose's constants), `PORTDUMP=` (port area per step), `NOSEHOP=` (the nose's hop low-pass, default 0). Defaults bit-identical (cmp, velum shut and open).
+  - `reverse_core.forward_branched`: the port a one-hop series element each step (VoiceBody::exchange_branches), the vocal tube with it as a side branch, then the nose; the sound lips + nostrils. Against the engine (/aa/, velum 0.01 → 0.4 → 0.01 cm²): **285.4 dB** (ignoring the nose 17.5).
+  - The split: one microphone, two openings. A junction condition per step (the oral peel's pressure at the port node against the waves the port and the nasal peel imply) is met at the true nostril flow to 1.8e-11, and the glottal flow peeled through it comes back at 288.6 dB. MEASURED.
+  - Solving it: Newton–GMRES on the whole condition (matrix-free, two peels per product): the residual stalled at 0.92 after 204 products, an hour and a half without a result (REJECTED: the condition is a causal shift of the share). Marching it, solving each nostril sample from the condition m steps earlier: matched the truth for 200 steps (2e-11), then diverged (rounding grew ~5% a step: REJECTED).
+  - **`marching.py`**: the oral path peeled time-major (one diagonal per sample) to the port node, the port stepped *forward*, the nose run forward skewed (node j at time k + j, so the nostrils' flow is known m − 1 steps ahead of when the oral peel needs it). No solves. Each piece exact against the replica's internal signals (skewed nose 374.5 dB, time-major oral peel 269.2 dB). The coupled loop was unstable near 4.9 kHz once the port passed ~0.28 cm² (×300 per 256 steps): the oral inverse inside the physical loop. The engine's nose had lossless hops; with a nasal hop low-pass of 0.2 (about 0.985 a hop at 4.9 kHz, −4 dB a pass through the nose at 5 kHz, little below 1 kHz) **the march is stable: split 283.4 / 284.0 dB, glottal flow 289.1 / 289.2 dB (ports 0.4 / 0.8 cm²), 0.07 s for 0.4 s of sound.** 0.05 and 0.1: still unstable. A scaffold choice for reversibility (nasal passages are lossy); their bandwidths against real nasals: open. MEASURED.
+  - **/ama/** (lips shut in one node 0.14–0.24 s, velum 0.5 cm²; nose hop 0.2): replica 182.2 dB; during the /m/ the nostrils carry the sound (lips −61.1 dB). The forward-nose march (B) held through the lips' closing and failed only once they were shut (143.3 ms): it inverts the oral path, which a closure makes weak. Peeling the nose and solving each nostril sample (A) fails at once even on a held /m/ (2.2 ms): REJECTED in principle. A per-step hybrid (A while shut) failed at the switch, A's own instability.
+  - The rule: invert the strong path, run the weak one forward. Next: a true seal (no leak: the engine's 1e-4 cm² floor leaks −61 dB). Sealed, the lips' share is the isolated lip node's decay (forward), the nose is the single peeled path, the cavity behind the seal is a closed branch driven forward from the junction's pressure; for a stop with the velum shut, the region behind the seal runs forward with the folds until the release. A time-major engine that peels what is observable and runs the rest forward.
+  - **True seal + modes** (`marching._march_sealed`): the oral path peeled while no seal falls in its reach; past that the nostrils carry the sound and the lips' own flow comes from the part in front of the seal run on alone (an isolated copy; sealed, it has no input). The front part runs forward from the port node's pressure throughout (`_oral_forward`, exact against the replica: 180.3 dB); at the release the oral peel's state is rebuilt from it (`_peel_from_front`). Then `_peel_below` takes the glottal flow from the port node down. Seal 0.01 cm²: **before the /m/ 222.2 dB, during the /m/ 128.7 dB** (the sealed-mode delivered wave reads ~2e-4 off: peeling through the nasal hop loss amplifies the high band ~(1.2/0.8)^30). Nasal viscous loss in place of the hop loss: ×5 and ×10 unstable while open, ×20 gives 104.6 dB in the /m/.
+  - The release: once the nostril sample being taken passes the release, the lips radiate again and their flow depends on the port node's pressure up to 9 steps past what is known; holding the last value was wrong there and, fed back through the ahead copy, exploded within 5 steps. Next: a small Newton solve over the ~30 nostril samples after each release (the window run with them; the lips' flow = sound − share against the front model's).
+  - **The nasal hop loss in tension**: the open-mouth march needs the nose damped near 4.9 kHz, the sealed one needs the nose peel well conditioned; the one-pole hop 0.2 cost ~106 dB at the half step rate over the nose, which the peel must undo. Stabilizers tried for the open-mouth march with a lossless nasal hop: nostril radiation scales (0.25–2): unstable; velum port resistance ×3 to ×100: unstable (REJECTED). **A shelf hop filter** g (x − b x′) + a y′ (`Tube::set_wave_shelf`, sustain `NOSESHELF=`; defaults bit-identical): the open-mouth march is stable once the shelf loses about −0.2 dB a hop at 5 kHz (a 0.6 b 0.57: stable; a 0.5 b 0.46, −0.16 dB: unstable); **a 0.8 b 0.79 loses −0.32 dB a hop at 5 kHz and only −0.47 at the half step rate (−14 dB over the nose)**, march glottal flow 289.4 dB. The shelf's inverse is a stable recursion in both nose peels.
+  - /ama/ with the shelf nose and the seal: **before the /m/ 223.4 dB, during it 167.3 dB** (128.7 with the one-pole). MEASURED.
+  - **The release** (`march_split`, Newton over the port node's pressures across the window: the lips hear them through the part in front of the seal before the march reaches them): consistent (residual 7.5e-4 at the true pressures, scale 2300); from a flat start Newton diverged, from the pressures one pitch period earlier (damped) it converged to 1e-10, **to another solution** (89.6 off the truth near the release), and the march on from it reproduces the sound with a glottal flow at 49.1 dB (61.8 after the /m/). A periodic prior (Tikhonov 1e-3–1e-1): 48.3 / 60.9 dB. Just after the release the lips are barely open and the port node's pressure is faintly heard: from the sound alone a family of glottal flows gives the same sound there. An information limit of sound-only inversion at a nasal release (~50–60 dB); in the search the folds' consistency (the equation error) is what decides among them. OPEN.
+- **Known answer 10: a stop with the velum shut — peel where the sound reveals the inside, run forward with the folds where it cannot** (`analysis/observer.py`; sustain FORCEWAVE NaN = the folds read their own tube that step, free; defaults bit-identical). Blocks: the node-major peel over the whole sound records every node's state just before the closure reaches node 0's lookahead (the seal node's index steps before the seal); render A (folds forced before, free from there) gives the glottal flow through the closure; the replica runs forward on it (`_forward_steps`: the reversible core's step with the shelf and the seal) to one step after the last sealed step (the peel's first iteration inverts the step before's scatter: ending at the last sealed step left the flow after it at 26.3 dB); the node-major peel resumes from the forward state (`_peel_states`); render B gives the equation error outside the window.
+  - Blocks against the engine (four keyframed vowels): forward steps 162.9 dB, peel 164.3, recorded state = forward state to ~1e-8 relative, forward from it 158.5, peel from a later state 164.3.
+  - /aa/ → lips sealed (one node, seal 0.01 cm², velum shut) → /aa/: **implied glottal flow 223.6 dB before the closure, 185.4 after; through it the folds' own flow 250.9 dB and the lips 298.7 dB; equation error at the truth −186.0 dB.** MEASURED. The same principle should settle a nasal release: there too the sound cannot decide, the folds can.
+- **Known answer 11: /ama/ by the same principle** (`observer.implied_branched`): windows the single-path peel cannot see = each seal and each stretch with the velum's port open, from when it reaches node 0's lookahead to one step past its end (`hidden_windows`); inside them the vocal tube, the port and the nose run forward on our folds' flow (`_forward_branched_steps`); outside, the shut-off nose rings on alone (`_nose_steps_isolated`) and its flow is taken off the sound before the peel. /aa/ → /m/ (lips sealed in one node, velum 0 → 0.5 → 0 cm², shelf nose 0.8 / 0.79): **implied glottal flow 231.1 dB where revealed, the folds' own 231.2 dB in the window, equation error at the truth −225.4 dB.** MEASURED. The release's ambiguity is gone: the folds decide what the sound cannot. The cost: inside the window the search has no equation error (only the forward sound against the sound, an output error, would test it); the split marches (`marching`) stay for nasalized vowels with the mouth open, if those need the equation error.
+- **Words with closures in the search** (`sequence_recover.py`: phones `NAME@place` for a stop, `NAME@place^area` for a nasal; a stop's or nasal's tube is the phone before's with one node sealed; the residual from `observer.implied` / `implied_branched`, equation error where revealed, the forward sound against the sound inside the windows; velum keyframes tied to the phone times, `reverse_core.velum_port` = the engine's port to 5.6e-17). At the truth: /aa b aa/ −194.0 dB (closure 1 ms late −21.3), /aa m aa/ −172.6 dB (velum 0.45 for 0.5: −28.8; closure leaving 1 ms late −37.6).
+  - /aa b aa/ first run: /aa/ exact, the closure's times exact; the release's 7 ms off and the vowel after it lost (−25.7 dB, round trip 1.3 dB): the window gave the search nothing (its residual zeroed), so the release was constrained only after the window. Now the stop's window also compares the forward sound with the sound. Rerunning; /aa m aa/ running.
+  - /aa m aa/ with the whole velum-open stretch as one forward window: round trip 25.8 dB (velum 0.48 for 0.50, release 2.4 ms off, joint stalled at −26 dB): ~230 ms of free-running folds is an output error again, rugged.
+  - **Nasal words now use the split march as the inverse, with only the release decided by the folds** (`sequence_recover.march_residual`, `marching.march_windows`): the march up to each release; a render forced with the waves implied so far and free from the window on dumps per step the port's waves, the port node's pressure, its outer wave and both flows (sustain `PORTWAVES=`; new `Tube::backward_wave`, `side_incoming`, `left_incoming`; defaults bit-identical); those drive every part of the march through the window; the march resumes.
+    - Two faults found by testing against the engine's own dump: the window's first step reads the port pressure and outer wave of the steps before it (copied from the window on, they read zero: 44.4 dB after a window where a run without one gave 289.6); and the peel below the port reads port_node steps ahead, so its last waves before a window came from zeros and the render forced with them lost the window (−35.5 dB at the truth): the folds now run free from port_node + 2 steps before each window.
+    - **/aa m aa/ at the truth: glottal flow 223.3 / 142.1 / 167.8 / 150.3 dB (before, during, the release window, after); the word's error −144.3 dB** (velum 0.45 for 0.5: −24.7; closure leaving 1 ms late: −28.4; last vowel 5% wider: −13.2). MEASURED.
+  - /aa b aa/ second run: the release still 7 ms late. The seal broke when the lips, opening toward the next vowel's area, crossed the seal area: the moment depended on that area (the next vowel still at its hint) as much as on the leaving time. Now a sealed phone opens to 0.05 cm² 1 ms after its leaving (a keyframe), then moves to the next phone: the release's moment is the leaving time's. Rerunning both words.
+  - Third run (release keyframe): the closure's arrival came out 23 ms early, and the vowel after it got a window too short for the node search (the LM stopped on fewer residuals than variables); /aa m aa/ likewise (closure 28 ms early, velum 0.01). Cause: a third of the coarse timing grid scored NaN (hypotheses closing early: the peel through the wrong narrowing lips overflowed) and `numpy.argmin` returns the first NaN. Non-finite residual steps now count as large (`tube_recover.fixed_clip`, as a short render's missing steps), and the grids take non-finite costs as infinite. The coarse grid then bottoms out at the truth (2.2e-15 against 2.9e5 at the next point). The second run's 7 ms may have had the same cause; this run tests the release keyframe and the guard together. MEASURED.
+  - **A caveat on every sequence result so far**: the hinted times were 8 ms off the truth, a multiple of the timing grids' steps (4, 1, 0.2 ms), so the grids held the exact truth. "Transition times exact (≤ 0.01 ms)" in known answer 6 and the closure times above owe that to the lattice. The hints are now 7.3 ms off (0.1 ms off the finest lattice); the joint LM must finish the times. OPEN until rerun.
+  - **Closure times near the truth were a spike** (whole word, the closure's arrival / the release late by 0.05, 0.1, 0.2, 0.5, 1, 2 ms): /aa d aa/ (alveolar seal) arrival −23.6 … −21.2 dB and release −7.4, 6.6, 27.1, 14.0, 29.0, 17.3 dB (truth −209.5): no basin, only the exact point. The peel through a narrowing but open node amplifies a wrong hypothesis's mismatch, and the folds, forced with it just before the window, carried it on. **Hidden from 0.1 cm² rather than from the seal** (`observer.closures(..., hide)`, `sequence_recover.HIDE_AREA`): /aa d aa/ arrival −40.6 … −27.0, release −42.0, −36.6, −30.6, −20.8, −11.0, −9.7 dB; /aa b aa/ alike; at 0.3 the same, at 1.0 worse (the release −19 dB at 0.05 ms). Truths unchanged: /aa b aa/ −193.0, /aa d aa/ −209.5, /aa g aa/ (velar, 18 nodes behind the open end) −208.6 dB. /aa n aa/ (alveolar nasal) at the truth: −98.6 dB. MEASURED.
+  - **Nasal words had it worse**: /aa m aa/ (march residual) closure late 0.05 / 0.1 / 0.2 / 0.5 / 1 / 2 ms: −19.0, −14.6, +27.9, +1580, +47.3, +368.5 dB; release late 1 ms: inf (the march running away on the oral peel through the narrowing lips). Now with HIDE_AREA the folds also decide every stretch where a node in front of the port is narrower than 0.1 cm² but not shut: the closing (from when the narrowing enters the oral peel's reach to when the seal does; the sealed mode, which peels the nose, then takes over; `marching._march_run` now starts its ahead copy also when entering the sealed mode from a window) and the opening (from the release's window to past the narrowing). Truth −148.3 dB (−144.3 before). Closure late as above: −38.9, −36.2, −34.2, −32.1, −27.6, −27.3; release −42.3, −39.5, −36.1, −22.7, −20.5, −19.7. /aa n aa/ (alveolar) alike (−38.9 … −24.0; −43.3 … −18.7). MEASURED.
+- **Fricatives in words** (`sequence_recover`: a phone `NAME@place~area`, the phone before's tube with that node narrowed, not sealed; the reversible jet on, gain 0.8, carried by every Target (`tube_recover.DEFAULT_JET`, `Target.jet`) and context to the peel (`reverse_core.peel_moving_glottis(jet=)`) and the renders; with the jet the first phone too is searched in its sequence, the static peel having no jet). At the truth, closure arrival / leaving late 0.05 … 2 ms: /aa s aa/ (alveolar, 0.08 cm²) −209.9 dB; −60.7 … −30.5; −56.5 … −21.9. /aa f aa/ (lips, 0.15 cm²) −195.9; −68.2 … −37.0; −74.8 … −40.6. Smooth (~6 dB a doubling) through the plain peel: a narrowing above ~0.05 cm² is no seal's ill-conditioning. A word with both a seal and a fricative needs the jet in the observer (not yet). MEASURED.
+- **Voiceless phones** (sustain `FOLDSEQ=`: "time lower_rest upper_rest chink move_seconds" per line, `Cord::set_target` at that step; defaults bit-identical, cmp, plain and with REVJET/SEAL). A phone written with a trailing `!` holds the folds apart: `fold_keyframes` abducts them ABDUCT_LEAD (10 ms) before its arrival (cord.cpp's voiceless plosive or fricative posture) and adducts them from its leaving (+ VOICE_ONSET, 0), each move 20 ms: triggers tied to the times the search already estimates, no new parameters. The folds are only ever run forward, so the equation error is unchanged. At the truth (closure arrival / leaving late 0.05 … 2 ms): /aa p aa/ −189.9 dB (voicing stops in the closure: glottal flow rms 8, 5, 3 against ~100), −39.1 … −18.5, −40.6 … −10.3. MEASURED.
+  - Voiceless fricatives with the jet at 0.8: through 0.08 cm² with the folds apart the render ran away 20 ms after the abduction (the reversible jet's source is the flow of the step before: an explicit feedback, unstable when strong); at 0.2 and 0.4 it runs (the noise at the lips ~10 against the vowel's ~92 rms at 0.2). **At 0.4: /aa s! aa/ (0.08 cm²) −205.0 dB, /aa f! aa/ (lips 0.15 cm²) −196.1, /aa s aa/ −210.1**, each smooth (~6 dB a doubling). JET_GAIN now 0.4. MEASURED.
+- **Seals and fricatives in one word.** The observer now carries the reversible jet (`observer._forward_steps` / `_peel_states`: per link its flow at the step, its source's four filter states and the source it carried, STATE_COLUMNS 19; at a resumed step the source is the state's, that scatter being already in it). Against the engine (/aa s aa t! aa/, /aa k! aa s! aa/, by 20 ms): forward steps 176–290 dB, observer glottal flow 185–293 dB.
+  - The engine's reversible jet ran away at a voiceless closure (the render stopped 2 ms into /k!/'s): each link's velocity is its own flow over the *narrowest node's* area, and with that node sealed (1e-4 cm²) the cavity in front's small flows read as huge jets. New `reversible_jet_closing` (sustain `REVJETCLOSE=`; `reverse_core._jet_source(closing=)`): the jet fades out as the narrowest node closes, none at a quarter of it, full from it; `posture_recover.JET_CLOSING` = 0.04 cm² on every render with a jet and a seal. Default and plain REVJET output bit-identical (cmp); known answer 8's constrictions (≥ 0.08 cm²) unaffected.
+  - `observer.closures(hide=)` now hides only narrowings that reach the seal (a fricative's 0.08 cm² was hidden by the 0.1 threshold, and the folds ran free through it; it peels well).
+  - At the truth, closure arrival / leaving late 0.05 … 2 ms: **/aa s aa t! aa/ −204.2 dB** (−63.3 … −33.0; −57.6 … −26.2), **/aa k! aa s! aa/ −198.4 dB** (−36.4 … −22.9; −46.0 … −17.5). MEASURED.
+- **NATO codewords as known answers (the truth's error; vowels only in the profile: /r/ = ER, /w/ = UW, /j/ = IY, /l/ an alveolar narrowing of 0.25 cm² without a lateral branch).** A consonant's tube is now the last vowel's with its node changed (`vowel_before`; the phone before's carried a cluster's first constriction on), a word's leading consonants the first vowel's (searched with it: `PrefixContext(leading=)`). The jet's gain in words is 0.2 (0.3 ran away at /k!/'s release into /er/: the explicit jet's loop grows with the flow; a stable formulation is OPEN). A seal held across a velum closing (/n d/) goes wholly to the folds (the sealed march mode needs the port open).
+  - Echo /eh k! ow/ −166.5 dB; Oscar /aa s! k! er/ −164.9; Alfa /ae l f! ah/ −170.4; India /ih n d iy ah/ −159.5; Papa /p! aa p! ah/ −171.9; Kilo /k! ih l ow/ −148.8; Delta /d eh l t! ah/ −165.3; Tango /t! ae ŋ g ow/ −155.3; Golf /g aa l f!/ −196.5. Each closure's or release's time late 0.05 … 2 ms rises monotonically from about −35 … −50 dB. MEASURED. These are the equation errors at the truth; the searches from hints are the test.
+- **What a release's time does to the error after it** (/aa b aa/, true tubes, release scanned ±1.5 ms by 0.25): the truth 1.5e-11, ±0.25 ms 5e5 / 8.6e6, then a plateau rising slowly to 1.7e7 at ±1.5 ms; almost all of it after the window. With the next vowel at its hint the minimum moves to +0.5 ms, and the window's own part (the forward sound against the sound, release burst included) moves with it (the burst is shaped by the opening toward that vowel): scanning the window alone does not unbias the release. MEASURED.
+  - Not fold phase: in a held /aa/ the forced folds are entrained (a nudge of 1e-3 to the forced wave decays to the 1e-11 floor within 10 ms). After the release the implied flow is right (against the truth's: 2.4e3 at the window's end, 9 by 55 ms), and the error between our folds and it starts small (4.5e4, 2.3e3 in the first 10 ms) and grows ~500× by 25–35 ms: **the voicing onset after a closure amplifies the folds' state difference** (an oscillation regrowing from small amplitude is an instability). Voicing onset encodes the release time sharply but in a narrow basin (~0.1–0.25 ms). MEASURED.
+  - An observer on the forced folds (sustain `FORCEFLOW=` + `OBSERVE=gain`: the folds feel the forced wave plus gain (ρc/A0)(their flow − the implied flow); zero at the truth; defaults bit-identical): gain 0.1 changed nothing, 0.5 made the error ~10× larger on both sides. REJECTED as tried (`sequence_recover.OBSERVE_GAIN` stays 0).
+- **A release with its own opening** (`sequence_recover.RELEASE_OPEN` 4 ms, `RELEASE_WIDE` 0.3 cm²: the seal opens to 0.05 cm² 1 ms after the leaving, to 0.3 cm² (or the next phone's area there if narrower) 4 ms after it, then on to the next phone): the folds' window (narrower than 0.1 cm²) now depends on the release's time alone. /aa b aa/ with the true vowel after: ±0.25 / ±0.5 ms cost 6.3e5–1.6e6 / 1.5e6–2.4e6 against ~1e7 before (a wider basin). With the vowel after at its hint, **the window's part alone has its minimum at the true release to 0.05 ms** (4.97e5 there, 5.0e5–5.1e5 at +0.05 … +0.15, 6.9e5 at −0.05), where the whole residual's is still at +0.5 ms. MEASURED.
+  - So a transition out of a seal now takes the release's time first by the window alone (`Target.hidden_only`; ±4 ms by 0.25 ms, then ±0.3 by 0.025), then the next phone's arrival by the whole residual (4, 1, 0.2, 0.04 ms rungs). The batch is restarted with it (/aa b aa/, Echo, /aa m aa/, Papa).
+  - First try in the search: the release came out 11 ms early. The window-only cost is not comparable between candidates: the window runs from the closure to the release, so an earlier release had a shorter window and fewer terms (and the scan reached only ±4 ms of a hint 7.3 ms off). REJECTED.
+  - **The release's time by our whole engine run forward** (`sequence_recover.output_residual`, `Target.output_from`): our folds forced by the plain peel's waves up to 5 ms before the closure arrived (nothing hides the inside there), free from there; our sound against the sound over one stretch for every candidate (to 15 ms past the hinted release). /aa b aa/, release late by −10 … +2 ms: with the true vowel after, 0 at the truth, 5.7e4 / 2.3e5 at ±0.1 ms, 5.9e5 / 2.4e6 at ±0.5, 3.1e6 / 6.0e6 at ±1, rising to 6.5e7 at −10 (a shallow local dip at −7); **with the vowel after at its hint: the minimum at the truth (1986), 5.4e4 / 2.5e5 at ±0.1 ms**, the rest as with the true vowel. Nasals keep the window-only scan (the plain peel does not hold once the velum opens; the march's release window keeps one length). Batch restarted. MEASURED.
+- **The jet in the nasal march, and frication as a gesture.**
+  - `marching`: the reversible jet in the time-major oral peel (`_diagonal(jet=)`, per-link columns 15–20), the front's forward run (`_oral_forward(jet=)`, columns 14–19), the hand-over (`_peel_from_front`) and the peel below the port (`_peel_below(jet=)`); `jet_table` per step (narrowest node, its area, the gate). A first run divided by zero inside numba: the front runs ahead of the sound and read past the jet table (numba does not bound-check); its rows are now clamped as the geometry's. /aa m aa f! aa/ at the truth −145.3 dB (−145.2 without the jet).
+  - Ungated, the jet ran the march away at the truth next to an open velum in /ao/ and /er/ (their own narrowings, /ao/'s pharynx 0.15 cm², /er/'s lips 0.225, hiss as jets): /aa f er m/ 32 dB, /aa f ao m/ 134 dB; /aa/ (0.37, a weak jet) and /ih/ (0.84, none) held. **The jet is now gated by the phone times** (sustain `JETSEQ=` "time gate", set at each 1 ms tick, `VoiceBody::set_jet_gate`; `reverse_core.jet_gate_steps`; `jet_gate` through reverse_core, observer and marching; `sequence_recover.jet_keyframes`: on through each fricative, ramped over the transitions into and out of it): triggers only, no new parameters. Defaults bit-identical (cmp). A fricative is written `~area`, a narrowing without noise (/l/) `=area`. JET_GAIN back to 0.4.
+  - Uniform still failed without any jet: /uw n ih ao/ 341 dB at the truth. With the velum open and the mouth narrow in front of the port (/uw/'s lips 0.333, or 0.518 at node 26 just in front of the port at /iy/'s node count) the mouth is the weak path, and the march (which inverts the oral path inside the port–nose loop) ran away. **Such stretches are now the folds' too** (`WEAK_ORAL` 0.7 cm² with the port open; 0.5 still let /iy uw n/ run away off the truth).
+  - At the truth with all of it: **Uniform /iy uw n ih f! ao er m/ −150.4 dB**, closure late 0.05 … 2 ms −54.3 … −34.2; /iy uw n ih/ −172.9; /uw n ih ao/ −140.4; Oscar −168.6; Alfa (with /l/ as `=0.25`) −170.4; /aa m aa/ −148.8. MEASURED.
+  - (A debugging print inserted between an `if` and its `else` attached the `else` to itself and put the old release windows back on top of the new; caught by a truth that changed with an environment variable; fixed before any search loaded it.)
+- **/aa b aa/ from hints with the release found by the forward run: round trip 25.0 dB.** The closure and release exact (0.02 / 0.00 ms off); the vowel after, 22.6 ms late and 0.43 cm² off; the prefix joint and the final joint (LM) did not move it at all. MEASURED.
+  - Why: with the hint's tube for that vowel, its arrival's cost is flat (~1e7 from −16 to +24 ms; with the true tube a clean minimum at the truth), so the first grid placed it 17.5 ms late, and the vowel's window (from arrival + 20 ms) shrank to 15 ms. A late arrival spoils a window even at the hold's end (0.32–0.35 s, true tube: +5 ms −28 dB, +15 ms −13 dB) while an early one barely does (−5 ms −66 dB, −10 ms −59 dB). The polish round's coarse rung (±16 ms) then jumped the arrival 18 ms on a tube still 0.43 off.
+  - Now after a release the next phone's first arrival is its hint less 5 ms (`EARLY_START`, no grid), and polish rounds re-time it with the found tube on ±3 ms rungs only. Rerunning.
+  - The joints' finite-difference step was tube_recover.STEP (1e-3) for every parameter: 1 ms for the times, wider than a release's whole basin, so the LM's time columns were noise and the joint never moved. Times now step 2e-5 s (`SequenceShape.steps`, `TIME_STEP`).
+- **Ten codewords at the truth with everything above** (release opening, gated jet, weak-mouth windows, /l/ as `=0.25`): Echo −152.4, Oscar −168.6, Alfa −170.4, India −143.6, Papa −165.9, Kilo −148.4, Delta −163.5, Tango −151.9, Golf −196.6, Uniform −150.4 dB; each first closure's or release's offset rises monotonically from −30 … −73 dB at 0.05 ms. The forward model and its inverse agree on all of them: the round trip from the truth is exact for the vocabulary's sounds (stops voiced and voiceless at three places, nasals at three, fricatives voiced and voiceless, /l/, clusters, leading and final consonants). The open problem is finding the truth from hints. MEASURED.
+- **/aa b aa/ from hints (hint times 7.3 ms off, the vowels' hints from organs_vtl_tongue): round trip 134.4 dB.** Closure and release exact; the vowel after the release: first search −59.8 dB (0.232 cm² rms), arrival re-timed 0.28894 (true 0.29000), polish −81.3 (0.081), arrival 0.29022, polish −82.7; the prefix joint −140.0 dB against the sound's swing, the final joints −142.6, −147.8, −149.7, −151.8 dB, tubes 0.000 / 0.000 / 0.008 cm² rms, every time 0.00 ms off. MEASURED. **The first word with a stop carried back from its sound alone, end to end.** (Before the early start and the joints' time step: 25.0 dB.)
+- **Echo from hints: round trip 38.5 dB.** Closure and release exact (≤ 0.01 ms); /ow/ after the release 0.33 cm² rms off (−54.4 dB after two polish rounds; /ow/ was one of the hard vowels alone, 53.4 dB); the prefix joint −68.8 dB, and the final joints did not move at all (288 evaluations each, nothing changed). Suspect: the voiceless folds' trigger (FOLDSEQ starts the move at a whole step, so a time moved by less than a step does nothing and then jumps: spikes in the joints' time columns). New sustain `FOLDKEYS=` (posture keyframes, linear between, set at each 1 ms tick; defaults bit-identical) and `fold_keyframes` as keyframes (modal → the phone's posture over FOLD_MOVE from ABDUCT_LEAD before its arrival, back over FOLD_MOVE from its leaving): smooth in the phone times. Truths: Echo −150.4, Papa −165.9, Oscar −164.4 dB. Echo queued again. MEASURED / OPEN.
+- **/aa m aa/ from hints: round trip 27.3 dB.** Closure, release and the vowel after's arrival right (≤ 0.02, 0.7 ms); the velum grid chose 0.84 cm² for 0.50 (its window ran past the release, where the phones after were still the sealed /m/'s tube), and the prefix joint traded every tube 0.1 cm² (the first vowel's too, exact before) for the velum (0.529). Scanned with the vowel after at its hint: over the window to 30 ms past the release the cost was flat from 0.45 to 0.55 (6.1e5); **over the /m/'s hold alone (the march peels the nose there), an exact minimum at 0.50 (2.8e-17)**, 0.45 / 0.55 at 4.6e3 / 8.0e3. `velum_grid` now scores the hold, with a third rung (0.0005 cm²). The test's 0.5 also sat on the grid's 0.05 lattice: rerun with 0.47. MEASURED.
+- Papa crashed in its first release scan: for a word-leading closure the forward run's stretch began 5 ms before time 0. It now starts from rest at 0 (exact there too). Requeued after Echo.
+- **Echo /eh k! ow/ from hints, smooth voiceless folds: round trip 66.4 dB** (38.5 with the trigger folds). Every time exact (≤ 0.00 ms but the closure's leaving, found 1.7 ms early and corrected by the joint); /eh/ and the /k/ 0.006 cm² rms off, /ow/ 0.129; prefix joint −85.2 dB, the final joints −83.4 (the first moved the /ow/ tube, the rest stalled). /ow/ was the hardest vowel alone too (53.4–67.7 dB, the zigzag near-null space): what is left is that vowel's floor, not the consonant. MEASURED.
+- **/aa m aa/ (velum 0.47) from hints: round trip 63.1 dB** (27.3 before the hold-only velum). Velum 0.474 from the grid, 0.470 after the joints (exact); every time exact; tubes 0.044 / 0.044 / 0.097 cm² rms (the prefix joint moved the first vowel, exact before, to buy the rest). MEASURED.
+  - **Why the final joints never move** (here and in Echo): at the recovered point a Gauss-Newton step (and 0.1, 0.01 of it) raised the cost (0.46 → 5.1e7, 4.8e3, 2.9), only 0.001 of it lowered it (0.4595); LM with column scaling (`x_scale='jac'`, 60 evaluations a rung) did not move either. Along one bad column (the vowel after's node 11, log area) the residual is linear from −1e-2 to +1e-4 and then **jumps** (|Δr| 0.054 at +1e-4, 1.63 at +3e-4): not curvature, a discontinuity. The two residuals first differ at 0.2259 s, inside the release's window (0.2220–0.2362 s), where our folds run free: in a nasal word that window stays open ~14 ms past the release, until the lips pass WEAK_ORAL, and the free folds' response to the geometry there is discontinuous (and their phase, once off, is not pulled back after it). /aa b aa/'s window closes ~1.5 ms after its release, and its joints converged (134.4 dB). OPEN: shorter release windows for nasals, or folds that the revealed flow re-locks.
+- **Papa from hints**: the leading /p!/'s release converged to the truth over the polish rounds (0.10050 → 0.10015 → 0.10000 s); the first vowel only to 1.14 cm² rms (−47.6 dB; its arrival 0.14562 for 0.15, the early start 12.3 ms before the truth). Then a crash: the prefix joint fits the first phones only, while the fold and jet schedules looked up the whole word's voiceless / fricative phones (index 2). Both schedules now skip phones beyond the arrivals they are given. The leading consonant's vowel is OPEN. Queue restarted: Golf, Alfa, Oscar, India, Papa.
+- **2026-10-20: the parallel toolchain.** Owner: start children on each piece of the optimization, hunt algorithmic equivalences, build a parallel toolchain that is the same but far better (novel voices will need on-the-fly re-hunts). research/ducklips/tract_fast (Mini ~/ducklips/tract_fast; its rebuilt engine byte-identical to this tree's): four children, each owning separate files and gated on bit-identical (or reported-deviation) equivalence against this frozen reference: the engine in-process with snapshots and per-step trimming (NOTES_engine.md), the numba kernels with profiles and resume-from-step (NOTES_kernels.md), cheap exact Jacobians by AD (NOTES_gradients.md), the search driver's waste, stop rules and locality interface (NOTES_driver.md). This tree stays the reference; its only changes now are bug fixes like the one above.
+- **Two corrections from the gradients child (both re-measured here).**
+  - **The replica's viscous glide was a step out of phase**: Tube's constructor has already taken one glide step (a sixteenth of the law's resistance, countdown 15) when sustain's first step runs; reverse_core started it at 0 with countdown 0, so its link resistances ran a step behind GEODUMP's (up to 0.019, 29% of values in /aa iy ae/). In phase: 8.9e-16. **The truth's equation error: /aa iy ae/ −160.2 → −244.3 dB, /aa b aa/ −201.6 → −243.9, Echo −150.4 → −244.7**; /aa m aa/ unchanged at −147.8 (the nose's replica likely has its own; OPEN). `reverse_core.ENGINE_GLIDE_PHASE` (default 1; env 0 restores the old replica), in this tree and in tract_fast. MEASURED.
+  - **The stalled joints' discontinuity is the pitch ear, not the voicing onset.** The engine's ear (`hear_pitch`, pitch_feedback 0.08 per closure, closures timed in whole steps) moves the folds' tension in quanta. Along /aa m aa/'s bad column (the vowel after's node 11) with PITCHFB=0 in the truth and every render, the residual is linear and symmetric from −1e-2 to +1e-2 (|Δr| 0.0057 per 1e-5) where with the ear it jumped between +1e-4 and +3e-4. The earlier attribution (the free folds in the nasal release's window) is withdrawn: REJECTED. Truths with the ear off: /aa b aa/ −242.3, Echo −245.6, /aa m aa/ −160.6 dB. The gradients child also found two smaller engine discontinuities: a triangular glottis whose rest gap goes negative (contact fraction 0 → 1) and the moving frame's fast-node switch. MEASURED.
+  - Decision pending the engine child's equivalence gate (it drives this tree's render): the reversible renders will set PITCHFB=0 (the ear stays in the engine as an option; the reversible configuration already switches off what cannot be inverted or differentiated).
+- **The gradients child** (tract_fast/ad, analysis/gradients.py, NOTES_gradients.md): forward-mode exact Jacobians (Dual<N> blocks, cord-only forced folds, per-node and per-phone sparsity) for the vowel-sequence residual: 143 columns in 4.5 s CPU against 43.6 s for the search's forward differences (0.30 s a reference residual), agreeing with central differences to the differences' own floor; one LM descent −19.5 → −81.6 dB with it where forward differences stalled at −19.8. Seals, the nose march and the jet: assessed, not built. MEASURED.
+- **The engine child** (tract_fast: SustainRun shared by the CLI and a C library, bindings/, analysis/engine.py, NOTES_engine.md): an in-process engine with posture_recover.render's exact signature, snapshot/resume, and an Incremental renderer resuming from the last snapshot before the first changed input; per-step work trimmed. Re-run here: its gate passed (13 cases byte-identical to this tree's CLI and render; snapshots at 6 steps and 12 incremental renders identical). Renders 1.40–1.49× faster (89.7 → 61.8 ms for a 0.41 s stop word); Incremental 2.3–2.4× on a search's pattern; the subprocess and files were only 10–15 ms of a render. Its hot tube loops are now compiled with -ffp-contract=off and the reference's fused multiply-adds written as explicit std::fma (otherwise harmless edits moved every render ~1e-9). MEASURED.
+- **PITCH_EAR = 0 in this tree's renders** (posture_recover: PITCHFB=0 in every render, truth and hypotheses; env PITCH_EAR restores a gain). Truths: /aa b aa/ −242.3, /aa m aa/ −160.6 dB. The paused Golf run loaded the old code (ear on) and keeps it consistently; the words after it take the ear off.
+- **The driver child** (tract_fast/analysis: sequence_recover, tube_recover, posture_recover, driver_ledger, column_locality, driver_bench; NOTES_driver.md). Exact changes, each checked bitwise: leastsq in place of least_squares (scipy's wrapper computed an extra Jacobian a stage), a residual/Jacobian memo, inert columns (a stop's own areas never reach the sound: 143 → 98 evaluations a Jacobian), skipping exact repeats, renders and peels stopped at the compared stretch, Jacobian columns resumed from the base point's record, a first-vowel cache, the in-process engine (`RENDERER=incremental`; CPU per residual 0.24 s → 0.10 s). /aa b aa/ on the old model: every printed number equal to this tree's log, 50,983 evaluations in place of 63,866; 58% of the time in node-search rungs. Algorithmic options (`FAST_ALGO=halving,jointstop,stall1,jointmore`). **On the corrected model (glide in phase, ear off): /aa b aa/ 140.9 dB (8 joint rounds; tubes 0.0029 cm² rms), /aa m aa/ 131.2 dB (velum 0.4700, tubes 0.0037; the joints move now), Echo 0.8 dB (failed at its closure).** MEASURED.
+  - Echo's closure on the corrected model (2-D map, leaving × arrival ±8 ms by 2): the arrival is a canyon: 1e-17 at the true pair, a plateau of 10^6.4–7 at ±2 ms of arrival whatever the leaving, a clean V along the leaving at the true arrival; with the leaving 8 ms off the arrival still has a funnel ±2.5 ms wide around the truth (10^5.3 at the bottom). The 2-D coarse grid (4 ms; the hint 7.3 ms off) never sat in it. The forward output error has the same shape. Now in tract_fast: into a seal, the arrival alone (±12 ms by 0.5), then the leaving alone, then the fine 2-D rungs. MEASURED; the rerun is going.
+  - From here the working line is tract_fast (POOL=8 RENDERER=incremental FAST_ALGO=halving,jointstop,stall1,jointmore); this tree stays the yardstick. Queue: Echo, Golf, Alfa, Oscar, India, Papa.
+- **Echo on tract_fast (corrected model): 48.4 dB.** The new closing scan put the /k!/'s arrival at 0.1497 s (true 0.1500); the joints took every time within 0.01 ms; /ow/ 0.143 cm² rms; the final joint did not move. At that point the times' Jacobian columns were ~2000× the tubes' (1.2e7, 8.2e6, 1.3e6 against ~5e3) and nonlinear inside their 2e-5 s step (the voiceless closure's abduction ends the voicing: a bifurcation, like the onset after a release), while the tubes' columns were linear (median disagreement 6e-4): even 0.1 of a Gauss-Newton step raised the cost (27 → 395). The tubes alone, times held: /ow/ 0.143 → 0.087 cm² but the error stayed at −70.9 dB (round trip 49.4): the times limit it. **Alternating the times alone (FD step 1e-6 s, ~25 evaluations a round) with the tubes alone: round trip 48.4 → 53.2, 56.2, 59.3 dB in three rounds, still climbing** (−70.5 → −81.5 dB). MEASURED. Now `FAST_ALGO blocks` (sequence_recover.block_rounds, after the final joint, to 12 rounds while a round gains 0.3 dB) and `polish_word.py` (block rounds from a saved answer).
+- **Golf /g aa l f!/ on tract_fast: 85.7 dB.** Word-leading /g/'s release exact (0.10000); its single vowel only 0.81 cm² off after its own search, then the final joint −28.5 → −71.8 → −105.8 → −107.0 dB, tubes 0.001 cm² rms, every time exact. MEASURED. Echo and Golf being polished by block rounds.
+- **Echo polished by block rounds (polish_word.py): 48.4 → 75.8 dB.** Ten rounds: −75.3, −78.4, −81.5, −84.5, −87.6, −90.6, −93.7, −95.7, −96.3, −96.4 dB; the times to below a microsecond (the /eh/'s leaving −30.2 → −0.01 µs, the release −6.0 → −0.62 µs); /eh/ and the /k!/ 0.0008 cm² rms; /ow/ 0.081 (its own floor: the zigzag near-null directions, as when it was searched alone). MEASURED.
+- **Golf's polish gained nothing at a 1 µs time step** (−107.0 dB, 85.7 dB; truth −245.9). Its error is even (~83 dB by 20 ms) from the /g/'s release at 0.10 s on, ~120 dB in the final /f!/. At the point: a Gauss-Newton step, even 0.01 of it, raised the cost (0.0137 → 0.0179); the least linear columns are the /g/'s release (disagreement 0.88 between its step and a quarter of it, norm 2.8e6) and the /f!/'s leaving (norm 9.4e6); along the straight line to the truth the cost fell 0.0137 → 0.0096 over 75% of the way, then 5.8e-5 at 90%, 1.8e-16 at 100%: the last tenth is ~6 ns of time (the step to the truth: tubes 0.0017 in log area, times 60 ns at most). A word-leading release 60 ns off, and the voicing's start from rest turns it into an 83 dB floor. The block rounds' time step now shrinks with the times' moves (a tenth of the last round's largest, 1 ns to 1 µs). Re-polishing. MEASURED.
+  - LM's model could not see the times' canyon at any step it was given (at 1 µs it moved them 16 ps). The block rounds' times are now a 1-D sweep (`time_sweep`: each time ±h at 1 µs, 0.3, 0.1 µs … 1 ns, every candidate of a scale evaluated together, kept when the cost falls). **Golf polished: 85.7 → 91.5 dB**, its /g/'s release 60 → 20 ns off; then no single time at any scale lowered the cost with the tube 0.0011 cm² off: what is left is coupled (time and tube together along the canyon). The floor is physical in kind: voicing that starts from rest after a word-leading release is hypersensitive to that release's moment. MEASURED / OPEN.
+- **Alfa /ae l f! ah/ on tract_fast: 41.0 dB.** /ae/, /l/, /f!/ and every time right (times within a few µs); the last vowel /ah/ 0.89 cm² rms off: its first search (context: hinted times, a prefix not yet joined) reached −58.2 dB, its polishes −53.3 and −64.1, the joints −75.3. At the recovered times: the found answer −74.9 dB in /ah/'s window, −75.3 whole; the true /ah/ with the other tubes as found −83.7 in the window but −55.1 whole (the prefix joints had moved the earlier tubes 0.027 cm² off to buy the rest); at the true times the found answer −74.9: a joint local minimum, the first vowel search's failure. `revisit_vowel.py`: a vowel searched again from its hint's survey in its recovered sequence, then the joints and block rounds. Running on Alfa. MEASURED.
+  - **Alfa revisited: 41.0 → 77.5 dB.** /ah/ searched again in its recovered sequence: −103.6 dB (0.123 cm² off), joints −73.8 → −100.2, −104.4, −104.5 dB; tubes 0.0015 / 0.0015 / 0.0015 / 0.087 cm² rms; times within 0.04 µs. A second search of each vowel once the word around it is known is now chained after the queue (Oscar 3, India 3,4, Papa 1,3, Echo 2). MEASURED.
+- Oscar's first run crashed in /er/'s posture survey (a candidate's render gave a stretch with no period; `period_of` found no candidates). The spectrum residual now scores a silent, short or non-finite stretch as far as can be (1e3). Oscar requeued after the chain (with FAST_ALGO blocks), then its revisit. India running. MEASURED.
+- **On "both ways"**: every round trip here is both directions: the sound carried back to the mouth (tubes, times, velum), then that recovered mouth driven forward by the same engine and its sound compared with the original's. The kept wave files (`_original`, `_recovered`, `_recovered_polished`, `_recovered_revisited`) are the forward direction from recovered parameters.
+- **India's first pass: 5.0 dB.** /ih/ exact, /n/'s closure and velum exact (0.500), then /n/ → /d/ (one alveolar seal held while the velum closes) was scanned as a release: its leaving 17.6 ms early, and every later phone was lost. A seal-to-seal transition has no release; its times show only in the nasal murmur's fading inside the folds' window, which runs from the first seal's closing to the second's release whatever these times are, so that window's own sound is a fair comparison. With true tubes: −16.4 at the truth; the arrival a funnel (5.2–5.3 at ±1 ms up to 7.2 at ±12 ms, log10), the leaving nearly flat beyond ±1 ms (5.9 → 6.4). Now: the arrival alone (±16 ms by 1), the leaving alone, then 2-D rungs to 10 µs. India and Oscar rerun after Papa (with blocks), then the vowel revisits of Papa, Echo, India, Oscar. MEASURED.
+- **Papa's first pass on tract_fast: 5.3 dB.** The first vowel after the leading /p!/ right after its joint (0.026 cm², times exact); the second /ah/ after the second /p!/ searched to −19.0 dB (2.98 cm² off); then the four-phone prefix joint, whose first rounds penalize the tubes' bends, left every tube 4.2 cm² off and a time 76 ms off (−5.9 dB) and the word was lost. A prefix joint whose result is worse on the unbent error than its start is now not taken. Papa rerun after India and Oscar; the revisits after. MEASURED.
+- **India's second run: 2.4 dB.** The seal-to-seal transition now came out 2.75 / 0.25 ms off (leaving / arrival; the leaving's landscape is weak), then /d/'s release 3 ms off: its forward scan forced our folds by the plain peel to 5 ms before the /d/'s own arrival, where the /n/'s velum was still open and the plain peel does not hold. The release scan now starts before the whole chain of sealed phones the release ends, and before the velum begins to open if one of them is nasal. With true tubes: −15.3 at the true release, monotone to 5.5 / 6.1 at ±0.2 ms, 7.0 at ±1 ms, 8.0 at ±8 ms. India's third run after Papa's. MEASURED.
+- **Oscar /aa s! k! er/ on tract_fast with block rounds: 72.4 dB.** Block rounds from the final joint: −67.7 (round 4) … −84.8 dB (round 11, the cap of 12), still gaining ~1.7 dB a round; /aa/, /s!/, /k!/ 0.0006 cm² rms, /er/ 0.078; the /er/'s arrival 1.6 µs off and closing. MEASURED.
+- **Papa's second run: 4.6 dB.** The same as the first: the second /ah/'s survey basins all near −10 dB, then a four-phone joint that moved the second /p!/'s closure 76 ms (it scored better than its start, so the guard let it through). The renders of that search went non-finite from 0.38 s on (just after the second /p!/'s release). Free renders of the same hypotheses were finite; the forced ones were not: the posture candidates can put a node at 0.02 cm², the peel through it overflows (the ill-conditioning closures had before they were hidden), and one overflowed forced wave made the rest of the render non-finite, so a whole candidate scored 1e3. `posture_recover.sane_forcing`: a forced wave's non-finite or overflowed steps (|w| > 1e7 dyn/cm²; the lungs push ~8e3) become free (NaN), the residual's steps there count as large, the rest of the candidate stands; a wave with none is passed through untouched (bit-identical renders). Papa's third run after India's. MEASURED.
+- **India's third run: 2.5 dB.** /d/'s release now 0.33 ms off; the seal-to-seal leaving still 2.75 ms; /iy/ searched to −12.3 dB (2.2 cm² off; this run predates sane_forcing); then the prefix and final joints relocated the word (every tube 23 cm² off, times 99–139 ms off) while scoring a little better than their bad start. A joint is now also not taken if it moves any time over 3 ms or any phone's tube over 1 cm² rms (`joint_sane`, prefix and final joints). India's fourth run after Papa's third, then the revisits. MEASURED.
+- **Papa's third run reproduced its second exactly** (the second /ah/ −19.0 dB, 4.6 overall): non-finite forcing was not what sank /ah/. With the earlier phones true, /ah/'s window error: true tube at the true arrival −245.7 dB, hinted tube −18.9; **at the early start (12.3 ms before the truth: the hint 7.3 ms early, less EARLY_START) even the true tube −11.5 dB**: after a voiceless stop the voicing restarts there, and a wrong arrival spoils the window whatever the tube (the early start helped /aa b aa/, whose hint was late). A spectral-change estimate of the arrival from the sound failed (the held voice's frame-to-frame change never fell under any share of the transition's: every estimate ~62 ms late; REJECTED). **A quick posture fit at each candidate arrival** (9 organ parameters from the hint, 20 evaluations, on the window's equation error in the sequence): −12.7, −22.9, −24.3, −34.9, **−45.0**, −33.4, −43.7, −28.6 dB at −12, −8, −4, −2, 0, +2, +4, +8 ms from the true arrival. `arrival_by_posture`: for every vowel after a release, a 2 ms grid over ±12 ms about the hint, the deepest fit's arrival, then the vowel's search. Papa and India rerun with it, then the revisits. MEASURED.

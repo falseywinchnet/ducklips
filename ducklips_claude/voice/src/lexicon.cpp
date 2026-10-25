@@ -24,7 +24,7 @@ again AH0 G EH1 N
 against AH0 G EH1 N S T
 ago AH0 G OW1
 air EH1 R
-alfa AE1 L F AH0
+alfa AA1 L F AH0
 all AO1 L
 allow AH0 L AW1
 almost AO1 L M OW2 S T
@@ -129,7 +129,7 @@ full F UH1 L
 give G IH1 V
 go G OW1
 goes G OW1 Z
-golf G AO1 L F
+golf G AA1 L F
 gone G AO1 N
 good G UH1 D
 gown G AW1 N

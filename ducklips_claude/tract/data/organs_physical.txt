@@ -1,0 +1,14 @@
+# engine_net.py: the network's vowel postures (from organs.txt)
+AA jaw=14.000 tx=3.404 ty=6.709 tipx=6.994 tipy=6.800 ap=2.333 pro=0.088 lw=2.451 drop=0.629  # cost 5.62 (formants 0.82 st, shape rms 0.480) F 732 1188 2682
+AE jaw=5.932 tx=4.048 ty=7.371 tipx=6.961 tipy=6.808 ap=1.254 pro=0.014 lw=4.933 drop=0.145  # cost 5.19 (formants 0.35 st, shape rms 0.484) F 648 1820 2593
+AH jaw=8.508 tx=2.774 ty=6.783 tipx=7.388 tipy=7.283 ap=0.426 pro=0.108 lw=3.436 drop=0.494  # cost 5.05 (formants 1.41 st, shape rms 0.364) F 586 1158 2794
+AO jaw=12.248 tx=2.513 ty=7.000 tipx=6.865 tipy=7.347 ap=0.355 pro=1.008 lw=2.988 drop=0.787  # cost 5.37 (formants 1.62 st, shape rms 0.374) F 465 924 2796
+EH jaw=0.568 tx=3.651 ty=6.904 tipx=7.235 tipy=7.390 ap=0.755 pro=0.099 lw=2.972 drop=0.016  # cost 3.29 (formants 0.15 st, shape rms 0.314) F 599 1660 2632
+EY jaw=1.547 tx=4.600 ty=7.443 tipx=6.873 tipy=7.042 ap=0.790 pro=0.082 lw=3.304 drop=0.070  # cost 3.37 (formants 0.04 st, shape rms 0.334) F 485 2051 2662
+IH jaw=1.252 tx=4.791 ty=7.454 tipx=7.139 tipy=7.204 ap=0.436 pro=0.143 lw=4.422 drop=0.198  # cost 4.09 (formants 0.26 st, shape rms 0.383) F 430 2073 2735
+IY jaw=0.770 tx=5.305 ty=7.550 tipx=7.034 tipy=6.873 ap=0.451 pro=0.139 lw=3.915 drop=0.015  # cost 5.81 (formants 1.20 st, shape rms 0.460) F 321 2177 2816
+OW jaw=13.963 tx=2.831 ty=7.784 tipx=6.701 tipy=6.792 ap=0.305 pro=0.291 lw=2.171 drop=0.742  # cost 4.15 (formants 0.18 st, shape rms 0.397) F 465 983 2614
+UH jaw=11.032 tx=3.162 ty=7.745 tipx=7.297 tipy=7.211 ap=0.157 pro=0.302 lw=3.256 drop=0.283  # cost 5.63 (formants 1.44 st, shape rms 0.419) F 435 1149 2574
+UW jaw=10.588 tx=4.382 ty=8.475 tipx=7.364 tipy=6.889 ap=0.233 pro=0.917 lw=2.101 drop=0.054  # cost 5.27 (formants 0.72 st, shape rms 0.456) F 344 1213 2426
+ER jaw=6.0291 tx=3.4733 ty=8.0596 tipx=6.4635 tipy=9.0464 ap=0.6979 pro=0.2767 lw=2.4886 drop=1.0344
+AX jaw=3.801 tx=4.140 ty=5.737 tipx=6.986 tipy=6.833 ap=0.632 pro=0.067 lw=1.881 drop=0.298  # cost 0.15 (formants 0.15 st, shape rms 0.000) F 548 1452 2638

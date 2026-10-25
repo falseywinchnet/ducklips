@@ -1,0 +1,184 @@
+# engine_net.py: the network's planner tree
+timing {
+  rate 1.020383364
+  variation 0.1006952524
+  lead_in 0.1
+  seal_lead 0.4343925976
+  vowel_hold 0.6211022555
+  seal_settle 0.02515763114
+  affricate_hiss_max 0.06393891926
+  affricate_hiss_at 0.323377504
+  release_move 0.03154706076
+  voiced_release_move 0.04709616866
+  burst_scale 1.031362699
+  release_peel_time 0.01652188486
+  voice_lag 0.0203483971
+  vowel_reach 0.3476574747
+  vowel_arrival 0.8085872166
+  jaw_lead 0.03869749059
+  fricative_hold 0
+  final_vowel_scale 1.876905333
+  final_consonant_scale 1.520821979
+  final_vowel_floor_ms 104.8533217
+  comma_vowel_scale 2.084859792
+  sonorant_devoicing 0.4418145506
+}
+glottis {
+  voicing_gap -0.00639708495
+  voiced_fricative_gap 0.04175779653
+  aspirate_gap 0.0604024947
+  unstressed_gap -7.908159412e-05
+  stress_press -1.242257136e-05
+  final_relax_gap -0.009687257601
+  vowel_compression 0.5839856291
+  unstressed_compression 0.583302044
+  onset_gap -1
+  onset_hold 0.02112229045
+  onset_settle 0.03390388409
+  fricative_abduct_lead 0.02870452312
+  abduction_move 0.04900198733
+  adduction_move 0.02098554199
+  adduction_lead 0.004649140041
+  affricate_voicing_move 0.05722252797
+  final_devoicing 0.0009514590236
+}
+breath {
+  speech_pressure 724.7180756
+  voiceless_pressure 0.8793273582
+  unstressed_pressure 0.9961368188
+  pause_pressure 0
+  breath_lead 0.04058586743
+  breath_rise 0.1153978012
+  vowel_breath_lead 0.1124334964
+  phrase_fade_tail 0.06461487979
+  phrase_fade_from 0.7434240567
+  phrase_open_delay 0.02997902635
+}
+release {
+  release_channel 0.5812120096
+  release_peel_area 0.07545669766
+}
+pitch {
+  base_pitch 120
+  pitch_floor 100
+  accent 22
+  accent_peak 0.05
+  accent_fall 0.25
+  unstressed_drift 0.06
+  unstressed_dip 0.5
+  pitch_spread 1.5
+  pitch_median 122
+  lowest_pitch 80
+  final_fall 0.9
+  comma_pitch 0.93
+}
+mouth {
+  postalveolar_lips 3
+  postalveolar_protrusion 0
+  sibilant_lips 1.5
+  sibilant_protrusion 0.1
+  lip_press 0.01
+  labial_jaw 1
+  velar_front 1.8
+  fricative_body_area 0.9
+}
+articulation {
+  labial_jaw 8.179941014
+  labiodental_aperture 0.03075261334
+  labiodental_jaw 4.035501592
+  dental_x 7.757196014
+  dental_y 8.231359623
+  dental_press 0.01751527728
+  dental_jaw 2.905001686
+  alveolar_x 6.774116706
+  alveolar_y 9.77154069
+  alveolar_press 0.1416252159
+  alveolar_jaw 2.794447126
+  tap_press 0.2793521854
+  sibilant_x 7.067175433
+  sibilant_y 9.13137437
+  sibilant_press -0.07555958925
+  sibilant_jaw 1.686656222
+  sibilant_aperture 0.5051989871
+  sibilant_protrusion 0.08003785831
+  sibilant_groove 1.017721411
+  postalveolar_x 6.328406854
+  postalveolar_y 9.927588798
+  postalveolar_press 0.09533113384
+  postalveolar_hiss_press -0.1349732453
+  postalveolar_jaw 2.33560185
+  postalveolar_aperture 0.5521124202
+  postalveolar_protrusion 0.4065774525
+  postalveolar_groove 0.5724948101
+  affricate_closure 0.377682591
+  lateral_x 6.702053228
+  lateral_y 9.728652047
+  lateral_press 0.1010422214
+  lateral_retract 0.1906953735
+  dark_lateral_x 2.587436351
+  dark_lateral_y 6.542209354
+  rhotic_x 6.038678429
+  rhotic_y 9.631995237
+  rhotic_press -0.3587877299
+  rhotic_back 0.5705138534
+  rhotic_up 0.2853524013
+  rhotic_aperture 0.5045346915
+  rhotic_protrusion 0.4209526579
+  velar_front 2.360036507
+  velar_back 4.847049802
+  velar_press 0.06841422573
+  w_aperture 0.4110670084
+  w_protrusion 0.6012737414
+  w_spread 2.329882418
+  w_round_share 0.6162734935
+  y_raise 0.07575026714
+  lead 0.03569211391
+  tip_close_move 0.03170021123
+  dorsum_close_move 0.05727517215
+  tip_release_move 0.03242113431
+  dorsum_release_move 0.05235349308
+  liquid_move 0.06789007887
+}
+duration {
+  IY 0.8953162071
+  IH 1.06463962
+  EY 1.010040161
+  EH 1.096774534
+  AE 0.9074863415
+  AA 0.9431749973
+  AO 1.0128694
+  OW 1.121816334
+  UH 1.073172373
+  UW 1.279173323
+  AH 1.131074245
+  AX 0.9613646282
+  ER 1.016034499
+  AY 0.9997567787
+  AW 1.072138727
+  OY 1.078563552
+  P 0.9214790855
+  B 1.107142114
+  T 1.077814564
+  D 1.064039724
+  DX 0.9080121192
+  K 0.9511559444
+  G 0.9783935202
+  M 0.8957482863
+  N 0.951809882
+  NG 0.9848933991
+  F 0.9348925171
+  V 1.027011309
+  TH 0.8963839499
+  DH 1.086932659
+  S 0.9546398581
+  Z 0.9321661545
+  SH 0.9874780687
+  ZH 1.077601366
+  CH 1.028563782
+  JH 1.110195861
+  L 0.9150243528
+  R 0.9314235498
+  W 1.21079645
+  Y 1.022036598
+  HH 1.095730698
+}

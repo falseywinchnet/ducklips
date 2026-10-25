@@ -1,0 +1,67 @@
+# The front end's tuned phone inventory (voice/data/phones_en.txt) for the sheet
+# tube, without its L line: the planner's built-in dark /l/ (tongue body
+# 8.25 cm / 0.25 cm^2, tip contact at 16.7) gives /l/ 37% four-view
+# identification on the sheet against 17% with the front end's tuned L
+# (fitted to its own body); overall 30.4% against 29.8%.
+# SH area 0.13 place 14 (front end's 0.1 at 14.4): with the monopole jet,
+# /sh/'s front cavity peaked at 3-4.5 kHz (+14 dB on bdl); 4 mm further back
+# its peak sits at 2.2-3 kHz as bdl's: /sh/ 50% -> 61%, /ch/ 44% -> 38%.
+# W area 0.07 (the planner's lip opening 0.20): /w/ was 8-9 dB strong at
+# 0.4-1.5 kHz on bdl; now within 1-4 dB over 0.4-4.5 kHz, /w/ 25% -> 39%.
+# IY varea 0.45 (the table's 0.179): through the sheet's kinetic losses the
+# narrow channel left /iy/ 5-9 dB quiet on bdl; /iy/ 18% -> 46%.
+# Phone overrides. Consonant places: tools/tune_phones.py against CMU ARCTIC bdl.
+# Vowel postures live in src/planner.cpp (tools/vowel_fit bounded). Durations: scaled by the measured
+# human/ours ratio over ARCTIC a0001-a0060 (owner heard "sea shore" as "si-shooor").
+# Fricative areas and places: levels calibrated against ARCTIC bdl per phone
+# (dB re utterance) after the Borda-Carnot loss and lip exit-loss fixes.
+# Vowel v* and SH: tools/four_view_tune.py (four-view total a0001-a0020 29.60 -> 28.62;
+# hold-out a0021-a0040 29.11 -> 28.34). W, L, ER: tools/identify_tune.py (four-view identification
+# a0001-a0040 36.95 -> 39.04%, check a0041-a0060 32.88 -> 33.63%); AW AO AH the same (39.25%, check 35.59%).
+# Sheet vowel postures (2026-10-13, /tmp/vopt.py): coordinate search of
+# vplace / varea / vlips for AA AE AH AO OW UW IY EH, each vowel kept on its
+# own LPC F1/F2 distance to bdl in running speech (ARCTIC a0001-a0060).
+# Mean distance 4.07 -> 1.77 semitones (AO 8.6 -> 2.1, AH 7.2 -> 2.8,
+# AA 4.7 -> 0.7, OW 4.8 -> 2.8, UW 4.2 -> 2.1, IY 3.3 -> 1.0, AE 3.3 -> 0.8).
+# Identification 31.5% -> 33.0% (three seeds, the same sentences). A second
+# pass (steps 0.5 cm, x1.25, x1.3; IH EY UH ER added): 1.49 semitones, 33.3%.
+# AA's and AH's lips (1.0 and 0.6 cm^2) are narrower than a person's: in the
+# sheet's tract they lower F2 toward bdl's. UH rests on 2 instances.
+AA inherent 185 vplace 7.5 varea 0.724 vlips 0.988
+AE darea 0 inherent 205 vplace 9 varea 2.1 vlips 9
+AO inherent 200 vplace 5.75 varea 0.137 vlips 0.228
+AW garea 0.25 inherent 270
+AX inherent 97 vlips 1
+AY inherent 285
+CH inherent 130 place 15
+D inherent 61 place 15.2
+DH area 0 inherent 75 place 16.2
+ER area 0.25 floor 1 inherent 216 place 13 vprotrusion 0.7 vplace 6.5 varea 1.6 vlips 0.6
+EY inherent 225 vplace 9.56 varea 0.325 vlips 5
+G inherent 85 place 11.65
+HH inherent 75
+IH inherent 135 vplace 10.75 varea 0.697 vlips 4.5
+IY inherent 200 vplace 12.25 varea 0.321 vlips 4.9
+JH inherent 130 place 14.6
+K inherent 107 place 11.2
+M inherent 105
+N inherent 77 place 15
+NG inherent 102 place 12.05
+OW inherent 240 vplace 5.75 varea 0.526 vlips 0.356
+OY inherent 280
+P inherent 97
+S area 0.133 inherent 122 place 15.3
+SH area 0.13 inherent 140 place 14
+T inherent 68 place 15
+TH area 0.07 inherent 100 place 17
+UH inherent 112 vplace 8.62 varea 0.479 vlips 0.769
+V area 0.12 inherent 68
+Y inherent 70
+Z area 0.05 inherent 97 place 15
+R area 0.25 floor 2.5 place 13 varea 2 vlips 1 vplace 6.5 vprotrusion 0.7
+ZH area 0.178
+F area 0.18
+AH vplace 8.75 varea 0.722 vlips 0.599
+EH darea 1 dplace 12 vplace 9.5 varea 1.4 vlips 6
+W area 0.07 varea 0.3 vplace 8
+UW vplace 13.13 varea 3.5 vlips 0.267

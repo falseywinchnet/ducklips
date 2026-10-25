@@ -1,0 +1,101 @@
+# The engine's parameter tree as m64 speaks it (FOLDTUBE=1, the articulatory
+# body): the start of the behavioural fit (analysis/fit_blocks.py). Format and
+# paths: include/tract/parameter_tree.hpp. Dumped with PARAMS_OUT.
+breath {
+  lung_follow 0.006
+}
+fold {
+  depth 0.3
+  cover_mass 0.09
+  body_mass 0.3
+  cover_stiffness 36000
+  coupling_stiffness 90000
+  support_stiffness 150000
+  vertical_stiffness 60000
+  cover_loss 0.1
+  support_loss 0.4
+  contact_stiffness 900000
+  contact_softness 0.0005
+  muscle_fluctuation 0.01
+  muscle_corner 100
+  natural_pitch 197
+  pitch_per_tension 171
+  elongation 70
+  elongation_reference 0.0026
+  elongation_release 0.01
+  elongation_floor 0.9
+  swing_per_pascal 4.9e-06
+  swing_onset 130
+}
+posture {
+  voicing_lower 0.011
+  voicing_upper 0.006
+  voicing_chink 0.0002
+  closure_press 0.004
+}
+ear {
+  pitch_feedback 0.08
+  pitch_correction_limit 0.3
+}
+variation {
+  breath 0
+  tension 0
+  posture 0
+  wall 0.1
+  wall_shared 0.3
+  tremor 0
+  adductor_tremor 0
+  breath_tremor 0
+  wander_gain 1
+}
+glottal_noise {
+  aspiration 8
+  closing_turbulence 0
+  jet_flux 0
+  flux_corner 0
+  fold_turbulence 1
+}
+oral_noise {
+  frication 2
+  jet_attack 0.008
+  strouhal 0.2
+  frication_band 3
+  jet_growth 0.4
+  jet_spread 0
+  jet_corner_ceiling 12000
+  lip_slit_width 2.5
+  jet_decay 1.2
+  obstacle_reach 0.8
+  labiodental 1.2
+}
+walls {
+  skin_gain 1
+  skin_corner 250
+  stiffness_scale 1
+  loss_scale 1
+  closure_pull 0.25
+  closure_relaxation 0
+}
+branches {
+  piriform_loss 0.5
+  piriform_port 0.6
+  piriform_scale 1
+  piriform_smoothing 0
+  sinus_neck_scale 0.25
+}
+tract {
+  hop_loss 0.02
+  nose_hop_loss 0.4
+}
+mouth {
+  release_speed 1
+  sliver_area 0.02
+  flare_growth 1.6
+  flare_widest 30
+}
+kinematic {
+  amplitude 0.0007
+  phase_lag 1.22
+  softness 0.0005
+  jitter 0.5
+}

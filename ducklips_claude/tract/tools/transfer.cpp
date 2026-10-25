@@ -83,6 +83,13 @@ int main(int count, char** values) {
   }
   tract::Tube tube(layout.vocal_material_list, nodes);
   tube.set_radiating_right(true);
+  // VISCOUS=x: a factor on the links' viscous resistance; HOPLOSS=k: the hop low-pass.
+  if (std::getenv("VISCOUS") != nullptr) {
+    tube.set_viscous_scale(std::strtod(std::getenv("VISCOUS"), nullptr));
+  }
+  if (std::getenv("HOPLOSS") != nullptr) {
+    tube.set_wave_smoothing(std::strtod(std::getenv("HOPLOSS"), nullptr));
+  }
   // 200 ms of response: an impulse wave at a nearly closed glottis.
   long steps = static_cast<long>(0.2 * tract::kStepRate);
   std::vector<double> response;

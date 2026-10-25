@@ -1,0 +1,14 @@
+# engine_net.py: the network's vowel postures (from organs.txt)
+AA jaw=11.4305 tx=3.4751 ty=6.5535 tipx=6.8066 tipy=6.4668 ap=2.2876 pro=0.0397 lw=2.9144 drop=0.6095
+AE jaw=4.5171 tx=3.9467 ty=7.1557 tipx=7.4111 tipy=7.4490 ap=1.5840 pro=0.0271 lw=4.7771 drop=0.1592
+AH jaw=7.0798 tx=2.7643 ty=6.9599 tipx=7.0069 tipy=7.3911 ap=1.3398 pro=0.0599 lw=3.0607 drop=0.7183
+AO jaw=10.6823 tx=2.1552 ty=6.6241 tipx=7.3647 tipy=7.3674 ap=1.2032 pro=0.6127 lw=2.6604 drop=1.1365
+EH jaw=1.6683 tx=3.8287 ty=6.7862 tipx=7.2574 tipy=7.4156 ap=0.9079 pro=0.0410 lw=3.2019 drop=-0.0377
+EY jaw=1.9664 tx=4.5870 ty=7.3449 tipx=6.9919 tipy=7.4363 ap=0.7757 pro=0.0099 lw=3.1199 drop=-0.0192
+IH jaw=0.8769 tx=4.5893 ty=7.4054 tipx=7.2792 tipy=7.3899 ap=0.6993 pro=0.1250 lw=4.5692 drop=0.4692
+IY jaw=1.0666 tx=5.1584 ty=7.7138 tipx=7.0314 tipy=7.2217 ap=0.4287 pro=0.2032 lw=3.3123 drop=0.0604
+OW jaw=6.7101 tx=2.8652 ty=7.2848 tipx=6.6968 tipy=6.5919 ap=0.2075 pro=0.1680 lw=2.2244 drop=0.3715
+UH jaw=7.3387 tx=2.6090 ty=7.6917 tipx=7.3531 tipy=7.2908 ap=0.8220 pro=0.0293 lw=3.2932 drop=0.1751
+UW jaw=6.2567 tx=4.1991 ty=8.0197 tipx=7.0544 tipy=7.1675 ap=0.2394 pro=0.8376 lw=2.2799 drop=0.0023
+ER jaw=6.3388 tx=3.6519 ty=7.8986 tipx=6.5329 tipy=9.0781 ap=0.7251 pro=0.2943 lw=2.2166 drop=1.2366
+AX jaw=2.2111 tx=3.8126 ty=5.9360 tipx=6.6658 tipy=6.7301 ap=0.7152 pro=0.0999 lw=2.0018 drop=0.5436

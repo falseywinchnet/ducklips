@@ -1,0 +1,4 @@
+# Sheet tube design, from Astra's web/tube (commit 42c7337). SI units.
+# band: name length_m radius_m material mass elasticity offset_m anchor support points role
+band 01_Under-tongue_entry 0.012 0.0025 soft 2 1 0 0.5 0.3 4 tract
+band 02_Floor_pocket 0.025 0.0055 soft 3 1.5 0 0.5 0.2 4 tract

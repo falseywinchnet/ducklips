@@ -11,6 +11,7 @@ namespace tract {
 using Index = std::int32_t;
 
 constexpr double kPi = 3.14159265358979323846;
+constexpr double kHalfPi = 0.5 * kPi;
 constexpr double kTwoPi = 2.0 * kPi;
 
 constexpr double kStepRate = 96000.0;              // state updates per second

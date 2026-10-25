@@ -18,11 +18,22 @@ constexpr double kFastFrame = 0.5;
 // Radius below which the lining is in contact with the opposite wall.
 constexpr double kContactRadius = 0.0025;  // cm
 constexpr double kContactFrequency = 1500.0;  // Hz, the contact spring on the lining's mass
+constexpr double kSmoothingArea = 3.0;        // cm^2: where the area-scaled hop loss equals the tube's k
+constexpr double kMostSmoothing = 0.6;
 
 }  // namespace
 
 // Viscous loss per cm of tube (VocalTractLab 2.4, Constants.h): the larger of
 // a steep narrow-duct law and a fixed-frequency boundary-layer law.
+// The hop loss of a link when it follows the cross-section
+// (Tube::set_smoothing_by_area): boundary-layer friction and heat
+// conduction per unit length go as perimeter over area, 2 sqrt(pi / A) for a
+// round duct, so the hop's k scales as sqrt(kSmoothingArea / A), equal to the
+// tube's k at kSmoothingArea and at most kMostSmoothing.
+double Tube::hop_smoothing(double area) const {
+  return std::min(wave_smoothing_ * std::sqrt(kSmoothingArea / std::max(area, kMinimumArea)), kMostSmoothing);
+}
+
 double viscous_resistance_per_cm(double area) {
   double safe = std::max(area, kMinimumArea);
   return std::max(0.03 * std::pow(safe, -2.6), 0.0065 / safe * std::sqrt(2250.0));
@@ -113,8 +124,8 @@ Tube::Tube(std::vector<SegmentMaterial> materials, std::vector<TubeNode> nodes)
   support_factor_.assign(n, 1.0);
   support_target_.assign(n, 1.0);
   fast_node_.assign(n, 0);
-  for (std::vector<double>* field : {&axial_k_, &link_area_, &forward_, &backward_, &forward_next_, &backward_next_, &forward_smooth_, &backward_smooth_,
-                                     &series_, &link_resistance_, &link_flow_, &resistance_step_}) {
+  for (std::vector<double>* field : {&axial_k_, &link_area_, &forward_, &backward_, &forward_next_, &backward_next_, &forward_smooth_, &backward_smooth_, &forward_raw_, &backward_raw_,
+                                     &series_, &link_resistance_, &link_flow_, &resistance_step_, &hop_k_}) {
     field->assign(links, 0.0);
   }
   active_count_ = static_cast<Index>(n);
@@ -305,6 +316,15 @@ void Tube::compile_node(std::size_t i) {
   }
 }
 
+void Tube::scale_axial(double scale) {
+  for (SegmentMaterial& material : materials_) {
+    material.axial_tension *= scale;
+  }
+  for (std::size_t i = 0; i + 1 < nodes_.size(); ++i) {
+    compile_link(i);
+  }
+}
+
 void Tube::compile_link(std::size_t i) {
   {
     const SegmentMaterial& left = materials_[static_cast<std::size_t>(nodes_[i].material)];
@@ -339,7 +359,14 @@ void Tube::refresh_geometry() {
     double factor_gap = support_target_[i] - support_factor_[i];
     bool support_moving = std::abs(factor_gap) > 1.0e-7;
     if (support_moving) {
-      support_factor_[i] += support_glide * factor_gap;
+      if (support_log_glide_ > 0.0) {
+        double log_glide = 1.0 - std::exp(-kStepSeconds / support_log_glide_);
+        support_factor_[i] = std::exp(std::log(std::max(support_factor_[i], 1.0e-6)) +
+                                      log_glide * (std::log(std::max(support_target_[i], 1.0e-6)) -
+                                                   std::log(std::max(support_factor_[i], 1.0e-6))));
+      } else {
+        support_factor_[i] += support_glide * factor_gap;
+      }
     }
     double offset = radius_target_[i] - rest_radius_[i];
     bool radius_moving = std::abs(offset) >= 1.0e-9 || std::abs(radius_rate_[i]) >= 1.0e-6;
@@ -398,19 +425,40 @@ void Tube::refresh_geometry() {
     }
   }
   for (std::size_t i = 0; i < n; ++i) {
-    double radius = std::max(rest_radius_[i] + cover_q_[i], 0.0);
+    double radius = std::max(rest_radius_[i] + (static_admittance_ ? 0.0 : cover_q_[i]), 0.0);
     area_[i] = std::max(kPi * radius * radius, kMinimumArea);
+  }
+  if (area_limit_) {
+    constexpr double kOpeningCurve = 480.0e6;  // cm^2 / s^4
+    constexpr double kClosingCurve = 40.0e6;
+    constexpr double kStaticLimit = 400.0 * kStepSeconds;  // cm^2 per step
+    if (limited_area_.size() != n) {
+      limited_area_ = area_;
+    }
+    for (std::size_t i = 0; i < n; ++i) {
+      double old = limited_area_[i];
+      double delta = std::clamp(area_[i] - old, -kStaticLimit, kStaticLimit);
+      double curve = area_[i] > old ? kOpeningCurve : kClosingCurve;
+      double t = std::sqrt(std::sqrt(old / curve)) + kStepSeconds;
+      double reach = curve * t * t * t * t - old;
+      delta = std::clamp(delta, -reach, reach);
+      area_[i] = std::max(old + delta, kMinimumArea);
+      limited_area_[i] = area_[i];
+    }
   }
   for (std::size_t i = 0; i + 1 < n; ++i) {
     link_area_[i] = 0.5 * (area_[i] + area_[i + 1]);
+    if (smoothing_by_area_ && (resistance_countdown_ == 0 || fast_node_[i] || fast_node_[i + 1])) {
+      hop_k_[i] = hop_smoothing(link_area_[i]);
+    }
     if (fast_node_[i] || fast_node_[i + 1]) {
       // Next to a fast-moving node (closure, release): exact every step.
-      link_resistance_[i] = viscous_resistance_per_cm(link_area_[i]) * kNodeLength;
+      link_resistance_[i] = viscous_scale_ * viscous_resistance_per_cm(link_area_[i]) * kNodeLength;
       resistance_step_[i] = 0.0;
       continue;
     }
     if (resistance_countdown_ == 0) {
-      double target = viscous_resistance_per_cm(link_area_[i]) * kNodeLength;
+      double target = viscous_scale_ * viscous_resistance_per_cm(link_area_[i]) * kNodeLength;
       resistance_step_[i] = (target - link_resistance_[i]) / 16.0;
     }
     link_resistance_[i] += resistance_step_[i];
@@ -491,8 +539,8 @@ void Tube::step_air() {
   }
   double share_now = opening_share_;
   // The opening's load (R parallel L for its area), at full weight.
-  double opening_resistance = 128.0 * kRhoC / (9.0 * kPi * kPi * opening_area_);
-  double opening_inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * opening_area_));
+  double opening_resistance = radiation_resistance_scale_ * 128.0 * kRhoC / (9.0 * kPi * kPi * opening_area_);
+  double opening_inertance = radiation_mass_scale_ * 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * opening_area_));
   for (std::size_t i = 0; i < n; ++i) {
     double admittance = 0.0;
     double twice_sum = 0.0;
@@ -518,9 +566,10 @@ void Tube::step_air() {
       // Lip radiation: a resistance R in parallel with an inertance L,
       // discretized by the trapezoid rule for the inertance's flow.
       double a = std::max(area_[i], kMinimumArea);
-      double resistance = 128.0 * kRhoC / (9.0 * kPi * kPi * a);
+      double resistance = radiation_resistance_scale_ * 128.0 * kRhoC / (9.0 * kPi * kPi * a);
       // The end correction's air mass, plus the tube past the last node.
-      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) + kAirDensity * end_extra_ / a;
+      double inertance = radiation_mass_scale_ * 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) +
+                         kAirDensity * end_extra_ / a;
       double gain = 0.5 * h / inertance;
       admittance += 1.0 / resistance + gain;
       twice_sum -= radiation_inertance_flow_ + gain * radiation_previous_pressure_;
@@ -608,19 +657,34 @@ void Tube::step_air() {
       // as the boundary layers' and heat conduction's do, which the
       // frequency-flat viscous term leaves out.
       double wave = p - from_left;
-      backward_smooth_[i - 1] = (1.0 - wave_smoothing_) * wave + wave_smoothing_ * backward_smooth_[i - 1];
+      double k = smoothing_by_area_ ? hop_k_[i - 1] : wave_smoothing_;
+      if (wave_shelf_ > 0.0) {
+        backward_smooth_[i - 1] = (1.0 - k) / (1.0 - wave_shelf_) * (wave - wave_shelf_ * backward_raw_[i - 1]) +
+                                  k * backward_smooth_[i - 1];
+        backward_raw_[i - 1] = wave;
+      } else {
+        backward_smooth_[i - 1] = (1.0 - k) * wave + k * backward_smooth_[i - 1];
+      }
       backward_next_[i - 1] = backward_smooth_[i - 1];
     } else {
       outgoing_left_ = p - from_left;
     }
     if (i + 1 < n) {
       double wave = p - from_right;
-      forward_smooth_[i] = (1.0 - wave_smoothing_) * wave + wave_smoothing_ * forward_smooth_[i];
+      double k = smoothing_by_area_ ? hop_k_[i] : wave_smoothing_;
+      if (wave_shelf_ > 0.0) {
+        forward_smooth_[i] = (1.0 - k) / (1.0 - wave_shelf_) * (wave - wave_shelf_ * forward_raw_[i]) +
+                             k * forward_smooth_[i];
+        forward_raw_[i] = wave;
+      } else {
+        forward_smooth_[i] = (1.0 - k) * wave + k * forward_smooth_[i];
+      }
       forward_next_[i] = forward_smooth_[i];
     } else if (radiating_right_) {
       double a = std::max(area_[i], kMinimumArea);
-      double resistance_r = 128.0 * kRhoC / (9.0 * kPi * kPi * a);
-      double inertance = 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) + kAirDensity * end_extra_ / a;
+      double resistance_r = radiation_resistance_scale_ * 128.0 * kRhoC / (9.0 * kPi * kPi * a);
+      double inertance = radiation_mass_scale_ * 8.0 * kAirDensity / (3.0 * kPi * std::sqrt(kPi * a)) +
+                         kAirDensity * end_extra_ / a;
       radiation_inertance_flow_ += 0.5 * h / inertance * (p + radiation_previous_pressure_);
       radiation_previous_pressure_ = p;
       radiated_flow_ = p / resistance_r + radiation_inertance_flow_;
@@ -650,6 +714,14 @@ void Tube::scatter_links() {
   for (std::size_t i = 0; i + 1 < n; ++i) {
     double to_right = 0.0;
     double to_left = 0.0;
+    if (seal_area_ > 0.0 && (area_[i] <= seal_area_ || area_[i + 1] <= seal_area_)) {
+      // Sealed: no flow, each wave turned back.
+      link_flow_[i] = 0.0;
+      double arriving_right = forward_[i];
+      forward_[i] = backward_[i];
+      backward_[i] = arriving_right;
+      continue;
+    }
     link_flow_[i] = series_element(forward_[i], backward_[i], kRhoC / link_area_[i], link_resistance_[i], series_[i],
                                    area_[i], area_[i + 1], to_right, to_left);
     forward_[i] = to_right;

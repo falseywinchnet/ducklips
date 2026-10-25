@@ -1,0 +1,225 @@
+# duration_calibrate.py against nato a0001-a0593/3
+# duration_calibrate.py against nato a0001-a0593/3
+# profile_fit.py nato5_r2_tree: train spectrum 2.1 dynamics 1.3 phase 17.6 pitch 11.1 timing 4.7 combined 4.5 | heldout spectrum 1.9 dynamics 0.4 phase 18.2 pitch 10.8 timing 3.6 combined 3.8
+# duration_calibrate.py against nato a0001-a0593/3
+# profile_fit.py nato5_r1_plan: train spectrum 1.5 dynamics 0.8 phase 13.3 pitch 10.7 timing 5.2 combined 4.0 | heldout spectrum 1.3 dynamics -0.4 phase 12.7 pitch 10.7 timing 3.0 combined 3.1
+# profile_fit.py nato5_r1_tree: train spectrum 1.7 dynamics 0.6 phase 10.1 pitch 9.0 timing 5.3 combined 3.8 | heldout spectrum 2.7 dynamics 0.2 phase 12.4 pitch 4.7 timing 3.8 combined 3.4
+# duration_calibrate.py against nato a0001-a0593/3
+# source_calibrate.py against arctic_slt a0021-a0593/25
+# duration_calibrate.py against arctic_slt a0001-a0593/3
+# profile_fit.py slt5_r3_plan: train spectrum 7.2 dynamics 5.4 phase 22.0 pitch 14.8 timing 9.3 combined 8.9 | heldout spectrum 7.0 dynamics 4.4 phase 21.7 pitch 7.2 timing 6.8 combined 7.1
+# source_calibrate.py against arctic_slt a0021-a0593/25
+# duration_calibrate.py against arctic_slt a0001-a0593/3
+# profile_fit.py slt5_r2_tree: train spectrum 7.3 dynamics 5.5 phase 21.4 pitch 5.8 timing 9.3 combined 7.7 | heldout spectrum 7.0 dynamics 4.6 phase 25.4 pitch 7.3 timing 6.8 combined 7.3
+# source_calibrate.py against arctic_slt a0021-a0593/25
+# duration_calibrate.py against arctic_slt a0001-a0593/3
+# profile_fit.py slt5_r1_plan: train spectrum 7.2 dynamics 5.0 phase 17.8 pitch 16.5 timing 9.2 combined 8.7 | heldout spectrum 6.9 dynamics 3.6 phase 25.5 pitch 7.7 timing 7.0 combined 6.9
+# profile_fit.py slt5_r1_tree: train spectrum 7.2 dynamics 5.4 phase 15.6 pitch 6.2 timing 9.2 combined 7.6 | heldout spectrum 7.0 dynamics 3.6 phase 20.4 pitch 5.6 timing 7.0 combined 6.5
+# source_calibrate.py against arctic_slt a0021-a0593/25
+# duration_calibrate.py against arctic_slt a0001-a0593/3
+# duration_calibrate.py against arctic_slt a0001-a0100
+# slt profile start: plan_jawcaps, pitch centred on slt (median 188 Hz, 5-95% 167-223)
+# plan.params + jaw ceilings for the velars and liquids, and liquids yielding the tip (2026-10-18)
+# The planner's parameter tree as m69 plans the NATO words (say --pressure 750,
+# the articulatory body): the start of the timing and articulation fit
+# (tract/analysis/engine_net.py). Format: voice/include/voice/plan_parameters.hpp.
+timing {
+  rate 1
+  variation 0.1
+  lead_in 0.1
+  seal_lead 0.5442946113
+  vowel_hold 0.4903798146
+  seal_settle 0.025
+  affricate_hiss_max 0.1241361023
+  affricate_hiss_at 0.3
+  release_move 0.01
+  voiced_release_move 0.05
+  burst_scale 1.744156351
+  release_peel_time 0.015
+  voice_lag 0.02
+  vowel_reach 0.35
+  vowel_arrival 0.8
+  jaw_lead 0.05937586932
+  fricative_hold 0
+  final_vowel_scale 1.8
+  final_consonant_scale 1.6
+  final_vowel_floor_ms 110
+  comma_vowel_scale 2.4
+  sonorant_devoicing 0.5
+  function_vowel_scale 2.025209975
+}
+glottis {
+  voicing_gap -0.006
+  voiced_fricative_gap 0.04
+  aspirate_gap 0.1800270807
+  unstressed_gap 0
+  stress_press 0
+  final_relax_gap -0.008
+  vowel_compression 0.6
+  unstressed_compression 0.6
+  onset_gap -1
+  onset_hold 0.02
+  onset_settle 0.03
+  fricative_abduct_lead 0.0006970643951
+  abduction_move 0.07791576808
+  adduction_move 0.05011393877
+  adduction_lead 0
+  affricate_voicing_move 0.06
+  final_devoicing 0.1951066169
+  affricate_hiss_gap 0.05202384857
+  voiceless_gap 0.1456627525
+}
+breath {
+  speech_pressure 750
+  voiceless_pressure 0.77052183
+  unstressed_pressure 0.8458987926
+  pause_pressure 0
+  breath_lead 0.04
+  breath_rise 0.11
+  vowel_breath_lead 0.12
+  phrase_fade_tail 0.06
+  phrase_fade_from 0.7
+  phrase_open_delay 0.03
+  syllable_rise 0.5815255249
+  syllable_decay 0.9114740571
+  inhale_pressure -88.56833079
+}
+release {
+  release_channel 0.6
+  release_peel_area 0
+}
+pitch {
+  base_pitch 208.1963695
+  pitch_floor 220
+  accent 10.82313313
+  accent_peak 0.05
+  accent_fall 0.25
+  unstressed_drift 0.06
+  unstressed_dip 0.9715086119
+  pitch_spread 1.625653005
+  pitch_median 205.0386919
+  lowest_pitch 169.753428
+  final_fall 0.9277889668
+  comma_pitch 0.93
+}
+mouth {
+  postalveolar_lips 3
+  postalveolar_protrusion 0
+  sibilant_lips 1.5
+  sibilant_protrusion 0.1
+  lip_press 0.01
+  labial_jaw 1
+  velar_front 1.8
+  fricative_body_area 0.9
+}
+articulation {
+  labial_jaw 8
+  labiodental_aperture 0.02558713578
+  labiodental_jaw 6.529697526
+  dental_x 7.72
+  dental_y 8.25
+  dental_press -0.1032784652
+  dental_jaw 0.4315517392
+  alveolar_x 6.75
+  alveolar_y 9.75
+  alveolar_press 0.002180431031
+  alveolar_jaw 3
+  tap_press 0.3
+  sibilant_x 6.869733503
+  sibilant_y 9.15
+  sibilant_press -0.1070335353
+  sibilant_jaw 1.5
+  sibilant_aperture 0.7944967365
+  sibilant_protrusion 0.1
+  sibilant_groove 0.8445658114
+  postalveolar_x 5.887324451
+  postalveolar_y 9.95
+  postalveolar_press 0.12
+  postalveolar_hiss_press -0.1948698235
+  postalveolar_jaw 2.5
+  postalveolar_aperture 1.475771379
+  postalveolar_protrusion 0.113287016
+  postalveolar_groove 0.2550157604
+  affricate_closure 0.300767043
+  lateral_x 6.75
+  lateral_y 9.75
+  lateral_press -0.07293817299
+  lateral_retract 0.7696754665
+  dark_lateral_x 2.65
+  dark_lateral_y 6.5
+  rhotic_x 6
+  rhotic_y 9.6
+  rhotic_press -0.3010663791
+  rhotic_back 0.2782044616
+  rhotic_up -0.2265197675
+  rhotic_aperture 0.9996407294
+  rhotic_protrusion 0.2397542711
+  velar_front 2.4
+  velar_back 4.8
+  velar_press 0.01416594196
+  w_aperture 0.05
+  w_protrusion 0.6
+  w_spread 2.2
+  w_round_share 0.5838290694
+  y_raise 0.04377215413
+  lead 0.04
+  tip_close_move 0.05926488927
+  dorsum_close_move 0.084275843
+  tip_release_move 0.08
+  dorsum_release_move 0.07501761663
+  liquid_move 0.08733441895
+  velar_jaw 6
+  lateral_jaw 6
+  rhotic_jaw 8
+  liquid_yields_tip 1
+}
+duration {
+  IY 0.8236835144
+  IH 0.7233186807
+  EY 0.9244537553
+  EH 0.8878348078
+  AE 0.8130907044
+  AA 0.8025128453
+  AO 0.8160889253
+  OW 0.838040879
+  UH 0.7191600354
+  UW 0.8156339976
+  AH 0.9702007394
+  AX 0.6079302562
+  ER 0.8852784695
+  AY 0.6835673268
+  AW 0.7712995563
+  OY 1.068155977
+  P 0.9637034468
+  B 0.8289340826
+  T 0.9168642294
+  D 0.9580423229
+  DX 1
+  K 0.995135827
+  G 0.8300912134
+  M 0.9135769672
+  N 0.8845446774
+  NG 0.9162393821
+  F 0.9993105274
+  V 0.9419479196
+  TH 0.8658361818
+  DH 0.8240834153
+  S 0.9937704762
+  Z 1.005579374
+  SH 1.06621918
+  ZH 0.7775897214
+  CH 1.002221838
+  JH 0.9725155149
+  L 0.8818029929
+  R 0.8573193039
+  W 0.8464389995
+  Y 0.7699959513
+  HH 0.9801529534
+}
+nasal {
+  velum 0.3492015991
+  close_lead -0.03
+  close_move 0.1152636999
+  open_lead 0.007440419404
+  anticipation 0.2412917606
+}

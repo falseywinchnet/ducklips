@@ -1,0 +1,145 @@
+pool 4 workers (POOL), chunk 1; exact shortcuts on (resume on); algorithmic changes halving,jointstop,stall1; renderer incremental; model: pitch ear 0.0, glide phase 1
+AA M@lips^0.47 AA: 46 nodes, 17.04 cm, 0.41 s; the truth's error -160.6 dB
+(first vowel from the cache: first_vowel_874f7b8e3b3aa645d3b7b10e.npz)
+AA: -246.9 dB, tube rms 0.000
+transition 1: leaving 0.0999 (true 0.1000), arrival 0.1500 (true 0.1500)
+M: velum 0.469 (true 0.470)
+M: closed, sealed at node 44
+transition 2: leaving 0.22000 (true 0.22000), arrival 0.29230 (true 0.29000)
+survey: 1024 postures, levels rms best 2.16 dB, hint 5.24 dB, kept 2.2 2.2 2.6 2.9 3.0 3.2
+  posture search from 2.16 dB levels: 46 nodes (natural 46), by the spectrum -46.7 dB, then -55.7 dB; tube rms 0.310 (true count 46)
+  posture search from 2.22 dB levels: 46 nodes (natural 46), by the spectrum -51.0 dB, then -59.6 dB; tube rms 0.134 (true count 46)
+  posture search from 2.63 dB levels: 46 nodes (natural 46), by the spectrum -39.7 dB, then -52.4 dB; tube rms 0.355 (true count 46)
+  posture search from 2.93 dB levels: 46 nodes (natural 46), by the spectrum -27.6 dB, then -44.1 dB; tube rms 0.566 (true count 46)
+  posture search from 2.98 dB levels: 46 nodes (natural 46), by the spectrum -50.3 dB, then -59.4 dB; tube rms 0.192 (true count 46)
+  posture search from 3.22 dB levels: 46 nodes (natural 46), by the spectrum -59.0 dB, then -67.6 dB; tube rms 0.138 (true count 46)
+    node rung 0: -72.2 dB, 46 nodes and 0.20 of air mass
+    node rung 0: -72.2 dB, 46 nodes and 0.09 of air mass
+    node rung 0: -72.2 dB, 46 nodes and 0.33 of air mass
+    node rung 0: -72.2 dB, 46 nodes and 0.16 of air mass
+    node rung 0: -72.2 dB, 46 nodes and 2.40 of air mass
+    node rung 0: -72.2 dB, 46 nodes and 2.40 of air mass
+  halving: first rungs -72.2 -72.2 -72.2 -72.2 -72.2 -72.2; carried on: basins 1 2
+    node rung 0: -72.2 dB, 46 nodes and 0.09 of air mass
+    node rung 1: -72.4 dB, 46 nodes and 0.09 of air mass
+    node rung 2: -72.4 dB, 46 nodes and 0.09 of air mass
+    node rung 3: -72.4 dB, 46 nodes and 0.09 of air mass
+  node search from -59.6 dB: -72.4 dB; tube rms 0.114
+    node rung 0: -72.2 dB, 46 nodes and 0.33 of air mass
+    node rung 1: -72.4 dB, 46 nodes and 0.33 of air mass
+    node rung 2: -72.4 dB, 46 nodes and 0.33 of air mass
+    node rung 3: -72.4 dB, 46 nodes and 0.33 of air mass
+  node search from -59.4 dB: -72.4 dB; tube rms 0.114
+AA: -72.4 dB, tube rms 0.114
+transition 2: leaving 0.22000 (true 0.22000), arrival 0.28962 (true 0.29000)
+    node rung 0: -77.4 dB, 46 nodes and 0.33 of air mass
+    node rung 1: -78.5 dB, 46 nodes and 0.33 of air mass
+    node rung 2: -78.6 dB, 46 nodes and 0.33 of air mass
+    node rung 3: -78.6 dB, 46 nodes and 0.33 of air mass
+AA polished: -78.6 dB, tube rms 0.310
+transition 2: leaving 0.22000 (true 0.22000), arrival 0.29006 (true 0.29000)
+    node rung 0: -87.1 dB, 46 nodes and 0.33 of air mass
+    node rung 1: -97.0 dB, 46 nodes and 0.33 of air mass
+    node rung 2: -97.1 dB, 46 nodes and 0.33 of air mass
+    node rung 3: -97.1 dB, 46 nodes and 0.33 of air mass
+AA polished: -97.1 dB, tube rms 0.020
+  joint over 3 phones to 0.350 s: -150.4 dB (against the sound's swing); tubes rms 0.000 0.000 0.016; times off 0.00 -0.00 -0.00 -0.00 ms
+before the joint search: -147.2 dB
+joint 0: 2676 evaluations; -151.6 dB; tubes rms 0.000 0.000 0.011; times off 0.00 -0.00 0.00 -0.00 -0.00 ms; velum 0.470
+joint 1: 2676 evaluations; -155.7 dB; tubes rms 0.000 0.000 0.007; times off 0.00 -0.00 0.00 -0.00 -0.00 ms; velum 0.470
+joint 2: 2480 evaluations; -158.2 dB; tubes rms 0.000 0.000 0.004; times off -0.00 -0.00 0.00 -0.00 -0.00 ms; velum 0.470
+joint 3: 2088 evaluations; -159.2 dB; tubes rms 0.000 0.000 0.004; times off -0.00 -0.00 0.00 -0.00 -0.00 ms; velum 0.470
+round trip: the recovered sequence's sound against the true one's: 131.2 dB
+errors: tubes rms max 0.0037 cm^2 (0.0000 0.0000 0.0037); times max 0.0000 ms; velum 0.4700 (true 0.470)
+total: 39330 evaluations (14110 saved by exact shortcuts), wall 50.4 min, CPU 179.7 min (pool 4)
+stage                                                       calls    evals   saved  wall_m    cpu_m   s/eval
+word                                                            1    39330   14110   50.44   179.67    0.274
+word/phone 0 AA                                                 1        0       0    0.00     0.00    0.010
+word/phone 0 AA/recover                                         1        0       0    0.00     0.00    0.010
+word/phone 1 M                                                  1      348       2    0.29     1.06    0.183
+word/phone 1 M/transition                                       1      290       2    0.24     0.88    0.183
+word/phone 1 M/transition/grid coarse                           1       81       0    0.11     0.36    0.270
+word/phone 1 M/transition/grid fine                             1       49       0    0.03     0.13    0.157
+word/phone 1 M/transition/grid finest                           1       80       1    0.05     0.20    0.150
+word/phone 1 M/transition/grid finer                            1       80       1    0.05     0.19    0.144
+word/phone 1 M/velum grid                                       1       58       0    0.05     0.18    0.183
+word/phone 1 M/velum grid/velum rung 0                          1       20       0    0.02     0.06    0.185
+word/phone 1 M/velum grid/velum rung 1                          1       17       0    0.01     0.05    0.184
+word/phone 1 M/velum grid/velum rung 2                          1       21       0    0.02     0.06    0.182
+word/phone 2 AA                                                 1    29062    8820   35.22   123.69    0.255
+word/phone 2 AA/transition                                      1      103       3    0.12     0.47    0.276
+word/phone 2 AA/transition/release scan 0                       1       81       0    0.10     0.37    0.277
+word/phone 2 AA/transition/release scan 1                       1       22       3    0.03     0.10    0.274
+word/phone 2 AA/recover                                         1    14146    3608   16.14    54.76    0.232
+word/phone 2 AA/recover/survey                                  1     1024       0    0.17     0.68    0.040
+word/phone 2 AA/recover/posture 0                               1      497      94    0.35     0.81    0.098
+word/phone 2 AA/recover/posture 1                               1      449      92    0.26     0.58    0.077
+word/phone 2 AA/recover/posture 2                               1      532      99    0.33     0.77    0.086
+word/phone 2 AA/recover/posture 3                               1      506      95    0.47     1.16    0.138
+word/phone 2 AA/recover/posture 4                               1      458      93    0.44     1.09    0.143
+word/phone 2 AA/recover/posture 5                               1      558     103    0.45     1.12    0.120
+word/phone 2 AA/recover/node search 0 first rung                1      736      66    1.10     3.85    0.314
+word/phone 2 AA/recover/node search 1 first rung                1     1159      75    1.67     6.01    0.311
+word/phone 2 AA/recover/node search 2 first rung                1     1066      72    1.55     5.56    0.313
+word/phone 2 AA/recover/node search 3 first rung                1      877      69    1.30     4.60    0.315
+word/phone 2 AA/recover/node search 4 first rung                1     1160      74    1.68     6.03    0.312
+word/phone 2 AA/recover/node search 5 first rung                1     1160      74    1.68     6.03    0.312
+word/phone 2 AA/recover/node search 0                           1     2101    1350    2.50     8.82    0.252
+word/phone 2 AA/recover/node search 1                           1     1863    1252    2.19     7.65    0.246
+word/phone 2 AA/polish 0 transition                             1      126       5    0.15     0.55    0.263
+word/phone 2 AA/polish 0 transition/release scan 0              1       81       0    0.09     0.35    0.259
+word/phone 2 AA/polish 0 transition/release scan 1              1       22       3    0.03     0.10    0.267
+word/phone 2 AA/polish 0 transition/arrival grid 0              1        7       0    0.01     0.03    0.274
+word/phone 2 AA/polish 0 transition/arrival grid 1              1        8       1    0.01     0.04    0.281
+word/phone 2 AA/polish 0 transition/arrival grid 2              1        8       1    0.01     0.03    0.262
+word/phone 2 AA/polish 0 node search                            1     2750     256    3.28    11.38    0.248
+word/phone 2 AA/polish 0 node search/rung 0                     1      970      70    1.11     3.99    0.247
+word/phone 2 AA/polish 0 node search/rung 1                     1     1017      71    1.20     4.27    0.252
+word/phone 2 AA/polish 0 node search/rung 2                     1      641      63    0.76     2.62    0.246
+word/phone 2 AA/polish 0 node search/rung 3                     1      117      52    0.19     0.47    0.243
+word/phone 2 AA/polish 1 transition                             1      126       5    0.15     0.56    0.265
+word/phone 2 AA/polish 1 transition/release scan 0              1       81       0    0.09     0.36    0.265
+word/phone 2 AA/polish 1 transition/release scan 1              1       22       3    0.03     0.10    0.268
+word/phone 2 AA/polish 1 transition/arrival grid 0              1        7       0    0.01     0.03    0.257
+word/phone 2 AA/polish 1 transition/arrival grid 1              1        8       1    0.01     0.04    0.274
+word/phone 2 AA/polish 1 transition/arrival grid 2              1        8       1    0.01     0.04    0.263
+word/phone 2 AA/polish 1 node search                            1     3165     266    3.67    13.04    0.247
+word/phone 2 AA/polish 1 node search/rung 0                     1     1016      72    1.16     4.18    0.247
+word/phone 2 AA/polish 1 node search/rung 1                     1     1017      71    1.17     4.21    0.248
+word/phone 2 AA/polish 1 node search/rung 2                     1     1017      71    1.16     4.18    0.247
+word/phone 2 AA/polish 1 node search/rung 3                     1      110      52    0.16     0.45    0.243
+word/phone 2 AA/prefix joint                                    1     8646    4677   11.71    42.93    0.298
+word/phone 2 AA/prefix joint/round 0                            1     2186    1181    2.96    10.88    0.299
+word/phone 2 AA/prefix joint/round 1                            1     1598     899    2.17     7.87    0.296
+word/phone 2 AA/prefix joint/round 2                            1     2578    1369    3.49    12.85    0.299
+word/phone 2 AA/prefix joint/round 3                            1     2284    1228    3.08    11.33    0.298
+word/final joint 0                                              1     2676    1416    4.00    14.78    0.331
+word/final joint 1                                              1     2676    1416    4.01    14.79    0.332
+word/final joint 2                                              1     2480    1322    3.73    13.73    0.332
+word/final joint 3                                              1     2088    1134    3.17    11.59    0.333
+kind (exclusive)                      evals    saved   wall_m    cpu_m
+rung                                  16005     3554    20.46    72.82
+final joint                            9920     5288    14.91    54.90
+round                                  8646     4677    11.71    42.93
+posture                                3000      576     2.30     5.53
+release scan                            309        9     0.36     1.38
+survey                                 1024        0     0.17     0.68
+grid coarse                              81        0     0.11     0.36
+node search first rung                   12        0     0.07     0.07
+arrival grid                             46        4     0.06     0.21
+grid finest                              80        1     0.05     0.20
+grid finer                               80        1     0.05     0.19
+velum rung                               58        0     0.05     0.18
+polish node search                       10        0     0.04     0.04
+node search                              10        0     0.04     0.04
+grid fine                                49        0     0.03     0.13
+word                                      0        0     0.02     0.02
+prefix joint                              0        0     0.00     0.00
+recover                                   0        0     0.00     0.00
+phone AA                                  0        0     0.00     0.00
+transition                                0        0     0.00     0.00
+polish transition                         0        0     0.00     0.00
+velum grid                                0        0     0.00     0.00
+phone M                                   0        0     0.00    -0.00
+column locality (projected; resume at the first input divergence less 4 node counts):
+  word                             26928 columns, steps from start 9.74e+08, from resume 4.6e+08: 47.2% of the columns' steps

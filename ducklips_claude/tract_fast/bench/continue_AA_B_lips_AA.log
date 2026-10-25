@@ -1,0 +1,12 @@
+from the saved result: equation error -150.9 dB, round trip 130.0 dB
+round 0: 2757 evaluations, gain 2.94 dB; equation error -153.9 dB; round trip 133.5 dB; tubes rms max 0.0055
+round 1: 2454 evaluations, gain 2.26 dB; equation error -156.1 dB; round trip 136.3 dB; tubes rms max 0.0042
+round 2: 2757 evaluations, gain 2.89 dB; equation error -159.0 dB; round trip 139.6 dB; tubes rms max 0.0031
+round 3: 2252 evaluations, gain 0.94 dB; equation error -160.0 dB; round trip 140.9 dB; tubes rms max 0.0029
+round 4: 2151 evaluations, gain 0.29 dB; equation error -160.2 dB; round trip 141.2 dB; tubes rms max 0.0028
+stage                                                       calls    evals   saved  wall_m    cpu_m   s/eval
+continued joint 0                                               1     2757    1415    2.23     7.92    0.172
+continued joint 1                                               1     2454    1274    2.07     7.39    0.181
+continued joint 2                                               1     2757    1415    2.34     8.35    0.182
+continued joint 3                                               1     2252    1180    1.90     6.76    0.180
+continued joint 4                                               1     2151    1133    1.84     6.48    0.181

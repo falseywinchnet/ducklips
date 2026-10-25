@@ -43,10 +43,10 @@ Biquad low_shelf(double rate, double hz, double gain_db) {
   return filter;
 }
 
-Biquad peak(double rate, double hz, double gain_db) {
+Biquad peak(double rate, double hz, double gain_db, double q) {
   double a = std::pow(10.0, gain_db / 40.0);
   double omega = 2.0 * 3.14159265358979323846 * hz / rate;
-  double alpha = std::sin(omega) / (2.0 * 0.7);  // Q 0.7: about two octaves between half-gain points
+  double alpha = std::sin(omega) / (2.0 * q);
   double a0 = 1.0 + alpha / a;
   Biquad filter;
   filter.b0 = (1.0 + alpha * a) / a0;
@@ -83,7 +83,7 @@ void apply_room(std::vector<float>& samples, double rate, const RoomOptions& opt
     apply_biquad(samples, low_shelf(rate, options.proximity_hz, options.proximity_db));
   }
   if (options.presence_db != 0.0) {
-    apply_biquad(samples, peak(rate, options.presence_hz, options.presence_db));
+    apply_biquad(samples, peak(rate, options.presence_hz, options.presence_db, options.presence_q));
   }
   std::array<std::vector<double>, kLines> lines;
   std::array<std::size_t, kLines> positions{};

@@ -1,0 +1,4 @@
+# Sheet tube design, from Astra's web/tube (commit 42c7337). SI units.
+# band: name length_m radius_m material mass elasticity offset_m anchor support points role
+band 01_Sinus_neck 0.012 0.0018 firm 1 1 0 0.5 2 4 tract
+band 02_Sinus_chamber 0.035 0.008 firm 2 1 0 0.5 3 4 tract

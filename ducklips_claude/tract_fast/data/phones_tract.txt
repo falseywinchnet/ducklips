@@ -1,0 +1,65 @@
+# The front end's tuned phone inventory (voice/data/phones_en.txt) with the
+# segment-module body's own values: F area 0.06 (0.18 let /f/ build only
+# 70 Pa behind the lips; 0.06 matches bdl's /f/ shape and, with the
+# labiodental source at 1.2, its level: -33 vs -32 dB re the loudest vowel).
+# Vowels refitted on this body (tmp vfit_tract grid, held vowel, LPC):
+# AE vplace 7.5 varea 1.5 gave 711/1547 Hz in "had" (target 581/1885);
+# 9.0/0.75 gives 567/1822. UH (kUH lips 1.0) gave F1 579 (469): lips 0.4,
+# 9.75/0.5 gives 473/1157.
+# Phone overrides. Consonant places: tools/tune_phones.py against CMU ARCTIC bdl.
+# Vowel postures live in src/planner.cpp (tools/vowel_fit bounded). Durations: scaled by the measured
+# human/ours ratio over ARCTIC a0001-a0060 (owner heard "sea shore" as "si-shooor").
+# Fricative areas and places: levels calibrated against ARCTIC bdl per phone
+# (dB re utterance) after the Borda-Carnot loss and lip exit-loss fixes.
+# Vowel v* and SH: tools/four_view_tune.py (four-view total a0001-a0020 29.60 -> 28.62;
+# hold-out a0021-a0040 29.11 -> 28.34). W, L, ER: tools/identify_tune.py (four-view identification
+# a0001-a0040 36.95 -> 39.04%, check a0041-a0060 32.88 -> 33.63%); AW AO AH the same (39.25%, check 35.59%).
+# Segment-engine vowel postures (2026-10-13, /tmp/vopt.py START=tract
+# ENGINE=tract): coordinate search of vplace / varea / vlips, each vowel kept
+# on its own LPC F1/F2 distance to bdl in running speech (ARCTIC a0001-a0060,
+# say at 750 Pa, speak with damped folds and a lossy tube): mean 3.99 -> 1.67
+# semitones. AE's lips capped at 10 cm^2 (the search pushed them to 17.6).
+# Identification 36.3% -> 36.7% (three seeds).
+# UW back and rounded (10.5 / 0.45 / 0.25; the fronted 13.28 / 3.25 / 0.6 sat
+# at F2 1456 against bdl's 1239 and was heard as /ah/): F2 1242 at 10.0 / 0.6 / 0.3;
+# /uw/ 0 -> 18%, overall 40.1 -> 40.6% (one seed). OW glides to a rounded
+# /U/ (9.5 / 0.4 / 0.25; the built-in kUH's lips were 1.0): /ow/ 0 -> 4%, 40.8%.
+AA inherent 185 vplace 6.4 varea 0.724 vlips 3.571
+AE darea 0 inherent 205 vplace 8.4 varea 0.75 vlips 10
+AO inherent 200 vplace 4.4 varea 0.231 vlips 0.26
+AW garea 0.25 inherent 270
+AX inherent 97 vlips 1
+AY inherent 285
+CH inherent 130 place 15
+D inherent 61 place 15.2
+DH area 0 inherent 75 place 16.2
+ER area 0.25 floor 1 inherent 216 place 13 vprotrusion 0.7 vplace 6.5 varea 2 vlips 0.6
+EY inherent 225 vplace 9.56 varea 0.26 vlips 5
+G inherent 85 place 11.65
+HH inherent 75
+IH inherent 135 vplace 10.65 varea 0.906 vlips 4.5
+IY inherent 200 vplace 11.95 varea 0.138 vlips 4.9
+JH inherent 130 place 14.6
+K inherent 107 place 11.2
+L area 0.3 inherent 105 place 16.2 varea 0.7 vplace 7
+M inherent 105
+N inherent 77 place 15
+NG inherent 102 place 12.05
+OW inherent 240 vplace 4.4 varea 0.526 vlips 0.292 gplace 9.5 garea 0.4 glips 0.25
+OY inherent 280
+P inherent 97
+S area 0.133 inherent 122 place 15.3
+SH area 0.1 inherent 140 place 14.4
+T inherent 68 place 15
+TH area 0.07 inherent 100 place 17
+UH inherent 112 vplace 9.75 varea 0.5 vlips 0.286
+V area 0.12 inherent 68
+Y inherent 70
+Z area 0.05 inherent 97 place 15
+R area 0.25 floor 2.5 place 13 varea 2 vlips 1 vplace 6.5 vprotrusion 0.7
+ZH area 0.178
+F area 0.06
+AH vplace 7.9 varea 0.555 vlips 1.335
+EH darea 1 dplace 12 vplace 8.3 varea 1.4 vlips 6
+W varea 0.3 vplace 8
+UW vplace 10.5 varea 0.45 vlips 0.25

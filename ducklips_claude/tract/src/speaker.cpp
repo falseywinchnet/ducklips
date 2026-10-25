@@ -45,7 +45,11 @@ BodyLayout articulatory_layout() {
   // already give real formants without them, that cannot be a real
   // speaker's, and the vowel tuning flattened every shape toward a uniform
   // tube to win F1 back (the owner's "talking through a tube").
-  layout.piriform_scale = 0.25;
+  // Now full size again, the vowels retuned under the shape constraint: at
+  // a quarter, voiced sound kept 7 dB too much above 4 kHz (harmonic and
+  // noise alike) against the owner's NATO reading; at full size within 2
+  // dB in every band (tract/analysis/nato_snr.py, /tmp/es/hn.py).
+  layout.piriform_scale = 1.0;
   // The voice's breath: turbulent flux (rms 4% of the flow, gated to
   // voicing), a phase random walk of 0.5 rad/sqrt(s) and a firmer contact
   // (5 um). Without it the band HNR above 1 kHz stood 6-10 dB over bdl's
@@ -98,7 +102,7 @@ Speaker::Speaker(const BodyLayout& layout, const voice::Score& score, std::uint3
   // nasal murmurs sat 9-11 dB over bdl at 3-7 kHz; at 0.2 the top band is
   // within 4 dB of bdl. 0.4 with the narrowed sinus ostia (see
   // BodyLayout::sinus_neck_scale): at 0.2, 2-4 kHz stood 4-6 dB over bdl.
-  body_.nose().set_wave_smoothing(0.4);
+  body_.nose().set_wave_smoothing(layout.nose_smoothing);
   // Rest postures, wander per unit effort and wander time (the front end's
   // body: these are the speeds and unsteadiness it was tuned with).
   set_motor(voice::Part::lungs, 0, 0.0, 12.0, 0.35, 1000.0);
@@ -130,6 +134,38 @@ Speaker::Speaker(const BodyLayout& layout, const voice::Score& score, std::uint3
   set_motor(voice::Part::angle, 0, 6.0, 0.15, 0.2, 10.0);
   set_motor(voice::Part::groove, 0, 0.0, 0.0, 0.2, 1.0);
   articulatory_ = uses_organs(score_) && body_.vocal().count() >= 56;
+  physical_tongue_ = layout.physical_tongue > 0.5;
+  tongue_settings_ = layout.tongue;
+  {
+    VtlTongueShape shape;
+    shape.on = layout.vtl_tongue > 0.5 && !physical_tongue_;
+    shape.body_rx = layout.vtl_body_radius;
+    shape.body_ry = layout.vtl_body_radius;
+    shape.tip_radius = layout.vtl_tip_radius;
+    shape.blade_along = layout.vtl_blade_along;
+    shape.blade_lift = layout.vtl_blade_lift;
+    shape.root_bulge = layout.vtl_root_bulge;
+    anatomy_.set_vtl_tongue(shape);
+  }
+  lateral_pocket_ = layout.lateral_pocket;
+  lateral_pocket_back_ = layout.lateral_pocket_back;
+  abduction_fade_start_ = layout.abduction_fade_start;
+  abduction_fade_end_ = layout.abduction_fade_end;
+  if (layout.anatomy_scale != 1.0) {
+    anatomy_.set_scale(layout.anatomy_scale);
+  }
+  if (layout.epilarynx_height >= 0.0) {
+    anatomy_.set_larynx_height(layout.epilarynx_height);
+  }
+  if (layout.epilarynx_area != 1.0) {
+    anatomy_.set_larynx_area_scale(layout.epilarynx_area);
+  }
+  if (layout.lateral_area != 0.12) {
+    anatomy_.set_lateral_area(layout.lateral_area);
+  }
+  if (layout.lateral_reach != 2.0) {
+    anatomy_.set_lateral_reach(layout.lateral_reach);
+  }
   if (articulatory_) {
     // The articulatory body's voice (2026-10-15, against bdl's vowel bands
     // over a0001-a0060): folds resting at 0.011 / 0.006 cm and a lighter
@@ -144,6 +180,9 @@ Speaker::Speaker(const BodyLayout& layout, const voice::Score& score, std::uint3
     // 0.030 / 0.015 it closed at 2.7e5, open 75%: the highs fell under the
     // noise, band HNR 4-7 kHz -13 dB, and 0-120 Hz rose to -12 dB.)
     body_.vocal().set_wave_smoothing(0.02);
+    if (layout.vocal_hop_loss >= 0.0) {
+      body_.vocal().set_wave_smoothing(layout.vocal_hop_loss);
+    }
     // The lips radiate from wherever the opening is (set_opening), not from
     // the tube's last node.
     body_.vocal().set_radiating_right(false);
@@ -197,6 +236,7 @@ void Speaker::set_motor(voice::Part part, int coordinate, double rest, double wa
   each.rest = rest;
   each.position = rest;
   each.target = rest;
+  each.aim = rest;
   each.wander_scale = wander_scale;
   each.wander_seconds = wander_seconds;
   each.span = span;
@@ -217,6 +257,10 @@ double Speaker::gauss() {
 // closing and pressing move smoothly through zero.
 void Speaker::apply(const voice::PartEvent& event) {
   double move = std::max(static_cast<double>(event.move), 0.004);
+  if (move_scale_ != 1.0 && event.part != voice::Part::lungs && event.part != voice::Part::pitch &&
+      event.part != voice::Part::glottis) {
+    move = std::max(move * move_scale_, 0.004);
+  }
   double omega = 4.5 / move;
   Motor& first = motor(event.part, 0);
   Motor& second = motor(event.part, 1);
@@ -294,7 +338,12 @@ void Speaker::apply(const voice::PartEvent& event) {
 // effort, and effort makes the hold less steady.
 void Speaker::advance_motors() {
   for (Motor& each : motors_) {
-    double pull = each.omega * each.omega * (each.target + each.wander - each.position);
+    double goal = each.target;
+    if (motor_smoothing_ > 0.0) {
+      each.aim += (1.0 - std::exp(-kControlSeconds * motor_smoothing_ * each.omega)) * (each.target - each.aim);
+      goal = each.aim;
+    }
+    double pull = each.omega * each.omega * (goal + each.wander - each.position);
     double drag = 2.0 * each.omega * each.velocity;
     each.velocity += kControlSeconds * (pull - drag);
     each.position += kControlSeconds * each.velocity;
@@ -339,6 +388,13 @@ double Speaker::shape_organs() {
   Tube& vocal = body_.vocal();
   if (geometry_tick_ == 0) {
     Articulators held = organs();
+    if (physical_tongue_) {
+      move_tongue(held, static_cast<double>(kGeometryTicks) * kControlSeconds);
+    } else if (anatomy_.vtl_tongue().on) {
+      anatomy_.vtl_tongue_outline(held, vtl_contour_);
+      held.contour = &vtl_contour_;
+      held.nearest_width = tongue_settings_.vtl_smooth_airway > 0.5;
+    }
     anatomy_.compute(held, profile_);
     node_from_.swap(node_to_);
     // (The glide starts from where the last frame's glide ended.) The
@@ -351,6 +407,9 @@ double Speaker::shape_organs() {
     profile_to_nodes(node_to_, length_to_);
     body_.set_velum_place(profile_.velum_arc);
     body_.set_under_tongue_place(profile_.tip_arc);
+    if (lateral_pocket_ > 0.0) {
+      body_.set_lateral_pocket_place(profile_.tip_arc - lateral_pocket_back_);
+    }
     body_.set_teeth(profile_.teeth_arc - 0.25, profile_.teeth_arc + 0.25);
   }
   double share = static_cast<double>(geometry_tick_ + 1) / static_cast<double>(kGeometryTicks);
@@ -380,6 +439,70 @@ double Speaker::shape_organs() {
   return sealed;
 }
 
+void Speaker::move_tongue(Articulators& held, double seconds) {
+  Articulators aimed = held;
+  aimed.tongue_x = motor(voice::Part::body, 0).target;
+  aimed.tongue_y = motor(voice::Part::body, 1).target;
+  aimed.tip_x = motor(voice::Part::apex, 0).target;
+  aimed.tip_y = motor(voice::Part::apex, 1).target;
+  // The tongue plans ahead: a body with mass must start before its target is
+  // due (the planner's leads were set for 28 ms motors), so it aims at the
+  // next body and tip targets due within tongue.lead of now. (The next, not
+  // the last: aiming at the last, a consonant's contact was skipped for the
+  // vowel after it.)
+  bool body_seen = false;
+  bool apex_seen = false;
+  for (std::size_t look = next_event_;
+       look < score_.parts.size() && score_.parts[look].time <= time_ + tongue_settings_.lead; ++look) {
+    const voice::PartEvent& coming = score_.parts[look];
+    if (coming.part == voice::Part::body && !body_seen) {
+      aimed.tongue_x = static_cast<double>(coming.a);
+      aimed.tongue_y = static_cast<double>(coming.b);
+      body_seen = true;
+    } else if (coming.part == voice::Part::apex && !apex_seen) {
+      aimed.tip_x = static_cast<double>(coming.a);
+      aimed.tip_y = static_cast<double>(coming.b);
+      apex_seen = true;
+    }
+  }
+  anatomy_.tongue_outline(aimed, tongue_target_);
+  if (!tongue_.ready()) {
+    // At rest: the motors' rests (the tongue relaxed, jaw as now).
+    Articulators rest = held;
+    rest.tongue_x = motor(voice::Part::body, 0).rest;
+    rest.tongue_y = motor(voice::Part::body, 1).rest;
+    rest.tip_x = motor(voice::Part::apex, 0).rest;
+    rest.tip_y = motor(voice::Part::apex, 1).rest;
+    TongueContour relaxed;
+    anatomy_.tongue_outline(rest, relaxed);
+    tongue_.reset(relaxed, tongue_settings_);
+    tongue_.place(tongue_target_);
+  }
+  tongue_.set_target(tongue_target_);
+  if (tongue_settings_.roles > 0.5) {
+    role_state(phones_, phone_cursor_, time_, tongue_settings_, tongue_roles_);
+    tongue_.set_impedance(tongue_roles_.stiffness, tongue_roles_.damping);
+    tongue_.set_shaping(tongue_roles_.shaping);
+  }
+  if (tongue_.uses_geometric()) {
+    // Where pinned pieces go: the geometric tongue as the motors hold it now.
+    anatomy_.tongue_outline(held, tongue_geometric_);
+    tongue_.set_geometric(tongue_geometric_, seconds);
+    if (tongue_settings_.roles > 0.5) {
+      tongue_.set_pins(tongue_roles_.pins);
+    }
+  }
+  tongue_.step(seconds, held, anatomy_);
+  tongue_frame_ = held;
+  tongue_frame_.contour = nullptr;
+  double lifted = std::max(tongue_.lift(), 0.0);
+  tongue_lift_ += (1.0 - std::exp(-seconds / 0.02)) * (lifted - tongue_lift_);
+  held.contour = &tongue_.contour();
+  bool thick = tongue_settings_.blade_body > 0.5 || tongue_settings_.spine > 0.5 || tongue_settings_.skeleton > 0.5;
+  held.underside = thick ? &tongue_.underside() : nullptr;
+  held.nearest_width = tongue_settings_.smooth_airway > 0.5;
+}
+
 Articulators Speaker::organs() {
   Articulators held;
   held.tongue_x = value(voice::Part::body, 0);
@@ -389,7 +512,7 @@ Articulators Speaker::organs() {
   held.lip_aperture = value(voice::Part::mouth, 0);
   held.lip_protrusion = std::max(value(voice::Part::mouth, 1), 0.0);
   held.lip_width = value(voice::Part::spread, 0);
-  held.larynx_drop = std::max(value(voice::Part::larynx, 0), 0.0);
+  held.larynx_drop = std::max(value(voice::Part::larynx, 0) - tongue_pull_raise_ * tongue_lift_, 0.0);
   held.jaw_angle = value(voice::Part::angle, 0);
   held.lateral = std::max(value(voice::Part::lateral, 0), 0.0);
   held.groove = std::max(value(voice::Part::groove, 0), 0.0);
@@ -399,6 +522,22 @@ Articulators Speaker::organs() {
 // Node areas from the profile: the area at the node's centre, or less if a
 // narrower cut falls within the node's span (a closure is never stepped
 // over); past the lip opening, the lips' area.
+double Speaker::profile_area_at(double arc) const {
+  int cuts = profile_.count;
+  if (arc <= profile_.arc[0]) {
+    return profile_.area[0];
+  }
+  for (int cut = 1; cut < cuts; ++cut) {
+    std::size_t here = static_cast<std::size_t>(cut);
+    if (profile_.arc[here] >= arc) {
+      double span = std::max(profile_.arc[here] - profile_.arc[here - 1], 1.0e-6);
+      double weight = std::clamp((arc - profile_.arc[here - 1]) / span, 0.0, 1.0);
+      return (1.0 - weight) * profile_.area[here - 1] + weight * profile_.area[here];
+    }
+  }
+  return profile_.area[static_cast<std::size_t>(cuts - 1)];
+}
+
 void Speaker::profile_to_nodes(std::vector<double>& areas, double length) const {
   int cuts = profile_.count;
   int cut = 0;
@@ -427,6 +566,7 @@ void Speaker::profile_to_nodes(std::vector<double>& areas, double length) const 
     }
     std::size_t here = static_cast<std::size_t>(cut);
     double area = profile_.area[here];
+    double inside = continuous_opening_ != 0.0 ? std::clamp((length - low) / kNodeLength, 0.0, 1.0) : 1.0;
     if (cut + 1 < cuts && centre > profile_.arc[here]) {
       std::size_t next = here + 1;
       double span = std::max(profile_.arc[next] - profile_.arc[here], 1.0e-6);
@@ -439,7 +579,10 @@ void Speaker::profile_to_nodes(std::vector<double>& areas, double length) const 
         area = std::min(area, profile_.area[index]);
       }
     }
-    areas[node] = area;
+    if (continuous_cuts_ != 0.0) {
+      area = std::min(area, std::min(profile_area_at(low), profile_area_at(std::min(high, length))));
+    }
+    areas[node] = inside * area + (1.0 - inside) * sliver_area_;
   }
 }
 
@@ -487,19 +630,26 @@ void Speaker::shape_body() {
   // (0.04 cm^2, a slow wobble that never collides: the voice bar was 32-40 dB
   // under the vowel, real ones 20-30); the adductors hold them together.
   double press = press_depth_ * relaxation_;
-  posture.lower_rest = std::max(voicing_lower_ + open - 0.002 * (compression - 0.5) - press, -0.006);
-  posture.upper_rest = std::max(voicing_upper_ + open - press, -0.008);
+  double pulled = tongue_pull_adduction_ * tongue_lift_;
+  posture.lower_rest = std::max(voicing_lower_ + open - 0.002 * (compression - 0.5) - press - pulled, -0.006);
+  posture.upper_rest = std::max(voicing_upper_ + open - press - pulled, -0.008);
   posture.chink = voicing_chink_ + 0.12 * open;
   body_.cord().set_target(posture, 0.015);
+  if (abduction_fade_end_ > abduction_fade_start_ && abduction_fade_end_ > 0.0) {
+    body_.cord().set_abduction_scale((abduction_fade_end_ - gap) / (abduction_fade_end_ - abduction_fade_start_));
+  }
 
   body_.set_lung_pressure(value(voice::Part::lungs, 0), lung_follow_);
-  body_.set_pitch(std::max(value(voice::Part::pitch, 0), 40.0));
+  body_.set_pitch(std::max(value(voice::Part::pitch, 0), 40.0) * (1.0 + tongue_pull_tension_ * tongue_lift_));
   double velum_root = std::max(value(voice::Part::velum, 0), 0.0);
   body_.set_velum(velum_root * velum_root);
   // A raised tip (/r/, /sh/, /er/) lifts the blade off the floor of the
   // mouth and opens the space beneath it.
   double floor = value(voice::Part::floor, 0);
   body_.set_under_tongue(0.4 * std::clamp((floor - 0.5) / 1.5, 0.0, 1.0));
+  if (lateral_pocket_ > 0.0) {
+    body_.set_lateral_pocket(lateral_pocket_ * std::clamp(value(voice::Part::lateral, 0), 0.0, 1.0));
+  }
 }
 
 void Speaker::push(const voice::PartEvent& event) {
