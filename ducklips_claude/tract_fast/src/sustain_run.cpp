@@ -327,6 +327,7 @@ bool options_from_environment(const EnvironmentLookup& environment, SustainSetti
   take_number(environment, "SEAL", settings.seal);
   take_number(environment, "SEALBLEND", settings.seal_blend);
   take_number(environment, "JETBOUND", settings.jet_bound);
+  take_number(environment, "ENTERINGONLY", settings.entering_from);
   if (pair_of(environment, "NOSERAD", settings.nose_radiation_mass, settings.nose_radiation_resistance)) {
     settings.nose_radiation = true;
   }
@@ -399,6 +400,17 @@ bool validate_settings(const SustainSettings& settings, std::string& error) {
       settings.fold_key_times.size() != settings.fold_key_postures.size()) {
     error = "keyframe times and values differ in count\n";
     return false;
+  }
+  if (settings.entering_from.has_value()) {
+    // The vocal tube reaches the folds, beyond its returning wave, only
+    // through the aspiration's drop (VoiceBody::aspiration_sample), whose
+    // every path to the folds is scaled by these three.
+    bool silent = settings.aspiration.has_value() && *settings.aspiration == 0.0 && settings.flux.has_value() &&
+                  *settings.flux == 0.0 && settings.fold_turbulence.has_value() && *settings.fold_turbulence == 0.0;
+    if (!silent) {
+      error = "ENTERINGONLY needs ASPIRATION, FLUX and FOLDTURB set to 0\n";
+      return false;
+    }
   }
   return true;
 }
@@ -976,8 +988,26 @@ bool SustainRun::advance(const SustainSettings& settings, long end, SustainSink&
   long forced_count = static_cast<long>(forced_waves.size());
   long observed_count = static_cast<long>(observed_flows.size());
   bool observing = !observed_flows.empty() && settings.observe_gain > 0.0;
+  // ENTERINGONLY: the vocal tube's air frozen from that step (see
+  // SustainSettings::entering_from). A run frozen before its present step
+  // carries a stale air: it continues only under settings that freeze it
+  // no later.
+  long entering_from = settings.entering_from.has_value() ? static_cast<long>(*settings.entering_from) : -1;
+  if (air_frozen_from_ >= 0 && step_ <= air_frozen_from_) {
+    air_frozen_from_ = -1;   // (the air is intact up to the present step)
+    body_.vocal().set_air_frozen(false);
+  }
+  if (air_frozen_from_ >= 0 && (entering_from < 0 || entering_from > air_frozen_from_)) {
+    std::fprintf(stderr, "ENTERINGONLY: the vocal tube's air was frozen at step %ld\n", air_frozen_from_);
+    failed_ = true;
+    return false;
+  }
   while (!failed_ && step_ < stop) {
     long step = step_;
+    if (entering_from >= 0 && step >= entering_from && air_frozen_from_ < 0) {
+      air_frozen_from_ = step;
+      body_.vocal().set_air_frozen(true);
+    }
     control(settings, step);
     // FORCEWAVE: the folds driven by these returning waves (a NaN wave:
     // the folds read their own tube that step, running free).

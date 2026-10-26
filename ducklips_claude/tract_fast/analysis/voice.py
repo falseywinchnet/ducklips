@@ -13,6 +13,7 @@ Usage: voice.py WORD;WORD;...  [extras] [holdout INDEX]
   each WORD a comma-separated spec list as puppet.py takes.
 """
 
+import concurrent.futures
 import multiprocessing
 import os
 import sys
@@ -26,6 +27,7 @@ import pyramid_word
 import sequence_recover
 
 SECANTS = puppet.SECANTS
+FAST = os.environ.get("VOICE_SLOW", "0") != "1"   # the fast path (step 59); VOICE_SLOW=1 the step-58 solver
 
 
 GROUPS = puppet.GROUPS   # the articulator groups (one definition, in puppet.py)
@@ -110,6 +112,7 @@ class VoiceProblem:
         self.offsets = numpy.cumsum([0] + [word.events() for word in self.words])
         self.secant = secant
         self.used = 1
+        self.workers = fields_word.POOL   # the pool's size, set by the solver that makes the pool
         self.steps = numpy.full(self.size(), secant)
 
     def size(self) -> int:
@@ -129,13 +132,29 @@ class VoiceProblem:
         return vector[self.offsets[-1]:self.offsets[-1] + len(self.shared)]
 
     def shared_extras(self, vector: numpy.ndarray) -> numpy.ndarray:
-        return vector[self.offsets[-1] + len(self.shared):]
+        # Bounded: a subclass may append its own unknowns after the shared block.
+        return vector[self.offsets[-1] + len(self.shared):self.offsets[-1] + 2 * len(self.shared)]
 
     def residual(self, vector: numpy.ndarray) -> numpy.ndarray:
         parts = []
         for index, word in enumerate(self.words):
             parts.append(word.residual(self.word_vector(vector, index)))
         return numpy.concatenate(parts)
+
+    def columns_of(self, index: int, active: numpy.ndarray) -> numpy.ndarray:
+        """The columns word `index`'s rows depend on: its own events and the
+        shared quantities of the articulators it has, those not frozen."""
+        own = numpy.arange(int(self.offsets[index]), int(self.offsets[index + 1]))
+        used = numpy.unique(self.maps[index])
+        shared = int(self.offsets[-1]) + used
+        if second_block(self.mode):
+            shared = numpy.concatenate([shared, shared + len(self.shared)])
+        columns = numpy.concatenate([own, shared])
+        return columns[active[columns]]
+
+    def steps_for(self, secant: float) -> numpy.ndarray:
+        """Every unknown's difference step at a rung: all times here."""
+        return numpy.full(self.size(), secant)
 
     def blocks(self) -> List[slice]:
         """Each word's stretch of the residual."""
@@ -238,19 +257,29 @@ def jacobian(pool, problem: VoiceProblem, vector: numpy.ndarray, current: numpy.
     return matrix
 
 
-def report(problem: VoiceProblem, vector: numpy.ndarray, cost: float, label: str) -> None:
+def report(problem: VoiceProblem, vector: numpy.ndarray, cost: float, label: str,
+           current: Optional[numpy.ndarray] = None) -> None:
+    """The step's line: all words' level, each word's level and events off
+    the truth, the traverse off the truth. With `current` (the vector's
+    residual) the word levels are read from it, not re-evaluated (nine
+    sequential residuals a step in the main process, ~2 s, step 59)."""
     truth = problem.true_vector()
+    blocks = problem.blocks()
     parts = []
     for index, word in enumerate(problem.words):
         own_truth = problem.word_vector(truth, index).copy()
         # word_vector sets the word's traverse from the vector it reads: the
         # vector's own last, so the block's level is the vector's.
         own = problem.word_vector(vector, index)
-        block_cost = pyramid_word.level_db(word.residual(own))
+        if current is not None:
+            block_cost = pyramid_word.level_db(current[blocks[index]])
+        else:
+            block_cost = pyramid_word.level_db(word.residual(own))
         parts.append("%s %.1f dB, events %.3f ms max off" % (
             "/".join(word.context.word.names), block_cost, 1000.0 * numpy.abs(own - own_truth).max()))
-    traverse = vector[problem.offsets[-1]:]
-    true_traverse = truth[problem.offsets[-1]:]
+    shared_end = int(problem.offsets[-1]) + (2 if second_block(problem.mode) else 1) * len(problem.shared)
+    traverse = vector[problem.offsets[-1]:shared_end]
+    true_traverse = truth[problem.offsets[-1]:shared_end]
     print("%s: all %.1f dB; %s; traverse off the truth %.3f ms max" % (
         label, cost, "; ".join(parts), 1000.0 * numpy.abs(traverse - true_traverse).max()), flush=True)
 
@@ -279,6 +308,246 @@ def lag_report(problem: VoiceProblem, vector: numpy.ndarray, heard: numpy.ndarra
             "%s:%s(%+.0f)" % (name, "unheard" if not flag else "%+.2f" % (1000.0 * values[j]), 1000.0 * true_values[j])
             for j, (name, flag) in enumerate(zip(problem.shared, part_heard))
             if flag or true_values[j] != 0.0)), flush=True)
+
+
+# ---- the fast path: one task a word, Broyden updates between Jacobians (step 59) ----
+
+def word_block(task: Tuple[numpy.ndarray, int, numpy.ndarray, numpy.ndarray]) -> Tuple[int, numpy.ndarray, numpy.ndarray]:
+    """One word's rows of the Jacobian for the task's columns, central
+    differences over the task's steps, every residual resumed in this
+    process's cache for the word (warmed at the base first). Returns the
+    word, its columns, the block (rows x columns)."""
+    vector, index, steps, columns = task
+    word = _voice.words[index]
+    block = numpy.zeros((word.context.word.size, len(columns)))
+    word.residual(_voice.word_vector(vector, index))
+    for position, column in enumerate(columns):
+        step = steps[column]
+        ahead = vector.copy()
+        ahead[column] += step
+        behind = vector.copy()
+        behind[column] -= step
+        block[:, position] = (word.residual(_voice.word_vector(ahead, index))
+                              - word.residual(_voice.word_vector(behind, index))) / (2.0 * step)
+    return index, columns, block
+
+
+def word_residual(task: Tuple[numpy.ndarray, int]) -> Tuple[int, numpy.ndarray]:
+    vector, index = task
+    return index, _voice.words[index].residual(_voice.word_vector(vector, index))
+
+
+def task_order(problem: VoiceProblem) -> List[int]:
+    """The words longest first (a pool finishes when its longest task does)."""
+    sizes = numpy.array([word.context.word.size for word in problem.words])
+    return [int(index) for index in numpy.argsort(-sizes, kind="stable")]
+
+
+class PinnedPool:
+    """Single-process executors, one a slot, and a fixed plan of which slot
+    computes which word's columns: a worker then caches only its own words.
+    (With any task to any worker every worker cached all nine words, 2.1 GB
+    each warm; a 4-worker pod with 8 GB lost a worker to the memory limit,
+    and 6 workers on the Mini's 16 GB went to swap, step 63.) The plan is
+    McNaughton's wrap-around rule: the slots filled in turn to an equal share
+    of the Jacobian's work (columns times residual length), a word split
+    where a slot fills, so the wall time stays the balanced one."""
+
+    def __init__(self, slots: int, initializer, initargs: Tuple) -> None:
+        self.slots = slots
+        self.executors = [concurrent.futures.ProcessPoolExecutor(1, initializer=initializer, initargs=initargs)
+                          for _ in range(slots)]
+        self.plans: Dict[bytes, Tuple[List[List[Tuple[int, numpy.ndarray]]], Dict[int, int]]] = {}
+
+    def __enter__(self) -> "PinnedPool":
+        return self
+
+    def __exit__(self, kind, value, trace) -> None:
+        for executor in self.executors:
+            executor.shutdown(wait=True, cancel_futures=True)
+
+    def plan(self, problem: "VoiceProblem", frozen: numpy.ndarray) -> Tuple[List[List[Tuple[int, numpy.ndarray]]], Dict[int, int]]:
+        """Per slot its (word, columns) shares, and per word the slot that
+        evaluates its residuals (the one holding most of its columns)."""
+        key = frozen.tobytes()
+        found = self.plans.get(key)
+        if found is not None:
+            return found
+        active = ~frozen
+        items = [(index, problem.columns_of(index, active)) for index in task_order(problem)]
+        sizes = {index: problem.words[index].context.word.size for index, _ in items}
+        total = float(sum(len(columns) * sizes[index] for index, columns in items))
+        target = total / self.slots
+        shares: List[List[Tuple[int, numpy.ndarray]]] = [[] for _ in range(self.slots)]
+        held: Dict[int, Dict[int, int]] = {}
+        slot = 0
+        filled = 0.0
+        for index, columns in items:
+            size = sizes[index]
+            remaining = columns
+            while len(remaining) > 0:
+                if slot == self.slots - 1:
+                    take = len(remaining)
+                else:
+                    take = int(numpy.clip(round((target - filled) / size), 1, len(remaining)))
+                shares[slot].append((index, remaining[:take]))
+                counts = held.setdefault(index, {})
+                counts[slot] = counts.get(slot, 0) + take
+                remaining = remaining[take:]
+                filled += take * size
+                if slot < self.slots - 1 and filled >= target - 0.5 * size:
+                    slot += 1
+                    filled = 0.0
+        owner = {}
+        for index, _ in items:
+            counts = held.get(index, {0: 0})
+            owner[index] = max(counts, key=counts.__getitem__)
+        found = (shares, owner)
+        self.plans[key] = found
+        return found
+
+
+def run_tasks(pool, function, tasks: List) -> List:
+    """`function`'s results over `tasks`, in completion order, from a
+    multiprocessing.Pool or a concurrent.futures executor (whose dead
+    worker raises BrokenProcessPool, where the Pool waited forever)."""
+    if hasattr(pool, "imap_unordered"):
+        return list(pool.imap_unordered(function, tasks))
+    futures = [pool.submit(function, task) for task in tasks]
+    return [future.result() for future in concurrent.futures.as_completed(futures)]
+
+
+def residual_parallel(pool, problem: VoiceProblem, vector: numpy.ndarray) -> numpy.ndarray:
+    """The voice's residual, one task a word (on a PinnedPool, in the slot
+    that holds the word's cache)."""
+    blocks = problem.blocks()
+    current = numpy.empty(blocks[-1].stop)
+    tasks = [(vector, i) for i in task_order(problem)]
+    if isinstance(pool, PinnedPool):
+        owner = pool.plan(problem, numpy.zeros(problem.size(), dtype=bool))[1]
+        futures = [pool.executors[owner[task[1]]].submit(word_residual, task) for task in tasks]
+        results = [future.result() for future in concurrent.futures.as_completed(futures)]
+    else:
+        results = run_tasks(pool, word_residual, tasks)
+    for index, part in results:
+        current[blocks[index]] = part
+    return current
+
+
+TASKS_A_WORKER = 3   # tasks a worker on average: enough to even out cores of two speeds (4 performance, 6 efficiency)
+
+
+def jacobian_tasks(problem: VoiceProblem, vector: numpy.ndarray, frozen: numpy.ndarray, workers: int) -> List:
+    """A Jacobian's tasks: each word's columns (its own events and the
+    shared columns it uses) cut into chunks, the longest words' first, so
+    that the slowest task no longer sets the wall time (one task a word,
+    Delta's 22 columns on an efficiency core did, step 62). Each chunk costs
+    one warm-up residual more."""
+    active = ~frozen
+    per_word = [(index, problem.columns_of(index, active)) for index in task_order(problem)]
+    total = sum(len(columns) for _, columns in per_word)
+    chunk = max(1, int(numpy.ceil(total / float(TASKS_A_WORKER * workers))))
+    tasks = []
+    for index, columns in per_word:
+        for first in range(0, len(columns), chunk):
+            tasks.append((vector, index, problem.steps, columns[first:first + chunk]))
+    return tasks
+
+
+def jacobian_by_word(pool, problem: VoiceProblem, vector: numpy.ndarray, frozen: numpy.ndarray) -> numpy.ndarray:
+    """The voice's Jacobian in word-and-column chunks: each word's rows for
+    its own events and the shared columns it uses (zero elsewhere). (Spread
+    by column instead, every worker evaluated all nine words for each shared
+    column, 82% of a step's residuals.)"""
+    blocks = problem.blocks()
+    matrix = numpy.zeros((blocks[-1].stop, problem.size()))
+    if isinstance(pool, PinnedPool):
+        shares = pool.plan(problem, frozen)[0]
+        futures = []
+        for slot, share in enumerate(shares):
+            for index, columns in share:
+                futures.append(pool.executors[slot].submit(word_block, (vector, index, problem.steps, columns)))
+        results = [future.result() for future in concurrent.futures.as_completed(futures)]
+    else:
+        results = run_tasks(pool, word_block, jacobian_tasks(problem, vector, frozen, problem.workers))
+    for index, columns, block in results:
+        matrix[blocks[index], columns] = block
+    return matrix
+
+
+def levenberg_broyden(pool, problem: VoiceProblem, vector: numpy.ndarray, frozen: numpy.ndarray,
+                      iterations: int, quiet: bool = False) -> Tuple[numpy.ndarray, numpy.ndarray]:
+    """levenberg's step (damped Gauss-Newton in the secant's units, Nielsen's
+    damping, the agreement gate), with the Jacobian computed by word and,
+    after an accepted step, corrected by Broyden's rank-one update with the
+    residual's change the step itself measured: J += (dr - J s) s' / s's.
+    A full Jacobian again only when the gate rejects a step on an updated
+    one. Returns the vector and which unknowns the sound heard."""
+    current = residual_parallel(pool, problem, vector)
+    cost = pyramid_word.level_db(current)
+    matrix = jacobian_by_word(pool, problem, vector, frozen)
+    fresh = True
+    jacobians = 1
+    residuals = 1
+    heard = numpy.zeros(len(vector), dtype=bool)
+    accepted_steps = 0
+    damping = pyramid_word.DAMPING_START
+    while accepted_steps < iterations:
+        matrix[:, ~numpy.all(numpy.isfinite(matrix), axis=0)] = 0.0
+        norms = numpy.sqrt(numpy.sum(matrix ** 2, axis=0))
+        heard = norms > 0.0
+        scale = problem.steps.copy()
+        mean = float(numpy.mean((norms[heard] * scale[heard]) ** 2)) if numpy.any(heard) else 0.0
+        if mean <= 0.0:
+            break
+        scale /= numpy.sqrt(mean)
+        scaled = matrix[:, heard] * scale[heard][None, :]
+        left, singular, rows = numpy.linalg.svd(scaled, full_matrices=False)
+        projected = left.T @ (-current)
+        first = pyramid_word.DAMPING_START
+        growth = 2.0
+        accepted = False
+        refreshed = False
+        while not accepted and damping <= pyramid_word.DAMPING_LIMIT * first:
+            z = rows.T @ (singular / (singular ** 2 + damping) * projected)
+            step = numpy.zeros(len(vector))
+            step[heard] = scale[heard] * z
+            trial = residual_parallel(pool, problem, vector + step)
+            residuals += 1
+            predicted = float(numpy.sum(current ** 2) - numpy.sum((current + matrix @ step) ** 2))
+            actual = float(numpy.sum(current ** 2) - numpy.sum(trial ** 2))
+            ratio = actual / predicted if predicted > 0.0 else 0.0
+            if actual > 0.0 and ratio >= fields_word.AGREEMENT:
+                if numpy.all(numpy.isfinite(trial)):
+                    change = trial - current
+                    matrix += numpy.outer(change - matrix @ step, step) / float(step @ step)
+                    fresh = False
+                vector, current = vector + step, trial
+                cost = pyramid_word.level_db(current)
+                damping *= max(1.0 / 3.0, 1.0 - (2.0 * ratio - 1.0) ** 3)
+                accepted = True
+            elif not fresh:
+                # The updated Jacobian disagreed with the sound: a full one,
+                # the same damping, the step taken again.
+                matrix = jacobian_by_word(pool, problem, vector, frozen)
+                fresh = True
+                jacobians += 1
+                refreshed = True
+                break
+            else:
+                damping *= growth
+                growth *= 2.0
+        if refreshed:
+            continue
+        if accepted:
+            accepted_steps += 1
+        if not quiet:
+            report(problem, vector, cost, "step %d (%d Jacobians, %d residuals of all words)%s" % (
+                accepted_steps, jacobians, residuals, "" if accepted else ": no damping lowered it"), current)
+        if not accepted:
+            break
+        damping = max(damping, pyramid_word.DAMPING_START)
+    return vector, heard
 
 
 def levenberg(pool, problem: VoiceProblem, vector: numpy.ndarray, frozen: numpy.ndarray,
@@ -349,6 +618,20 @@ def solve(word_specs: Sequence[Sequence[str]], mode: str = "lags",
         pyramid_word.level_db(problem.residual(truth))), flush=True)
     report(problem, vector, pyramid_word.level_db(problem.residual(vector)), "%s start" % label)
     heard = numpy.zeros(problem.size(), dtype=bool)
+    if FAST:
+        # One pool for every rung (the secant travels with each task): the
+        # workers build the words once, not once a rung.
+        workers = fields_word.POOL
+        problem.workers = workers
+        with concurrent.futures.ProcessPoolExecutor(workers, initializer=worker_start,
+                                                    initargs=(word_specs, SECANTS[0], mode, cached, groups)) as pool:
+            for secant in SECANTS:
+                problem.secant = secant
+                problem.steps = problem.steps_for(secant)
+                print("%s secant %.3g s" % (label, secant), flush=True)
+                vector, heard = levenberg_broyden(pool, problem, vector, frozen, fields_word.ITERATIONS)
+        lag_report(problem, vector, heard)
+        return problem, vector
     for secant in SECANTS:
         problem.secant = secant
         problem.steps = numpy.full(problem.size(), secant)

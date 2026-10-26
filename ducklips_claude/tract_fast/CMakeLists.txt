@@ -34,7 +34,12 @@ target_compile_options(tract PRIVATE -Wall -Wextra -Wpedantic)
 # NOTES.md, Milestone 2 speed).
 option(TRACT_NATIVE "tune for the building CPU" ON)
 if(TRACT_NATIVE)
-  target_compile_options(tract PRIVATE -mcpu=native -ffp-contract=fast)
+  if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
+    # x86 compilers take -march, not -mcpu (the compute pod, 2026-10-26).
+    target_compile_options(tract PRIVATE -march=native -ffp-contract=fast)
+  else()
+    target_compile_options(tract PRIVATE -mcpu=native -ffp-contract=fast)
+  endif()
 endif()
 
 set_target_properties(tract PROPERTIES POSITION_INDEPENDENT_CODE ON)
@@ -61,6 +66,21 @@ add_library(tract_engine SHARED bindings/tract_engine.cpp)
 target_link_libraries(tract_engine PRIVATE tract_run)
 target_include_directories(tract_engine PRIVATE bindings)
 target_compile_options(tract_engine PRIVATE -Wall -Wextra -Wpedantic)
+
+# The peel's native time-major kernel, the moving geometry and the hidden
+# windows' forward run
+# (bindings/peel_core.h; analysis/peel_native.py): numba's expressions to the
+# bit, so no multiply-add fused.
+add_library(peel_core SHARED bindings/peel_core.cpp bindings/geometry_core.cpp bindings/forward_core.cpp)
+target_include_directories(peel_core PRIVATE bindings)
+target_compile_options(peel_core PRIVATE -Wall -Wextra -Wpedantic -ffp-contract=off)
+if(TRACT_NATIVE AND CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i[3-6]86")
+  # On x86 the kernels' two-lane code (include/tract/lanes.hpp) needs the
+  # CPU's own instructions: built for baseline x86-64 (no FMA) its vfmaq
+  # fell back to software std::fma, and the peel ran 6.6x and the window
+  # runs 8x slower than on the Mini (the pod, 2026-10-26). ARM is unchanged.
+  target_compile_options(peel_core PRIVATE -march=native)
+endif()
 
 add_executable(transfer tools/transfer.cpp)
 target_link_libraries(transfer PRIVATE tract)

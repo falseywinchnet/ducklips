@@ -51,6 +51,7 @@ import numpy
 import engine
 import fields_word
 import observer
+import peel_native
 import posture_recover
 import puppet
 import pyramid_word
@@ -63,6 +64,10 @@ EVERY = 960          # engine steps between run snapshots (engine.Incremental's 
 # folds free inside every earlier hidden window, one engine run a residual);
 # 0 (default): pyramid_word.equation_error's values to the bit.
 CANONICAL = os.environ.get("CANONICAL", "0") == "1"
+# ENTERING_ONLY=1: the engine's vocal tube air not stepped where the folds are
+# forced to the end (engine ENTERINGONLY; NOTES_residual_speed.md). Read when
+# a SharedFieldFlow is made, so a caller may set adjoint.ENTERING_ONLY.
+ENTERING_ONLY = os.environ.get("ENTERING_ONLY", "0") == "1"
 GEOMETRY_EVERY = reverse_core.GEOMETRY_EVERY
 POOL = fields_word.POOL
 
@@ -103,13 +108,22 @@ class RenderCache:
     (bindings/equivalence.py checks engine.Incremental's results byte for
     byte; `check` below checks this cache's residuals). Renders may stop
     short of the word's end (`end`): the run is left there and continued
-    by the next render that agrees with it so far."""
+    by the next render that agrees with it so far.
+
+    With `entering_from` (the engine's ENTERINGONLY: from that step only the
+    flow entering is read, the vocal tube's air is not stepped), a state
+    whose air was frozen at step F (`frozen`, kept with the live run and
+    each snapshot) serves a render only if it is at or before F or the
+    render freezes no later than F (its own entering_from <= F): the
+    divergence of the settings does not compare ENTERINGONLY."""
 
     def __init__(self, every: int = EVERY) -> None:
         self.every = int(every)
         self.settings: Optional[engine.Settings] = None
-        self.snapshots: List[Tuple[int, engine.Run]] = []   # (step, the run's state before that step), ascending
+        # (step, the run's state before that step, the step its air was frozen at or None), ascending
+        self.snapshots: List[Tuple[int, engine.Run, Optional[int]]] = []
         self.run: Optional[engine.Run] = None               # the live run, at step self.reached
+        self.frozen: Optional[int] = None                   # the step the live run's air was frozen at
         self.raw: Optional[numpy.ndarray] = None            # (steps, 2): flow entering, flow radiated
         self.reached = 0        # steps of self.raw written by the last render
         self.reused = 0         # steps the last render took from the one before
@@ -117,34 +131,60 @@ class RenderCache:
         self.renders = 0
         self.steps_run = 0      # engine steps advanced, all renders
 
-    def render(self, settings: engine.Settings, end: Optional[int] = None) -> Tuple[numpy.ndarray, bool]:
+    @staticmethod
+    def serves(step: int, frozen: Optional[int], needed: int) -> bool:
+        """Whether a state at `step` whose air was frozen at `frozen` serves
+        a render that reads the air up to step `needed`."""
+        if frozen is None or step <= frozen:
+            return True
+        return needed <= frozen
+
+    def render(self, settings: engine.Settings, end: Optional[int] = None,
+               entering_from: Optional[int] = None) -> Tuple[numpy.ndarray, bool]:
         """The RAW pairs of steps 0..end - 1 (the word's end by default) and
-        whether every output was finite."""
+        whether every output was finite. entering_from: the settings'
+        ENTERINGONLY step (None: unset)."""
         steps = settings.steps()
         stop = steps if end is None else min(int(end), steps)
+        needed = steps if entering_from is None else int(entering_from)
         resume = -1
         if self.settings is not None:
             resume = min(self.settings.divergence(settings), self.reached)
-        kept: List[Tuple[int, engine.Run]] = []
-        for step, run in self.snapshots:
-            if step <= resume:
-                kept.append((step, run))
+        live = (self.run is not None and resume >= self.reached and self.reached > 0 and
+                self.serves(self.reached, self.frozen, needed))
+        chosen = -1
+        if not live:
+            for index in range(len(self.snapshots)):
+                step, saved, frozen = self.snapshots[index]
+                if step <= resume and self.serves(step, frozen, needed):
+                    chosen = index
+        kept: List[Tuple[int, engine.Run, Optional[int]]] = []
         raw = numpy.empty((steps, 2))
-        if self.run is not None and resume >= self.reached and self.reached > 0:
+        frozen_now: Optional[int] = None
+        if live:
             # Everything computed so far agrees: the live run continues.
+            for step, saved, frozen in self.snapshots:
+                if step <= resume:
+                    kept.append((step, saved, frozen))
             start = self.reached
             run = self.run
             run.settings = settings
+            frozen_now = self.frozen
             raw[:start] = self.raw[:start]
-        elif kept:
-            start, saved = kept[-1]
+        elif chosen >= 0:
+            for index in range(chosen + 1):
+                kept.append(self.snapshots[index])
+            start, saved, frozen = self.snapshots[chosen]
             run = saved.snapshot()
             run.settings = settings
+            frozen_now = frozen
             raw[:start] = self.raw[:start]
         else:
             start = 0
             run = engine.Run(settings)
-            kept = [(0, run.snapshot())]
+            kept = [(0, run.snapshot(), None)]
+        if frozen_now is not None and start <= frozen_now:
+            frozen_now = None   # (the engine thaws a state at or before its freeze)
         self.resumed_from = start
         self.reused = start
         reached = start
@@ -156,11 +196,14 @@ class RenderCache:
             if reached == before:
                 raise RuntimeError("the engine did not advance at step %d" % reached)
             self.steps_run += reached - before
+            if frozen_now is None and entering_from is not None and reached > max(int(entering_from), before):
+                frozen_now = max(int(entering_from), before)
             if finite and reached == boundary and reached < steps and reached % self.every == 0:
-                kept.append((reached, run.snapshot()))
+                kept.append((reached, run.snapshot(), frozen_now))
         self.settings = settings
         self.snapshots = kept
         self.run = run
+        self.frozen = frozen_now
         self.raw = raw
         self.reached = reached
         self.renders += 1
@@ -172,14 +215,28 @@ def closure_windows(geometry: numpy.ndarray, seal: float, hide: float, count: in
     """The hidden stretches as observer._implied_run lays them out: for each
     closure (first sealed step, last sealed step, seal node), hidden from
     max(first - node, the previous stretch's end) to min(last + 2, count)."""
+    return windows_of(observer.closures(geometry, seal, hide), count)
+
+
+def windows_of(stretches: Sequence[Tuple[int, int, int]], count: int) -> List[Tuple[int, int]]:
+    """closure_windows from observer.closures' stretches."""
     windows: List[Tuple[int, int]] = []
     start = 0
-    for first, last, node in observer.closures(geometry, seal, hide):
+    for first, last, node in stretches:
         hidden_from = max(first - node, start)
         hidden_to = min(last + 2, count)
         windows.append((hidden_from, hidden_to))
         start = hidden_to
     return windows
+
+
+def last_free_step(forced: numpy.ndarray) -> int:
+    """The last step whose returning wave is NaN (the folds free), -1 if none."""
+    free = numpy.flatnonzero(~numpy.isfinite(forced))
+    if len(free) == 0:
+        return -1
+    last = int(free[-1])
+    return last
 
 
 class SharedFieldFlow:
@@ -210,6 +267,11 @@ class SharedFieldFlow:
         # pyramid_word's by the rounding of that forcing (MEASURED in
         # NOTES_adjoint.md). False: pyramid_word's values to the bit.
         self.canonical = canonical
+        # The engine's ENTERINGONLY from the step after the last free fold
+        # step (ENTERING_ONLY; NOTES_residual_speed.md): past it the folds are
+        # forced and only their flow is read, so the vocal tube's air is not
+        # stepped. Exact for that flow (bindings/engine_identity.py, `check`).
+        self.entering_only = ENTERING_ONLY
 
     def end_for(self, forced: numpy.ndarray) -> int:
         """The step the caller reads to: the end of the window whose start
@@ -239,7 +301,11 @@ class SharedFieldFlow:
                     waves[window_from:window_to] = numpy.nan
             forced = waves
         settings = prepare_render(self.context, self.command, forced)
-        pairs, finite = self.cache.render(settings, end)
+        entering_from: Optional[int] = None
+        if self.entering_only:
+            entering_from = last_free_step(forced) + 1
+            settings.number("ENTERINGONLY", float(entering_from))
+        pairs, finite = self.cache.render(settings, end, entering_from)
         flow = numpy.zeros(len(forced))
         size = min(len(pairs), len(forced))
         flow[:size] = pairs[:size, 0]
@@ -255,16 +321,24 @@ class ChainedGeometry:
     recurrence being causal). The buffer is returned: valid until the next
     resume, writable."""
 
-    def __init__(self) -> None:
+    def __init__(self, native: bool = False) -> None:
         self.rest: Optional[numpy.ndarray] = None
         self.buffer: Optional[numpy.ndarray] = None
         self.snaps: Optional[numpy.ndarray] = None
         self.counters: Optional[numpy.ndarray] = None
         self.resumed_from = 0
+        # native: the rows by peel_native.geometry_steps (_geometry_steps to
+        # the bit), with each step's least area, first area and jet node in
+        # `notes` (valid for every step the buffer holds).
+        self.native = native
+        self.notes: Optional[peel_native.GeometryNotes] = None
 
-    def geometry(self, rest: numpy.ndarray, first_changed: int, viscous: float) -> numpy.ndarray:
+    def geometry(self, rest: numpy.ndarray, first_changed: int, viscous: float, steps_total: Optional[int] = None,
+                 rest_every: int = 1) -> numpy.ndarray:
+        """The rows for rest areas per step (or per rest_every steps, the
+        native kernel only: `steps_total` steps), resumed at first_changed."""
         rest = numpy.ascontiguousarray(rest, dtype=numpy.float64)
-        steps = rest.shape[0]
+        steps = rest.shape[0] if steps_total is None else int(steps_total)
         n = rest.shape[1]
         every = GEOMETRY_EVERY
         slots = max((steps + every - 1) // every, 1)
@@ -273,6 +347,7 @@ class ChainedGeometry:
             self.buffer = numpy.empty((steps, n, 12))
             self.snaps = numpy.zeros((slots, n, reverse_core.GEOMETRY_STATE))
             self.counters = numpy.zeros((slots, 2))
+            self.notes = peel_native.GeometryNotes(steps) if self.native else None
             state = reverse_core._geometry_start(rest)
             counters = numpy.zeros(2)
             if reverse_core.ENGINE_GLIDE_PHASE != 0:
@@ -284,8 +359,13 @@ class ChainedGeometry:
             begin = index * every
             state = self.snaps[index].copy()
             counters = self.counters[index].copy()
-        reverse_core._geometry_steps(rest, reverse_core.material_table(n), float(viscous), self.buffer, state,
-                                     counters, begin, steps, every, self.snaps, self.counters)
+        materials = reverse_core.material_table(n)
+        if self.native:
+            peel_native.geometry_steps(rest, materials, float(viscous), self.buffer, state, counters, begin, steps,
+                                       every, self.snaps, self.counters, self.notes, rest_every)
+        else:
+            reverse_core._geometry_steps(rest, materials, float(viscous), self.buffer, state, counters, begin, steps,
+                                         every, self.snaps, self.counters)
         self.rest = rest
         self.resumed_from = begin
         return self.buffer
@@ -315,7 +395,10 @@ class ResidualCache:
         self.context = context
         self.canonical = canonical
         self.field: Optional[numpy.ndarray] = None
-        self.geometry = ChainedGeometry()
+        # NATIVE_PEEL (observer's switch, read here once): the native
+        # geometry, peels and their notes (NOTES_residual_speed.md).
+        self.native = observer.NATIVE_PEEL
+        self.geometry = ChainedGeometry(self.native)
         self.renders = RenderCache()
         self.implied_record = None
         self.peel_record = None
@@ -331,33 +414,61 @@ class ResidualCache:
         field = pyramid_word.physical(context, command)
         first_changed = first_changed_step(self.field, field, steps)
         self.first_changed = first_changed
-        schedule = numpy.repeat(field[:, context.channels["areas"]], TICK, axis=0)[:steps]
-        geometry = self.geometry.geometry(schedule, first_changed, posture_recover.VISCOUS)
+        if self.native:
+            # (The kernel reads the command's tick rows: numpy.repeat's
+            # 23 MB schedule a residual not made.)
+            ticks = numpy.ascontiguousarray(field[:, context.channels["areas"]], dtype=numpy.float64)
+            geometry = self.geometry.geometry(ticks, first_changed, posture_recover.VISCOUS, steps, TICK)
+        else:
+            schedule = numpy.repeat(field[:, context.channels["areas"]], TICK, axis=0)[:steps]
+            geometry = self.geometry.geometry(schedule, first_changed, posture_recover.VISCOUS)
         end_extra = word.length - context.count * posture_recover.NODE
         gate = sequence_recover.jet_gate_for(word.true_arrivals, word.true_leavings, word.fricatives, steps)
+        known = None
+        area0 = geometry[:, 0, 0]
+        if self.native:
+            area0 = self.geometry.notes.first_area
         if word.seal > 0.0:
-            windows = closure_windows(geometry, word.seal, sequence_recover.HIDE_AREA, steps)
+            if self.native:
+                stretches = observer.closures_of(self.geometry.notes.least, geometry, word.seal,
+                                                 sequence_recover.HIDE_AREA)
+                known = (stretches, area0)
+                windows = windows_of(stretches, steps)
+            else:
+                windows = closure_windows(geometry, word.seal, sequence_recover.HIDE_AREA, steps)
             free = SharedFieldFlow(context, command, self.renders, windows, self.canonical)
             if self.implied_record is None or first_changed <= 0:
-                implied, pressure, revealed, modelled, record = observer.implied_record(
-                    geometry, sound, word.seal, posture_recover.HOP, end_extra, free, hide=sequence_recover.HIDE_AREA,
-                    jet=word.jet, jet_closing=posture_recover.JET_CLOSING, jet_gate=gate)
+                if known is not None:
+                    implied, pressure, revealed, modelled, record = observer.implied_record_with(
+                        geometry, sound, word.seal, posture_recover.HOP, end_extra, free, known,
+                        hide=sequence_recover.HIDE_AREA, jet=word.jet, jet_closing=posture_recover.JET_CLOSING,
+                        jet_gate=gate)
+                else:
+                    implied, pressure, revealed, modelled, record = observer.implied_record(
+                        geometry, sound, word.seal, posture_recover.HOP, end_extra, free,
+                        hide=sequence_recover.HIDE_AREA, jet=word.jet, jet_closing=posture_recover.JET_CLOSING,
+                        jet_gate=gate)
             else:
                 implied, pressure, revealed, modelled, record = observer.implied_resume(
-                    self.implied_record, geometry, sound, free, first_changed, gate)
+                    self.implied_record, geometry, sound, free, first_changed, gate, known)
             self.implied_record = record
         else:
             free = SharedFieldFlow(context, command, self.renders, [], self.canonical)
             if self.peel_record is None or first_changed <= 0:
-                implied, pressure, record = reverse_core.peel_moving_record(
-                    geometry, sound, hop=posture_recover.HOP, end_extra=end_extra, jet=word.jet, gate=gate)
+                if observer.NATIVE_PEEL:
+                    implied, pressure, record = peel_native.peel_moving_record(
+                        geometry, sound, hop=posture_recover.HOP, end_extra=end_extra, jet=word.jet, gate=gate)
+                else:
+                    implied, pressure, record = reverse_core.peel_moving_record(
+                        geometry, sound, hop=posture_recover.HOP, end_extra=end_extra, jet=word.jet, gate=gate)
             else:
+                # (A record resumes with its own kind: native or numba.)
                 implied, pressure, record = reverse_core.peel_moving_resume(self.peel_record, geometry, sound,
                                                                             first_changed, gate)
             self.peel_record = record
             revealed = numpy.ones(len(implied), dtype=bool)
             modelled = None
-        forced = 0.5 * (pressure - implied * reverse_core.RHO_C / geometry[:, 0, 0])
+        forced = 0.5 * (pressure - implied * reverse_core.RHO_C / area0)
         forced[~revealed] = numpy.nan
         driven = free(forced)
         size = min(len(driven), len(implied))

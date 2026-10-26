@@ -65,6 +65,7 @@ std::optional<double>* optional_field(tract::SustainSettings& settings, const ch
       {"SEAL", &tract::SustainSettings::seal},
       {"SEALBLEND", &tract::SustainSettings::seal_blend},
       {"JETBOUND", &tract::SustainSettings::jet_bound},
+      {"ENTERINGONLY", &tract::SustainSettings::entering_from},
       {"NOSEVISCOUS", &tract::SustainSettings::nose_viscous},
       {"NOSESHELF", &tract::SustainSettings::nose_shelf},
       {"NOSEHOP", &tract::SustainSettings::nose_hop},

@@ -372,6 +372,16 @@ double Tube::link_viscous(std::size_t i) {
 
 // Current air geometry from the lining's displacement.
 void Tube::refresh_geometry() {
+  if (air_frozen_ && static_admittance_) {
+    refresh_first_area();   // (tube_step.cpp)
+    return;
+  }
+  if (frame_settled()) {
+    // (The frame, its supports and its pushed air at rest: only the areas
+    // and the links follow the linings; tube_step.cpp.)
+    refresh_settled_geometry();
+    return;
+  }
   std::size_t n = nodes_.size();
   // The frame follows its target critically damped, corner 160 Hz (about
   // 2 ms lag): quick enough for a stop release to pop. (At 60 Hz, tried
@@ -514,6 +524,10 @@ void Tube::refresh_geometry() {
 }
 
 void Tube::step() {
+  if (air_frozen_) {
+    refresh_geometry();
+    return;
+  }
   step_lining();
   refresh_geometry();
   step_air();

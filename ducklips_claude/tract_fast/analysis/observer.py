@@ -62,6 +62,20 @@ def _junction_with(walls, i, known, admittance, v, bv):
 # the forward steps as an argument.
 SEAL_BLEND = os.environ.get("SEALBLEND", "0") == "1"
 
+# NATIVE_PEEL=1: _implied_run's peels in the native time-major kernel
+# (peel_native.NativeStatesPeel: StatesPeel's values to the bit, MEASURED in
+# NOTES_residual_speed.md); 0 (default): StatesPeel. Read when a peel is
+# made, so a caller may set observer.NATIVE_PEEL itself.
+NATIVE_PEEL = os.environ.get("NATIVE_PEEL", "0") == "1"
+
+
+def states_peel_type():
+    """The class _implied_run peels with (StatesPeel or its native twin)."""
+    if NATIVE_PEEL:
+        import peel_native
+        return peel_native.NativeStatesPeel
+    return StatesPeel
+
 
 @njit(cache=True)
 def seal_share(geometry, step, i, seal, seal_blend):
@@ -549,21 +563,30 @@ def closures(geometry, seal, hide=0.0):
     if seal <= 0.0:
         return []
     least = least_area(numpy.ascontiguousarray(geometry, float))
+    return closures_of(least, geometry, seal, hide)
+
+
+def closures_of(least, geometry, seal, hide=0.0):
+    """closures() from each step's least area (least_area's values: a caller
+    that keeps them across evaluations passes them)."""
+    if seal <= 0.0:
+        return []
     sealed = least <= max(seal, hide)
+    # The runs of sealed steps, [start, stop), from the edges of the mask
+    # padded with an unsealed step at each end (the step-by-step scan's runs:
+    # 2 ms of a residual as a Python loop, NOTES_residual_speed.md).
+    padded = numpy.concatenate((numpy.zeros(1, bool), sealed, numpy.zeros(1, bool)))
+    edges = numpy.flatnonzero(padded[1:] != padded[:-1])
+    starts = edges[0::2]
+    stops = edges[1::2]
     out = []
-    t = 0
-    count = len(sealed)
-    while t < count:
-        if sealed[t]:
-            start = t
-            while t < count and sealed[t]:
-                t += 1
-            # Only a narrowing that seals: one that stays open (a fricative's,
-            # 0.08 cm^2) peels well (/aa s aa/ exact, its times smooth).
-            if numpy.any(least[start:t] <= seal):
-                out.append((start, t - 1, int(numpy.argmin(geometry[start, :, 0]))))
-        else:
-            t += 1
+    for index in range(len(starts)):
+        start = int(starts[index])
+        stop = int(stops[index])
+        # Only a narrowing that seals: one that stays open (a fricative's,
+        # 0.08 cm^2) peels well (/aa s aa/ exact, its times smooth).
+        if numpy.any(least[start:stop] <= seal):
+            out.append((start, stop - 1, int(numpy.argmin(geometry[start, :, 0]))))
     return out
 
 
@@ -626,7 +649,16 @@ def implied_record(geometry, sound, seal, hop, end_extra, free_flow, hop_zero=0.
     return _implied_run(geometry, sound, free_flow, jet_gate, settings, True, None, 0)
 
 
-def implied_resume(record, geometry, sound, free_flow, first_changed, jet_gate=None):
+def implied_record_with(geometry, sound, seal, hop, end_extra, free_flow, known, hide=0.0, jet=0.0,
+                        seed=reverse_core.JET_SEED, jet_closing=0.0, jet_gate=None):
+    """implied_record with the closures and the first node's area already
+    known (known: (closures(geometry, seal, hide), geometry[:, 0, 0] as a
+    contiguous array)); the same values."""
+    settings = ImpliedSettings(seal, hop, end_extra, 0.0, hide, jet, seed, jet_closing)
+    return _implied_run(geometry, sound, free_flow, jet_gate, settings, True, None, 0, known)
+
+
+def implied_resume(record, geometry, sound, free_flow, first_changed, jet_gate=None, known=None):
     """implied() for a hypothesis whose inputs equal the record's before
     step first_changed: the geometry's rows, the sound, the jet's gate, and
     whatever free_flow's output depends on (free_flow must be causal: its
@@ -637,12 +669,14 @@ def implied_resume(record, geometry, sound, free_flow, first_changed, jet_gate=N
     chunk boundary before it; the rest is run again. Returns (flow,
     pressure, revealed, modelled, a new ImpliedRecord): the same to the bit
     as implied_record on these inputs."""
-    return _implied_run(geometry, sound, free_flow, jet_gate, record.settings, True, record, int(first_changed))
+    return _implied_run(geometry, sound, free_flow, jet_gate, record.settings, True, record, int(first_changed),
+                        known)
 
 
-def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, first_changed):
+def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, first_changed, known=None):
     """implied(), its segments kept (keep) and taken or resumed from `base`
-    before first_changed."""
+    before first_changed; `known`: (the closures, the first node's area per
+    step) when the caller has them (implied_record_with)."""
     geometry = numpy.ascontiguousarray(geometry, float)
     count = len(sound)
     n = geometry.shape[1]
@@ -663,11 +697,15 @@ def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, fir
     state = numpy.zeros((n, STATE_COLUMNS))
     recorded = numpy.zeros((n, STATE_COLUMNS))
     start = 0
-    area0 = geometry[:, 0, 0]
+    if known is None:
+        stretches = closures(geometry, settings.seal, settings.hide)
+        area0 = geometry[:, 0, 0]
+    else:
+        stretches, area0 = known
     noise = kernels_jet.noise_table(seed, n - 1, count) if jet > 0.0 else numpy.zeros((0, 0))
     segments = []
     same = base is not None   # every piece so far the base's
-    for index, (first, last, node) in enumerate(closures(geometry, settings.seal, settings.hide)):
+    for index, (first, last, node) in enumerate(stretches):
         hidden_from = max(first - node, start)
         hidden_to = min(last + 2, count)
         old = base.segments[index] if same and index < len(base.segments) else None
@@ -687,7 +725,7 @@ def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, fir
                 # (Only as far as the record and the flow before hidden_from
                 # need: the rest is replaced by the window and the next
                 # stretch's peel.)
-                peel = StatesPeel(geometry, sound, start, state, hidden_from - 1, hop, hop_zero, True, end_extra, flow,
+                peel = states_peel_type()(geometry, sound, start, state, hidden_from - 1, hop, hop_zero, True, end_extra, flow,
                                   pressure, recorded, jet, seed, jet_closing, jet_gate, snapshots=keep)
             peel.advance(peel.reach(hidden_from))
             same = False
@@ -706,9 +744,15 @@ def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, fir
             state = recorded.copy()
             lips = numpy.zeros(count)
             first_pressure = numpy.zeros(count)
-            _forward_steps(geometry, folds, hidden_from, hidden_to, state, hop, hop_zero, True, end_extra,
-                           settings.seal, lips, first_pressure, jet, seed, jet_closing, jet_gate, noise,
-                           kernels_jet.new_cache(1)[0], SEAL_BLEND, reverse_core.JET_BOUND)
+            if NATIVE_PEEL:
+                import peel_native
+                peel_native.forward_steps(geometry, folds, hidden_from, hidden_to, state, hop, hop_zero, True,
+                                          end_extra, settings.seal, lips, first_pressure, jet, seed, jet_closing,
+                                          jet_gate, noise, SEAL_BLEND, reverse_core.JET_BOUND)
+            else:
+                _forward_steps(geometry, folds, hidden_from, hidden_to, state, hop, hop_zero, True, end_extra,
+                               settings.seal, lips, first_pressure, jet, seed, jet_closing, jet_gate, noise,
+                               kernels_jet.new_cache(1)[0], SEAL_BLEND, reverse_core.JET_BOUND)
             folds_window = numpy.array(folds[hidden_from:hidden_to], float)
             lips_window = lips[hidden_from:hidden_to].copy()
             pressure_window = first_pressure[hidden_from:hidden_to].copy()
@@ -725,7 +769,7 @@ def _implied_run(geometry, sound, free_flow, jet_gate, settings, keep, base, fir
     if same and base.final is not None and base.final.t_start == start:
         final = base.final.resumed(geometry, sound, first_changed, jet_gate, flow, pressure, recorded)
     if final is None:
-        final = StatesPeel(geometry, sound, start, state, -1, hop, hop_zero, True, end_extra, flow, pressure, recorded,
+        final = states_peel_type()(geometry, sound, start, state, -1, hop, hop_zero, True, end_extra, flow, pressure, recorded,
                            jet, seed, jet_closing, jet_gate, snapshots=keep)
     final.advance(count)
     outputs = (flow, pressure, revealed, modelled)

@@ -112,6 +112,12 @@ class Tube {
   // admittances, tying it to the next node inward; the replica with this
   // left the engine's lip flow at 40.9 dB, 2026-10-19.)
   void set_static_admittance(bool on) { static_admittance_ = on; }
+  // The air and the lining not stepped, and of the geometry only the first
+  // node's area kept (with static admittance; otherwise all of it): for a
+  // caller that reads nothing of this tube from here on but area(0)
+  // (SustainRun's ENTERINGONLY: the folds read it). The rest of the state
+  // then stands where it was; a caller must not read it again.
+  void set_air_frozen(bool frozen) { air_frozen_ = frozen; }
   // Scales every material's axial tension and recompiles the links (0: each
   // node's lining moves on its own, for the reversible engine).
   void scale_axial(double scale);
@@ -261,6 +267,9 @@ class Tube {
   void compile_node(std::size_t i);
   void compile_link(std::size_t i);
   void refresh_geometry();
+  bool frame_settled() const;
+  void refresh_settled_geometry();
+  void refresh_first_area();
   void step_lining();
   void factor_lining();
   void refactor_lining();
@@ -268,6 +277,11 @@ class Tube {
   bool solve_diagonal(std::size_t n);
   double hop_smoothing(double area) const;
   void step_air();
+  bool plain_air() const;
+  void step_air_plain();
+  void air_node_plain(std::size_t i, std::size_t n, double* drawn_out);
+  void air_pair_plain(std::size_t i, double* drawn_out);
+  void scatter_links_plain();
   void follow_opening();
   void scatter_links();
 
@@ -290,6 +304,7 @@ class Tube {
   double wave_smoothing_ = 0.0;           // the hop low-pass's k (0: lossless hops)
   double wave_shelf_ = 0.0;               // the hop filter's zero (0: a one-pole low-pass)
   bool static_admittance_ = false;
+  bool air_frozen_ = false;              // set_air_frozen
   double viscous_scale_ = 1.0;
   double seal_area_ = 0.0;               // a node this narrow seals (0: off)
   bool seal_blend_ = false;              // SEALBLEND (set_seal_blend)
@@ -379,6 +394,7 @@ class Tube {
   std::vector<double> forward_next_;
   std::vector<double> backward_next_;
   std::vector<double> series_;         // series pressure source on link i this step
+  std::vector<double> drawn_;          // step_air_plain: each node's drawn flow, summed in node order after
   std::vector<double> pressure_;
   std::vector<double> wall_flow_;      // cm^3/s into the air from the lining
   std::vector<double> link_resistance_; // viscous series resistance of link i

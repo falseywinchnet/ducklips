@@ -66,6 +66,59 @@ def profile(posture):
     return numpy.array(arcs), numpy.array(areas), length
 
 
+class ProbeServer:
+    """One geometry_probe process kept open for this process's life, in its
+    full-precision mode, fed one posture a line. (A process a posture forked
+    the caller each time: in a pool worker with threads running, macOS's
+    malloc fork handler aborted the child, and multiprocessing.Pool then
+    waited for the lost task forever: the 100% shapes run sat idle 19.5 h,
+    step 62.)"""
+
+    def __init__(self) -> None:
+        self.process = None
+        self.owner = 0
+
+    def profile(self, posture):
+        if self.process is None or self.owner != os.getpid() or self.process.poll() is not None:
+            self.process = subprocess.Popen([PROBE, "full"], stdin=subprocess.PIPE, stdout=subprocess.PIPE,
+                                            text=True, bufsize=1, cwd=ROOT)
+            self.owner = os.getpid()
+        line = " ".join("%s=%.17g" % (k, posture[k]) for k in FIELDS) + " anat.vtl=1\n"
+        self.process.stdin.write(line)
+        self.process.stdin.flush()
+        length = None
+        arcs = []
+        areas = []
+        while True:
+            row = self.process.stdout.readline()
+            if not row:
+                raise RuntimeError("geometry_probe ended without answering")
+            parts = row.split()
+            if not parts:
+                continue
+            if parts[0] == "end":
+                break
+            if parts[0] == "length":
+                length = float(parts[1])
+            elif parts[0] == "cut":
+                arcs.append(float(parts[1]))
+                areas.append(float(parts[2]))
+        return numpy.array(arcs), numpy.array(areas), length
+
+
+_PROBE_SERVER = ProbeServer()
+
+
+def profile_full(posture):
+    """profile at full precision, from this process's kept probe."""
+    return _PROBE_SERVER.profile(posture)
+
+
+def nodes_full(posture, count):
+    """nodes from profile_full (the tube to full precision; `count` nodes)."""
+    return nodes_of_profile(profile_full(posture), count)
+
+
 def nodes(posture, count=None):
     """The tube as the engine's nodes: whole nodes, each the narrowest of the
     cut profile (linear between cuts) over its span, so a closure is never
@@ -79,7 +132,12 @@ def nodes(posture, count=None):
     tube then moves continuously with the posture. (Free, it jumped as the
     length crossed a whole node: 0.05 spans from the true /ae/, a start
     rounding to 43 nodes where the truth has 44 never came back, +3.0 dB.)"""
-    arcs, areas, length = profile(posture)
+    return nodes_of_profile(profile(posture), count)
+
+
+def nodes_of_profile(cuts, count=None):
+    """nodes' tube from a profile's (arcs, areas, length)."""
+    arcs, areas, length = cuts
     if count is None:
         count = max(int(numpy.floor(length / NODE)), 2)
     else:

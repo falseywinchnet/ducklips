@@ -1688,3 +1688,194 @@ monotone where they do (coarticulation; node_progress jumped there).
   below −25 dB, the remedy is structural: after convergence, try each
   pairwise exchange of group traverses and keep the one the sound prefers
   (a discrete choice made by the residual, not a constant).
+
+## Step 59: the cost of a voice solve. MEASURED (Mini, nine words, traverse family, from the hint).
+
+| solver | wall | Jacobians | all-word residuals (trials) | level |
+|---|---|---|---|---|
+| step 58 (Jacobian every step, columns spread over 6 workers) | 715 s | 32 | 32+ | −25.3 dB |
+| fast path (`voice.levenberg_broyden`, one task a word, 9 workers) | 355 s | 11 | 74 | −23.7 dB |
+
+- Fast path: one pool for all rungs; each word's Jacobian rows in one task
+  (its own midpoints and the shared columns its articulators use, every
+  residual resumed in that worker's cache); trials evaluated a word a
+  task; Broyden's rank-one update after an accepted step, a full Jacobian
+  only when the gate rejects a step on an updated one (11 Jacobians for
+  ~25 accepted steps); `report` reads word levels from the residual it has
+  (it re-evaluated nine residuals a step); the canonical one-pass residual
+  is the default (`puppet.attach_cache`; 0.21 s CPU against 0.32 exact and
+  0.41 plain on Delta; ≤ 2.6e-12 relative from plain). 2.0x, not more.
+- Where the 355 s go: about 3,600 word residuals (Jacobians ~270 each,
+  82% of them the 12 shared columns × 9 words × 2) at ~0.9 s CPU each.
+  The M4 has 4 performance and 6 efficiency cores; with 9 workers most
+  residuals run on efficiency cores (0.21 s was measured on one, unloaded,
+  likely a performance core).
+- The same pharynx/back exchange (pharynx 86, back 114 ms; truth 120,
+  100); blade 50.0 ms and −7.71 ms, lips 72.0 and +5.43, folds 63.0 and
+  +5.68, front 75.5 and −1.89. The exchanged start (stopped at round 1,
+  for the cost work) put the move times right (pharynx 123, back 94) but
+  the back's lag at −7.1 ms: not yet resolved.
+- Next levers, in order of measured headroom: the residual itself (the
+  C++ render is 41% of a canonical residual at ~33 ns a node-step; the
+  numba peel 29%, Python bookkeeping 10%, geometry 8%); forward
+  differences at the coarse rungs (half a Jacobian); and amortization —
+  a voice's traverse is learned once, a new utterance then solves only its
+  midpoints (Delta: 4 midpoints, 39 s).
+
+## Step 60: shapes from sound — the experiment built. MEASURED (smoke tests); runs pending.
+
+`analysis/shapes.py` (`ShapesProblem`, a `voice.VoiceProblem` in traverse
+mode): each vowel's posture is one set of the body's 9 parameters shared by
+every word and transition it appears in; a stop's tube is its vowel's with
+the seal node closed. A posture's difference step at a rung is the same
+fraction of its field's spread over the vowel table as the rung's time
+secant is of the plan's mean move (15% at 10 ms, 0.016% at one step).
+`voice.VoiceProblem.columns_of` and `steps_for` are now methods a subclass
+extends; `shared_extras` is bounded (it ran into appended unknowns).
+
+- Truth in the family (IY-AA-UW and Papa): −250.1 dB. Starts: 20% of the
+  way to the hints, tubes 0.17–0.21 cm² rms off; the hints, 0.83–1.05.
+- Frozen lip fields cap what can be reached (everything else at the
+  truth): protrusion and width at the start −38.7 dB (20%) / −22.7 (hints);
+  width alone −36.5 / −21.9; protrusion alone −39.9 / −23.5; none frozen
+  −250.1. Step 13's near-nulls are combinations, not fields: REJECTED,
+  freezing a heard field. Nothing is frozen.
+- Plan (runs wait for the speed worker, to keep its timings honest): nine
+  words, 7 vowels × 9 = 63 posture unknowns, from 20%, 50% and 100% of the
+  way to the hints; first with the traverse held at the truth, then free.
+  Compare with steps 11 and 15 (one word: 20% partly converged, the hints
+  failed).
+
+## Step 61: the worker's residual speed-up, checked and adopted. MEASURED.
+
+Record: `NOTES_residual_speed.md`. Native peel, geometry and hidden-window
+kernels (`NATIVE_PEEL=1`), and the engine's `ENTERINGONLY` (`ENTERING_ONLY=1`):
+1.6–2.4x less CPU a canonical residual over ten words (sum 1.229 → 0.657 s),
+199 of 199 points bit-identical, default renders 22 of 22 byte-identical,
+a nine-word voice Jacobian identical (warm wall 6.98 → 4.05 s). The engine
+is now instruction-bound at ~16 ns a node-step over 77 nodes (the trachea
+runs too); 5x would need the model changed, which bit-identity forbids.
+
+- My check on the shapes residual (three words, 47 midpoint moves and a
+  posture move, `/tmp/esf/spot2.py`): 0.138 → 0.068 s CPU a residual,
+  bit-identical over 2,827,200 values. (A first check read no gain: the
+  Mini's zsh does not word-split `env $sw`, so NATIVE_PEEL was "1
+  ENTERING_ONLY=1" and off. Invalid, redone.)
+- DECIDED: both switches on in every run from here (set at launch; the
+  defaults stay off so the library's other callers are untouched).
+- Cumulative today on the residual: plain 0.41 → exact 0.32 → canonical 0.21
+  → native 0.09–0.10 s CPU (Delta); on a nine-word solve, 715 → 355 s before
+  the native kernels.
+
+## Step 62: why a run "took three hours", and the rework. MEASURED.
+
+- The 100% shapes run sat idle 19.5 h. Cause (crash report
+  python3.12-2026-10-25-013314.ips): a pool worker aborted inside `fork()`
+  (`_malloc_fork_parent` → `_os_unfair_lock_unowned_abort`) while starting
+  a `geometry_probe` process for a new posture — macOS's malloc fork
+  handler in a process with other threads running. `multiprocessing.Pool`
+  then waited forever for the lost task. Not the native kernels.
+- Fixes: `posture_recover.ProbeServer` keeps one probe process a Python
+  process, fed a posture a line (0.6 ms a posture against 4.4 ms a fork);
+  the voice and shapes solvers use `concurrent.futures.ProcessPoolExecutor`,
+  whose dead worker raises `BrokenProcessPool` instead of hanging.
+- Precision: the probe printed areas at four decimals and arcs at three;
+  full-precision tubes (`geometry_probe full`, the default output
+  byte-identical) differ by up to 1.27e-3 cm², more than the finest
+  posture steps move them. `shapes.py` now builds the truth and every
+  tube at full precision.
+- Full-precision shapes runs (traverse known, 9 workers): from 20% of the
+  way to the hints 164 s, tubes 0.10–0.30 cm² off, −25.5 dB; from 50%
+  181 s, 0.21–0.42, −15.6 dB; from the hints 176 s, 0.35–1.31, −16.7 dB.
+  Every start moves far toward the truth; none converges. OPEN: stall or
+  basin.
+- Chunked Jacobian (`voice.jacobian_tasks`: each word's columns cut into
+  chunks, about three tasks a worker, longest words first): the 20% run in
+  135 s on 6 workers against 164 s on 9, results identical to the digit.
+  A nine-word solve: 715 s (step 58) → 355 (step 59) → 164 → 135 s.
+- Owner (2026-10-26): the Mini crashes when overloaded. A 10-worker pool
+  drove its load to 26; stopped by PID. Cap: POOL ≤ 6 on the Mini, niced.
+- The x86 compute pod (4 threads of a Threadripper 7960X, 8 GB): the
+  worker's NEON code had no platform guard. `include/tract/lanes.hpp`
+  is `<arm_neon.h>` on ARM (the Mini's libraries rebuilt byte-identical)
+  and the same intrinsics on SSE2 elsewhere (FMA3 or std::fma for vfmaq);
+  `CMakeLists.txt` takes -march=native on x86. The three vector files
+  compile on the pod; the build and smoke test are running.
+
+## Step 63: memory, the 8-vCPU pod, and everything free. MEASURED.
+
+- A warm worker held 2.1 GB (nine words' caches, ~230 MB each: engine
+  snapshots, peel records, moving geometry; measured on the pod with
+  `resource`). Four workers and the main process overran the 4-vCPU pod's
+  8 GB (a worker killed: `BrokenProcessPool`, the robust pool working as
+  meant); six on the Mini's 16 GB went into swap (1.3 GB used at idle
+  after). Fixes: the main process holds no caches; `voice.PinnedPool`
+  (single-process slots, each word's columns pinned to slots by
+  McNaughton's wrap-around rule on columns × residual length): 1–3 words
+  a slot, load within 2% of even (6 and 8 slots).
+- Owner (2026-10-26): an 8-vCPU, 16 GB pod (EPYC 9575F; CPU may be
+  pushed to full). Jobs ship as one tarball (14 s); each job builds the
+  engine, peel and probe for the host; NATIVE_PEEL gains nothing on x86
+  (numba 0.193 against native 0.204 s a Delta residual on the Threadripper:
+  the CPU, not the port).
+- Everything free from 20% (23 midpoints, 12 traverse, 63 posture; 8
+  workers, 8 iterations a rung): 216 s, peak 7.9 GB. −19.7 dB. Postures
+  0.17–0.39 → 0.15–0.49 cm² (IY, AH better; AA, AE worse). Move times:
+  blade 51.5 (50), lips 66.6 (70), folds 61.7 (60), front 71.9 (80),
+  back 121.7 (100), pharynx 79.1 (120). Raw lags 3–7 ms high together;
+  Alfa's events 38 ms off. The gauge (all lags +c, all midpoints −c) was
+  free and the solve drifted along it.
+- DECIDED: the gauge fixed in `shapes.py` (the pharynx's lag held at zero,
+  `GAUGE`): a convention, not a fitted value. Rerun with 24 iterations a
+  rung (the Mini's run from the hints, 24 iterations, traverse known: 304
+  s, tubes 0.26–1.18 cm², −19.0 dB; the 1 ms rung still descending when it
+  ran out, the 0.1 ms rung found no step).
+
+## Step 64: a posture needs contexts. MEASURED (pod, gauge fixed, 24 iterations a rung).
+
+Nine words, everything free from 20% of the way to the hints: 755 s, peak
+8.2 GB, −20.4 dB. Tube error start → end, with the number of words that
+contain the vowel:
+
+| vowel | words | start | end |
+|---|---|---|---|
+| IY | 4 | 0.189 | 0.069 |
+| AH | 3 | 0.197 | 0.130 |
+| EH | 2 | 0.230 | 0.148 |
+| OW | 1 | 0.389 | 0.160 |
+| AA | 5 | 0.165 | 0.168 |
+| UW | 2 | 0.184 | 0.239 |
+| AE | 1 | 0.295 | 0.591 |
+
+- AE, in Alfa alone, went the wrong way while Alfa's events went 38 ms off:
+  inside one word the posture and the timing traded (steps 10–15's
+  non-uniqueness). The vowel heard in most contexts bar AA came back best.
+  Not monotone (AA, OW), but the two ends are clear.
+- The gauge fixed, the common drift went; the lags still carry 2–3 ms of
+  compensation (back +2.3, front +2.7, lips +8.0, folds +6.7; truth 0, 0,
+  +6, +4). Move times: blade 50.9 (50), lips 67.7 (70), folds 61.7 (60),
+  front 77.2 (80), back 118.4 (100), pharynx 91.5 (120).
+- HYPOTHESIS: a posture is pinned by the number of transitions it is
+  heard in, not by the solver. Test running: twelve words, the nine plus
+  AE-P-IY, UW-T-AE, AE-K-AA (AE then in four words).
+
+## Step 65: twelve words — contexts rescue a lone vowel, not convergence. MEASURED (pod).
+
+Twelve words (the nine plus AE-P-IY, UW-T-AE, AE-K-AA), everything free
+from 20%, gauge fixed, 24 iterations a rung: 867 s, peak 9.2 GB, −21.1 dB
+(13 Jacobians, 55 all-word residuals). Tubes start → end (nine words' end):
+IY 0.189 → 0.053 (0.069); AH 0.197 → 0.090 (0.130); UW 0.184 → 0.181
+(0.239); AE 0.295 → 0.210 (0.591); OW 0.389 → 0.209 (0.160); EH 0.230 →
+0.216 (0.148); AA 0.165 → 0.226 (0.168). Alfa's events 38 → 25 ms off.
+Move times: pharynx 125.4 (120), back 87.6 (100), front 78.7 (80), blade
+49.6 (50), lips 64.5 (70), folds 65.6 (60); lags back 0.02, front 1.20,
+blade −6.27 (−8), lips 8.65 (6), folds 5.95 (4).
+
+- The step 64 hypothesis holds for its sharp case: AE, heard once, failed;
+  heard four times, it improved. It does not hold as a cure: every vowel
+  stays 0.05–0.23 cm² off while the truth fits at −249 dB.
+- In every shapes run the 0.1 ms and one-step rungs change nothing (the
+  postures identical between them); they cost about a third of a run.
+  The stall is at the coarse-to-fine handoff, ~−20 dB.
+- NEXT: the landscape around the stalled point, along the posture and
+  traverse directions (as step 47 did for timing), before any change.

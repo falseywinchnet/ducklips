@@ -17,6 +17,8 @@
 
 #include "tract/tube.hpp"
 
+#include "tract/lanes.hpp"   // <arm_neon.h> on ARM; the same names on SSE2 elsewhere
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
@@ -92,6 +94,99 @@ void Tube::step_lining() {
     body_v[i] = velocity;
     body_q[i] = std::fma(velocity, h, body_q[i]);
   }
+}
+
+// Whether refresh_geometry's frame part would change nothing this step: no
+// ramp and no area limit, and at every node the frame at rest (its offset
+// under the 1e-9 cm the follower sleeps below and its rate exactly 0, so
+// the follower writes back the zeros it holds), the support's glide asleep
+// (gap at most 1e-7), the pushed air's two poles and flow exactly 0, the
+// fast and moved marks clear. Then the support, radius and frame loops leave
+// every value as it is (0 + g (0 - 0) = 0), no node or link is compiled, and
+// refresh_settled_geometry does the rest. (The trachea's frame never moves:
+// MEASURED in NOTES_residual_speed.md.)
+bool Tube::frame_settled() const {
+  if (ramp_left_ != 0 || area_limit_) {
+    return false;
+  }
+  std::size_t n = nodes_.size();
+  for (std::size_t i = 0; i < n; ++i) {
+    bool at_rest = std::abs(radius_target_[i] - rest_radius_[i]) < 1.0e-9 && radius_rate_[i] == 0.0;
+    bool supported = std::abs(support_target_[i] - support_factor_[i]) <= 1.0e-7;
+    bool still = frame_low_[i] == 0.0 && frame_lower_[i] == 0.0 && frame_flow_[i] == 0.0;
+    bool unmarked = fast_node_[i] == 0 && moved_node_[i] == 0;
+    if (!(at_rest && supported && still && unmarked)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// refresh_geometry when frame_settled: its area loop and link loop as they
+// are there (no fast node: the viscous glide and the area-scaled hop loss
+// follow the countdown alone). The fused build computes the glide's step as
+// one multiply-subtract, (scale law) kNodeLength - R (fnmsub, read from its
+// object code 2026-10-25): written so here; no other product is added
+// (bindings/engine_identity.py: the renders identical).
+void Tube::refresh_settled_geometry() {
+  std::size_t n = nodes_.size();
+  for (std::size_t i = 0; i < n; ++i) {
+    double radius = std::max(rest_radius_[i] + (static_admittance_ ? 0.0 : cover_q_[i]), 0.0);
+    area_[i] = std::max(kPi * radius * radius, kMinimumArea);
+  }
+  for (std::size_t i = 0; i + 1 < n; ++i) {
+    double link_area = 0.5 * (area_[i] + area_[i + 1]);
+    if (!(link_area == link_area_[i])) {
+      link_area_[i] = link_area;
+      link_y_[i] = link_area / kRhoC;
+      link_z_[i] = kRhoC / link_area;
+    }
+    if (smoothing_by_area_ && resistance_countdown_ == 0) {
+      hop_k_[i] = hop_smoothing(link_area_[i]);
+    }
+    if (resistance_countdown_ == 0) {
+      double scaled_law = viscous_scale_ * link_viscous(i);
+      resistance_step_[i] = std::fma(scaled_law, kNodeLength, -link_resistance_[i]) / 16.0;
+    }
+    link_resistance_[i] += resistance_step_[i];
+  }
+  resistance_countdown_ = resistance_countdown_ == 0 ? 15 : resistance_countdown_ - 1;
+}
+
+// refresh_geometry for a frozen tube with static admittance
+// (set_air_frozen): the ramp of every node's target (its count is shared)
+// and the first node's frame, whose area is all a caller then reads (the
+// first area depends on no other node's frame). The fused build computes
+// the follower as fma(fma(offset, omega^2, rate (-2 omega)), h, rate) and
+// the radius as fma(rate, h, radius) (read from its object code
+// 2026-10-25); written so here.
+void Tube::refresh_first_area() {
+  constexpr double omega = kTwoPi * 160.0;
+  if (ramp_left_ > 0) {
+    std::size_t n = nodes_.size();
+    for (std::size_t i = 0; i < n; ++i) {
+      radius_target_[i] += radius_ramp_[i];
+    }
+    if (--ramp_left_ == 0) {
+      radius_target_ = radius_goal_;
+    }
+  }
+  double offset = radius_target_[0] - rest_radius_[0];
+  bool radius_moving = std::abs(offset) >= 1.0e-9 || std::abs(radius_rate_[0]) >= 1.0e-6;
+  if (radius_moving) {
+    double damping = radius_rate_[0] * (-2.0 * omega);
+    double pull = std::fma(offset, omega * omega, damping);
+    radius_rate_[0] = std::fma(pull, kStepSeconds, radius_rate_[0]);
+    rest_radius_[0] = std::max(std::fma(radius_rate_[0], kStepSeconds, rest_radius_[0]), 1.0e-4);
+    fast_node_[0] = std::abs(radius_rate_[0]) > 0.5;
+    moved_node_[0] = 1;
+  } else {
+    radius_rate_[0] = 0.0;
+    fast_node_[0] = 0;
+    moved_node_[0] = 0;
+  }
+  double radius = std::max(rest_radius_[0] + 0.0, 0.0);
+  area_[0] = std::max(kPi * radius * radius, kMinimumArea);
 }
 
 // Thomas algorithm (symmetric tridiagonal), its elimination kept: the
@@ -234,6 +329,10 @@ void Tube::refactor_lining() {
 // motion, solved as one scalar implicit exchange per node (no global solve):
 // the lining's velocity and the air pressure it sees are found together.
 void Tube::step_air() {
+  if (plain_air()) {
+    step_air_plain();
+    return;
+  }
   std::size_t n = static_cast<std::size_t>(active_count_);
   constexpr double h = kStepSeconds;
   constexpr double half_h = 0.5 * h;
@@ -502,6 +601,281 @@ void Tube::step_air() {
   std::swap(backward_, backward_next_);
   scatter_links();
   std::fill(series_.begin(), series_.end(), 0.0);
+}
+
+// ---- The plain tube's air (the trachea): step_air and scatter_links for a
+// tube with its two end ports open and nothing else, nodes two to a
+// vector. Each value is step_air's expression on the same inputs: the
+// same operations in the same order, each lane rounding as the scalar
+// (a vector fma is the scalar std::fma, per lane); the junction's lining
+// factors and the links' kinetic coefficients are taken every step (they
+// are pure functions of inputs that, when unchanged, give the values
+// kept); the drawn flows are summed in node order after. MEASURED in
+// NOTES_residual_speed.md. ----
+
+// Whether step_air's general loop reduces to the plain one: no opening, no
+// side ports, no radiation, no seal, the hop loss constant and a plain
+// one-pole (no shelf), every node active, both end ports open.
+bool Tube::plain_air() const {
+  std::size_t n = nodes_.size();
+  bool ends = left_port_area_ > 0.0 && right_port_area_ > 0.0;
+  bool bare = side_node_.empty() && opening_node_ < 0 && opening_position_ < 0.0 && !radiating_right_;
+  bool open = seal_area_ <= 0.0 && !smoothing_by_area_ && !(wave_shelf_ > 0.0);
+  return ends && bare && open && n >= 4 && static_cast<std::size_t>(active_count_) == n;
+}
+
+// step_air's loop body for node i of a plain tube (its ends included).
+void Tube::air_node_plain(std::size_t i, std::size_t n, double* drawn_out) {
+  constexpr double h = kStepSeconds;
+  constexpr double half_h = 0.5 * h;
+  double admittance = 0.0;
+  double twice_sum = 0.0;
+  double from_left = 0.0;
+  double from_right = 0.0;
+  if (i > 0) {
+    double y = link_y_[i - 1];
+    from_left = forward_[i - 1];
+    admittance += y;
+    twice_sum = std::fma(2.0 * y, from_left, twice_sum);
+  } else {
+    double y = left_port_area_ / kRhoC;
+    from_left = left_incoming_;
+    admittance += y;
+    twice_sum = std::fma(2.0 * y, from_left, twice_sum);
+  }
+  if (i + 1 < n) {
+    double y = link_y_[i];
+    from_right = backward_[i];
+    admittance += y;
+    twice_sum = std::fma(2.0 * y, from_right, twice_sum);
+  } else {
+    double y = right_port_area_ / kRhoC;
+    from_right = right_incoming_;
+    admittance += y;
+    twice_sum = std::fma(2.0 * y, from_right, twice_sum);
+  }
+  if (admittance <= 0.0) {
+    admittance = kMinimumArea / kRhoC;
+  }
+  double surface = surface_[i];
+  twice_sum -= frame_flow_[i];
+  if (junction_dirty_[i] || !(admittance == junction_admittance_[i])) {
+    double fresh = surface * surface / admittance + cover_c_[i];
+    double half_resistance = half_h * fresh;
+    junction_resistance_[i] = fresh;
+    junction_plus_[i] = half_resistance + cover_mass_[i];
+    junction_minus_[i] = cover_mass_[i] - half_resistance;
+    junction_admittance_[i] = admittance;
+    junction_dirty_[i] = 0;
+  }
+  double plus = junction_plus_[i];
+  double minus = junction_minus_[i];
+  double drive = surface * twice_sum / admittance + cover_c_[i] * body_v_[i];
+  double radius = rest_radius_[i] + cover_q_[i];
+  double penetration = kContactRadius - radius;
+  if (penetration > 0.0) {
+    constexpr double omega = kTwoPi * kContactFrequency;
+    drive = std::fma(penetration, cover_mass_[i] * omega * omega, drive);
+    double resistance = std::fma(2.0 * cover_mass_[i], omega, junction_resistance_[i]);
+    double half_resistance = half_h * resistance;
+    plus = half_resistance + cover_mass_[i];
+    minus = cover_mass_[i] - half_resistance;
+  }
+  double velocity = cover_v_[i];
+  double next = std::fma(h, drive, velocity * minus) / plus;
+  double middle = 0.5 * (velocity + next);
+  if (radius < -kContactRadius && next < 0.0) {
+    cover_q_[i] = -kContactRadius - rest_radius_[i];
+    next = 0.0;
+    middle = 0.5 * velocity;
+  }
+  cover_v_[i] = next;
+  double drawn = surface * middle;
+  double p = (twice_sum - drawn) / admittance;
+  pressure_[i] = p;
+  wall_flow_[i] = -drawn;
+  drawn_out[i] = drawn;
+  double k = wave_smoothing_;
+  if (i > 0) {
+    double wave = p - from_left;
+    backward_smooth_[i - 1] = std::fma(wave, 1.0 - k, k * backward_smooth_[i - 1]);
+    backward_next_[i - 1] = backward_smooth_[i - 1];
+  } else {
+    outgoing_left_ = p - from_left;
+  }
+  if (i + 1 < n) {
+    double wave = p - from_right;
+    forward_smooth_[i] = std::fma(wave, 1.0 - k, k * forward_smooth_[i]);
+    forward_next_[i] = forward_smooth_[i];
+  } else {
+    outgoing_right_ = p - from_right;
+  }
+}
+
+// air_node_plain for the interior nodes i and i + 1 (lanes 0 and 1), when
+// neither touches the opposite wall and both admittances are positive (the
+// caller has checked; otherwise it runs air_node_plain on each).
+void Tube::air_pair_plain(std::size_t i, double* drawn_out) {
+  constexpr double h = kStepSeconds;
+  constexpr double half_h = 0.5 * h;
+  float64x2_t zero = vdupq_n_f64(0.0);
+  float64x2_t two = vdupq_n_f64(2.0);
+  float64x2_t y_left = vld1q_f64(&link_y_[i - 1]);
+  float64x2_t from_left = vld1q_f64(&forward_[i - 1]);
+  float64x2_t y_right = vld1q_f64(&link_y_[i]);
+  float64x2_t from_right = vld1q_f64(&backward_[i]);
+  float64x2_t admittance = vaddq_f64(vaddq_f64(zero, y_left), y_right);
+  float64x2_t twice_sum = vfmaq_f64(zero, vmulq_f64(two, y_left), from_left);
+  twice_sum = vfmaq_f64(twice_sum, vmulq_f64(two, y_right), from_right);
+  float64x2_t surface = vld1q_f64(&surface_[i]);
+  twice_sum = vsubq_f64(twice_sum, vld1q_f64(&frame_flow_[i]));
+  float64x2_t cover_c = vld1q_f64(&cover_c_[i]);
+  float64x2_t cover_mass = vld1q_f64(&cover_mass_[i]);
+  float64x2_t fresh = vaddq_f64(vdivq_f64(vmulq_f64(surface, surface), admittance), cover_c);
+  float64x2_t half_resistance = vmulq_f64(vdupq_n_f64(half_h), fresh);
+  float64x2_t plus = vaddq_f64(half_resistance, cover_mass);
+  float64x2_t minus = vsubq_f64(cover_mass, half_resistance);
+  vst1q_f64(&junction_resistance_[i], fresh);
+  vst1q_f64(&junction_plus_[i], plus);
+  vst1q_f64(&junction_minus_[i], minus);
+  vst1q_f64(&junction_admittance_[i], admittance);
+  junction_dirty_[i] = 0;
+  junction_dirty_[i + 1] = 0;
+  float64x2_t drive = vaddq_f64(vdivq_f64(vmulq_f64(surface, twice_sum), admittance),
+                                vmulq_f64(cover_c, vld1q_f64(&body_v_[i])));
+  float64x2_t velocity = vld1q_f64(&cover_v_[i]);
+  float64x2_t next = vdivq_f64(vfmaq_f64(vmulq_f64(velocity, minus), vdupq_n_f64(h), drive), plus);
+  float64x2_t middle = vmulq_f64(vdupq_n_f64(0.5), vaddq_f64(velocity, next));
+  vst1q_f64(&cover_v_[i], next);
+  float64x2_t drawn = vmulq_f64(surface, middle);
+  float64x2_t p = vdivq_f64(vsubq_f64(twice_sum, drawn), admittance);
+  vst1q_f64(&pressure_[i], p);
+  vst1q_f64(&wall_flow_[i], vnegq_f64(drawn));
+  vst1q_f64(&drawn_out[i], drawn);
+  float64x2_t k = vdupq_n_f64(wave_smoothing_);
+  float64x2_t pass = vdupq_n_f64(1.0 - wave_smoothing_);
+  float64x2_t backward_wave = vsubq_f64(p, from_left);
+  float64x2_t backward_smooth = vfmaq_f64(vmulq_f64(k, vld1q_f64(&backward_smooth_[i - 1])), backward_wave, pass);
+  vst1q_f64(&backward_smooth_[i - 1], backward_smooth);
+  vst1q_f64(&backward_next_[i - 1], backward_smooth);
+  float64x2_t forward_wave = vsubq_f64(p, from_right);
+  float64x2_t forward_smooth = vfmaq_f64(vmulq_f64(k, vld1q_f64(&forward_smooth_[i])), forward_wave, pass);
+  vst1q_f64(&forward_smooth_[i], forward_smooth);
+  vst1q_f64(&forward_next_[i], forward_smooth);
+}
+
+void Tube::step_air_plain() {
+  std::size_t n = nodes_.size();
+  if (drawn_.size() != n) {
+    drawn_.assign(n, 0.0);
+  }
+  double* drawn = drawn_.data();
+  air_node_plain(0, n, drawn);
+  std::size_t i = 1;
+  while (i + 2 < n) {
+    // (Nodes i and i + 1, both interior.)
+    bool positive = link_y_[i - 1] + link_y_[i] > 0.0 && link_y_[i] + link_y_[i + 1] > 0.0;
+    bool apart = kContactRadius - (rest_radius_[i] + cover_q_[i]) <= 0.0 &&
+                 kContactRadius - (rest_radius_[i + 1] + cover_q_[i + 1]) <= 0.0;
+    if (positive && apart) {
+      air_pair_plain(i, drawn);
+    } else {
+      air_node_plain(i, n, drawn);
+      air_node_plain(i + 1, n, drawn);
+    }
+    i += 2;
+  }
+  while (i < n) {
+    air_node_plain(i, n, drawn);
+    i += 1;
+  }
+  double total_wall = 0.0;
+  for (std::size_t node = 0; node < n; ++node) {
+    total_wall += drawn[node];
+  }
+  total_wall_flow_ = total_wall;
+  std::swap(forward_, forward_next_);
+  std::swap(backward_, backward_next_);
+  scatter_links_plain();
+  std::fill(series_.begin(), series_.end(), 0.0);
+}
+
+// scatter_links without a seal, links two to a vector (each lane
+// scatter_links' expressions; the kinetic coefficients taken every step).
+void Tube::scatter_links_plain() {
+  std::size_t n = nodes_.size();
+  float64x2_t zero = vdupq_n_f64(0.0);
+  float64x2_t one = vdupq_n_f64(1.0);
+  float64x2_t two = vdupq_n_f64(2.0);
+  float64x2_t least = vdupq_n_f64(kMinimumArea);
+  float64x2_t coefficient = vdupq_n_f64(0.5 * kAirDensity);
+  std::size_t i = 0;
+  while (i + 2 < n) {
+    float64x2_t first = vld1q_f64(&area_[i]);
+    float64x2_t second = vld1q_f64(&area_[i + 1]);
+    // std::max(area, kMinimumArea): (area < kMinimumArea) ? kMinimumArea : area.
+    float64x2_t first_floored = vbslq_f64(vcltq_f64(first, least), least, first);
+    float64x2_t second_floored = vbslq_f64(vcltq_f64(second, least), least, second);
+    float64x2_t right_difference = vsubq_f64(vdivq_f64(one, first_floored), vdivq_f64(one, second));
+    float64x2_t left_difference = vsubq_f64(vdivq_f64(one, second_floored), vdivq_f64(one, first));
+    float64x2_t right_k = vmulq_f64(vmulq_f64(coefficient, right_difference), right_difference);
+    float64x2_t left_k = vmulq_f64(vmulq_f64(coefficient, left_difference), left_difference);
+    right_k = vbslq_f64(vcgtq_f64(second, first), right_k, zero);
+    left_k = vbslq_f64(vcgtq_f64(first, second), left_k, zero);
+    vst1q_f64(&kinetic_first_area_[i], first);
+    vst1q_f64(&kinetic_second_area_[i], second);
+    vst1q_f64(&kinetic_right_[i], right_k);
+    vst1q_f64(&kinetic_left_[i], left_k);
+    float64x2_t arriving_forward = vld1q_f64(&forward_[i]);
+    float64x2_t arriving_backward = vld1q_f64(&backward_[i]);
+    float64x2_t z = vld1q_f64(&link_z_[i]);
+    float64x2_t drive = vaddq_f64(vmulq_f64(two, vsubq_f64(arriving_forward, arriving_backward)),
+                                  vld1q_f64(&series_[i]));
+    uint64x2_t onward = vcgeq_f64(drive, zero);
+    float64x2_t kinetic = vbslq_f64(onward, right_k, left_k);
+    float64x2_t linear = vaddq_f64(vmulq_f64(two, z), vld1q_f64(&link_resistance_[i]));
+    float64x2_t size = vabsq_f64(drive);
+    float64x2_t root = vsqrtq_f64(vfmaq_f64(vmulq_f64(vmulq_f64(vdupq_n_f64(4.0), kinetic), size), linear, linear));
+    float64x2_t magnitude = vdivq_f64(vmulq_f64(two, size), vaddq_f64(linear, root));
+    float64x2_t flow = vbslq_f64(onward, magnitude, vnegq_f64(magnitude));
+    vst1q_f64(&link_flow_[i], flow);
+    float64x2_t carried = vmulq_f64(z, flow);
+    vst1q_f64(&forward_[i], vaddq_f64(arriving_backward, carried));
+    vst1q_f64(&backward_[i], vsubq_f64(arriving_forward, carried));
+    i += 2;
+  }
+  while (i + 1 < n) {
+    double first_area = area_[i];
+    double second_area = area_[i + 1];
+    if (!(first_area == kinetic_first_area_[i] && second_area == kinetic_second_area_[i])) {
+      kinetic_first_area_[i] = first_area;
+      kinetic_second_area_[i] = second_area;
+      kinetic_right_[i] = 0.0;
+      kinetic_left_[i] = 0.0;
+      if (second_area > first_area) {
+        double difference = 1.0 / std::max(first_area, kMinimumArea) - 1.0 / second_area;
+        kinetic_right_[i] = 0.5 * kAirDensity * difference * difference;
+      }
+      if (first_area > second_area) {
+        double difference = 1.0 / std::max(second_area, kMinimumArea) - 1.0 / first_area;
+        kinetic_left_[i] = 0.5 * kAirDensity * difference * difference;
+      }
+    }
+    double arriving_forward = forward_[i];
+    double arriving_backward = backward_[i];
+    double z = link_z_[i];
+    double drive = 2.0 * (arriving_forward - arriving_backward) + series_[i];
+    double kinetic = drive >= 0.0 ? kinetic_right_[i] : kinetic_left_[i];
+    double linear = 2.0 * z + link_resistance_[i];
+    double magnitude = 2.0 * std::abs(drive) /
+                       (linear + std::sqrt(std::fma(linear, linear, 4.0 * kinetic * std::abs(drive))));
+    double flow = drive >= 0.0 ? magnitude : -magnitude;
+    link_flow_[i] = flow;
+    double carried = z * flow;
+    forward_[i] = arriving_backward + carried;
+    backward_[i] = arriving_forward - carried;
+    i += 1;
+  }
 }
 
 // Each link carries a series element between its two travelling waves:

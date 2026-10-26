@@ -107,6 +107,16 @@ struct SustainSettings {
   std::optional<double> reversible_nose;
   std::optional<double> seal;
   std::optional<double> seal_blend;
+  // ENTERINGONLY=step: from this step on the caller reads only the flow
+  // entering the vocal tube, and every fold step is forced (FORCEWAVE
+  // finite): the vocal tube's air is then not stepped (Tube::set_air_frozen),
+  // its geometry is (the folds read its first area). Exact for that flow
+  // while the vocal tube reaches the folds only through its air's returning
+  // wave and through terms scaled by ASPIRATION, FLUX, FOLDTURB (all 0 in
+  // engine.prepare; validate_settings refuses it otherwise). Not compared by
+  // first_divergent_step: a run frozen at step F resumes only for settings
+  // whose ENTERINGONLY is at most F (SustainRun::advance refuses others).
+  std::optional<double> entering_from;
   std::optional<double> jet_bound;   // JETBOUND=1 (VoiceBody::set_jet_bound, from the lungs' pressure)  // SEALBLEND=1 (Tube::set_seal_blend)
   bool nose_radiation = false;
   double nose_radiation_mass = 1.0;
@@ -285,6 +295,7 @@ class SustainRun {
   long total_ = 0;
   long release_step_ = 0;
   long step_ = 0;
+  long air_frozen_from_ = -1;   // the step the vocal tube's air was frozen at (ENTERINGONLY; -1: not)
   bool failed_ = false;
   bool keep_audio_ = false;
   bool keep_source_ = false;

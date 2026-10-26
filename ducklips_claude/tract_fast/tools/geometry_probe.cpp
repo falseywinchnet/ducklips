@@ -107,6 +107,11 @@ void apply(const std::string& key, const std::string& value, tract::Articulators
 
 int main(int count, char** values) {
   bool outline = count > 1 && std::strcmp(values[1], "outline") == 0;
+  // full: the length and the cuts' arcs, areas and widths at %.17g. At four
+  // decimals the areas moved in 1e-4 cm2 quanta, the size of the finest
+  // posture difference steps (shapes.py, step 62), so those Jacobian columns
+  // were mostly rounding. The default output is unchanged.
+  bool full = count > 1 && std::strcmp(values[1], "full") == 0;
   tract::MidsagittalTract model;
   tract::TractProfile profile;
   std::string line;
@@ -126,12 +131,22 @@ int main(int count, char** values) {
       organs.contour = &vtl_contour;
     }
     model.compute(organs, profile);
-    std::printf("length %.3f teeth %.3f lips %.3f velum %.3f tip %.3f\n", profile.length, profile.teeth_arc,
-                profile.lip_arc, profile.velum_arc, profile.tip_arc);
+    if (full) {
+      std::printf("length %.17g teeth %.17g lips %.17g velum %.17g tip %.17g\n", profile.length, profile.teeth_arc,
+                  profile.lip_arc, profile.velum_arc, profile.tip_arc);
+    } else {
+      std::printf("length %.3f teeth %.3f lips %.3f velum %.3f tip %.3f\n", profile.length, profile.teeth_arc,
+                  profile.lip_arc, profile.velum_arc, profile.tip_arc);
+    }
     for (int cut = 0; cut < profile.count; ++cut) {
       std::size_t index = static_cast<std::size_t>(cut);
-      std::printf("cut %.3f %.4f %.4f %s %.3f %.3f\n", profile.arc[index], profile.area[index], profile.width[index],
-                  region_name(profile.region[index]), profile.mid_x[index], profile.mid_y[index]);
+      if (full) {
+        std::printf("cut %.17g %.17g %.17g %s %.17g %.17g\n", profile.arc[index], profile.area[index],
+                    profile.width[index], region_name(profile.region[index]), profile.mid_x[index], profile.mid_y[index]);
+      } else {
+        std::printf("cut %.3f %.4f %.4f %s %.3f %.3f\n", profile.arc[index], profile.area[index], profile.width[index],
+                    region_name(profile.region[index]), profile.mid_x[index], profile.mid_y[index]);
+      }
     }
     if (outline) {
       for (int point = 0; point < model.hull_points(); ++point) {
